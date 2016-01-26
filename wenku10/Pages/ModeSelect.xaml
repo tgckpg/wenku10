@@ -1,0 +1,138 @@
+﻿<Page
+    x:Class="wenku10.Pages.ModeSelect"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource MajorBackgroundBrush}">
+        <Grid x:Name="HiddenInput" Opacity="0">
+            <TextBox x:Name="HiddenTextBox" />
+            <Rectangle Fill="Transparent"
+                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </Grid>
+        <Button Margin="10" Click="SinglePlayer"
+                VerticalAlignment="Center" HorizontalAlignment="Center"
+                Background="{StaticResource Shades80}"
+                Style="{StaticResource PlainButton}">
+            <Grid x:Name="SenseGround" Height="200" Width="200">
+                <Rectangle x:Name="SenseFlash" Opacity="0">
+                    <Rectangle.Fill>
+                        <SolidColorBrush x:Name="SenseFill" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <Rectangle x:Name="SenseFlush" Opacity="0">
+                    <Rectangle.Fill>
+                        <SolidColorBrush x:Name="FlushFill" Color="White" />
+                    </Rectangle.Fill>
+                </Rectangle>
+                <TextBlock x:Name="OSenseText" Text="Start" TextWrapping="Wrap"
+                           FontSize="30"
+                           VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock.Foreground>
+                        <SolidColorBrush x:Name="SenseBrush" Color="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}" />
+                    </TextBlock.Foreground>
+                </TextBlock>
+                <Grid.Resources>
+                    <Storyboard x:Name="Multiplayer">
+                        <DoubleAnimation Storyboard.TargetName="SenseFlush"
+                                         Storyboard.TargetProperty="Opacity"
+                                         BeginTime="0:0:0.0"
+                                         Duration="0:0:0.5"
+                                         From="1" To="1">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <ColorAnimation Storyboard.TargetName="FlushFill"
+                                         Storyboard.TargetProperty="Color"
+                                         BeginTime="0:0:0.0"
+                                         Duration="0:0:0.5"
+                                         From="White"
+                                         To="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                        <ColorAnimation Storyboard.TargetName="SenseBrush"
+                                        Storyboard.TargetProperty="Color"
+                                        BeginTime="0:0:0.0"
+                                        Duration="0:0:0.5"
+                                        From="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}"
+                                        To="White">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                    </Storyboard>
+                    <Storyboard x:Name="DataUpdate">
+                        <DoubleAnimation Storyboard.TargetName="SenseFlash"
+                                         Storyboard.TargetProperty="Opacity"
+                                         BeginTime="0:0:0.0"
+                                         Duration="0:0:0.5"
+                                         From="1" To="0">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <ColorAnimation Storyboard.TargetName="SenseBrush"
+                                        Storyboard.TargetProperty="Color"
+                                        BeginTime="0:0:0.0"
+                                        Duration="0:0:0.5"
+                                        From="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}"
+                                        To="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}">
+                            <ColorAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </ColorAnimation.EasingFunction>
+                        </ColorAnimation>
+                    </Storyboard>
+                </Grid.Resources>
+            </Grid>
+        </Button>
+        <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"
+                VerticalAlignment="Center" HorizontalAlignment="Center" >
+            <Grid Height="200" Width="200" Margin="10">
+                <TextBlock x:Name="SenseText" Text="Start"
+                           FontSize="30" Opacity="1"
+                           TextWrapping="Wrap" Foreground="White"
+                           VerticalAlignment="Center" HorizontalAlignment="Center">
+                </TextBlock>
+            </Grid>
+            <Border.Resources>
+                <Storyboard x:Name="FadeOut">
+                    <DoubleAnimation Storyboard.TargetName="ForeText"
+                                     Storyboard.TargetProperty="Opacity"
+                                     BeginTime="0:0:0.0"
+                                     Duration="0:0:3"
+                                     From="1" To="0">
+                        <DoubleAnimation.EasingFunction>
+                            <CubicEase EasingMode="EaseIn" />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </Border.Resources>
+        </Border>
+        <Button Style="{StaticResource PlainButton}"
+                x:Name="HuhButton"
+                Margin="10" Click="ShowKeyboard"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+            <Rectangle Fill="Transparent" Width="20" Height="20" />
+        </Button>
+        <Button Click="ShowNews"
+                Style="{StaticResource PlainButton}"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="10">
+            <Grid Width="40" Height="40" Background="{StaticResource Shades90}" >
+                <ProgressRing x:Name="NewsLoading"
+                              Width="40" Height="40"
+                              Foreground="{StaticResource RelativeShadesBrush}"
+                              IsActive="True"/>
+                <i:IconInfo AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
+            </Grid>
+        </Button>
+    </Grid>
+</Page>

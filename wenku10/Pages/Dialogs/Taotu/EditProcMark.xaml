@@ -1,0 +1,193 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.Taotu.EditProcMark"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs.Taotu"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{StaticResource MajorBackgroundBrush}"
+    Style="{StaticResource ScrollContentDialog}"
+    PrimaryButtonText="Button1"
+    IsSecondaryButtonEnabled="False">
+    <ContentDialog.Resources>
+        <v:BoolStateConverter x:Key="BoolStateConverter" />
+    </ContentDialog.Resources>
+    <ContentDialog.Title>
+        <TextBlock x:Uid="/libtaotu/Resources/Marker" Text="Edit Marker"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+    </ContentDialog.Title>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <!-- Control Buttons -->
+            <RowDefinition Height="Auto" />
+            <!-- Mappings -->
+            <RowDefinition Height="Auto" />
+            <!-- Preview Section -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource IconButton}"
+                    HorizontalAlignment="Left" VerticalAlignment="Center"
+                    Click="RunTilHere">
+                <Grid Height="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ProgressRing x:Name="TestRunning" Width="30" Height="30" />
+                        <i:IconTestTube AutoScale="True" />
+                    <TextBlock Grid.Column="1" x:Uid="/libtaotu/Resources/Test"
+                               Margin="5" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Text="Test" />
+                </Grid>
+            </Button>
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <!-- Volume Mappings -->
+            <TextBlock Foreground="{StaticResource MinorBrush}"
+                       x:Uid="/Book/VolumeMapping"
+                       Text="Volume Mappings" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         x:Uid="/libtaotu/Resources/Pattern"
+                         PlaceholderText="Pattern" Margin="3"
+                         Text="{Binding VolPattern}"
+                         FontFamily="Lucida Console"
+                         Tag="VolPattern"
+                         LostFocus="SetProp"/>
+                <TextBox Grid.Column="1"
+                         PlaceholderText="Title" Margin="3"
+                         Text="{Binding VolTitle}"
+                         FontFamily="Lucida Console"
+                         Tag="VolTitle"
+                         LostFocus="SetProp"/>
+                <TextBox Grid.Column="2"
+                         x:Uid="/libtaotu/Resources/Param"
+                         PlaceholderText="Param ->" Margin="3"
+                         Tag="VolParam"
+                         Text="{Binding VolParam}"
+                         FontFamily="Lucida Console"
+                         LostFocus="SetProp"/>
+
+                <Button Grid.Column="3"
+                        x:Uid="/libtaotu/Resources/SubProcs"
+                        Margin="3" Style="{StaticResource IconButton}"
+                        Click="SubVolume">
+                    <Grid Width="30" Height="30">
+                        <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                        <p:StateControl State="{Binding HasVolProcs, Converter={StaticResource BoolStateConverter}}">
+                            <i:IconSteps AutoScale="True" Foreground="{StaticResource MajorBrush}" />
+                        </p:StateControl>
+                    </Grid>
+                </Button>
+                <Button Grid.Column="4"
+                        Margin="3" Style="{StaticResource IconButton}"
+                        Click="ToggleVAsync">
+                    <Grid Width="30" Height="30">
+                        <p:StateControl
+                            x:Uid="/libtaotu/Resources/Sync"
+                            ToolTipService.ToolTip="Synchronous"
+                            State="{Binding VolAsync, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                            <i:IconSerial AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                        </p:StateControl>
+                        <p:StateControl
+                            x:Uid="/libtaotu/Resources/Async"
+                            ToolTipService.ToolTip="Asynchronous"
+                            State="{Binding VolAsync, Converter={StaticResource BoolStateConverter}}">
+                            <i:IconParallel AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
+                        </p:StateControl>
+                    </Grid>
+                </Button>
+            </Grid>
+            <!-- Chapter Mappings -->
+            <TextBlock Foreground="{StaticResource MinorBrush}"
+                       x:Uid="/Book/ChapterMapping"
+                       Text="Chapter Mappings" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         x:Uid="/libtaotu/Resources/Pattern"
+                         PlaceholderText="Pattern" Margin="3"
+                         Text="{Binding EpPattern}"
+                         FontFamily="Lucida Console"
+                         Tag="EpPattern"
+                         LostFocus="SetProp"/>
+                <TextBox Grid.Column="1"
+                         PlaceholderText="Title" Margin="3"
+                         Text="{Binding EpTitle}"
+                         FontFamily="Lucida Console"
+                         Tag="EpTitle"
+                         LostFocus="SetProp"/>
+                <TextBox Grid.Column="2"
+                         x:Uid="/libtaotu/Resources/Param"
+                         PlaceholderText="Param ->" Margin="3"
+                         Tag="EpParam"
+                         Text="{Binding EpParam}"
+                         FontFamily="Lucida Console"
+                         LostFocus="SetProp"/>
+
+                <Button Grid.Column="3"
+                        x:Uid="/libtaotu/Resources/SubProcs"
+                        Margin="3" Style="{StaticResource IconButton}"
+                        Click="SubChapter">
+                    <Grid Width="30" Height="30">
+                        <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
+                        <p:StateControl State="{Binding HasEpProcs, Converter={StaticResource BoolStateConverter}}">
+                            <i:IconSteps AutoScale="True" Foreground="{StaticResource MajorBrush}" />
+                        </p:StateControl>
+                    </Grid>
+                </Button>
+                <Button Grid.Column="4"
+                        Margin="3" Style="{StaticResource IconButton}"
+                        Click="ToggleEAsync">
+                    <Grid Width="30" Height="30">
+                        <p:StateControl
+                            x:Uid="/libtaotu/Resources/Sync"
+                            ToolTipService.ToolTip="Synchronous"
+                            State="{Binding EpAsync, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                            <i:IconSerial AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                        </p:StateControl>
+                        <p:StateControl
+                            x:Uid="/libtaotu/Resources/ASync"
+                            ToolTipService.ToolTip="Asynchronous"
+                            State="{Binding EpAsync, Converter={StaticResource BoolStateConverter}}">
+                            <i:IconParallel AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
+                        </p:StateControl>
+                    </Grid>
+                </Button>
+            </Grid>
+        </StackPanel>
+        <!-- Preview Section -->
+        <Grid Grid.Row="2" Margin="5">
+            <Frame x:Name="Preview" />
+            <Button Style="{StaticResource IconButton}"
+                    Width="35" Height="35"
+                    Margin="10" Click="FrameGoBack" IsEnabled="{Binding Path=CanGoBack, ElementName=Preview}"
+                    VerticalAlignment="Top" HorizontalAlignment="Left">
+                <i:IconNavigateArrow Direction="MirrorVertical" AutoScale="True" 
+                                     Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+            </Button>
+        </Grid>
+    </Grid>
+</ContentDialog>

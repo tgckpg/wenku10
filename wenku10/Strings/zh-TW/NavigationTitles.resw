@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Desc_History.Text" xml:space="preserve">
+    <value>查閱過去打開過的書</value>
+  </data>
+  <data name="Desc_History2.Text" xml:space="preserve">
+    <value>目前沒有打開過任何書本目錄</value>
+  </data>
+  <data name="Desc_News.Text" xml:space="preserve">
+    <value>文庫公告</value>
+  </data>
+  <data name="Desc_PressList.Text" xml:space="preserve">
+    <value>查看各出版社</value>
+  </data>
+  <data name="Desc_RecentUpdate.Text" xml:space="preserve">
+    <value>最近更新的文章</value>
+  </data>
+  <data name="Desc_TopList_DDigest.Text" xml:space="preserve">
+    <value>以每日點擊量排行</value>
+  </data>
+  <data name="Desc_TopList_Favourite.Text" xml:space="preserve">
+    <value>以會員收藏量作排行</value>
+  </data>
+  <data name="Desc_TopList_HITs.Text" xml:space="preserve">
+    <value>以總點擊量排行</value>
+  </data>
+  <data name="Desc_TopList_WDigest.Text" xml:space="preserve">
+    <value>以週一為一周開始的推薦數量，每週日24:00:00數據重置</value>
+  </data>
+  <data name="History.Text" xml:space="preserve">
+    <value>歷史</value>
+  </data>
+  <data name="MonthlySuggest.Text" xml:space="preserve">
+    <value>月度推薦</value>
+  </data>
+  <data name="News.Text" xml:space="preserve">
+    <value>公告</value>
+  </data>
+  <data name="PressList.Text" xml:space="preserve">
+    <value>文庫分類</value>
+  </data>
+  <data name="RankingList.Text" xml:space="preserve">
+    <value>排名分類</value>
+  </data>
+  <data name="SpecialTopics.Text" xml:space="preserve">
+    <value>文庫專題</value>
+  </data>
+  <data name="TopList_DDigest.Text" xml:space="preserve">
+    <value>日排行榜</value>
+    <comment>dayvisit</comment>
+  </data>
+  <data name="TopList_Favourite.Text" xml:space="preserve">
+    <value>總收藏榜</value>
+    <comment>goodnum</comment>
+  </data>
+  <data name="TopList_HITs.Text" xml:space="preserve">
+    <value>總排行榜</value>
+    <comment>allvisit</comment>
+  </data>
+  <data name="TopList_WDigest.Text" xml:space="preserve">
+    <value>本週會員推薦榜</value>
+    <comment>weekvote</comment>
+  </data>
+  <data name="RecentUpdate.Text" xml:space="preserve">
+    <value>最近更新</value>
+    <comment>lastupdate</comment>
+  </data>
+  <data name="Desc_Finished.Text" xml:space="preserve">
+    <value>查看已完結的書籍</value>
+  </data>
+  <data name="Desc_NewestEntries.Text" xml:space="preserve">
+    <value>查看最新入庫的書籍</value>
+  </data>
+  <data name="Finished.Text" xml:space="preserve">
+    <value>完結全本</value>
+    <comment>fullflag</comment>
+  </data>
+  <data name="NewestEntries.Text" xml:space="preserve">
+    <value>新書一覽</value>
+    <comment>postdate</comment>
+  </data>
+</root>

@@ -1,0 +1,394 @@
+﻿<Page
+    x:Class="wenku10.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:vp="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="using:System"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
+
+    <Page.Resources>
+        <v:ParallaxConverter x:Key="ParallaxConverter" />
+        <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <v:FavConverter x:Key="FavConverter" />
+        <CollectionViewSource x:Name="favItems" />
+        <CollectionViewSource x:Name="Section3Items" />
+    </Page.Resources>
+
+    <Grid>
+        <c:PassiveSplitView x:Name="MainSplitPane"
+                            EnablePaneSwipe="False"
+                            Background="{StaticResource MajorBackgroundBrush}" >
+            <c:PassiveSplitView.Pane>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="65" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="12.5" />
+                        <ColumnDefinition Width="50" />
+                    </Grid.ColumnDefinitions>
+                    <Canvas p:Clip.ToBounds="True" Loaded="BookTitleLoaded" Grid.Row="0" Margin="5" >
+                        <TextBlock x:Name="MarqueeText"
+                                   Foreground="{StaticResource RelativeMajorBrush}"
+                                   FontSize="30"
+                                   LayoutUpdated="Sb_Completed"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding Title}">
+                            <TextBlock.RenderTransform>
+                                <CompositeTransform TranslateX="0" />
+                            </TextBlock.RenderTransform>
+                        </TextBlock>
+                    </Canvas>
+                    <Button Grid.Row="0" Grid.Column="2"
+                            Style="{StaticResource PlainButton}"
+                            BorderThickness="2" Padding="0" Click="ClosePaneButton">
+                        <Grid Width="50" Height="50" >
+                            <ProgressRing x:Name="PaneLoadBubble" Foreground="{StaticResource RelativeMajorBrush}"/>
+                            <i:IconNavigateArrow x:Name="PaneBackIcon" AutoScale="True" Direction="MirrorVertical"/>
+                        </Grid>
+                    </Button>
+
+                    <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" Margin="10" VerticalScrollBarVisibility="Hidden">
+                        <p:StateControl x:Name="PaneGridState">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="200" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="25" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Margin="5" Source="{Binding Cover}" />
+                                <Grid Grid.Column="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Margin="5,10,5,5" Grid.Row="0">
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBrush}"/>
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                    </StackPanel>
+                                    <StackPanel Margin="5" Grid.Row="1">
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding PushCount}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
+                                       TextWrapping="Wrap" Text="{Binding Intro}"
+                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" FontSize="20"
+                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource RelativeMajorBrush}" />
+                            </Grid>
+                        </p:StateControl>
+                    </ScrollViewer>
+                    <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
+                            Style="{StaticResource PlainButton}"
+                            Tag="{Binding Id}" Tapped="Navigate_Tapped">
+                        <i:IconLogin AutoScale="True" Direction="MirrorVertical" />
+                    </Button>
+                </Grid>
+            </c:PassiveSplitView.Pane>
+            <c:PassiveSplitView.Content>
+                <Grid>
+                    <Canvas x:Name="StarFields" />
+
+                    <c:ParallaxHub x:Name="HomeHub">
+                        <c:ParallaxHub.ScrollerRibbon>
+                            <TextBlock x:Uid="/AppResources/ApplicationTitle"
+                                       FontSize="30"
+                                       Margin="0,15,0,0"
+                                       Grid.Column="0" Grid.ColumnSpan="40"
+                                       Foreground="{StaticResource Shades40}" Text="wenku8" />
+                        </c:ParallaxHub.ScrollerRibbon>
+
+                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}" >
+                            <HubSection.Resources>
+                                <vp:DataStateConverter x:Key="DataStateConverter" />
+                                <vp:BoolStateConverter x:Key="LoadingStateConverter" />
+                            </HubSection.Resources>
+                            <HubSection.Header>
+                                <StackPanel>
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Margin="5" Grid.Column="0" PlaceholderText="Search BookShelf"
+                                                 Width="140"
+                                                 Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
+                                        <ComboBox Margin="5" Grid.Column="1" x:Uid="/AppResources/Order"
+                                                  SelectionChanged="OrderFavItems"
+                                                  PlaceholderText="Order">
+                                            <ComboBox.Items>
+                                                <ComboBoxItem>
+                                                    <TextBlock x:Uid="/AppResources/Order_by_Date_Desc" Text="OrderByDateDesc" />
+                                                </ComboBoxItem>
+                                                <ComboBoxItem>
+                                                    <TextBlock x:Uid="/AppResources/Order_by_Date_Asc" Text="OrderByDateAsc" />
+                                                </ComboBoxItem>
+                                            </ComboBox.Items>
+                                        </ComboBox>
+                                        <c:OneDriveButton x:Name="OneDriveResync"
+                                                          Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                                          Grid.Column="2" />
+                                    </Grid>
+                                </StackPanel>
+                            </HubSection.Header>
+                            <DataTemplate>
+                                <p:StateControl State="{Binding Data, Converter={StaticResource DataStateConverter}}">
+                                    <ListView ItemsSource="{Binding SearchSet}"
+                                              ItemClick="BookClicked"
+                                              IsItemClickEnabled="True"
+                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                              ItemContainerStyle="{StaticResource BareListItem}">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border>
+                                                    <Border.Resources>
+                                                        <MenuFlyout x:Key="FavContextMenu">
+                                                            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_PinToStart"
+                                                                        Text="Pin to Desktop"
+                                                                        Click="FavContext" Tag="Pin"/>
+                                                            <MenuFlyoutItem Text="{Binding AutoCacheText}"
+                                                                        Click="FavContext" Tag="AutoCache"/>
+                                                            <MenuFlyoutItem Text="{Binding RSync}"
+                                                                        Click="FavContext" Tag="RSync"/>
+                                                            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Delete"
+                                                                        Text="Delete" 
+                                                                        Click="FavContext" Tag="Delete"/>
+                                                        </MenuFlyout>
+                                                    </Border.Resources>
+
+                                                    <Grid Margin="5" Width="350"
+                                                          RightTapped="ShowFavContext"
+                                                          FlyoutBase.AttachedFlyout="{StaticResource FavContextMenu}"
+                                                          MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*" />
+                                                            <RowDefinition Height="Auto" />
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="25" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Rectangle Grid.Column="1" Width="5"
+                                                                   Fill="{StaticResource Shades90}"
+                                                                   HorizontalAlignment="Left"/>
+
+                                                        <StackPanel Grid.Column="1" p:Clip.ToBounds="True" >
+                                                            <c:StateBubble State="{Binding SyncState}" Margin="0,2.5"
+                                                                           VerticalAlignment="Top" HorizontalAlignment="Center" />
+                                                            <c:StateBubble State="{Binding CacheState}" Margin="0,2.5"
+                                                                           Foreground="Magenta"
+                                                                           VerticalAlignment="Top" HorizontalAlignment="Center" />
+                                                        </StackPanel>
+
+                                                        <Image Stretch="Uniform" Source="{Binding Banner}" />
+
+                                                        <Rectangle Fill="{StaticResource MajorBrush}" Opacity="0.3"/>
+                                                        <Rectangle Fill="{StaticResource Shades90}"/>
+                                                        <Rectangle Fill="{StaticResource Shades90}"/>
+
+                                                        <StackPanel Padding="10">
+                                                            <TextBlock TextWrapping="Wrap"
+                                                                   TextTrimming="WordEllipsis"
+                                                                   Foreground="{StaticResource RelativeShadesBrush}" FontSize="24" Text="{Binding Name}" />
+                                                            <TextBlock TextTrimming="WordEllipsis">
+                                                                <TextBlock.Foreground>
+                                                                    <SolidColorBrush Color="{Binding SubtleColor}" />
+                                                                </TextBlock.Foreground>
+                                                                <Run x:Uid="/Book/UpdateDate" />:
+                                                                <Run Text="{Binding Desc2}" />
+                                                            </TextBlock>
+                                                            <TextBlock Foreground="{StaticResource RelativeShadesBrush}">
+                                                                <Run x:Uid="/Book/Date" />:
+                                                                <Run Text="{Binding Desc}" />
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                        <Border Grid.Column="0" Grid.Row="1"
+                                                                Visibility="{Binding UpdateActive, Converter={StaticResource FavConverter}, ConverterParameter=1}"
+                                                                Background="{StaticResource Shades40}">
+                                                            <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
+                                                                       TextTrimming="WordEllipsis"
+                                                                       DataContext="{Binding AutoCacheObj}"
+                                                                       Margin="5">
+                                                                    <Run x:Uid="/ContextMenu/ContextMenu_AutoUpdate" Text="AutoUpdate"/>
+                                                                    <Run Text="{Binding StatusText}" />
+                                                            </TextBlock>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </p:StateControl>
+                            </DataTemplate>
+                        </HubSection>
+
+                        <HubSection x:Name="NavigationSection" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                            <DataTemplate>
+                                <ListView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="GotoNavigation">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" FontSize="36"
+                                                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                                                <TextBlock Text="{Binding Desc}" TextWrapping="Wrap">
+                                                    <TextBlock.Foreground>
+                                                        <SolidColorBrush Color="{Binding SubtleColor}" />
+                                                    </TextBlock.Foreground>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </DataTemplate>
+                        </HubSection>
+
+                        <HubSection x:Name="RectileSection" Visibility="Collapsed">
+                            <DataTemplate>
+                                <c:VariableGridView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="BookClicked">
+                                    <c:VariableGridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <c:Rectile
+                                                Title="{Binding Name}"
+                                                Description="{Binding Desc2}"
+                                                Image="{Binding Banner}"
+                                                IsLoaded="{Binding IsLoaded}" Size="{Binding Size}"
+                                            />
+                                        </DataTemplate>
+                                    </c:VariableGridView.ItemTemplate>
+                                    <c:VariableGridView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VariableSizedWrapGrid ItemWidth="135" ItemHeight="135" MaximumRowsOrColumns="2" Orientation="Vertical"/>
+                                        </ItemsPanelTemplate>
+                                    </c:VariableGridView.ItemsPanel>
+                                </c:VariableGridView>
+                            </DataTemplate>
+                        </HubSection>
+
+                        <HubSection x:Name="CustomSection"
+                                    Visibility="Collapsed"
+                                    MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="40" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel>
+                                        <Button Style="{StaticResource PlainButton}"
+                                                Click="ReloadCustomSection"
+                                                Width="40" Height="40">
+                                            <Grid>
+                                                <ProgressRing Width="40" Height="40"
+                                                              x:Name="CustomRing"
+                                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
+                                                              IsActive="False" />
+                                                <i:IconReload AutoScale="True"
+                                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                            </Grid>
+                                        </Button>
+                                        <p:VerticalStack Grid.Column="0"
+                                                         Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                                         FontSize="35" Text="{Binding Header}"/>
+                                    </StackPanel>
+                                    <GridView Grid.Column="1"
+                                              ItemsSource="{Binding Data}"
+                                              ItemClick="BookClicked"
+                                              IsItemClickEnabled="True"
+                                              IncrementalLoadingThreshold="0">
+                                        <GridView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Image Margin="5" Stretch="UniformToFill" Source="{Binding Banner}" />
+                                            </DataTemplate>
+                                        </GridView.ItemTemplate>
+                                        <GridView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <ItemsWrapGrid ItemWidth="192" ItemHeight="250" Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </GridView.ItemsPanel>
+                                    </GridView>
+                                </Grid>
+                            </DataTemplate>
+                        </HubSection>
+
+                    </c:ParallaxHub>
+                    <Grid VerticalAlignment="Top" HorizontalAlignment="Right" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel x:Name="AdvDMStat" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10">
+                            <Border Background="Black" >
+                                <TextBlock Foreground="White" Margin="5">
+                                    AdvDM.RTrans[ <Run Text="{Binding ShortStat}" /> ]
+                                </TextBlock>
+                            </Border>
+                        </StackPanel>
+                        <!-- Settings Button -->
+                        <Button x:Name="SettingsButton"
+                                Width="65" Height="65"
+                                Margin="10" Grid.Column="1"
+                                Background="{StaticResource MinorBrush}"
+                                Style="{StaticResource PlainButton}">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Name="DebugLog"
+                                                    Visibility="Collapsed"
+                                                    x:Uid="/Settings/Advanced_Debug_FileLogging"
+                                                    Text="Local Log" Click="ShowLog" />
+                                    <MenuFlyoutItem Text="{Binding LoginOrInfo}" Click="LoginOrInfo" />
+                                    <MenuFlyoutItem x:Uid="/AppBar/Search" Click="GotoSearch" />
+                                    <MenuFlyoutItem x:Uid="/AppBar/Settings" Text="Settings" Click="GotoSettings" />
+                                    <MenuFlyoutItem x:Uid="/AppBar/About" Text="About" Click="ShowAbout" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                            <Grid>
+                                <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeMajorBrush}" />
+                                <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
+                            </Grid>
+                        </Button>
+                    </Grid>
+                    <p:StateControl x:Name="PopupPage" State="{Binding PageStatus}"
+                                    MaxWidth="350">
+                        <Frame Content="{Binding FrameContent}"/>
+                    </p:StateControl>
+                    <Grid Visibility="Collapsed">
+                        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
+                        <ProgressRing IsActive="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Grid>
+
+                    <p:StateControl x:Name="BackAgainMessage"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Background="{StaticResource MajorBrush}">
+                            <TextBlock x:Uid="/AppResources/PressAgainExit"
+                                       Text="Press again to exit"
+                                       Foreground="{StaticResource RelativeMajorBrush}" Margin="5" />
+                        </StackPanel>
+                    </p:StateControl>
+                </Grid>
+            </c:PassiveSplitView.Content>
+        </c:PassiveSplitView>
+        <c:TipMask x:Name="LoadingMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" />
+    </Grid>
+</Page>

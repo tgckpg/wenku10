@@ -1,0 +1,185 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.Themes.ThemeColors"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings.Themes"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <MenuFlyout x:Key="ThemeContextMenu">
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Copy" Tapped="ThemeCopy" Text="Copy" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Edit" Visibility="{Binding IsSystemSet}" Tapped="ThemeEdit" Text="Edit" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Delete" Visibility="{Binding IsSystemSet}" Tapped="ThemeDelete" Text="Delete" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Rename" Visibility="{Binding IsSystemSet}" Tapped="ThemeRename" Text="Rename" />
+        </MenuFlyout>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+		<!--ContentPanel - place additional content here-->
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="0,0,0,5">
+                <TextBlock>
+                    <Run x:Uid="/Settings/Appearance_Theme_Guide" Text="Color Set" Foreground="{StaticResource MajorBrush}" FontSize="30" />
+                    <Run x:Uid="/Settings/Desc_Appearance_Theme_Guide" Text="Hold that shit" Foreground="{StaticResource SubtleBrush}"/>
+                </TextBlock>
+
+                <GridView x:Name="ThemeView"
+                          ItemContainerStyle="{StaticResource BareGridItem}"
+                          SelectionChanged="ThemeView_SelectionChanged">
+                    <GridView.Background>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/OpacityChecker.png"/>
+                    </GridView.Background>
+
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="35" Height="35">
+                                <Grid.Background>
+                                    <SolidColorBrush Color="{Binding Background}" />
+                                </Grid.Background>
+                                <TextBlock x:Uid="/AppResources/Test" Text="A"
+                                               FontSize="30"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding Foreground}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid ItemHeight="35" ItemWidth="35"
+                                           MaximumRowsOrColumns="10"
+                                           Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+                
+                <TextBlock>
+                    <Run x:Uid="/Settings/Appearance_Shades_Guide" Text="Shades" Foreground="{StaticResource MajorBrush}"/>
+                    <Run x:Uid="/Settings/Desc_Appearance_Shades_Guide" Text="Click theme colors above to show the shades" Foreground="{StaticResource SubtleBrush}"/>
+                </TextBlock>
+                <GridView x:Name="ShadesView"
+                          ItemContainerStyle="{StaticResource BareGridItem}">
+                    <GridView.Background>
+                        <ImageBrush Stretch="UniformToFill" ImageSource="/Assets/OpacityChecker.png"/>
+                    </GridView.Background>
+
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="35" Height="35">
+                                <Grid.Background>
+                                    <SolidColorBrush Color="{Binding Background}" />
+                                </Grid.Background>
+                                    <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="{Binding Shaded}" />
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                <TextBlock x:Uid="/AppResources/Test" Text="A"
+                                               FontSize="30"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding Foreground}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid ItemHeight="35" ItemWidth="35"
+                                           MaximumRowsOrColumns="10"
+                                           Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0">
+                        <Run x:Uid="/Settings/Appearance_Theme_ColorSet" Text="Color Set" Foreground="{StaticResource MajorBrush}" FontSize="30" />
+                        <Run x:Uid="/Settings/Desc_Appearance_Theme_ColorSet" Text="Desc Color Set" Foreground="{StaticResource SubtleBrush}"/>
+                    </TextBlock>
+                    <c:OneDriveButton x:Name="OneDriveResync"
+                                      Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                      Grid.Column="1" />
+                </Grid>
+            </StackPanel>
+            <ListView Name="Presets" SelectionChanged="Presets_SelectionChanged"
+                      ItemContainerStyle="{StaticResource CommentListItem}"
+                      Grid.Row="2">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="10,10,8,10"
+                                    FlyoutBase.AttachedFlyout="{StaticResource ThemeContextMenu}"
+                                    RightTapped="ThemeContextMenu">
+                            <StackPanel.Background>
+                                <SolidColorBrush Color="{Binding MinorBackgroundColor}" />
+                            </StackPanel.Background>
+                            <TextBlock Margin="5" Text="{Binding Name}">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding MajorColor}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <Border>
+                                <Border.Background>
+                                    <ImageBrush ImageSource="/Assets/OpacityChecker.png" Stretch="UniformToFill"/>
+                                </Border.Background>
+                                <ItemsControl Margin="2" Visibility="{Binding IsSystemSet}"
+                                              ItemsSource="{Binding Colors}">
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Rectangle Width="55" Height="55">
+                                                <Rectangle.Fill>
+                                                    <SolidColorBrush Color="{Binding TColor}" />
+                                                </Rectangle.Fill>
+                                            </Rectangle>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <ItemsWrapGrid ItemHeight="35" ItemWidth="35"
+                                                           MaximumRowsOrColumns="10"
+                                                           Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </Border>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+        <Button Grid.Row="1"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Tapped="Button_Tapped">
+            <i:IconSave AutoScale="True"
+                        Foreground="{StaticResource MajorBrush}"
+                        Width="50" Height="50" />
+        </Button>
+    </Grid>
+
+</Page>

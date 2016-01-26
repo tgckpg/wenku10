@@ -1,0 +1,15 @@
+[submodule "libs/libtranslate"]
+	path = libs/libtranslate
+	url = AstroGit:libtranslate.git
+[submodule "libs/libpenguin"]
+	path = libs/libpenguin
+	url = AstroGit:libpenguin.git
+[submodule "libs/libwenku8"]
+	path = libs/libwenku8
+	url = AstroGit:libwenku8.git
+[submodule "libs/libtaotu"]
+	path = libs/libtaotu
+	url = AstroGit:libtaotu.git
+[submodule "libs/wenku8-protocol"]
+	path = libs/wenku8-protocol
+	url = AstroGit:libtaotu.git

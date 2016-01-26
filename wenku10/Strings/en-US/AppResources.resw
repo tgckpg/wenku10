@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApplicationTitle.Text" xml:space="preserve">
+    <value>wenku8</value>
+  </data>
+  <data name="Bookmark.Text" xml:space="preserve">
+    <value>Bookmark</value>
+  </data>
+  <data name="Button_Post.Text" xml:space="preserve">
+    <value>Post</value>
+  </data>
+  <data name="ColorPicker.Text" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
+  <data name="ColorPicker_Swatch.Text" xml:space="preserve">
+    <value>Swatch</value>
+  </data>
+  <data name="Comments.Text" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Desc_InputKey.Text" xml:space="preserve">
+    <value>Please enter a Keyword</value>
+  </data>
+  <data name="Desc_Reviews_Content_B.Text" xml:space="preserve">
+    <value>words of content</value>
+  </data>
+  <data name="Desc_Reviews_Title_A.Text" xml:space="preserve">
+    <value>Please enter at least</value>
+  </data>
+  <data name="Desc_Reviews_Title_B.Text" xml:space="preserve">
+    <value>words of title</value>
+  </data>
+  <data name="Desc_Reviews_Title_Optional.Text" xml:space="preserve">
+    <value>Optional</value>
+  </data>
+  <data name="ImageViewer_DownloadFailed.Text" xml:space="preserve">
+    <value>Download failed</value>
+  </data>
+  <data name="ImageViewer_Download.Text" xml:space="preserve">
+    <value>Downloading</value>
+  </data>
+  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+    <value>Loading</value>
+  </data>
+  <data name="introText.Text" xml:space="preserve">
+    <value>Introduction</value>
+  </data>
+  <data name="Login.Text" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Login_AccountName.Text" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="Login_Password.Text" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="NotFound_BookData.Text" xml:space="preserve">
+    <value>Book Info not yet downloaded</value>
+  </data>
+  <data name="Reviews_MinLimit.Text" xml:space="preserve">
+    <value>too few text</value>
+  </data>
+  <data name="Reviews_Topic_Type0.Text" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Reviews_Topic_Type1.Text" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Reviews_Topic_Type2.Text" xml:space="preserve">
+    <value>Spoiler</value>
+  </data>
+  <data name="SavedBooks_Empty.Text" xml:space="preserve">
+    <value>Please use the buttons under the book info page</value>
+  </data>
+  <data name="Search_By_Author.Text" xml:space="preserve">
+    <value>Author</value>
+  </data>
+  <data name="Search_By_Title.Text" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Search_Condition.Text" xml:space="preserve">
+    <value>By</value>
+  </data>
+  <data name="Search_Example.Text" xml:space="preserve">
+    <value>Nope</value>
+    <comment>NaN</comment>
+  </data>
+  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
+    <value>Result(s)</value>
+  </data>
+  <data name="Search_Tooltip.Text" xml:space="preserve">
+    <value>Does not support content searching</value>
+    <comment>NaN</comment>
+  </data>
+  <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
+    <value>Not yet have this article</value>
+  </data>
+  <data name="StaffPicks.Header" xml:space="preserve">
+    <value>Staff Picks</value>
+  </data>
+  <data name="Statistic.Text" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="Test.Text" xml:space="preserve">
+    <value>字</value>
+  </data>
+  <data name="VersionUpdate.Text" xml:space="preserve">
+    <value>New update has been found</value>
+  </data>
+  <data name="VersionUpdateCurrent.Text" xml:space="preserve">
+    <value>Current version</value>
+  </data>
+  <data name="VersionUpdateExpire.Text" xml:space="preserve">
+    <value>days until expired</value>
+  </data>
+  <data name="VersionUpdateWill.Text" xml:space="preserve">
+    <value>will</value>
+  </data>
+  <data name="ViewList.Text" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="But_There_Is_Nothing.Text" xml:space="preserve">
+    <value>Please wail wile downloading necessary info. You will be directed to Content Page automatically.</value>
+  </data>
+  <data name="Button_Back.Text" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Order_By_Date_Asc.Text" xml:space="preserve">
+    <value>Date Ascending</value>
+  </data>
+  <data name="Order_By_Date_Desc.Text" xml:space="preserve">
+    <value>Date Descending</value>
+  </data>
+  <data name="Order.PlaceholderText" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="DefaultToParagraph.Text" xml:space="preserve">
+    <value>Default to Paragraph Text</value>
+  </data>
+  <data name="NameOf.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NewBookmark.Text" xml:space="preserve">
+    <value>Bookmark set here could be found under the main menu's bookmark tab</value>
+  </data>
+  <data name="PickAColor.Text" xml:space="preserve">
+    <value>Pick a color</value>
+  </data>
+  <data name="PressAgainExit.Text" xml:space="preserve">
+    <value>Press again to exit</value>
+  </data>
+  <data name="ClickToRead.Text" xml:space="preserve">
+    <value>Click To Read</value>
+  </data>
+</root>

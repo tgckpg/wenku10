@@ -1,0 +1,83 @@
+﻿<Page
+    x:Class="wenku10.Pages.ContentReaderPane.ReaderContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.ContentReaderPane"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:VDisplayConverter x:Key="VDisplayConverter" />
+        <MenuFlyout x:Key="ParagraphFlyout" Placement="Top">
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Copy" Text="Copy" Click="ContextCopyClicked" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
+            <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
+        </MenuFlyout>
+    </Page.Resources>
+
+    <Grid x:Name="MasterGrid"
+          Tapped="MasterGrid_Tapped"
+          Background="{Binding BackgroundBrush}" >
+        <ListView x:Name="ContentGrid"
+                  IsSwipeEnabled="False"
+                  SelectionChanged="ContentGrid_SelectionChanged"
+                  IsItemClickEnabled="True"
+                  ItemClick="ContentGrid_ItemClick"
+                  ItemsSource="{Binding Data}"
+                  SelectedIndex="{Binding SelectedIndex}"
+                  ItemTemplateSelector="{Binding TemplateSelector}"
+                  Margin="{Binding Margin}"
+                  Loaded="SetBookAnchor"
+                  Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
+                  FlowDirection="{Binding FlowDir}">
+            <FlyoutBase.AttachedFlyout>
+                <Flyout x:Name="ContentFlyout" />
+            </FlyoutBase.AttachedFlyout>
+
+            <ListView.Resources>
+                <DataTemplate x:Name="Horizontal">
+                    <Grid RightTapped="Grid_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Background="{Binding AnchorColor}" />
+                        <p:VerticalStack
+                            Grid.Row="1"
+                            Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
+                            HorizontalAlignment="Center"
+                            Foreground="{Binding FontColor}"
+                            FontSize="{Binding FontSize}"
+                            FontWeight="{Binding FontWeight}"
+                            LineHeight="{Binding LineHeight}"
+                            Padding="{Binding ParagraphSpacing}"
+                        />
+                    </Grid>
+                </DataTemplate>
+                <DataTemplate x:Name="Vertical">
+                    <Grid RightTapped="Grid_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="20"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Background="{Binding AnchorColor}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Text="{Binding Text}"
+                            TextWrapping="Wrap"
+                            Foreground="{Binding FontColor}"
+                            FontSize="{Binding FontSize}"
+                            FontWeight="{Binding FontWeight}"
+                            LineHeight="{Binding LineHeight}"
+                            Padding="{Binding ParagraphSpacing}"
+                        />
+                    </Grid>
+                </DataTemplate>
+            </ListView.Resources>
+        </ListView>
+    </Grid>
+</Page>

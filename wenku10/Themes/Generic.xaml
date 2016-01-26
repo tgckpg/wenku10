@@ -1,0 +1,43 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku8.Resources"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:Converters="using:wenku8.Converters">
+
+    <local:LayouResources x:Key="LayoutResources"/>
+    <SolidColorBrush x:Key="MajorBrush" Color="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="MinorBrush" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="RelativeMajorBrush" Color="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="RelativeMajorBackgroundBrush" Color="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="MajorBackgroundBrush" Color="{Binding LayoutSettings.MajorBackgroundColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="MinorBackgroundBrush" Color="{Binding LayoutSettings.MinorBackgroundColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="SubtleBrush" Color="{Binding LayoutSettings.SubtleColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="VerticalRibbonBrush" Color="{Binding LayoutSettings.VerticalRibbonColor, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="HorizontalRibbonBrush" Color="{Binding LayoutSettings.HorizontalRibbonColor, Source={StaticResource LayoutResources}}" />
+
+    <SolidColorBrush x:Key="Shades10" Color="{Binding LayoutSettings.Shades10, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades20" Color="{Binding LayoutSettings.Shades20, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades30" Color="{Binding LayoutSettings.Shades30, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades40" Color="{Binding LayoutSettings.Shades40, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades50" Color="{Binding LayoutSettings.Shades50, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades60" Color="{Binding LayoutSettings.Shades60, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades70" Color="{Binding LayoutSettings.Shades70, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades80" Color="{Binding LayoutSettings.Shades80, Source={StaticResource LayoutResources}}" />
+    <SolidColorBrush x:Key="Shades90" Color="{Binding LayoutSettings.Shades90, Source={StaticResource LayoutResources}}" />
+
+    <SolidColorBrush x:Key="RelativeShadesBrush" Color="{Binding LayoutSettings.RelativeShadesBrush, Source={StaticResource LayoutResources}}" />
+
+    <SolidColorBrush x:Key="ContentDisabledForegroundBrush" Color="#66FFFFFF" />
+    <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#66FFFFFF" />
+    <SolidColorBrush x:Key="DisabledBorderBrush" Color="#66FFFFFF" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#66000000" />
+    
+    <QuadraticEase EasingMode="EaseOut" x:Key="EaseOutQuadratic" />
+    <CubicEase EasingMode="EaseOut" x:Key="EaseOutCubic" />
+    <QuarticEase EasingMode="EaseOut" x:Key="EaseOutQuartic" />
+    <QuinticEase EasingMode="EaseOut" x:Key="EaseOutQuintic" />
+    <ExponentialEase EasingMode="EaseOut" x:Key="EaseOutExponential" Exponent="10" />
+
+    <v:ContentStyleConverter x:Key="ContentStyleConverter" />
+</ResourceDictionary>

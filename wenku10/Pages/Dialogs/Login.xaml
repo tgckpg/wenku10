@@ -1,0 +1,32 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.Login"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{StaticResource MajorBackgroundBrush}"
+    PrimaryButtonText="Button1"
+    SecondaryButtonText="Button2"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    <ContentDialog.Title>
+        <TextBlock x:Uid="/AppResources/Login" Text="Login" />
+    </ContentDialog.Title>
+
+    <StackPanel>
+        <TextBlock x:Uid="/AppResources/Login_AccountName" Text="Account"
+                   Foreground="{StaticResource MajorBrush}" />
+        <TextBox x:Name="Account" KeyDown="OnKeyDown"/>
+        <TextBlock x:Uid="/AppResources/Login_Password"
+                   Foreground="{StaticResource MajorBrush}"
+                   Text="Password" />
+        <PasswordBox x:Name="Password" KeyDown="OnKeyDown"/>
+        <CheckBox x:Name="IsRemember" IsChecked="True">
+            <TextBlock Foreground="{StaticResource MinorBrush}"
+                       x:Uid="/Settings/Account_Remember"
+                       Text="RememberMe" />
+        </CheckBox>
+    </StackPanel>
+</ContentDialog>

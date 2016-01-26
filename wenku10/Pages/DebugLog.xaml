@@ -1,0 +1,26 @@
+﻿<Page
+    x:Class="wenku10.Pages.DebugLog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Border Background="{StaticResource MajorBackgroundBrush}">
+        <Grid Margin="15">
+            <ListView x:Name="LogList" IsItemClickEnabled="True" ItemClick="LogList_ItemClick">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock TextWrapping="Wrap" Margin="5" Text="{Binding Time}" FontFamily="Lucida Console" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                            <TextBlock TextWrapping="Wrap" Margin="5" Text="{Binding Level}" FontFamily="Lucida Console" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                            <TextBlock TextWrapping="Wrap" Margin="5" Text="{Binding Tag}" FontFamily="Lucida Console" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                            <TextBlock TextWrapping="Wrap" Margin="5" Text="{Binding Message}" FontFamily="Lucida Console" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Border>
+</Page>

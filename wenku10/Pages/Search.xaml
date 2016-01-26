@@ -1,0 +1,100 @@
+﻿<Page
+    x:Class="wenku10.Pages.Search"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d">
+
+    <c:PassiveSplitView x:Name="MainSplitView"
+                        Background="{StaticResource MajorBackgroundBrush}"
+                        PanelBackground="{StaticResource MajorBrush}"
+                        Style="{StaticResource PassiveSplitVertical}"
+                        State="Opened">
+        <c:PassiveSplitView.Pane>
+            <Grid Background="{StaticResource Shades10}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>   
+                <ComboBox Name="SCondition"
+                          SelectedIndex="0"
+                          Grid.Column="0" Margin="10" >
+                    <ComboBox.Items>
+                        <TextBlock x:Uid="/AppResources/Search_By_Title" Text="Search_By_Title" />
+                        <TextBlock x:Uid="/AppResources/Search_By_Author" Text="Search_By_Author" />
+                    </ComboBox.Items>
+                </ComboBox>
+                <AutoSuggestBox x:Name="SearchTerm"
+                                QueryIcon="Find"
+                                QuerySubmitted="SearchBox_QuerySubmitted"
+                                Grid.Column="1" Margin="10"
+                                PlaceholderText="Search" Text="{Binding SearchTerms}" />
+                <Button Grid.Column="2"
+                        Click="OpenSearchBar"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Style="{StaticResource PlainButton}">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <TextBlock x:Name="Status" Margin="5" 
+                                   Foreground="{StaticResource RelativeMajorBrush}" />
+                        <ProgressRing x:Name="IsLoading"
+                                      Foreground="{StaticResource RelativeMajorBrush}"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </c:PassiveSplitView.Pane>
+        <c:PassiveSplitView.Content>
+            <Grid Tapped="Grid_Tapped">
+                <c:VariableGridView Margin="20,0,20,20"
+                                    x:Name="VGrid"
+                                    Loaded="GridView_Loaded"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="Seacrh_ItemClick"
+                                    ScrollViewer.HorizontalScrollMode="Disabled"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                    ScrollViewer.VerticalScrollMode="Enabled"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                    <c:VariableGridView.Header>
+                        <Rectangle Width="20" Height="55" />
+                    </c:VariableGridView.Header>
+                    <c:VariableGridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Background="{StaticResource Shades90}" Width="300" MinHeight="120">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.Row="0" Background="{StaticResource Shades70}">
+                                    <TextBlock Text="{Binding Title}"
+                                               FontSize="20" Margin="5"
+                                               TextTrimming="WordEllipsis"
+                                               Foreground="{StaticResource RelativeShadesBrush}" />
+                                </Border>
+                                <Border Grid.Row="1" Background="{StaticResource Shades30}" >
+                                    <TextBlock Text="{Binding Author}"
+                                               FontSize="20" Margin="5"
+                                               TextTrimming="WordEllipsis"
+                                               Foreground="{StaticResource RelativeShadesBrush}"
+                                               />
+                                </Border>
+                                <TextBlock Grid.Row="2"
+                                           Text="{Binding Description}"
+                                           FontSize="18" Margin="5"
+                                           Foreground="{StaticResource RelativeShadesBrush}"
+                                           TextTrimming="WordEllipsis"
+                                           TextWrapping="Wrap"/>
+                            </Grid>
+                        </DataTemplate>
+                    </c:VariableGridView.ItemTemplate>
+                </c:VariableGridView>
+                <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
+            </Grid>
+        </c:PassiveSplitView.Content>
+    </c:PassiveSplitView>
+</Page>

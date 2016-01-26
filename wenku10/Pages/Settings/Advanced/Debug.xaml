@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.Advanced.Debug"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings.Advanced"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer Background="{StaticResource MajorBrush}"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <ComboBox x:Name="LogLevelCB" SelectionChanged="LogLevelCB_SelectionChanged" >
+                <ComboBox.Header>
+                    <TextBlock x:Uid="/Settings/Advanced_Debug_LogLevel"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               FontSize="20"
+                               Text="Log Level" />
+                </ComboBox.Header>
+                <ComboBox.Items>
+                    <TextBlock Text="DEBUG" />
+                    <TextBlock Text="INFO" />
+                    <TextBlock Text="WARNING" />
+                    <TextBlock Text="ERROR" />
+                </ComboBox.Items>
+            </ComboBox>
+            <ToggleSwitch x:Name="FileLogToggle" Toggled="FileLog">
+                <ToggleSwitch.Header>
+                    <TextBlock x:Uid="/Settings/Advanced_Debug_FileLogging"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               FontSize="20"
+                               Text="Local Logging" />
+                </ToggleSwitch.Header>
+                <ToggleSwitch.OnContent>
+                    <TextBlock x:Uid="/Settings/Enabled"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               Text="Enabled" />
+                </ToggleSwitch.OnContent>
+                <ToggleSwitch.OffContent>
+                    <TextBlock x:Uid="/Settings/Disabled"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               Text="Disabled" />
+                </ToggleSwitch.OffContent>
+            </ToggleSwitch>
+            <ToggleSwitch x:Name="RemoteLogToggle" Toggled="RemoteLog">
+                <ToggleSwitch.Header>
+                    <TextBlock x:Uid="/Settings/Advanced_Debug_RemoteLogging"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               FontSize="20"
+                               Text="Remote Logging" />
+                </ToggleSwitch.Header>
+                <ToggleSwitch.OnContent>
+                    <TextBlock x:Uid="/Settings/Enabled"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               Text="Enabled" />
+                </ToggleSwitch.OnContent>
+                <ToggleSwitch.OffContent>
+                    <TextBlock x:Uid="/Settings/Disabled"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               Text="Disabled" />
+                </ToggleSwitch.OffContent>
+            </ToggleSwitch>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="RemoteAddress" Grid.Column="0" LostFocus="RemoteAddress_LostFocus" />
+                <TextBlock Grid.Column="1" Margin="5" Foreground="{StaticResource RelativeMajorBrush}" Text="UDP 9730"/>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

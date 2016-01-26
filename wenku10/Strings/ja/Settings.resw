@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Desc_Account_Revalidation.Text" xml:space="preserve">
+    <value>需要重新登入</value>
+  </data>
+  <data name="Desc_Appearance_Backgrounds.Text" xml:space="preserve">
+    <value>ページの背景の設定</value>
+  </data>
+  <data name="Desc_Appearance_Theme_ColorSet.Text" xml:space="preserve">
+    <value>（項目を押して、新しいカラーセットを作成します）</value>
+    <comment>#</comment>
+  </data>
+  <data name="Desc_Appearance_Theme_Guide.Text" xml:space="preserve">
+    <value>（以下「言」ははっきりと見ることができます確認して下さい）</value>
+    <comment>#</comment>
+  </data>
+  <data name="Desc_Appearance_ContentReader.Text" xml:space="preserve">
+    <value>ボディスタイル：フォントサイズ、色、行間隔、段落間隔、背景。</value>
+  </data>
+  <data name="Desc_Data_Cache.Text" xml:space="preserve">
+    <value>キャッシュは、いくつかの動的な情報番組を格納することです。このようなクリックスルー率、収集及び数など。プログラムがこの情報をダウンロードすることができませんでした場合は、自動的にキャッシュされたデータを使用します。しかし、プログラムはキャッシュを見つけることができない場合には、警告が表示されます。</value>
+  </data>
+  <data name="Desc_Data_Caches.Text" xml:space="preserve">
+    <value>キャッシュの使用</value>
+  </data>
+  <data name="Desc_Data_Connection.Text" xml:space="preserve">
+    <value>伝送モード</value>
+  </data>
+  <data name="Desc_Data_Illustration.Text" xml:space="preserve">
+    <value>図は大きいので、高解像度、ダウンロードに時間がかかり、それが別々に保存されます。</value>
+  </data>
+  <data name="Desc_Data_Illustrations.Text" xml:space="preserve">
+    <value>保存場所</value>
+  </data>
+  <data name="Desc_Data_Illustration_AboutDelete.Text" xml:space="preserve">
+    <value>PS：写真ライブラリに保存された画像は削除されません</value>
+  </data>
+  <data name="Desc_Data_Illustration_Error.Text" xml:space="preserve">
+    <value>写真ライブラリーに問題があります、ライブラリを使用することができません</value>
+  </data>
+  <data name="Desc_Data_Preload.Text" xml:space="preserve">
+    <value>プログラムが自動的になどカバー、テキストなどの静的な情報をプリロードします</value>
+  </data>
+  <data name="Desc_Data_Preloads.Text" xml:space="preserve">
+    <value>プリロード</value>
+  </data>
+  <data name="Desc_Language_AS.Text" xml:space="preserve">
+    <value>検索は、「繁体字中国語」入力をサポートしていませんが、「簡体字中国語」にインターフェイス言語を変更し、アプリケーションを再起動する必要があります</value>
+  </data>
+  <data name="Desc_Language_C.Text" xml:space="preserve">
+    <value>現在の言語</value>
+  </data>
+  <data name="Account.Text" xml:space="preserve">
+    <value>アカウント</value>
+  </data>
+  <data name="Account_AName.Text" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Account_Exp.Text" xml:space="preserve">
+    <value>エクスペリエンス</value>
+  </data>
+  <data name="Account_Logout.Text" xml:space="preserve">
+    <value>ログアウト</value>
+  </data>
+  <data name="Account_Remember.Text" xml:space="preserve">
+    <value>ログイン情報を記憶</value>
+  </data>
+  <data name="Account_Score.Text" xml:space="preserve">
+    <value>積分</value>
+  </data>
+  <data name="Appearance.Text" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="Appearance_ContentReader.Text" xml:space="preserve">
+    <value>テキスト</value>
+  </data>
+  <data name="Appearance_ContentReader_Background.Text" xml:space="preserve">
+    <value>背景の色</value>
+  </data>
+  <data name="Appearance_ContentReader_ContentExp.Text" xml:space="preserve">
+    <value>内容のサンプル</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp1.Text" xml:space="preserve">
+    <value>てるてるぼうず、てるぼうず 明日天気にしてをくれ いつかの夢の空のよに 晴れたら金の鈴あげよ</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp2.Text" xml:space="preserve">
+    <value>てるてるぼうず、てるぼうず 明日天気にしてをくれ 私の願いを聞いたなら 甘いお酒をたんと飲ましょ</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp3.Text" xml:space="preserve">
+    <value>てるてるぼうず、てるぼうず 明日天気にしてをくれ それでも曇って泣いてたら そなたの首をちょんと切るぞ</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp4.Text" xml:space="preserve">
+    <value>通りゃんせ　通りゃんせ ここはどこの　細通じゃ 天神さまの　細道じゃ ちっと通して　下しゃんせ 御用のないもの　通しゃせぬ この子の七つの　お祝いに お札を納めに　まいります 行きはよいよい　帰りはこわい こわいながらも 通りゃんせ　通りゃんせ</value>
+  </data>
+  <data name="Appearance_ContentReader_FontColor.Text" xml:space="preserve">
+    <value>フォントの色</value>
+  </data>
+  <data name="Appearance_ContentReader_FontSize.Text" xml:space="preserve">
+    <value>フォントサイズ</value>
+  </data>
+  <data name="Appearance_ContentReader_HideHeader.Text" xml:space="preserve">
+    <value>自動隱藏標題</value>
+  </data>
+  <data name="Appearance_ContentReader_LineSpacing.Text" xml:space="preserve">
+    <value>行間隔</value>
+  </data>
+  <data name="Appearance_ContentReader_MinimizeAppBar.Text" xml:space="preserve">
+    <value>自動隱藏下選單</value>
+  </data>
+  <data name="Appearance_ContentReader_ParagraphSpacing.Text" xml:space="preserve">
+    <value>段落間隔</value>
+  </data>
+  <data name="Appearance_ContentReader_TapBrushColor.Text" xml:space="preserve">
+    <value>段落色</value>
+  </data>
+  <data name="Appearance_ContentReader_UseReadingAnchor.Text" xml:space="preserve">
+    <value>セクションアンカー</value>
+  </data>
+  <data name="Appearance_ContentReader_UseTapBrush.Text" xml:space="preserve">
+    <value>段落色</value>
+  </data>
+  <data name="Appearance_Theme.Text" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Appearance_Theme_ColorSet.Text" xml:space="preserve">
+    <value>セット</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Dark.Text" xml:space="preserve">
+    <value>夜</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Default.Text" xml:space="preserve">
+    <value>プリセット</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Guide.Text" xml:space="preserve">
+    <value>下見</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Light.Text" xml:space="preserve">
+    <value>日</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_System.Text" xml:space="preserve">
+    <value>システム</value>
+    <comment>#</comment>
+  </data>
+  <data name="Data_Cache.Text" xml:space="preserve">
+    <value>キャッシュ</value>
+  </data>
+  <data name="Data_CacheUsed.Text" xml:space="preserve">
+    <value>使用</value>
+  </data>
+  <data name="Data_Cache_Limit.Text" xml:space="preserve">
+    <value>制限</value>
+  </data>
+  <data name="Data_Clear.Text" xml:space="preserve">
+    <value>データを消去</value>
+  </data>
+  <data name="Data_ClearAll.Text" xml:space="preserve">
+    <value>すべてのデータをクリア</value>
+  </data>
+  <data name="Data_Connection.Text" xml:space="preserve">
+    <value>ネットワーク</value>
+  </data>
+  <data name="Data_Connection_WiFi.Text" xml:space="preserve">
+    <value>無線LANのみ</value>
+  </data>
+  <data name="Data_Illustration.Text" xml:space="preserve">
+    <value>イラスト</value>
+  </data>
+  <data name="Data_Illustration_SaveLocation.Text" xml:space="preserve">
+    <value>保存場所</value>
+  </data>
+  <data name="Data_Illustration_SaveLocation_Album.Text" xml:space="preserve">
+    <value>写真ライブラリー</value>
+  </data>
+  <data name="Data_Illustration_SaveLocation_Isolated.Text" xml:space="preserve">
+    <value>分離ストレージ</value>
+  </data>
+  <data name="Data_Preload.Text" xml:space="preserve">
+    <value>プリロード</value>
+  </data>
+  <data name="Data_Preload_Cover.Text" xml:space="preserve">
+    <value>フロントカバー</value>
+  </data>
+  <data name="Data_Preload_TextContent.Text" xml:space="preserve">
+    <value>コンテンツ、紹介、目次</value>
+  </data>
+  <data name="Language.Text" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Language_S.Text" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Language_T.Text" xml:space="preserve">
+    <value>繁體中文</value>
+  </data>
+  <data name="Need_Restart.Text" xml:space="preserve">
+    <value>設定変更されましたが、アプリを再起動する必要があります。上のボタンをクリックして、アプリを終了してください。</value>
+  </data>
+  <data name="Sliders_Unlock.Text" xml:space="preserve">
+    <value>ロック解除</value>
+  </data>
+  <data name="Storage.Text" xml:space="preserve">
+    <value>データ</value>
+  </data>
+  <data name="Switches.Text" xml:space="preserve">
+    <value>スイッチ</value>
+  </data>
+  <data name="Desc_Advanced_Debug.Text" xml:space="preserve">
+    <value>お使いの携帯電話は、ヒーターになります。そしてより多くの電力を消費します。</value>
+  </data>
+  <data name="Desc_Advanced_Server.Text" xml:space="preserve">
+    <value>サーバーのトラフィックポリシーを調整</value>
+  </data>
+  <data name="Desc_Appearance_Layout.Text" xml:space="preserve">
+    <value>各ページの概略図、および水平/垂直、モジュラーソート</value>
+  </data>
+  <data name="Advanced.Text" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="Advanced_Debug.Text" xml:space="preserve">
+    <value>デバッグ</value>
+  </data>
+  <data name="Advanced_Debug_FileLogging.Text" xml:space="preserve">
+    <value>ローカルログ</value>
+  </data>
+  <data name="Advanced_Debug_RemoteLogging.Text" xml:space="preserve">
+    <value>リモートログ</value>
+  </data>
+  <data name="Advanced_Server.Text" xml:space="preserve">
+    <value>サーバー</value>
+  </data>
+  <data name="Appearance_Layout.Text" xml:space="preserve">
+    <value>レイアウト</value>
+  </data>
+  <data name="Disabled.Text" xml:space="preserve">
+    <value>無効</value>
+  </data>
+  <data name="Enabled.Text" xml:space="preserve">
+    <value>有効</value>
+  </data>
+  <data name="Desc_Appearance_Shades_Guide.Text" xml:space="preserve">
+    <value>背景の深さを表示するには、上記の色を押してください</value>
+  </data>
+  <data name="Appearance_Shades_Guide.Text" xml:space="preserve">
+    <value>濃淡</value>
+  </data>
+  <data name="Appearance_Layout_BookInfoView.Text" xml:space="preserve">
+    <value>書籍の情報ビュー</value>
+  </data>
+  <data name="Appearance_Layout_MainPage.Text" xml:space="preserve">
+    <value>メインページ</value>
+  </data>
+  <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
+    <value>ナビゲーション・ページ</value>
+  </data>
+  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
+    <value>内容に直接ジャンプします</value>
+  </data>
+  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
+    <value>並べ替えるには、任意の項目をドラッグしてください。</value>
+  </data>
+  <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
+    <value>情報ページ</value>
+  </data>
+  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
+    <value>一部の人々は、これは不要だと思います...</value>
+  </data>
+  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
+    <value>これは、トラフィックを削減することが妥当です</value>
+  </data>
+  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
+    <value>ええ？ ！どのように読んでするつもりですか？</value>
+  </data>
+  <data name="Layout_FlowDirection.Text" xml:space="preserve">
+    <value>流れ方向</value>
+  </data>
+  <data name="Layout_FlowLeft.Text" xml:space="preserve">
+    <value>左から右へ</value>
+  </data>
+  <data name="Layout_FlowRight.Text" xml:space="preserve">
+    <value>右から左へ</value>
+  </data>
+  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
+    <value>カスタムナビゲーション</value>
+  </data>
+  <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
+    <value>選択したカスタムナビゲーション</value>
+  </data>
+  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
+    <value>ホームページを入って時少し速くなります</value>
+  </data>
+  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
+    <value>文庫精選</value>
+  </data>
+  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
+    <value>私も、これは役に立たないと思います</value>
+  </data>
+  <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
+    <value>水平</value>
+  </data>
+  <data name="Layout_Aligment_Vertical.Text" xml:space="preserve">
+    <value>垂直</value>
+  </data>
+  <data name="Layout_Alignment.Text" xml:space="preserve">
+    <value>整列</value>
+  </data>
+  <data name="Account_Reviews_Post_Sign.Text" xml:space="preserve">
+    <value>署名</value>
+  </data>
+  <data name="Account_Reviews_Post_Sign_Default.Text" xml:space="preserve">
+    <value>- 從uwp 發出</value>
+  </data>
+  <data name=" Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>フォントウエート</value>
+  </data>
+  <data name="Others.Text" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
+    <value>メニューの背景</value>
+  </data>
+  <data name="Preface.Text" xml:space="preserve">
+    <value>設定ページに入ると、ページキャッシュがクリアされます。そのように設定が完了すると、ページをリロードする必要があります。それでも設定ページに行きますか？</value>
+  </data>
+  <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
+    <value>ログレベル</value>
+  </data>
+  <data name="Appearance_ContentReader_AssistHelper.Text" xml:space="preserve">
+    <value>補助線</value>
+  </data>
+  <data name="Layout_ContentReader_UsePageClick.Text" xml:space="preserve">
+    <value>ページクリック</value>
+  </data>
+  <data name="Layout_ContentReader_UsePageClick_Warning.Text" xml:space="preserve">
+    <value>これを有効にすると、それぞれ「メニューを呼び出しダブルタップ」と「オートチャプターアンカー」の機能を無効にします。「ページクリック」を有効にしますか？</value>
+  </data>
+  <data name="Desc_Language_AJ.Text" xml:space="preserve">
+    <value>Current Language</value>
+  </data>
+  <data name="Desc_Language_AT.Text" xml:space="preserve">
+    <value>「繁体字中国語」に変更インターフェース言語、検索「簡体字中国語」入力をサポートしていませんが、アプリケーションを再起動する必要があります</value>
+  </data>
+  <data name="Language_J.Text" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+</root>

@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.Data.Cache"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings.Data"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <StackPanel Margin="15">
+            <TextBlock Text="Desc_Data_Cache"
+                       x:Uid="/Settings/Desc_Data_Cache"
+                       TextWrapping="Wrap" Foreground="{StaticResource SubtleBrush}" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="CacheLimit"
+                           Foreground="{StaticResource MinorBrush}"
+                           VerticalAlignment="Center" />
+                <Button Grid.Column="1" Padding="12.0" Click="Button_Click_1">
+                    <TextBlock x:Uid="/Settings/Data_Clear"
+                               Text="Data_Clear" />
+                </Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>

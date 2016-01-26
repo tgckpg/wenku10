@@ -1,0 +1,81 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.Advanced.ServerSelector"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings.Advanced"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="10" Grid.Row="0">
+            
+            <ToggleSwitch x:Name="EnableSS" VerticalAlignment="Top" Toggled="ToggleSS">
+                <ToggleSwitch.Header>
+                    <TextBlock x:Uid="/InitQuestions/EnableServerSelector"
+                               FontSize="23"
+                               TextWrapping="Wrap"
+                               Foreground="{StaticResource MinorBrush}"
+                               Text="EnableServerSelector?" />
+                </ToggleSwitch.Header>
+                <ToggleSwitch.OnContent>
+                    <TextBlock x:Uid="/Settings/Enabled"
+                               Foreground="{StaticResource MinorBrush}"
+                               Text="Enabled" />
+                </ToggleSwitch.OnContent>
+                <ToggleSwitch.OffContent>
+                    <TextBlock x:Uid="/Settings/Disabled"
+                               Foreground="{StaticResource MinorBrush}"
+                               Text="Disabled" />
+                </ToggleSwitch.OffContent>
+            </ToggleSwitch>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Slider x:Name="MaxPing"
+                    Minimum="1" Maximum="5000" SmallChange="100"
+                    ValueChanged="MaxPing_ValueChanged"
+                    PointerCaptureLost="MaxPing_PointerCaptureLost"
+                    Value="500">
+                <Slider.Header>
+                    <TextBlock x:Uid="/Settings/Advanced_SS_MaxPing"
+                               Foreground="{StaticResource MinorBrush}"
+                               Text="Max Ping" />
+                </Slider.Header>
+            </Slider>
+
+            <ListView Grid.Row="1"  x:Name="AvailableServers">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Foreground="{StaticResource SubtleBrush}"
+                                       Margin="10"
+                                       TextTrimming="CharacterEllipsis"
+                                       Text="{Binding Desc}" />
+                            <TextBlock Grid.Column="1" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                       Margin="10"
+                                       TextTrimming="CharacterEllipsis"
+                                       Text="{Binding Name}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <TextBlock Grid.Row="2" Text="I want to participate diverting services"
+                       Foreground="{StaticResource MajorBrush}"
+                       />
+        </Grid>
+    </Grid>
+</Page>

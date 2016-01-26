@@ -1,0 +1,468 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Desc_Account_Revalidation.Text" xml:space="preserve">
+    <value>需要重新登入</value>
+  </data>
+  <data name="Desc_Appearance_Backgrounds.Text" xml:space="preserve">
+    <value>各頁面的背景設定</value>
+  </data>
+  <data name="Desc_Appearance_Theme_ColorSet.Text" xml:space="preserve">
+    <value>(長按項目以建立新色集)</value>
+    <comment>#</comment>
+  </data>
+  <data name="Desc_Appearance_Theme_Guide.Text" xml:space="preserve">
+    <value>(請確認以下的「字」能清楚地看見)</value>
+    <comment>#</comment>
+  </data>
+  <data name="Desc_Appearance_ContentReader.Text" xml:space="preserve">
+    <value>正文閱讀的樣式：字體大小、顏色、行距、段距，背景等。</value>
+  </data>
+  <data name="Desc_Data_Cache.Text" xml:space="preserve">
+    <value>快取是讓程序保存一些動態資訊。如點擊率，收藏數等。在程序無法下載這些資訊時，便會自動使用緩存數據。但當程序無法找到緩存時，會提示通知。</value>
+  </data>
+  <data name="Desc_Data_Caches.Text" xml:space="preserve">
+    <value>快取使用量</value>
+  </data>
+  <data name="Desc_Data_Connection.Text" xml:space="preserve">
+    <value>傳輸方式</value>
+  </data>
+  <data name="Desc_Data_Illustration.Text" xml:space="preserve">
+    <value>由於插圖很大，解像度高，下轉需時，所以會分別儲存。</value>
+  </data>
+  <data name="Desc_Data_Illustrations.Text" xml:space="preserve">
+    <value>插圖保存住置</value>
+  </data>
+  <data name="Desc_Data_Illustration_AboutDelete.Text" xml:space="preserve">
+    <value>注：不會清除儲存在我的相冊的插圖</value>
+  </data>
+  <data name="Desc_Data_Illustration_Error.Text" xml:space="preserve">
+    <value>偵測到相冊異常，自動下載到相冊將無法使用。</value>
+  </data>
+  <data name="Desc_Data_Preload.Text" xml:space="preserve">
+    <value>程序會自動預載靜態資訊，如封面、小說文本、簡介等。</value>
+  </data>
+  <data name="Desc_Data_Preloads.Text" xml:space="preserve">
+    <value>預載量</value>
+  </data>
+  <data name="Desc_Language_AS.Text" xml:space="preserve">
+    <value>将界面语言更改为「简体」，搜索将不支持繁体输入，需要重新启动</value>
+  </data>
+  <data name="Desc_Language_C.Text" xml:space="preserve">
+    <value>當前語言</value>
+  </data>
+  <data name="Account.Text" xml:space="preserve">
+    <value>帳號</value>
+  </data>
+  <data name="Account_AName.Text" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Account_Exp.Text" xml:space="preserve">
+    <value>經驗值</value>
+  </data>
+  <data name="Account_Logout.Text" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="Account_Remember.Text" xml:space="preserve">
+    <value>記住密碼並自動登入</value>
+  </data>
+  <data name="Account_Score.Text" xml:space="preserve">
+    <value>積分</value>
+  </data>
+  <data name="Appearance.Text" xml:space="preserve">
+    <value>外觀</value>
+  </data>
+  <data name="Appearance_ContentReader.Text" xml:space="preserve">
+    <value>正文</value>
+  </data>
+  <data name="Appearance_ContentReader_Background.Text" xml:space="preserve">
+    <value>背景顏色</value>
+  </data>
+  <data name="Appearance_ContentReader_ContentExp.Text" xml:space="preserve">
+    <value>正文範本</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp1.Text" xml:space="preserve">
+    <value>因為那一年裡，我以謎樣的天才美少女作家身份紅遍全日本，備受矚目。</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp2.Text" xml:space="preserve">
+    <value>事情是發生在我國三那年的春天。</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp3.Text" xml:space="preserve">
+    <value>那年我十四歲，但馬上就要迎接十五風了，是個非常平凡的國中生。有朋友，也有喜歡的女生，日子過得很有趣。像是吃錯了藥一樣，我拿生平寫的第一本小說投稿參加文藝雜誌的新人獎比賽，沒想到竟然以最年輕的小說家身份獲得大獎。</value>
+  </data>
+  <data name="Appearance_ContentReader_Exp4.Text" xml:space="preserve">
+    <value>故事內容是位女孩以第一人稱講述故事，加上我又用了井上美羽的女孩姓名為筆名，結果雜誌社就以為——</value>
+  </data>
+  <data name="Appearance_ContentReader_FontColor.Text" xml:space="preserve">
+    <value>字體顏色</value>
+  </data>
+  <data name="Appearance_ContentReader_FontSize.Text" xml:space="preserve">
+    <value>字型大小</value>
+  </data>
+  <data name="Appearance_ContentReader_HideHeader.Text" xml:space="preserve">
+    <value>自動隱藏標題</value>
+  </data>
+  <data name="Appearance_ContentReader_LineSpacing.Text" xml:space="preserve">
+    <value>行距</value>
+  </data>
+  <data name="Appearance_ContentReader_MinimizeAppBar.Text" xml:space="preserve">
+    <value>自動隱藏下選單</value>
+  </data>
+  <data name="Appearance_ContentReader_ParagraphSpacing.Text" xml:space="preserve">
+    <value>段距</value>
+  </data>
+  <data name="Appearance_ContentReader_TapBrushColor.Text" xml:space="preserve">
+    <value>段落上色顏色</value>
+  </data>
+  <data name="Appearance_ContentReader_UseReadingAnchor.Text" xml:space="preserve">
+    <value>使用章節錨點</value>
+  </data>
+  <data name="Appearance_ContentReader_UseTapBrush.Text" xml:space="preserve">
+    <value>使用段落上色</value>
+  </data>
+  <data name="Appearance_Theme.Text" xml:space="preserve">
+    <value>佈景主題</value>
+  </data>
+  <data name="Appearance_Theme_ColorSet.Text" xml:space="preserve">
+    <value>色集</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Dark.Text" xml:space="preserve">
+    <value>黑夜</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Default.Text" xml:space="preserve">
+    <value>預設</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Guide.Text" xml:space="preserve">
+    <value>預覽</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_Light.Text" xml:space="preserve">
+    <value>白天</value>
+    <comment>#</comment>
+  </data>
+  <data name="Appearance_Theme_System.Text" xml:space="preserve">
+    <value>系統</value>
+    <comment>#</comment>
+  </data>
+  <data name="Data_Cache.Text" xml:space="preserve">
+    <value>快取</value>
+  </data>
+  <data name="Data_CacheUsed.Text" xml:space="preserve">
+    <value>已使用</value>
+  </data>
+  <data name="Data_Cache_Limit.Text" xml:space="preserve">
+    <value>限制</value>
+  </data>
+  <data name="Data_Clear.Text" xml:space="preserve">
+    <value>清除數據</value>
+  </data>
+  <data name="Data_ClearAll.Text" xml:space="preserve">
+    <value>清除所有資料</value>
+  </data>
+  <data name="Data_Connection.Text" xml:space="preserve">
+    <value>網絡</value>
+  </data>
+  <data name="Data_Connection_WiFi.Text" xml:space="preserve">
+    <value>只透過WiFi傳輸</value>
+  </data>
+  <data name="Data_Illustration.Text" xml:space="preserve">
+    <value>插圖</value>
+  </data>
+  <data name="Data_Illustration_SaveLocation.Text" xml:space="preserve">
+    <value>儲存位置</value>
+  </data>
+  <data name="Data_Illustration_SaveLocation_Album.Text" xml:space="preserve">
+    <value>我的相簿</value>
+  </data>
+  <data name="Data_Illustration_SaveLocation_Isolated.Text" xml:space="preserve">
+    <value>獨立存儲</value>
+  </data>
+  <data name="Data_Preload.Text" xml:space="preserve">
+    <value>預載</value>
+  </data>
+  <data name="Data_Preload_Cover.Text" xml:space="preserve">
+    <value>封面</value>
+  </data>
+  <data name="Data_Preload_TextContent.Text" xml:space="preserve">
+    <value>文本、簡介、目錄</value>
+  </data>
+  <data name="Language.Text" xml:space="preserve">
+    <value>語言</value>
+  </data>
+  <data name="Language_S.Text" xml:space="preserve">
+    <value>简体</value>
+  </data>
+  <data name="Language_T.Text" xml:space="preserve">
+    <value>繁體</value>
+  </data>
+  <data name="Need_Restart.Text" xml:space="preserve">
+    <value>已更改設定，需要重新啟動，請按上面退出</value>
+  </data>
+  <data name="Sliders_Unlock.Text" xml:space="preserve">
+    <value>解除鎖定</value>
+  </data>
+  <data name="Storage.Text" xml:space="preserve">
+    <value>資料</value>
+  </data>
+  <data name="Switches.Text" xml:space="preserve">
+    <value>切換</value>
+  </data>
+  <data name="Desc_Advanced_Debug.Text" xml:space="preserve">
+    <value>將手機變成取暖裝置，會比較耗電</value>
+  </data>
+  <data name="Desc_Advanced_Server.Text" xml:space="preserve">
+    <value>調整伺服器分流策略</value>
+  </data>
+  <data name="Desc_Appearance_Layout.Text" xml:space="preserve">
+    <value>各頁面的表示模式、橫向/縱向，模組排序等</value>
+  </data>
+  <data name="Advanced.Text" xml:space="preserve">
+    <value>進階</value>
+  </data>
+  <data name="Advanced_Debug.Text" xml:space="preserve">
+    <value>除錯</value>
+  </data>
+  <data name="Advanced_Debug_FileLogging.Text" xml:space="preserve">
+    <value>本地木頭</value>
+  </data>
+  <data name="Advanced_Debug_RemoteLogging.Text" xml:space="preserve">
+    <value>遠端木頭</value>
+  </data>
+  <data name="Advanced_Server.Text" xml:space="preserve">
+    <value>伺服器</value>
+  </data>
+  <data name="Appearance_Layout.Text" xml:space="preserve">
+    <value>排版</value>
+  </data>
+  <data name="Disabled.Text" xml:space="preserve">
+    <value>停用</value>
+  </data>
+  <data name="Enabled.Text" xml:space="preserve">
+    <value>啓用</value>
+  </data>
+  <data name="Desc_Appearance_Shades_Guide.Text" xml:space="preserve">
+    <value>請按上面的色塊檢視各底色深度</value>
+  </data>
+  <data name="Appearance_Shades_Guide.Text" xml:space="preserve">
+    <value>色調</value>
+  </data>
+  <data name="Appearance_Layout_BookInfoView.Text" xml:space="preserve">
+    <value>書頁</value>
+  </data>
+  <data name="Appearance_Layout_MainPage.Text" xml:space="preserve">
+    <value>主頁</value>
+  </data>
+  <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
+    <value>導航頁面</value>
+  </data>
+  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
+    <value>將會直接跳到正文</value>
+  </data>
+  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
+    <value>拖曳圖示以變更位置</value>
+  </data>
+  <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
+    <value>資訊頁</value>
+  </data>
+  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
+    <value>有些人覺得這是多餘的…</value>
+  </data>
+  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
+    <value>減少一點流量也是合埋的</value>
+  </data>
+  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
+    <value>欸？！那你要怎麼看書啊？</value>
+  </data>
+  <data name="Layout_FlowDirection.Text" xml:space="preserve">
+    <value>流動方向</value>
+  </data>
+  <data name="Layout_FlowLeft.Text" xml:space="preserve">
+    <value>左至右</value>
+  </data>
+  <data name="Layout_FlowRight.Text" xml:space="preserve">
+    <value>右至左</value>
+  </data>
+  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
+    <value>自定義導航</value>
+  </data>
+  <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
+    <value>選定自定義導航</value>
+  </data>
+  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
+    <value>進入主頁會變得快一點</value>
+  </data>
+  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
+    <value>文庫精選</value>
+  </data>
+  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
+    <value>其實我也覺得這個沒什麼用呢</value>
+  </data>
+  <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
+    <value>橫堵</value>
+  </data>
+  <data name="Layout_Aligment_Vertical.Text" xml:space="preserve">
+    <value>直堵</value>
+  </data>
+  <data name="Layout_Alignment.Text" xml:space="preserve">
+    <value>排列</value>
+  </data>
+  <data name="Account_Reviews_Post_Sign.Text" xml:space="preserve">
+    <value>發貼簽名</value>
+  </data>
+  <data name="Account_Reviews_Post_Sign_Default.Text" xml:space="preserve">
+    <value>- 從uwp 發出</value>
+  </data>
+  <data name=" Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>字體粗幼度</value>
+  </data>
+  <data name="Others.Text" xml:space="preserve">
+    <value>其它</value>
+  </data>
+  <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
+    <value>目錄底色</value>
+  </data>
+  <data name="Preface.Text" xml:space="preserve">
+    <value>進入設定時會清除頁面快取，所以在你設定完畢並返回的時候頁面會重新載入，要進行設定嗎？</value>
+  </data>
+  <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
+    <value>木頭等級</value>
+  </data>
+  <data name="Appearance_ContentReader_AssistHelper.Text" xml:space="preserve">
+    <value>輔助線</value>
+  </data>
+  <data name="Layout_ContentReader_UsePageClick.Text" xml:space="preserve">
+    <value>點擊翻頁</value>
+  </data>
+  <data name="Layout_ContentReader_UsePageClick_Warning.Text" xml:space="preserve">
+    <value>啟用點擊翻頁將會分別停用「自動章節錨點」與「點兩下呼出選單」功能，與要啟用點擊翻頁嗎？</value>
+  </data>
+  <data name="Desc_Language_AJ.Text" xml:space="preserve">
+    <value>將語言設定為日文，因為我很無聊，這是用 Google Translate 做的</value>
+  </data>
+  <data name="Language_J.Text" xml:space="preserve">
+    <value>日文</value>
+  </data>
+  <data name="Desc_Language_AT.Text" xml:space="preserve">
+    <value>Current Language</value>
+    <comment># This will not be used</comment>
+  </data>
+</root>

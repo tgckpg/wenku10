@@ -1,0 +1,37 @@
+﻿<Page
+    x:Class="wenku10.Pages.InfoViews.ReplyList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.InfoViews"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ms="using:Microsoft.Phone.Controls"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+    </Page.Resources>
+
+    <ListView x:Name="RepliesView"
+              ItemsSource="{Binding Replies}" Background="#222"
+              ItemContainerStyle="{StaticResource CommentListItem}">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Margin="5,8,0,8" Fill="#888" Width="3"/>
+                    <StackPanel Grid.Column="1" Margin="5, 10">
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <TextBlock Margin="0,0,10,0" Foreground="{StaticResource MinorBrush}" Text="{Binding Username}" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" Foreground="{StaticResource MajorBrush}" />
+                        </StackPanel>
+                        <!--TextBlock Foreground="#999" Margin="5,0" FontSize="20" Text="abcd"/-->
+                        <TextBlock Margin="5,0,5,0" Foreground="#888" Text="{Binding Title}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</Page>

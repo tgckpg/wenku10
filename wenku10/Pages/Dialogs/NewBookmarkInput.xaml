@@ -1,0 +1,47 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.NewBookmarkInput"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="New Bookmark"
+    PrimaryButtonText="OK"
+    SecondaryButtonText="Cancel"
+    Background="{StaticResource MajorBackgroundBrush}"
+    Foreground="{StaticResource MajorBrush}"
+    Style="{StaticResource ScrollContentDialog}"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel x:Name="DialogView" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <TextBlock x:Uid="/AppResources/NewBookmark" TextWrapping="Wrap"
+                       Text="You can set custom bookmark here, bookmark set here can be accessed from bookmark list" />
+            <TextBox x:Name="BookmarkName"
+                     PlaceholderText="Default to paragraph text">
+                <TextBox.Header>
+                    <TextBlock x:Uid="/AppResources/NameOf" Foreground="{StaticResource MinorBrush}" />
+                </TextBox.Header>
+            </TextBox>
+            <TextBlock x:Uid="/AppResources/PickAColor" Text="Please pick a color" />
+        </StackPanel>
+
+        <GridView x:Name="ColorGrid" Grid.Row="1">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle Width="35" Height="35" >
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="{Binding TColor}" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+    </Grid>
+</ContentDialog>

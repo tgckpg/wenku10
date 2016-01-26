@@ -1,0 +1,130 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.FirstTimeSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Pivot x:Name="MainView" SelectionChanged="MainView_SelectionChanged" >
+            <Pivot.Items>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock Foreground="White" Text="Hello, there!" />
+                    </PivotItem.Header>
+                    <TextBlock Foreground="White"
+                               x:Uid="/InitQuestions/Intro"
+                               FontSize="23"
+                               TextWrapping="Wrap"
+                               Text="Greetings Message" />
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock Foreground="White" Text="OneDrive" />
+                    </PivotItem.Header>
+                    <ToggleSwitch x:Name="OneDriveToggle" VerticalAlignment="Top" Toggled="OneDrive">
+                        <ToggleSwitch.Header>
+                            <TextBlock x:Uid="/InitQuestions/EnableOneDrive"
+                                       FontSize="23"
+                                       Foreground="White"
+                                       TextWrapping="Wrap"
+                                       Text="EnableOneDrive?" />
+                        </ToggleSwitch.Header>
+                        <ToggleSwitch.OnContent>
+                            <TextBlock x:Uid="/Settings/Enabled"
+                                       Foreground="White"
+                                       Text="Enabled" />
+                        </ToggleSwitch.OnContent>
+                        <ToggleSwitch.OffContent>
+                            <TextBlock x:Uid="/Settings/Disabled"
+                                       Foreground="White"
+                                       Text="Disabled" />
+                        </ToggleSwitch.OffContent>
+                    </ToggleSwitch>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock Foreground="White" Text="ServerSelector" />
+                    </PivotItem.Header>
+                    <ToggleSwitch x:Name="EnableSS" VerticalAlignment="Top" Toggled="ToggleSS">
+                        <ToggleSwitch.Header>
+                            <TextBlock x:Uid="/InitQuestions/EnableServerSelector"
+                                       FontSize="23"
+                                       TextWrapping="Wrap"
+                                       Foreground="White"
+                                       Text="EnableServerSelector?" />
+                        </ToggleSwitch.Header>
+                        <ToggleSwitch.OnContent>
+                            <TextBlock x:Uid="/Settings/Enabled"
+                                       Foreground="White"
+                                       Text="Enabled" />
+                        </ToggleSwitch.OnContent>
+                        <ToggleSwitch.OffContent>
+                            <TextBlock x:Uid="/Settings/Disabled"
+                                       Foreground="White"
+                                       Text="Disabled" />
+                        </ToggleSwitch.OffContent>
+                    </ToggleSwitch>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock Foreground="White" Text="Theme" />
+                    </PivotItem.Header>
+                    <ToggleSwitch x:Name="ThemeToggle" VerticalAlignment="Top">
+                        <ToggleSwitch.Header>
+                            <TextBlock x:Uid="/InitQuestions/Theme"
+                                       FontSize="23"
+                                       TextWrapping="Wrap"
+                                       Foreground="White"
+                                       Text="EnableOneDrive?" />
+                        </ToggleSwitch.Header>
+                        <ToggleSwitch.OnContent>
+                            <TextBlock x:Uid="/Settings/Appearance_Theme_Dark"
+                                       Foreground="White"
+                                       Text="Enabled" />
+                        </ToggleSwitch.OnContent>
+                        <ToggleSwitch.OffContent>
+                            <TextBlock x:Uid="/Settings/Appearance_Theme_Light"
+                                       Foreground="White"
+                                       Text="Disabled" />
+                        </ToggleSwitch.OffContent>
+                    </ToggleSwitch>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock Foreground="White" Text="All Done!" />
+                    </PivotItem.Header>
+                    <TextBlock Foreground="White"
+                               x:Uid="/InitQuestions/Thankyou"
+                               TextWrapping="Wrap"
+                               FontSize="23"
+                               Text="Thankyou Message" />
+                </PivotItem>
+            </Pivot.Items>
+        </Pivot>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Grid.Row="1">
+            <Button Style="{StaticResource PlainButton}" x:Name="PrevBtn" Padding="10,5" Margin="10" Click="Prev">
+                <TextBlock x:Uid="/InitQuestions/Prev"
+                           Padding="15,10" Foreground="White"
+                           Text="Previous" />
+            </Button>
+            <Button Style="{StaticResource PlainButton}" x:Name="NextBtn" Padding="10,5" Margin="10" Click="Next" >
+                <TextBlock x:Uid="/InitQuestions/Next"
+                           Padding="15,10" Foreground="White"
+                           Text="Next" />
+            </Button>
+            <Button Style="{StaticResource PlainButton}" x:Name="CompBtn" Padding="10,5" Margin="10" Click="Complete">
+                <TextBlock x:Uid="/InitQuestions/Complete"
+                           Padding="15,10" Foreground="White"
+                           Text="Complete" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>

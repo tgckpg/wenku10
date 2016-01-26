@@ -1,0 +1,35 @@
+#!/bin/bash
+
+BUILDER="/cygdrive/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe"
+
+echo "Mapping drive"
+net use \\\\CI\\ci /user:ci "LxVV5JpIGAmlKTgJOTpX56D53WO391lT"
+
+cd //CI/ci/sources/wenku10
+if [[ $? -ne 0 ]]; then
+echo Cannot cd into build
+exit 1
+fi
+
+STATUS=0
+echo "{CI_SECTION_START} NuGet Restore"
+nuget restore
+if [[ $? -ne 0 ]]; then
+    STATUS=1
+fi
+echo "{CI_SECTION_END}"
+
+echo "{CI_SECTION_START} MSBuild"
+"$BUILDER" wenku10.sln /p:Configuration="Beta"
+if [[ $? -ne 0 ]]; then
+    STATUS=1
+fi
+echo "{CI_SECTION_END}"
+
+echo "{CI_SECTION_START} Test"
+echo "No tests yet."
+echo "{CI_SECTION_END}"
+
+if [[ $STATUS -ne 0 ]]; then
+    exit 1
+fi

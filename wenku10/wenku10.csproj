@@ -1,0 +1,678 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{82F9B476-9D4B-4643-85B1-53329FE58F0C}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>wenku10</RootNamespace>
+    <AssemblyName>wenku10</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>wenku10_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>F2E3248B1096632CC0FCE29706983B1E848883CB</PackageCertificateThumbprint>
+    <AppxBundle>Always</AppxBundle>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>false</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Assets\OpacityChecker.png" />
+    <Content Include="Assets\Samples\bookcoversample.png" />
+    <Content Include="Strings\badwords.txt" />
+    <None Include="project.json" />
+    <PRIResource Include="Strings\en-US\AppResources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainStage.xaml.cs">
+      <DependentUpon>MainStage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Microsoft.Phone.Controls\ControlResources.cs" />
+    <Compile Include="Microsoft.Phone.Controls\DateTimeFormatHelper.cs" />
+    <Compile Include="Microsoft.Phone.Controls\RelativeTimeConverter.cs" />
+    <Compile Include="Pages\Dialogs\Taotu\EditProcExtract.xaml.cs">
+      <DependentUpon>EditProcExtract.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Taotu\EditProcMark.xaml.cs">
+      <DependentUpon>EditProcMark.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DirectTextViewer.xaml.cs">
+      <DependentUpon>DirectTextViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LocalModeTxtList.xaml.cs">
+      <DependentUpon>LocalModeTxtList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ModeSelect.xaml.cs">
+      <DependentUpon>ModeSelect.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="wenku8\Model\Loaders\AutoCache.cs" />
+    <Compile Include="wenku8\Model\Loaders\BookLoader.cs" />
+    <Compile Include="wenku8\Model\Loaders\ChapterLoader.cs" />
+    <Compile Include="wenku8\Model\Loaders\CommentLoader.cs" />
+    <Compile Include="wenku8\Model\Loaders\NewsLoader.cs" />
+    <Compile Include="wenku8\Model\Loaders\VolumeLoader.cs" />
+    <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
+    <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
+    <Compile Include="wenku8\Model\Section\LocalFileList\LocalTextScope.cs" />
+    <Compile Include="wenku8\Model\Section\LocalFileList\SpiderScope.cs" />
+    <Compile Include="wenku8\Model\Section\SearchSections.cs" />
+    <Compile Include="wenku8\Model\Section\LoginStatus.cs" />
+    <Compile Include="wenku8\Model\Section\NavPaneSection.cs" />
+    <Compile Include="wenku8\Model\Section\PopupList.cs" />
+    <Compile Include="wenku8\Model\Section\ReaderView.cs" />
+    <Compile Include="wenku8\Model\Section\ReviewsSection.cs" />
+    <Compile Include="wenku8\Model\Section\TOCPane.cs" />
+    <Compile Include="wenku8\Model\Section\TOCSection.cs" />
+    <Compile Include="Pages\About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Account.xaml.cs">
+      <DependentUpon>Account.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BookInfoView.xaml.cs">
+      <DependentUpon>BookInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReader.xaml.cs">
+      <DependentUpon>ContentReader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
+      <DependentUpon>BookmarkList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\CategorizedList.xaml.cs">
+      <DependentUpon>CategorizedList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderPane\ImageList.xaml.cs">
+      <DependentUpon>ImageList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderPane\ReaderContent.xaml.cs">
+      <DependentUpon>ReaderContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderPane\TableOfContents.xaml.cs">
+      <DependentUpon>TableOfContents.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DebugLog.xaml.cs">
+      <DependentUpon>DebugLog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Announcements.xaml.cs">
+      <DependentUpon>Announcements.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\ColorPicker.xaml.cs">
+      <DependentUpon>ColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\NewBookmarkInput.xaml.cs">
+      <DependentUpon>NewBookmarkInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Rename.xaml.cs">
+      <DependentUpon>Rename.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\History.xaml.cs">
+      <DependentUpon>History.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ImageView.xaml.cs">
+      <DependentUpon>ImageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\InfoViews\ReplyList.xaml.cs">
+      <DependentUpon>ReplyList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\NavList.xaml.cs">
+      <DependentUpon>NavList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ReviewsInput.xaml.cs">
+      <DependentUpon>ReviewsInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Search.xaml.cs">
+      <DependentUpon>Search.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Advanced\Debug.xaml.cs">
+      <DependentUpon>Debug.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Advanced\ServerSelector.xaml.cs">
+      <DependentUpon>ServerSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Data\Cache.xaml.cs">
+      <DependentUpon>Cache.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Data\Illustration.xaml.cs">
+      <DependentUpon>Illustration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Data\Preload.xaml.cs">
+      <DependentUpon>Preload.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\FirstTimeSettings.xaml.cs">
+      <DependentUpon>FirstTimeSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\MainSettings.xaml.cs">
+      <DependentUpon>MainSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Themes\ContentReader.xaml.cs">
+      <DependentUpon>ContentReader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Themes\EditColors.xaml.cs">
+      <DependentUpon>EditColors.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Themes\Layout.xaml.cs">
+      <DependentUpon>Layout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\Themes\ThemeColors.xaml.cs">
+      <DependentUpon>ThemeColors.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="wenku8\Model\Topics\PressList.cs" />
+    <Compile Include="wenku8\Settings\Layout\BookInfoView.cs" />
+    <Compile Include="wenku8\Settings\Layout\ContentReader.cs" />
+    <Compile Include="wenku8\Settings\Layout\MainPage.cs" />
+    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\InfoView.cs" />
+    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\Reviews.cs" />
+    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\ThumbnailBase.cs" />
+    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\TOCView.cs" />
+    <Compile Include="wenku8\Settings\Layout\NavList.cs" />
+    <Compile Include="wenku8\System\Bootstrap.cs" />
+    <Compile Include="wenku8\System\UnitTest.cs" />
+    <Compile Include="wenku8\Taotu\WenkuMarker.cs" />
+    <Compile Include="wenku8\Taotu\WenkuExtractor.cs" />
+    <Page Include="MainStage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Account.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BookInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ContentReader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ContentReaderPane\BookmarkList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\CategorizedList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ContentReaderPane\ImageList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ContentReaderPane\ReaderContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ContentReaderPane\TableOfContents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DebugLog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Announcements.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\ColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Login.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\NewBookmarkInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Rename.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Taotu\EditProcExtract.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Taotu\EditProcMark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DirectTextViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\History.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ImageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\InfoViews\ReplyList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LocalModeTxtList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ModeSelect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\NavList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ReviewsInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Search.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Advanced\Debug.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Advanced\ServerSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Data\Cache.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Data\Illustration.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Data\Preload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\FirstTimeSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\MainSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Themes\ContentReader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Themes\EditColors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Themes\Layout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Themes\ThemeColors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Global\Button.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Global\ScrollBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Global\ListViewItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Global\Pivot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Global\ToggleSwitch.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ListViewItems\CommentListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Pages\MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ScrollContentDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ListViewItems\ListVIewItems.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\VerticalListView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <PRIResource Include="Strings\en-US\AppBar.resw" />
+    <PRIResource Include="Strings\en-US\ContextMenu.resw" />
+    <PRIResource Include="Strings\en-US\AdvDM.resw" />
+    <PRIResource Include="Strings\en-US\WMessage.resw" />
+    <PRIResource Include="Strings\en-US\LoadingMessage.resw" />
+    <PRIResource Include="Strings\en-US\Error.resw" />
+    <PRIResource Include="Strings\en-US\Book.resw" />
+    <PRIResource Include="Strings\en-US\DateTimeUnits.resw" />
+    <PRIResource Include="Strings\en-US\Message.resw" />
+    <PRIResource Include="Strings\en-US\NavigationTitles.resw" />
+    <PRIResource Include="Strings\en-US\Settings.resw" />
+    <PRIResource Include="Strings\zh-CN\AdvDM.resw" />
+    <PRIResource Include="Strings\zh-CN\AppBar.resw" />
+    <PRIResource Include="Strings\zh-CN\AppResources.resw" />
+    <PRIResource Include="Strings\zh-CN\Book.resw" />
+    <PRIResource Include="Strings\zh-CN\ContextMenu.resw" />
+    <PRIResource Include="Strings\zh-CN\DateTimeUnits.resw" />
+    <PRIResource Include="Strings\zh-CN\Error.resw" />
+    <PRIResource Include="Strings\zh-CN\LoadingMessage.resw" />
+    <PRIResource Include="Strings\zh-CN\Message.resw" />
+    <PRIResource Include="Strings\zh-CN\NavigationTitles.resw" />
+    <PRIResource Include="Strings\zh-CN\Settings.resw" />
+    <PRIResource Include="Strings\zh-CN\WMessage.resw" />
+    <PRIResource Include="Strings\zh-TW\AdvDM.resw" />
+    <PRIResource Include="Strings\zh-TW\AppBar.resw" />
+    <PRIResource Include="Strings\zh-TW\AppResources.resw" />
+    <PRIResource Include="Strings\zh-TW\Book.resw" />
+    <PRIResource Include="Strings\zh-TW\ContextMenu.resw" />
+    <PRIResource Include="Strings\zh-TW\DateTimeUnits.resw" />
+    <PRIResource Include="Strings\zh-TW\Error.resw" />
+    <PRIResource Include="Strings\zh-TW\LoadingMessage.resw" />
+    <PRIResource Include="Strings\zh-TW\Message.resw" />
+    <PRIResource Include="Strings\zh-TW\NavigationTitles.resw" />
+    <PRIResource Include="Strings\zh-TW\Settings.resw" />
+    <PRIResource Include="Strings\zh-TW\WMessage.resw" />
+    <PRIResource Include="Strings\en-US\InitQuestions.resw" />
+    <PRIResource Include="Strings\zh-TW\InitQuestions.resw" />
+    <PRIResource Include="Strings\zh-CN\InitQuestions.resw" />
+    <PRIResource Include="Strings\en-US\Tips.resw" />
+    <PRIResource Include="Strings\zh-TW\Tips.resw" />
+    <PRIResource Include="Strings\zh-CN\Tips.resw" />
+    <PRIResource Include="Strings\ja\AdvDM.resw" />
+    <PRIResource Include="Strings\ja\AppBar.resw" />
+    <PRIResource Include="Strings\ja\AppResources.resw" />
+    <PRIResource Include="Strings\ja\Book.resw" />
+    <PRIResource Include="Strings\ja\ContextMenu.resw" />
+    <PRIResource Include="Strings\ja\DateTimeUnits.resw" />
+    <PRIResource Include="Strings\ja\Error.resw" />
+    <PRIResource Include="Strings\ja\InitQuestions.resw" />
+    <PRIResource Include="Strings\ja\LoadingMessage.resw" />
+    <PRIResource Include="Strings\ja\Message.resw" />
+    <PRIResource Include="Strings\ja\NavigationTitles.resw" />
+    <PRIResource Include="Strings\ja\Settings.resw" />
+    <PRIResource Include="Strings\ja\Tips.resw" />
+    <PRIResource Include="Strings\ja\WMessage.resw" />
+    <None Include="wenku10.pfx" />
+    <None Include="wenku10_StoreKey.pfx" />
+    <None Include="wenku10_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Icons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libs\libpenguin\Net.Astropenguin\Net.Astropenguin.csproj">
+      <Project>{5a6b4589-8c63-40d5-946f-759a9282a176}</Project>
+      <Name>Net.Astropenguin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\libtaotu\libtaotu.csproj">
+      <Project>{119b84b1-d42b-460c-8f72-4fae1e2614f1}</Project>
+      <Name>libtaotu</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\libwenku8\libwenku8.csproj">
+      <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
+      <Name>libwenku8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
+      <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>
+      <Name>wenku8-protocol</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Beta|ARM'">
+    <OutputPath>bin\ARM\Beta\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS;BETA</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Beta|x64'">
+    <OutputPath>bin\x64\Beta\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS;BETA</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Beta|x86'">
+    <OutputPath>bin\x86\Beta\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS;BETA</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Testing|ARM'">
+    <OutputPath>bin\ARM\Testing\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS;TESTING</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Testing|x64'">
+    <OutputPath>bin\x64\Testing\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS;TESTING</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Testing|x86'">
+    <OutputPath>bin\x86\Testing\</OutputPath>
+    <DefineConstants>NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;CODE_ANALYSIS;TESTING</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>wenku10.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+	   Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.Data.Preload"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings.Data"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <StackPanel Margin="15">
+
+            <!-- Preload Section -->
+            <TextBlock x:Uid="/Settings/Desc_Data_Preload"
+                       Text="Desc_Data_Preload"
+                       TextWrapping="Wrap" Foreground="{StaticResource SubtleBrush}" />
+
+            <TextBlock x:Uid="/Settings/Data_Preload_Cover"
+                       Foreground="{StaticResource MajorBrush}"
+                       Text="Data_Preload_Cover" FontSize="20"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="CoverSize"
+                           Foreground="{StaticResource MinorBrush}"
+                           Grid.Column="0" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Padding="12" Click="Button_Click_1">
+                    <TextBlock x:Uid="/Settings/Data_Clear" Text="Data_Clear" />
+                </Button>
+            </Grid>
+
+            <TextBlock x:Uid="/Settings/Data_Preload_TextContent"
+                       Foreground="{StaticResource MajorBrush}"
+                       Text="Data_Preload_TextContent" FontSize="20"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="TextContentSize"
+                           Foreground="{StaticResource MinorBrush}"
+                           Grid.Column="0" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Padding="12" Click="Button_Click_2">
+                    <TextBlock x:Uid="/Settings/Data_Clear" Text="Data_Clear" />
+                </Button>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Page>

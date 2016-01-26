@@ -1,0 +1,209 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.ColorPicker"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{StaticResource MajorBackgroundBrush}"
+    Foreground="{StaticResource MajorBrush}"
+    Style="{StaticResource ScrollContentDialog}"
+    PrimaryButtonText="Button1"
+    SecondaryButtonText="Button2"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+    <ContentDialog.Title>
+        <TextBlock x:Uid="/AppResources/PickAColor" Text="Pretty pick a color please" />
+    </ContentDialog.Title>
+
+    <Grid x:Name="MainView">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ComboBox x:Name="PresetColors"
+                  SelectionChanged="PresetColors_SelectionChanged">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Margin="5" Width="10" Height="10">
+                            <Rectangle.Fill>
+                                <SolidColorBrush Color="{Binding TColor}" />
+                            </Rectangle.Fill>
+                        </Rectangle>
+                        <TextBlock Grid.Column="1" Text="{Binding ColorTag}" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <c:VariableGridView Grid.Row="1"
+                            Margin="5"
+                            Padding="5"
+                            ScrollViewer.HorizontalScrollMode="Enabled"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            IsItemClickEnabled="True"
+                            ItemContainerStyle="{StaticResource PlainGridItem}"
+                            ItemClick="VariableGridView_ItemClick"
+                            ItemsSource="{Binding Palettes}">
+            <c:VariableGridView.Background>
+                <ImageBrush  Stretch="UniformToFill" ImageSource="ms-appx:///Assets/OpacityChecker.png" />
+            </c:VariableGridView.Background>
+            <c:VariableGridView.ItemTemplate>
+                <DataTemplate>
+                    <Border Width="{Binding Dim}" Height="{Binding Dim}">
+                        <Border.Background>
+                            <SolidColorBrush Color="{Binding TColor}" />
+                        </Border.Background>
+                        <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                   Margin="5"
+                                   Text="{Binding ColorTag}" >
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Color="{Binding TextColor}" />
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </Border>
+                </DataTemplate>
+            </c:VariableGridView.ItemTemplate>
+            <c:VariableGridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VariableSizedWrapGrid ItemWidth="40" ItemHeight="40"
+                                           Orientation="Vertical" MaximumRowsOrColumns="4" />
+                </ItemsPanelTemplate>
+            </c:VariableGridView.ItemsPanel>
+        </c:VariableGridView>
+        <Pivot Grid.Row="2" DataContext="{Binding CColor}" Margin="-10,1,-15,0">
+            <Pivot.HeaderTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </Pivot.HeaderTemplate>
+            <Pivot.Items>
+            <PivotItem Header="ARGB">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="A:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding A}"
+                                 Tag="A,255"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Hex:"
+                                   Margin="5"/>
+                        <TextBox Width="128" Text="{Binding Hex}"
+                                 LostFocus="HexInput" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0, 5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="R:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding R}"
+                                 Tag="R,255"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="G:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding G}"
+                                 Tag="G,255"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="B:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding B}"
+                                 Tag="B,255"
+                                 LostFocus="NumericInput"/>
+                    </StackPanel>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="CMYK">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0, 5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="C:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding C}"
+                                 Tag="C,100"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="M:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding M}"
+                                 Tag="M,100"
+                                 LostFocus="NumericInput"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0, 5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Y:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding Y}"
+                                 Tag="Y,100"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="K:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding K}"
+                                 Tag="K,100"
+                                 LostFocus="NumericInput"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0, 5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Opacity:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding Opacity}"
+                                 Tag="Opacity,100"
+                                 LostFocus="NumericInput"/>
+                    </StackPanel>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="HSL">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="H:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding H}"
+                                 Tag="H,360"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="S:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding S}"
+                                 Tag="S,100"
+                                 LostFocus="NumericInput"/>
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="L:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding L}"
+                                 Tag="L,100"
+                                 LostFocus="NumericInput"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="Opacity:"
+                                   Margin="5"/>
+                        <TextBox Width="64" InputScope="Number" Text="{Binding Opacity}"
+                                 Tag="Opacity,100"
+                                 LostFocus="NumericInput"/>
+                    </StackPanel>
+                </StackPanel>
+            </PivotItem>
+            </Pivot.Items>
+        </Pivot>
+        <StackPanel Grid.Row="3">
+            <TextBlock TextWrapping="Wrap">
+                 For Color scheme, it is recommended to use
+                <Hyperlink Foreground="{StaticResource VerticalRibbonBrush}"
+                           NavigateUri="https://color.adobe.com/">
+                    Adobe Kuler
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

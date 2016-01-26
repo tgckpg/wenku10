@@ -1,0 +1,78 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.Announcements"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs"
+    xmlns:ms="using:Microsoft.Phone.Controls"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource ScrollContentDialog}"
+    Background="{StaticResource MajorBackgroundBrush}"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+    <ContentDialog.Title>
+            <TextBlock x:Uid="/NavigationTitles/News"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       Text="Announcements" />
+    </ContentDialog.Title>
+
+    <Grid>
+        <Grid.Resources>
+            <Flyout x:Key="VersionFlyout">
+                <TextBlock x:Name="FullVersion" />
+            </Flyout>
+            <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <HyperlinkButton FontSize="15"
+                         VerticalAlignment="Top" HorizontalAlignment="Right"
+                         Click="ShowVersion"
+                         FlyoutBase.AttachedFlyout="{StaticResource VersionFlyout}"
+                         Foreground="{StaticResource SubtleBrush}">
+            <TextBlock Foreground="{StaticResource SubtleBrush}">
+                <Run x:Uid="/AppResources/VersionUpdateCurrent" Text="CurrentVersion"/>
+                <Run x:Name="version" />
+            </TextBlock>
+        </HyperlinkButton>
+
+        <ListView x:Name="MainList"
+                  Grid.Row="1"
+                  IsItemClickEnabled="True"
+                  ItemClick="MainList_ItemClick"
+                  ItemContainerStyle="{StaticResource CommentListItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Grid.Column="0" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <HyperlinkButton NavigateUri="{Binding Link}">
+                                <TextBlock TextWrapping="Wrap">
+                                    <Underline>
+                                        <Run Text="{Binding Name}" />
+                                    </Underline>
+                                    <TextBlock.Foreground>
+                                        <SolidColorBrush Color="{Binding FG}" />
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </HyperlinkButton>
+                            <TextBlock Grid.Column="1"
+                                       Margin="0,0,10,0" VerticalAlignment="Center"
+                                       Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"
+                                       Foreground="{StaticResource SubtleBrush}" />
+                        </Grid>
+                        <TextBlock Foreground="{StaticResource SubtleBrush}" Text="{Binding Desc}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentDialog>
