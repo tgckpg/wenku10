@@ -13,16 +13,6 @@ wenku10 versatile book reader that does many things.
 - Faster vertical text rendering ( I am planning to switch the core components to native library )
 - Better design. I don't think if I have time to do this
 
-#### How to compile
-- Sign the assembly first, for all project, follow the steps below:
-  1. Right click project properties -> Signing -> Uncheck signing
-  2. Under project -> expand the [Properties] group -> Edit AssemblyInfo.cs
-  3. Remove the `, PublicKey...` suffix inside `IntenalsVisibleTo`
-  4. Compile the project
-  5. Once the project is compile and the dll is present. Enable the signing again
-  6. Generate the publickey and put it after `InternalsVisibleTo`
-- For `libtranslate`, you need to generate the code before compiling
-
 #### Screenshots
 Here are some screenshots as of version 1.2.3b
 ![Screenshot 1](https://tgckpg.github.io/wenku10/screenshots/zh-tw (1).png)
