@@ -1,6 +1,6 @@
 [submodule "libs/libtranslate"]
 	path = libs/libtranslate
-	url = AstroGit:libtranslate.git
+	url = git@github.com:tgckpg/libtranslate.git
 [submodule "libs/libpenguin"]
 	path = libs/libpenguin
 	url = git@github.com:tgckpg/libpenguin.git
