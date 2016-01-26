@@ -10,6 +10,3 @@
 [submodule "libs/libtaotu"]
 	path = libs/libtaotu
 	url = git@github.com:tgckpg/libtaotu.git
-[submodule "libs/wenku8-protocol"]
-	path = libs/wenku8-protocol
-	url = git@github.com:tgckpg/libtaotu.git
