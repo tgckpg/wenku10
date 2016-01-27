@@ -101,6 +101,7 @@ namespace wenku10.Pages.Settings
                         new ActionItem( stx.Text( "Data_Cache"), stx.Text( "Desc_Data_Cache" ), typeof( Data.Cache ) )
                         , new ActionItem( stx.Text( "Data_Illustration"), stx.Text( "Desc_Data_Illustration" ), typeof( Data.Illustration ) )
                         , new ActionItem( stx.Text( "Data_Preload"), stx.Text( "Desc_Data_Preload" ), typeof( Data.Preload ) )
+                        , new ActionItem( stx.Text( "EBWin"), stx.Text( "Desc_EBWin_Short" ), typeof( Data.EBWin ) )
                         , OneDriveButton = new ActionItem( "OneDrive", Properties.ENABLE_ONEDRIVE ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
                         // , new ActionItem( stx.Text( "Data_Connection"), stx.Text( "Desc_Data_Connection" ), typeof( Data.Cache ) )
                     }

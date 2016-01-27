@@ -133,6 +133,9 @@
     <Compile Include="Pages\ModeSelect.xaml.cs">
       <DependentUpon>ModeSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\Data\EBWin.xaml.cs">
+      <DependentUpon>EBWin.xaml</DependentUpon>
+    </Compile>
     <Compile Include="wenku8\Model\Loaders\AutoCache.cs" />
     <Compile Include="wenku8\Model\Loaders\BookLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\ChapterLoader.cs" />
@@ -381,6 +384,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Settings\Data\Cache.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Data\EBWin.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

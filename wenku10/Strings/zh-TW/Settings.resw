@@ -465,4 +465,16 @@
     <value>Current Language</value>
     <comment># This will not be used</comment>
   </data>
+  <data name="Desc_EBWin_Install.Text" xml:space="preserve">
+    <value>安裝新的詞典</value>
+  </data>
+  <data name="Desc_EBWin_Long.Text" xml:space="preserve">
+    <value>讓你閲讀時可以直接使用 ebwin 提拱的字典格式</value>
+  </data>
+  <data name="Desc_EBWin_Short.Text" xml:space="preserve">
+    <value>EBWin 查字工具</value>
+  </data>
+  <data name="EBWin.Text" xml:space="preserve">
+    <value>EBWin</value>
+  </data>
 </root>
