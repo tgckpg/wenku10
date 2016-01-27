@@ -477,4 +477,10 @@
   <data name="EBWin.Text" xml:space="preserve">
     <value>EBWin</value>
   </data>
+  <data name="EBWin_Installing.Text" xml:space="preserve">
+    <value>Installing</value>
+  </data>
+  <data name="EBWin_Install_Failed.Text" xml:space="preserve">
+    <value>Installation failed</value>
+  </data>
 </root>

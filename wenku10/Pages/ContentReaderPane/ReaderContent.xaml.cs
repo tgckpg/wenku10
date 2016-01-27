@@ -207,6 +207,13 @@ namespace wenku10.Pages.ContentReaderPane
             SetCustomAnchor( SelectedParagraph );
         }
 
+        internal async void SearchWords( object sender, RoutedEventArgs e )
+        {
+            if ( SelectedParagraph == null ) return;
+            Dialogs.EBDictSearch DictDialog = new Dialogs.EBDictSearch( SelectedParagraph );
+            await Popups.ShowDialog( DictDialog );
+        }
+
         public async void SetCustomAnchor( Paragraph P, string BookmarkName = null )
         {
             Dialogs.NewBookmarkInput BookmarkIn = new Dialogs.NewBookmarkInput( P );

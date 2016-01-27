@@ -469,4 +469,10 @@
   <data name="EBWin.Text" xml:space="preserve">
     <value>EBWin</value>
   </data>
+  <data name="EBWin_Installing.Text" xml:space="preserve">
+    <value>安裝</value>
+  </data>
+  <data name="EBWin_Install_Failed.Text" xml:space="preserve">
+    <value>安装失败</value>
+  </data>
 </root>

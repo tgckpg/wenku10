@@ -5,6 +5,7 @@
     xmlns:local="using:wenku10.Pages.Settings.Data"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -13,12 +14,13 @@
         <v:BoolStateConverter x:Key="BoolStateConverter" />
     </Page.Resources>
 
-    <Grid Background="{StaticResource MajorBackgroundBrush}">
+    <Grid Background="{StaticResource MajorBackgroundBrush}"
+          x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel x:Name="InfoPanel" Margin="10" Grid.Row="0">
+        <StackPanel Margin="10" Grid.Row="0">
             <TextBlock Margin="5" Text="EBWin Dictionaries"
                        x:Uid="/Settings/Desc_EBWin_Long"
                        TextWrapping="Wrap" Foreground="{StaticResource SubtleBrush}" />
@@ -36,6 +38,7 @@
                 <p:StateControl Grid.Column="0" State="{Binding HaveChosen, Converter={StaticResource BoolStateConverter}}">
                     <TextBlock Foreground="{StaticResource MajorBrush}"
                                Margin="5"
+                               TextWrapping="Wrap"
                                Text="{Binding InstMessage}" />
                 </p:StateControl>
                 <ProgressRing Grid.Column="1" Margin="5"
@@ -47,10 +50,9 @@
                 <StackPanel>
                     <Button Click="InstallNewDict" >
                         <TextBlock Text="Confirm Install"
-                                  Foreground="{StaticResource MajorBrush}"
+                                   Foreground="{StaticResource MajorBrush}"
                                    x:Uid="/Settings/EBWin_Confirm_Intstall" />
                     </Button>
-                    <ProgressBar Value="{Binding Progress}" />
                 </StackPanel>
             </p:StateControl>
         </StackPanel>
@@ -58,14 +60,32 @@
             <p:StateControl State="{Binding Data, Converter={StaticResource DataStateConverter}}">
                 <TextBlock Text="No dictionary" />
             </p:StateControl>
-            <ListView x:Name="ListOfDicts" Margin="5" ItemsSource="{Binding Data}">
+            <ListView ItemsSource="{Binding Data}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel>
-                            <TextBlock FontSize="30" Text="{Binding Name}" />
-                            <TextBlock Text="{Binding Desc}" />
-                            <TextBlock Text="{Binding Desc2}" />
-                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0"
+                                    Click="RemoveDict"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Style="{StaticResource IconButton}">
+                                <i:IconCross Width="30" Height="30"
+                                             AutoScale="True"
+                                             Foreground="{StaticResource MinorBrush}"/>
+                            </Button>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock FontSize="23"
+                                           Margin="5"
+                                           Foreground="{StaticResource MajorBrush}"
+                                           Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Desc}"
+                                           Foreground="{StaticResource MinorBrush}"
+                                           Margin="5" />
+                            </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

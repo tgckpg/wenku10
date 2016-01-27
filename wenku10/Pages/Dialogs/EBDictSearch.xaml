@@ -1,0 +1,135 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.EBDictSearch"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource ScrollContentDialog}"
+    Background="{StaticResource MajorBackgroundBrush}"
+    IsSecondaryButtonEnabled="False">
+    <ContentDialog.Title>
+        <TextBlock x:Uid="/ContextMenu/ContextMenu_Search_Dict"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="Announcements" />
+    </ContentDialog.Title>
+
+    <ContentDialog.Resources>
+        <Style x:Key="TextBoxStyle1" TargetType="TextBox">
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="{ThemeResource TextControlThemePadding}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Disabled" />
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="PointerOver" />
+                                    <VisualState x:Name="Focused" />
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="ButtonStates">
+                                    <VisualState x:Name="ButtonVisible" />
+                                    <VisualState x:Name="ButtonCollapsed" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <ContentPresenter x:Name="HeaderContentPresenter"
+                                  x:DeferLoadStrategy="Lazy"
+                                  Visibility="Collapsed"
+                                  Grid.Row="0"
+                                  Foreground="{ThemeResource SystemControlForegroundBaseHighBrush}"
+                                  Margin="0,0,0,8"
+                                  Grid.ColumnSpan="2"
+                                  Content="{TemplateBinding Header}"
+                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                  FontWeight="Normal" />
+                            <ScrollViewer x:Name="ContentElement"
+                                  Grid.Row="1"
+                                  HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                  HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                  VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                  IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+                                  IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                                  IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                                  Margin="{TemplateBinding BorderThickness}"
+                                  Padding="{TemplateBinding Padding}"
+                                  IsTabStop="False"
+                                  AutomationProperties.AccessibilityView="Raw"
+                                  ZoomMode="Disabled" />
+                            <ContentControl x:Name="PlaceholderTextContentPresenter"
+                                  Grid.Row="1"
+                                  Foreground="{ThemeResource SystemControlPageTextBaseMediumBrush}"
+                                  Margin="{TemplateBinding BorderThickness}"
+                                  Padding="{TemplateBinding Padding}"
+                                  IsTabStop="False"
+                                  Grid.ColumnSpan="2"
+                                  Content="{TemplateBinding PlaceholderText}"
+                                  IsHitTestVisible="False"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </ContentDialog.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock x:Uid="/AppResources/EBWin_Highlight"
+                       Text="Please highlight a word to search" />
+            <TextBox x:Name="ParaText"
+                     Style="{StaticResource TextBoxStyle1}"
+                     Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                     TextWrapping="Wrap"
+                     SelectionChanged="TextSelected"
+                     IsReadOnly="True" />
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="5" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="CurrentWord" Grid.Column="0"/>
+            <ProgressRing Grid.Column="1"
+                          Foreground="{StaticResource MajorBrush}"
+                          IsActive="{Binding Searching}"
+                          Margin="5"
+                          Width="25" Height="25"/>
+        </Grid>
+        <ListView Grid.Row="2" ItemsSource="{Binding SearchSet}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Foreground="{StaticResource MajorBrush}"
+                                   Margin="3"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Name}" />
+                        <TextBlock Foreground="{StaticResource SubtleBrush}"
+                                   Margin="3"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Desc}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</ContentDialog>

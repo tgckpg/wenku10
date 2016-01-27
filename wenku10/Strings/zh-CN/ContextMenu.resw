@@ -147,6 +147,9 @@
   <data name="ContextMenu_Rename.Text" xml:space="preserve">
     <value>更名</value>
   </data>
+  <data name="ContextMenu_Search_Dict.Text" xml:space="preserve">
+    <value>查字</value>
+  </data>
   <data name="ContextMenu_SpiderEdit.Text" xml:space="preserve">
     <value>蜘蛛编辑器</value>
   </data>

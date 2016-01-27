@@ -16,6 +16,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using wenku8.Model.ListItem;
+
 namespace wenku10.Pages.Settings.Data
 {
     sealed partial class EBWin : Page
@@ -31,7 +33,7 @@ namespace wenku10.Pages.Settings.Data
         {
             DictMgr = new wenku8.System.EBDictManager();
 
-            InfoPanel.DataContext = DictMgr;
+            LayoutRoot.DataContext = DictMgr;
         }
 
         private void OpenNewDict( object sender, RoutedEventArgs e )
@@ -42,6 +44,11 @@ namespace wenku10.Pages.Settings.Data
         private void InstallNewDict( object sender, RoutedEventArgs e )
         {
             DictMgr.Install();
+        }
+
+        private void RemoveDict( object sender, RoutedEventArgs e )
+        {
+            DictMgr.Remove( ( sender as Button ).DataContext as ActiveItem );
         }
     }
 }

@@ -12,6 +12,7 @@
         <v:VDisplayConverter x:Key="VDisplayConverter" />
         <MenuFlyout x:Key="ParagraphFlyout" Placement="Top">
             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Copy" Text="Copy" Click="ContextCopyClicked" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Search_Dict" Text="Search words" Click="SearchWords" />
             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
             <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
         </MenuFlyout>
