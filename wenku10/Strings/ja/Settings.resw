@@ -482,4 +482,16 @@
   <data name="EBWin_Install_Failed.Text" xml:space="preserve">
     <value>失敗しました</value>
   </data>
+  <data name="EBWin_Already_Installed.Text" xml:space="preserve">
+    <value>既にインストールされています</value>
+  </data>
+  <data name="EBWin_CharCode.Text" xml:space="preserve">
+    <value>文字コード</value>
+  </data>
+  <data name="EBWin_DiscType.Text" xml:space="preserve">
+    <value>ディスクタイプ</value>
+  </data>
+  <data name="EBWin_NumSubbooks.Text" xml:space="preserve">
+    <value>サブ冊数</value>
+  </data>
 </root>

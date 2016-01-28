@@ -50,9 +50,15 @@ namespace wenku10.Pages.Dialogs
         private void TextSelected( object sender, RoutedEventArgs e )
         {
             CurrentWord.Text = ParaText.SelectedText;
+            SearchTermUpdate();
         }
 
         private void SearchTermUpdate( TextBox sender, TextBoxTextChangingEventArgs args )
+        {
+            SearchTermUpdate();
+        }
+
+        private void SearchTermUpdate()
         {
             if( Longed == null )
             {
@@ -68,8 +74,8 @@ namespace wenku10.Pages.Dialogs
         private void Longed_Tick( object sender, object e )
         {
             Longed.Stop();
-            string text = CurrentWord.Text;
-            if ( Dict == null || string.IsNullOrEmpty( text ) ) return;
+            string text = CurrentWord.Text.Trim();
+            if ( Dict == null || string.IsNullOrEmpty( text ) || text == Dict.SearchTerm ) return;
 
             Dict.SearchTerm = CurrentWord.Text;
         }

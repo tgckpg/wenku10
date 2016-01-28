@@ -483,4 +483,16 @@
   <data name="EBWin_Install_Failed.Text" xml:space="preserve">
     <value>Installation failed</value>
   </data>
+  <data name="EBWin_Already_Installed.Text" xml:space="preserve">
+    <value>Already Installed</value>
+  </data>
+  <data name="EBWin_CharCode.Text" xml:space="preserve">
+    <value>Character Code</value>
+  </data>
+  <data name="EBWin_DiscType.Text" xml:space="preserve">
+    <value>Disc Type</value>
+  </data>
+  <data name="EBWin_NumSubbooks.Text" xml:space="preserve">
+    <value>Number of subbooks</value>
+  </data>
 </root>

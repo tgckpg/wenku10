@@ -57,9 +57,6 @@
             </p:StateControl>
         </StackPanel>
         <Grid Grid.Row="1" x:Name="DictList">
-            <p:StateControl State="{Binding Data, Converter={StaticResource DataStateConverter}}">
-                <TextBlock Text="No dictionary" />
-            </p:StateControl>
             <ListView ItemsSource="{Binding Data}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

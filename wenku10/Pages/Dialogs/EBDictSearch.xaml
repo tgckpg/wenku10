@@ -95,6 +95,7 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock x:Uid="/AppResources/EBWin_Highlight"
+                       Foreground="{StaticResource MinorBrush}"
                        Text="Please highlight a word to search" />
             <TextBox x:Name="ParaText"
                      Style="{StaticResource TextBoxStyle1}"
@@ -119,16 +120,15 @@
         <ListView Grid.Row="2" ItemsSource="{Binding SearchSet}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Margin="5">
+                    <StackPanel>
                         <TextBlock Foreground="{StaticResource MajorBrush}"
                                    TextWrapping="Wrap"
                                    Text="{Binding Name}" />
                         <TextBlock Foreground="{StaticResource SubtleBrush}"
-                                   Margin="15, 3"
+                                   Margin="10, 3"
                                    TextWrapping="Wrap"
                                    Text="{Binding Desc}" />
                         <TextBlock Foreground="{StaticResource SubtleBrush}"
-                                   Margin="5, 0"
                                    TextWrapping="Wrap"
                                    Text="{Binding Desc2}" />
                     </StackPanel>

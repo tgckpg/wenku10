@@ -43,6 +43,9 @@ namespace wenku8.System
 
             // Unlocking libraries
             Net.Astropenguin.UI.VerticalStack.LOCKED = false;
+
+            // Set Logger for libeburc
+            EBDictManager.SetLogger();
 		}
 
         private static bool L2 = false;

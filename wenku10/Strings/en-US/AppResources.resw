@@ -272,18 +272,6 @@
   <data name="ClickToRead.Text" xml:space="preserve">
     <value>Click To Read</value>
   </data>
-  <data name="EBWin_Already_Installed.Text" xml:space="preserve">
-    <value>Already Installed</value>
-  </data>
-  <data name="EBWin_CharCode.Text" xml:space="preserve">
-    <value>Character Code</value>
-  </data>
-  <data name="EBWin_DiscType.Text" xml:space="preserve">
-    <value>Disc Type</value>
-  </data>
-  <data name="EBWin_NumSubbooks.Text" xml:space="preserve">
-    <value>Number of subbooks</value>
-  </data>
   <data name="Size.Text" xml:space="preserve">
     <value>Size</value>
   </data>
