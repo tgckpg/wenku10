@@ -108,7 +108,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="CurrentWord" Grid.Column="0"/>
+            <TextBox x:Name="CurrentWord" Grid.Column="0"
+                     TextChanging="SearchTermUpdate"/>
             <ProgressRing Grid.Column="1"
                           Foreground="{StaticResource MajorBrush}"
                           IsActive="{Binding Searching}"
@@ -118,15 +119,18 @@
         <ListView Grid.Row="2" ItemsSource="{Binding SearchSet}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
+                    <StackPanel Margin="5">
                         <TextBlock Foreground="{StaticResource MajorBrush}"
-                                   Margin="3"
                                    TextWrapping="Wrap"
                                    Text="{Binding Name}" />
                         <TextBlock Foreground="{StaticResource SubtleBrush}"
-                                   Margin="3"
+                                   Margin="15, 3"
                                    TextWrapping="Wrap"
                                    Text="{Binding Desc}" />
+                        <TextBlock Foreground="{StaticResource SubtleBrush}"
+                                   Margin="5, 0"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Desc2}" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

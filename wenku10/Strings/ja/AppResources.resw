@@ -272,4 +272,19 @@
   <data name="ClickToRead.Text" xml:space="preserve">
     <value>クリックしてください</value>
   </data>
+  <data name="EBWin_Already_Installed.Text" xml:space="preserve">
+    <value>既にインストールされています</value>
+  </data>
+  <data name="EBWin_CharCode.Text" xml:space="preserve">
+    <value>文字コード</value>
+  </data>
+  <data name="EBWin_DiscType.Text" xml:space="preserve">
+    <value>ディスクタイプ</value>
+  </data>
+  <data name="EBWin_NumSubbooks.Text" xml:space="preserve">
+    <value>サブ冊数</value>
+  </data>
+  <data name="Size.Text" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
 </root>

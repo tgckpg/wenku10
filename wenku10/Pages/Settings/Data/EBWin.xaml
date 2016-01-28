@@ -70,20 +70,21 @@
                             </Grid.ColumnDefinitions>
                             <Button Grid.Column="0"
                                     Click="RemoveDict"
-                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    Background="{StaticResource Shades90}"
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                    Width="30"
                                     Style="{StaticResource IconButton}">
-                                <i:IconCross Width="30" Height="30"
+                                <i:IconCross Width="20" Height="20"
                                              AutoScale="True"
-                                             Foreground="{StaticResource MinorBrush}"/>
+                                             HorizontalAlignment="Center" VerticalAlignment="Center"
+                                             Foreground="{StaticResource RelativeShadesBrush}"/>
                             </Button>
-                            <StackPanel Grid.Column="1">
+                            <StackPanel Grid.Column="1" Margin="5">
                                 <TextBlock FontSize="23"
-                                           Margin="5"
                                            Foreground="{StaticResource MajorBrush}"
                                            Text="{Binding Name}" />
-                                <TextBlock Text="{Binding Desc}"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Margin="5" />
+                                <TextBlock Foreground="{StaticResource MinorBrush}"
+                                           Text="{Binding Desc}" />
                             </StackPanel>
                         </Grid>
                     </DataTemplate>

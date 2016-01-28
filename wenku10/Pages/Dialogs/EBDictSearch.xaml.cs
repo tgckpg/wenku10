@@ -49,6 +49,11 @@ namespace wenku10.Pages.Dialogs
         DispatcherTimer Longed;
         private void TextSelected( object sender, RoutedEventArgs e )
         {
+            CurrentWord.Text = ParaText.SelectedText;
+        }
+
+        private void SearchTermUpdate( TextBox sender, TextBoxTextChangingEventArgs args )
+        {
             if( Longed == null )
             {
                 Longed = new DispatcherTimer();
@@ -63,12 +68,10 @@ namespace wenku10.Pages.Dialogs
         private void Longed_Tick( object sender, object e )
         {
             Longed.Stop();
-            string text = ParaText.SelectedText;
+            string text = CurrentWord.Text;
             if ( Dict == null || string.IsNullOrEmpty( text ) ) return;
 
-            CurrentWord.Text = text;
-            Dict.SearchTerm = text; 
+            Dict.SearchTerm = CurrentWord.Text;
         }
-
     }
 }

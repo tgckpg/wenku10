@@ -272,4 +272,19 @@
   <data name="ClickToRead.Text" xml:space="preserve">
     <value>点击阅题</value>
   </data>
+  <data name="EBWin_Already_Installed.Text" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="EBWin_CharCode.Text" xml:space="preserve">
+    <value>编码</value>
+  </data>
+  <data name="EBWin_DiscType.Text" xml:space="preserve">
+    <value>盘式</value>
+  </data>
+  <data name="EBWin_NumSubbooks.Text" xml:space="preserve">
+    <value>子书数</value>
+  </data>
+  <data name="Size.Text" xml:space="preserve">
+    <value>大小</value>
+  </data>
 </root>
