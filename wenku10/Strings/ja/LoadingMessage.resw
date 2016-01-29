@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BookConstruct" xml:space="preserve">
+    <value>書籍情報の構築</value>
+  </data>
+  <data name="CompilingTOC" xml:space="preserve">
+    <value>「{0}」の目次を構築します</value>
+  </data>
+  <data name="EpisodeStepper" xml:space="preserve">
+    <value>エピソードステッパーを読み込んでいます</value>
+  </data>
+  <data name="LoadingVolume" xml:space="preserve">
+    <value>ボリュームを読み込んでいます</value>
+  </data>
+  <data name="PleaseWaitSecondsForUI" xml:space="preserve">
+    <value>準備完了、インタフェースの応答を確実にするために {0} 秒待ってください。</value>
+  </data>
   <data name="ProgressIndicator_AppInit.Text" xml:space="preserve">
     <value>初期化中です。しばらくお待ちください</value>
   </data>
@@ -128,5 +143,17 @@
   </data>
   <data name="ProgressIndicator_PleaseWait.Text" xml:space="preserve">
     <value>しばらくお待ちください</value>
+  </data>
+  <data name="RedrawingContent" xml:space="preserve">
+    <value>内容を再描画</value>
+  </data>
+  <data name="SettingEpisodeStepper" xml:space="preserve">
+    <value>エピソードステッパーを設定します</value>
+  </data>
+  <data name="SubProcessRun" xml:space="preserve">
+    <value>クモは、サブプロセスを実行しています…「{0}」</value>
+  </data>
+  <data name="WaitingForUI" xml:space="preserve">
+    <value>インタフェースの応答を待っています</value>
   </data>
 </root>

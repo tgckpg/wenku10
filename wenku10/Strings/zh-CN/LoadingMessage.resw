@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BookConstruct" xml:space="preserve">
+    <value>建构文章信息</value>
+  </data>
+  <data name="CompilingTOC" xml:space="preserve">
+    <value>编制目录「{0}」</value>
+  </data>
+  <data name="EpisodeStepper" xml:space="preserve">
+    <value>装载步进集</value>
+  </data>
+  <data name="LoadingVolume" xml:space="preserve">
+    <value>装载卷目</value>
+  </data>
+  <data name="PleaseWaitSecondsForUI" xml:space="preserve">
+    <value>准备完毕，请等待 {0} 秒以确保界面响应</value>
+  </data>
   <data name="ProgressIndicator_AppInit.Text" xml:space="preserve">
     <value>正在初始化中，​​请稍候</value>
   </data>
@@ -128,5 +143,17 @@
   </data>
   <data name="ProgressIndicator_PleaseWait.Text" xml:space="preserve">
     <value>请稍候</value>
+  </data>
+  <data name="RedrawingContent" xml:space="preserve">
+    <value>重绘正文</value>
+  </data>
+  <data name="SettingEpisodeStepper" xml:space="preserve">
+    <value>设置步进集</value>
+  </data>
+  <data name="SubProcessRun" xml:space="preserve">
+    <value>蜘蛛正在运行子进程…「{0}」</value>
+  </data>
+  <data name="WaitingForUI" xml:space="preserve">
+    <value>正在等待界面响应</value>
   </data>
 </root>

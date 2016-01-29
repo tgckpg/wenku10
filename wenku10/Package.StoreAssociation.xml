@@ -358,14 +358,13 @@
     <Language Code="zu-za" InMinimumRequirementSet="true" />
   </SupportedLocales>
   <ProductReservedInfo>
-    <MainPackageIdentityName>60674Astropenguin.wenku8appbeta</MainPackageIdentityName>
+    <MainPackageIdentityName>60674Astropenguin.wenku8testingchannel</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>wenku8 app beta</ReservedName>
-      <ReservedName>輕小說文庫</ReservedName>
+      <ReservedName>wenku8 testing channel</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
-    <MainPackageIdentityName>60674Astropenguin.wenku8testingchannel</MainPackageIdentityName>
+    <MainPackageIdentityName>60674Astropenguin.wenku8appbeta</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH0C24G" />
+  <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH68VTF" />
 </StoreAssociation>

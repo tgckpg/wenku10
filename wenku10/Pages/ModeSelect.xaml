@@ -38,8 +38,9 @@
                     </TextBlock.Foreground>
                 </TextBlock>
                 <ProgressRing x:Name="LoadingRing"
+                              Foreground="{StaticResource RelativeShadesBrush}"
                               IsActive="False"
-                              Width="90" Height="90"/>
+                              Width="100" Height="100"/>
                 <Grid.Resources>
                     <Storyboard x:Name="Multiplayer">
                         <DoubleAnimation Storyboard.TargetName="SenseFlush"

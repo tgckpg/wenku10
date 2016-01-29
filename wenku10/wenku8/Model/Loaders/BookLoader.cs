@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
@@ -35,7 +36,7 @@ namespace wenku8.Model.Loaders
 
             if( b.IsLocal )
             {
-                Net.Astropenguin.Helpers.Worker.UIInvoke( () => CompleteHandler( b ) );
+                OnComplete( b );
                 return;
             }
 
@@ -43,7 +44,7 @@ namespace wenku8.Model.Loaders
             {
                 if ( useCache && Shared.Storage.FileExists( b.TOCPath ) )
                 {
-                    CompleteHandler( b );
+                    OnComplete( b );
                 }
                 else
                 {
@@ -83,7 +84,7 @@ namespace wenku8.Model.Loaders
             }
 
             B.PackVolumes();
-            CompleteHandler( B );
+            OnComplete( B );
         }
 
         public void LoadIntro( BookItem b, bool useCache = true )
@@ -134,7 +135,7 @@ namespace wenku8.Model.Loaders
 				// Download failed and no cache is available.
 				// Inform user there is a network problem
 				// MessageBox.Show( "Some information could not be downloaded, please try again later." );
-				CompleteHandler( null );
+				OnComplete( null );
 			}
 		}
 
@@ -161,7 +162,7 @@ namespace wenku8.Model.Loaders
             {
                 CurrentBook.Cover = await Image.GetSourceFromUrl( CurrentBook.CoverPath );
                 // Cover cached immediately. Call once
-                CompleteHandler( CurrentBook );
+                OnComplete( CurrentBook );
             }
             ////////// Active informations: Can not store in AppCache
         }
@@ -173,7 +174,14 @@ namespace wenku8.Model.Loaders
             // Read Image
             CurrentBook.Cover = await Image.GetSourceFromUrl( CurrentBook.CoverPath );
             // Cover cached. Call once
-            CompleteHandler( CurrentBook );
+            OnComplete( CurrentBook );
+        }
+
+        // Loading itself is resources intensive
+        // But dispatching itself is not
+        private void OnComplete( BookItem b )
+        {
+            Worker.UIInvoke( () => { CompleteHandler( b ); } );
         }
     }
 }

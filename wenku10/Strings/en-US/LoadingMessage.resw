@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BookConstruct" xml:space="preserve">
+    <value>Constructing book information</value>
+  </data>
+  <data name="CompilingTOC" xml:space="preserve">
+    <value>Compiling table of contents: "{0}"</value>
+  </data>
+  <data name="EpisodeStepper" xml:space="preserve">
+    <value>Loading Episode Stepper</value>
+  </data>
+  <data name="LoadingVolume" xml:space="preserve">
+    <value>Loading volume</value>
+  </data>
+  <data name="PleaseWaitSecondsForUI" xml:space="preserve">
+    <value>Content is ready. Please wait for {0} second(s) ensuring UI responsiveness</value>
+  </data>
   <data name="ProgressIndicator_AppInit.Text" xml:space="preserve">
     <value>Initializing, please wait...</value>
   </data>
@@ -128,5 +143,17 @@
   </data>
   <data name="ProgressIndicator_PleaseWait.Text" xml:space="preserve">
     <value>Please wait</value>
+  </data>
+  <data name="RedrawingContent" xml:space="preserve">
+    <value>Redrawing contents</value>
+  </data>
+  <data name="SettingEpisodeStepper" xml:space="preserve">
+    <value>Setting Episode Stepper</value>
+  </data>
+  <data name="SubProcessRun" xml:space="preserve">
+    <value>Spider is running its subprocess ..."{0}"</value>
+  </data>
+  <data name="WaitingForUI" xml:space="preserve">
+    <value>Waiting for UI to response</value>
   </data>
 </root>

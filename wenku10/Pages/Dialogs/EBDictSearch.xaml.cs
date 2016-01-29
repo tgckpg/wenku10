@@ -35,6 +35,7 @@ namespace wenku10.Pages.Dialogs
             : this()
         {
             ParaText.Text = P.Text;
+            P.FontSize = P.FontSize;
             SetTemplate();
         }
 
@@ -53,10 +54,8 @@ namespace wenku10.Pages.Dialogs
             SearchTermUpdate();
         }
 
-        private void SearchTermUpdate( TextBox sender, TextBoxTextChangingEventArgs args )
-        {
-            SearchTermUpdate();
-        }
+        private void SearchTermUpdate( TextBox sender, TextBoxTextChangingEventArgs args ) { SearchTermUpdate(); }
+        private void ParaText_Tapped( object sender, TappedRoutedEventArgs e ) { SearchTermUpdate(); }
 
         private void SearchTermUpdate()
         {

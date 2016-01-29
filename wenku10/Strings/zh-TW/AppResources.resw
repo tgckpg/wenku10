@@ -273,6 +273,6 @@
     <value>點擊閱題</value>
   </data>
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
-    <value>請高亮要搜索的詞</value>
+    <value>反白以搜尋</value>
   </data>
 </root>
