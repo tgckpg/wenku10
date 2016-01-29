@@ -147,6 +147,9 @@
   <data name="ContextMenu_Rename.Text" xml:space="preserve">
     <value>Rename</value>
   </data>
+  <data name="ContextMenu_Search_Dict.Text" xml:space="preserve">
+    <value>Search words</value>
+  </data>
   <data name="ContextMenu_SpiderEdit.Text" xml:space="preserve">
     <value>Spider Edit</value>
   </data>

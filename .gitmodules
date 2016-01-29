@@ -10,3 +10,6 @@
 [submodule "libs/libtaotu"]
 	path = libs/libtaotu
 	url = git@github.com:tgckpg/libtaotu.git
+[submodule "libs/libeburc"]
+	path = libs/libeburc
+	url = git@github.com:tgckpg/libeburc

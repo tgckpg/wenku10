@@ -272,4 +272,10 @@
   <data name="ClickToRead.Text" xml:space="preserve">
     <value>Click To Read</value>
   </data>
+  <data name="Size.Text" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
+    <value>Please highlight a word to search</value>
+  </data>
 </root>

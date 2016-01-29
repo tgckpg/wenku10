@@ -147,6 +147,9 @@
   <data name="ContextMenu_Rename.Text" xml:space="preserve">
     <value>名前を変更</value>
   </data>
+  <data name="ContextMenu_Search_Dict.Text" xml:space="preserve">
+    <value>検索ワード</value>
+  </data>
   <data name="ContextMenu_SpiderEdit.Text" xml:space="preserve">
     <value>クモエディタ</value>
   </data>
