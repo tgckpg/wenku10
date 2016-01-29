@@ -13,9 +13,9 @@
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <ContentDialog.Title>
-            <TextBlock x:Uid="/NavigationTitles/News"
-                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                       Text="Announcements" />
+        <TextBlock x:Uid="/NavigationTitles/News"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="Announcements" />
     </ContentDialog.Title>
 
     <Grid>

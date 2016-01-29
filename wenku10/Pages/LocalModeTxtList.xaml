@@ -130,7 +130,7 @@
                             Width="300" MinHeight="120" >
                         <Border.Resources>
                             <MenuFlyout x:Key="BookAction">
-                                <MenuFlyoutItem Text="{Binding FavContextMenu}" Click="ToggleFav" />
+                                <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}" Text="{Binding FavContextMenu}" Click="ToggleFav" />
 
                                 <MenuFlyoutItem IsEnabled="{Binding CanReprocess}"
                                                 x:Uid="/ContextMenu/ContextMenu_Reanalyze"
@@ -217,5 +217,7 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+
+        <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
     </Grid>
 </Page>

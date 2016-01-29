@@ -29,8 +29,6 @@ namespace wenku8.System
             Resources.Shared.Storage = new GeneralStorage();
             Net.Astropenguin.IO.XRegistry.AStorage = Resources.Shared.Storage;
             Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
-			// 3. AppGate, encrypt before any requests
-			AppGate.Initialize();
             Logger.Log( ID, "AppGate Initilizated", LogType.INFO );
             // Connection Mode
 			WCacheMode.Initialize();
@@ -45,6 +43,9 @@ namespace wenku8.System
 
             // Unlocking libraries
             Net.Astropenguin.UI.VerticalStack.LOCKED = false;
+
+            // Set Logger for libeburc
+            EBDictManager.SetLogger();
 		}
 
         private static bool L2 = false;

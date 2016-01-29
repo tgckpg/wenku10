@@ -42,7 +42,7 @@ namespace wenku10.Pages
 
         public static BookInfoView Instance;
 
-        private wenku8.Model.Book.BookItem ThisBook;
+        private BookItem ThisBook;
         private TOCSection TOCData;
         private ListView VolList;
         private ReviewsSection ReviewsSection;

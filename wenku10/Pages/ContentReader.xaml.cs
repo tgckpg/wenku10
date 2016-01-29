@@ -145,13 +145,13 @@ namespace wenku10.Pages
         private void NextChapter( KeyCombinationEventArgs e )
         {
             ES.stepNext();
-            OpenBook( new Chapter( ES.currentEpTitle, CurrentBook.Id, ES.currentVid, ES.currentCid ) );
+            OpenBook( ES.Chapter );
         }
 
         private void PrevChapter( KeyCombinationEventArgs e )
         {
             ES.stepPrev();
-            OpenBook( new Chapter( ES.currentEpTitle, CurrentBook.Id, ES.currentVid, ES.currentCid ) );
+            OpenBook( ES.Chapter );
         }
 
         private void VC_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )

@@ -90,11 +90,15 @@ namespace wenku10.Pages
             {
                 if( Item is SpiderBook )
                 {
-                    Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() );
+                    BackMask.HandleForward(
+                        Frame, () => Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() )
+                    );
                 }
                 else
                 {
-                    Frame.Navigate( typeof( BookInfoView ), new LocalTextDocument( Item.aid ) );
+                    BackMask.HandleForward(
+                        Frame, () => Frame.Navigate( typeof( BookInfoView ), new LocalTextDocument( Item.aid ) )
+                    );
                 }
             }
             else if ( !Item.Processing && Item.File != null )

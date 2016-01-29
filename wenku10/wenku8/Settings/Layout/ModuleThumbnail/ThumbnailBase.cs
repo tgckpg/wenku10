@@ -8,6 +8,8 @@ namespace wenku8.Settings.Layout.ModuleThumbnail
         virtual public string ModName { get; set; }
         virtual public string ViewName { get; set; }
 
+        virtual public bool DefaultValue { get { return true; } }
+
         public ThumbnailBase( string ModName, string ViewName )
             :base()
         {

@@ -109,7 +109,7 @@ namespace wenku8.Settings.Layout
                     LayoutSettings.SetParameter(
                         Tb.ModName, new XKey[] {
                             new XKey( "order", ++i )
-                            , new XKey( "enable", "1" )
+                            , new XKey( "enable", Tb.DefaultValue )
                         }
                     );
 

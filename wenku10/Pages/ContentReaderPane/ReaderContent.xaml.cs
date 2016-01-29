@@ -81,7 +81,7 @@ namespace wenku10.Pages.ContentReaderPane
             Grid ParaGrid = sender as Grid;
             if ( ParaGrid == null ) return;
 
-            FlyoutBase.ShowAttachedFlyout( ParaGrid );
+            FlyoutBase.ShowAttachedFlyout( MainStage.Instance.IsPhone ? MasterGrid : ParaGrid );
 
             SelectedParagraph = ParaGrid.DataContext as Paragraph;
         }
@@ -205,6 +205,13 @@ namespace wenku10.Pages.ContentReaderPane
         {
             if ( SelectedParagraph == null ) return;
             SetCustomAnchor( SelectedParagraph );
+        }
+
+        internal async void SearchWords( object sender, RoutedEventArgs e )
+        {
+            if ( SelectedParagraph == null ) return;
+            Dialogs.EBDictSearch DictDialog = new Dialogs.EBDictSearch( SelectedParagraph );
+            await Popups.ShowDialog( DictDialog );
         }
 
         public async void SetCustomAnchor( Paragraph P, string BookmarkName = null )
