@@ -275,4 +275,7 @@
   <data name="Size.Text" xml:space="preserve">
     <value>大小</value>
   </data>
+  <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
+    <value>请高亮要搜索的词</value>
+  </data>
 </root>

@@ -81,7 +81,7 @@ namespace wenku10.Pages.ContentReaderPane
             Grid ParaGrid = sender as Grid;
             if ( ParaGrid == null ) return;
 
-            FlyoutBase.ShowAttachedFlyout( ParaGrid );
+            FlyoutBase.ShowAttachedFlyout( MainStage.Instance.IsPhone ? MasterGrid : ParaGrid );
 
             SelectedParagraph = ParaGrid.DataContext as Paragraph;
         }

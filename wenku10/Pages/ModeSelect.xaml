@@ -37,6 +37,9 @@
                         <SolidColorBrush x:Name="SenseBrush" Color="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}" />
                     </TextBlock.Foreground>
                 </TextBlock>
+                <ProgressRing x:Name="LoadingRing"
+                              IsActive="False"
+                              Width="90" Height="90"/>
                 <Grid.Resources>
                     <Storyboard x:Name="Multiplayer">
                         <DoubleAnimation Storyboard.TargetName="SenseFlush"

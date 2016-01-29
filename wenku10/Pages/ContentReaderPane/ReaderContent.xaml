@@ -10,7 +10,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <v:VDisplayConverter x:Key="VDisplayConverter" />
-        <MenuFlyout x:Key="ParagraphFlyout" Placement="Top">
+        <MenuFlyout x:Key="ParagraphFlyout" Placement="Bottom">
             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Copy" Text="Copy" Click="ContextCopyClicked" />
             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Search_Dict" Text="Search words" Click="SearchWords" />
             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
@@ -20,6 +20,7 @@
 
     <Grid x:Name="MasterGrid"
           Tapped="MasterGrid_Tapped"
+          FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" 
           Background="{Binding BackgroundBrush}" >
         <ListView x:Name="ContentGrid"
                   IsSwipeEnabled="False"
@@ -39,7 +40,8 @@
 
             <ListView.Resources>
                 <DataTemplate x:Name="Horizontal">
-                    <Grid RightTapped="Grid_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" >
+                    <Grid FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}"
+                          RightTapped="Grid_RightTapped">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="10"/>
                             <RowDefinition Height="*"/>

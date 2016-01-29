@@ -12,7 +12,7 @@
     <ContentDialog.Title>
         <TextBlock x:Uid="/ContextMenu/ContextMenu_Search_Dict"
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                   Text="Announcements" />
+                   Text="Search word" />
     </ContentDialog.Title>
 
     <ContentDialog.Resources>
@@ -94,7 +94,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock x:Uid="/AppResources/EBWin_Highlight"
+            <TextBlock x:Uid="/AppResources/EBWin_HighlightToSearch"
                        Foreground="{StaticResource MinorBrush}"
                        Text="Please highlight a word to search" />
             <TextBox x:Name="ParaText"
