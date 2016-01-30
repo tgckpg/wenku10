@@ -23,7 +23,7 @@ using Net.Astropenguin.Logging;
 using wenku8.CompositeElement;
 using wenku8.Ext;
 using wenku8.Model.Book;
-using wenku8.Settings;
+using wenku8.Resources;
 
 namespace wenku10.Pages
 {
@@ -125,7 +125,7 @@ namespace wenku10.Pages
             Expression<Action<IList<BookItem>>> handler = x => BookLoaded( x );
             LL = X.Instance<IListLoader>( XProto.ListLoader
                 , X.Call<XKey[]>( XProto.WRequest, "GetSearch", GetSearchMethod(), Key )
-                , new BookPool( 256 )
+                , Shared.BooksCache
                 , handler 
                 , false
             );

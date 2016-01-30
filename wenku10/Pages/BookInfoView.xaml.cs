@@ -292,7 +292,7 @@ namespace wenku10.Pages
             SyncStarted = false;
         }
 
-        private async void GoToContentReader( wenku8.Model.Book.BookItem b )
+        private async void GoToContentReader( BookItem b )
         {
             TOCData = new TOCSection( b );
             if ( TOCData.AnchorAvailable )
@@ -425,7 +425,9 @@ namespace wenku10.Pages
         {
             if( TOCData.AnchorAvailable )
             {
-                Frame.Navigate( typeof( ContentReader ), TOCData.AutoAnchor );
+                BackMask.HandleForward(
+                    Frame, () => Frame.Navigate( typeof( ContentReader ), TOCData.AutoAnchor )
+                );
             }
             else
             {

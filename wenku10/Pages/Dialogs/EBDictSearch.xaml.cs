@@ -23,6 +23,8 @@ namespace wenku10.Pages.Dialogs
     sealed partial class EBDictSearch : ContentDialog
     {
         EBDictionary Dict;
+        DispatcherTimer Longed;
+
         private EBDictSearch()
         {
             this.InitializeComponent();
@@ -35,7 +37,7 @@ namespace wenku10.Pages.Dialogs
             : this()
         {
             ParaText.Text = P.Text;
-            P.FontSize = P.FontSize;
+            ParaText.FontSize = P.FontSize;
             SetTemplate();
         }
 
@@ -47,15 +49,13 @@ namespace wenku10.Pages.Dialogs
             LayoutRoot.DataContext = Dict;
         }
 
-        DispatcherTimer Longed;
         private void TextSelected( object sender, RoutedEventArgs e )
         {
             CurrentWord.Text = ParaText.SelectedText;
             SearchTermUpdate();
         }
 
-        private void SearchTermUpdate( TextBox sender, TextBoxTextChangingEventArgs args ) { SearchTermUpdate(); }
-        private void ParaText_Tapped( object sender, TappedRoutedEventArgs e ) { SearchTermUpdate(); }
+        private void ManualSearchTerm( TextBox sender, TextBoxTextChangingEventArgs args ) { SearchTermUpdate(); }
 
         private void SearchTermUpdate()
         {
@@ -74,6 +74,7 @@ namespace wenku10.Pages.Dialogs
         {
             Longed.Stop();
             string text = CurrentWord.Text.Trim();
+
             if ( Dict == null || string.IsNullOrEmpty( text ) || text == Dict.SearchTerm ) return;
 
             Dict.SearchTerm = CurrentWord.Text;

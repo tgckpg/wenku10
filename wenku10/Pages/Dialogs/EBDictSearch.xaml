@@ -104,7 +104,6 @@
                      Style="{StaticResource TextBoxStyle1}"
                      Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                      TextWrapping="Wrap"
-                     Tapped="ParaText_Tapped"
                      SelectionChanged="TextSelected"
                      IsReadOnly="True" />
         </StackPanel>
@@ -114,7 +113,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox x:Name="CurrentWord" Grid.Column="0"
-                     TextChanging="SearchTermUpdate"/>
+                     TextChanging="ManualSearchTerm"/>
             <TextBlock Grid.Column="1"
                        Foreground="{StaticResource MinorBrush}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"

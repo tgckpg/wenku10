@@ -227,7 +227,7 @@ namespace wenku8.Model.Section
 
         private void SetFrameData( string XmlData )
         {
-            BookPool Bp = new BookPool( 32 );
+            BookPool Bp = Shared.BooksCache;
             string[] Ids = PassBookFromList( XmlData, Bp );
 
             Expression<Action<IList<BookItem>>> handler = B => UpdateData( B );
