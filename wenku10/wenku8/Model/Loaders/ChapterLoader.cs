@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+
 using wenku10;
 
 namespace wenku8.Model.Loaders
@@ -21,7 +23,7 @@ namespace wenku8.Model.Loaders
 
         public BookItem CurrentBook { get; private set; }
 
-        private Action<Chapter> OnComplete;
+        private Action<Chapter> CompleteHandler;
 
         public bool ProtoMode { get; private set; }
 
@@ -29,7 +31,7 @@ namespace wenku8.Model.Loaders
         {
             ProtoMode = true;
             CurrentBook = b;
-            OnComplete = CompleteHandler;
+            this.CompleteHandler = CompleteHandler;
         }
 
         public ChapterLoader( Action<Chapter> CompleteHandler = null )
@@ -37,11 +39,11 @@ namespace wenku8.Model.Loaders
             ProtoMode = false;
             if( CompleteHandler == null )
             {
-                OnComplete = x => { };
+                this.CompleteHandler = x => { };
             }
             else
             {
-                OnComplete = CompleteHandler;
+                this.CompleteHandler = CompleteHandler;
             }
         }
 
@@ -101,6 +103,11 @@ namespace wenku8.Model.Loaders
         public async void Load( Chapter C, bool Cache = true )
         {
             await LoadAsync( C, Cache );
+        }
+
+        private void OnComplete( Chapter C )
+        {
+            Worker.UIInvoke( () => CompleteHandler( C ) );
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
@@ -12,7 +13,6 @@ namespace wenku8.Model.Loaders
     using Book;
     using Book.Spider;
     using Resources;
-    using Settings;
 
     class VolumeLoader
     {
@@ -20,15 +20,16 @@ namespace wenku8.Model.Loaders
 
         public BookItem CurrentBook { get; private set; }
 
-        private Action<BookItem> OnComplete;
+        private Action<BookItem> CompleteHandler;
 
         public VolumeLoader( Action<BookItem> CompleteHandler )
         {
-            OnComplete = CompleteHandler;
+            this.CompleteHandler = CompleteHandler;
         }
 
         public void Load( BookItem b )
         {
+            Shared.LoadMessage( "LoadingVolume" );
             CurrentBook = b;
             if ( b.IsLocal || Shared.Storage.FileExists( CurrentBook.TOCPath ) )
             {
@@ -65,13 +66,19 @@ namespace wenku8.Model.Loaders
             IEnumerable<SVolume> Vols = b.GetVolumes().Cast<SVolume>();
             foreach ( SVolume Vol in Vols )
             {
+                Shared.LoadMessage( "SubProcessRun", Vol.VolumeTitle );
                 // This should finalize the chapter info
                 await Vol.SubProcRun( b );
             }
 
+            Shared.LoadMessage( "CompilingTOC", b.Title );
             await b.CompileTOC( Vols );
             OnComplete( b );
         }
 
+        private void OnComplete( BookItem b )
+        {
+            Worker.UIInvoke( () => CompleteHandler( b ) );
+        }
     }
 }

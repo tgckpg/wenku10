@@ -32,6 +32,8 @@ namespace wenku10.Pages
     public sealed partial class ModeSelect : Page
     {
         public bool ProtoUnLocked { get; private set; }
+
+        private bool ModeSelected = false;
         Frame RootFrame;
 
         public ModeSelect()
@@ -48,8 +50,15 @@ namespace wenku10.Pages
 
         private void SinglePlayer( object sender, RoutedEventArgs e )
         {
+            if ( ModeSelected ) return;
+            ModeSelected = true;
+            LoadingRing.IsActive = true;
+
             NavigationHandler.OnNavigatedBack -= DisableBack;
-            MainStage.Instance.ClearNavigate( typeof( LocalModeTxtList ), "" );
+
+            var j = Dispatcher.RunIdleAsync( x => {
+                MainStage.Instance.ClearNavigate( typeof( LocalModeTxtList ), "" );
+            } );
         }
 
         private void SetTemplate()
@@ -61,6 +70,7 @@ namespace wenku10.Pages
             UnReg = App.KeyboardControl.RegisterSequence(
                 ( x ) =>
                 {
+                    ModeSelected = true;
                     ProtoUnLocked = true;
                     x.Handled = true;
                     App.KeyboardControl.KeyDown -= Frame_KeyDown;
@@ -175,7 +185,10 @@ namespace wenku10.Pages
             await AS.Load();
 
             NewsLoading.IsActive = false;
-            if ( !AS.HasNewThings ) return;
+            if ( AS.HasNewThings )
+            {
+                ShowNews();
+            }
         }
 
         private void ShowNews( object sender, RoutedEventArgs e ) { ShowNews(); }

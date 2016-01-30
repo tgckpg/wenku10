@@ -24,6 +24,7 @@ using Net.Astropenguin.Logging;
 using wenku8.Model.Book;
 using wenku8.Model.Section;
 using wenku8.Model.Text;
+using wenku8.Resources;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -175,7 +176,10 @@ namespace wenku10.Pages.ContentReaderPane
                         ContentGrid.SelectedItem = Reader.SelectedData;
                     break;
                 case "Data":
+                    Shared.LoadMessage( "PleaseWaitSecondsForUI", "2" );
                     await Task.Delay( 2000 );
+
+                    Shared.LoadMessage( "WaitingForUI" );
                     var NOP = ContentGrid.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( Container.RenderComplete ) );
                     break;
             }

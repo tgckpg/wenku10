@@ -20,8 +20,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Controls;
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
@@ -32,6 +34,7 @@ using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.Section;
+using wenku8.Resources;
 
 namespace wenku10.Pages
 {
@@ -48,6 +51,7 @@ namespace wenku10.Pages
         public bool UseInertia = false;
 
         private Action ReloadReader;
+        private bool OpenLock = false;
         private bool NeedRedraw = false;
         private bool Disposed = true;
 
@@ -199,6 +203,7 @@ namespace wenku10.Pages
 
         public void OpenBook( Chapter C, bool Reload = false, int Anchor = -1 )
         {
+            if ( OpenLock ) return;
             if ( C == null )
             {
                 Logger.Log( ID, "Oops, Chapter is null. Can't open nothing.", LogType.WARNING );
@@ -217,62 +222,89 @@ namespace wenku10.Pages
             }
 
             ClosePane();
-
-            if( C is SChapter )
-            {
-                CurrentBook = new BookInstruction( C as SChapter );
-            }
-            else
-            {
-                CurrentBook = X.Instance<BookItem>( XProto.BookItemEx, C );
-            }
+            OpenMask();
 
             CurrentChapter = C;
+            OpenLock = true;
 
-            BookLoader BL = new BookLoader( BookLoaded );
-            BL.Load( CurrentBook, true );
-
-            // Fire up Episode stepper, used for stepping next episode
-            VolumeLoader VL = new VolumeLoader(
-                ( BookItem b ) =>
+            // Throw this into background as it is resources intensive
+            Task.Run( () =>
+            {
+                if ( CurrentBook == null || C.aid != CurrentBook.Id )
                 {
-                    ES = new EpisodeStepper( new VolumesInfo( b ) );
-                    SetInfoTemplate();
+                    Shared.LoadMessage( "BookConstruct" );
+
+                    if ( C is SChapter )
+                    {
+                        CurrentBook = new BookInstruction( C as SChapter );
+                    }
+                    else
+                    {
+                        CurrentBook = X.Instance<BookItem>( XProto.BookItemEx, C );
+                    }
                 }
-            );
 
-            VL.Load( CurrentBook );
+                BookLoader BL = new BookLoader( BookLoaded );
+                BL.Load( CurrentBook, true );
 
-            ReloadReader = () =>
-            {
-                ContentFrame.Content = null;
-                ContentView = new ReaderContent( this, Anchor );
-                ContentFrame.Content = ContentView;
-                // Load Content at the very end
-                ContentView.Load( false );
-            };
+                // Fire up Episode stepper, used for stepping next episode
+                if ( ES == null || ES.Chapter.aid != C.aid )
+                {
+                    Shared.LoadMessage( "EpisodeStepper" );
+                    VolumeLoader VL = new VolumeLoader(
+                        ( BookItem b ) =>
+                        {
+                            ES = new EpisodeStepper( new VolumesInfo( b ) );
+                            SetInfoTemplate();
+                        }
+                    );
 
-            // Override reload here since
-            // Since the selected index just won't update
-            if( Reload )
-            {
-                StringResources stx = new StringResources( "LoadingMessage" );
-                RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
-                RenderMask.State = ControlState.Reovia;
+                    VL.Load( CurrentBook );
+                }
+                else
+                {
+                    Worker.UIInvoke( () => SetInfoTemplate() );
+                }
 
-                ChapterLoader CL = new ChapterLoader( CurrentBook, x => Redraw() );
+                ReloadReader = () =>
+                {
+                    ContentFrame.Content = null;
+                    Shared.LoadMessage( "RedrawingContent" );
+                    ContentView = new ReaderContent( this, Anchor );
+                    ContentFrame.Content = ContentView;
+                    // Load Content at the very end
+                    ContentView.Load( false );
+                };
 
-                // if book is local, use the cache
-                CL.Load( CurrentChapter, CurrentBook.IsLocal );
-            }
-            else
-            {
-                Redraw();
-            }
+                // Override reload here since
+                // Since the selected index just won't update
+                if ( Reload )
+                {
+                    ChapterLoader CL = new ChapterLoader( CurrentBook, x =>
+                    {
+                        OpenLock = false;
+                        Redraw();
+                    } );
+
+                    // if book is local, use the cache
+                    CL.Load( CurrentChapter, CurrentBook.IsLocal );
+                }
+                else
+                {
+                    Worker.UIInvoke( () =>
+                    {
+                        // Lock should be released before redrawing start
+                        OpenLock = false;
+                        Redraw();
+                    } );
+                }
+
+            } );
         }
 
         private void SetInfoTemplate()
         {
+            Shared.LoadMessage( "SettingEpisodeStepper" );
             if ( VolStepper.ItemsSource != null )
             {
                 SelectCurrentEp();
@@ -480,16 +512,23 @@ namespace wenku10.Pages
 
         private void Redraw()
         {
-            StringResources stx = new StringResources( "LoadingMessage" );
-            RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
-            RenderMask.State = ControlState.Reovia;
+            // When Open operation is processing you should not do any redraw before opening
 
+            if ( OpenLock ) return;
+            OpenMask();
             ReloadReader();
 
             // No need to RenderComplete since this is handled by
             // property changed Data event in ReaderView
             // await Task.Delay( 2000 );
             // var NOP = ContentFrame.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( RenderComplete ) );
+        }
+
+        private void OpenMask()
+        {
+            StringResources stx = new StringResources( "LoadingMessage" );
+            RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
+            RenderMask.State = ControlState.Reovia;
         }
 
         private void BeginRead( object sender, TappedRoutedEventArgs e )

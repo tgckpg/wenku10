@@ -98,6 +98,9 @@
                        Foreground="{StaticResource MinorBrush}"
                        Text="Please highlight a word to search" />
             <TextBox x:Name="ParaText"
+                     MaxHeight="100"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.IsVerticalRailEnabled="True"
                      Style="{StaticResource TextBoxStyle1}"
                      Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                      TextWrapping="Wrap"
@@ -110,7 +113,11 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox x:Name="CurrentWord" Grid.Column="0"
-                     TextChanging="SearchTermUpdate"/>
+                     TextChanging="ManualSearchTerm"/>
+            <TextBlock Grid.Column="1"
+                       Foreground="{StaticResource MinorBrush}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Text="{Binding NumResults}" />
             <ProgressRing Grid.Column="1"
                           Foreground="{StaticResource MajorBrush}"
                           IsActive="{Binding Searching}"
