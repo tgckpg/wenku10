@@ -1,6 +1,6 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.DataModel;
@@ -32,7 +32,7 @@ namespace wenku8.Model.Section
 
         private const string AvatarLocation = FileLinks.ROOT_IMAGE + "USER_AVATAR";
 
-        public ImageSource Avatar { get; private set; }
+        public BitmapImage Avatar { get; private set; }
 
         private ControlState _pagestatus = ControlState.Foreatii;
         public ControlState PageStatus
@@ -66,6 +66,7 @@ namespace wenku8.Model.Section
 
         public LoginStatus()
         {
+            Avatar = new BitmapImage();
             Member = X.Singleton<IMember>( XProto.Member );
             Member_OnStatusChanged();
             Member.OnStatusChanged += Member_OnStatusChanged;
@@ -110,13 +111,13 @@ namespace wenku8.Model.Section
         {
             if ( !Shared.Storage.FileExists( AvatarLocation ) ) return;
 
-            Avatar = await Resources.Image.GetSourceFromUrl( AvatarLocation );
+            Avatar.SetSourceFromUrl( AvatarLocation );
             NotifyChanged( "Avatar" );
         }
 
-        private async void AvatarLoaded( DRequestCompletedEventArgs e, string id )
+        private void AvatarLoaded( DRequestCompletedEventArgs e, string id )
         {
-            Avatar = await Resources.Image.GetFromBytes( e.ResponseBytes );
+            Avatar.SetSourceFromUrl( null );
             NotifyChanged( "Avatar" );
 
             Shared.Storage.WriteBytes( AvatarLocation, e.ResponseBytes );

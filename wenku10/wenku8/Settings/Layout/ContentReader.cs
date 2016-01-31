@@ -8,6 +8,7 @@ using Net.Astropenguin.IO;
 
 namespace wenku8.Settings.Layout
 {
+    using Resources;
     public class ContentReader 
     {
         private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_CONTREADER;
@@ -52,12 +53,12 @@ namespace wenku8.Settings.Layout
         {
             if( LayoutSettings.GetParameter( Horizontal ) == null )
             {
-                IsHorizontal = true;
+                IsHorizontal = Shared.LocaleDefaults.Get<bool>( "ContentReader.IsHorizontal" );
             }
 
             if( LayoutSettings.GetParameter( RightToLeft ) == null )
             {
-                IsRightToLeft = true;
+                IsRightToLeft = Shared.LocaleDefaults.Get<bool>( "ContentReader.IsRightToLeft" );
             }
         }
     }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
@@ -42,14 +45,7 @@ namespace wenku8.Model.Loaders
 
             if ( b is BookInstruction )
             {
-                if ( useCache && Shared.Storage.FileExists( b.TOCPath ) )
-                {
-                    OnComplete( b );
-                }
-                else
-                {
-                    LoadInstruction( b as BookInstruction );
-                }
+                LoadInstruction( b as BookInstruction, useCache );
                 return;
             }
 
@@ -71,17 +67,27 @@ namespace wenku8.Model.Loaders
                     return;
                 }
             }
+
             X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
                 .InitDownload( id, ReqKeys, PrelaodBookInfo, PrelaodBookInfo, true );
         }
 
-        public async void LoadInstruction( BookInstruction B )
+        public async void LoadInstruction( BookInstruction B, bool useCache )
         {
+            if ( useCache && Shared.Storage.FileExists( B.TOCPath ) )
+            {
+                await CacheCover( B );
+                OnComplete( B );
+                return;
+            }
+
             if ( !B.Packable )
             {
                 SpiderBook SBook = new SpiderBook( B );
                 await SBook.Process();
             }
+
+            await CacheCover( B );
 
             B.PackVolumes();
             OnComplete( B );
@@ -155,26 +161,73 @@ namespace wenku8.Model.Loaders
                 ///// App-specific approach
                 X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
                     id, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", id )
-                    ,cacheCover, Utils.DoNothing, false
+                    ,CoverDownloaded, Utils.DoNothing, false
                 );
             }
             else
             {
-                CurrentBook.Cover = await Image.GetSourceFromUrl( CurrentBook.CoverPath );
+                SetCover( CurrentBook );
                 // Cover cached immediately. Call once
                 OnComplete( CurrentBook );
             }
             ////////// Active informations: Can not store in AppCache
         }
 
-        private async void cacheCover( DRequestCompletedEventArgs e, string id )
+        private async Task CacheCover( BookItem B )
+        {
+            if( Shared.Storage.FileExists( CurrentBook.CoverPath ) )
+            {
+                SetCover( B );
+                return;
+            }
+
+            if( !string.IsNullOrEmpty( B.CoverSrcUrl ) )
+            {
+                TaskCompletionSource<int> Awaitable = new TaskCompletionSource<int>();
+
+                // Set the referer, as it is required by some site such as fanfiction.net
+                new RuntimeCache( a => {
+                    HttpRequest R = new WHTTPRequest( a );
+                    R.EN_UITHREAD = true;
+
+                    if ( !string.IsNullOrEmpty( B.OriginalUrl ) )
+                    {
+                        R.RequestHeaders[ HttpRequestHeader.Referer ] = B.OriginalUrl;
+                    }
+
+                    return R;
+                } ).GET( new Uri( B.CoverSrcUrl ), ( a, b ) => {
+                    CoverDownloaded( a, b );
+                    Awaitable.TrySetResult( 0 );
+                }
+                // Failed handler
+                , ( a, b, c ) => {
+                    Awaitable.TrySetResult( 0 );
+                }, false );
+
+                await Awaitable.Task;
+            }
+        }
+
+        private void CoverDownloaded( DRequestCompletedEventArgs e, string id )
         {
             // Write Cache
             Shared.Storage.WriteBytes( CurrentBook.CoverPath, e.ResponseBytes );
             // Read Image
-            CurrentBook.Cover = await Image.GetSourceFromUrl( CurrentBook.CoverPath );
+            SetCover( CurrentBook );
             // Cover cached. Call once
             OnComplete( CurrentBook );
+        }
+
+        private void SetCover( BookItem B )
+        {
+            Worker.UIInvoke( () =>
+            {
+                BitmapImage bmp = new BitmapImage();
+                bmp.SetSourceFromUrl( B.CoverPath );
+
+                B.Cover = bmp;
+            } );
         }
 
         // Loading itself is resources intensive

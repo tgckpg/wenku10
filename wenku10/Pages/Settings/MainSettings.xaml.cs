@@ -126,6 +126,13 @@ namespace wenku10.Pages.Settings
                     , Data = new ActiveItem[]
                     {
                         new ActionItem(
+                            stx.Text( "Language_E")
+                            , Properties.LANGUAGE == "en-US"
+                                ? stx.Text( "Desc_Language_C" )
+                                : stx.Text( "Desc_Language_AE" )
+                            , "en-US" 
+                        )
+                        , new ActionItem(
                             stx.Text( "Language_T")
                             , Properties.LANGUAGE == "zh-TW"
                                 ? stx.Text( "Desc_Language_C" )

@@ -394,6 +394,7 @@ namespace wenku10.Pages
         private PaneNavButton InertiaButton()
         {
             PaneNavButton InertiaButton = null;
+            UseInertia = Shared.LocaleDefaults.Get<bool>( "ContentReader.UseInertia" );
 
             Action ToggleFIcon = () =>
             {

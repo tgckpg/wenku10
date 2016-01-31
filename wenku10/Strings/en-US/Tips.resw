@@ -118,48 +118,48 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="1" xml:space="preserve">
-    <value>OneDrive：按一下「雲」可以再次同步</value>
+    <value>OneDrive: Press cloud button to sync again</value>
   </data>
   <data name="10" xml:space="preserve">
-    <value>系統：書頁資訊的排版可以在設定中調整</value>
+    <value>System: The layout of the book info view can be adjusted in settings</value>
   </data>
   <data name="11" xml:space="preserve">
-    <value>系統：會員申請請到 wenku8 的主站上申請</value>
+    <value>TitbitsThe entire project consist of 70,000+lines of codes as of 1 Jan 2016</value>
   </data>
   <data name="12" xml:space="preserve">
-    <value>系統：資訊頁全部停用的話可以直接跳到正文</value>
+    <value>Book Info View: If all modules are disabled, you can jump to Content Reader directly</value>
   </data>
   <data name="13" xml:space="preserve">
-    <value>資訊頁：書籤按鈕可以直接跳到章節錨點</value>
+    <value>Book Info View: Bookmark buttons can lead you to the auto anchor directly</value>
   </data>
   <data name="14" xml:space="preserve">
-    <value>資訊頁：長按主目錄可以單卷下載</value>
+    <value>Book Info View: Press and hold a volume title opens up a context menu</value>
   </data>
   <data name="2" xml:space="preserve">
-    <value>正文：上下的線是輔助線，可以在設定裏設成「透明」關閉</value>
+    <value>Content Reader: The heading/footing lines can be disabled by setting it to transparent</value>
   </data>
   <data name="3" xml:space="preserve">
-    <value>正文：主選單中的★可以查看插圖</value>
+    <value>Content Reader: You can view illustrations in the main menu</value>
   </data>
   <data name="4" xml:space="preserve">
-    <value>正文：長按段落可以叫出段落選單</value>
+    <value>Content Reader: Press and hold a paragraph will call out the paragraph menu</value>
   </data>
   <data name="5" xml:space="preserve">
-    <value>正文：設定 -&gt; 排版 -&gt; 正文 可以將閱讀模式設定成點擊播頁</value>
+    <value>Content Reader: There is an option to change the navigation by click the sides of screen to scroll a page. Settings -&gt; Themes -&gt; ContentReader</value>
   </data>
   <data name="6" xml:space="preserve">
-    <value>正文：點一下段落會自動設置章節錨點</value>
+    <value>Content Reader: An auto anchor will be set when you click a paragraph</value>
   </data>
   <data name="7" xml:space="preserve">
-    <value>正文：點兩下可以叫出主選單</value>
+    <value>Content Reader: Double click to call out the main menu</value>
   </data>
   <data name="8" xml:space="preserve">
-    <value>系統：按 Ctrl + F / 主選單的全屏按鈕可以全屏閱題</value>
+    <value>System: Press Ctrl + F / Fullscreen button in main menu to go fullscreen</value>
   </data>
   <data name="9" xml:space="preserve">
-    <value>系統：插圖是可以儲存到相冊的</value>
+    <value>System: illustrations could be saved in Pictures library</value>
   </data>
   <data name="DidYouKnow.Text" xml:space="preserve">
-    <value>你知道嗎？</value>
+    <value>Did You Know?</value>
   </data>
 </root>

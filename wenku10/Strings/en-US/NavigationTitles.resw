@@ -118,82 +118,82 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Desc_History.Text" xml:space="preserve">
-    <value>查閱過去打開過的書</value>
+    <value>Reading history</value>
   </data>
   <data name="Desc_History2.Text" xml:space="preserve">
-    <value>目前沒有打開過任何書本目錄</value>
+    <value>You didn't happened to open any book yet</value>
   </data>
   <data name="Desc_News.Text" xml:space="preserve">
-    <value>文庫公告</value>
+    <value>Announcements</value>
   </data>
   <data name="Desc_PressList.Text" xml:space="preserve">
-    <value>查看各出版社</value>
+    <value>Publisher list</value>
   </data>
   <data name="Desc_RecentUpdate.Text" xml:space="preserve">
-    <value>最近更新的文章</value>
+    <value>Recent update</value>
   </data>
   <data name="Desc_TopList_DDigest.Text" xml:space="preserve">
-    <value>以每日點擊量排行</value>
+    <value>Number of clicks by day</value>
   </data>
   <data name="Desc_TopList_Favourite.Text" xml:space="preserve">
-    <value>以會員收藏量作排行</value>
+    <value>Number of favourites by member</value>
   </data>
   <data name="Desc_TopList_HITs.Text" xml:space="preserve">
-    <value>以總點擊量排行</value>
+    <value>Total clicks</value>
   </data>
   <data name="Desc_TopList_WDigest.Text" xml:space="preserve">
-    <value>以週一為一周開始的推薦數量，每週日24:00:00數據重置</value>
+    <value>Hit counts restarts at each Monday.</value>
   </data>
   <data name="History.Text" xml:space="preserve">
-    <value>歷史</value>
+    <value>History</value>
   </data>
   <data name="MonthlySuggest.Text" xml:space="preserve">
-    <value>月度推薦</value>
+    <value>Monthly digest</value>
   </data>
   <data name="News.Text" xml:space="preserve">
-    <value>公告</value>
+    <value>Announcements</value>
   </data>
   <data name="PressList.Text" xml:space="preserve">
-    <value>文庫分類</value>
+    <value>Press list</value>
   </data>
   <data name="RankingList.Text" xml:space="preserve">
-    <value>排名分類</value>
+    <value>Rankings</value>
   </data>
   <data name="SpecialTopics.Text" xml:space="preserve">
-    <value>文庫專題</value>
+    <value>Special topics</value>
   </data>
   <data name="TopList_DDigest.Text" xml:space="preserve">
-    <value>日排行榜</value>
+    <value>Daily hits</value>
     <comment>dayvisit</comment>
   </data>
   <data name="TopList_Favourite.Text" xml:space="preserve">
-    <value>總收藏榜</value>
+    <value>Total favs</value>
     <comment>goodnum</comment>
   </data>
   <data name="TopList_HITs.Text" xml:space="preserve">
-    <value>總排行榜</value>
+    <value>Top</value>
     <comment>allvisit</comment>
   </data>
   <data name="TopList_WDigest.Text" xml:space="preserve">
-    <value>本週會員推薦榜</value>
+    <value>Weekly digest</value>
     <comment>weekvote</comment>
   </data>
   <data name="RecentUpdate.Text" xml:space="preserve">
-    <value>最近更新</value>
+    <value>Last update</value>
     <comment>lastupdate</comment>
   </data>
   <data name="Desc_Finished.Text" xml:space="preserve">
-    <value>查看已完結的書籍</value>
+    <value>Completed series</value>
   </data>
   <data name="Desc_NewestEntries.Text" xml:space="preserve">
-    <value>查看最新入庫的書籍</value>
+    <value>Not the newest entries, but the newest collection</value>
   </data>
   <data name="Finished.Text" xml:space="preserve">
-    <value>完結全本</value>
+    <value>Finished</value>
     <comment>fullflag</comment>
   </data>
   <data name="NewestEntries.Text" xml:space="preserve">
-    <value>新書一覽</value>
+    <value>New arrivals</value>
     <comment>postdate</comment>
   </data>
 </root>

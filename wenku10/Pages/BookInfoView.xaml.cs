@@ -568,7 +568,7 @@ namespace wenku10.Pages
 
         private void OpenInBrowser( object sender, RoutedEventArgs e )
         {
-            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( "http://www.wenku8.com/book/" + ThisBook.Id + ".htm" ) );
+            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
         }
 
         Grid PushGrid;

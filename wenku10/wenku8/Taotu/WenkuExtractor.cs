@@ -27,6 +27,7 @@ namespace wenku8.Taotu
     using Model.Book;
     using Model.Book.Spider;
     using Resources;
+    using Settings;
 
     class WenkuExtractor : Procedure, ISubProcedure
     {
@@ -114,6 +115,11 @@ namespace wenku8.Taotu
                 : ( BookConvoy.Payload as BookItem )
                 ;
 
+            if( !string.IsNullOrEmpty( LoadUrl ) )
+            {
+                BookInst.ReadParam( AppKeys.BINF_ORGURL, LoadUrl );
+            }
+
             if( ISF == null )
             {
                 ISF = await ProceduralSpider.DownloadSource( LoadUrl );
@@ -143,7 +149,10 @@ namespace wenku8.Taotu
                 {
                     // If the website split a single property into serveral pages
                     // That website is stupid. Would not support.
-                    Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() );
+                    if( !Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() ) )
+                    {
+                        ProcManager.PanelMessage( this, "Invalid param: " + Extr.PType.ToString(), LogType.WARNING );
+                    }
                 }
             }
         }
