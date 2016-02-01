@@ -24,15 +24,14 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.Settings;
 using wenku8.Ext;
+using wenku8.CompositeElement;
 using wenku8.Model.Book;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Section;
 using wenku8.Storage;
-using wenku8.CompositeElement;
 
 namespace wenku10.Pages
 {
@@ -46,6 +45,7 @@ namespace wenku10.Pages
         private TOCSection TOCData;
         private ListView VolList;
         private ReviewsSection ReviewsSection;
+        private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
 
         private bool SkipThisPage = false;
         private bool _inSync = false;
@@ -89,10 +89,12 @@ namespace wenku10.Pages
             try
             {
                 // Try Dispose
-                TOCSection.DataContext = null;
-                CommentSection.DataContext = null;
-                BookInfoSection.DataContext = null;
-
+                Worker.UIInvoke( () =>
+                {
+                    TOCSection.DataContext = null;
+                    CommentSection.DataContext = null;
+                    BookInfoSection.DataContext = null;
+                } );
             }
             catch( Exception )
             {
@@ -102,7 +104,7 @@ namespace wenku10.Pages
 
         private void ReorderModules()
         {
-            global::wenku8.Settings.Layout.BookInfoView LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+            LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
             ViewOrder = LayoutSettings.GetViewOrders();
 
             LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
@@ -334,9 +336,12 @@ namespace wenku10.Pages
         private void VolumeLoaded( BookItem b )
         {
             TOCData = new TOCSection( b );
+            TOCData.TemplateSelector.IsHorizontal = LayoutSettings.HorizontalTOC;
 
             TOCSection.DataContext = TOCData;
             TOCFloatSection.DataContext = TOCData;
+
+            TOCData.SetViewSource( VolumesViewSource );
 
             if( VolList != null && 0 < VolList.Items.Count() )
             {

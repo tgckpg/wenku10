@@ -15,10 +15,12 @@
     NavigationCacheMode="Enabled">
     <Page.Resources>
         <Converters:VDisplayConverter x:Key="VDisplayConverter" />
+        <Converters:ParallaxConverter x:Key="ParallaxConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
     </Page.Resources>
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -26,6 +28,8 @@
 
         <Grid.Resources>
             <v:BoolStateConverter x:Key="CachedStateConverter" />
+
+            <!-- Horizontal Chapter List ItemTemplate -->
             <DataTemplate x:Key="ChListItemTemplate">
                 <Grid>
                     <p:StateControl Width="30" State="{Binding IsCached, Converter={StaticResource CachedStateConverter}}"
@@ -41,7 +45,6 @@
                         </i:IconStar>
                     </p:StateControl>
                     <p:VerticalStack
-                        Grid.Row="1"
                         Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
                         HorizontalAlignment="Center"
                         Foreground="{StaticResource RelativeShadesBrush}"
@@ -50,7 +53,46 @@
                     />
                 </Grid>
             </DataTemplate>
+
+            <!-- Vertical ChapterList ItemTemplate -->
+            <DataTemplate x:Key="ChListVertical">
+                <Grid>
+                    <p:StateControl Width="30"
+                                    State="{Binding IsCached, Converter={StaticResource CachedStateConverter}}"
+                                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                                    FlowDirection="LeftToRight" >
+                        <i:IconStar Width="60" Height="60" AutoScale="True"
+                                    Margin="-30,0,-25,0"
+                                    Foreground="{StaticResource MajorBrush}"
+                                    Opacity="0.3" >
+                            <i:IconStar.RenderTransform>
+                                <CompositeTransform Rotation="-10" CenterX="30" CenterY="30" />
+                            </i:IconStar.RenderTransform>
+                        </i:IconStar>
+                    </p:StateControl>
+                    <TextBlock Margin="10"
+                               Foreground="{StaticResource RelativeShadesBrush}"
+                               FontSize="20" TextWrapping="Wrap"
+                               Text="{Binding ChapterTitle}" />
+                </Grid>
+            </DataTemplate>
+
         </Grid.Resources>
+
+        <Border Grid.RowSpan="2" Margin="-100, -100, -100, -100">
+            <Border.Background>
+                <ImageBrush ImageSource="/Assets/Samples/BgBookInfoView.jpg" Stretch="UniformToFill" />
+            </Border.Background>
+            <Border.RenderTransform>
+                <CompositeTransform
+                    TranslateX="{
+                        Binding ElementName=ContentScroll
+                        , Path=HorizontalOffset
+                        , Converter={StaticResource ParallaxConverter}
+                        , ConverterParameter=-0.10
+                    }" />
+            </Border.RenderTransform>
+        </Border>
 
         <ScrollViewer
             x:Name="ContentScroll"
@@ -61,6 +103,7 @@
             HorizontalScrollBarVisibility="Auto"
             ViewChanged="ContentScroll_ViewChanged" >
             <StackPanel x:Name="MasterContainer" Orientation="Horizontal">
+                <!-- Section Book Info -->
                 <Border x:Name="BookInfoSection" FlowDirection="LeftToRight"
                         Background="{StaticResource MinorBackgroundBrush}"
                         Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
@@ -197,6 +240,7 @@
                     </ContentControl>
                 </Border>
 
+                <!-- Section Table of Contents -->
                 <Border x:Name="TOCSection" Grid.Column="2" Background="{StaticResource Shades60}">
                     <Border.Transitions>
                         <TransitionCollection>
@@ -211,11 +255,7 @@
                                         <ColumnDefinition Width="65" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Grid.Column="0" Grid.RowSpan="2"
+                                    <StackPanel Grid.Column="0"
                                                 Background="{StaticResource Shades70}"
                                                 VerticalAlignment="Stretch">
                                         <Button Style="{StaticResource PlainButton}" Width="65" Height="65" Click="JumpToBookmark">
@@ -227,67 +267,127 @@
                                     </StackPanel>
                                     <TextBlock
                                         x:Uid="/AppBar/TOC"
-                                        Grid.RowSpan="2"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Center"
                                         TextLineBounds="TrimToBaseline"
                                         FontSize="50"
                                         Foreground="{StaticResource Shades80}"
                                         TextWrapping="Wrap" />
-                                    <ListView Grid.Column="1" Grid.Row="0"
-                                              ItemsSource="{Binding Volumes}"
-                                              Style="{StaticResource VerticalListView}"
-                                              ItemContainerStyle="{StaticResource TOCListItem}"
-                                              LayoutUpdated="ChFixedListLayoutUpdate"
-                                              Loaded="VolumeListLoaded"
-                                              SelectionChanged="VolumeChanged">
-                                        <ListView.Resources>
+
+                                    <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}">
+                                        <ContentControl.Resources>
                                             <MenuFlyout x:Key="VolumeAction">
                                                 <MenuFlyoutItem x:Uid="/AppBar/VDownload" Tapped="DownloadVolume" />
                                             </MenuFlyout>
-                                        </ListView.Resources>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <p:VerticalStack
-                                                    Margin="10"
-                                                    Grid.Row="0"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalAlignment="Center"
-                                                    Foreground="{StaticResource RelativeShadesBrush}"
-                                                    FontSize="20"
-                                                    RightTapped="TOCShowVolumeAction"
-                                                    FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                                                    Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
-                                                />
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
 
-                                    <Rectangle Grid.Column="1" Grid.Row="1"
-                                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                               Fill="{StaticResource Shades90}" />
-                                    <Rectangle Grid.Column="1" Grid.Row="1"
-                                               HorizontalAlignment="Left"
-                                               Loaded="ChLeftBoundaryLoaded" />
-                                    <Rectangle Grid.Column="1" Grid.Row="1"
-                                               HorizontalAlignment="Right"
-                                               Loaded="ChRightBoundaryLoaded" />
-                                    <ListView ItemsSource="{Binding Chapters}"
-                                              Grid.Column="1" Grid.Row="1" 
-                                              Style="{StaticResource VerticalListView}"
-                                              HorizontalAlignment="Left"
-                                              ItemTemplate="{StaticResource ChListItemTemplate}"
-                                              ItemContainerStyle="{StaticResource PlainListItem}"
-                                              MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                                              Loaded="ChapterListLoaded"
-                                              IsItemClickEnabled="True"
-                                              ItemClick="ChapterSelected" >
-                                    </ListView>
+                                            <DataTemplate x:Name="Vertical">
+                                                <SemanticZoom Width="400"
+                                                              FlowDirection="LeftToRight" >
+                                                    <SemanticZoom.ZoomedInView>
+                                                        <ListView ItemsSource="{Binding Source={StaticResource VolumesViewSource}}"
+                                                                  ItemTemplate="{StaticResource ChListVertical}"
+                                                                  Loaded="ChapterListLoaded"
+                                                                  IsItemClickEnabled="True"
+                                                                  ItemClick="ChapterSelected" >
+                                                            <ListView.GroupStyle>
+                                                                <GroupStyle>
+                                                                    <GroupStyle.HeaderTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBlock
+                                                                                Margin="10"
+                                                                                Foreground="{StaticResource RelativeShadesBrush}"
+                                                                                FontSize="20" TextWrapping="Wrap"
+                                                                                RightTapped="TOCShowVolumeAction"
+                                                                                FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
+                                                                                Text="{Binding Vol.VolumeTitle}"
+                                                                            />
+                                                                        </DataTemplate>
+                                                                    </GroupStyle.HeaderTemplate>
+                                                                </GroupStyle>
+                                                            </ListView.GroupStyle>
+                                                        </ListView>
+                                                    </SemanticZoom.ZoomedInView>
+                                                    <SemanticZoom.ZoomedOutView>
+                                                        <ListView ItemsSource="{Binding VolumeCollections}" 
+                                                                  Loaded="VolumeListLoaded"
+                                                                  SelectionChanged="VolumeChanged">
+                                                            <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock
+                                                                        Margin="10"
+                                                                        Foreground="{StaticResource RelativeShadesBrush}"
+                                                                        FontSize="20" TextWrapping="Wrap"
+                                                                        Text="{Binding Group.Vol.VolumeTitle}"
+                                                                    />
+                                                                </DataTemplate>
+                                                            </ListView.ItemTemplate>
+                                                        </ListView>
+                                                    </SemanticZoom.ZoomedOutView>
+                                                </SemanticZoom>
+                                            </DataTemplate>
+
+                                            <!-- Horizontal template -->
+                                            <DataTemplate x:Name="Horizontal">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <ListView Grid.Row="0"
+                                                              ItemsSource="{Binding Volumes}"
+                                                              Style="{StaticResource VerticalListView}"
+                                                              ItemContainerStyle="{StaticResource TOCListItem}"
+                                                              LayoutUpdated="ChFixedListLayoutUpdate"
+                                                              Loaded="VolumeListLoaded"
+                                                              SelectionChanged="VolumeChanged">
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <p:VerticalStack
+                                                                    Margin="10"
+                                                                    Grid.Row="0"
+                                                                    VerticalAlignment="Top"
+                                                                    HorizontalAlignment="Center"
+                                                                    Foreground="{StaticResource RelativeShadesBrush}"
+                                                                    FontSize="20"
+                                                                    RightTapped="TOCShowVolumeAction"
+                                                                    FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
+                                                                    Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
+                                                                />
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+
+                                                    <Rectangle Grid.Row="1"
+                                                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                                               Fill="{StaticResource Shades90}" />
+                                                    <Rectangle Grid.Row="1"
+                                                               HorizontalAlignment="Left"
+                                                               Loaded="ChLeftBoundaryLoaded" />
+                                                    <Rectangle Grid.Row="1"
+                                                               HorizontalAlignment="Right"
+                                                               Loaded="ChRightBoundaryLoaded" />
+                                                    <ListView ItemsSource="{Binding Chapters}"
+                                                              Grid.Row="1" 
+                                                              Style="{StaticResource VerticalListView}"
+                                                              HorizontalAlignment="Left"
+                                                              ItemTemplate="{StaticResource ChListItemTemplate}"
+                                                              ItemContainerStyle="{StaticResource PlainListItem}"
+                                                              MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                                                              Loaded="ChapterListLoaded"
+                                                              IsItemClickEnabled="True"
+                                                              ItemClick="ChapterSelected" >
+                                                    </ListView>
+                                                </Grid>
+                                            </DataTemplate>
+
+                                        </ContentControl.Resources>
+                                    </ContentControl>
                                 </Grid>
                             </DataTemplate>
                         </ContentControl.ContentTemplate>
                     </ContentControl>
                 </Border>
 
+                <!-- Section Comments -->
                 <Border x:Name="CommentSection" Grid.Column="1" Background="#999"
                         Width="450" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
                     <Border.Transitions>
@@ -364,6 +464,7 @@
                         </ContentControl.ContentTemplate>
                     </ContentControl>
                 </Border>
+
             </StackPanel>
         </ScrollViewer>
 

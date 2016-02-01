@@ -9,17 +9,18 @@ using Windows.UI.Xaml.Controls;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 
-using wenku8.Settings.Layout.ModuleThumbnail;
-using wenku8.System;
-
 namespace wenku8.Settings.Layout
 {
+    using Resources;
+    using Settings.Layout.ModuleThumbnail;
+
     class BookInfoView
     {
         public static readonly string ID = typeof( BookInfoView ).Name;
 
         private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_BOOKINFOVIEW;
         private const string RightToLeft = "RightToLeft";
+        private const string HrTOCName = "HorizontalTOC";
 
         public bool IsRightToLeft
         {
@@ -30,6 +31,19 @@ namespace wenku8.Settings.Layout
             set
             {
                 LayoutSettings.SetParameter( RightToLeft, new XKey( "enable", value ) );
+                LayoutSettings.Save();
+            }
+        }
+
+        public bool HorizontalTOC
+        {
+            get
+            {
+                return LayoutSettings.GetParameter( HrTOCName ).GetBool( "enable" );
+            }
+            set
+            {
+                LayoutSettings.SetParameter( HrTOCName, new XKey( "enable", value ) );
                 LayoutSettings.Save();
             }
         }
@@ -94,7 +108,18 @@ namespace wenku8.Settings.Layout
 
             if ( LayoutSettings.GetParameter( RightToLeft ) == null )
             {
-                LayoutSettings.SetParameter( RightToLeft, new XKey( "enable", true ) );
+                LayoutSettings.SetParameter(
+                    RightToLeft
+                    , new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.IsRightToLeft" ) )
+                );
+            }
+
+            if ( LayoutSettings.GetParameter( HrTOCName ) == null )
+            {
+                LayoutSettings.SetParameter(
+                    HrTOCName
+                    , new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.HorizontalTOC" ) )
+                );
             }
 
             // Create Index Item if not available

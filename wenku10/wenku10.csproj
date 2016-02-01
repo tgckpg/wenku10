@@ -103,6 +103,7 @@
     </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\OpacityChecker.png" />
+    <Content Include="Assets\Samples\BgBookInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />

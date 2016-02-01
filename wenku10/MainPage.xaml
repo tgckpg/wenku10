@@ -15,7 +15,6 @@
     NavigationCacheMode="Enabled">
 
     <Page.Resources>
-        <v:ParallaxConverter x:Key="ParallaxConverter" />
         <v:BoolDataConverter x:Key="BoolDataConverter" />
         <v:FavConverter x:Key="FavConverter" />
         <CollectionViewSource x:Name="favItems" />
