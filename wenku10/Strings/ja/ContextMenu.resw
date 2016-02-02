@@ -162,4 +162,13 @@
   <data name="ContextMenu_WUnsync.Text" xml:space="preserve">
     <value>ローカルに移動</value>
   </data>
+  <data name="CustomBackground.Text" xml:space="preserve">
+    <value>カスタムの背景</value>
+  </data>
+  <data name="PresetBackground.Text" xml:space="preserve">
+    <value>プリセットの背景</value>
+  </data>
+  <data name="SystemBackground.Text" xml:space="preserve">
+    <value>システムの背景</value>
+  </data>
 </root>

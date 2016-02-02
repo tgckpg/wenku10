@@ -162,4 +162,13 @@
   <data name="ContextMenu_WUnsync.Text" xml:space="preserve">
     <value>移至本地</value>
   </data>
+  <data name="CustomBackground.Text" xml:space="preserve">
+    <value>自定义背景</value>
+  </data>
+  <data name="PresetBackground.Text" xml:space="preserve">
+    <value>预设背景</value>
+  </data>
+  <data name="SystemBackground.Text" xml:space="preserve">
+    <value>系统背景</value>
+  </data>
 </root>

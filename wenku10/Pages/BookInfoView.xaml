@@ -17,6 +17,7 @@
         <Converters:VDisplayConverter x:Key="VDisplayConverter" />
         <Converters:ParallaxConverter x:Key="ParallaxConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:BoolStateConverter x:Key="BoolStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
     </Page.Resources>
@@ -79,20 +80,25 @@
 
         </Grid.Resources>
 
-        <Border Grid.RowSpan="2" Margin="-100, -100, -100, -100">
-            <Border.Background>
-                <ImageBrush ImageSource="/Assets/Samples/BgBookInfoView.jpg" Stretch="UniformToFill" />
-            </Border.Background>
-            <Border.RenderTransform>
-                <CompositeTransform
-                    TranslateX="{
+        <!-- Background from data context -->
+        <Grid x:Name="TOCBg" Grid.RowSpan="2" Margin="-100, -100, -100, -100">
+            <Grid.RenderTransform>
+                <TranslateTransform
+                    X="{
                         Binding ElementName=ContentScroll
                         , Path=HorizontalOffset
                         , Converter={StaticResource ParallaxConverter}
                         , ConverterParameter=-0.10
                     }" />
-            </Border.RenderTransform>
-        </Border>
+            </Grid.RenderTransform>
+            <!-- Swapping between 2 image to create fading effect -->
+            <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                <Image Source="{Binding Background}" Stretch="UniformToFill" />
+            </p:StateControl>
+            <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                <Image Source="{Binding Background2}" Stretch="UniformToFill" />
+            </p:StateControl>
+        </Grid>
 
         <ScrollViewer
             x:Name="ContentScroll"
@@ -104,8 +110,7 @@
             ViewChanged="ContentScroll_ViewChanged" >
             <StackPanel x:Name="MasterContainer" Orientation="Horizontal">
                 <!-- Section Book Info -->
-                <Border x:Name="BookInfoSection" FlowDirection="LeftToRight"
-                        Background="{StaticResource MinorBackgroundBrush}"
+                <Border x:Name="BookInfoSection"
                         Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                     <Border.Transitions>
                         <TransitionCollection>
@@ -115,17 +120,39 @@
                     <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid p:Clip.ToBounds="True">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="65"/>
                                     </Grid.RowDefinitions>
+                                    <!-- Background from data context -->
+                                    <Grid Grid.RowSpan="2" Margin="-100, -100, -100, -100" 
+                                          Loaded="InfoBgLoaded">
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform
+                                                X="{
+                                                    Binding ElementName=ContentScroll
+                                                    , Path=HorizontalOffset
+                                                    , Converter={StaticResource ParallaxConverter}
+                                                    , ConverterParameter=-0.20
+                                                }" />
+                                        </Grid.RenderTransform>
+                                        <!-- Swapping between 2 image to create fading effect -->
+                                        <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                                            <Image Source="{Binding Background}" Stretch="UniformToFill"/>
+                                        </p:StateControl>
+                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                                            <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
+                                        </p:StateControl>
+                                    </Grid>
+                                    <Rectangle Grid.RowSpan="2"
+                                               Fill="{StaticResource MinorBackgroundBrush}"/>
                                     <ScrollViewer Grid.Row="0" Margin="10" FlowDirection="LeftToRight"
                                                   VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
                                         <StackPanel>
                                             <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
                                                        Text="{Binding Title}" FontSize="30"
-                                                       Foreground="{StaticResource MajorBrush}" TextWrapping="Wrap" />
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap" />
                                             <Grid Grid.Row="1" Grid.Column="1">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
@@ -139,19 +166,19 @@
                                                     <Image MaxWidth="140" Margin="5" Source="{Binding Cover}" />
                                                 </p:StateControl>
                                                 <StackPanel Grid.Column="1" Margin="5,10,5,5" Grid.Row="0">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource MinorBrush}"/>
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource MinorBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource MinorBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource MinorBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="1" Margin="5" Grid.Row="1">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource MinorBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource MinorBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                     <Grid Loaded="PushCountGridLoaded">
-                                                        <Rectangle x:Name="PushCountFlash" Fill="{StaticResource MinorBrush}" Opacity="0"/>
+                                                        <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
                                                         <TextBlock Text="{Binding PushCount}" >
                                                             <TextBlock.Foreground>
-                                                                <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
+                                                                <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}" />
                                                             </TextBlock.Foreground>
                                                         </TextBlock>
                                                         <Grid.Resources>
@@ -169,8 +196,8 @@
                                                                                 Storyboard.TargetProperty="Color"
                                                                                 BeginTime="0:0:0.0"
                                                                                 Duration="0:0:0.5"
-                                                                                From="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}"
-                                                                                To="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}">
+                                                                                From="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}"
+                                                                                To="Transparent">
                                                                     <ColorAnimation.EasingFunction>
                                                                         <CubicEase EasingMode="EaseOut" />
                                                                     </ColorAnimation.EasingFunction>
@@ -179,32 +206,30 @@
                                                         </Grid.Resources>
                                                     </Grid>
 
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource MinorBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
 
                                             </Grid>
                                             <TextBlock Grid.Row="2" Margin="5"
                                                        TextWrapping="Wrap" Text="{Binding Intro}"
-                                                       Foreground="{StaticResource MinorBrush}" />
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                             <TextBlock Grid.Row="3" HorizontalAlignment="Right" FontSize="20"
-                                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource MinorBrush}" />
+                                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                         </StackPanel>
                                     </ScrollViewer>
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal"
+                                                FlowDirection="LeftToRight">
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
                                                 Height="65" Width="65"
-                                                FlowDirection="LeftToRight"
                                                 Click="OpenInBrowser" >
-                                                <i:IconMSEdge Width="40" Height="40"
-                                                              VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                              AutoScale="True" />
+                                                <i:IconMSEdge AutoScale="True" />
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
                                                 Height="65" Width="65"
                                                 Tapped="AddOrRemoveFav">
-                                            <Grid FlowDirection="LeftToRight">
+                                            <Grid>
                                                 <Grid.Resources>
                                                     <Converters:FavConverter x:Key="FavConverter" />
                                                 </Grid.Resources>
@@ -214,6 +239,26 @@
                                                 <i:IconFav AutoScale="True"
                                                            Visibility="{Binding IsFav, Converter={StaticResource FavConverter}, ConverterParameter=0}"/>
                                             </Grid>
+                                        </Button>
+                                        <Button Style="{StaticResource PlainButton}"
+                                                Background="{StaticResource Shades40}"
+                                                Height="65" Width="65">
+                                            <Button.Flyout>
+                                                <MenuFlyout>
+                                                    <MenuFlyoutSubItem x:Uid="/AppBar/TOC" Text="Table of Contents">
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,TOC" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" IsEnabled="False" Text="Preset Background" Click="ChangeBackground" Tag="Preset,TOC" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,TOC"  />
+                                                    </MenuFlyoutSubItem>
+                                                    <!--<MenuFlyoutSeparator />-->
+                                                    <MenuFlyoutSubItem x:Uid="/AppBar/BookInfoView" Text="Info Panel" Tag="INFO_VIEW">
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" IsEnabled="False"  Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
+                                                    </MenuFlyoutSubItem>
+                                                </MenuFlyout>
+                                            </Button.Flyout>
+                                            <i:IconCanvasBrush AutoScale="True" />
                                         </Button>
                                         <!-- Obsolete buttons
                                         <Button Style="{StaticResource PlainButton}"

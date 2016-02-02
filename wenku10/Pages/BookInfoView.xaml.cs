@@ -49,6 +49,7 @@ namespace wenku10.Pages
 
         private bool SkipThisPage = false;
         private bool _inSync = false;
+
         private bool SyncStarted
         {
             get { return _inSync; }
@@ -62,6 +63,8 @@ namespace wenku10.Pages
         private List<string> ViewOrder;
 
         private ProgressRing InSync;
+        private Grid InfoBgGrid;
+        private Grid PushGrid;
 
         public BookInfoView()
         {
@@ -105,6 +108,8 @@ namespace wenku10.Pages
         private void ReorderModules()
         {
             LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+
+            TOCBg.DataContext = LayoutSettings.GetBgContext( "TOC" );
             ViewOrder = LayoutSettings.GetViewOrders();
 
             LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
@@ -163,6 +168,9 @@ namespace wenku10.Pages
             base.OnNavigatedTo( e );
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
             NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
+
+            LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
+            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 
             if( e.NavigationMode == NavigationMode.New )
             {
@@ -576,7 +584,6 @@ namespace wenku10.Pages
             var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
         }
 
-        Grid PushGrid;
         private void Vote( object sender, RoutedEventArgs e )
         {
             if( ThisBook.XTest( XProto.BookItemEx ) )
@@ -596,5 +603,20 @@ namespace wenku10.Pages
         {
             PushGrid = sender as Grid;
         }
+
+        private void ChangeBackground( object sender, RoutedEventArgs e )
+        {
+            MenuFlyoutItem item = sender as MenuFlyoutItem;
+            string[] Argv = item.Tag.ToString().Split( ',' );
+
+            LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
+        }
+
+        private void InfoBgLoaded( object sender, RoutedEventArgs e )
+        {
+            InfoBgGrid = sender as Grid;
+            InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
+        }
     }
 }
+
