@@ -63,7 +63,7 @@
                 <DataTemplate x:Name="Vertical">
                     <Grid RightTapped="Grid_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20"/>
+                            <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>

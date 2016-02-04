@@ -47,10 +47,7 @@ namespace wenku10.Pages.Dialogs.Taotu
             MessageBus.OnDelivery += MessageBus_OnDelivery;
         }
 
-        ~EditProcMark()
-        {
-            Dispose();
-        }
+        ~EditProcMark() { Dispose(); }
 
         public void Dispose()
         {

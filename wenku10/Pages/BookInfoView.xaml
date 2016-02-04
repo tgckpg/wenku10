@@ -15,9 +15,13 @@
     NavigationCacheMode="Enabled">
     <Page.Resources>
         <Converters:VDisplayConverter x:Key="VDisplayConverter" />
+        <Converters:ParallaxConverter x:Key="ParallaxConverter" />
+        <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:BoolStateConverter x:Key="BoolStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
     </Page.Resources>
-    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -25,6 +29,8 @@
 
         <Grid.Resources>
             <v:BoolStateConverter x:Key="CachedStateConverter" />
+
+            <!-- Horizontal Chapter List ItemTemplate -->
             <DataTemplate x:Key="ChListItemTemplate">
                 <Grid>
                     <p:StateControl Width="30" State="{Binding IsCached, Converter={StaticResource CachedStateConverter}}"
@@ -40,7 +46,6 @@
                         </i:IconStar>
                     </p:StateControl>
                     <p:VerticalStack
-                        Grid.Row="1"
                         Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
                         HorizontalAlignment="Center"
                         Foreground="{StaticResource RelativeShadesBrush}"
@@ -49,7 +54,51 @@
                     />
                 </Grid>
             </DataTemplate>
+
+            <!-- Vertical ChapterList ItemTemplate -->
+            <DataTemplate x:Key="ChListVertical">
+                <Grid>
+                    <p:StateControl Width="30"
+                                    State="{Binding IsCached, Converter={StaticResource CachedStateConverter}}"
+                                    VerticalAlignment="Top" HorizontalAlignment="Left"
+                                    FlowDirection="LeftToRight" >
+                        <i:IconStar Width="60" Height="60" AutoScale="True"
+                                    Margin="-30,0,-25,0"
+                                    Foreground="{StaticResource MajorBrush}"
+                                    Opacity="0.3" >
+                            <i:IconStar.RenderTransform>
+                                <CompositeTransform Rotation="-10" CenterX="30" CenterY="30" />
+                            </i:IconStar.RenderTransform>
+                        </i:IconStar>
+                    </p:StateControl>
+                    <TextBlock Margin="10"
+                               Foreground="{StaticResource RelativeShadesBrush}"
+                               FontSize="20" TextWrapping="Wrap"
+                               Text="{Binding ChapterTitle}" />
+                </Grid>
+            </DataTemplate>
+
         </Grid.Resources>
+
+        <!-- Background from data context -->
+        <Grid x:Name="TOCBg" Grid.RowSpan="2" Margin="-100, -100, -100, -100">
+            <Grid.RenderTransform>
+                <TranslateTransform
+                    X="{
+                        Binding ElementName=ContentScroll
+                        , Path=HorizontalOffset
+                        , Converter={StaticResource ParallaxConverter}
+                        , ConverterParameter=-0.10
+                    }" />
+            </Grid.RenderTransform>
+            <!-- Swapping between 2 image to create fading effect -->
+            <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                <Image Source="{Binding Background}" Stretch="UniformToFill" />
+            </p:StateControl>
+            <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                <Image Source="{Binding Background2}" Stretch="UniformToFill" />
+            </p:StateControl>
+        </Grid>
 
         <ScrollViewer
             x:Name="ContentScroll"
@@ -60,8 +109,8 @@
             HorizontalScrollBarVisibility="Auto"
             ViewChanged="ContentScroll_ViewChanged" >
             <StackPanel x:Name="MasterContainer" Orientation="Horizontal">
-                <Border x:Name="BookInfoSection" FlowDirection="LeftToRight"
-                        Background="{StaticResource MinorBackgroundBrush}"
+                <!-- Section Book Info -->
+                <Border x:Name="BookInfoSection"
                         Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                     <Border.Transitions>
                         <TransitionCollection>
@@ -71,41 +120,65 @@
                     <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid p:Clip.ToBounds="True">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="65"/>
                                     </Grid.RowDefinitions>
+                                    <!-- Background from data context -->
+                                    <Grid Grid.RowSpan="2" Margin="-100, -100, -100, -100" 
+                                          Loaded="InfoBgLoaded">
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform
+                                                X="{
+                                                    Binding ElementName=ContentScroll
+                                                    , Path=HorizontalOffset
+                                                    , Converter={StaticResource ParallaxConverter}
+                                                    , ConverterParameter=-0.20
+                                                }" />
+                                        </Grid.RenderTransform>
+                                        <!-- Swapping between 2 image to create fading effect -->
+                                        <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                                            <Image Source="{Binding Background}" Stretch="UniformToFill"/>
+                                        </p:StateControl>
+                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                                            <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
+                                        </p:StateControl>
+                                    </Grid>
+                                    <Rectangle Grid.RowSpan="2"
+                                               Fill="{StaticResource MinorBackgroundBrush}"/>
                                     <ScrollViewer Grid.Row="0" Margin="10" FlowDirection="LeftToRight"
                                                   VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
                                         <StackPanel>
                                             <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
                                                        Text="{Binding Title}" FontSize="30"
-                                                       Foreground="{StaticResource MajorBrush}" TextWrapping="Wrap" />
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap" />
                                             <Grid Grid.Row="1" Grid.Column="1">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="140" />
+                                                    <ColumnDefinition Width="Auto" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
-                                                <Image Grid.RowSpan="2" Margin="5" Source="{Binding Cover}" />
+                                                <p:StateControl Grid.RowSpan="2" State="{Binding Cover, Converter={StaticResource DataStateConverter}}" >
+                                                    <Image MaxWidth="140" Margin="5" Source="{Binding Cover}" />
+                                                </p:StateControl>
                                                 <StackPanel Grid.Column="1" Margin="5,10,5,5" Grid.Row="0">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource MinorBrush}"/>
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource MinorBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource MinorBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource MinorBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="1" Margin="5" Grid.Row="1">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource MinorBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource MinorBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                     <Grid Loaded="PushCountGridLoaded">
-                                                        <Rectangle x:Name="PushCountFlash" Fill="{StaticResource MinorBrush}" Opacity="0"/>
+                                                        <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
                                                         <TextBlock Text="{Binding PushCount}" >
                                                             <TextBlock.Foreground>
-                                                                <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
+                                                                <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}" />
                                                             </TextBlock.Foreground>
                                                         </TextBlock>
                                                         <Grid.Resources>
@@ -123,8 +196,8 @@
                                                                                 Storyboard.TargetProperty="Color"
                                                                                 BeginTime="0:0:0.0"
                                                                                 Duration="0:0:0.5"
-                                                                                From="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}"
-                                                                                To="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}">
+                                                                                From="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}"
+                                                                                To="Transparent">
                                                                     <ColorAnimation.EasingFunction>
                                                                         <CubicEase EasingMode="EaseOut" />
                                                                     </ColorAnimation.EasingFunction>
@@ -133,33 +206,30 @@
                                                         </Grid.Resources>
                                                     </Grid>
 
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource MinorBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
 
                                             </Grid>
                                             <TextBlock Grid.Row="2" Margin="5"
                                                        TextWrapping="Wrap" Text="{Binding Intro}"
-                                                       Foreground="{StaticResource MinorBrush}" />
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                             <TextBlock Grid.Row="3" HorizontalAlignment="Right" FontSize="20"
-                                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource MinorBrush}" />
+                                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                         </StackPanel>
                                     </ScrollViewer>
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal"
+                                                FlowDirection="LeftToRight">
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
                                                 Height="65" Width="65"
                                                 Click="OpenInBrowser" >
-                                            <TextBlock Text="Open this in browser"
-                                                       Foreground="White"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Center"
-                                                       HorizontalAlignment="Center"/>
+                                                <i:IconMSEdge AutoScale="True" />
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
                                                 Height="65" Width="65"
                                                 Tapped="AddOrRemoveFav">
-                                            <Grid FlowDirection="LeftToRight">
+                                            <Grid>
                                                 <Grid.Resources>
                                                     <Converters:FavConverter x:Key="FavConverter" />
                                                 </Grid.Resources>
@@ -170,6 +240,27 @@
                                                            Visibility="{Binding IsFav, Converter={StaticResource FavConverter}, ConverterParameter=0}"/>
                                             </Grid>
                                         </Button>
+                                        <Button Style="{StaticResource PlainButton}"
+                                                Background="{StaticResource Shades40}"
+                                                Height="65" Width="65">
+                                            <Button.Flyout>
+                                                <MenuFlyout>
+                                                    <MenuFlyoutSubItem x:Uid="/AppBar/TOC" Text="Table of Contents">
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,TOC" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" IsEnabled="False" Text="Preset Background" Click="ChangeBackground" Tag="Preset,TOC" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,TOC"  />
+                                                    </MenuFlyoutSubItem>
+                                                    <!--<MenuFlyoutSeparator />-->
+                                                    <MenuFlyoutSubItem x:Uid="/AppBar/BookInfoView" Text="Info Panel" Tag="INFO_VIEW">
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" IsEnabled="False"  Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
+                                                    </MenuFlyoutSubItem>
+                                                </MenuFlyout>
+                                            </Button.Flyout>
+                                            <i:IconCanvasBrush AutoScale="True" />
+                                        </Button>
+                                        <!-- Obsolete buttons
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
                                                 Height="65" Width="65"
@@ -186,6 +277,7 @@
                                                        TextAlignment="Center"
                                                        HorizontalAlignment="Center"/>
                                         </Button>
+                                        -->
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -193,6 +285,7 @@
                     </ContentControl>
                 </Border>
 
+                <!-- Section Table of Contents -->
                 <Border x:Name="TOCSection" Grid.Column="2" Background="{StaticResource Shades60}">
                     <Border.Transitions>
                         <TransitionCollection>
@@ -207,11 +300,7 @@
                                         <ColumnDefinition Width="65" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Grid.Column="0" Grid.RowSpan="2"
+                                    <StackPanel Grid.Column="0"
                                                 Background="{StaticResource Shades70}"
                                                 VerticalAlignment="Stretch">
                                         <Button Style="{StaticResource PlainButton}" Width="65" Height="65" Click="JumpToBookmark">
@@ -223,67 +312,127 @@
                                     </StackPanel>
                                     <TextBlock
                                         x:Uid="/AppBar/TOC"
-                                        Grid.RowSpan="2"
                                         VerticalAlignment="Bottom" HorizontalAlignment="Center"
                                         TextLineBounds="TrimToBaseline"
                                         FontSize="50"
                                         Foreground="{StaticResource Shades80}"
                                         TextWrapping="Wrap" />
-                                    <ListView Grid.Column="1" Grid.Row="0"
-                                              ItemsSource="{Binding Volumes}"
-                                              Style="{StaticResource VerticalListView}"
-                                              ItemContainerStyle="{StaticResource TOCListItem}"
-                                              LayoutUpdated="ChFixedListLayoutUpdate"
-                                              Loaded="VolumeListLoaded"
-                                              SelectionChanged="VolumeChanged">
-                                        <ListView.Resources>
+
+                                    <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}">
+                                        <ContentControl.Resources>
                                             <MenuFlyout x:Key="VolumeAction">
                                                 <MenuFlyoutItem x:Uid="/AppBar/VDownload" Tapped="DownloadVolume" />
                                             </MenuFlyout>
-                                        </ListView.Resources>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <p:VerticalStack
-                                                    Margin="10"
-                                                    Grid.Row="0"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalAlignment="Center"
-                                                    Foreground="{StaticResource RelativeShadesBrush}"
-                                                    FontSize="20"
-                                                    RightTapped="TOCShowVolumeAction"
-                                                    FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                                                    Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
-                                                />
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
 
-                                    <Rectangle Grid.Column="1" Grid.Row="1"
-                                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                               Fill="{StaticResource Shades90}" />
-                                    <Rectangle Grid.Column="1" Grid.Row="1"
-                                               HorizontalAlignment="Left"
-                                               Loaded="ChLeftBoundaryLoaded" />
-                                    <Rectangle Grid.Column="1" Grid.Row="1"
-                                               HorizontalAlignment="Right"
-                                               Loaded="ChRightBoundaryLoaded" />
-                                    <ListView ItemsSource="{Binding Chapters}"
-                                              Grid.Column="1" Grid.Row="1" 
-                                              Style="{StaticResource VerticalListView}"
-                                              HorizontalAlignment="Left"
-                                              ItemTemplate="{StaticResource ChListItemTemplate}"
-                                              ItemContainerStyle="{StaticResource PlainListItem}"
-                                              MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                                              Loaded="ChapterListLoaded"
-                                              IsItemClickEnabled="True"
-                                              ItemClick="ChapterSelected" >
-                                    </ListView>
+                                            <DataTemplate x:Name="Vertical">
+                                                <SemanticZoom Width="400"
+                                                              FlowDirection="LeftToRight" >
+                                                    <SemanticZoom.ZoomedInView>
+                                                        <ListView ItemsSource="{Binding Source={StaticResource VolumesViewSource}}"
+                                                                  ItemTemplate="{StaticResource ChListVertical}"
+                                                                  Loaded="ChapterListLoaded"
+                                                                  IsItemClickEnabled="True"
+                                                                  ItemClick="ChapterSelected" >
+                                                            <ListView.GroupStyle>
+                                                                <GroupStyle>
+                                                                    <GroupStyle.HeaderTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBlock
+                                                                                Margin="10"
+                                                                                Foreground="{StaticResource RelativeShadesBrush}"
+                                                                                FontSize="20" TextWrapping="Wrap"
+                                                                                RightTapped="TOCShowVolumeAction"
+                                                                                FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
+                                                                                Text="{Binding Vol.VolumeTitle}"
+                                                                            />
+                                                                        </DataTemplate>
+                                                                    </GroupStyle.HeaderTemplate>
+                                                                </GroupStyle>
+                                                            </ListView.GroupStyle>
+                                                        </ListView>
+                                                    </SemanticZoom.ZoomedInView>
+                                                    <SemanticZoom.ZoomedOutView>
+                                                        <ListView ItemsSource="{Binding VolumeCollections}" 
+                                                                  Loaded="VolumeListLoaded"
+                                                                  SelectionChanged="VolumeChanged">
+                                                            <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock
+                                                                        Margin="10"
+                                                                        Foreground="{StaticResource RelativeShadesBrush}"
+                                                                        FontSize="20" TextWrapping="Wrap"
+                                                                        Text="{Binding Group.Vol.VolumeTitle}"
+                                                                    />
+                                                                </DataTemplate>
+                                                            </ListView.ItemTemplate>
+                                                        </ListView>
+                                                    </SemanticZoom.ZoomedOutView>
+                                                </SemanticZoom>
+                                            </DataTemplate>
+
+                                            <!-- Horizontal template -->
+                                            <DataTemplate x:Name="Horizontal">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+                                                    <ListView Grid.Row="0"
+                                                              ItemsSource="{Binding Volumes}"
+                                                              Style="{StaticResource VerticalListView}"
+                                                              ItemContainerStyle="{StaticResource TOCListItem}"
+                                                              LayoutUpdated="ChFixedListLayoutUpdate"
+                                                              Loaded="VolumeListLoaded"
+                                                              SelectionChanged="VolumeChanged">
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <p:VerticalStack
+                                                                    Margin="10"
+                                                                    Grid.Row="0"
+                                                                    VerticalAlignment="Top"
+                                                                    HorizontalAlignment="Center"
+                                                                    Foreground="{StaticResource RelativeShadesBrush}"
+                                                                    FontSize="20"
+                                                                    RightTapped="TOCShowVolumeAction"
+                                                                    FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
+                                                                    Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
+                                                                />
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+
+                                                    <Rectangle Grid.Row="1"
+                                                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                                               Fill="{StaticResource Shades90}" />
+                                                    <Rectangle Grid.Row="1"
+                                                               HorizontalAlignment="Left"
+                                                               Loaded="ChLeftBoundaryLoaded" />
+                                                    <Rectangle Grid.Row="1"
+                                                               HorizontalAlignment="Right"
+                                                               Loaded="ChRightBoundaryLoaded" />
+                                                    <ListView ItemsSource="{Binding Chapters}"
+                                                              Grid.Row="1" 
+                                                              Style="{StaticResource VerticalListView}"
+                                                              HorizontalAlignment="Left"
+                                                              ItemTemplate="{StaticResource ChListItemTemplate}"
+                                                              ItemContainerStyle="{StaticResource PlainListItem}"
+                                                              MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                                                              Loaded="ChapterListLoaded"
+                                                              IsItemClickEnabled="True"
+                                                              ItemClick="ChapterSelected" >
+                                                    </ListView>
+                                                </Grid>
+                                            </DataTemplate>
+
+                                        </ContentControl.Resources>
+                                    </ContentControl>
                                 </Grid>
                             </DataTemplate>
                         </ContentControl.ContentTemplate>
                     </ContentControl>
                 </Border>
 
+                <!-- Section Comments -->
                 <Border x:Name="CommentSection" Grid.Column="1" Background="#999"
                         Width="450" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
                     <Border.Transitions>
@@ -360,6 +509,7 @@
                         </ContentControl.ContentTemplate>
                     </ContentControl>
                 </Border>
+
             </StackPanel>
         </ScrollViewer>
 

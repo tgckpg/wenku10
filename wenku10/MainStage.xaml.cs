@@ -21,11 +21,6 @@ namespace wenku10
 {
     public sealed partial class MainStage : Page
     {
-        private enum GameMode
-        {
-            SinglePlayer, OnlineMultiPlayer
-        }
-
         public static readonly string ID = typeof( MainStage ).Name;
         public static MainStage Instance;
 
@@ -33,8 +28,6 @@ namespace wenku10
         public Canvas Canvas { get { return TransitionLayer; } }
         public Grid ObjectLayer { get { return TransitionObjectLayer; } }
         public bool IsPhone { get; private set; }
-
-        private GameMode? Mode = null;
 
         protected override void OnNavigatedFrom( NavigationEventArgs e )
         {
@@ -54,13 +47,13 @@ namespace wenku10
                 return;
             }
 
-            if( Mode == null )
+            // if( Mode == null )
             {
                 RootFrame.Navigate( typeof( Pages.ModeSelect ), e.Parameter );
                 return;
             }
 
-            RootFrame.Navigate( typeof( MainPage ), e.Parameter );
+            // RootFrame.Navigate( typeof( MainPage ), e.Parameter );
         }
 
         public MainStage()

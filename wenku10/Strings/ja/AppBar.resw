@@ -186,4 +186,7 @@
   <data name="FavOut" xml:space="preserve">
     <value>本棚に削除</value>
   </data>
+  <data name="BookInfoView.Text" xml:space="preserve">
+    <value>情報セクション</value>
+  </data>
 </root>

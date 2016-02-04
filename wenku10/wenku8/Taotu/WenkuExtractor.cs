@@ -7,12 +7,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
+using Net.Astropenguin.UI.Icons;
 
 using libtaotu.Controls;
 using libtaotu.Crawler;
@@ -27,6 +29,7 @@ namespace wenku8.Taotu
     using Model.Book;
     using Model.Book.Spider;
     using Resources;
+    using Settings;
 
     class WenkuExtractor : Procedure, ISubProcedure
     {
@@ -42,6 +45,9 @@ namespace wenku8.Taotu
             get { return SubEdit.SubProc; } 
             set { throw new InvalidOperationException(); }
         }
+
+        protected override Color BgColor { get { return Color.FromArgb( 255, 60, 60, 60 ); } }
+        protected override IconBase Icon { get { return new IconLogout(){ AutoScale = true, Direction = Direction.Rotate270 }; } }
 
         public WenkuExtractor()
             : base( ProcType.EXTRACT )
@@ -61,6 +67,8 @@ namespace wenku8.Taotu
 
         public override async Task<ProcConvoy> Run( ProcConvoy Convoy )
         {
+            await base.Run( Convoy );
+
             string LoadUrl = TargetUrl;
 
             IStorageFile ISF = null;
@@ -114,6 +122,11 @@ namespace wenku8.Taotu
                 : ( BookConvoy.Payload as BookItem )
                 ;
 
+            if( !string.IsNullOrEmpty( LoadUrl ) )
+            {
+                BookInst.ReadParam( AppKeys.BINF_ORGURL, LoadUrl );
+            }
+
             if( ISF == null )
             {
                 ISF = await ProceduralSpider.DownloadSource( LoadUrl );
@@ -143,7 +156,10 @@ namespace wenku8.Taotu
                 {
                     // If the website split a single property into serveral pages
                     // That website is stupid. Would not support.
-                    Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() );
+                    if( !Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() ) )
+                    {
+                        ProcManager.PanelMessage( this, "Invalid param: " + Extr.PType.ToString(), LogType.WARNING );
+                    }
                 }
             }
         }

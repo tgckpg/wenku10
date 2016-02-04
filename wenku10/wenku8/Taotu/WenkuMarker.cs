@@ -5,11 +5,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
+using Net.Astropenguin.UI.Icons;
 
 using libtaotu.Controls;
 using libtaotu.Pages;
@@ -62,6 +64,9 @@ namespace wenku8.Taotu
 
         public bool HasVolProcs { get { return VolProcs.HasProcedures; } }
         public bool HasEpProcs { get { return EpProcs.HasProcedures; } }
+
+        protected override Color BgColor { get { return Colors.DarkGreen; } }
+        protected override IconBase Icon { get { return new IconCross(){ AutoScale = true }; } }
 
         private ProcManager VolProcs;
         private ProcManager EpProcs;
@@ -149,23 +154,16 @@ namespace wenku8.Taotu
         {
             Convoy = await base.Run( Convoy );
 
-            ProcConvoy UsableConvoy = ProcManager.TracePackage(
-                Convoy
-                , ( P, C ) => {
-                    if( P.Type.HasFlag( ProcType.FIND ) || P.Type.HasFlag( ProcType.URLLIST ) )
-                    {
-                        return C.Payload is IEnumerable<IStorageFile>;
-                    }
-                    return false;
-                }
-            );
-
-            if( UsableConvoy == null )
+            ProcConvoy UsableConvoy;
+            if ( !TryGetConvoy( out UsableConvoy, ( P, C ) =>
             {
-                ProcManager.PanelMessage( this, "No usable convoy found, skipping this step", LogType.WARNING );
-                Faulted = true;
-                return Convoy;
+                if ( P.Type.HasFlag( ProcType.FIND ) || P.Type.HasFlag( ProcType.URLLIST ) )
+                {
+                    return C.Payload is IEnumerable<IStorageFile>;
+                }
+                return false;
             }
+            ) ) return Convoy;
 
             IInstructionSet SpTOC = null;
 

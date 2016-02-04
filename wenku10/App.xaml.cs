@@ -56,7 +56,7 @@ namespace wenku10
 			{
 				if ( NetLog.Enabled && !NetLog.Ended )
 				{
-					Exception ex = ( Exception ) e.Exception;
+					Exception ex = e.Exception;
 					Logger.Log( ID, ex.Message, LogType.ERROR );
 					Logger.Log( ID, ex.StackTrace, LogType.ERROR );
 					NetLog.FireEndSignal( ex );

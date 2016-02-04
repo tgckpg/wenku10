@@ -186,4 +186,7 @@
   <data name="FavOut" xml:space="preserve">
     <value>移出書架</value>
   </data>
+  <data name="BookInfoView.Text" xml:space="preserve">
+    <value>資訊頁</value>
+  </data>
 </root>

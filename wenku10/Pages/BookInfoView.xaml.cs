@@ -24,15 +24,14 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.Settings;
 using wenku8.Ext;
+using wenku8.CompositeElement;
 using wenku8.Model.Book;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Section;
 using wenku8.Storage;
-using wenku8.CompositeElement;
 
 namespace wenku10.Pages
 {
@@ -46,9 +45,11 @@ namespace wenku10.Pages
         private TOCSection TOCData;
         private ListView VolList;
         private ReviewsSection ReviewsSection;
+        private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
 
         private bool SkipThisPage = false;
         private bool _inSync = false;
+
         private bool SyncStarted
         {
             get { return _inSync; }
@@ -62,6 +63,8 @@ namespace wenku10.Pages
         private List<string> ViewOrder;
 
         private ProgressRing InSync;
+        private Grid InfoBgGrid;
+        private Grid PushGrid;
 
         public BookInfoView()
         {
@@ -89,10 +92,12 @@ namespace wenku10.Pages
             try
             {
                 // Try Dispose
-                TOCSection.DataContext = null;
-                CommentSection.DataContext = null;
-                BookInfoSection.DataContext = null;
-
+                Worker.UIInvoke( () =>
+                {
+                    TOCSection.DataContext = null;
+                    CommentSection.DataContext = null;
+                    BookInfoSection.DataContext = null;
+                } );
             }
             catch( Exception )
             {
@@ -102,7 +107,9 @@ namespace wenku10.Pages
 
         private void ReorderModules()
         {
-            global::wenku8.Settings.Layout.BookInfoView LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+            LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+
+            TOCBg.DataContext = LayoutSettings.GetBgContext( "TOC" );
             ViewOrder = LayoutSettings.GetViewOrders();
 
             LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
@@ -161,6 +168,9 @@ namespace wenku10.Pages
             base.OnNavigatedTo( e );
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
             NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
+
+            LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
+            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 
             if( e.NavigationMode == NavigationMode.New )
             {
@@ -334,9 +344,12 @@ namespace wenku10.Pages
         private void VolumeLoaded( BookItem b )
         {
             TOCData = new TOCSection( b );
+            TOCData.TemplateSelector.IsHorizontal = LayoutSettings.HorizontalTOC;
 
             TOCSection.DataContext = TOCData;
             TOCFloatSection.DataContext = TOCData;
+
+            TOCData.SetViewSource( VolumesViewSource );
 
             if( VolList != null && 0 < VolList.Items.Count() )
             {
@@ -568,10 +581,9 @@ namespace wenku10.Pages
 
         private void OpenInBrowser( object sender, RoutedEventArgs e )
         {
-            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( "http://www.wenku8.com/book/" + ThisBook.Id + ".htm" ) );
+            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
         }
 
-        Grid PushGrid;
         private void Vote( object sender, RoutedEventArgs e )
         {
             if( ThisBook.XTest( XProto.BookItemEx ) )
@@ -591,5 +603,20 @@ namespace wenku10.Pages
         {
             PushGrid = sender as Grid;
         }
+
+        private void ChangeBackground( object sender, RoutedEventArgs e )
+        {
+            MenuFlyoutItem item = sender as MenuFlyoutItem;
+            string[] Argv = item.Tag.ToString().Split( ',' );
+
+            LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
+        }
+
+        private void InfoBgLoaded( object sender, RoutedEventArgs e )
+        {
+            InfoBgGrid = sender as Grid;
+            InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
+        }
     }
 }
+

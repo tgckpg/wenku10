@@ -59,6 +59,7 @@ namespace wenku10.Pages.Settings.Themes
             TogRev.IsOn = Conf_BookInfoView.Toggle( TogRev.Tag.ToString() );
             TogInf.IsOn = Conf_BookInfoView.Toggle( TogInf.Tag.ToString() );
             TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
+            TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
             TogSPicks.IsOn = Conf_MainPage.IsStaffPicksEnabled;
             TogCSec.IsOn = Conf_MainPage.IsCustomSectionEnabled;
             TogNAlign.IsOn = Conf_NavList.IsHorizontal;
@@ -112,6 +113,11 @@ namespace wenku10.Pages.Settings.Themes
                 PageThumbnail.FlowDirection = FlowDirection.LeftToRight;
                 Conf_BookInfoView.IsRightToLeft = false;
             }
+        }
+
+        private void Toggled_TOCAlign( object sender, RoutedEventArgs e )
+        {
+            Conf_BookInfoView.HorizontalTOC = TogTOCAlign.IsOn;
         }
 
         private void Toggled_BSecs( object sender, RoutedEventArgs e )
