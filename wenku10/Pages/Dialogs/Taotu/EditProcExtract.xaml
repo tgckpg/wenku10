@@ -12,7 +12,7 @@
     mc:Ignorable="d"
     Background="{StaticResource MajorBackgroundBrush}"
     Style="{StaticResource ScrollContentDialog}"
-    PrimaryButtonText="Button1"
+    IsPrimaryButtonEnabled="True"
     IsSecondaryButtonEnabled="False">
     <ContentDialog.Resources>
         <Style x:Key="StretchListItem" TargetType="ListViewItem">
@@ -52,7 +52,9 @@
             <CheckBox x:Name="IncomingCheck" Foreground="White"
                       Grid.Row="0" Grid.Column="0"
                       Unchecked="SetIncoming" Checked="SetIncoming" >
-                <TextBlock x:Uid="/libtaotu/Resources/Incoming" Text="Incoming" />
+                <TextBlock x:Uid="/libtaotu/Resources/Incoming"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           Text="Incoming" />
             </CheckBox>
             <!-- Test Button -->
             <Button Style="{StaticResource IconButton}"
@@ -130,7 +132,7 @@
                                     <Grid HorizontalAlignment="Left"
                                           Margin="3"
                                           Width="30" Height="30" >
-                                        <i:IconTick AutoScale="True" Foreground="White"/>
+                                        <i:IconTick AutoScale="True" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                         <p:StateControl State="{Binding Valid, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
                                             <Border Width="30" Height="30" Background="OrangeRed">
                                                 <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="20"

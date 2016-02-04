@@ -7,12 +7,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
+using Net.Astropenguin.UI.Icons;
 
 using libtaotu.Controls;
 using libtaotu.Crawler;
@@ -44,6 +46,9 @@ namespace wenku8.Taotu
             set { throw new InvalidOperationException(); }
         }
 
+        protected override Color BgColor { get { return Color.FromArgb( 255, 60, 60, 60 ); } }
+        protected override IconBase Icon { get { return new IconLogout(){ AutoScale = true, Direction = Direction.Rotate270 }; } }
+
         public WenkuExtractor()
             : base( ProcType.EXTRACT )
         {
@@ -62,6 +67,8 @@ namespace wenku8.Taotu
 
         public override async Task<ProcConvoy> Run( ProcConvoy Convoy )
         {
+            await base.Run( Convoy );
+
             string LoadUrl = TargetUrl;
 
             IStorageFile ISF = null;
