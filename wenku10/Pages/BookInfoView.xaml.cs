@@ -254,7 +254,7 @@ namespace wenku10.Pages
             BookItem BookEx = X.Instance<BookItem>( XProto.BookItemEx, id );
             BookEx.XSetProp(
                 "Mode"
-                , X.Static<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+                , X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
 
             ThisBook = BookEx;
 
@@ -589,7 +589,7 @@ namespace wenku10.Pages
             if( ThisBook.XTest( XProto.BookItemEx ) )
             {
                 Expression<Action> handler = () => BeginStory();
-                ThisBook.XCall<object>( "Vote", handler );
+                ThisBook.XCall<object>( "Vote", handler.Compile() );
             }
         }
 

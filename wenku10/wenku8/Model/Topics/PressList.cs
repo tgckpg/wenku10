@@ -30,7 +30,7 @@ namespace wenku8.Model.Topics
                 , X.Call<XKey[]>(
                     XProto.WRequest
                     , "GetXML"
-                    , X.Static<string>( XProto.WProtocols, "COMMAND_TLIST_PARAM_SORT" ) )
+                    , X.Const<string>( XProto.WProtocols, "COMMAND_TLIST_PARAM_SORT" ) )
                 , ( DRequestCompletedEventArgs e, string id ) => {
                     Shared.Storage.WriteBytes( FileLinks.ROOT_WTEXT + FileLinks.PRESS_LISTF, e.ResponseBytes );
                     CompleteHandler( this );

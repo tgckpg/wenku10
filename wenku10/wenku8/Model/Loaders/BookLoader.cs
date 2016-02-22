@@ -20,7 +20,7 @@ namespace wenku8.Model.Loaders
     using System;
     using System.Messages;
 
-    class BookLoader
+    class BookLoader : IBookLoader
     {
         public static readonly string ID = typeof( BookLoader ).Name;
 
@@ -50,7 +50,7 @@ namespace wenku8.Model.Loaders
             }
 
             string id = b.Id;
-            string Mode = X.Static<string>( "wenku8.System.WProtocols", "ACTION_BOOK_INFO" );
+            string Mode = X.Const<string>( XProto.WProtocols, "ACTION_BOOK_INFO" );
 
             if( CurrentBook.XTest( XProto.BookItemEx ) )
             {
@@ -60,7 +60,7 @@ namespace wenku8.Model.Loaders
             XKey[] ReqKeys = X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, id );
             if ( useCache )
             {
-                string cacheName = X.Call<string>( XProto.WRuntimeCache, "GetCacheString", ReqKeys );
+                string cacheName = X.Call<string>( XProto.WRuntimeCache, "GetCacheString", new object[] { ReqKeys } );
                 if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
                 {
                     ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
@@ -151,7 +151,7 @@ namespace wenku8.Model.Loaders
 			ExtractBookInfo( e.ResponseString, id );
 		}
 
-        private async void ExtractBookInfo( string InfoData, string id )
+        private void ExtractBookInfo( string InfoData, string id )
         {
             ////// App-specific approach
             CurrentBook.ParseXml( InfoData );
@@ -161,7 +161,7 @@ namespace wenku8.Model.Loaders
                 ///// App-specific approach
                 X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
                     id, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", id )
-                    ,CoverDownloaded, Utils.DoNothing, false
+                    , CoverDownloaded, Utils.DoNothing, false
                 );
             }
             else

@@ -226,7 +226,7 @@ namespace wenku10
             {
                 case SectionMode.InfoPane:
                     // Pane Loading = True
-                    b.XSetProp( "Mode", X.Static<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+                    b.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
 
                     BookLoader loader = new BookLoader( UpdatePane );
                     loader.Load( b, true );
