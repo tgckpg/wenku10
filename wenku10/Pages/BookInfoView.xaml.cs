@@ -413,6 +413,10 @@ namespace wenku10.Pages
             FrameworkElement Elem = sender as FrameworkElement;
             FlyoutBase.ShowAttachedFlyout( Elem );
             RightClickedVolume = Elem.DataContext as Volume;
+            if ( RightClickedVolume == null )
+            {
+                RightClickedVolume = ( Elem.DataContext as TOCSection.ChapterGroup ).Vol;
+            }
         }
         private async void DownloadVolume( object sender, TappedRoutedEventArgs e )
         {

@@ -215,7 +215,7 @@
                                                                 <TextBlock.Foreground>
                                                                     <SolidColorBrush Color="{Binding SubtleColor}" />
                                                                 </TextBlock.Foreground>
-                                                                <Run x:Uid="/Book/UpdateDate" />:
+                                                                <Run x:Uid="/Book/LatestSection" />:
                                                                 <Run Text="{Binding Desc2}" />
                                                             </TextBlock>
                                                             <TextBlock Foreground="{StaticResource RelativeShadesBrush}">

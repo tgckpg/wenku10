@@ -318,7 +318,9 @@
                                         Foreground="{StaticResource Shades80}"
                                         TextWrapping="Wrap" />
 
-                                    <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}">
+                                    <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}"
+                                                    VerticalAlignment="Stretch"
+                                                    VerticalContentAlignment="Stretch">
                                         <ContentControl.Resources>
                                             <MenuFlyout x:Key="VolumeAction">
                                                 <MenuFlyoutItem x:Uid="/AppBar/VDownload" Tapped="DownloadVolume" />

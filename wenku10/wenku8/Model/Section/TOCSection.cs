@@ -71,7 +71,7 @@ namespace wenku8.Model.Section
             NotifyChanged( "VolumeCollections" );
         }
 
-        private class ChapterGroup : List<Chapter>
+        internal class ChapterGroup : List<Chapter>
         {
             public Volume Vol { get; set; }
 
