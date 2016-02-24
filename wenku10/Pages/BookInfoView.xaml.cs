@@ -41,7 +41,8 @@ namespace wenku10.Pages
 
         public static BookInfoView Instance;
 
-        private BookItem ThisBook;
+        internal BookItem ThisBook;
+
         private TOCSection TOCData;
         private ListView VolList;
         private ReviewsSection ReviewsSection;
@@ -68,7 +69,6 @@ namespace wenku10.Pages
 
         public BookInfoView()
         {
-            Instance = this;
             InitializeComponent();
             ReorderModules();
         }
@@ -166,11 +166,11 @@ namespace wenku10.Pages
         protected override void OnNavigatedTo( NavigationEventArgs e )
         {
             base.OnNavigatedTo( e );
+
+            Instance = this;
+
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
             NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
-
-            LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
-            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 
             if( e.NavigationMode == NavigationMode.New )
             {
@@ -180,6 +180,9 @@ namespace wenku10.Pages
                 BookInfoSection.DataContext = null;
                 OpenType( e.Parameter );
             }
+
+            LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
+            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 
             if( SkipThisPage && e.NavigationMode == NavigationMode.Back )
             {
@@ -608,10 +611,27 @@ namespace wenku10.Pages
             PushGrid = sender as Grid;
         }
 
-        private void ChangeBackground( object sender, RoutedEventArgs e )
+        private async void ChangeBackground( object sender, RoutedEventArgs e )
         {
             MenuFlyoutItem item = sender as MenuFlyoutItem;
             string[] Argv = item.Tag.ToString().Split( ',' );
+
+            if ( Argv[ 0 ] == "Preset" )
+            {
+                bool No = true;
+
+                StringResources stm = new StringResources( "Message" );
+                StringResources stc = new StringResources( "ContextMenu" );
+
+                MessageDialog MsgBox = new MessageDialog( stm.Str( "BInfoView_PresetBg_Mesg" ), stc.Text( "PresetBackground" ) );
+                MsgBox.Commands.Add( new UICommand( stm.Str( "Yes" ), x => { No = false; } ) );
+                MsgBox.Commands.Add( new UICommand( stm.Str( "No" ) ) );
+
+                await Popups.ShowDialog( MsgBox );
+
+                if ( No ) return;
+
+            }
 
             LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
         }

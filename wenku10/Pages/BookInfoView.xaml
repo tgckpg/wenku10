@@ -247,13 +247,13 @@
                                                 <MenuFlyout>
                                                     <MenuFlyoutSubItem x:Uid="/AppBar/TOC" Text="Table of Contents">
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,TOC" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" IsEnabled="False" Text="Preset Background" Click="ChangeBackground" Tag="Preset,TOC" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,TOC" />
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,TOC"  />
                                                     </MenuFlyoutSubItem>
                                                     <!--<MenuFlyoutSeparator />-->
                                                     <MenuFlyoutSubItem x:Uid="/AppBar/BookInfoView" Text="Info Panel" Tag="INFO_VIEW">
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" IsEnabled="False"  Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
                                                     </MenuFlyoutSubItem>
                                                 </MenuFlyout>

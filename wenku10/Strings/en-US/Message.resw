@@ -159,4 +159,7 @@
   <data name="AllRead" xml:space="preserve">
     <value>All Read</value>
   </data>
+  <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
+    <value>By switching to preset background, app will try to search and download illustrations within the book. Assume that you have already downloaded the a chapter with illustrations. This may cause bandwidth, continue?</value>
+  </data>
 </root>
