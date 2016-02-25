@@ -15,6 +15,8 @@ namespace wenku8.Model.Loaders
     using Ext;
     using Resources;
 
+    using TransferInst = wenku8.AdvDM.WRuntimeTransfer.TransferInst;
+
     class AutoCache : ActiveData, IAutoCache
     {
         public static readonly string ID = typeof( AutoCache ).Name;
@@ -86,7 +88,7 @@ namespace wenku8.Model.Loaders
                             Request
                             , C.ChapterPath, Guid.NewGuid()
                             , Uri.EscapeDataString( ThisBook.Title ) + "&" + Uri.EscapeDataString( ES.CurrentVolTitle ) + "&" + Uri.EscapeDataString( ES.currentEpTitle )
-                            , new XKey( "TOKENILLS", C.IllustrationPath )
+                            , C.IllustrationPath
                         );
                     }
                 }
@@ -116,9 +118,9 @@ namespace wenku8.Model.Loaders
         }
 
         // Thread Complete Processor
-        public static void LoadComplete( DRequestCompletedEventArgs e, XParameter PArgs )
+        public static void LoadComplete( DRequestCompletedEventArgs e, TransferInst PArgs )
         {
-            new ContentParser().OrganizeBookContent( e.ResponseString, PArgs.ID, PArgs.GetValue( "TOKENILLS" ) );
+            new ContentParser().OrganizeBookContent( e.ResponseString, PArgs.ID, PArgs.cParam );
         }
 
         private void cacheInfoFailed( string cacheName, string id, Exception ex )
@@ -154,7 +156,7 @@ namespace wenku8.Model.Loaders
                             X.Call<XKey[]>( XProto.WRequest, "GetBookContent", id, c.cid )
                             , c.ChapterPath, Guid.NewGuid()
                             , Uri.EscapeDataString( ThisBook.Title ) + "&" + Uri.EscapeDataString( Vol.VolumeTitle ) + "&" + Uri.EscapeDataString( c.ChapterTitle )
-                            , new XKey( "TOKENILLS", c.IllustrationPath )
+                            , c.IllustrationPath
                         );
                     }
                 }

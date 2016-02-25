@@ -16,6 +16,7 @@
     <Page.Resources>
         <Converters:VDisplayConverter x:Key="VDisplayConverter" />
         <Converters:ParallaxConverter x:Key="ParallaxConverter" />
+        <Converters:BoolDataConverter x:Key="BoolDataConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <v:BoolStateConverter x:Key="BoolStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
@@ -221,6 +222,7 @@
                                                 FlowDirection="LeftToRight">
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
+                                                IsEnabled="{Binding OriginalUrl, Converter={StaticResource BoolDataConverter}}"
                                                 Height="65" Width="65"
                                                 Click="OpenInBrowser" >
                                                 <i:IconMSEdge AutoScale="True" />
@@ -251,10 +253,16 @@
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,TOC"  />
                                                     </MenuFlyoutSubItem>
                                                     <!--<MenuFlyoutSeparator />-->
-                                                    <MenuFlyoutSubItem x:Uid="/AppBar/BookInfoView" Text="Info Panel" Tag="INFO_VIEW">
+                                                    <MenuFlyoutSubItem x:Uid="/AppBar/BookInfoView" Text="Info Panel">
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
                                                         <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
+                                                    </MenuFlyoutSubItem>
+                                                    <!--<MenuFlyoutSeparator />-->
+                                                    <MenuFlyoutSubItem x:Uid="/AppResources/Comments" Text="Comments">
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,COMMENTS" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,COMMENTS" />
+                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,COMMENTS"  />
                                                     </MenuFlyoutSubItem>
                                                 </MenuFlyout>
                                             </Button.Flyout>
@@ -286,7 +294,7 @@
                 </Border>
 
                 <!-- Section Table of Contents -->
-                <Border x:Name="TOCSection" Grid.Column="2" Background="{StaticResource Shades60}">
+                <Border x:Name="TOCSection" Grid.Column="2" Background="{StaticResource Shades90}">
                     <Border.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition />
@@ -435,17 +443,18 @@
                 </Border>
 
                 <!-- Section Comments -->
-                <Border x:Name="CommentSection" Grid.Column="1" Background="#999"
+                <Border x:Name="CommentSection" Grid.Column="1"
                         Width="450" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
                     <Border.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition />
                         </TransitionCollection>
                     </Border.Transitions>
+
                     <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
-                                <Grid>
+                                <Grid p:Clip.ToBounds="True">
                                     <Grid.Resources>
                                         <v:BoolStateConverter x:Key="LoadingStateConverter" />
                                     </Grid.Resources>
@@ -453,6 +462,35 @@
                                         <ColumnDefinition Width="65" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
+
+                                    <!-- Background from data context -->
+                                    <Grid Grid.ColumnSpan="2" Margin="-200, -30, -200, -30" 
+                                          Loaded="CommentsBgLoaded">
+                                        <Grid.RenderTransform>
+                                            <TranslateTransform
+                                                X="{
+                                                    Binding ElementName=ContentScroll
+                                                    , Path=HorizontalOffset
+                                                    , Converter={StaticResource ParallaxConverter}
+                                                    , ConverterParameter=-0.10
+                                                }" />
+                                        </Grid.RenderTransform>
+                                        <!-- Swapping between 2 image to create fading effect -->
+                                        <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                                            <Image Source="{Binding Background}" Stretch="UniformToFill"/>
+                                        </p:StateControl>
+                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                                            <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
+                                        </p:StateControl>
+                                    </Grid>
+
+                                    <Rectangle Grid.ColumnSpan="2"
+                                               Fill="#999" Opacity="0.6"/>
+                                    <p:StateControl Grid.ColumnSpan="2"
+                                                    State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                                        <Rectangle Fill="#999" Opacity="0.4" />
+                                    </p:StateControl>
+
                                     <ListView Grid.Column="0" Background="{StaticResource Shades90}"
                                               ItemsSource="{Binding Controls}"
                                               IsItemClickEnabled="True"

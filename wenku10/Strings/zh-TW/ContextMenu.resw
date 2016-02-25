@@ -163,12 +163,12 @@
     <value>移至本地</value>
   </data>
   <data name="CustomBackground.Text" xml:space="preserve">
-    <value>自定义背景</value>
+    <value>自定義背景</value>
   </data>
   <data name="PresetBackground.Text" xml:space="preserve">
-    <value>预设背景</value>
+    <value>預設背景</value>
   </data>
   <data name="SystemBackground.Text" xml:space="preserve">
-    <value>系统背景</value>
+    <value>系統背景</value>
   </data>
 </root>

@@ -183,6 +183,7 @@ namespace wenku10.Pages
 
             LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
             LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
+            LayoutSettings.GetBgContext( "COMMENTS" ).ApplyBackgrounds();
 
             if( SkipThisPage && e.NavigationMode == NavigationMode.Back )
             {
@@ -254,6 +255,28 @@ namespace wenku10.Pages
 
         private void LoadBookInfo( string id )
         {
+            string[] Argv = id.Split( new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries );
+
+            if ( Argv.Length == 2 )
+            {
+                string Mode = Argv[ 0 ];
+                id = Argv[ 1 ];
+
+                if ( Mode == "Spider" )
+                {
+                    // XXX: TODO
+                    return;
+                }
+                else if ( Mode == "Local" )
+                {
+                    // XXX: TODO
+                    return;
+                }
+
+                // Commencing the Level2 initializations
+                new wenku8.System.Bootstrap().Level2();
+            }
+
             BookItem BookEx = X.Instance<BookItem>( XProto.BookItemEx, id );
             BookEx.XSetProp(
                 "Mode"
@@ -640,6 +663,12 @@ namespace wenku10.Pages
         {
             InfoBgGrid = sender as Grid;
             InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
+        }
+
+        private void CommentsBgLoaded( object sender, RoutedEventArgs e )
+        {
+            InfoBgGrid = sender as Grid;
+            InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "COMMENTS" );
         }
     }
 }

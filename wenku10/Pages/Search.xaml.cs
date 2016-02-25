@@ -88,7 +88,7 @@ namespace wenku10.Pages
         private void Seacrh_ItemClick( object sender, ItemClickEventArgs e )
         {
             RestoreStatus();
-            Frame.Navigate( typeof( BookInfoView ), e.ClickedItem.XProp<string>( "Id" ) );
+            Frame.Navigate( typeof( BookInfoView ), ( e.ClickedItem as BookItem ).Id );
         }
 
         private void GridView_Loaded( object sender, RoutedEventArgs e )

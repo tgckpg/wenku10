@@ -446,6 +446,9 @@ namespace wenku8.Settings.Layout
                             case "INFO_VIEW":
                                 value = "ms-appx:///Assets/Samples/BgInfoView.jpg";
                                 break;
+                            case "COMMENTS":
+                                value = "ms-appx:///Assets/Samples/BgComments.jpg";
+                                break;
                         }
 
                         break;
