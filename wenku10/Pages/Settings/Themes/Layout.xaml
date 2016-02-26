@@ -284,6 +284,23 @@
                                        Text="Disable" />
                         </ToggleSwitch.OffContent>
                     </ToggleSwitch>
+                    <ToggleSwitch x:Name="TogDoubleTap" Toggled="Toggled_DoubleTap">
+                        <ToggleSwitch.Header>
+                            <TextBlock Foreground="{StaticResource MinorBrush}"
+                                       x:Uid="/Settings/Layout_ContentReader_UseDoubleTap"
+                                       Text="UseDoubleTap" />
+                        </ToggleSwitch.Header>
+                        <ToggleSwitch.OnContent>
+                            <TextBlock x:Uid="/Settings/Enabled"
+                                       Foreground="{StaticResource MajorBrush}"
+                                       Text="Enable" />
+                        </ToggleSwitch.OnContent>
+                        <ToggleSwitch.OffContent>
+                            <TextBlock x:Uid="/Settings/Disabled"
+                                       Foreground="{StaticResource MinorBrush}"
+                                       Text="Disable" />
+                        </ToggleSwitch.OffContent>
+                    </ToggleSwitch>
                 </StackPanel>
             </PivotItem>
         </Pivot>

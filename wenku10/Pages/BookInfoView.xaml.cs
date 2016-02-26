@@ -99,10 +99,7 @@ namespace wenku10.Pages
                     BookInfoSection.DataContext = null;
                 } );
             }
-            catch( Exception )
-            {
-
-            }
+            catch( Exception ) { }
         }
 
         private void ReorderModules()

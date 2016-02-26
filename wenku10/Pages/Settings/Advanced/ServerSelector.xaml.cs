@@ -71,16 +71,13 @@ namespace wenku10.Pages.Settings.Advanced
         {
             List<ServerChoice> SC = new List<ServerChoice>();
 
-            throw new NotImplementedException( "ServerSelector ?" );
             try
             {
-                /*
                 await global::wenku8.System.ServerSelector.ProcessList( e.ResponseString );
                 foreach( Weight<string> W in global::wenku8.System.ServerSelector.ServerList )
                 {
                     SC.Add( new ServerChoice( W ) );
                 }
-                */
             }
             catch( Exception ex )
             {
