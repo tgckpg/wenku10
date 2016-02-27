@@ -161,4 +161,7 @@
   <data name="AllRead" xml:space="preserve">
     <value>全部已读</value>
   </data>
+  <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
+    <value>若要使用预设背景，应用将会自动搜索并下载文章所提供的插图(假设已下载插图所在的章节)，这样会增加使用流量。继续？</value>
+  </data>
 </root>

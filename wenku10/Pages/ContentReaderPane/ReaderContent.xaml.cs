@@ -28,7 +28,7 @@ using wenku8.Resources;
 
 namespace wenku10.Pages.ContentReaderPane
 {
-    sealed partial class ReaderContent : Page
+    sealed partial class ReaderContent : Page, IDisposable
     {
         public static readonly string ID = typeof( ReaderContent ).Name;
 
@@ -45,6 +45,23 @@ namespace wenku10.Pages.ContentReaderPane
             this.InitializeComponent();
             this.Container = Container;
             SetTemplate( Anchor );
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                Reader.PropertyChanged += ScrollToParagraph;
+                Reader.Dispose();
+                Reader = null;
+
+                Worker.UIInvoke( () =>
+                {
+                    MasterGrid.DataContext = null;
+                } );
+
+            }
+            catch( Exception ) { }
         }
 
         internal void SetTemplate( int Anchor )

@@ -10,12 +10,16 @@ using Windows.UI.Xaml.Media.Imaging;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 namespace wenku8.Settings.Layout
 {
+    using AdvDM;
+    using Model.Book;
     using Resources;
     using Settings.Layout.ModuleThumbnail;
+    using SrcView = wenku10.Pages.BookInfoView;
 
     class BookInfoView
     {
@@ -333,6 +337,8 @@ namespace wenku8.Settings.Layout
                 string value = P.GetValue( "value" );
                 if ( value == null ) return;
 
+                bool UseDefault = false;
+
                 switch ( P.GetValue( "type" ) )
                 {
                     case "Custom":
@@ -362,16 +368,52 @@ namespace wenku8.Settings.Layout
                             await Shared.Storage.CreateDirFromISOStorage( FileLinks.ROOT_BANNER )
                             , Section + ".image", NameCollisionOption.ReplaceExisting );
 
-                        BitmapImage b = await Image.NewBitmap();
-                        b.SetSourceFromUrl( FileLinks.ROOT_BANNER + Section + ".image" );
-                        UpdateImage( b );
+                        ApplyImage( FileLinks.ROOT_BANNER + Section + ".image" );
                         break;
                     case "Preset":
+                        BookItem B = SrcView.Instance.ThisBook;
+
+                        try
+                        {
+                            List<string> ImagePaths = new List<string>();
+                            foreach ( Volume V in B.GetVolumes() )
+                            {
+                                foreach ( Chapter C in V.ChapterList )
+                                {
+                                    if ( C.HasIllustrations )
+                                    {
+                                        ImagePaths.AddRange(
+                                            Shared.Storage.GetString( C.IllustrationPath )
+                                            .Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
+                                        );
+                                    }
+                                }
+                            }
+
+                            if ( 0 < ImagePaths.Count )
+                            {
+                                string Url = ImagePaths[ System.Utils.Rand.Next( ImagePaths.Count() ) ];
+                                TryUseImage( Url );
+                            }
+                            else
+                            {
+                                UseDefault = true;
+                            }
+                        }
+                        catch ( Exception ex )
+                        {
+                            Logger.Log( ID, ex.Message, LogType.ERROR );
+                        }
                         break;
                     default:
                     case "System":
-                        UpdateImage( await Image.NewBitmap( new Uri( value, UriKind.Absolute ) ) );
+                        UseDefault = true;
                         break;
+                }
+
+                if ( UseDefault )
+                {
+                    UpdateImage( await Image.NewBitmap( new Uri( value, UriKind.Absolute ) ) );
                 }
             }
 
@@ -393,8 +435,8 @@ namespace wenku8.Settings.Layout
                         AppStorage.FutureAccessList.AddOrReplace( value, Location );
 
                         break;
+                    // Preset value fall offs to system as default value
                     case "Preset":
-                        break;
                     case "System":
                         switch ( Section )
                         {
@@ -403,6 +445,9 @@ namespace wenku8.Settings.Layout
                                 break;
                             case "INFO_VIEW":
                                 value = "ms-appx:///Assets/Samples/BgInfoView.jpg";
+                                break;
+                            case "COMMENTS":
+                                value = "ms-appx:///Assets/Samples/BgComments.jpg";
                                 break;
                         }
 
@@ -458,6 +503,39 @@ namespace wenku8.Settings.Layout
 
                 // Show the back
                 Back( b );
+            }
+
+            private async void TryUseImage( string Url )
+            {
+                WBackgroundTransfer Transfer = new WBackgroundTransfer();
+                Guid id = Guid.Empty;
+
+                Transfer.OnThreadComplete += ( DTheradCompleteArgs DArgs ) =>
+                {
+                    if( DArgs.Id.Equals( id ) )
+                    {
+                        ApplyImage( DArgs.FileLocation );
+                    }
+                };
+
+                string fileName = Url.Substring( Url.LastIndexOf( '/' ) + 1 );
+                string imageLocation = FileLinks.ROOT_IMAGE + fileName;
+
+                if ( Shared.Storage.FileExists( imageLocation ) )
+                {
+                    ApplyImage( imageLocation );
+                }
+                else
+                {
+                    id = await Transfer.RegisterImage( Url, imageLocation );
+                }
+            }
+
+            private async void ApplyImage( string Location )
+            {
+                BitmapImage b = await Image.NewBitmap();
+                b.SetSourceFromUrl( Location );
+                UpdateImage( b );
             }
         }
     }

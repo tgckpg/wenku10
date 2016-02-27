@@ -62,7 +62,7 @@ namespace wenku10.Pages.Settings.Advanced
         {
             IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false );
             wc.GET(
-                new Uri( X.Static<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )
+                new Uri( X.Const<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )
                 , GotServerList, global::wenku8.System.Utils.DoNothing, true );
 
         }
@@ -71,16 +71,13 @@ namespace wenku10.Pages.Settings.Advanced
         {
             List<ServerChoice> SC = new List<ServerChoice>();
 
-            throw new NotImplementedException( "ServerSelector ?" );
             try
             {
-                /*
                 await global::wenku8.System.ServerSelector.ProcessList( e.ResponseString );
                 foreach( Weight<string> W in global::wenku8.System.ServerSelector.ServerList )
                 {
                     SC.Add( new ServerChoice( W ) );
                 }
-                */
             }
             catch( Exception ex )
             {

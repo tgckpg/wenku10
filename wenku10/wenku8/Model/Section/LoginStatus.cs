@@ -66,7 +66,6 @@ namespace wenku8.Model.Section
 
         public LoginStatus()
         {
-            Avatar = new BitmapImage();
             Member = X.Singleton<IMember>( XProto.Member );
             Member_OnStatusChanged();
             Member.OnStatusChanged += Member_OnStatusChanged;
@@ -85,13 +84,13 @@ namespace wenku8.Model.Section
                 : stx.Text( "Login" )
                 ;
 
-            TryLoadAvatar();
+            RefreshAvatar();
 
             if( !Member.IsLoggedIn )
             {
                 if ( Member.WillLogin ) return;
 
-                Avatar = null;
+                Image.Destroy( Avatar );
                 NotifyChanged( "Avatar" );
                 return;
             }
@@ -101,26 +100,31 @@ namespace wenku8.Model.Section
                 "USER_AVATAR"
                 , X.Call<XKey[]>( XProto.WRequest, "GetUserAvatar" )
                 , AvatarLoaded
-                , ( string id, string url, Exception ex ) => { TryLoadAvatar(); }
+                , ( string id, string url, Exception ex ) => { RefreshAvatar(); }
                 , false
             );
         }
 
 
-        private async void TryLoadAvatar()
+        private void AvatarLoaded( DRequestCompletedEventArgs e, string id )
         {
-            if ( !Shared.Storage.FileExists( AvatarLocation ) ) return;
+            Shared.Storage.WriteBytes( AvatarLocation, e.ResponseBytes );
+            RefreshAvatar();
+        }
+
+        private void RefreshAvatar()
+        {
+            Image.Destroy( Avatar );
+            Avatar = new BitmapImage();
+
+            if ( !( Member.IsLoggedIn && Shared.Storage.FileExists( AvatarLocation ) ) )
+            {
+                NotifyChanged( "Avatar" );
+                return;
+            }
 
             Avatar.SetSourceFromUrl( AvatarLocation );
             NotifyChanged( "Avatar" );
-        }
-
-        private void AvatarLoaded( DRequestCompletedEventArgs e, string id )
-        {
-            Avatar.SetSourceFromUrl( null );
-            NotifyChanged( "Avatar" );
-
-            Shared.Storage.WriteBytes( AvatarLocation, e.ResponseBytes );
         }
 
         public async void PopupLoginOrInfo()

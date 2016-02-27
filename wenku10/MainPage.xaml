@@ -8,6 +8,7 @@
     xmlns:vp="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:n="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="using:System"
@@ -15,7 +16,9 @@
     NavigationCacheMode="Enabled">
 
     <Page.Resources>
+        <n:BoolStateConverter x:Key="BoolStateConverter" />
         <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <v:ParallaxConverter x:Key="ParallaxConverter" />
         <v:FavConverter x:Key="FavConverter" />
         <CollectionViewSource x:Name="favItems" />
         <CollectionViewSource x:Name="Section3Items" />
@@ -106,7 +109,25 @@
             </c:PassiveSplitView.Pane>
             <c:PassiveSplitView.Content>
                 <Grid>
+                    <!-- Background from data context -->
+                    <Grid Grid.RowSpan="2" Margin="-100" >
+                        <Grid.RenderTransform>
+                            <TranslateTransform
+                                X="{
+                                    Binding ElementName=HomeHub
+                                    , Path=HorizontalOffset
+                                    , Converter={StaticResource ParallaxConverter}
+                                    , ConverterParameter=-0.10
+                                }" />
+                        </Grid.RenderTransform>
+                        <Image Source="/Assets/Samples/BgMain.jpg" Stretch="UniformToFill"/>
+                    </Grid>
+
                     <Canvas x:Name="StarFields" />
+                    <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.2" />
+                    <p:StateControl x:Name="BgCover">
+                        <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.6" />
+                    </p:StateControl>
 
                     <c:ParallaxHub x:Name="HomeHub">
                         <c:ParallaxHub.ScrollerRibbon>
@@ -215,7 +236,7 @@
                                                                 <TextBlock.Foreground>
                                                                     <SolidColorBrush Color="{Binding SubtleColor}" />
                                                                 </TextBlock.Foreground>
-                                                                <Run x:Uid="/Book/UpdateDate" />:
+                                                                <Run x:Uid="/Book/LatestSection" />:
                                                                 <Run Text="{Binding Desc2}" />
                                                             </TextBlock>
                                                             <TextBlock Foreground="{StaticResource RelativeShadesBrush}">

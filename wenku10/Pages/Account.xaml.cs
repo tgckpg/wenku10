@@ -37,7 +37,7 @@ namespace wenku10.Pages
 
         private void SetTemplate()
         {
-            Settings = X.Instance<IMemberInfo>( "wenku8.Settings.MemberInfo" );
+            Settings = X.Instance<IMemberInfo>( XProto.MemberInfo );
             UserInfo.DataContext = Settings;
             Sign.Text = Settings.Signature;
 
@@ -67,7 +67,7 @@ namespace wenku10.Pages
 
         private void LogoutTapped( object sender, TappedRoutedEventArgs e )
         {
-            X.Instance<IMember>( XProto.Member ).Logout();
+            X.Singleton<IMember>( XProto.Member ).Logout();
             Close();
         }
 

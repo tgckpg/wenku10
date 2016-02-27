@@ -500,4 +500,7 @@
   <data name="Language_E.Text" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
+    <value>Double tap main menu</value>
+  </data>
 </root>

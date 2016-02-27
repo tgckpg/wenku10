@@ -102,8 +102,7 @@ namespace wenku10.Pages
 
             ForeText.Visibility = Visibility.Visible;
 
-            Grid G = ForeText.Parent as Grid;
-            G.Children.Remove( ForeText );
+            LayoutRoot.Children.Remove( ForeText );
 
             MainStage.Instance.ObjectLayer.Children.Add( ForeText );
 

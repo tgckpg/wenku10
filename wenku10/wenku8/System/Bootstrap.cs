@@ -58,8 +58,6 @@ namespace wenku8.System
             // 1. Runtime Queue
             global::wenku10.App.RuntimeTransfer = new WRuntimeTransfer();
             Logger.Log( ID, "WRuntimeTransfer Initilizated", LogType.INFO );
-            // 2. AutoCaching, must after Runtime Queue
-            // AutoCache.Initialize();
         }
 
         protected void AppSettingsInit()

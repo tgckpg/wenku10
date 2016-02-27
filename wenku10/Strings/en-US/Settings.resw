@@ -453,7 +453,7 @@
     <value>Use page click</value>
   </data>
   <data name="Layout_ContentReader_UsePageClick_Warning.Text" xml:space="preserve">
-    <value>啟用點擊翻頁將會分別停用「自動章節錨點」與「點兩下呼出選單」功能，與要啟用點擊翻頁嗎？</value>
+    <value>Enabling page click will both disable reading anchor and double tap feature, continue?</value>
   </data>
   <data name="Desc_Language_AJ.Text" xml:space="preserve">
     <value>Change the language to Japanese</value>
@@ -500,5 +500,8 @@
   </data>
   <data name="Language_E.Text" xml:space="preserve">
     <value>English</value>
+  </data>
+  <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
+    <value>Double tap main menu</value>
   </data>
 </root>

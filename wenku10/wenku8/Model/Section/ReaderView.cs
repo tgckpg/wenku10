@@ -20,11 +20,13 @@ namespace wenku8.Model.Section
     using System;
     using Text;
 
-    class ReaderView : ActiveData
+    class ReaderView : ActiveData, IDisposable
     {
         public bool AutoBookmark = Properties.CONTENTREADER_AUTOBOOKMARK;
         public bool AutoAnchor = Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
+        public bool DoubleTap = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
         public bool UsePageClick { get { return !AutoAnchor; } }
+        public bool UseDoubleTap { get { return DoubleTap; } }
 
         public Settings.Layout.ContentReader Settings { get; set; }
 
@@ -114,6 +116,19 @@ namespace wenku8.Model.Section
             CL = new ChapterLoader( B, SetContent );
         }
 
+        public void Dispose()
+        {
+            try
+            {
+                AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
+                foreach ( Paragraph P in Data ) P.Dispose();
+                CL = null;
+                BS = null;
+                Data = null;
+            }
+            catch ( Exception ) { }
+        }
+
         /// <summary>
         /// For Use in Settings
         /// </summary>
@@ -124,13 +139,7 @@ namespace wenku8.Model.Section
             InitParams();
         }
 
-        ~ReaderView()
-        {
-            AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
-            CL = null;
-            BS = null;
-            Data = null;
-        }
+        ~ReaderView() { Dispose(); }
 
         private void InitParams()
         {

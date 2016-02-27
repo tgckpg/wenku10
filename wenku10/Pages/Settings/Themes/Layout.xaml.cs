@@ -29,6 +29,7 @@ namespace wenku10.Pages.Settings.Themes
         private global::wenku8.Settings.Layout.NavList Conf_NavList;
         private global::wenku8.Settings.Layout.ContentReader Conf_ContentReader;
 
+        private bool TemplateSet = false;
         public Layout()
         {
             this.InitializeComponent();
@@ -51,6 +52,8 @@ namespace wenku10.Pages.Settings.Themes
             Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView( PageThumbnail );
             Conf_BookInfoView.SetOrder();
             LayoutToggles();
+
+            TemplateSet = true;
         }
 
         private void LayoutToggles()
@@ -68,6 +71,7 @@ namespace wenku10.Pages.Settings.Themes
 
 
             TogPageClick.IsOn = !Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
+            TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
         }
 
         // NavList
@@ -154,7 +158,7 @@ namespace wenku10.Pages.Settings.Themes
 
         private async void Toggled_PageClick( object sender, RoutedEventArgs e )
         {
-            ToggleSwitch SW = sender as ToggleSwitch;
+            if ( !TemplateSet ) return;
 
             if( TogPageClick.IsOn && Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR )
             {
@@ -172,6 +176,24 @@ namespace wenku10.Pages.Settings.Themes
             }
 
             Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = !TogPageClick.IsOn;
+
+            if( TogPageClick.IsOn )
+            {
+                Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn = false;
+            }
+        }
+
+        private void Toggled_DoubleTap( object sender, RoutedEventArgs e )
+        {
+            if ( !TemplateSet ) return;
+
+            Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn;
+
+            if( TogDoubleTap.IsOn )
+            {
+                Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = true;
+                TogPageClick.IsOn = false;
+            }
         }
         #endregion
     }

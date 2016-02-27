@@ -213,8 +213,13 @@ namespace wenku10.Pages.Settings.Themes
 
         private async void Button_Tapped( object sender, TappedRoutedEventArgs e )
         {
+            // Save the selected set since in time this will be unselected and cause problem
+            ThemeSet ThisSet = Presets.SelectedItem as ThemeSet;
+            if ( ThisSet == null ) return;
+
             if ( !await MainSettings.Instance.ConfirmRestart( "Appearance_Theme" ) ) return;
-            ( Presets.SelectedItem as ThemeSet ).Apply();
+
+            ThisSet.Apply();
         }
 
         private void ThemeEdit( object sender, TappedRoutedEventArgs e )

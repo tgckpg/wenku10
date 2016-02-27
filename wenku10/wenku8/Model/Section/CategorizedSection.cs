@@ -112,14 +112,14 @@ namespace wenku8.Model.Section
         // Do the switching in overloads
         public void Load( string ListName )
         {
-            if ( ListName == X.Static<string>( XProto.WProtocols, "COMMAND_XML_PARAM_STOPICS" ) )
+            if ( ListName == X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_STOPICS" ) )
             {
                 // This cannot be generalize because of the nature
                 // of this list
                 // Download is handled in NavSelection's Push Special Topics
                 LoadComplete( new Topics.Special().Topics );
             }
-            else if ( ListName == X.Static<string>( XProto.WProtocols, "COMMAND_XML_PARAM_PRESS" ) )
+            else if ( ListName == X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_PRESS" ) )
             {
                 Topics.PressList List = new Topics.PressList(
                     ( L ) => { LoadComplete( L.GetList() ); }
@@ -231,7 +231,7 @@ namespace wenku8.Model.Section
             string[] Ids = PassBookFromList( XmlData, Bp );
 
             Expression<Action<IList<BookItem>>> handler = B => UpdateData( B );
-            IListLoader LL = X.Instance<IListLoader>( XProto.ListLoader, Ids, Bp, handler );
+            IListLoader LL = X.Instance<IListLoader>( XProto.ListLoader, Ids, Bp, handler.Compile() );
         }
 
         private void UpdateData( IList<BookItem> B )
@@ -257,7 +257,7 @@ namespace wenku8.Model.Section
                     BookItem b;
                     if ( id != "" )
                     {
-                        b = new BookItem( id );
+                        b = X.Instance<BookItem>( XProto.BookItemEx, id );
                         BookReference[ id ] = b;
                         b.Title = book.Value;
                         p[ i++ ] = id;

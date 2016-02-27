@@ -270,6 +270,7 @@ namespace wenku10.Pages
                 {
                     ContentFrame.Content = null;
                     Shared.LoadMessage( "RedrawingContent" );
+                    if ( ContentView != null ) ContentView.Dispose();
                     ContentView = new ReaderContent( this, Anchor );
                     ContentFrame.Content = ContentView;
                     // Load Content at the very end
@@ -354,7 +355,7 @@ namespace wenku10.Pages
 
         private void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
         {
-            if ( ContentView.Reader.UsePageClick ) return;
+            if ( ContentView.Reader.UsePageClick || !ContentView.Reader.UseDoubleTap ) return;
             RollOutLeftPane();
         }
 

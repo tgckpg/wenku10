@@ -179,13 +179,17 @@ namespace wenku10
             FS = X.Instance<IFavSection>( XProto.FavSection );
 
             MemberSections();
-
-            if ( !global::wenku8.Config.Properties.ENABLE_ONEDRIVE ) return;
-
-            OneDriveResync.Visibility = Visibility.Visible;
-
-            FS.IsLoading = true;
             OneDriveResync.SetSync( ReSync );
+
+            FS.PropertyChanged += FS_PropertyChanged;
+        }
+
+        private void FS_PropertyChanged( object sender, PropertyChangedEventArgs e )
+        {
+            if ( e.PropertyName == "IsLoading" )
+            {
+                BgCover.State = FS.IsLoading ? ControlState.Foreatii : ControlState.Reovia;
+            }
         }
 
         private async Task ReSync()
@@ -200,6 +204,8 @@ namespace wenku10
                 await new BookStorage().SyncSettings();
                 FS.Reload();
             }
+
+            FS.IsLoading = false;
         }
 
         private async void MemberSections()
@@ -226,7 +232,7 @@ namespace wenku10
             {
                 case SectionMode.InfoPane:
                     // Pane Loading = True
-                    b.XSetProp( "Mode", X.Static<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+                    b.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
 
                     BookLoader loader = new BookLoader( UpdatePane );
                     loader.Load( b, true );

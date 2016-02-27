@@ -41,7 +41,8 @@ namespace wenku10.Pages
 
         public static BookInfoView Instance;
 
-        private BookItem ThisBook;
+        internal BookItem ThisBook;
+
         private TOCSection TOCData;
         private ListView VolList;
         private ReviewsSection ReviewsSection;
@@ -68,7 +69,6 @@ namespace wenku10.Pages
 
         public BookInfoView()
         {
-            Instance = this;
             InitializeComponent();
             ReorderModules();
         }
@@ -99,10 +99,7 @@ namespace wenku10.Pages
                     BookInfoSection.DataContext = null;
                 } );
             }
-            catch( Exception )
-            {
-
-            }
+            catch( Exception ) { }
         }
 
         private void ReorderModules()
@@ -166,11 +163,11 @@ namespace wenku10.Pages
         protected override void OnNavigatedTo( NavigationEventArgs e )
         {
             base.OnNavigatedTo( e );
+
+            Instance = this;
+
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
             NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
-
-            LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
-            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 
             if( e.NavigationMode == NavigationMode.New )
             {
@@ -180,6 +177,10 @@ namespace wenku10.Pages
                 BookInfoSection.DataContext = null;
                 OpenType( e.Parameter );
             }
+
+            LayoutSettings.GetBgContext( "TOC" ).ApplyBackgrounds();
+            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
+            LayoutSettings.GetBgContext( "COMMENTS" ).ApplyBackgrounds();
 
             if( SkipThisPage && e.NavigationMode == NavigationMode.Back )
             {
@@ -251,10 +252,32 @@ namespace wenku10.Pages
 
         private void LoadBookInfo( string id )
         {
+            string[] Argv = id.Split( new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries );
+
+            if ( Argv.Length == 2 )
+            {
+                string Mode = Argv[ 0 ];
+                id = Argv[ 1 ];
+
+                if ( Mode == "Spider" )
+                {
+                    // XXX: TODO
+                    return;
+                }
+                else if ( Mode == "Local" )
+                {
+                    // XXX: TODO
+                    return;
+                }
+
+                // Commencing the Level2 initializations
+                new wenku8.System.Bootstrap().Level2();
+            }
+
             BookItem BookEx = X.Instance<BookItem>( XProto.BookItemEx, id );
             BookEx.XSetProp(
                 "Mode"
-                , X.Static<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+                , X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
 
             ThisBook = BookEx;
 
@@ -413,6 +436,10 @@ namespace wenku10.Pages
             FrameworkElement Elem = sender as FrameworkElement;
             FlyoutBase.ShowAttachedFlyout( Elem );
             RightClickedVolume = Elem.DataContext as Volume;
+            if ( RightClickedVolume == null )
+            {
+                RightClickedVolume = ( Elem.DataContext as TOCSection.ChapterGroup ).Vol;
+            }
         }
         private async void DownloadVolume( object sender, TappedRoutedEventArgs e )
         {
@@ -589,7 +616,7 @@ namespace wenku10.Pages
             if( ThisBook.XTest( XProto.BookItemEx ) )
             {
                 Expression<Action> handler = () => BeginStory();
-                ThisBook.XCall<object>( "Vote", handler );
+                ThisBook.XCall<object>( "Vote", handler.Compile() );
             }
         }
 
@@ -604,10 +631,27 @@ namespace wenku10.Pages
             PushGrid = sender as Grid;
         }
 
-        private void ChangeBackground( object sender, RoutedEventArgs e )
+        private async void ChangeBackground( object sender, RoutedEventArgs e )
         {
             MenuFlyoutItem item = sender as MenuFlyoutItem;
             string[] Argv = item.Tag.ToString().Split( ',' );
+
+            if ( Argv[ 0 ] == "Preset" )
+            {
+                bool No = true;
+
+                StringResources stm = new StringResources( "Message" );
+                StringResources stc = new StringResources( "ContextMenu" );
+
+                MessageDialog MsgBox = new MessageDialog( stm.Str( "BInfoView_PresetBg_Mesg" ), stc.Text( "PresetBackground" ) );
+                MsgBox.Commands.Add( new UICommand( stm.Str( "Yes" ), x => { No = false; } ) );
+                MsgBox.Commands.Add( new UICommand( stm.Str( "No" ) ) );
+
+                await Popups.ShowDialog( MsgBox );
+
+                if ( No ) return;
+
+            }
 
             LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
         }
@@ -616,6 +660,12 @@ namespace wenku10.Pages
         {
             InfoBgGrid = sender as Grid;
             InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
+        }
+
+        private void CommentsBgLoaded( object sender, RoutedEventArgs e )
+        {
+            InfoBgGrid = sender as Grid;
+            InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "COMMENTS" );
         }
     }
 }

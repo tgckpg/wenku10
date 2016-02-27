@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource MajorBackgroundBrush}">
+    <Grid x:Name="LayoutRoot" Background="{ThemeResource MajorBackgroundBrush}">
         <Grid x:Name="HiddenInput" Opacity="0">
             <TextBox x:Name="HiddenTextBox" />
             <Rectangle Fill="Transparent"
