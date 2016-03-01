@@ -3,18 +3,30 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Settings.Advanced"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <v:BoolStateConverter x:Key="BoolStateConverter" />
+    </Page.Resources>
 
     <Grid Background="{StaticResource MajorBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Margin="10" Grid.Row="0">
-            
-            <ToggleSwitch x:Name="EnableSS" VerticalAlignment="Top" Toggled="ToggleSS">
+        <Grid Margin="10" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ToggleSwitch x:Name="EnableSS"
+                          VerticalAlignment="Top" HorizontalAlignment="Left"
+                          Toggled="ToggleSS">
                 <ToggleSwitch.Header>
                     <TextBlock x:Uid="/InitQuestions/EnableServerSelector"
                                FontSize="23"
@@ -33,9 +45,16 @@
                                Text="Disabled" />
                 </ToggleSwitch.OffContent>
             </ToggleSwitch>
-        </StackPanel>
+            <Button x:Name="ServerReset"
+                    Grid.Column="2"
+                    VerticalAlignment="Center" HorizontalAlignment="Right"
+                    Click="ResetServer">
+                <TextBlock Text="Reset" />
+            </Button>
+        </Grid>
         <Grid Grid.Row="1" Margin="10">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -52,28 +71,69 @@
                 </Slider.Header>
             </Slider>
 
-            <ListView Grid.Row="1"  x:Name="AvailableServers">
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="ServiceUri"
+                         Grid.Column="0"
+                         KeyDown="AddServer"
+                         PlaceholderText="Service Uri" />
+                <Button x:Name="AddUri" Grid.Column="1"
+                        Style="{StaticResource IconButton}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Width="25" Height="25" Margin="5"
+                        Click="AddServer">
+                    <i:IconPlusSign AutoScale="True" />
+                </Button>
+            </Grid>
+
+            <ListView x:Name="AvailableServers"
+                      Grid.Row="2" Margin="3" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="30" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="25" />
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Foreground="{StaticResource SubtleBrush}"
-                                       Margin="10"
-                                       TextTrimming="CharacterEllipsis"
-                                       Text="{Binding Desc}" />
-                            <TextBlock Grid.Column="1" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+
+                            <Rectangle Grid.Column="0" Fill="{StaticResource MajorBrush}" Opacity="0.2" />
+                            <p:StateControl State="{Binding Preferred, Converter={StaticResource BoolStateConverter}}"
+                                            Grid.Column="0">
+                                <Rectangle Fill="{StaticResource MajorBrush}" />
+                            </p:StateControl>
+
+                            <Button Click="RemoveServer"
+                                    Grid.Column="1"
+                                    Style="{StaticResource IconButton}"
+                                    VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Width="25" Height="25">
+                                <i:IconCross AutoScale="True" />
+                            </Button>
+                            <TextBlock Grid.Column="2"
+                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                        Margin="10"
                                        TextTrimming="CharacterEllipsis"
                                        Text="{Binding Name}" />
+                            <ProgressRing Grid.Column="3"
+                                          Width="25" Height="25"
+                                          Foreground="{StaticResource MajorBrush}"
+                                          IsActive="{Binding IsLoading}" />
+                            <TextBlock Grid.Column="3"
+                                       VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                       Foreground="{StaticResource SubtleBrush}"
+                                       TextTrimming="CharacterEllipsis"
+                                       Text="{Binding Desc}" />
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
 
-            <TextBlock Grid.Row="2" Text="I want to participate diverting services"
+            <TextBlock Grid.Row="3" Text="I want to participate diverting services"
                        Foreground="{StaticResource MajorBrush}"
                        />
         </Grid>
