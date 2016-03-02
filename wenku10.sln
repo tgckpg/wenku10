@@ -18,6 +18,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libeburc", "libs\libeburc\libeburc.vcxproj", "{CC217642-F7F5-4BDB-B4A2-ED6628466212}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		libs\libpenguin\Global\Global.projitems*{5a6b4589-8c63-40d5-946f-759a9282a176}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Beta|Any CPU = Beta|Any CPU
 		Beta|ARM = Beta|ARM
