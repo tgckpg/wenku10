@@ -24,7 +24,6 @@ using Net.Astropenguin.Logging;
 using wenku8.Config;
 using wenku8.Ext;
 using wenku8.Settings;
-using SSSelect = wenku8.System.ServerSelector;
 
 namespace wenku10.Pages.Settings.Advanced
 {
@@ -67,11 +66,23 @@ namespace wenku10.Pages.Settings.Advanced
 
         private void RefreshServers()
         {
-            IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false );
-            wc.GET(
-                new Uri( X.Const<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )
-                , GotServerList, global::wenku8.System.Utils.DoNothing, true );
+            try
+            {
 
+                IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false );
+                wc.GET(
+                    new Uri( X.Const<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )
+                    , GotServerList, global::wenku8.System.Utils.DoNothing, true );
+            }
+            catch ( DllNotFoundException ex )
+            {
+                Logger.Log( ID, "Protocol not present", LogType.INFO );
+                EnableSS.IsEnabled = false;
+            }
+            catch ( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.WARNING );
+            }
         }
 
         private void GotServerList( DRequestCompletedEventArgs e, string key )
@@ -82,7 +93,7 @@ namespace wenku10.Pages.Settings.Advanced
 
             try
             {
-                IEnumerable<string> Servers = SSSelect.ExtractList( e.ResponseString );
+                IEnumerable<string> Servers = X.Call<IEnumerable<string>>( XProto.ServerSelector, "ExtractList", e.ResponseString );
 
                 SC = Servers.Remap( x =>
                 {
@@ -92,11 +103,11 @@ namespace wenku10.Pages.Settings.Advanced
 
                 var j = Task.Run( async () =>
                 {
-                    await SSSelect.ProcessList( Servers );
+                    await X.Call<Task>( XProto.ServerSelector, "ProcessList", Servers );
 
                     foreach( ServerChoice C in SC )
                     {
-                        C.Preferred = SSSelect.ServerList.Any( x =>
+                        C.Preferred = X.Static<IEnumerable<Weight<string>>>( XProto.ServerSelector, "ServerList" ).Any( x =>
                         {
                             if ( x.Freight == C.Name )
                             {
