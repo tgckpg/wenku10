@@ -9,7 +9,7 @@ using Net.Astropenguin.Logging;
 
 namespace wenku8.Model.Loader
 {
-    using Ext;
+    using AdvDM;
     using Topics;
     using ListItem;
 
@@ -37,7 +37,7 @@ namespace wenku8.Model.Loader
 
         public async Task Load()
         {
-            IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false, false );
+            RuntimeCache wCache = new RuntimeCache();
 
             TaskCompletionSource<int> TCS = new TaskCompletionSource<int>();
 
