@@ -496,4 +496,17 @@
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
     <value>點兩下主選單</value>
   </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>Qǐng zài cmd zhōng yùnxíng yǐxià zhǐlìng:
+请在 cmd 中运行以下指令：</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>注意：若要连接到本机位址，请先利用</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value>添加豁免</value>
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>重置</value>
+  </data>
 </root>

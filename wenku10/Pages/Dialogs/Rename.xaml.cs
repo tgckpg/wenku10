@@ -33,15 +33,24 @@ namespace wenku10.Pages.Dialogs
         {
             this.InitializeComponent();
             StringResources stx = new StringResources( "Message" );
+            StringResources stm = new StringResources( "ContextMenu" );
             PrimaryButtonText = stx.Str( "OK" );
             SecondaryButtonText = stx.Str( "Cancel" );
+
+            TitleBlock.Text = stm.Text( "ContextMenu_Rename" );
         }
 
-        public Rename( INamable Target )
-            :this()
+        public Rename( INamable Target, string Title = null, bool ReadOnly = false )
+            : this()
         {
             NamingTarget = Target;
             NewName.Text = Target.Name;
+            NewName.IsReadOnly = ReadOnly;
+
+            if ( !string.IsNullOrEmpty( Title ) )
+            {
+                TitleBlock.Text = Title;
+            }
         }
 
         private async void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )

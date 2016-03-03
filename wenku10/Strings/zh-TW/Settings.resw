@@ -507,4 +507,16 @@
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
     <value>ダブルクリックメインメニュー</value>
   </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>請在 cmd 中運行以下指令：</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>注意：若要連接到本機位址，請先利用</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value>增加豁免</value>
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>重置</value>
+  </data>
 </root>

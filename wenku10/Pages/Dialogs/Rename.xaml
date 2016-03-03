@@ -10,7 +10,7 @@
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
     <ContentDialog.Title>
         <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                   x:Uid="/ContextMenu/ContextMenu_Rename"
+                   x:Name="TitleBlock"
                    Text="Title" />
     </ContentDialog.Title>
 

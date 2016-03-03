@@ -504,4 +504,16 @@
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
     <value>Double tap main menu</value>
   </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>Please run the following command in cmd</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>Note: To connect to a local address please exempt this app via</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>Reset</value>
+  </data>
 </root>

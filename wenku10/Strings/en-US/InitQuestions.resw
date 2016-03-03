@@ -124,7 +124,7 @@
     <value>OneDrive supports bookmark syncing, settings, etc.</value>
   </data>
   <data name="EnableServerSelector.Text" xml:space="preserve">
-    <value>Server selector is deprecated</value>
+    <value>ServerSelector is a load balancer that will perhaps enhance the loading speed</value>
   </data>
   <data name="Intro.Text" xml:space="preserve">
     <value>Hi, looks like this is the first time running this app. You will need to answer a few question before setting up the environment</value>

@@ -22,17 +22,24 @@
         <Grid Margin="10" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
+            <!-- Toggle Button -->
             <ToggleSwitch x:Name="EnableSS"
                           VerticalAlignment="Top" HorizontalAlignment="Left"
                           Toggled="ToggleSS">
                 <ToggleSwitch.Header>
-                    <TextBlock x:Uid="/InitQuestions/EnableServerSelector"
-                               FontSize="23"
-                               TextWrapping="Wrap"
-                               Foreground="{StaticResource MinorBrush}"
-                               Text="EnableServerSelector?" />
+                    <StackPanel>
+                        <TextBlock x:Uid="/Settings/Advanced_Server"
+                                   FontSize="23"
+                                   Foreground="{StaticResource MinorBrush}"
+                                   Text="EnableServerSelector?" />
+                        <TextBlock x:Uid="/InitQuestions/EnableServerSelector"
+                                   FontSize="16"
+                                   TextWrapping="Wrap"
+                                   Foreground="{StaticResource SubtleBrush}"
+                                   Text="EnableServerSelector?" />
+                    </StackPanel>
                 </ToggleSwitch.Header>
                 <ToggleSwitch.OnContent>
                     <TextBlock x:Uid="/Settings/Enabled"
@@ -45,11 +52,12 @@
                                Text="Disabled" />
                 </ToggleSwitch.OffContent>
             </ToggleSwitch>
+            <!-- Reset Button -->
             <Button x:Name="ServerReset"
                     Grid.Column="2"
                     VerticalAlignment="Center" HorizontalAlignment="Right"
                     Click="ResetServer">
-                <TextBlock Text="Reset" />
+                <TextBlock x:Uid="/Settings/Advanced_Server_Reset" Text="Reset" />
             </Button>
         </Grid>
         <Grid Grid.Row="1" Margin="10">
@@ -133,9 +141,14 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <TextBlock Grid.Row="3" Text="I want to participate diverting services"
-                       Foreground="{StaticResource MajorBrush}"
-                       />
+            <TextBlock Grid.Row="3"
+                       Margin="5"
+                       TextWrapping="Wrap"
+                       Foreground="{StaticResource MajorBrush}" >
+                <Run x:Uid="/Settings/Advanced_Server_Note_A">Note: To connect to a local address please exempt this app via</Run> 
+                <Hyperlink Click="ShowCommand" >CheckNetIsolation</Hyperlink>.
+                <Run x:Uid="/Settings/Advanced_Server_Note_B" />
+            </TextBlock>
         </Grid>
     </Grid>
 </Page>

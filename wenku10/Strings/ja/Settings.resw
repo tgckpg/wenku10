@@ -503,4 +503,16 @@
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
     <value>Double tap main menu</value>
   </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>CMDで次のコマンドを実行してください：</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>注：ローカルアドレスに接続するには、</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value>を使用してください</value>
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>リセット</value>
+  </data>
 </root>
