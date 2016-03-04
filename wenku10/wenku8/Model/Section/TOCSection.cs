@@ -34,13 +34,28 @@ namespace wenku8.Model.Section
 
             CurrentBook = b;
             Volumes = b.GetVolumes();
+
+            SetAutoAnchor();
         }
 
         public void SelectVolume( Volume v )
         {
             Chapters = v.ChapterList;
             NotifyChanged( "Chapters" );
+        }
 
+        public void SetViewSource( CollectionViewSource ViewSource )
+        {
+            if ( TemplateSelector.IsHorizontal ) return;
+
+            ViewSource.Source = Volumes.Remap( x => new ChapterGroup( x ) );
+
+            VolumeCollections = ViewSource.View.CollectionGroups;
+            NotifyChanged( "VolumeCollections" );
+        }
+
+        private void SetAutoAnchor()
+        {
             // Set the autoanchor
             BookStorage BS = new BookStorage();
             string AnchorId = BS.GetBookmark( CurrentBook.Id );
@@ -59,16 +74,6 @@ namespace wenku8.Model.Section
             EndLoop:
 
             NotifyChanged( "AnchorAvailable" );
-        }
-
-        public void SetViewSource( CollectionViewSource ViewSource )
-        {
-            if ( TemplateSelector.IsHorizontal ) return;
-
-            ViewSource.Source = Volumes.Remap( x => new ChapterGroup( x ) );
-
-            VolumeCollections = ViewSource.View.CollectionGroups;
-            NotifyChanged( "VolumeCollections" );
         }
 
         internal class ChapterGroup : List<Chapter>
