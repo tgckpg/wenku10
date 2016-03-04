@@ -508,7 +508,7 @@
     <value>ダブルクリックメインメニュー</value>
   </data>
   <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
-    <value>請在 cmd 中運行以下指令：</value>
+    <value>請在 cmd 中執行以下指令：</value>
   </data>
   <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
     <value>注意：若要連接到本機位址，請先利用</value>

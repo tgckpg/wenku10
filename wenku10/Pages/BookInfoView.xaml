@@ -17,6 +17,7 @@
         <Converters:VDisplayConverter x:Key="VDisplayConverter" />
         <Converters:ParallaxConverter x:Key="ParallaxConverter" />
         <Converters:BoolDataConverter x:Key="BoolDataConverter" />
+        <Converters:NumberSimplifier x:Key="NumberSimplifier" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <v:BoolStateConverter x:Key="BoolStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
@@ -170,14 +171,24 @@
                                                     <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
                                                     <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                     <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap"
+                                                               ToolTipService.ToolTip="{Binding Length}"
+                                                               Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
                                                 <StackPanel Grid.Column="1" Margin="5" Grid.Row="1">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap"
+                                                               ToolTipService.ToolTip="{Binding TotalHitCount}"
+                                                               Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap"
+                                                               ToolTipService.ToolTip="{Binding TodayHitCount}"
+                                                               Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                     <Grid Loaded="PushCountGridLoaded">
                                                         <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
-                                                        <TextBlock Text="{Binding PushCount}" >
+                                                        <TextBlock Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
+                                                                   ToolTipService.ToolTip="{Binding PushCount}">
                                                             <TextBlock.Foreground>
                                                                 <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}" />
                                                             </TextBlock.Foreground>
@@ -207,7 +218,10 @@
                                                         </Grid.Resources>
                                                     </Grid>
 
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap"
+                                                               Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
+                                                               ToolTipService.ToolTip="{Binding FavCount}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
 
                                             </Grid>

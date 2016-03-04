@@ -507,17 +507,12 @@ namespace wenku10
         private void ReloadCustomSection( object sender, RoutedEventArgs e )
         {
             Button b = sender as Button;
-            ProgressRing Pring = b.FindName( "CustomRing" ) as ProgressRing;
-
-            if ( Pring.IsActive ) return;
-            Pring.IsActive = true;
 
             INavSelections NS = NavigationSection.DataContext as INavSelections;
             IPaneInfoSection PS = NS.CustomSection();
 
             if ( PS.Data != null )
             {
-                Pring.IsActive = false;
                 CustomSection.DataContext = PS;
             }
             else
@@ -529,7 +524,6 @@ namespace wenku10
                     {
                         PS.PropertyChanged -= PropChanged;
                         CustomSection.DataContext = PS;
-                        Pring.IsActive = false;
                     }
                 };
 

@@ -5,7 +5,6 @@
     xmlns:local="using:wenku10"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
-    xmlns:vp="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
@@ -18,6 +17,7 @@
     <Page.Resources>
         <n:BoolStateConverter x:Key="BoolStateConverter" />
         <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
         <v:FavConverter x:Key="FavConverter" />
         <CollectionViewSource x:Name="favItems" />
@@ -28,6 +28,7 @@
         <c:PassiveSplitView x:Name="MainSplitPane"
                             EnablePaneSwipe="False"
                             Background="{StaticResource MajorBackgroundBrush}" >
+            <!-- Info Pane -->
             <c:PassiveSplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -83,13 +84,23 @@
                                         <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBrush}"/>
                                         <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBrush}" />
                                         <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}" />
                                     </StackPanel>
                                     <StackPanel Margin="5" Grid.Row="1">
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding PushCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}" />
+                                        <TextBlock TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}" />
                                     </StackPanel>
                                 </Grid>
                                 <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
@@ -125,6 +136,8 @@
 
                     <Canvas x:Name="StarFields" />
                     <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.2" />
+                    
+                    <!-- Loading Background Cover -->
                     <p:StateControl x:Name="BgCover">
                         <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.6" />
                     </p:StateControl>
@@ -138,10 +151,11 @@
                                        Foreground="{StaticResource Shades40}" Text="wenku8" />
                         </c:ParallaxHub.ScrollerRibbon>
 
+                        <!-- Fav Section -->
                         <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}" >
                             <HubSection.Resources>
-                                <vp:DataStateConverter x:Key="DataStateConverter" />
-                                <vp:BoolStateConverter x:Key="LoadingStateConverter" />
+                                <n:DataStateConverter x:Key="DataStateConverter" />
+                                <n:BoolStateConverter x:Key="LoadingStateConverter" />
                             </HubSection.Resources>
                             <HubSection.Header>
                                 <StackPanel>
@@ -264,6 +278,7 @@
                             </DataTemplate>
                         </HubSection>
 
+                        <!-- Navigation Titles -->
                         <HubSection x:Name="NavigationSection" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                             <DataTemplate>
                                 <ListView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="GotoNavigation">
@@ -284,6 +299,7 @@
                             </DataTemplate>
                         </HubSection>
 
+                        <!-- Staff picks XXX: Perhaps deprecate this section -->
                         <HubSection x:Name="RectileSection" Visibility="Collapsed">
                             <DataTemplate>
                                 <c:VariableGridView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="BookClicked">
@@ -316,16 +332,20 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel>
+                                        <!-- Reload Button -->
                                         <Button Style="{StaticResource PlainButton}"
+                                                Background="Transparent"
+                                                BorderBrush="{StaticResource RelativeMajorBackgroundBrush}"
                                                 Click="ReloadCustomSection"
                                                 Width="40" Height="40">
                                             <Grid>
                                                 <ProgressRing Width="40" Height="40"
-                                                              x:Name="CustomRing"
                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
-                                                              IsActive="False" />
-                                                <i:IconReload AutoScale="True"
-                                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                              IsActive="{Binding IsLoading}" />
+                                                <p:StateControl State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                                                    <i:IconReload AutoScale="True"
+                                                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                </p:StateControl>
                                             </Grid>
                                         </Button>
                                         <p:VerticalStack Grid.Column="0"

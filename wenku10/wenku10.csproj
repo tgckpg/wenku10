@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>wenku10_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>F2E3248B1096632CC0FCE29706983B1E848883CB</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>8683C9196E76D3B0C5663DDDD810606D0E5D6BF5</PackageCertificateThumbprint>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
@@ -110,6 +110,7 @@
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
+    <None Include="wenku10_StoreKey.pfx" />
     <PRIResource Include="Strings\en-US\AppResources.resw" />
   </ItemGroup>
   <ItemGroup>
@@ -539,9 +540,11 @@
     <PRIResource Include="Strings\ja\Settings.resw" />
     <PRIResource Include="Strings\ja\Tips.resw" />
     <PRIResource Include="Strings\ja\WMessage.resw" />
+    <PRIResource Include="Strings\en-US\Numbers.resw" />
+    <PRIResource Include="Strings\zh-TW\Numbers.resw" />
+    <PRIResource Include="Strings\zh-CN\Numbers.resw" />
+    <PRIResource Include="Strings\ja\Numbers.resw" />
     <None Include="wenku10.pfx" />
-    <None Include="wenku10_StoreKey.pfx" />
-    <None Include="wenku10_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
