@@ -124,7 +124,7 @@
     <value />
   </data>
   <data name="e12" xml:space="preserve">
-    <value>Trillion</value>
+    <value>trillions</value>
   </data>
   <data name="e13" xml:space="preserve">
     <value />
@@ -133,7 +133,7 @@
     <value />
   </data>
   <data name="e15" xml:space="preserve">
-    <value>Quadrillion</value>
+    <value>quadrillions</value>
   </data>
   <data name="e16" xml:space="preserve">
     <value />
@@ -142,7 +142,7 @@
     <value />
   </data>
   <data name="e18" xml:space="preserve">
-    <value>Quintillion</value>
+    <value>quintillions</value>
   </data>
   <data name="e19" xml:space="preserve">
     <value />
@@ -151,7 +151,7 @@
     <value />
   </data>
   <data name="e21" xml:space="preserve">
-    <value>Sextillion</value>
+    <value>sextillions</value>
   </data>
   <data name="e22" xml:space="preserve">
     <value />
@@ -160,10 +160,10 @@
     <value />
   </data>
   <data name="e24" xml:space="preserve">
-    <value>Septillion</value>
+    <value>septillions</value>
   </data>
   <data name="e3" xml:space="preserve">
-    <value>Thoudsand</value>
+    <value>thoudsands</value>
   </data>
   <data name="e4" xml:space="preserve">
     <value />
@@ -172,7 +172,7 @@
     <value />
   </data>
   <data name="e6" xml:space="preserve">
-    <value>Million</value>
+    <value>millions</value>
   </data>
   <data name="e7" xml:space="preserve">
     <value />
@@ -181,6 +181,6 @@
     <value />
   </data>
   <data name="e9" xml:space="preserve">
-    <value>Billion</value>
+    <value>billions</value>
   </data>
 </root>

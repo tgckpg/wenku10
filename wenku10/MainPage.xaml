@@ -62,53 +62,61 @@
                         </Grid>
                     </Button>
 
-                    <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" Margin="10" VerticalScrollBarVisibility="Hidden">
+                    <ScrollViewer Grid.Row="1"
+                                  Grid.RowSpan="2" Grid.ColumnSpan="3"
+                                  Margin="10, 0, 10, 10"
+                                  VerticalScrollBarVisibility="Hidden">
                         <p:StateControl x:Name="PaneGridState">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="200" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="25" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="140" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Margin="5" Source="{Binding Cover}" />
-                                <Grid Grid.Column="1">
+                            <StackPanel Margin="0, 10, 0, 50">
+                                <TextBlock TextWrapping="Wrap"
+                                           Text="{Binding LatestSection}"
+                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                                <TextBlock TextWrapping="Wrap"
+                                           Text="{Binding RecentUpdate}"
+                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                                <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="200" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Margin="5,10,5,5" Grid.Row="0">
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBrush}"/>
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextTrimming="CharacterEllipsis"
-                                                   Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
-                                                   Foreground="{StaticResource RelativeMajorBrush}" />
-                                    </StackPanel>
-                                    <StackPanel Margin="5" Grid.Row="1">
-                                        <TextBlock TextTrimming="CharacterEllipsis"
-                                                   Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
-                                                   Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextTrimming="CharacterEllipsis"
-                                                   Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
-                                                   Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextTrimming="CharacterEllipsis"
-                                                   Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
-                                                   Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextTrimming="CharacterEllipsis"
-                                                   Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
-                                                   Foreground="{StaticResource RelativeMajorBrush}" />
-                                    </StackPanel>
-                                </Grid>
-                                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
-                                       TextWrapping="Wrap" Text="{Binding Intro}"
-                                       Foreground="{StaticResource RelativeMajorBrush}" />
-                                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" FontSize="20"
-                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Margin="5" Source="{Binding Cover}" />
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Margin="5,10,5,5" Grid.Row="0">
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBrush}"/>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                        </StackPanel>
+                                        <StackPanel Margin="5" Grid.Row="1">
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
+                                           TextWrapping="Wrap" Text="{Binding Intro}"
+                                           Foreground="{StaticResource RelativeMajorBrush}" />
                             </Grid>
+                            </StackPanel>
                         </p:StateControl>
                     </ScrollViewer>
                     <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
