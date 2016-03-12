@@ -241,7 +241,7 @@ namespace wenku8.Model.Section
 
         public void SelectIndex( int i )
         {
-            if ( i < Data.Count() )
+            if ( i < Data.Count() && 0 <= i )
             {
                 SelectAndAnchor( Data[ i ] );
             }

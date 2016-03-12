@@ -338,7 +338,12 @@ namespace wenku10.Pages
         {
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
             ChangedManually = false;
-            EPStepper.SelectedItem = Eps.First( x => x.Payload == CurrentChapter.cid ); 
+            EPStepper.SelectedItem = Eps.First( x => x.Payload == CurrentChapter.cid );
+
+            if ( ContentPane != null && ContentPane.Context is TableOfContents )
+            {
+                ( ContentPane.Context as TableOfContents ).UpdateDisplay();
+            }
         }
 
         private void BookLoaded( BookItem b )

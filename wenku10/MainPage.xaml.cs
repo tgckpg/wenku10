@@ -25,11 +25,11 @@ using Net.Astropenguin.UI;
 using wenku8.CompositeElement;
 using wenku8.Effects;
 using wenku8.Ext;
+using wenku8.Model.Book;
 using wenku8.Model.Section;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Storage;
-using wenku8.Model.Book;
 
 namespace wenku10
 {
