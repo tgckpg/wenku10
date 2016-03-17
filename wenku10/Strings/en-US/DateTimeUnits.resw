@@ -118,139 +118,139 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutAMinuteAgo" xml:space="preserve">
-    <value>約 1 分鐘前</value>
+    <value>about a minute ago</value>
     <comment>Default text for "about a minute ago" as used by the RelativeTimeConverter.</comment>
   </data>
   <data name="AboutAMonthAgo" xml:space="preserve">
-    <value>約 1 個月前</value>
+    <value>about a month ago</value>
     <comment>Default text for "about a month ago" as used by the RelativeTimeConverter.</comment>
   </data>
   <data name="AboutAnHourAgo" xml:space="preserve">
-    <value>約 1 小時前</value>
+    <value>about an hour ago</value>
     <comment>Default text for "about an hour ago" as used by the RelativeTimeConverter.</comment>
   </data>
   <data name="AboutAWeekAgo" xml:space="preserve">
-    <value>約 1 週前</value>
+    <value>about a week ago</value>
     <comment>Default text for "about a week ago" as used by the RelativeTimeConverter.</comment>
   </data>
   <data name="last Friday" xml:space="preserve">
-    <value>上週五</value>
+    <value>last Friday</value>
     <comment>Default text for "last Friday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="last Monday" xml:space="preserve">
-    <value>上週一</value>
+    <value>last Monday</value>
     <comment>Default text for "last Monday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="last Saturday" xml:space="preserve">
-    <value>上週六</value>
+    <value>last Saturday</value>
     <comment>Default text for "last Saturday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="last Sunday" xml:space="preserve">
-    <value>上週日</value>
+    <value>last Sunday</value>
     <comment>Default text for "last Sunday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="last Thursday" xml:space="preserve">
-    <value>上週四</value>
+    <value>last Thursday</value>
     <comment>Default text for "last Thursday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="last Tuesday" xml:space="preserve">
-    <value>上週二</value>
+    <value>last Tuesday</value>
     <comment>Default text for "last Tuesday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="last Wednesday" xml:space="preserve">
-    <value>上週三</value>
+    <value>last Wednesday</value>
     <comment>Default text for "last Wednesday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Friday" xml:space="preserve">
-    <value>週五</value>
+    <value>on Friday</value>
     <comment>Default text for "on Friday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Monday" xml:space="preserve">
-    <value>週一</value>
+    <value>on Monday</value>
     <comment>Default text for "on Monday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Saturday" xml:space="preserve">
-    <value>週六</value>
+    <value>on Saturday</value>
     <comment>Default text for "on Saturday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Sunday" xml:space="preserve">
-    <value>週日</value>
+    <value>on Sunday</value>
     <comment>Default text for "on Sunday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Thursday" xml:space="preserve">
-    <value>週四</value>
+    <value>on Thursday</value>
     <comment>Default text for "on Thursday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Tuesday" xml:space="preserve">
-    <value>週二</value>
+    <value>on Tuesday</value>
     <comment>Default text for "on Tuesday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="on Wednesday" xml:space="preserve">
-    <value>週三</value>
+    <value>on Wednesday</value>
     <comment>Default text for "on Wednesday" as used by RelativeTimeConverter</comment>
   </data>
   <data name="OverAYearAgo" xml:space="preserve">
-    <value>1 年多前</value>
+    <value>over a year ago</value>
     <comment>Default text for "over a year ago" as used by the RelativeTimeConverter.</comment>
   </data>
   <data name="XHoursAgo_2To4" xml:space="preserve">
-    <value>{0} 小時前</value>
+    <value>{0} hours ago</value>
     <comment>Default text for "{0} hours ago" as used by the RelativeTimeConverter,  where {0} is 2, 3 or 4.</comment>
   </data>
   <data name="XHoursAgo_EndsIn1Not11" xml:space="preserve">
-    <value>{0} 小時前</value>
+    <value>{0} hours ago</value>
     <comment>Default text for "{0} hours ago" as used by the RelativeTimeConverter, where {0} is a number that ends in 1 but doesn't end in 11.</comment>
   </data>
   <data name="XHoursAgo_EndsIn2To4Not12To14" xml:space="preserve">
-    <value>{0} 小時前</value>
+    <value>{0} hours ago</value>
     <comment>Default text for "{0} hours ago" as used by the RelativeTimeConverter, where {0} is a number that ends in 2, 3 or 4, but doesn't end in 12, 13 or 14.</comment>
   </data>
   <data name="XHoursAgo_Other" xml:space="preserve">
-    <value>{0} 小時前</value>
+    <value>{0} hours ago</value>
     <comment>Default text for "{0} hours ago" as used by the RelativeTimeConverter, where {0} is a number not considered in any of the other exceptions, i.e. a number that ends in 0 or 5 to 9.</comment>
   </data>
   <data name="XMinutesAgo_2To4" xml:space="preserve">
-    <value>{0} 分鐘前</value>
+    <value>{0} minutes ago</value>
     <comment>Default text for "{0} minutes ago" as used by the RelativeTimeConverter, where {0} is 2, 3 or 4.</comment>
   </data>
   <data name="XMinutesAgo_EndsIn1Not11" xml:space="preserve">
-    <value>{0} 分鐘前</value>
+    <value>{0} minutes ago</value>
     <comment>Default text for "{0} minutes ago" as used by the RelativeTimeConverter, where {0} is a number that ends in 1 but doesn't end in 11.</comment>
   </data>
   <data name="XMinutesAgo_EndsIn2To4Not12To14" xml:space="preserve">
-    <value>{0} 分鐘前</value>
+    <value>{0} minutes ago</value>
     <comment>Default text for "{0} minutes ago" as used by the RelativeTimeConverter, where {0} is a number that ends in 2, 3 or 4, but doesn't end in 12, 13 or 14.</comment>
   </data>
   <data name="XMinutesAgo_Other" xml:space="preserve">
-    <value>{0} 分鐘前</value>
+    <value>{0} minutes ago</value>
     <comment>Default text for "{0} minutes ago" as used by the RelativeTimeConverter, where {0} is a number not considered in any of the other exceptions, i.e. a number that ends in 0 or 5 to 9.</comment>
   </data>
   <data name="XMonthsAgo_2To4" xml:space="preserve">
-    <value>{0} 個月前</value>
+    <value>{0} months ago</value>
     <comment>Default text for "{0} months ago" as used by the RelativeTimeConverter, where {0} is 2, 3 or 4.</comment>
   </data>
   <data name="XMonthsAgo_5To12" xml:space="preserve">
-    <value>{0} 個月前</value>
+    <value>{0} months ago</value>
     <comment>Default text for "{0} months ago" as used by the RelativeTimeConverter, where {0} is a number from 5 to 12.</comment>
   </data>
   <data name="XSecondsAgo_2To4" xml:space="preserve">
-    <value>{0} 秒鐘前</value>
+    <value>{0} seconds ago</value>
     <comment>Default text for "{0} seconds ago" as used by the RelativeTimeConverter,  where {0} is 2, 3 or 4.</comment>
   </data>
   <data name="XSecondsAgo_EndsIn1Not11" xml:space="preserve">
-    <value>{0} 秒鐘前</value>
+    <value>{0} seconds ago</value>
     <comment>Default text for "{0} seconds ago" as used by the RelativeTimeConverter, where {0} is a number that ends in 1 but doesn't end in 11.</comment>
   </data>
   <data name="XSecondsAgo_EndsIn2To4Not12To14" xml:space="preserve">
-    <value>{0} 秒鐘前</value>
+    <value>{0} seconds ago</value>
     <comment>Default text for "{0} seconds ago" as used by the RelativeTimeConverter, where {0} is a number that ends in 2, 3 or 4, but doesn't end in 12, 13 or 14.</comment>
   </data>
   <data name="XSecondsAgo_Other" xml:space="preserve">
-    <value>{0} 秒鐘前</value>
+    <value>{0} seconds ago</value>
     <comment>Default text for "{0} seconds ago" as used by the RelativeTimeConverter, where {0} is a number not considered in any of the other exceptions, i.e. a number that ends in 0 or 5 to 9.</comment>
   </data>
   <data name="XWeeksAgo_2To4" xml:space="preserve">
-    <value>{0} 週前</value>
+    <value>{0} weeks ago</value>
     <comment>Default text for "{0} weeks ago" as used by the RelativeTimeConverter, where {0} is 2, 3 or 4.</comment>
   </data>
 </root>

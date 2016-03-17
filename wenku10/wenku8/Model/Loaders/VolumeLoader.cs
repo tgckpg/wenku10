@@ -31,7 +31,7 @@ namespace wenku8.Model.Loaders
         {
             Shared.LoadMessage( "LoadingVolume" );
             CurrentBook = b;
-            if ( b.IsLocal || Shared.Storage.FileExists( CurrentBook.TOCPath ) )
+            if ( b.IsLocal || ( !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
             {
                 OnComplete( b );
             }

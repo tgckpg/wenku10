@@ -49,6 +49,7 @@ namespace wenku10.Pages
         private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
 
         private bool SkipThisPage = false;
+        private bool useCache = true;
         private bool _inSync = false;
 
         private bool SyncStarted
@@ -193,8 +194,10 @@ namespace wenku10.Pages
 
         private void OpenType( object parameter )
         {
+            useCache = true;
             if ( parameter is string )
             {
+                useCache = false;
                 LoadBookInfo( parameter.ToString() );
             }
             else if ( parameter is LocalTextDocument )
@@ -247,7 +250,7 @@ namespace wenku10.Pages
                 }
             } );
 
-            BL.Load( ThisBook, true );
+            BL.Load( ThisBook, useCache );
         }
 
         private void LoadBookInfo( string id )
