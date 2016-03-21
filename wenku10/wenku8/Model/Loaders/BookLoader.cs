@@ -54,7 +54,7 @@ namespace wenku8.Model.Loaders
 
             if( CurrentBook.XTest( XProto.BookItemEx ) )
             {
-                Mode = CurrentBook.XProp<string>( "Mode" );
+                Mode = CurrentBook.XField<string>( "Mode" );
             }
 
             XKey[] ReqKeys = X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, id );
