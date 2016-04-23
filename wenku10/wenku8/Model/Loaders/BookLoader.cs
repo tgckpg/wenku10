@@ -19,6 +19,7 @@ namespace wenku8.Model.Loaders
     using Settings;
     using System;
     using System.Messages;
+    using Text;
 
     class BookLoader : IBookLoader
     {
@@ -120,7 +121,7 @@ namespace wenku8.Model.Loaders
 
         private void SaveIntro( DRequestCompletedEventArgs e, string id )
         {
-            Shared.Storage.WriteString( CurrentBook.IntroPath, e.ResponseString );
+            Shared.Storage.WriteString( CurrentBook.IntroPath, Manipulation.PatchSyntax( e.ResponseString ) );
             CurrentBook.Intro = "OK";
         }
 

@@ -16,6 +16,7 @@ namespace wenku8.Model.Loaders
     using Book.Spider;
     using Ext;
     using Resources;
+    using Text;
 
     using TransferInst = wenku8.AdvDM.WRuntimeTransfer.TransferInst;
 
@@ -53,7 +54,7 @@ namespace wenku8.Model.Loaders
 
         private void cacheInfo( DRequestCompletedEventArgs e, string id )
         {
-            Shared.Storage.WriteString( ThisBook.TOCPath, e.ResponseString );
+            Shared.Storage.WriteString( ThisBook.TOCPath, Manipulation.PatchSyntax( e.ResponseString ) );
             Shared.Storage.WriteString( ThisBook.TOCDatePath, ThisBook.RecentUpdateRaw );
 
             StepAutomation();

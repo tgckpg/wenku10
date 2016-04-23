@@ -519,4 +519,13 @@
   <data name="Advanced_Server_Reset.Text" xml:space="preserve">
     <value>重置</value>
   </data>
+  <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
+    <value>修正誤用了的符號</value>
+  </data>
+  <data name="Advanced_Misc.Text" xml:space="preserve">
+    <value>其它設定</value>
+  </data>
+  <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
+    <value>沒能分類，或者預設值比較好的設定</value>
+  </data>
 </root>

@@ -515,4 +515,13 @@
   <data name="Advanced_Server_Reset.Text" xml:space="preserve">
     <value>リセット</value>
   </data>
+  <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
+    <value>誤用していたの符号を修正</value>
+  </data>
+  <data name="Advanced_Misc.Text" xml:space="preserve">
+    <value>他の設定</value>
+  </data>
+  <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
+    <value>分類されていませんまたはデフォルトの設定やより良いです</value>
+  </data>
 </root>

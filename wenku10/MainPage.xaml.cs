@@ -33,7 +33,7 @@ using wenku8.Storage;
 
 namespace wenku10
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IDisposable
     {
         public static readonly string ID = typeof( MainPage ).Name;
 
@@ -47,7 +47,25 @@ namespace wenku10
 
         ~MainPage()
         {
-            NavigationHandler.OnNavigatedBack -= OnBackRequested;
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                NavigationHandler.OnNavigatedBack -= OnBackRequested;
+                AdvDMStat.DataContext = null;
+                CustomSection.DataContext = null;
+                NavigationSection.DataContext = null;
+                SettingsButton.DataContext = null;
+                FavSectionView.DataContext = null;
+                Galaxy.Stop();
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
         }
 
         protected override void OnNavigatedFrom( NavigationEventArgs e )
@@ -398,6 +416,7 @@ namespace wenku10
 
             if ( Go )
             {
+                Dispose();
                 Frame.Navigate( typeof( Pages.Settings.MainSettings ) );
             }
         }

@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.Advanced.Misc"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings.Advanced"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer Background="{StaticResource MajorBrush}"
+                  VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <ToggleSwitch x:Name="SyntaxPatchToggle" Toggled="ToggleSynPatch">
+                <ToggleSwitch.Header>
+                    <TextBlock x:Uid="/Settings/Advanced_Misc_SyntaxPatch"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               FontSize="20"
+                               Text="Syntax Patch" />
+                </ToggleSwitch.Header>
+                <ToggleSwitch.OnContent>
+                    <TextBlock x:Uid="/Settings/Enabled"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               Text="Enabled" />
+                </ToggleSwitch.OnContent>
+                <ToggleSwitch.OffContent>
+                    <TextBlock x:Uid="/Settings/Disabled"
+                               Foreground="{StaticResource RelativeMajorBrush}"
+                               Text="Disabled" />
+                </ToggleSwitch.OffContent>
+            </ToggleSwitch>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

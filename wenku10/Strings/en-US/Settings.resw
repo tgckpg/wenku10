@@ -516,4 +516,13 @@
   <data name="Advanced_Server_Reset.Text" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
+    <value>Fix misused symbols</value>
+  </data>
+  <data name="Advanced_Misc.Text" xml:space="preserve">
+    <value>Miscellaneous settings</value>
+  </data>
+  <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
+    <value>Settings that are either not important enough to categorize or good to be using default value</value>
+  </data>
 </root>
