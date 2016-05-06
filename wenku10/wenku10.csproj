@@ -104,7 +104,6 @@
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\Samples\BgComments.jpg" />
-    <Content Include="Assets\Samples\BgMain.jpg" />
     <Content Include="Assets\Samples\BgTOC.jpg" />
     <Content Include="Assets\Samples\BgInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />

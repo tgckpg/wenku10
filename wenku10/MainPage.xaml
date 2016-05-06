@@ -139,7 +139,6 @@
                                     , ConverterParameter=-0.10
                                 }" />
                         </Grid.RenderTransform>
-                        <Image Source="/Assets/Samples/BgMain.jpg" Stretch="UniformToFill"/>
                     </Grid>
 
                     <Canvas x:Name="StarFields" />
