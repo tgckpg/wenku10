@@ -422,7 +422,7 @@ namespace wenku10.Pages
             VolList = sender as ListView;
             if ( TOCData == null ) return;
             // Auto select the first one
-            VolList.SelectedItem = TOCData.Volumes[ 0 ];
+            VolList.SelectedItem = TOCData.Volumes.FirstOrDefault();
         }
 
         private void ChapterSelected( object sender, ItemClickEventArgs e )
