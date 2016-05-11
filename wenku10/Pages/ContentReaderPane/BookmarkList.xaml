@@ -13,7 +13,7 @@
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
         <MenuFlyout x:Key="BookmarkAction">
             <MenuFlyout.Items>
-                <MenuFlyoutItem Text="Remove" Tapped="RemoveBookmark"/>
+                <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Delete" Text="Remove" Click="RemoveBookmark"/>
             </MenuFlyout.Items>
         </MenuFlyout>
     </Page.Resources>
