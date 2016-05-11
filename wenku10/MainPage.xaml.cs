@@ -134,17 +134,6 @@ namespace wenku10
 #if DEBUG
             new global::wenku8.UnitTest();
 #endif
-
-            /*
-            TransitionCollection collection = new TransitionCollection();
-            NavigationThemeTransition theme = new NavigationThemeTransition();
-
-            var info = new ContinuumNavigationTransitionInfo();
-
-            theme.DefaultNavigationTransitionInfo = info;
-            collection.Add( theme );
-            this.Transitions = collection;
-            */
         }
 
         private void Start()

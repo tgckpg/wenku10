@@ -138,13 +138,11 @@ namespace wenku10.Pages.ContentReaderPane
 
         internal void PrevPara()
         {
-            if ( ContentGrid.SelectedIndex == 0 ) return;
             Reader.SelectIndex( Reader.SelectedIndex - 1 );
         }
 
         internal void NextPara()
         {
-            if ( ContentGrid.Items.Count == ContentGrid.SelectedIndex + 1 ) return;
             Reader.SelectIndex( Reader.SelectedIndex + 1 );
         }
 
