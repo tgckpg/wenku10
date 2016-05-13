@@ -401,6 +401,12 @@ namespace wenku10.Pages
                 Refresh = true;
                 ChLayoutUpdate = false;
                 Volume V = e.AddedItems[ 0 ] as Volume;
+
+                /*
+                 * When the page is backed, TOCData will is being set to null
+                 * Causing NullReference exception
+                 * */
+                if ( TOCData == null ) return;
                 TOCData.SelectVolume( V );
             } );
         }
