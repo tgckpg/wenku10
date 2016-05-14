@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Logging;
 
 namespace wenku8.Model.Section
 {
+    using AdvDM;
     using ListItem;
+    using Net.Astropenguin.Loaders;
     using Resources;
     using Settings;
     using Storage;
-
+    using wenku10.Pages;
+    using Windows.Storage;
     partial class LocalFileList : SearchableContext
     {
         private string _loading = null;
@@ -79,6 +83,44 @@ namespace wenku8.Model.Section
 
             Loading = null;
             if ( Items != null && 0 < Items.Count() ) SearchSet = Items;
+        }
+
+        public void LoadUrl( LocalModeTxtList.DownloadBookContext Context )
+        {
+            RuntimeCache rCache = new RuntimeCache();
+            Logger.Log( ID, Context.Id, LogType.DEBUG );
+            Logger.Log( ID, Context.Title, LogType.DEBUG );
+
+            Worker.UIInvoke( () =>
+            {
+                StringResources stx = new StringResources( "AdvDM" );
+                Loading = stx.Text( "Active" );
+            } );
+
+            rCache.GET( Context.Url, ( e, url ) => {
+                Loading = null;
+                SaveTemp( e, Context );
+            }
+            , ( id, url, ex ) =>
+            {
+                Logger.Log( ID, "Cannot download: " + id, LogType.WARNING );
+                Logger.Log( ID, ex.Message, LogType.WARNING );
+
+            }, false );
+        }
+
+        private async void SaveTemp( DRequestCompletedEventArgs e, LocalModeTxtList.DownloadBookContext Context )
+        {
+            StorageFile ISF = await AppStorage.MkTemp(
+                Context.Id
+                + ". "
+                + ( string.IsNullOrEmpty( Context.Title ) ? "{ Parse Needed }" : Context.Title )
+                + ".txt"
+            );
+
+            await ISF.WriteBytes( e.ResponseBytes );
+
+            SearchSet = new LocalBook[] { new LocalBook( ISF ) };
         }
 
         public bool Processing { get; private set; }

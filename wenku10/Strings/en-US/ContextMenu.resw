@@ -165,6 +165,12 @@
   <data name="CustomBackground.Text" xml:space="preserve">
     <value>Custom Background</value>
   </data>
+  <data name="OpenDirectory.Text" xml:space="preserve">
+    <value>Open from directory</value>
+  </data>
+  <data name="OpenFromUrl.Text" xml:space="preserve">
+    <value>Open from Url</value>
+  </data>
   <data name="PresetBackground.Text" xml:space="preserve">
     <value>Preset Background</value>
   </data>

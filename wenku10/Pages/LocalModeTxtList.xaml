@@ -56,6 +56,21 @@
                         </p:StateControl>
                     </Grid>
                 </Button>
+                <!-- Open Directory -->
+                <Button Width="40" Height="40"
+                        Margin="0,0,10,0"
+                        Style="{StaticResource PlainButton}">
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem x:Uid="/ContextMenu/OpenDirectory"
+                                            Text="Open Directory" Click="LoadFiles" />
+                            <MenuFlyoutItem x:Uid="/ContextMenu/OpenFromUrl"
+                                            Text="Open from Url" Click="LoadUrl" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                    <i:IconLogout AutoScale="True" Direction="Rotate270"
+                                  Foreground="{StaticResource RelativeShadesBrush}" />
+                </Button>
                 <!-- Process all local book button -->
                 <Button x:Name="ProcessButton"
                         Click="ProcessAll"
@@ -76,13 +91,6 @@
                                          AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
                         </p:StateControl>
                     </Grid>
-                </Button>
-                <!-- Open Directory -->
-                <Button Click="LoadFiles"
-                        Width="40" Height="40"
-                        Style="{StaticResource PlainButton}">
-                    <i:IconLogout AutoScale="True" Direction="Rotate270"
-                                  Foreground="{StaticResource RelativeShadesBrush}" />
                 </Button>
                 <!-- Toggle Fav -->
                 <Button Style="{StaticResource PlainButton}"

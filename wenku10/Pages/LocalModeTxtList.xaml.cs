@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
@@ -62,6 +63,53 @@ namespace wenku10.Pages
         private void LoadFiles( object sender, RoutedEventArgs e )
         {
             FileListContext.Load();
+        }
+
+        private async void LoadUrl( object sender, RoutedEventArgs e )
+        {
+            StringResources stx = new StringResources( "AdvDM" );
+
+            DownloadBookContext UrlC = new DownloadBookContext();
+            Dialogs.Rename UrlBox = new Dialogs.Rename( UrlC, stx.Text( "Download_Location" ) );
+            UrlBox.Placeholder = "http://example.com/NN. XXXX.txt";
+
+            await Popups.ShowDialog( UrlBox );
+
+            if ( UrlBox.Canceled ) return;
+
+            FileListContext.LoadUrl( UrlC );
+        }
+
+        public class DownloadBookContext : INamable
+        {
+            private Uri _url;
+
+            public Regex Re = new Regex( @"https?://.+/(\d+)\.([\w\W]+\.)?txt$" );
+
+            public Uri Url { get { return _url; } }
+
+            public string Id { get; private set; }
+            public string Title { get; private set; }
+
+            public string Name
+            {
+                get { return _url == null ? "" : _url.ToString(); }
+                set
+                {
+                    Match m = Re.Match( value );
+                    if ( !m.Success )
+                    {
+                        throw new Exception( "Invalid Url" );
+                    }
+                    else
+                    {
+                        Id = m.Groups[ 1 ].Value;
+                        Title = m.Groups[ 2 ].Value;
+                    }
+
+                    _url = new Uri( value );
+                }
+            }
         }
 
         protected override void OnNavigatedFrom( NavigationEventArgs e )

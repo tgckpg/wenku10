@@ -14,7 +14,7 @@
                    Text="Title" />
     </ContentDialog.Title>
 
-    <Grid>
-        <TextBox x:Name="NewName"/>
+    <Grid Margin="5">
+        <TextBox x:Name="NewName" />
     </Grid>
 </ContentDialog>

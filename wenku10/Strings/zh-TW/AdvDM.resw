@@ -135,6 +135,9 @@
   <data name="Desc_Jobs.Text" xml:space="preserve">
     <value>當前工作，就是程序執行時的工作。當程序退出後，工作會被終止。</value>
   </data>
+  <data name="Download_Location.Text" xml:space="preserve">
+    <value>下載地址</value>
+  </data>
   <data name="Failed.Text" xml:space="preserve">
     <value>失效</value>
   </data>

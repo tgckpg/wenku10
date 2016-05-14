@@ -327,6 +327,8 @@ namespace wenku10.Pages
                 Eps.Add( new ActiveItem( ES.currentEpTitle, "", ES.currentCid ) );
             }
 
+            ES.Rewind();
+
             VolStepper.ItemsSource = Vols;
             EPStepper.ItemsSource = Eps;
             SelectCurrentEp();

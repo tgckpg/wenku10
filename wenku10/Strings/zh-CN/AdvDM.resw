@@ -135,6 +135,9 @@
   <data name="Desc_Jobs.Text" xml:space="preserve">
     <value>前台运行，当程序退出后，工作会被终止。</value>
   </data>
+  <data name="Download_Location.Text" xml:space="preserve">
+    <value>下载地址</value>
+  </data>
   <data name="Failed.Text" xml:space="preserve">
     <value>下载失败</value>
   </data>
