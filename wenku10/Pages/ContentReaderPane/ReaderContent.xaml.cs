@@ -22,6 +22,7 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
 
 using wenku8.Model.Book;
+using wenku8.Model.Pages.ContentReader;
 using wenku8.Model.Section;
 using wenku8.Model.Text;
 using wenku8.Resources;
@@ -51,9 +52,11 @@ namespace wenku10.Pages.ContentReaderPane
         {
             try
             {
-                Reader.PropertyChanged += ScrollToParagraph;
+                Reader.PropertyChanged -= ScrollToParagraph;
                 Reader.Dispose();
                 Reader = null;
+
+                ClockStop();
 
                 Worker.UIInvoke( () =>
                 {
@@ -61,7 +64,7 @@ namespace wenku10.Pages.ContentReaderPane
                 } );
 
             }
-            catch( Exception ) { }
+            catch ( Exception ) { }
         }
 
         internal void SetTemplate( int Anchor )
@@ -74,6 +77,8 @@ namespace wenku10.Pages.ContentReaderPane
 
             MasterGrid.DataContext = Reader;
             Reader.PropertyChanged += ScrollToParagraph;
+
+            ClockStart();
         }
 
         internal void Load( bool Reload = false )
@@ -120,7 +125,7 @@ namespace wenku10.Pages.ContentReaderPane
             }
         }
 
-        internal void ScrollLess( bool IsPage = false  )
+        internal void ScrollLess( bool IsPage = false )
         {
             ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
             double d = 50;
@@ -167,7 +172,8 @@ namespace wenku10.Pages.ContentReaderPane
 
             ContentGrid.IsSynchronizedWithCurrentItem = false;
 
-            if ( Reader.SelectedData != null )
+            // Reader may not be available as ContentGrid.OnLoad is faster then SetTemplate
+            if ( !( Reader == null || Reader.SelectedData == null ) )
                 ContentGrid.ScrollIntoView( Reader.SelectedData, ScrollIntoViewAlignment.Leading );
         }
 
@@ -187,7 +193,7 @@ namespace wenku10.Pages.ContentReaderPane
             switch ( e.PropertyName )
             {
                 case "SelectedIndex":
-                    if( !UserStartReading )
+                    if ( !UserStartReading )
                         ContentGrid.SelectedItem = Reader.SelectedData;
                     break;
                 case "Data":
@@ -248,16 +254,16 @@ namespace wenku10.Pages.ContentReaderPane
         {
             Container.ClosePane();
             if ( Reader == null ) return;
-            if( Reader.UsePageClick )
+            if ( Reader.UsePageClick )
             {
                 Point P = e.GetPosition( MasterGrid );
-                if( Reader.Settings.IsHorizontal )
+                if ( Reader.Settings.IsHorizontal )
                 {
                     double HW = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenWidth;
                     if ( Reader.Settings.IsRightToLeft )
-                        if( P.X < HW ) ScrollMore( true ); else ScrollLess( true );
+                        if ( P.X < HW ) ScrollMore( true ); else ScrollLess( true );
                     else
-                        if( HW < P.X ) ScrollMore( true ); else ScrollLess( true );
+                        if ( HW < P.X ) ScrollMore( true ); else ScrollLess( true );
                 }
                 else
                 {
@@ -272,6 +278,36 @@ namespace wenku10.Pages.ContentReaderPane
             Paragraph P = e.ClickedItem as Paragraph;
             if ( P == SelectedParagraph ) return;
             Reader.SelectAndAnchor( SelectedParagraph = P );
+        }
+
+        DispatcherTimer ClockTicker;
+        private void ClockStart()
+        {
+            if ( ClockTicker == null )
+            {
+                ClockTicker = new DispatcherTimer();
+                ClockTicker.Interval = TimeSpan.FromSeconds( 5 );
+            }
+
+            RClock.DataContext = new ClockContext();
+
+            ClockTicker.Tick += ClockTicker_Tick;
+            ClockTicker.Start();
+        }
+
+        private void ClockStop()
+        {
+            if ( ClockTicker == null ) return;
+            ClockTicker.Stop();
+            ( RClock.DataContext as ClockContext ).Dispose();
+
+            ClockTicker.Tick -= ClockTicker_Tick;
+            ClockTicker = null;
+        }
+
+        private void ClockTicker_Tick( object sender, object e )
+        {
+            RClock.Time = DateTime.Now;
         }
     }
 }

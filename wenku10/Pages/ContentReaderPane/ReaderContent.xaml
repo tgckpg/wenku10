@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -22,6 +23,14 @@
           Tapped="MasterGrid_Tapped"
           FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" 
           Background="{Binding BackgroundBrush}" >
+        <c:QClock x:Name="RClock"
+                  HourHandBrush="{Binding HHBrush}"
+                  MinuteHandBrush="{Binding MHBrush}"
+                  ScalesBrush="{Binding SBrush}"
+                  RenderTransform="{Binding RenderTransform}"
+                  Width="100" Height="100"
+                  Margin="0,0,22,22"
+                  HorizontalAlignment="Right" VerticalAlignment="Bottom" />
         <ListView x:Name="ContentGrid"
                   IsSwipeEnabled="False"
                   SelectionChanged="ContentGrid_SelectionChanged"

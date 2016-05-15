@@ -4,10 +4,30 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Settings.Themes"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="ColorTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding ColorTag}" Foreground="{StaticResource MajorBrush}" />
+                <Rectangle Width="50" Grid.Column="1"
+                           Stroke="{StaticResource MajorBrush}"
+                           StrokeThickness="1">
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="{Binding TColor}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+        </DataTemplate>
+        
+    </Page.Resources>
 
     <Pivot Background="{StaticResource MajorBackgroundBrush}">
         <PivotItem>
@@ -28,30 +48,13 @@
                         </PivotItem.Header>
                         <ListView x:Name="ColorList"
                                   IsItemClickEnabled="True"
+                                  ItemTemplate="{StaticResource ColorTemplate}"
                                   ItemClick="ColorList_ItemClick">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                 </Style>
                             </ListView.ItemContainerStyle>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid HorizontalAlignment="Stretch">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding ColorTag}" Foreground="{StaticResource MajorBrush}" />
-                                        <Rectangle Width="50" Grid.Column="1"
-                                                   Stroke="{StaticResource MajorBrush}"
-                                                   StrokeThickness="1">
-                                            <Rectangle.Fill>
-                                                <SolidColorBrush Color="{Binding TColor}" />
-                                            </Rectangle.Fill>
-                                        </Rectangle>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
                         </ListView>
                     </PivotItem>
                     <PivotItem>
@@ -96,6 +99,21 @@
                     </PivotItem>
                     <PivotItem>
                         <PivotItem.Header>
+                            <TextBlock x:Uid="/Settings/Appearance_ContentReader_Clock" Text="Clock" />
+                        </PivotItem.Header>
+                        <ListView x:Name="ClockColorList"
+                                  IsItemClickEnabled="True"
+                                  ItemTemplate="{StaticResource ColorTemplate}"
+                                  ItemClick="ColorList_ItemClick">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </PivotItem>
+                    <PivotItem>
+                        <PivotItem.Header>
                             <TextBlock x:Uid="/Settings/Others" Text="Others" />
                         </PivotItem.Header>
                         <StackPanel>
@@ -124,55 +142,69 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <ListView Grid.Row="1" x:Name="ContentGrid"
-                              ItemTemplateSelector="{Binding TemplateSelector}"
-                              Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
-                              FlowDirection="{Binding FlowDir}">
 
-                        <ListView.Resources>
-                            <DataTemplate x:Name="Horizontal">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="20"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="20"/>
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Background="{Binding AnchorColor}" />
-                                    <p:VerticalStack
-                                        Grid.Row="1"
-                                        Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
-                                        HorizontalAlignment="Center"
-                                        Foreground="{Binding FontColor}"
-                                        FontSize="{Binding FontSize}"
-                                        FontWeight="{Binding FontWeight}"
-                                        LineHeight="{Binding LineHeight}"
-                                        Padding="{Binding ParagraphSpacing}"
-                                    />
-                                </Grid>
-                            </DataTemplate>
-                            <DataTemplate x:Name="Vertical">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Background="{Binding AnchorColor}" />
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        Text="{Binding Text}"
-                                        TextWrapping="Wrap"
-                                        Foreground="{Binding FontColor}"
-                                        FontSize="{Binding FontSize}"
-                                        LineHeight="{Binding LineHeight}"
-                                        Padding="{Binding ParagraphSpacing}"
-                                    />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.Resources>
-                    </ListView>
-                </Grid>
-            </Grid>
+                    <Grid x:Name="DemoGrid" Grid.Row="1"
+                          p:Clip.ToBounds="True" >
+
+                        <c:QClock x:Name="RClock"
+                                  HourHandBrush="{Binding HHBrush}"
+                                  MinuteHandBrush="{Binding MHBrush}"
+                                  ScalesBrush="{Binding SBrush}"
+                                  RenderTransform="{Binding RenderTransform}"
+                                  Width="100" Height="100"
+                                  Margin="0,0,22,22"
+                                  HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+
+                        <ListView x:Name="ContentGrid"
+                                  ItemTemplateSelector="{Binding TemplateSelector}"
+                                  Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
+                                  FlowDirection="{Binding FlowDir}">
+
+                            <ListView.Resources>
+                                <DataTemplate x:Name="Horizontal">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="20"/>
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Background="{Binding AnchorColor}" />
+                                        <p:VerticalStack
+                                            Grid.Row="1"
+                                            Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
+                                            HorizontalAlignment="Center"
+                                            Foreground="{Binding FontColor}"
+                                            FontSize="{Binding FontSize}"
+                                            FontWeight="{Binding FontWeight}"
+                                            LineHeight="{Binding LineHeight}"
+                                            Padding="{Binding ParagraphSpacing}"
+                                        />
+                                    </Grid>
+                                </DataTemplate>
+                                <DataTemplate x:Name="Vertical">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="20"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Background="{Binding AnchorColor}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Text="{Binding Text}"
+                                            TextWrapping="Wrap"
+                                            Foreground="{Binding FontColor}"
+                                            FontSize="{Binding FontSize}"
+                                            LineHeight="{Binding LineHeight}"
+                                            Padding="{Binding ParagraphSpacing}"
+                                        />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.Resources>
+                        </ListView>
+                    </Grid> <!-- End ContentGrid -->
+                </Grid> <!-- End DemoGrid -->
+            </Grid> <!-- End ContextGrid -->
         </PivotItem>
     </Pivot>
 </Page>

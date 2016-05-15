@@ -518,4 +518,16 @@
   <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
     <value>没能分类，或者预设值比较好的设置</value>
   </data>
+  <data name="Appearance_ContentReader_Clock_HHColor.Text" xml:space="preserve">
+    <value>时针</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_MHColor.Text" xml:space="preserve">
+    <value>分针</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_SColor.Text" xml:space="preserve">
+    <value>尺度</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
+    <value>时钟</value>
+  </data>
 </root>

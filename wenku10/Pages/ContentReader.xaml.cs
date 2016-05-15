@@ -104,9 +104,13 @@ namespace wenku10.Pages
             NavigationHandler.OnNavigatedBack -= OnBackRequested;
             Window.Current.SizeChanged -= Current_SizeChanged;
             App.ViewControl.PropertyChanged -= VC_PropertyChanged;
+
             CurrentBook = null;
             CurrentChapter = null;
+
+            ContentView?.Dispose();
             ContentView = null;
+
             ES = null;
             ContentPane = null;
 
@@ -270,7 +274,7 @@ namespace wenku10.Pages
                 {
                     ContentFrame.Content = null;
                     Shared.LoadMessage( "RedrawingContent" );
-                    if ( ContentView != null ) ContentView.Dispose();
+                    ContentView?.Dispose();
                     ContentView = new ReaderContent( this, Anchor );
                     ContentFrame.Content = ContentView;
                     // Load Content at the very end

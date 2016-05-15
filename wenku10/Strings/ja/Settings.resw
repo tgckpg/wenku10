@@ -524,4 +524,16 @@
   <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
     <value>分類されていませんまたはデフォルトの設定やより良いです</value>
   </data>
+  <data name="Appearance_ContentReader_Clock_HHColor.Text" xml:space="preserve">
+    <value>時針</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_MHColor.Text" xml:space="preserve">
+    <value>分針</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_SColor.Text" xml:space="preserve">
+    <value>スケール</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
+    <value>時計</value>
+  </data>
 </root>

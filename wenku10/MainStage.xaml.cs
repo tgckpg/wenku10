@@ -103,6 +103,7 @@ namespace wenku10
             RootFrame.Navigated += OnNavigated;
         }
 
+
         private static readonly Type[] SpecialElement = new Type[]
         {
             typeof( TextBox ), typeof( RichEditBox ), typeof( PasswordBox )

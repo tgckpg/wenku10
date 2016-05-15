@@ -525,4 +525,16 @@
   <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
     <value>Settings that are either not important enough to categorize or good to be using default value</value>
   </data>
+  <data name="Appearance_ContentReader_Clock_HHColor.Text" xml:space="preserve">
+    <value>Hour hand</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_MHColor.Text" xml:space="preserve">
+    <value>Minute hand</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_SColor.Text" xml:space="preserve">
+    <value>Scales</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
+    <value>Clock</value>
+  </data>
 </root>

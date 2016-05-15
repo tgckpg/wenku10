@@ -152,6 +152,7 @@
     <Compile Include="wenku8\Model\Loaders\CommentLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\NewsLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\VolumeLoader.cs" />
+    <Compile Include="wenku8\Model\Pages\ContentReader\ClockContext.cs" />
     <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
     <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
     <Compile Include="wenku8\Model\Section\LocalFileList\LocalTextScope.cs" />
