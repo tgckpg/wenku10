@@ -555,4 +555,10 @@
   <data name="Help_Wiki.Text" xml:space="preserve">
     <value>wiki</value>
   </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>回報問題 / 功能建議</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>問題回報</value>
+  </data>
 </root>

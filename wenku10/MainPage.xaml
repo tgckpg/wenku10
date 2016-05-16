@@ -25,9 +25,25 @@
     </Page.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HomeHub.Margin" Value="0,0,75,0" />
+                        <Setter Target="AppTitleVertical.Visibility" Value="Visible" />
+                        <Setter Target="AppTitleHorizotal.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <c:PassiveSplitView x:Name="MainSplitPane"
                             EnablePaneSwipe="False"
-                            Background="{StaticResource MajorBackgroundBrush}" >
+                            Background="{StaticResource MajorBackgroundBrush}">
             <!-- Info Pane -->
             <c:PassiveSplitView.Pane>
                 <Grid>
@@ -151,11 +167,10 @@
 
                     <c:ParallaxHub x:Name="HomeHub">
                         <c:ParallaxHub.ScrollerRibbon>
-                            <TextBlock x:Uid="/AppResources/ApplicationTitle"
-                                       FontSize="30"
-                                       Margin="0,15,0,0"
-                                       Grid.Column="0" Grid.ColumnSpan="40"
-                                       Foreground="{StaticResource Shades40}" Text="wenku8" />
+                            <Rectangle x:Name="HorzRibbon" Stroke="{StaticResource MajorBrush}"
+                                       StrokeThickness="1"
+                                       Margin="-5,10"
+                                       Height="65" />
                         </c:ParallaxHub.ScrollerRibbon>
 
                         <!-- Fav Section -->
@@ -392,29 +407,61 @@
                                 </TextBlock>
                             </Border>
                         </StackPanel>
-                        <!-- Settings Button -->
-                        <Button x:Name="SettingsButton"
-                                Width="65" Height="65"
-                                Margin="10" Grid.Column="1"
-                                Background="{StaticResource MinorBrush}"
-                                Style="{StaticResource PlainButton}">
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem x:Name="DebugLog"
-                                                    Visibility="Collapsed"
-                                                    x:Uid="/Settings/Advanced_Debug_FileLogging"
-                                                    Text="Local Log" Click="ShowLog" />
-                                    <MenuFlyoutItem Text="{Binding LoginOrInfo}" Click="LoginOrInfo" />
-                                    <MenuFlyoutItem x:Uid="/AppBar/Search" Click="GotoSearch" />
-                                    <MenuFlyoutItem x:Uid="/AppBar/Settings" Text="Settings" Click="GotoSettings" />
-                                    <MenuFlyoutItem x:Uid="/AppBar/About" Text="About" Click="ShowAbout" />
-                                </MenuFlyout>
-                            </Button.Flyout>
-                            <Grid>
-                                <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeMajorBrush}" />
-                                <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
-                            </Grid>
-                        </Button>
+
+                        <Grid Grid.Column="1" Margin="10" >
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Settings Button -->
+                            <Button x:Name="SettingsButton"
+                                    Grid.Row="0" Grid.Column="1"
+                                    Width="65" Height="65"
+                                    Background="{StaticResource MinorBrush}"
+                                    Style="{StaticResource PlainButton}">
+                                <Button.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem x:Name="DebugLog"
+                                                        Visibility="Collapsed"
+                                                        x:Uid="/Settings/Advanced_Debug_FileLogging"
+                                                        Text="Local Log" Click="ShowLog" />
+                                        <MenuFlyoutItem Text="{Binding LoginOrInfo}" Click="LoginOrInfo" />
+                                        <MenuFlyoutItem x:Uid="/AppBar/Search" Click="GotoSearch" />
+                                        <MenuFlyoutItem x:Uid="/AppBar/Settings" Text="Settings" Click="GotoSettings" />
+                                        <MenuFlyoutItem x:Uid="/AppBar/About" Text="About" Click="ShowAbout" />
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                                <Grid>
+                                    <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeMajorBrush}" />
+                                    <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
+                                </Grid>
+                            </Button>
+                            <!-- Application Title -->
+                            <TextBlock x:Uid="/AppResources/ApplicationTitle"
+                                       x:Name="AppTitleHorizotal"
+                                       Visibility="Visible"
+                                       Grid.Row="0" Grid.Column="0"
+                                       Margin="10,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="40" Text="wenku8" 
+                                       Foreground="{StaticResource MinorBrush}" />
+                                       
+                            <p:VerticalStack x:Uid="/AppResources/ApplicationTitle"
+                                             x:Name="AppTitleVertical"
+                                             Visibility="Collapsed"
+                                             Grid.Row="1" Grid.Column="1"
+                                             Margin="0,10"
+                                             HorizontalAlignment="Center"
+                                             FontSize="40" Text="wenku8"
+                                             Foreground="{StaticResource MinorBrush}" />
+                        </Grid>
                     </Grid>
                     <p:StateControl x:Name="PopupPage" State="{Binding PageStatus}"
                                     MaxWidth="350">

@@ -552,4 +552,10 @@
   <data name="Help_Wiki.Text" xml:space="preserve">
     <value>wiki</value>
   </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>Bug report / Feature request</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>Bug report</value>
+  </data>
 </root>

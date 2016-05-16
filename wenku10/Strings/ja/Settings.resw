@@ -551,4 +551,10 @@
   <data name="Help_Wiki.Text" xml:space="preserve">
     <value>ウィキ</value>
   </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>バグ､機能の投稿</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>バグレポート</value>
+  </data>
 </root>

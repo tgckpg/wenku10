@@ -545,4 +545,10 @@
   <data name="Help_Wiki.Text" xml:space="preserve">
     <value>wiki</value>
   </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>报告错误 / 功能请求</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>错误报告</value>
+  </data>
 </root>

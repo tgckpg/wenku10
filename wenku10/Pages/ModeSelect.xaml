@@ -17,19 +17,20 @@
         </Grid>
         <Button Margin="10" Click="SinglePlayer"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
-                Background="{StaticResource Shades80}"
+                Background="Transparent"
                 Style="{StaticResource PlainButton}">
             <Grid x:Name="SenseGround" Height="200" Width="200">
-                <Rectangle x:Name="SenseFlash" Opacity="0">
-                    <Rectangle.Fill>
+                <Ellipse Stroke="{StaticResource Shades30}" StrokeThickness="10" />
+                <Ellipse x:Name="SenseFlash" Opacity="0">
+                    <Ellipse.Fill>
                         <SolidColorBrush x:Name="SenseFill" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
-                    </Rectangle.Fill>
-                </Rectangle>
-                <Rectangle x:Name="SenseFlush" Opacity="0">
-                    <Rectangle.Fill>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Ellipse x:Name="SenseFlush" Opacity="0">
+                    <Ellipse.Fill>
                         <SolidColorBrush x:Name="FlushFill" Color="White" />
-                    </Rectangle.Fill>
-                </Rectangle>
+                    </Ellipse.Fill>
+                </Ellipse>
                 <TextBlock x:Name="OSenseText" Text="Start" TextWrapping="Wrap"
                            FontSize="30"
                            VerticalAlignment="Center" HorizontalAlignment="Center">

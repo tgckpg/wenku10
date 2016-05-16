@@ -22,7 +22,7 @@
     <Grid x:Name="MasterGrid"
           Tapped="MasterGrid_Tapped"
           FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" 
-          Background="{Binding BackgroundBrush}" >
+          Background="{Binding BackgroundBrush}">
         <c:QClock x:Name="RClock"
                   HourHandBrush="{Binding HHBrush}"
                   MinuteHandBrush="{Binding MHBrush}"

@@ -102,7 +102,7 @@
                 <!-- Settings -->
                 <Button Style="{StaticResource PlainButton}"
                         Click="GotoSettings"
-                        Width="40" Height="40" Margin="0,0,10,0" >
+                        Width="40" Height="40" Margin="0" >
                     <i:IconSettings AutoScale="True"
                                     Foreground="{StaticResource RelativeShadesBrush}" />
                 </Button>
