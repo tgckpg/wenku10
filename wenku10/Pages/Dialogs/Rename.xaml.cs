@@ -46,7 +46,11 @@ namespace wenku10.Pages.Dialogs
             TitleBlock.Text = stm.Text( "ContextMenu_Rename" );
         }
 
-        public Rename( INamable Target, string Title = null, bool ReadOnly = false )
+        // For Activator.CreateInstance
+        public Rename( INamable Target ) : this( Target, null, false ) { }
+        public Rename( INamable Target, string Title ) : this( Target, Title, false ) { }
+
+        public Rename( INamable Target, string Title, bool ReadOnly )
             : this()
         {
             NamingTarget = Target;

@@ -20,8 +20,13 @@
             </Pivot.HeaderTemplate>
             <Pivot.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel x:Name="DataSection" Margin="10">
-                        <ListView ItemsSource="{Binding Data}"
+                    <Grid x:Name="DataSection" Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ListView Grid.Row="0"
+                                  ItemsSource="{Binding Data}"
                                   ItemClick="ListView_ItemClick"
                                   IsItemClickEnabled="True"
                                   IsEnabled="{Binding IsEnabled}">
@@ -34,13 +39,16 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </StackPanel>
+                        <TextBlock Grid.Row="1" Text="{Binding Footnote}" />
+                    </Grid>
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>
         <p:StateControl x:Name="PopupPage">
             <Border Background="{StaticResource Shades90}">
-                <Frame x:Name="PopupFrame" MaxWidth="350" Content="{Binding FrameContent}"/>
+                <Frame x:Name="PopupFrame"
+                       Width="500"
+                       MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" Content="{Binding FrameContent}"/>
             </Border>
         </p:StateControl>
         <c:TipMask x:Name="LoadingMask" x:Uid="/LoadingMessage/ProgressIndicator_AppInit" />

@@ -536,4 +536,19 @@
   <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
     <value>時計</value>
   </data>
+  <data name="Desc_Help_Slack.Text" xml:space="preserve">
+    <value>Slack ディスカッション・グループに参加</value>
+  </data>
+  <data name="Desc_Help_Wiki.Text" xml:space="preserve">
+    <value>Wikiを訪問</value>
+  </data>
+  <data name="Help.Text" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="Help_Slack.Text" xml:space="preserve">
+    <value>Slack</value>
+  </data>
+  <data name="Help_Wiki.Text" xml:space="preserve">
+    <value>ウィキ</value>
+  </data>
 </root>

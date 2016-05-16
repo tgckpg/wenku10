@@ -530,4 +530,19 @@
   <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
     <value>时钟</value>
   </data>
+  <data name="Desc_Help_Slack.Text" xml:space="preserve">
+    <value>加入 slack 讨论组</value>
+  </data>
+  <data name="Desc_Help_Wiki.Text" xml:space="preserve">
+    <value>wenku10 的 wiki</value>
+  </data>
+  <data name="Help.Text" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="Help_Slack.Text" xml:space="preserve">
+    <value>Slack</value>
+  </data>
+  <data name="Help_Wiki.Text" xml:space="preserve">
+    <value>wiki</value>
+  </data>
 </root>

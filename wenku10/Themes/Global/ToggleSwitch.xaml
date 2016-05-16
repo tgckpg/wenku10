@@ -37,7 +37,7 @@
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="SwitchKnobOff">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MajorBrush}"/>
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MinorBrush}"/>
                                         </ObjectAnimationUsingKeyFrames>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="SwitchKnobBounds">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MajorBackgroundBrush}"/>
@@ -193,7 +193,11 @@
                         <ContentPresenter x:Name="OffContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding OffContentTemplate}" Content="{TemplateBinding OffContent}" Grid.Column="2" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="False" Opacity="0" Grid.Row="1" Grid.RowSpan="3" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         <ContentPresenter x:Name="OnContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding OnContentTemplate}" Content="{TemplateBinding OnContent}" Grid.Column="2" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="False" Opacity="0" Grid.Row="1" Grid.RowSpan="3" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         <Grid Grid.ColumnSpan="3" Control.IsTemplateFocusTarget="True" Margin="0,5" Grid.Row="1" Grid.RowSpan="3"/>
-                        <Rectangle x:Name="OuterBorder" Height="20" RadiusY="10" Grid.Row="2" RadiusX="10" Stroke="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" StrokeThickness="2" Width="44"/>
+                        <Rectangle x:Name="OuterBorder"
+                                   Width="44" Height="20"
+                                   RadiusY="10" RadiusX="10"
+                                   Grid.Row="2"
+                                   Stroke="{StaticResource SystemControlForegroundBaseMediumHighBrush}" StrokeThickness="2" />
                         <Rectangle x:Name="SwitchKnobBounds" Fill="{StaticResource MajorBackgroundBrush}" Height="20" Opacity="0" RadiusY="10" Grid.Row="2" RadiusX="10" Stroke="{ThemeResource SystemControlHighlightAltBaseHighBrush}" StrokeThickness="{ThemeResource ToggleSwitchOnStrokeThickness}" Width="44"/>
                         <Grid x:Name="SwitchKnob" HorizontalAlignment="Left" Height="20" Grid.Row="2" Width="20">
                             <Grid.RenderTransform>

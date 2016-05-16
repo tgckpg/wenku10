@@ -202,7 +202,7 @@ namespace wenku10.Pages.Settings.Themes
             SolidColorBrush C = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_FONTCOLOR );
             ExpContent.All( ( x ) => { x.FontColor = C; return true; } );
 
-            DemoGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
+            ContextGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
         }
 
 

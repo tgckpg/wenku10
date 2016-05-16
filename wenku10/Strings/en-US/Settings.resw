@@ -198,16 +198,16 @@
     <value>Content Sample</value>
   </data>
   <data name="Appearance_ContentReader_Exp1.Text" xml:space="preserve">
-    <value>因為那一年裡，我以謎樣的天才美少女作家身份紅遍全日本，備受矚目。</value>
+    <value>The rabbit-hole went straight on like a tunnel for some way and then dipped suddenly down, so suddenly that Alice had not a moment to think about stopping herself before she found herself falling down what seemed to be a very deep well.</value>
   </data>
   <data name="Appearance_ContentReader_Exp2.Text" xml:space="preserve">
-    <value>事情是發生在我國三那年的春天。</value>
+    <value>Either the well was very deep, or she fell very slowly, for she had plenty of time, as she went down, to look about her. First, she tried to make out what she was coming to, but it was too dark to see anything; then she looked at the sides of the well and noticed that they were filled with cupboards and book-shelves; here and there she saw maps and pictures hung upon pegs. She took down a jar from one of the shelves as she passed. It was labeled "ORANGE MARMALADE," but, to her great disappointment, it was empty; she did not like to drop the jar, so managed to put it into one of the cupboards as she fell past it.</value>
   </data>
   <data name="Appearance_ContentReader_Exp3.Text" xml:space="preserve">
-    <value>那年我十四歲，但馬上就要迎接十五風了，是個非常平凡的國中生。有朋友，也有喜歡的女生，日子過得很有趣。像是吃錯了藥一樣，我拿生平寫的第一本小說投稿參加文藝雜誌的新人獎比賽，沒想到竟然以最年輕的小說家身份獲得大獎。</value>
+    <value>Down, down, down! Would the fall never come to an end? There was nothing else to do, so Alice soon began talking to herself. "Dinah'll miss me very much to-night, I should think!" (Dinah was the cat.) "I hope they'll remember her saucer of milk at tea-time. Dinah, my dear, I wish you were down here with me!" Alice felt that she was dozing off, when suddenly, thump! thump! down she came upon a heap of sticks and dry leaves, and the fall was over.</value>
   </data>
   <data name="Appearance_ContentReader_Exp4.Text" xml:space="preserve">
-    <value>故事內容是位女孩以第一人稱講述故事，加上我又用了井上美羽的女孩姓名為筆名，結果雜誌社就以為——</value>
+    <value>Alice was not a bit hurt, and she jumped up in a moment. She looked up, but it was all dark overhead; before her was another long passage and the White Rabbit was still in sight, hurrying down it. There was not a moment to be lost. Away went Alice like the wind and was just in time to hear it say, as it turned a corner, "Oh, my ears and whiskers, how late it's getting!" She was close behind it when she turned the corner, but the Rabbit was no longer to be seen.</value>
   </data>
   <data name="Appearance_ContentReader_FontColor.Text" xml:space="preserve">
     <value>Font color</value>
@@ -536,5 +536,20 @@
   </data>
   <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
     <value>Clock</value>
+  </data>
+  <data name="Desc_Help_Slack.Text" xml:space="preserve">
+    <value>Join the slack discussion group</value>
+  </data>
+  <data name="Desc_Help_Wiki.Text" xml:space="preserve">
+    <value>Visit the app wiki</value>
+  </data>
+  <data name="Help.Text" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="Help_Slack.Text" xml:space="preserve">
+    <value>Slack</value>
+  </data>
+  <data name="Help_Wiki.Text" xml:space="preserve">
+    <value>wiki</value>
   </data>
 </root>
