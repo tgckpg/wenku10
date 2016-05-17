@@ -33,7 +33,7 @@
                         <AdaptiveTrigger MinWindowWidth="800" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="HomeHub.Margin" Value="0,0,75,0" />
+                        <Setter Target="HomeHub.Margin" Value="0,0,65,0" />
                         <Setter Target="AppTitleVertical.Visibility" Value="Visible" />
                         <Setter Target="AppTitleHorizotal.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
@@ -159,7 +159,7 @@
 
                     <Canvas x:Name="StarFields" />
                     <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.2" />
-                    
+
                     <!-- Loading Background Cover -->
                     <p:StateControl x:Name="BgCover">
                         <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.6" />
@@ -167,57 +167,63 @@
 
                     <c:ParallaxHub x:Name="HomeHub">
                         <c:ParallaxHub.ScrollerRibbon>
-                            <Rectangle x:Name="HorzRibbon" Stroke="{StaticResource MajorBrush}"
+                            <Rectangle x:Name="HorzRibbon" Stroke="{StaticResource MinorBrush}"
                                        StrokeThickness="1"
-                                       Margin="-5,10"
-                                       Height="65" />
+                                       Margin="-50,10,-50,25"
+                                       Height="40" />
                         </c:ParallaxHub.ScrollerRibbon>
 
                         <!-- Fav Section -->
-                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}" >
+                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}">
                             <HubSection.Resources>
                                 <n:DataStateConverter x:Key="DataStateConverter" />
                                 <n:BoolStateConverter x:Key="LoadingStateConverter" />
                             </HubSection.Resources>
                             <HubSection.Header>
-                                <StackPanel>
-                                    <Grid Margin="5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox Margin="5" Grid.Column="0" PlaceholderText="Search BookShelf"
-                                                 Width="140"
-                                                 Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
-                                        <ComboBox Margin="5" Grid.Column="1" x:Uid="/AppResources/Order"
-                                                  SelectionChanged="OrderFavItems"
-                                                  PlaceholderText="Order">
-                                            <ComboBox.Items>
-                                                <ComboBoxItem>
-                                                    <TextBlock x:Uid="/AppResources/Order_by_Date_Desc" Text="OrderByDateDesc" />
-                                                </ComboBoxItem>
-                                                <ComboBoxItem>
-                                                    <TextBlock x:Uid="/AppResources/Order_by_Date_Asc" Text="OrderByDateAsc" />
-                                                </ComboBoxItem>
-                                            </ComboBox.Items>
-                                        </ComboBox>
-                                        <c:OneDriveButton x:Name="OneDriveResync"
-                                                          Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                                                          Grid.Column="2" />
-                                    </Grid>
-                                </StackPanel>
+                                <Grid Background="{StaticResource MinorBrush}"
+                                      Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Margin="5,0" Grid.Column="0" PlaceholderText="Search BookShelf"
+                                             VerticalAlignment="Center"
+                                             Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
+                                    <ComboBox x:Uid="/AppResources/Order"
+                                              Margin="5,0" Grid.Column="1"
+                                              VerticalAlignment="Center"
+                                              SelectionChanged="OrderFavItems"
+                                              PlaceholderText="Order">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem>
+                                                <TextBlock x:Uid="/AppResources/Order_by_Date_Desc" Text="OrderByDateDesc" />
+                                            </ComboBoxItem>
+                                            <ComboBoxItem>
+                                                <TextBlock x:Uid="/AppResources/Order_by_Date_Asc" Text="OrderByDateAsc" />
+                                            </ComboBoxItem>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                    <c:OneDriveButton x:Name="OneDriveResync"
+                                                      VerticalAlignment="Center"
+                                                      Visibility="Collapsed"
+                                                      Foreground="{StaticResource RelativeMajorBrush}"
+                                                      Margin="5,-3,2,-3"
+                                                      Grid.Column="2" />
+                                </Grid>
                             </HubSection.Header>
                             <DataTemplate>
                                 <p:StateControl State="{Binding Data, Converter={StaticResource DataStateConverter}}">
                                     <ListView ItemsSource="{Binding SearchSet}"
                                               ItemClick="BookClicked"
                                               IsItemClickEnabled="True"
+                                              HorizontalAlignment="Right"
                                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                               ItemContainerStyle="{StaticResource BareListItem}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Border>
+                                                <Border MaxWidth="350"
+                                                        Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                                                     <Border.Resources>
                                                         <MenuFlyout x:Key="FavContextMenu">
                                                             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_PinToStart"
@@ -233,10 +239,9 @@
                                                         </MenuFlyout>
                                                     </Border.Resources>
 
-                                                    <Grid Margin="5" Width="350"
+                                                    <Grid Margin="20,5,5,5"
                                                           RightTapped="ShowFavContext"
-                                                          FlyoutBase.AttachedFlyout="{StaticResource FavContextMenu}"
-                                                          MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                                                          FlyoutBase.AttachedFlyout="{StaticResource FavContextMenu}" >
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*" />
                                                             <RowDefinition Height="Auto" />
@@ -258,7 +263,7 @@
                                                                            VerticalAlignment="Top" HorizontalAlignment="Center" />
                                                         </StackPanel>
 
-                                                        <Image Stretch="Uniform" Source="{Binding Banner}" />
+                                                        <Image Stretch="UniformToFill" Source="{Binding Banner}" />
 
                                                         <Rectangle Fill="{StaticResource MajorBrush}" Opacity="0.3"/>
                                                         <Rectangle Fill="{StaticResource Shades90}"/>
@@ -395,20 +400,13 @@
                         </HubSection>
 
                     </c:ParallaxHub>
-                    <Grid VerticalAlignment="Top" HorizontalAlignment="Right" >
+                    <Grid VerticalAlignment="Top">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel x:Name="AdvDMStat" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10">
-                            <Border Background="Black" >
-                                <TextBlock Foreground="White" Margin="5">
-                                    AdvDM.RTrans[ <Run Text="{Binding ShortStat}" /> ]
-                                </TextBlock>
-                            </Border>
-                        </StackPanel>
 
-                        <Grid Grid.Column="1" Margin="10" >
+                        <Grid Grid.Column="1" Margin="10" HorizontalAlignment="Right">
 
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -449,24 +447,39 @@
                                        Visibility="Visible"
                                        Grid.Row="0" Grid.Column="0"
                                        Margin="10,0"
-                                       VerticalAlignment="Center"
-                                       FontSize="40" Text="wenku8" 
+                                       VerticalAlignment="Top"
+                                       FontSize="30" Text="wenku8" 
                                        Foreground="{StaticResource MinorBrush}" />
-                                       
+
                             <p:VerticalStack x:Uid="/AppResources/ApplicationTitle"
                                              x:Name="AppTitleVertical"
                                              Visibility="Collapsed"
                                              Grid.Row="1" Grid.Column="1"
-                                             Margin="0,10"
-                                             HorizontalAlignment="Center"
-                                             FontSize="40" Text="wenku8"
+                                             Margin="10,5"
+                                             HorizontalAlignment="Right"
+                                             FontSize="30" Text="wenku8"
                                              Foreground="{StaticResource MinorBrush}" />
                         </Grid>
+
+                        <StackPanel x:Name="AdvDMStat"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Left"
+                                    Visibility="Collapsed" Margin="10,15">
+                            <Border Background="Black" >
+                                <TextBlock Foreground="White" Margin="5">
+                                    AdvDM.RTrans[ <Run Text="{Binding ShortStat}" /> ]
+                                </TextBlock>
+                            </Border>
+                        </StackPanel>
                     </Grid>
+
+                    <!-- Popup Login / Account Info -->
                     <p:StateControl x:Name="PopupPage" State="{Binding PageStatus}"
                                     MaxWidth="350">
                         <Frame Content="{Binding FrameContent}"/>
                     </p:StateControl>
+
                     <Grid Visibility="Collapsed">
                         <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
                         <ProgressRing IsActive="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>

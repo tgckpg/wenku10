@@ -26,16 +26,10 @@
                 </Rectangle>
             </Grid>
         </DataTemplate>
-        
     </Page.Resources>
 
     <Pivot Background="{StaticResource MajorBackgroundBrush}">
         <PivotItem>
-            <PivotItem.Header>
-                <TextBlock x:Uid="/Settings/Appearance_ContentReader_ContentExp"
-                           Foreground="{StaticResource MajorBrush}"
-                           Text="Content Sample"/>
-            </PivotItem.Header>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

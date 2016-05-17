@@ -32,7 +32,7 @@
     <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#66FFFFFF" />
     <SolidColorBrush x:Key="DisabledBorderBrush" Color="#66FFFFFF" />
     <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#66000000" />
-    
+
     <QuadraticEase EasingMode="EaseOut" x:Key="EaseOutQuadratic" />
     <CubicEase EasingMode="EaseOut" x:Key="EaseOutCubic" />
     <QuarticEase EasingMode="EaseOut" x:Key="EaseOutQuartic" />

@@ -186,6 +186,12 @@ namespace wenku10
             FS = X.Instance<IFavSection>( XProto.FavSection );
 
             MemberSections();
+
+            if( global::wenku8.Config.Properties.ENABLE_ONEDRIVE )
+            {
+                OneDriveResync.Visibility = Visibility.Visible;
+            }
+
             OneDriveResync.SetSync( ReSync );
 
             FS.PropertyChanged += FS_PropertyChanged;

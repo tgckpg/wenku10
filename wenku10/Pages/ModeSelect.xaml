@@ -21,15 +21,15 @@
                 Style="{StaticResource PlainButton}">
             <Grid x:Name="SenseGround" Height="200" Width="200">
                 <Ellipse Stroke="{StaticResource Shades30}" StrokeThickness="10" />
-                <Ellipse x:Name="SenseFlash" Opacity="0">
-                    <Ellipse.Fill>
+                <Ellipse x:Name="SenseFlash" Opacity="0" StrokeThickness="10">
+                    <Ellipse.Stroke>
                         <SolidColorBrush x:Name="SenseFill" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
-                    </Ellipse.Fill>
+                    </Ellipse.Stroke>
                 </Ellipse>
-                <Ellipse x:Name="SenseFlush" Opacity="0">
-                    <Ellipse.Fill>
+                <Ellipse x:Name="SenseFlush" Opacity="0" StrokeThickness="10">
+                    <Ellipse.Stroke>
                         <SolidColorBrush x:Name="FlushFill" Color="White" />
-                    </Ellipse.Fill>
+                    </Ellipse.Stroke>
                 </Ellipse>
                 <TextBlock x:Name="OSenseText" Text="Start" TextWrapping="Wrap"
                            FontSize="30"

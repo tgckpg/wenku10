@@ -183,7 +183,7 @@
                                                Foreground="#DD1450" />
                                 </Grid>
                             </p:StateControl>
-                            
+
                             <!-- Spider Icon -->
                             <p:StateControl State="{Binding IsSpider, Converter={StaticResource BoolStateConverter}}" p:Clip.ToBounds="True"
                                             VerticalAlignment="Top" HorizontalAlignment="Right"

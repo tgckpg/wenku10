@@ -69,7 +69,7 @@
                         </ItemsPanelTemplate>
                     </GridView.ItemsPanel>
                 </GridView>
-                
+
                 <TextBlock>
                     <Run x:Uid="/Settings/Appearance_Shades_Guide" Text="Shades" Foreground="{StaticResource MajorBrush}"/>
                     <Run x:Uid="/Settings/Desc_Appearance_Shades_Guide" Text="Click theme colors above to show the shades" Foreground="{StaticResource SubtleBrush}"/>
