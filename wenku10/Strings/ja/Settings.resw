@@ -501,7 +501,7 @@
     <value>English</value>
   </data>
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
-    <value>Double tap main menu</value>
+    <value>ダブルクリックすると、メインメニューを呼ぶ</value>
   </data>
   <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
     <value>CMDで次のコマンドを実行してください：</value>

@@ -494,7 +494,7 @@
     <value>English</value>
   </data>
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
-    <value>點兩下主選單</value>
+    <value>双击调用主菜单</value>
   </data>
   <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
     <value>Qǐng zài cmd zhōng yùnxíng yǐxià zhǐlìng:

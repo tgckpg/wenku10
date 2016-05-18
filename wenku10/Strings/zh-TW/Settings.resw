@@ -505,7 +505,7 @@
     <value>English</value>
   </data>
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
-    <value>ダブルクリックメインメニュー</value>
+    <value>點兩下呼叫主選單</value>
   </data>
   <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
     <value>請在 cmd 中執行以下指令：</value>

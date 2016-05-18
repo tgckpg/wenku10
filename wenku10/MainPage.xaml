@@ -180,13 +180,20 @@
                                 <n:BoolStateConverter x:Key="LoadingStateConverter" />
                             </HubSection.Resources>
                             <HubSection.Header>
-                                <Grid Background="{StaticResource MinorBrush}"
-                                      Padding="10">
+                                <Grid Padding="10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
+
+                                    <Rectangle Margin="-10" Grid.ColumnSpan="3" Fill="{StaticResource MinorBrush}" />
+                                    <Polygon Grid.Column="3"
+                                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                             Fill="{StaticResource MinorBrush}"
+                                             Points="0,0 10,5, 0,10" />
+
                                     <TextBox Margin="5,0" Grid.Column="0" PlaceholderText="Search BookShelf"
                                              VerticalAlignment="Center"
                                              Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
@@ -326,7 +333,7 @@
                             </DataTemplate>
                         </HubSection>
 
-                        <!-- Staff picks XXX: Perhaps deprecate this section -->
+                        <!-- Staff picks TODO: Need to redesigen this section -->
                         <HubSection x:Name="RectileSection" Visibility="Collapsed">
                             <DataTemplate>
                                 <c:VariableGridView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="BookClicked">
