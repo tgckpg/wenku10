@@ -552,7 +552,7 @@ namespace wenku10
             Floaty.BindTimer( AnimationTimer.Instance );
 
             Floaty.TextSpeed = AnimationTimer.RandDouble( -2, 2 );
-            Galaxy.AssignRoam( AnimationTimer.RandDouble( -100, 100 ), AnimationTimer.RandDouble( -100, 100 ), Floaty.Roam );
+            Galaxy.AssignRoam( AnimationTimer.RandDouble( -100, 100 ), AnimationTimer.RandDouble( -100, 100 ), Floaty );
         }
     }
 

@@ -175,6 +175,7 @@
 
                         <!-- Fav Section -->
                         <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}"
+                                    Width="400"
                                     MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
                             <HubSection.Resources>
                                 <n:DataStateConverter x:Key="DataStateConverter" />
@@ -230,7 +231,7 @@
                                               ItemContainerStyle="{StaticResource BareListItem}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Border MaxWidth="350" >
+                                                <Border>
                                                     <Border.Resources>
                                                         <MenuFlyout x:Key="FavContextMenu">
                                                             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_PinToStart"
@@ -336,14 +337,16 @@
                         <!-- Staff picks TODO: Need to redesigen this section -->
                         <HubSection x:Name="RectileSection" Visibility="Collapsed">
                             <DataTemplate>
-                                <c:StarCanvas ItemsSource="{Binding Data}">
+                                <c:StarCanvas
+                                    ItemsSource="{Binding Data}"
+                                    MaxItemsAtOnce="{Binding MaxDisplayItems}">
                                     <c:StarCanvas.ItemTemplate>
                                         <DataTemplate>
                                             <c:FloatyButton
                                                 Title="{Binding Name}"
                                                 ImageSource="{Binding Banner}"
                                                 TextRotation="{Binding Rotation}"
-                                                OuterRingBrush="{StaticResource MinorBrush}"
+                                                OuterRingBrush="{StaticResource MajorBrush}"
                                                 TextBrush="{StaticResource RelativeMajorBackgroundBrush}"
                                                 Loaded="FloatyButton_Loaded"
                                             />
