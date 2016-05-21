@@ -236,7 +236,20 @@ namespace wenku10
 
         private void BookClicked( object sender, ItemClickEventArgs e )
         {
-            BookInfoItem BookItem = e.ClickedItem as BookInfoItem;
+            BookClicked( e.ClickedItem as BookInfoItem );
+        }
+
+        private async void BookClicked( object sender, StarCanvas.ItemClickedEventArgs e )
+        {
+            await Task.Delay( 500 );
+            await Dispatcher.RunIdleAsync( ( x ) =>
+            {
+                BookClicked( e.ClickedItem as BookInfoItem );
+            } );
+        }
+
+        private void BookClicked( BookInfoItem BookItem )
+        {
             Logger.Log( ID, string.Format( "Clicked items is {0}, mode {1}", BookItem.Payload, BookItem.Mode ) );
 
             BookItem b = X.Instance<BookItem>( XProto.BookItemEx, BookItem.Payload );

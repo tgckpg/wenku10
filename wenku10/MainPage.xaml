@@ -339,6 +339,7 @@
                             <DataTemplate>
                                 <c:StarCanvas
                                     ItemsSource="{Binding Data}"
+                                    ItemClick="BookClicked"
                                     MaxItemsAtOnce="{Binding MaxDisplayItems}">
                                     <c:StarCanvas.ItemTemplate>
                                         <DataTemplate>

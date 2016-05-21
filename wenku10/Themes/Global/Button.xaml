@@ -58,7 +58,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <ContentPresenter Background="{StaticResource RelativeMajorBrush}"
+                        <ContentPresenter Background="{StaticResource MinorBackgroundBrush}"
                                           Foreground="{StaticResource MinorBrush}"
                                           x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
