@@ -16,9 +16,10 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Settings.Layout
 {
     using AdvDM;
+    using Effects;
     using Model.Book;
+    using ModuleThumbnail;
     using Resources;
-    using Settings.Layout.ModuleThumbnail;
     using SrcView = wenku10.Pages.BookInfoView;
 
     class BookInfoView
@@ -350,7 +351,7 @@ namespace wenku8.Settings.Layout
                         IEnumerable<IStorageFile> sfs = await isf.GetFilesAsync();
 
                         sfs = sfs.TakeWhile( x => Acceptables.Contains( x.FileType.ToUpper() ) );
-                        int l = System.Utils.Rand.Next( sfs.Count() );
+                        int l = AnimationTimer.RandInt( sfs.Count() );
 
                         int i = 0;
 
@@ -392,7 +393,7 @@ namespace wenku8.Settings.Layout
 
                             if ( 0 < ImagePaths.Count )
                             {
-                                string Url = ImagePaths[ System.Utils.Rand.Next( ImagePaths.Count() ) ];
+                                string Url = ImagePaths[ AnimationTimer.RandInt( ImagePaths.Count() ) ];
                                 TryUseImage( Url );
                             }
                             else

@@ -545,6 +545,15 @@ namespace wenku10
             }
 
         }
+
+        private void FloatyButton_Loaded( object sender, RoutedEventArgs e )
+        {
+            FloatyButton Floaty = ( ( FloatyButton ) sender );
+            Floaty.BindTimer( AnimationTimer.Instance );
+
+            Floaty.TextSpeed = AnimationTimer.RandDouble( -2, 2 );
+            Galaxy.AssignRoam( AnimationTimer.RandDouble( -100, 100 ), AnimationTimer.RandDouble( -100, 100 ), Floaty.Roam );
+        }
     }
 
 }

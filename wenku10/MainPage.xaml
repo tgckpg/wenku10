@@ -174,7 +174,8 @@
                         </c:ParallaxHub.ScrollerRibbon>
 
                         <!-- Fav Section -->
-                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}">
+                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}"
+                                    MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
                             <HubSection.Resources>
                                 <n:DataStateConverter x:Key="DataStateConverter" />
                                 <n:BoolStateConverter x:Key="LoadingStateConverter" />
@@ -188,11 +189,11 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Rectangle Margin="-10" Grid.ColumnSpan="3" Fill="{StaticResource MinorBrush}" />
-                                    <Polygon Grid.Column="3"
+                                    <Rectangle Margin="-10" Grid.ColumnSpan="3" Fill="{StaticResource Shades60}" />
+                                    <!--Polygon Grid.Column="3"
                                              VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                              Fill="{StaticResource MinorBrush}"
-                                             Points="0,0 10,5, 0,10" />
+                                             Points="0,0 10,5, 0,10" /-->
 
                                     <TextBox Margin="5,0" Grid.Column="0" PlaceholderText="Search BookShelf"
                                              VerticalAlignment="Center"
@@ -229,8 +230,7 @@
                                               ItemContainerStyle="{StaticResource BareListItem}">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Border MaxWidth="350"
-                                                        Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                                                <Border MaxWidth="350" >
                                                     <Border.Resources>
                                                         <MenuFlyout x:Key="FavContextMenu">
                                                             <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_PinToStart"
@@ -336,23 +336,20 @@
                         <!-- Staff picks TODO: Need to redesigen this section -->
                         <HubSection x:Name="RectileSection" Visibility="Collapsed">
                             <DataTemplate>
-                                <c:VariableGridView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="BookClicked">
-                                    <c:VariableGridView.ItemTemplate>
+                                <c:StarCanvas ItemsSource="{Binding Data}">
+                                    <c:StarCanvas.ItemTemplate>
                                         <DataTemplate>
-                                            <c:Rectile
+                                            <c:FloatyButton
                                                 Title="{Binding Name}"
-                                                Description="{Binding Desc2}"
-                                                Image="{Binding Banner}"
-                                                IsLoaded="{Binding IsLoaded}" Size="{Binding Size}"
+                                                ImageSource="{Binding Banner}"
+                                                TextRotation="{Binding Rotation}"
+                                                OuterRingBrush="{StaticResource MinorBrush}"
+                                                TextBrush="{StaticResource RelativeMajorBackgroundBrush}"
+                                                Loaded="FloatyButton_Loaded"
                                             />
                                         </DataTemplate>
-                                    </c:VariableGridView.ItemTemplate>
-                                    <c:VariableGridView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <VariableSizedWrapGrid ItemWidth="135" ItemHeight="135" MaximumRowsOrColumns="2" Orientation="Vertical"/>
-                                        </ItemsPanelTemplate>
-                                    </c:VariableGridView.ItemsPanel>
-                                </c:VariableGridView>
+                                    </c:StarCanvas.ItemTemplate>
+                                </c:StarCanvas>
                             </DataTemplate>
                         </HubSection>
 
