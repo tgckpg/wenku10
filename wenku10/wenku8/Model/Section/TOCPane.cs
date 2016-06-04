@@ -66,7 +66,7 @@ namespace wenku8.Model.Section
             SearchSet = Items;
         }
 
-        public TOCItem Select( Chapter C )
+        public TOCItem GetItem( Chapter C )
         {
             foreach( TOCItem Item in TOCItems )
             {

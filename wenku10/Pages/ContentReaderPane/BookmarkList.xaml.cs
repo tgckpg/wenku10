@@ -14,13 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
-
 namespace wenku10.Pages.ContentReaderPane
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     sealed partial class BookmarkList : Page
     {
         private ContentReader Reader;
@@ -69,7 +64,7 @@ namespace wenku10.Pages.ContentReaderPane
             }
         }
 
-        private void RemoveBookmark( object sender, TappedRoutedEventArgs e )
+        private void RemoveBookmark( object sender, RoutedEventArgs e )
         {
             Reader.ContentView.Reader.RemoveAnchor( FlyoutTargetItem );
         }

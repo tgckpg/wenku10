@@ -22,8 +22,8 @@ using Net.Astropenguin.Logging;
 
 using wenku8.Config;
 using wenku8.Model.Text;
+using wenku8.Model.Pages.ContentReader;
 using wenku8.Settings.Theme;
-using wenku8.System.Messages;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -67,35 +67,47 @@ namespace wenku10.Pages.Settings.Themes
                         UpdateExampleFc();
                     }
                 }
+
                 , new ColorItem(
                     stx.Text( "Appearance_ContentReader_FontColor" )
                     , Properties.APPEARANCE_CONTENTREADER_FONTCOLOR
-                )
-                {
-                    BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = c; }
-                }
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = c; } }
+
                 , new ColorItem(
                     stx.Text( "Appearance_ContentReader_TapBrushColor" )
                     , Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR
-                )
-                {
-                    BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = c; }
-                }
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = c; } }
+
                 , new ColorItem(
                     stx.Text( "Appearance_ContentReader_NavBg" )
                     , Properties.APPEARANCE_CONTENTREADER_NAVBG
-                )
-                {
-                    BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_NAVBG = c; }
-                }
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_NAVBG = c; } }
+
                 , new ColorItem(
                     stx.Text( "Appearance_ContentReader_AssistHelper" )
                     , Properties.APPEARANCE_CONTENTREADER_ASSISTBG
-                )
-                {
-                    BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ASSISTBG = c; }
-                }
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ASSISTBG = c; } }
             };
+
+            ClockColorList.ItemsSource = new ColorItem[]
+            {
+                new ColorItem(
+                    stx.Text( "Appearance_ContentReader_Clock_HHColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR = c; } }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_Clock_MHColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR = c; } }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_Clock_SColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR = c; } }
+            };
+
+            RClock.DataContext = new ClockContext();
 
             FontSizeSlider.Value = Properties.APPEARANCE_CONTENTREADER_FONTSIZE;
             LineSpacingSlider.Value = Properties.APPEARANCE_CONTENTREADER_LINEHEIGHT;
@@ -190,7 +202,7 @@ namespace wenku10.Pages.Settings.Themes
             SolidColorBrush C = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_FONTCOLOR );
             ExpContent.All( ( x ) => { x.FontColor = C; return true; } );
 
-            ContentGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
+            ContextGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
         }
 
 

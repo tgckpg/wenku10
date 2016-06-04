@@ -10,11 +10,13 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
@@ -227,5 +229,22 @@ namespace wenku10.Pages.Settings.Advanced
             }
         }
 
+        private class CommandCopy : INamable
+        {
+            public string Name
+            {
+                get; set;
+            }
+        }
+
+        private async void ShowCommand( Hyperlink sender, HyperlinkClickEventArgs args )
+        {
+            Logger.Log( ID, AppSettings.FamilyName, LogType.DEBUG );
+            StringResources stx = new StringResources( "Settings" );
+            await Popups.ShowDialog(
+                new Dialogs.Rename(
+                    new CommandCopy() { Name = "CheckNetIsolation LoopbackExempt -a -n=" + AppSettings.FamilyName }
+                    , stx.Text( "Advanced_Server_Exempt_Command" ) , true ) );
+        }
     }
 }

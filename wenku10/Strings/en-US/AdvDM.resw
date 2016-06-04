@@ -135,6 +135,9 @@
   <data name="Desc_Jobs.Text" xml:space="preserve">
     <value>Foreground jobs will be terminated upon app exit</value>
   </data>
+  <data name="Download_Location.Text" xml:space="preserve">
+    <value>Download location</value>
+  </data>
   <data name="Failed.Text" xml:space="preserve">
     <value>Failed</value>
   </data>

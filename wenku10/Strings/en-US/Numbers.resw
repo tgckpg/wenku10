@@ -117,64 +117,70 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContextMenu_AutoUpdate.Text" xml:space="preserve">
-    <value>自動ダウンロード</value>
+  <data name="e10" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_Copy.Text" xml:space="preserve">
-    <value>コピー</value>
+  <data name="e11" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_Delete.Text" xml:space="preserve">
-    <value>削除</value>
+  <data name="e12" xml:space="preserve">
+    <value>trillions</value>
   </data>
-  <data name="ContextMenu_DirectView.Text" xml:space="preserve">
-    <value>ソースを表示</value>
+  <data name="e13" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_DisAutomation.Text" xml:space="preserve">
-    <value>自動ダウンロードを無効</value>
+  <data name="e14" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_Edit.Text" xml:space="preserve">
-    <value>編集</value>
+  <data name="e15" xml:space="preserve">
+    <value>quadrillions</value>
   </data>
-  <data name="ContextMenu_ImportSpider.Text" xml:space="preserve">
-    <value>輸入クモ</value>
+  <data name="e16" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_PinToStart.Text" xml:space="preserve">
-    <value>スタートピン</value>
+  <data name="e17" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_Reanalyze.Text" xml:space="preserve">
-    <value>再分析</value>
+  <data name="e18" xml:space="preserve">
+    <value>quintillions</value>
   </data>
-  <data name="ContextMenu_Rename.Text" xml:space="preserve">
-    <value>名前を変更</value>
+  <data name="e19" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_Search_Dict.Text" xml:space="preserve">
-    <value>検索ワード</value>
+  <data name="e20" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_SpiderEdit.Text" xml:space="preserve">
-    <value>クモエディタ</value>
+  <data name="e21" xml:space="preserve">
+    <value>sextillions</value>
   </data>
-  <data name="ContextMenu_ViewHorz.Text" xml:space="preserve">
-    <value>水平方向に表示</value>
+  <data name="e22" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_WSync.Text" xml:space="preserve">
-    <value>文庫に同期</value>
+  <data name="e23" xml:space="preserve">
+    <value />
   </data>
-  <data name="ContextMenu_WUnsync.Text" xml:space="preserve">
-    <value>ローカルに移動</value>
+  <data name="e24" xml:space="preserve">
+    <value>septillions</value>
   </data>
-  <data name="CustomBackground.Text" xml:space="preserve">
-    <value>カスタムの背景</value>
+  <data name="e3" xml:space="preserve">
+    <value>thoudsands</value>
   </data>
-  <data name="OpenDirectory.Text" xml:space="preserve">
-    <value>オープンディレクトリ</value>
+  <data name="e4" xml:space="preserve">
+    <value />
   </data>
-  <data name="OpenFromUrl.Text" xml:space="preserve">
-    <value>URLからオープン</value>
+  <data name="e5" xml:space="preserve">
+    <value />
   </data>
-  <data name="PresetBackground.Text" xml:space="preserve">
-    <value>プリセットの背景</value>
+  <data name="e6" xml:space="preserve">
+    <value>millions</value>
   </data>
-  <data name="SystemBackground.Text" xml:space="preserve">
-    <value>システムの背景</value>
+  <data name="e7" xml:space="preserve">
+    <value />
+  </data>
+  <data name="e8" xml:space="preserve">
+    <value />
+  </data>
+  <data name="e9" xml:space="preserve">
+    <value>billions</value>
   </data>
 </root>

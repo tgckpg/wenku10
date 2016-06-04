@@ -501,6 +501,60 @@
     <value>English</value>
   </data>
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
-    <value>Double tap main menu</value>
+    <value>ダブルクリックすると、メインメニューを呼ぶ</value>
+  </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>CMDで次のコマンドを実行してください：</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>注：ローカルアドレスに接続するには、</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value>を使用してください</value>
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>リセット</value>
+  </data>
+  <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
+    <value>誤用していたの符号を修正</value>
+  </data>
+  <data name="Advanced_Misc.Text" xml:space="preserve">
+    <value>他の設定</value>
+  </data>
+  <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
+    <value>分類されていませんまたはデフォルトの設定やより良いです</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_HHColor.Text" xml:space="preserve">
+    <value>時針</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_MHColor.Text" xml:space="preserve">
+    <value>分針</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_SColor.Text" xml:space="preserve">
+    <value>スケール</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
+    <value>時計</value>
+  </data>
+  <data name="Desc_Help_Slack.Text" xml:space="preserve">
+    <value>Slack ディスカッション・グループに参加</value>
+  </data>
+  <data name="Desc_Help_Wiki.Text" xml:space="preserve">
+    <value>Wikiを訪問</value>
+  </data>
+  <data name="Help.Text" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
+  <data name="Help_Slack.Text" xml:space="preserve">
+    <value>Slack</value>
+  </data>
+  <data name="Help_Wiki.Text" xml:space="preserve">
+    <value>ウィキ</value>
+  </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>バグ､機能の投稿</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>バグレポート</value>
   </data>
 </root>

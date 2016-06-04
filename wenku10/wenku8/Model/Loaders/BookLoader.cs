@@ -19,6 +19,7 @@ namespace wenku8.Model.Loaders
     using Settings;
     using System;
     using System.Messages;
+    using Text;
 
     class BookLoader : IBookLoader
     {
@@ -54,7 +55,7 @@ namespace wenku8.Model.Loaders
 
             if( CurrentBook.XTest( XProto.BookItemEx ) )
             {
-                Mode = CurrentBook.XProp<string>( "Mode" );
+                Mode = CurrentBook.XField<string>( "Mode" );
             }
 
             XKey[] ReqKeys = X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, id );
@@ -120,7 +121,7 @@ namespace wenku8.Model.Loaders
 
         private void SaveIntro( DRequestCompletedEventArgs e, string id )
         {
-            Shared.Storage.WriteString( CurrentBook.IntroPath, e.ResponseString );
+            Shared.Storage.WriteString( CurrentBook.IntroPath, Manipulation.PatchSyntax( e.ResponseString ) );
             CurrentBook.Intro = "OK";
         }
 

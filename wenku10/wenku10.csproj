@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>wenku10_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>F2E3248B1096632CC0FCE29706983B1E848883CB</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>8683C9196E76D3B0C5663DDDD810606D0E5D6BF5</PackageCertificateThumbprint>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
@@ -104,12 +104,12 @@
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\Samples\BgComments.jpg" />
-    <Content Include="Assets\Samples\BgMain.jpg" />
     <Content Include="Assets\Samples\BgTOC.jpg" />
     <Content Include="Assets\Samples\BgInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
+    <None Include="wenku10_StoreKey.pfx" />
     <PRIResource Include="Strings\en-US\AppResources.resw" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +140,9 @@
     <Compile Include="Pages\ModeSelect.xaml.cs">
       <DependentUpon>ModeSelect.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\Advanced\Misc.xaml.cs">
+      <DependentUpon>Misc.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Settings\Data\EBWin.xaml.cs">
       <DependentUpon>EBWin.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,7 @@
     <Compile Include="wenku8\Model\Loaders\CommentLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\NewsLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\VolumeLoader.cs" />
+    <Compile Include="wenku8\Model\Pages\ContentReader\ClockContext.cs" />
     <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
     <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
     <Compile Include="wenku8\Model\Section\LocalFileList\LocalTextScope.cs" />
@@ -390,6 +394,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Settings\Advanced\Misc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Settings\Advanced\ServerSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -433,6 +441,14 @@
     <Page Include="Pages\Settings\Themes\ThemeColors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Global\ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Global\TextBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Global\Button.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -539,9 +555,11 @@
     <PRIResource Include="Strings\ja\Settings.resw" />
     <PRIResource Include="Strings\ja\Tips.resw" />
     <PRIResource Include="Strings\ja\WMessage.resw" />
+    <PRIResource Include="Strings\en-US\Numbers.resw" />
+    <PRIResource Include="Strings\zh-TW\Numbers.resw" />
+    <PRIResource Include="Strings\zh-CN\Numbers.resw" />
+    <PRIResource Include="Strings\ja\Numbers.resw" />
     <None Include="wenku10.pfx" />
-    <None Include="wenku10_StoreKey.pfx" />
-    <None Include="wenku10_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />

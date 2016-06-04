@@ -13,6 +13,7 @@ namespace wenku8.Model.Loaders
     using Book;
     using Book.Spider;
     using Resources;
+    using Text;
 
     class VolumeLoader
     {
@@ -31,7 +32,7 @@ namespace wenku8.Model.Loaders
         {
             Shared.LoadMessage( "LoadingVolume" );
             CurrentBook = b;
-            if ( b.IsLocal || Shared.Storage.FileExists( CurrentBook.TOCPath ) )
+            if ( b.IsLocal || ( !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
             {
                 OnComplete( b );
             }
@@ -48,7 +49,7 @@ namespace wenku8.Model.Loaders
                     , X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", CurrentBook.Id )
                     , ( DRequestCompletedEventArgs e, string id ) =>
                     {
-                        Shared.Storage.WriteString( CurrentBook.TOCPath, e.ResponseString );
+                        Shared.Storage.WriteString( CurrentBook.TOCPath, Manipulation.PatchSyntax( e.ResponseString ) );
                         Shared.Storage.WriteString( CurrentBook.TOCDatePath, CurrentBook.RecentUpdateRaw );
                         OnComplete( b );
                     }

@@ -5,7 +5,6 @@
     xmlns:local="using:wenku10"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
-    xmlns:vp="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
@@ -18,6 +17,7 @@
     <Page.Resources>
         <n:BoolStateConverter x:Key="BoolStateConverter" />
         <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
         <v:FavConverter x:Key="FavConverter" />
         <CollectionViewSource x:Name="favItems" />
@@ -25,9 +25,26 @@
     </Page.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="HomeHub.Margin" Value="0,0,65,0" />
+                        <Setter Target="AppTitleVertical.Visibility" Value="Visible" />
+                        <Setter Target="AppTitleHorizotal.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <c:PassiveSplitView x:Name="MainSplitPane"
                             EnablePaneSwipe="False"
-                            Background="{StaticResource MajorBackgroundBrush}" >
+                            Background="{StaticResource MajorBackgroundBrush}">
+            <!-- Info Pane -->
             <c:PassiveSplitView.Pane>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -61,43 +78,61 @@
                         </Grid>
                     </Button>
 
-                    <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" Margin="10" VerticalScrollBarVisibility="Hidden">
+                    <ScrollViewer Grid.Row="1"
+                                  Grid.RowSpan="2" Grid.ColumnSpan="3"
+                                  Margin="10, 0, 10, 10"
+                                  VerticalScrollBarVisibility="Hidden">
                         <p:StateControl x:Name="PaneGridState">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="200" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="25" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="140" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Margin="5" Source="{Binding Cover}" />
-                                <Grid Grid.Column="1">
+                            <StackPanel Margin="0, 10, 0, 50">
+                                <TextBlock TextWrapping="Wrap"
+                                           Text="{Binding LatestSection}"
+                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                                <TextBlock TextWrapping="Wrap"
+                                           Text="{Binding RecentUpdate}"
+                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                                <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="200" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
-                                    <StackPanel Margin="5,10,5,5" Grid.Row="0">
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBrush}"/>
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding Length}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                    </StackPanel>
-                                    <StackPanel Margin="5" Grid.Row="1">
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding TotalHitCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding TodayHitCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding PushCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                        <TextBlock TextWrapping="Wrap" Text="{Binding FavCount}" Foreground="{StaticResource RelativeMajorBrush}" />
-                                    </StackPanel>
-                                </Grid>
-                                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
-                                       TextWrapping="Wrap" Text="{Binding Intro}"
-                                       Foreground="{StaticResource RelativeMajorBrush}" />
-                                <TextBlock Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" FontSize="20"
-                                       TextWrapping="Wrap" Text="{Binding RecentUpdate}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Margin="5" Source="{Binding Cover}" />
+                                    <Grid Grid.Column="1">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Margin="5,10,5,5" Grid.Row="0">
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBrush}"/>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                        </StackPanel>
+                                        <StackPanel Margin="5" Grid.Row="1">
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                                        </StackPanel>
+                                    </Grid>
+                                    <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
+                                           TextWrapping="Wrap" Text="{Binding Intro}"
+                                           Foreground="{StaticResource RelativeMajorBrush}" />
                             </Grid>
+                            </StackPanel>
                         </p:StateControl>
                     </ScrollViewer>
                     <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"
@@ -120,63 +155,78 @@
                                     , ConverterParameter=-0.10
                                 }" />
                         </Grid.RenderTransform>
-                        <Image Source="/Assets/Samples/BgMain.jpg" Stretch="UniformToFill"/>
                     </Grid>
 
                     <Canvas x:Name="StarFields" />
                     <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.2" />
+
+                    <!-- Loading Background Cover -->
                     <p:StateControl x:Name="BgCover">
                         <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.6" />
                     </p:StateControl>
 
                     <c:ParallaxHub x:Name="HomeHub">
                         <c:ParallaxHub.ScrollerRibbon>
-                            <TextBlock x:Uid="/AppResources/ApplicationTitle"
-                                       FontSize="30"
-                                       Margin="0,15,0,0"
-                                       Grid.Column="0" Grid.ColumnSpan="40"
-                                       Foreground="{StaticResource Shades40}" Text="wenku8" />
+                            <Rectangle x:Name="HorzRibbon" Stroke="{StaticResource MinorBrush}"
+                                       StrokeThickness="1"
+                                       Margin="-50,10,-50,25"
+                                       Height="40" />
                         </c:ParallaxHub.ScrollerRibbon>
 
-                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}" >
+                        <!-- Fav Section -->
+                        <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}"
+                                    Width="400"
+                                    MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
                             <HubSection.Resources>
-                                <vp:DataStateConverter x:Key="DataStateConverter" />
-                                <vp:BoolStateConverter x:Key="LoadingStateConverter" />
+                                <n:DataStateConverter x:Key="DataStateConverter" />
+                                <n:BoolStateConverter x:Key="LoadingStateConverter" />
                             </HubSection.Resources>
                             <HubSection.Header>
-                                <StackPanel>
-                                    <Grid Margin="5">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBox Margin="5" Grid.Column="0" PlaceholderText="Search BookShelf"
-                                                 Width="140"
-                                                 Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
-                                        <ComboBox Margin="5" Grid.Column="1" x:Uid="/AppResources/Order"
-                                                  SelectionChanged="OrderFavItems"
-                                                  PlaceholderText="Order">
-                                            <ComboBox.Items>
-                                                <ComboBoxItem>
-                                                    <TextBlock x:Uid="/AppResources/Order_by_Date_Desc" Text="OrderByDateDesc" />
-                                                </ComboBoxItem>
-                                                <ComboBoxItem>
-                                                    <TextBlock x:Uid="/AppResources/Order_by_Date_Asc" Text="OrderByDateAsc" />
-                                                </ComboBoxItem>
-                                            </ComboBox.Items>
-                                        </ComboBox>
-                                        <c:OneDriveButton x:Name="OneDriveResync"
-                                                          Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                                                          Grid.Column="2" />
-                                    </Grid>
-                                </StackPanel>
+                                <Grid Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Rectangle Margin="-10" Grid.ColumnSpan="3" Fill="{StaticResource Shades60}" />
+                                    <!--Polygon Grid.Column="3"
+                                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                             Fill="{StaticResource MinorBrush}"
+                                             Points="0,0 10,5, 0,10" /-->
+
+                                    <TextBox Margin="5,0" Grid.Column="0" PlaceholderText="Search BookShelf"
+                                             VerticalAlignment="Center"
+                                             Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
+                                    <ComboBox x:Uid="/AppResources/Order"
+                                              Margin="5,0" Grid.Column="1"
+                                              VerticalAlignment="Center"
+                                              SelectionChanged="OrderFavItems"
+                                              PlaceholderText="Order">
+                                        <ComboBox.Items>
+                                            <ComboBoxItem>
+                                                <TextBlock x:Uid="/AppResources/Order_by_Date_Desc" Text="OrderByDateDesc" />
+                                            </ComboBoxItem>
+                                            <ComboBoxItem>
+                                                <TextBlock x:Uid="/AppResources/Order_by_Date_Asc" Text="OrderByDateAsc" />
+                                            </ComboBoxItem>
+                                        </ComboBox.Items>
+                                    </ComboBox>
+                                    <c:OneDriveButton x:Name="OneDriveResync"
+                                                      VerticalAlignment="Center"
+                                                      Visibility="Collapsed"
+                                                      Foreground="{StaticResource RelativeMajorBrush}"
+                                                      Margin="5,-3,2,-3"
+                                                      Grid.Column="2" />
+                                </Grid>
                             </HubSection.Header>
                             <DataTemplate>
                                 <p:StateControl State="{Binding Data, Converter={StaticResource DataStateConverter}}">
                                     <ListView ItemsSource="{Binding SearchSet}"
                                               ItemClick="BookClicked"
                                               IsItemClickEnabled="True"
+                                              HorizontalAlignment="Right"
                                               ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                               ItemContainerStyle="{StaticResource BareListItem}">
                                         <ListView.ItemTemplate>
@@ -197,10 +247,9 @@
                                                         </MenuFlyout>
                                                     </Border.Resources>
 
-                                                    <Grid Margin="5" Width="350"
+                                                    <Grid Margin="20,5,5,5"
                                                           RightTapped="ShowFavContext"
-                                                          FlyoutBase.AttachedFlyout="{StaticResource FavContextMenu}"
-                                                          MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                                                          FlyoutBase.AttachedFlyout="{StaticResource FavContextMenu}" >
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*" />
                                                             <RowDefinition Height="Auto" />
@@ -222,7 +271,7 @@
                                                                            VerticalAlignment="Top" HorizontalAlignment="Center" />
                                                         </StackPanel>
 
-                                                        <Image Stretch="Uniform" Source="{Binding Banner}" />
+                                                        <Image Stretch="UniformToFill" Source="{Binding Banner}" />
 
                                                         <Rectangle Fill="{StaticResource MajorBrush}" Opacity="0.3"/>
                                                         <Rectangle Fill="{StaticResource Shades90}"/>
@@ -264,6 +313,7 @@
                             </DataTemplate>
                         </HubSection>
 
+                        <!-- Navigation Titles -->
                         <HubSection x:Name="NavigationSection" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                             <DataTemplate>
                                 <ListView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="GotoNavigation">
@@ -284,25 +334,26 @@
                             </DataTemplate>
                         </HubSection>
 
+                        <!-- Staff picks TODO: Need to redesigen this section -->
                         <HubSection x:Name="RectileSection" Visibility="Collapsed">
                             <DataTemplate>
-                                <c:VariableGridView ItemsSource="{Binding Data}" IsItemClickEnabled="True" ItemClick="BookClicked">
-                                    <c:VariableGridView.ItemTemplate>
+                                <c:StarCanvas
+                                    ItemsSource="{Binding Data}"
+                                    ItemClick="BookClicked"
+                                    MaxItemsAtOnce="{Binding MaxDisplayItems}">
+                                    <c:StarCanvas.ItemTemplate>
                                         <DataTemplate>
-                                            <c:Rectile
+                                            <c:FloatyButton
                                                 Title="{Binding Name}"
-                                                Description="{Binding Desc2}"
-                                                Image="{Binding Banner}"
-                                                IsLoaded="{Binding IsLoaded}" Size="{Binding Size}"
+                                                ImageSource="{Binding Banner}"
+                                                TextRotation="{Binding Rotation}"
+                                                OuterRingBrush="{StaticResource MajorBrush}"
+                                                TextBrush="{StaticResource RelativeMajorBackgroundBrush}"
+                                                Loaded="FloatyButton_Loaded"
                                             />
                                         </DataTemplate>
-                                    </c:VariableGridView.ItemTemplate>
-                                    <c:VariableGridView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <VariableSizedWrapGrid ItemWidth="135" ItemHeight="135" MaximumRowsOrColumns="2" Orientation="Vertical"/>
-                                        </ItemsPanelTemplate>
-                                    </c:VariableGridView.ItemsPanel>
-                                </c:VariableGridView>
+                                    </c:StarCanvas.ItemTemplate>
+                                </c:StarCanvas>
                             </DataTemplate>
                         </HubSection>
 
@@ -316,16 +367,20 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel>
+                                        <!-- Reload Button -->
                                         <Button Style="{StaticResource PlainButton}"
+                                                Background="Transparent"
+                                                BorderBrush="{StaticResource RelativeMajorBackgroundBrush}"
                                                 Click="ReloadCustomSection"
                                                 Width="40" Height="40">
                                             <Grid>
                                                 <ProgressRing Width="40" Height="40"
-                                                              x:Name="CustomRing"
                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
-                                                              IsActive="False" />
-                                                <i:IconReload AutoScale="True"
-                                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                              IsActive="{Binding IsLoading}" />
+                                                <p:StateControl State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                                                    <i:IconReload AutoScale="True"
+                                                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                </p:StateControl>
                                             </Grid>
                                         </Button>
                                         <p:VerticalStack Grid.Column="0"
@@ -353,46 +408,86 @@
                         </HubSection>
 
                     </c:ParallaxHub>
-                    <Grid VerticalAlignment="Top" HorizontalAlignment="Right" >
+                    <Grid VerticalAlignment="Top">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel x:Name="AdvDMStat" Visibility="Collapsed" HorizontalAlignment="Left" Margin="10">
+
+                        <Grid Grid.Column="1" Margin="10" HorizontalAlignment="Right">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Settings Button -->
+                            <Button x:Name="SettingsButton"
+                                    Grid.Row="0" Grid.Column="1"
+                                    Width="65" Height="65"
+                                    Background="{StaticResource MinorBrush}"
+                                    Style="{StaticResource PlainButton}">
+                                <Button.Flyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem x:Name="DebugLog"
+                                                        Visibility="Collapsed"
+                                                        x:Uid="/Settings/Advanced_Debug_FileLogging"
+                                                        Text="Local Log" Click="ShowLog" />
+                                        <MenuFlyoutItem Text="{Binding LoginOrInfo}" Click="LoginOrInfo" />
+                                        <MenuFlyoutItem x:Uid="/AppBar/Search" Click="GotoSearch" />
+                                        <MenuFlyoutItem x:Uid="/AppBar/Settings" Text="Settings" Click="GotoSettings" />
+                                        <MenuFlyoutItem x:Uid="/AppBar/About" Text="About" Click="ShowAbout" />
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                                <Grid>
+                                    <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeMajorBrush}" />
+                                    <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
+                                </Grid>
+                            </Button>
+                            <!-- Application Title -->
+                            <TextBlock x:Uid="/AppResources/ApplicationTitle"
+                                       x:Name="AppTitleHorizotal"
+                                       Visibility="Visible"
+                                       Grid.Row="0" Grid.Column="0"
+                                       Margin="10,0"
+                                       VerticalAlignment="Top"
+                                       FontSize="30" Text="wenku8" 
+                                       Foreground="{StaticResource MinorBrush}" />
+
+                            <p:VerticalStack x:Uid="/AppResources/ApplicationTitle"
+                                             x:Name="AppTitleVertical"
+                                             Visibility="Collapsed"
+                                             Grid.Row="1" Grid.Column="1"
+                                             Margin="10,5"
+                                             HorizontalAlignment="Right"
+                                             FontSize="30" Text="wenku8"
+                                             Foreground="{StaticResource MinorBrush}" />
+                        </Grid>
+
+                        <StackPanel x:Name="AdvDMStat"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Left"
+                                    Visibility="Collapsed" Margin="10,15">
                             <Border Background="Black" >
                                 <TextBlock Foreground="White" Margin="5">
                                     AdvDM.RTrans[ <Run Text="{Binding ShortStat}" /> ]
                                 </TextBlock>
                             </Border>
                         </StackPanel>
-                        <!-- Settings Button -->
-                        <Button x:Name="SettingsButton"
-                                Width="65" Height="65"
-                                Margin="10" Grid.Column="1"
-                                Background="{StaticResource MinorBrush}"
-                                Style="{StaticResource PlainButton}">
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem x:Name="DebugLog"
-                                                    Visibility="Collapsed"
-                                                    x:Uid="/Settings/Advanced_Debug_FileLogging"
-                                                    Text="Local Log" Click="ShowLog" />
-                                    <MenuFlyoutItem Text="{Binding LoginOrInfo}" Click="LoginOrInfo" />
-                                    <MenuFlyoutItem x:Uid="/AppBar/Search" Click="GotoSearch" />
-                                    <MenuFlyoutItem x:Uid="/AppBar/Settings" Text="Settings" Click="GotoSettings" />
-                                    <MenuFlyoutItem x:Uid="/AppBar/About" Text="About" Click="ShowAbout" />
-                                </MenuFlyout>
-                            </Button.Flyout>
-                            <Grid>
-                                <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeMajorBrush}" />
-                                <Image Source="{Binding Avatar}" Stretch="UniformToFill" />
-                            </Grid>
-                        </Button>
                     </Grid>
+
+                    <!-- Popup Login / Account Info -->
                     <p:StateControl x:Name="PopupPage" State="{Binding PageStatus}"
                                     MaxWidth="350">
                         <Frame Content="{Binding FrameContent}"/>
                     </p:StateControl>
+
                     <Grid Visibility="Collapsed">
                         <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
                         <ProgressRing IsActive="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>

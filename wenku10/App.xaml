@@ -16,6 +16,8 @@
                 <ResourceDictionary Source="/Themes/Global/ToggleSwitch.xaml" />
                 <ResourceDictionary Source="/Themes/Global/Pivot.xaml" />
                 <ResourceDictionary Source="/Themes/Global/Button.xaml" />
+                <ResourceDictionary Source="/Themes/Global/TextBox.xaml" />
+                <ResourceDictionary Source="/Themes/Global/ComboBox.xaml" />
                 <ResourceDictionary Source="/Themes/Global/ListViewItem.xaml" />
 
                 <ResourceDictionary Source="/Themes/ListViewItems/CommentListItem.xaml" />

@@ -19,8 +19,6 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.Interfaces;
-
 namespace wenku10.Pages.Dialogs
 {
     public sealed partial class Rename : ContentDialog
@@ -29,36 +27,73 @@ namespace wenku10.Pages.Dialogs
 
         public bool Canceled = true;
 
+        public string Placeholder
+        {
+            set
+            {
+                NewName.PlaceholderText = value;
+            }
+        }
+
         private Rename()
         {
             this.InitializeComponent();
             StringResources stx = new StringResources( "Message" );
+            StringResources stm = new StringResources( "ContextMenu" );
             PrimaryButtonText = stx.Str( "OK" );
             SecondaryButtonText = stx.Str( "Cancel" );
+
+            TitleBlock.Text = stm.Text( "ContextMenu_Rename" );
         }
 
-        public Rename( INamable Target )
-            :this()
+        // For Activator.CreateInstance
+        public Rename( INamable Target ) : this( Target, null, false ) { }
+        public Rename( INamable Target, string Title ) : this( Target, Title, false ) { }
+
+        public Rename( INamable Target, string Title, bool ReadOnly )
+            : this()
         {
             NamingTarget = Target;
             NewName.Text = Target.Name;
+            NewName.IsReadOnly = ReadOnly;
+
+            if ( !string.IsNullOrEmpty( Title ) )
+            {
+                TitleBlock.Text = Title;
+            }
         }
 
         private async void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
         {
             string NName = NewName.Text.Trim();
-            if( string.IsNullOrEmpty( NName ) )
-            {
-                MessageDialog Msg = new MessageDialog( "Name cannot be empty!" );
-                await Popups.ShowDialog( Msg );
-                args.Cancel = true;
-                NewName.Focus( FocusState.Keyboard );
+            string Error = "";
 
-                return;
+            if ( string.IsNullOrEmpty( NName ) )
+            {
+                Error = "Value cannot be empty!";
+            }
+            else
+            {
+                try
+                {
+                    NamingTarget.Name = NName;
+                    Canceled = false;
+                }
+                catch ( Exception ex )
+                {
+                    Error = ex.Message;
+                }
             }
 
-            Canceled = false;
-            NamingTarget.Name = NName;
+            if ( Error != "" )
+            {
+                args.Cancel = true;
+                MessageDialog Msg = new MessageDialog( Error );
+                // Should NOT use Popups.ShowDialog because it closes the rename dialog
+                // Making the caller await step thru, causing undesired behaviour
+                await Msg.ShowAsync();
+                NewName.Focus( FocusState.Keyboard );
+            }
         }
     }
 }

@@ -80,7 +80,7 @@ namespace wenku10.Pages
             base.OnNavigatedTo( e );
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-            if( Disposed )
+            if ( Disposed )
             {
                 Disposed = false;
                 NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
@@ -104,9 +104,13 @@ namespace wenku10.Pages
             NavigationHandler.OnNavigatedBack -= OnBackRequested;
             Window.Current.SizeChanged -= Current_SizeChanged;
             App.ViewControl.PropertyChanged -= VC_PropertyChanged;
+
             CurrentBook = null;
             CurrentChapter = null;
+
+            ContentView?.Dispose();
             ContentView = null;
+
             ES = null;
             ContentPane = null;
 
@@ -115,7 +119,7 @@ namespace wenku10.Pages
                 VolStepper.ItemsSource = null;
                 EPStepper.ItemsSource = null;
             }
-            catch( Exception ) { }
+            catch ( Exception ) { }
 
         }
 
@@ -134,7 +138,7 @@ namespace wenku10.Pages
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.J ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.K ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( ScrollBottom, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.G ) );
-            RegKey.Add( App.KeyboardControl.RegisterSequence( ScrollTop, Windows.System.VirtualKey.G, Windows.System.VirtualKey.G  ) );
+            RegKey.Add( App.KeyboardControl.RegisterSequence( ScrollTop, Windows.System.VirtualKey.G, Windows.System.VirtualKey.G ) );
 
             RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Left ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Right ) );
@@ -180,7 +184,7 @@ namespace wenku10.Pages
 
         private void TriggerOrientation()
         {
-            if( Orientation == null )
+            if ( Orientation == null )
             {
                 Orientation = App.ViewControl.Orientation;
             }
@@ -270,7 +274,7 @@ namespace wenku10.Pages
                 {
                     ContentFrame.Content = null;
                     Shared.LoadMessage( "RedrawingContent" );
-                    if ( ContentView != null ) ContentView.Dispose();
+                    ContentView?.Dispose();
                     ContentView = new ReaderContent( this, Anchor );
                     ContentFrame.Content = ContentView;
                     // Load Content at the very end
@@ -316,9 +320,9 @@ namespace wenku10.Pages
             List<ActiveItem> Eps = new List<ActiveItem>();
 
             string pVid = "";
-            for( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
+            for ( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
             {
-                if( ES.currentVid != pVid )
+                if ( ES.currentVid != pVid )
                 {
                     pVid = ES.currentVid;
                     Vols.Add( new ActiveItem( ES.CurrentVolTitle, "", ES.currentVid ) );
@@ -326,6 +330,8 @@ namespace wenku10.Pages
 
                 Eps.Add( new ActiveItem( ES.currentEpTitle, "", ES.currentCid ) );
             }
+
+            ES.Rewind();
 
             VolStepper.ItemsSource = Vols;
             EPStepper.ItemsSource = Eps;
@@ -338,7 +344,12 @@ namespace wenku10.Pages
         {
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
             ChangedManually = false;
-            EPStepper.SelectedItem = Eps.First( x => x.Payload == CurrentChapter.cid ); 
+            EPStepper.SelectedItem = Eps.First( x => x.Payload == CurrentChapter.cid );
+
+            if ( ContentPane != null && ContentPane.Context is TableOfContents )
+            {
+                ( ContentPane.Context as TableOfContents ).UpdateDisplay();
+            }
         }
 
         private void BookLoaded( BookItem b )
@@ -399,7 +410,7 @@ namespace wenku10.Pages
 
             Action ToggleFIcon = () =>
             {
-                if( UseInertia = !UseInertia )
+                if ( UseInertia = !UseInertia )
                 {
                     InertiaButton.UpdateIcon( new IconUseInertia() { AutoScale = true } );
                 }
@@ -424,7 +435,7 @@ namespace wenku10.Pages
             Action ToggleFIcon = () =>
             {
                 ToggleFullScreen();
-                if( App.ViewControl.IsFullScreen )
+                if ( App.ViewControl.IsFullScreen )
                 {
                     FullScreenButton.UpdateIcon( new IconRetract() { AutoScale = true } );
                 }
@@ -499,7 +510,7 @@ namespace wenku10.Pages
             }
 
             // Popup info mask
-            if( InfoMask.State == ControlState.Foreatii )
+            if ( InfoMask.State == ControlState.Foreatii )
             {
                 InfoMask.State = ControlState.Reovia;
                 e.Handled = true;
@@ -543,6 +554,14 @@ namespace wenku10.Pages
         {
             if ( e.AddedItems.Count < 1 ) return;
 
+            if ( ChangedManually )
+            {
+                ChangedManually = false;
+                return;
+            }
+
+            ChangedManually = true;
+
             string EP = ( e.AddedItems[ 0 ] as ActiveItem ).Payload;
 
             List<ActiveItem> Vols = VolStepper.ItemsSource as List<ActiveItem>;
@@ -560,9 +579,8 @@ namespace wenku10.Pages
 
             if ( Vid == null ) return;
 
-            if( ( VolStepper.SelectedItem as ActiveItem ).Payload != Vid )
+            if ( ( VolStepper.SelectedItem as ActiveItem ).Payload != Vid )
             {
-                ChangedManually = false;
                 VolStepper.SelectedItem = Vols.First( x => x.Payload == Vid );
             }
 
@@ -580,14 +598,16 @@ namespace wenku10.Pages
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
             if ( Eps == null ) return;
 
-            if( !ChangedManually )
+            if ( ChangedManually )
             {
-                ChangedManually = true;
+                ChangedManually = false;
                 return;
             }
 
+            ChangedManually = true;
+
             string cid = null;
-            for( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
+            for ( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
             {
                 if ( ES.currentVid == Vol )
                 {
@@ -598,9 +618,13 @@ namespace wenku10.Pages
 
             ActiveItem ShouldBeEp = Eps.First( x => x.Payload == cid );
 
-            if( EPStepper.SelectedItem != ShouldBeEp )
+            if ( EPStepper.SelectedItem != ShouldBeEp )
             {
                 EPStepper.SelectedItem = ShouldBeEp;
+
+                var j = EPStepper.Dispatcher.RunIdleAsync(
+                    ( x ) => OpenBook( ES.Chapter )
+                );
             }
         }
     }

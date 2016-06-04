@@ -51,9 +51,14 @@ namespace wenku10.Pages.ContentReaderPane
             TOC = new TOCPane( Reader.CurrentBook.GetVolumes() );
 
             TOCContext.DataContext = TOC;
-            TOCList.SelectedItem = TOC.Select( Reader.CurrentChapter );
+            TOCList.SelectedItem = TOC.GetItem( Reader.CurrentChapter );
             TOCList.Loaded += TOCListLoaded;
             TOCList.SelectionChanged += TOCList_SelectionChanged;
+        }
+
+        public void UpdateDisplay()
+        {
+            TOCList.SelectedItem = TOC.GetItem( Reader.CurrentChapter );
         }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )

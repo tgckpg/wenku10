@@ -84,7 +84,7 @@ namespace wenku10
 #if DEBUG
             if ( global::System.Diagnostics.Debugger.IsAttached )
             {
-                this.DebugSettings.EnableFrameRateCounter = true;
+                // this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
 

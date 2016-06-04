@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.DataModel;
@@ -12,8 +13,10 @@ using wenku10;
 namespace wenku8.Model.Loaders
 {
     using Book;
+    using Book.Spider;
     using Ext;
     using Resources;
+    using Text;
 
     using TransferInst = wenku8.AdvDM.WRuntimeTransfer.TransferInst;
 
@@ -33,14 +36,14 @@ namespace wenku8.Model.Loaders
         public string StatusText { get; private set; }
 
         public AutoCache( BookItem b, Action<BookItem> Handler )
-            :this()
+            : this()
         {
             // fitm = f;
             ThisBook = b;
             OnComplete = Handler;
 
             StatusText = "Ready";
-            if( CurrentCount < AutoLimit )
+            if ( CurrentCount < AutoLimit )
             {
                 wCache.InitDownload(
                     ThisBook.Id
@@ -51,7 +54,7 @@ namespace wenku8.Model.Loaders
 
         private void cacheInfo( DRequestCompletedEventArgs e, string id )
         {
-            Shared.Storage.WriteString( ThisBook.TOCPath, e.ResponseString );
+            Shared.Storage.WriteString( ThisBook.TOCPath, Manipulation.PatchSyntax( e.ResponseString ) );
             Shared.Storage.WriteString( ThisBook.TOCDatePath, ThisBook.RecentUpdateRaw );
 
             StepAutomation();
@@ -61,7 +64,7 @@ namespace wenku8.Model.Loaders
         {
             ES = new EpisodeStepper( new VolumesInfo( ThisBook ) );
 
-            if( AutoLimit < CurrentCount )
+            if ( AutoLimit < CurrentCount )
             {
                 DispLog( string.Format( "Error: Limit Reached {0}/{1}", CurrentCount - 1, AutoLimit ) );
                 return;
@@ -93,7 +96,7 @@ namespace wenku8.Model.Loaders
                     }
                 }
             }
-            catch( Exception ex )
+            catch ( Exception ex )
             {
                 global::System.Diagnostics.Debugger.Break();
                 Logger.Log( ID, ex.Message, LogType.ERROR );
@@ -143,10 +146,32 @@ namespace wenku8.Model.Loaders
 
         internal static void DownloadVolume( BookItem ThisBook, Volume Vol )
         {
+            if ( ThisBook is BookInstruction )
+            {
+                Chapter[] Chs = Vol.ChapterList;
+
+                int i = 0; int l = Chs.Length;
+
+                ChapterLoader Loader = null;
+                Loader = new ChapterLoader( ThisBook, C => {
+                    C.UpdateStatus();
+
+                    if ( i < l )
+                    {
+                        Loader.Load( Chs[ i++ ] );
+                    }
+                } );
+
+                Loader.Load( Chs[ i++ ] );
+                return;
+            }
+
+
             Worker.ReisterBackgroundWork( () =>
             {
                 string id = ThisBook.Id;
                 string CVid = Vol.vid;
+
                 foreach ( Chapter c in Vol.ChapterList )
                 {
                     if ( !c.IsCached )
@@ -166,6 +191,7 @@ namespace wenku8.Model.Loaders
                     LoadComplete( a, b );
                     Worker.UIInvoke( () => { foreach ( Chapter C in Vol.ChapterList ) C.UpdateStatus(); } );
                 } );
+
                 App.RuntimeTransfer.ResumeThread();
             } );
         }

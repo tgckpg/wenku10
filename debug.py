@@ -56,7 +56,11 @@ status = re.compile('^(\d+) ([^ ]+)* ?([\w\W]*)')
 print( 'Listening on: ' + str(PORT) )
 while 1:
 	data, addr = s.recvfrom( 65536 )
-	mesg = status.match(data.strip(codecs.BOM_UTF8).decode( "utf-8" ))
+	mesg = None
+	try:
+		mesg = status.match(data.strip(codecs.BOM_UTF8).decode( "utf-8" ))
+	except:
+		pass
 
 	if mesg == None:
 		print( "Received a message: " + data.decode( "utf-8" ) )

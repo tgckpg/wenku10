@@ -25,15 +25,15 @@ using Net.Astropenguin.UI;
 using wenku8.CompositeElement;
 using wenku8.Effects;
 using wenku8.Ext;
+using wenku8.Model.Book;
 using wenku8.Model.Section;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Storage;
-using wenku8.Model.Book;
 
 namespace wenku10
 {
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage : Page, IDisposable
     {
         public static readonly string ID = typeof( MainPage ).Name;
 
@@ -47,7 +47,25 @@ namespace wenku10
 
         ~MainPage()
         {
-            NavigationHandler.OnNavigatedBack -= OnBackRequested;
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                NavigationHandler.OnNavigatedBack -= OnBackRequested;
+                AdvDMStat.DataContext = null;
+                CustomSection.DataContext = null;
+                NavigationSection.DataContext = null;
+                SettingsButton.DataContext = null;
+                FavSectionView.DataContext = null;
+                Galaxy.Stop();
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
         }
 
         protected override void OnNavigatedFrom( NavigationEventArgs e )
@@ -116,17 +134,6 @@ namespace wenku10
 #if DEBUG
             new global::wenku8.UnitTest();
 #endif
-
-            /*
-            TransitionCollection collection = new TransitionCollection();
-            NavigationThemeTransition theme = new NavigationThemeTransition();
-
-            var info = new ContinuumNavigationTransitionInfo();
-
-            theme.DefaultNavigationTransitionInfo = info;
-            collection.Add( theme );
-            this.Transitions = collection;
-            */
         }
 
         private void Start()
@@ -179,6 +186,12 @@ namespace wenku10
             FS = X.Instance<IFavSection>( XProto.FavSection );
 
             MemberSections();
+
+            if( global::wenku8.Config.Properties.ENABLE_ONEDRIVE )
+            {
+                OneDriveResync.Visibility = Visibility.Visible;
+            }
+
             OneDriveResync.SetSync( ReSync );
 
             FS.PropertyChanged += FS_PropertyChanged;
@@ -223,7 +236,20 @@ namespace wenku10
 
         private void BookClicked( object sender, ItemClickEventArgs e )
         {
-            BookInfoItem BookItem = e.ClickedItem as BookInfoItem;
+            BookClicked( e.ClickedItem as BookInfoItem );
+        }
+
+        private async void BookClicked( object sender, StarCanvas.ItemClickedEventArgs e )
+        {
+            await Task.Delay( 500 );
+            await Dispatcher.RunIdleAsync( ( x ) =>
+            {
+                BookClicked( e.ClickedItem as BookInfoItem );
+            } );
+        }
+
+        private void BookClicked( BookInfoItem BookItem )
+        {
             Logger.Log( ID, string.Format( "Clicked items is {0}, mode {1}", BookItem.Payload, BookItem.Mode ) );
 
             BookItem b = X.Instance<BookItem>( XProto.BookItemEx, BookItem.Payload );
@@ -398,6 +424,7 @@ namespace wenku10
 
             if ( Go )
             {
+                Dispose();
                 Frame.Navigate( typeof( Pages.Settings.MainSettings ) );
             }
         }
@@ -507,17 +534,12 @@ namespace wenku10
         private void ReloadCustomSection( object sender, RoutedEventArgs e )
         {
             Button b = sender as Button;
-            ProgressRing Pring = b.FindName( "CustomRing" ) as ProgressRing;
-
-            if ( Pring.IsActive ) return;
-            Pring.IsActive = true;
 
             INavSelections NS = NavigationSection.DataContext as INavSelections;
             IPaneInfoSection PS = NS.CustomSection();
 
             if ( PS.Data != null )
             {
-                Pring.IsActive = false;
                 CustomSection.DataContext = PS;
             }
             else
@@ -529,13 +551,21 @@ namespace wenku10
                     {
                         PS.PropertyChanged -= PropChanged;
                         CustomSection.DataContext = PS;
-                        Pring.IsActive = false;
                     }
                 };
 
                 PS.PropertyChanged += PropChanged;
             }
 
+        }
+
+        private void FloatyButton_Loaded( object sender, RoutedEventArgs e )
+        {
+            FloatyButton Floaty = ( ( FloatyButton ) sender );
+            Floaty.BindTimer( AnimationTimer.Instance );
+
+            Floaty.TextSpeed = AnimationTimer.RandDouble( -2, 2 );
+            Galaxy.AssignRoam( AnimationTimer.RandDouble( -100, 100 ), AnimationTimer.RandDouble( -100, 100 ), Floaty );
         }
     }
 

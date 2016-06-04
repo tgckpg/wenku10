@@ -47,6 +47,8 @@ namespace wenku10.Pages.Dialogs
 
             Dict = await Manager.GetDictionary();
             LayoutRoot.DataContext = Dict;
+            Mask.State = Net.Astropenguin.UI.ControlState.Foreatii;
+            MaskLoading.IsActive = false;
         }
 
         private void TextSelected( object sender, RoutedEventArgs e )

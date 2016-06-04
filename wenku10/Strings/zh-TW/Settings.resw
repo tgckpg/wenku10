@@ -505,6 +505,60 @@
     <value>English</value>
   </data>
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
-    <value>ダブルクリックメインメニュー</value>
+    <value>點兩下呼叫主選單</value>
+  </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>請在 cmd 中執行以下指令：</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>注意：若要連接到本機位址，請先利用</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value>增加豁免</value>
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
+    <value>修正誤用了的符號</value>
+  </data>
+  <data name="Advanced_Misc.Text" xml:space="preserve">
+    <value>其它設定</value>
+  </data>
+  <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
+    <value>沒能分類，或者預設值比較好的設定</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_HHColor.Text" xml:space="preserve">
+    <value>時針</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_MHColor.Text" xml:space="preserve">
+    <value>分針</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_SColor.Text" xml:space="preserve">
+    <value>尺度</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
+    <value>時鐘</value>
+  </data>
+  <data name="Desc_Help_Slack.Text" xml:space="preserve">
+    <value>加入Slack 討論組</value>
+  </data>
+  <data name="Desc_Help_Wiki.Text" xml:space="preserve">
+    <value>wenku10 的 wiki</value>
+  </data>
+  <data name="Help.Text" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Help_Slack.Text" xml:space="preserve">
+    <value>Slack</value>
+  </data>
+  <data name="Help_Wiki.Text" xml:space="preserve">
+    <value>wiki</value>
+  </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>回報問題 / 功能建議</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>問題回報</value>
   </data>
 </root>

@@ -103,9 +103,10 @@ namespace wenku10
             RootFrame.Navigated += OnNavigated;
         }
 
+
         private static readonly Type[] SpecialElement = new Type[]
         {
-            typeof( TextBox ), typeof( RichEditBox )
+            typeof( TextBox ), typeof( RichEditBox ), typeof( PasswordBox )
         };
         private void Escape( KeyCombinationEventArgs e )
         {

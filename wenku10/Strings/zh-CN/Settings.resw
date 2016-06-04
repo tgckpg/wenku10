@@ -494,6 +494,61 @@
     <value>English</value>
   </data>
   <data name="Layout_ContentReader_UseDoubleTap.Text" xml:space="preserve">
-    <value>點兩下主選單</value>
+    <value>双击调用主菜单</value>
+  </data>
+  <data name="Advanced_Server_Exempt_Command.Text" xml:space="preserve">
+    <value>Qǐng zài cmd zhōng yùnxíng yǐxià zhǐlìng:
+请在 cmd 中运行以下指令：</value>
+  </data>
+  <data name="Advanced_Server_Note_A.Text" xml:space="preserve">
+    <value>注意：若要连接到本机位址，请先利用</value>
+  </data>
+  <data name="Advanced_Server_Note_B.Text" xml:space="preserve">
+    <value>添加豁免</value>
+  </data>
+  <data name="Advanced_Server_Reset.Text" xml:space="preserve">
+    <value>重置</value>
+  </data>
+  <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
+    <value>改正误用了的符号</value>
+  </data>
+  <data name="Advanced_Misc.Text" xml:space="preserve">
+    <value>其他设置</value>
+  </data>
+  <data name="Desc_Advanced_Misc.Text" xml:space="preserve">
+    <value>没能分类，或者预设值比较好的设置</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_HHColor.Text" xml:space="preserve">
+    <value>时针</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_MHColor.Text" xml:space="preserve">
+    <value>分针</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock_SColor.Text" xml:space="preserve">
+    <value>尺度</value>
+  </data>
+  <data name="Appearance_ContentReader_Clock.Text" xml:space="preserve">
+    <value>时钟</value>
+  </data>
+  <data name="Desc_Help_Slack.Text" xml:space="preserve">
+    <value>加入 slack 讨论组</value>
+  </data>
+  <data name="Desc_Help_Wiki.Text" xml:space="preserve">
+    <value>wenku10 的 wiki</value>
+  </data>
+  <data name="Help.Text" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="Help_Slack.Text" xml:space="preserve">
+    <value>Slack</value>
+  </data>
+  <data name="Help_Wiki.Text" xml:space="preserve">
+    <value>wiki</value>
+  </data>
+  <data name="Desc_Help_BugFeature.Text" xml:space="preserve">
+    <value>报告错误 / 功能请求</value>
+  </data>
+  <data name="Help_BugFeature.Text" xml:space="preserve">
+    <value>错误报告</value>
   </data>
 </root>

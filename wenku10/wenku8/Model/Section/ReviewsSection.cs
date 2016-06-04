@@ -232,7 +232,7 @@ namespace wenku8.Model.Section
         {
             if ( ex.XTest( XProto.WException ) )
             {
-                if ( ex.XProp<Enum>( "WCode" ) == X.Static<Enum>( XProto.WCode, "LOGON_REQUIRED" ) )
+                if ( ex.XProp<Enum>( "WCode" ).Equals( X.Const<Enum>( XProto.WCode, "LOGON_REQUIRED" ) ) )
                 {
                     // Prompt login
                     wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login();

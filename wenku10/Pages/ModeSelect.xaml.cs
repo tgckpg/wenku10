@@ -20,10 +20,12 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Logging;
 
 using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Effects.Stage;
+using wenku8.Effects.Stage.CircleParty;
 using wenku8.Effects.Stage.RectangleParty;
 using wenku8.System;
 
@@ -31,6 +33,8 @@ namespace wenku10.Pages
 {
     public sealed partial class ModeSelect : Page
     {
+        public static readonly string ID = typeof( ModeSelect ).Name;
+
         public bool ProtoUnLocked { get; private set; }
 
         private bool ModeSelected = false;
@@ -38,7 +42,7 @@ namespace wenku10.Pages
 
         public ModeSelect()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             NavigationHandler.InsertHandlerOnNavigatedBack( DisableBack );
             SetTemplate();
         }
@@ -65,41 +69,43 @@ namespace wenku10.Pages
         {
             RootFrame = MainStage.Instance.RootFrame;
 
-            Action UnReg = null;
-            // Unlock Protocol Mode
-            UnReg = App.KeyboardControl.RegisterSequence(
-                ( x ) =>
-                {
-                    ModeSelected = true;
-                    ProtoUnLocked = true;
-                    x.Handled = true;
-                    App.KeyboardControl.KeyDown -= Frame_KeyDown;
-                    UnReg();
-                    StartMultiplayer();
-                }
-                , VirtualKey.G, VirtualKey.I, VirtualKey.V, VirtualKey.E
-                , VirtualKey.Space
-                , VirtualKey.M, VirtualKey.E
-                , VirtualKey.Space
-                , VirtualKey.C, VirtualKey.A, VirtualKey.N, VirtualKey.D, VirtualKey.I, VirtualKey.E, VirtualKey.S
-            );
-
-            App.KeyboardControl.KeyDown += Frame_KeyDown;
+            var j = Dispatcher.RunIdleAsync( x =>
+            {
+                BaumkuchenSecret( new Baumkuchen( ReactorRings ) );
+            } );
 
             GetAnnouncements();
         }
 
-        private void Frame_KeyDown( object sender, KeyEventArgs e )
+        private void BaumkuchenSecret( Baumkuchen BCret )
         {
-            Storyboard SB = SenseGround.Resources[ "DataUpdate" ] as Storyboard;
-            SB.Begin();
+            int[] Sequence = new int[] { 1, 2, 3, 4, 5, 4, 3, 2, 3, 4, 5, 6, 7, 8 };
+
+            int j = 0;
+            int l = Sequence.Length;
+
+            BCret.TouchHandler = ( i ) =>
+            {
+                if ( i == 1 ) j = 0;
+                if ( i != Sequence[ j ] )
+                {
+                    j = 0;
+                }
+                else
+                {
+                    j++;
+                    if( l == j )
+                    {
+                        BCret.TouchHandler = null;
+                        BCret.Flush();
+                        StartMultiplayer();
+                    }
+                }
+            };
         }
 
         private void StartMultiplayer()
         {
-            HuhButton.Focus( FocusState.Pointer );
-            Storyboard SB = SenseGround.Resources[ "DataUpdate" ] as Storyboard;
-
             ForeText.Visibility = Visibility.Visible;
 
             LayoutRoot.Children.Remove( ForeText );
@@ -108,7 +114,7 @@ namespace wenku10.Pages
 
             OSenseText.Visibility = Visibility.Collapsed;
 
-            SB = SenseGround.Resources[ "Multiplayer" ] as Storyboard;
+            Storyboard SB = SenseGround.Resources[ "Multiplayer" ] as Storyboard;
             SB.Begin();
 
             SB.Completed += ( x2, e2 ) => CoverTheWholeScreen();
@@ -196,11 +202,6 @@ namespace wenku10.Pages
         {
             Dialogs.Announcements NewsDialog = new Dialogs.Announcements();
             await Popups.ShowDialog( NewsDialog );
-        }
-
-        private void ShowKeyboard( object sender, RoutedEventArgs e )
-        {
-            HiddenTextBox.Focus( FocusState.Keyboard );
         }
     }
 }

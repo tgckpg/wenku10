@@ -49,6 +49,7 @@ namespace wenku10.Pages
         private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
 
         private bool SkipThisPage = false;
+        private bool useCache = true;
         private bool _inSync = false;
 
         private bool SyncStarted
@@ -193,8 +194,10 @@ namespace wenku10.Pages
 
         private void OpenType( object parameter )
         {
+            useCache = true;
             if ( parameter is string )
             {
+                useCache = false;
                 LoadBookInfo( parameter.ToString() );
             }
             else if ( parameter is LocalTextDocument )
@@ -247,7 +250,7 @@ namespace wenku10.Pages
                 }
             } );
 
-            BL.Load( ThisBook, true );
+            BL.Load( ThisBook, useCache );
         }
 
         private void LoadBookInfo( string id )
@@ -398,6 +401,12 @@ namespace wenku10.Pages
                 Refresh = true;
                 ChLayoutUpdate = false;
                 Volume V = e.AddedItems[ 0 ] as Volume;
+
+                /*
+                 * When the page is backed, TOCData will is being set to null
+                 * Causing NullReference exception
+                 * */
+                if ( TOCData == null ) return;
                 TOCData.SelectVolume( V );
             } );
         }
@@ -419,7 +428,7 @@ namespace wenku10.Pages
             VolList = sender as ListView;
             if ( TOCData == null ) return;
             // Auto select the first one
-            VolList.SelectedItem = TOCData.Volumes[ 0 ];
+            VolList.SelectedItem = TOCData.Volumes.FirstOrDefault();
         }
 
         private void ChapterSelected( object sender, ItemClickEventArgs e )
@@ -441,7 +450,7 @@ namespace wenku10.Pages
                 RightClickedVolume = ( Elem.DataContext as TOCSection.ChapterGroup ).Vol;
             }
         }
-        private async void DownloadVolume( object sender, TappedRoutedEventArgs e )
+        private async void DownloadVolume( object sender, RoutedEventArgs e )
         {
             StringResources stx = new StringResources( "ContextMenu" );
             StringResources stm = new StringResources( "Message" );

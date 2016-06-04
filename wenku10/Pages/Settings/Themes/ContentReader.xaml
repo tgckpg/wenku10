@@ -4,18 +4,32 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Settings.Themes"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="ColorTemplate">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding ColorTag}" Foreground="{StaticResource MajorBrush}" />
+                <Rectangle Width="50" Grid.Column="1"
+                           Stroke="{StaticResource MajorBrush}"
+                           StrokeThickness="1">
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="{Binding TColor}" />
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
     <Pivot Background="{StaticResource MajorBackgroundBrush}">
         <PivotItem>
-            <PivotItem.Header>
-                <TextBlock x:Uid="/Settings/Appearance_ContentReader_ContentExp"
-                           Foreground="{StaticResource MajorBrush}"
-                           Text="Content Sample"/>
-            </PivotItem.Header>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -28,30 +42,13 @@
                         </PivotItem.Header>
                         <ListView x:Name="ColorList"
                                   IsItemClickEnabled="True"
+                                  ItemTemplate="{StaticResource ColorTemplate}"
                                   ItemClick="ColorList_ItemClick">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem">
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                 </Style>
                             </ListView.ItemContainerStyle>
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid HorizontalAlignment="Stretch">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding ColorTag}" Foreground="{StaticResource MajorBrush}" />
-                                        <Rectangle Width="50" Grid.Column="1"
-                                                   Stroke="{StaticResource MajorBrush}"
-                                                   StrokeThickness="1">
-                                            <Rectangle.Fill>
-                                                <SolidColorBrush Color="{Binding TColor}" />
-                                            </Rectangle.Fill>
-                                        </Rectangle>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
                         </ListView>
                     </PivotItem>
                     <PivotItem>
@@ -96,6 +93,21 @@
                     </PivotItem>
                     <PivotItem>
                         <PivotItem.Header>
+                            <TextBlock x:Uid="/Settings/Appearance_ContentReader_Clock" Text="Clock" />
+                        </PivotItem.Header>
+                        <ListView x:Name="ClockColorList"
+                                  IsItemClickEnabled="True"
+                                  ItemTemplate="{StaticResource ColorTemplate}"
+                                  ItemClick="ColorList_ItemClick">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </PivotItem>
+                    <PivotItem>
+                        <PivotItem.Header>
                             <TextBlock x:Uid="/Settings/Others" Text="Others" />
                         </PivotItem.Header>
                         <StackPanel>
@@ -114,17 +126,25 @@
                         </StackPanel>
                     </PivotItem>
                 </Pivot>
-                <Grid x:Name="ContextGrid" Grid.Row="1" >
+                <Grid x:Name="ContextGrid"
+                      Margin="10"
+                      p:Clip.ToBounds="True" 
+                      Grid.Row="1" >
                     <Grid.Resources>
                         <v:ContentStyleConverter x:Key="ContentStyleConverter" />
                         <v:VDisplayConverter x:Key="VDisplayConverter" />
                     </Grid.Resources>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <ListView Grid.Row="1" x:Name="ContentGrid"
+                    <c:QClock x:Name="RClock"
+                              HourHandBrush="{Binding HHBrush}"
+                              MinuteHandBrush="{Binding MHBrush}"
+                              ScalesBrush="{Binding SBrush}"
+                              RenderTransform="{Binding RenderTransform}"
+                              Width="100" Height="100"
+                              Margin="0,0,22,22"
+                              HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+
+                    <ListView x:Name="ContentGrid"
                               ItemTemplateSelector="{Binding TemplateSelector}"
                               Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
                               FlowDirection="{Binding FlowDir}">
@@ -171,8 +191,8 @@
                             </DataTemplate>
                         </ListView.Resources>
                     </ListView>
-                </Grid>
-            </Grid>
+                </Grid> <!-- End ContentGrid -->
+            </Grid> <!-- End ContextGrid -->
         </PivotItem>
     </Pivot>
 </Page>

@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Dialogs"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -16,6 +18,7 @@
     </ContentDialog.Title>
 
     <ContentDialog.Resources>
+        <v:DataStateConverter x:Key="DataStateConverter" />
         <Style x:Key="TextBoxStyle1" TargetType="TextBox">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <Setter Property="Background" Value="Transparent" />
@@ -142,5 +145,18 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <p:StateControl x:Name="Mask" State="Reovia" Grid.RowSpan="3">
+            <Grid Background="{StaticResource MajorBackgroundBrush}">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressRing x:Name="MaskLoading" IsActive="True"
+                                  Foreground="{StaticResource MajorBrush}"
+                                  Width="40" Height="40" Margin="5" />
+                    <TextBlock TextAlignment="Center"
+                               x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait"
+                               Foreground="{StaticResource MinorBrush}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </Grid>
+        </p:StateControl>
     </Grid>
 </ContentDialog>

@@ -16,13 +16,9 @@ using Windows.UI.Xaml.Navigation;
 using wenku8.Config;
 using wenku8.Storage;
 using Net.Astropenguin.Logging;
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace wenku10.Pages.Settings
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class FirstTimeSettings : Page
     {
         private static readonly string ID = typeof( FirstTimeSettings ).Name;
@@ -52,6 +48,9 @@ namespace wenku10.Pages.Settings
         private void SetTemplate()
         {
             OneDriveToggle.IsOn = Properties.ENABLE_ONEDRIVE;
+
+            // Phone should disable double tap
+            Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = !MainStage.Instance.IsPhone;
         }
 
         private void Prev( object sender, RoutedEventArgs e ) { Prev(); }
@@ -134,14 +133,18 @@ namespace wenku10.Pages.Settings
                 Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = Windows.UI.Color.FromArgb( 255, 138, 41, 0 );
                 Properties.APPEARANCE_CONTENTREADER_NAVBG = Windows.UI.Color.FromArgb( 255, 50, 50, 50 );
                 Properties.APPEARANCE_CONTENTREADER_ASSISTBG = Windows.UI.Colors.Gray;
+
+                Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR = Windows.UI.Color.FromArgb( 0xFF, 50, 50, 50 );
+                Properties.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR = Windows.UI.Color.FromArgb( 0xFF, 50, 50, 50 );
+                Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR = Windows.UI.Color.FromArgb( 0xFF, 50, 50, 50 );
             }
             else
             {
                 T = global::wenku8.System.ThemeManager.DefaultLight();
                 T.BlackShades();
 
-                Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 255, 64, 64, 64 );
-                Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = Windows.UI.Color.FromArgb( 255, 217, 234, 225 );
+                Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 255, 38, 38, 38 );
+                Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = Windows.UI.Color.FromArgb( 255, 98, 167, 130 );
                 Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = Windows.UI.Color.FromArgb( 255, 255, 88, 9 );
                 Properties.APPEARANCE_CONTENTREADER_NAVBG = Windows.UI.Color.FromArgb( 255, 81, 94, 108 );
                 Properties.APPEARANCE_CONTENTREADER_ASSISTBG = Windows.UI.Color.FromArgb( 23, 0, 0, 0 );
