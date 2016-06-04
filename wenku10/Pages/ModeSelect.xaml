@@ -10,11 +10,7 @@
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource MajorBackgroundBrush}">
-        <Grid x:Name="HiddenInput" Opacity="0">
-            <TextBox x:Name="HiddenTextBox" />
-            <Rectangle Fill="Transparent"
-                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        </Grid>
+        <Canvas x:Name="ReactorRings" Margin="0"/>
         <Button Margin="10" Click="SinglePlayer"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
                 Background="Transparent"
@@ -74,27 +70,6 @@
                             </ColorAnimation.EasingFunction>
                         </ColorAnimation>
                     </Storyboard>
-                    <Storyboard x:Name="DataUpdate">
-                        <DoubleAnimation Storyboard.TargetName="SenseFlash"
-                                         Storyboard.TargetProperty="Opacity"
-                                         BeginTime="0:0:0.0"
-                                         Duration="0:0:0.5"
-                                         From="1" To="0">
-                            <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut" />
-                            </DoubleAnimation.EasingFunction>
-                        </DoubleAnimation>
-                        <ColorAnimation Storyboard.TargetName="SenseBrush"
-                                        Storyboard.TargetProperty="Color"
-                                        BeginTime="0:0:0.0"
-                                        Duration="0:0:0.5"
-                                        From="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}"
-                                        To="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}">
-                            <ColorAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut" />
-                            </ColorAnimation.EasingFunction>
-                        </ColorAnimation>
-                    </Storyboard>
                 </Grid.Resources>
             </Grid>
         </Button>
@@ -121,12 +96,6 @@
                 </Storyboard>
             </Border.Resources>
         </Border>
-        <Button Style="{StaticResource PlainButton}"
-                x:Name="HuhButton"
-                Margin="10" Click="ShowKeyboard"
-                HorizontalAlignment="Right" VerticalAlignment="Bottom" >
-            <Rectangle Fill="Transparent" Width="20" Height="20" />
-        </Button>
         <Button Click="ShowNews"
                 Style="{StaticResource PlainButton}"
                 HorizontalAlignment="Right" VerticalAlignment="Top"

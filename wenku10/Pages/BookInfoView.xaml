@@ -350,7 +350,7 @@
                                                     VerticalContentAlignment="Stretch">
                                         <ContentControl.Resources>
                                             <MenuFlyout x:Key="VolumeAction">
-                                                <MenuFlyoutItem x:Uid="/AppBar/VDownload" Tapped="DownloadVolume" />
+                                                <MenuFlyoutItem x:Uid="/AppBar/VDownload" Click="DownloadVolume" />
                                             </MenuFlyout>
 
                                             <DataTemplate x:Name="Vertical">

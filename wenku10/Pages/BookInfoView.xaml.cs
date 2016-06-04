@@ -450,7 +450,7 @@ namespace wenku10.Pages
                 RightClickedVolume = ( Elem.DataContext as TOCSection.ChapterGroup ).Vol;
             }
         }
-        private async void DownloadVolume( object sender, TappedRoutedEventArgs e )
+        private async void DownloadVolume( object sender, RoutedEventArgs e )
         {
             StringResources stx = new StringResources( "ContextMenu" );
             StringResources stm = new StringResources( "Message" );

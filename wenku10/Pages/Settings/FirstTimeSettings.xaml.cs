@@ -143,8 +143,8 @@ namespace wenku10.Pages.Settings
                 T = global::wenku8.System.ThemeManager.DefaultLight();
                 T.BlackShades();
 
-                Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 255, 64, 64, 64 );
-                Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = Windows.UI.Color.FromArgb( 255, 217, 234, 225 );
+                Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 255, 38, 38, 38 );
+                Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = Windows.UI.Color.FromArgb( 255, 98, 167, 130 );
                 Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = Windows.UI.Color.FromArgb( 255, 255, 88, 9 );
                 Properties.APPEARANCE_CONTENTREADER_NAVBG = Windows.UI.Color.FromArgb( 255, 81, 94, 108 );
                 Properties.APPEARANCE_CONTENTREADER_ASSISTBG = Windows.UI.Color.FromArgb( 23, 0, 0, 0 );

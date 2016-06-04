@@ -222,18 +222,18 @@ namespace wenku10.Pages.Settings.Themes
             ThisSet.Apply();
         }
 
-        private void ThemeEdit( object sender, TappedRoutedEventArgs e )
+        private void ThemeEdit( object sender, RoutedEventArgs e )
         {
             Frame.Navigate( typeof( EditColors ), SelectedTheme );
         }
 
-        private void ThemeDelete( object sender, TappedRoutedEventArgs e )
+        private void ThemeDelete( object sender, RoutedEventArgs e )
         {
             Manager.RemoveTheme( SelectedTheme.Name );
             PresetThemeColors.Remove( SelectedTheme );
         }
 
-        private async void ThemeRename( object sender, TappedRoutedEventArgs e )
+        private async void ThemeRename( object sender, RoutedEventArgs e )
         {
             string OName = SelectedTheme.Name;
             Dialogs.Rename R = new Dialogs.Rename( SelectedTheme );
@@ -244,7 +244,7 @@ namespace wenku10.Pages.Settings.Themes
             Manager.Remove( OName );
         }
 
-        private void ThemeCopy( object sender, TappedRoutedEventArgs e )
+        private void ThemeCopy( object sender, RoutedEventArgs e )
         {
             StringResources stx = new StringResources( "Settings" );
             PresetThemeColors.Add(
