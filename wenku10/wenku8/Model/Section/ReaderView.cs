@@ -101,18 +101,19 @@ namespace wenku8.Model.Section
         public Action OnComplete { get; private set; }
 
         private BookStorage BS = new BookStorage();
+        private AutoAnchor AAnc = new AutoAnchor();
         private ChapterLoader CL;
         private Chapter BindChapter;
         private Paragraph Selected;
 
-        private AnchorStorage Anchors;
+        private CustomAnchor Anchors;
         private int AutoAnchorOvd = -1;
 
         public ReaderView( BookItem B, Chapter C )
             :this()
         {
             BindChapter = C;
-            Anchors = new AnchorStorage( B );
+            Anchors = new CustomAnchor( B );
             CL = new ChapterLoader( B, SetContent );
         }
 
@@ -207,7 +208,7 @@ namespace wenku8.Model.Section
                 int index = -1;
                 if ( AutoAnchor )
                 {
-                    index = BS.GetReadAnchor( BindChapter.cid );
+                    index = AAnc.GetReadAnchor( BindChapter.cid );
                 }
 
                 if( AutoAnchorOvd != -1 )
@@ -235,7 +236,7 @@ namespace wenku8.Model.Section
             SelectedData = P;
             if( AutoAnchor )
             {
-                BS.SaveAnchor( BindChapter.cid, Data.IndexOf( P ) );
+                AAnc.SaveAnchor( BindChapter.cid, Data.IndexOf( P ) );
             }
         }
 
@@ -253,7 +254,7 @@ namespace wenku8.Model.Section
 
             if( AutoBookmark )
             {
-                BS.SaveBookmark( BindChapter.aid, BindChapter.cid );
+                AAnc.SaveBookmark( BindChapter.aid, BindChapter.cid );
             }
         }
 
