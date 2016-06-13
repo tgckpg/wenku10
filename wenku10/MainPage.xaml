@@ -334,7 +334,7 @@
                             </DataTemplate>
                         </HubSection>
 
-                        <!-- Staff picks TODO: Need to redesigen this section -->
+                        <!-- Staff picks -->
                         <HubSection x:Name="RectileSection" Visibility="Collapsed">
                             <DataTemplate>
                                 <c:StarCanvas
@@ -394,7 +394,12 @@
                                               IncrementalLoadingThreshold="0">
                                         <GridView.ItemTemplate>
                                             <DataTemplate>
-                                                <Image Margin="5" Stretch="UniformToFill" Source="{Binding Banner}" />
+                                                <Rectangle Width="182" Height="240" Margin="5"
+                                                           RadiusX="20" RadiusY="20">
+                                                    <Rectangle.Fill>
+                                                        <ImageBrush Stretch="UniformToFill" ImageSource="{Binding Banner}" />
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
                                             </DataTemplate>
                                         </GridView.ItemTemplate>
                                         <GridView.ItemsPanel>
