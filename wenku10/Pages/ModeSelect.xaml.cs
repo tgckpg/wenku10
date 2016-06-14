@@ -192,7 +192,8 @@ namespace wenku10.Pages
             NewsLoading.IsActive = false;
             if ( AS.HasNewThings )
             {
-                ShowNews();
+                Storyboard sb = ( Storyboard ) NotiRect.Resources[ "Notify" ];
+                sb?.Begin();
             }
         }
 
@@ -202,6 +203,9 @@ namespace wenku10.Pages
         {
             Dialogs.Announcements NewsDialog = new Dialogs.Announcements();
             await Popups.ShowDialog( NewsDialog );
+
+            Storyboard sb = ( Storyboard ) NotiRect.Resources[ "Notify" ];
+            sb?.Stop();
         }
     }
 }
