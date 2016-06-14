@@ -324,6 +324,7 @@ namespace wenku10.Pages
                 CustomAnchor ANC = new CustomAnchor( ThisBook );
                 await ANC.SyncSettings();
                 await new AutoAnchor().SyncSettings();
+                TOCData?.SetAutoAnchor();
             }
 
             SyncStarted = false;

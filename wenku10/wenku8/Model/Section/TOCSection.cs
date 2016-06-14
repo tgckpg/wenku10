@@ -54,7 +54,7 @@ namespace wenku8.Model.Section
             NotifyChanged( "VolumeCollections" );
         }
 
-        private void SetAutoAnchor()
+        public void SetAutoAnchor()
         {
             // Set the autoanchor
             string AnchorId = new AutoAnchor().GetBookmark( CurrentBook.Id );
