@@ -81,7 +81,7 @@ namespace wenku10
             base.OnNavigatedTo( e );
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-            if( e.NavigationMode == NavigationMode.Back ) Start();
+            if ( e.NavigationMode == NavigationMode.Back ) Start();
             if ( e.NavigationMode != NavigationMode.New ) return;
 
             string Param = e.Parameter.ToString();
@@ -141,6 +141,8 @@ namespace wenku10
             if ( Init )
             {
                 Galaxy.Draw();
+                FS?.Reload();
+
                 return;
             }
 

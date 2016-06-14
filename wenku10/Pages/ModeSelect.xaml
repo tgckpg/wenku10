@@ -10,12 +10,11 @@
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource MajorBackgroundBrush}">
-        <Canvas x:Name="ReactorRings" Margin="0"/>
         <Button Margin="10" Click="SinglePlayer"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
                 Background="Transparent"
                 Style="{StaticResource PlainButton}">
-            <Grid x:Name="SenseGround" Height="200" Width="200">
+            <Grid x:Name="SenseGround" Height="150" Width="150">
                 <Ellipse Stroke="{StaticResource Shades30}" StrokeThickness="10" />
                 <Ellipse x:Name="SenseFlash" Opacity="0" StrokeThickness="10">
                     <Ellipse.Stroke>
@@ -73,9 +72,10 @@
                 </Grid.Resources>
             </Grid>
         </Button>
+        <Canvas x:Name="ReactorRings" Margin="0"/>
         <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"
                 VerticalAlignment="Center" HorizontalAlignment="Center" >
-            <Grid Height="200" Width="200" Margin="10">
+            <Grid Height="200" Width="150" Margin="10">
                 <TextBlock x:Name="SenseText" Text="Start"
                            FontSize="30" Opacity="1"
                            TextWrapping="Wrap" Foreground="White"
@@ -99,13 +99,32 @@
         <Button Click="ShowNews"
                 Style="{StaticResource PlainButton}"
                 HorizontalAlignment="Right" VerticalAlignment="Top"
+                Background="Transparent"
                 Margin="10">
-            <Grid Width="40" Height="40" Background="{StaticResource Shades90}" >
+            <Grid x:Name="NotiRect" Width="40" Height="40">
                 <ProgressRing x:Name="NewsLoading"
                               Width="40" Height="40"
-                              Foreground="{StaticResource RelativeShadesBrush}"
+                              Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                               IsActive="True"/>
-                <i:IconInfo AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
+                <Rectangle x:Name="NotifyAura"
+                           Opacity="0.3" Stroke="{StaticResource RelativeMajorBackgroundBrush}"
+                           Width="40" Height="40"
+                           StrokeThickness="1">
+                </Rectangle>
+                <i:IconInfo AutoScale="True" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                <Grid.Resources>
+                    <Storyboard x:Name="Notify" AutoReverse="True" RepeatBehavior="Forever">
+                        <DoubleAnimation Storyboard.TargetName="NotifyAura"
+                                         Storyboard.TargetProperty="Opacity"
+                                         BeginTime="0:0:0.0"
+                                         Duration="0:0:0.3"
+                                         From="0" To="1">
+                            <DoubleAnimation.EasingFunction>
+                                <CubicEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </Grid.Resources>
             </Grid>
         </Button>
     </Grid>

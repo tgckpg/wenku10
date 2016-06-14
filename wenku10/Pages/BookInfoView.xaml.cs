@@ -321,8 +321,9 @@ namespace wenku10.Pages
 
             if ( OneDriveSync.Instance.Authenticated )
             {
-                AnchorStorage ANC = new AnchorStorage( ThisBook );
+                CustomAnchor ANC = new CustomAnchor( ThisBook );
                 await ANC.SyncSettings();
+                await new AutoAnchor().SyncSettings();
             }
 
             SyncStarted = false;
