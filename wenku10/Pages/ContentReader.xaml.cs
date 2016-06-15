@@ -370,10 +370,10 @@ namespace wenku10.Pages
             RollOutLeftPane();
         }
 
-        private void RollOutLeftPane()
+        public void RollOutLeftPane()
         {
             // Config is open, do not roll out the pane
-            if ( Config.State == ControlState.Reovia ) return;
+            if ( Overlay.State == ControlState.Reovia && OverlayFrame.Content is Settings.Themes.ContentReader ) return;
             ContentView.UserStartReading = false;
             MainSplitView.OpenPane();
         }
@@ -401,6 +401,8 @@ namespace wenku10.Pages
 
             PaneGrid.DataContext = ContentPane;
             MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
+
+            Overlay.OnStateChanged += Overlay_OnStateChanged;
         }
 
         private PaneNavButton InertiaButton()
@@ -475,8 +477,14 @@ namespace wenku10.Pages
         private void GotoSettings()
         {
             MainSplitView.ClosePane();
-            Config.State = ControlState.Reovia;
-            ConfigPopup.Content = new Settings.Themes.ContentReader();
+            Overlay.State = ControlState.Reovia;
+            OverlayFrame.Content = new Settings.Themes.ContentReader();
+        }
+
+        public void OverNavigate( Type Page, object Param )
+        {
+            Overlay.State = ControlState.Reovia;
+            OverlayFrame.Navigate( Page, Param );
         }
 
         private void ToggleFullScreen()
@@ -488,16 +496,16 @@ namespace wenku10.Pages
         private void OnBackRequested( object sender, XBackRequestedEventArgs e )
         {
             // Close the settings first
-            if ( Config.State == ControlState.Reovia )
+            if ( Overlay.State == ControlState.Reovia )
             {
-                Config.State = ControlState.Foreatii;
-                Settings.Themes.ContentReader Settings = ConfigPopup.Content as Settings.Themes.ContentReader;
+                Overlay.State = ControlState.Foreatii;
+                Settings.Themes.ContentReader Settings = OverlayFrame.Content as Settings.Themes.ContentReader;
                 MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
                 FocusHelper.DataContext = new global::wenku8.Model.Pages.ContentReader.AssistContext();
 
-                if ( Settings.NeedRedraw ) Redraw();
+                // If the overlay frame content is settings, and the settings is changed
+                if ( Settings != null && Settings.NeedRedraw ) Redraw();
 
-                ConfigPopup.Content = null;
                 e.Handled = true;
                 return;
             }
@@ -521,6 +529,14 @@ namespace wenku10.Pages
             RenderMask.Text = stx.Text( "ProgressIndicator_PleaseWait" );
             RenderMask.HandleBack( Frame, e );
             Dispose();
+        }
+
+        private void Overlay_OnStateChanged( object sender, ControlState args )
+        {
+            if ( args == ControlState.Foreatii )
+            {
+                OverlayFrame.Content = null;
+            }
         }
 
         private void Redraw()

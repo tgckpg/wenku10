@@ -25,12 +25,10 @@ using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Resources;
 using wenku8.Settings;
+using Net.Astropenguin.Controls;
 
 namespace wenku10.Pages.ContentReaderPane
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     sealed partial class ImageList : Page
     {
         private ContentReader ReaderPage;
@@ -109,8 +107,18 @@ namespace wenku10.Pages.ContentReaderPane
             ImageThumb Img = e.ClickedItem as ImageThumb;
             if ( Img.IsDownloadNeeded ) return;
 
-            ReaderPage.NavigationCacheMode = NavigationCacheMode.Enabled;
-            ReaderPage.Frame.Navigate( typeof( ImageView ), Img );
+            ReaderPage.ClosePane();
+
+            EventHandler<XBackRequestedEventArgs> ViewImage = null;
+            ViewImage = ( sender2, e2 ) =>
+            {
+                NavigationHandler.OnNavigatedBack -= ViewImage;
+                ReaderPage.RollOutLeftPane();
+            };
+
+            NavigationHandler.InsertHandlerOnNavigatedBack( ViewImage );
+
+            ReaderPage.OverNavigate( typeof( ImageView ), Img );
         }
 
         private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()
