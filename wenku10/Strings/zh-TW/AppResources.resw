@@ -275,4 +275,7 @@
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>反白以搜尋</value>
   </data>
+  <data name="Login_Expired.Text" xml:space="preserve">
+    <value>您的登入期限已過，請重新登入。</value>
+  </data>
 </root>

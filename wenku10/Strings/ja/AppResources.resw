@@ -278,4 +278,7 @@
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>検索する単語をハイライトしてください。</value>
   </data>
+  <data name="Login_Expired.Text" xml:space="preserve">
+    <value>あなたの利用期間が期限切れになった、もう一度ログインしてください。</value>
+  </data>
 </root>

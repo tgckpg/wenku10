@@ -16,7 +16,6 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Loaders;
 
 using wenku8.Ext;
-using wenku8.Config;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -39,15 +38,10 @@ namespace wenku10.Pages.Dialogs
             Member.OnStatusChanged += Member_StatusUpdate;
         }
 
-        void Member_StatusUpdate()
+        void Member_StatusUpdate( object sender, MemberStatus st )
         {
             if ( Member.IsLoggedIn )
             {
-                if ( IsRemember.IsChecked == true )
-                {
-                    Properties.ACCOUNT_NAME = Account.Text;
-                    Properties.ACCOUNT_PASSWD = Password.Password;
-                }
                 Hide();
             }
             else
@@ -123,6 +117,11 @@ namespace wenku10.Pages.Dialogs
                 // Request string
                 Member.Login( Name, Passwd );
             }
+        }
+
+        internal void ShowExpireMessage()
+        {
+            ExpireMesg.Visibility = Visibility.Visible;
         }
     }
 }

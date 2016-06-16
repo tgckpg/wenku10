@@ -278,4 +278,7 @@
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>Please highlight a word to search</value>
   </data>
+  <data name="Login_Expired.Text" xml:space="preserve">
+    <value>Sorry, session expired. Please re-login first.</value>
+  </data>
 </root>

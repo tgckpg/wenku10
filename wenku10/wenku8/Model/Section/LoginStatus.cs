@@ -67,7 +67,7 @@ namespace wenku8.Model.Section
         public LoginStatus()
         {
             Member = X.Singleton<IMember>( XProto.Member );
-            Member_OnStatusChanged();
+            MemberStatusChanged();
             Member.OnStatusChanged += Member_OnStatusChanged;
         }
 
@@ -76,7 +76,12 @@ namespace wenku8.Model.Section
             Member.OnStatusChanged -= Member_OnStatusChanged;
         }
 
-        private void Member_OnStatusChanged()
+        private void Member_OnStatusChanged( object sender, MemberStatus e )
+        {
+            MemberStatusChanged();
+        }
+
+        private void MemberStatusChanged()
         {
             StringResources stx = new StringResources();
             LoginOrInfo = Member.IsLoggedIn
@@ -104,7 +109,6 @@ namespace wenku8.Model.Section
                 , false
             );
         }
-
 
         private void AvatarLoaded( DRequestCompletedEventArgs e, string id )
         {
@@ -137,6 +141,8 @@ namespace wenku8.Model.Section
             else
             {
                 wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login();
+                if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+                    Login.ShowExpireMessage();
                 await Popups.ShowDialog( Login );
             }
         }

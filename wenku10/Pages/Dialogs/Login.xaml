@@ -16,6 +16,10 @@
     </ContentDialog.Title>
 
     <StackPanel>
+        <TextBlock x:Name="ExpireMesg"
+                   Visibility="Collapsed"
+                   x:Uid="/AppResources/Login_Expired" Text="SESSION_EXPIRED"
+                   Foreground="{StaticResource SubtleBrush}" />
         <TextBlock x:Uid="/AppResources/Login_AccountName" Text="Account"
                    Foreground="{StaticResource MajorBrush}" />
         <TextBox x:Name="Account" KeyDown="OnKeyDown"/>
@@ -23,10 +27,5 @@
                    Foreground="{StaticResource MajorBrush}"
                    Text="Password" />
         <PasswordBox x:Name="Password" KeyDown="OnKeyDown"/>
-        <CheckBox x:Name="IsRemember" IsChecked="True">
-            <TextBlock Foreground="{StaticResource MinorBrush}"
-                       x:Uid="/Settings/Account_Remember"
-                       Text="RememberMe" />
-        </CheckBox>
     </StackPanel>
 </ContentDialog>

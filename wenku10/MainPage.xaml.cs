@@ -385,10 +385,13 @@ namespace wenku10
             IMember Member = X.Singleton<IMember>( XProto.Member );
             if ( Member.WillLogin )
             {
-                StatusUpdate A = null;
-                A = () =>
+                TypedEventHandler<object, MemberStatus> A = null;
+                A = ( s, e ) =>
                 {
                     Member.OnStatusChanged -= A;
+
+                    if ( e == MemberStatus.RE_LOGIN_NEEDED ) ReLogin();
+
                     IsLoggedIn.SetResult( Member.IsLoggedIn );
                 };
 
@@ -400,6 +403,15 @@ namespace wenku10
             }
 
             return await IsLoggedIn.Task;
+        }
+
+        private async void ReLogin()
+        {
+            await Task.Delay( 3000 );
+            var j = Dispatcher.RunIdleAsync( ( x ) =>
+            {
+                ( ( LoginStatus ) SettingsButton.DataContext ).PopupLoginOrInfo();
+            } );
         }
 
         private async void GotoSettings( object sender, RoutedEventArgs e )
