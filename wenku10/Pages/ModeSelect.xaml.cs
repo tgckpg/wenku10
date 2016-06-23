@@ -68,12 +68,6 @@ namespace wenku10.Pages
         private void SetTemplate()
         {
             RootFrame = MainStage.Instance.RootFrame;
-
-            var j = Dispatcher.RunIdleAsync( x =>
-            {
-                BaumkuchenSecret( new Baumkuchen( ReactorRings ) );
-            } );
-
             GetAnnouncements();
         }
 
