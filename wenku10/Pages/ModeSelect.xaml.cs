@@ -188,7 +188,7 @@ namespace wenku10.Pages
         private PFSimulator PFSim = new PFSimulator();
         private CanvasBitmap pNote;
 
-        private bool ShowWireFrame = true;
+        private bool ShowWireFrame = false;
 
         private PointerSpawner PtrSpawn;
         private CyclicSp CountDown;
@@ -199,11 +199,8 @@ namespace wenku10.Pages
 
         private float[] Dots = new float[]{
             6.2831f / 6,
-            6.2831f / 5,
             6.2831f / 4,
-            6.2831f / 3,
             6.2831f / 2,
-            6.2831f / 1
         };
         private int dIndex = 0;
 
@@ -234,15 +231,16 @@ namespace wenku10.Pages
 
         private async Task CountDownDots()
         {
-            if ( dIndex == 6 )
+            if ( dIndex == 3 )
             {
                 PFSim.Spawners.Clear();
                 return;
             }
 
             CountDown.Span = Dots[ dIndex ];
-            CountDown.Num = ( Dots.Length - dIndex ++ );
-            await Task.Delay( 1250 );
+            CountDown.Num = 6 - ( 2 * dIndex++ );
+            CountDown.R = 80 + 70 * NTimer.LFloat();
+            await Task.Delay( 2500 );
             var j = CountDownDots();
         }
 
@@ -279,7 +277,6 @@ namespace wenku10.Pages
                 PFSim.Spawners.Add( PtrSpawn );
 
                 PFSim.Fields.Clear();
-                PFSim.Fields.Add( new Wind() { A = CountDown.Center, B = CountDown.Center } );
             }
         }
 
@@ -345,7 +342,7 @@ namespace wenku10.Pages
         {
             public Vector2 Center;
             public float R = 150;
-            public float Step = 0.02f;
+            public float Step = 0.005f;
             public int Num = 6;
             public float Span = 1.0471f;
             private float MR = 150;
