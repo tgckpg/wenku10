@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
-    xmlns:Controls="using:wenku10"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -11,23 +11,13 @@
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource MajorBackgroundBrush}">
-        <Controls:ParticleField />
+        <Border PointerPressed="Button_PointerPressed" Background="Transparent" />
         <Button Margin="10" Click="SinglePlayer"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
                 Background="Transparent"
                 Style="{StaticResource PlainButton}">
             <Grid x:Name="SenseGround" Height="150" Width="150">
                 <Ellipse Stroke="{StaticResource Shades30}" StrokeThickness="10" />
-                <Ellipse x:Name="SenseFlash" Opacity="0" StrokeThickness="10">
-                    <Ellipse.Stroke>
-                        <SolidColorBrush x:Name="SenseFill" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
-                    </Ellipse.Stroke>
-                </Ellipse>
-                <Ellipse x:Name="SenseFlush" Opacity="0" StrokeThickness="10">
-                    <Ellipse.Stroke>
-                        <SolidColorBrush x:Name="FlushFill" Color="White" />
-                    </Ellipse.Stroke>
-                </Ellipse>
                 <TextBlock x:Name="OSenseText" Text="Start" TextWrapping="Wrap"
                            FontSize="30"
                            VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -39,41 +29,12 @@
                               Foreground="{StaticResource RelativeShadesBrush}"
                               IsActive="False"
                               Width="100" Height="100"/>
-                <Grid.Resources>
-                    <Storyboard x:Name="Multiplayer">
-                        <DoubleAnimation Storyboard.TargetName="SenseFlush"
-                                         Storyboard.TargetProperty="Opacity"
-                                         BeginTime="0:0:0.0"
-                                         Duration="0:0:0.5"
-                                         From="1" To="1">
-                            <DoubleAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut" />
-                            </DoubleAnimation.EasingFunction>
-                        </DoubleAnimation>
-                        <ColorAnimation Storyboard.TargetName="FlushFill"
-                                         Storyboard.TargetProperty="Color"
-                                         BeginTime="0:0:0.0"
-                                         Duration="0:0:0.5"
-                                         From="White"
-                                         To="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}">
-                            <ColorAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut" />
-                            </ColorAnimation.EasingFunction>
-                        </ColorAnimation>
-                        <ColorAnimation Storyboard.TargetName="SenseBrush"
-                                        Storyboard.TargetProperty="Color"
-                                        BeginTime="0:0:0.0"
-                                        Duration="0:0:0.5"
-                                        From="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}"
-                                        To="White">
-                            <ColorAnimation.EasingFunction>
-                                <CubicEase EasingMode="EaseOut" />
-                            </ColorAnimation.EasingFunction>
-                        </ColorAnimation>
-                    </Storyboard>
-                </Grid.Resources>
             </Grid>
         </Button>
+        <canvas:CanvasAnimatedControl x:Name="Stage"
+                                      CreateResources="Stage_CreateResources"
+                                      SizeChanged="Stage_SizeChanged"
+                                      IsHitTestVisible="False" />
         <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"
                 VerticalAlignment="Center" HorizontalAlignment="Center" >
             <Grid Height="200" Width="150" Margin="10">

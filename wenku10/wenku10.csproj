@@ -147,9 +147,6 @@
     <Compile Include="Pages\Settings\Data\EBWin.xaml.cs">
       <DependentUpon>EBWin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Themes\ParticleField.xaml.cs">
-      <DependentUpon>ParticleField.xaml</DependentUpon>
-    </Compile>
     <Compile Include="wenku8\Model\Loaders\AutoCache.cs" />
     <Compile Include="wenku8\Model\Loaders\BookLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\ChapterLoader.cs" />
@@ -479,10 +476,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Pages\MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ParticleField.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

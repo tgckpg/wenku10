@@ -351,7 +351,7 @@ namespace wenku8.Settings.Layout
                         IEnumerable<IStorageFile> sfs = await isf.GetFilesAsync();
 
                         sfs = sfs.TakeWhile( x => Acceptables.Contains( x.FileType.ToUpper() ) );
-                        int l = AnimationTimer.RandInt( sfs.Count() );
+                        int l = NTimer.RandInt( sfs.Count() );
 
                         int i = 0;
 
@@ -393,7 +393,7 @@ namespace wenku8.Settings.Layout
 
                             if ( 0 < ImagePaths.Count )
                             {
-                                string Url = ImagePaths[ AnimationTimer.RandInt( ImagePaths.Count() ) ];
+                                string Url = ImagePaths[ NTimer.RandInt( ImagePaths.Count() ) ];
                                 TryUseImage( Url );
                             }
                             else
