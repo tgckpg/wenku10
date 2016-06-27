@@ -58,14 +58,14 @@
                 </Storyboard>
             </Border.Resources>
         </Border>
-        <Button Click="ShowNews"
+        <Button x:Name="NewsButton" Click="ShowNews"
                 Style="{StaticResource PlainButton}"
                 HorizontalAlignment="Right" VerticalAlignment="Top"
                 Background="Transparent"
                 Margin="10">
-            <Grid x:Name="NotiRect" Width="40" Height="40">
+            <Grid x:Name="NotiRect" Width="45" Height="45">
                 <ProgressRing x:Name="NewsLoading"
-                              Width="40" Height="40"
+                              Width="45" Height="45"
                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                               IsActive="True"/>
                 <Rectangle x:Name="NotifyAura"

@@ -77,13 +77,15 @@ namespace wenku10.Pages
         private void SetTemplate()
         {
             RootFrame = MainStage.Instance.RootFrame;
+
+            if( MainStage.Instance.IsPhone )
+            {
+                NewsButton.HorizontalAlignment = HorizontalAlignment.Left;
+                NewsButton.VerticalAlignment = VerticalAlignment.Bottom;
+            }
+
             GetAnnouncements();
             SetPField();
-        }
-
-        private void BaumkuchenSecret()
-        {
-            StartMultiplayer();
         }
 
         private void StartMultiplayer()
@@ -95,6 +97,8 @@ namespace wenku10.Pages
             MainStage.Instance.ObjectLayer.Children.Add( ForeText );
 
             OSenseText.Visibility = Visibility.Collapsed;
+
+            CoverTheWholeScreen();
         }
 
         private void CoverTheWholeScreen()
@@ -221,19 +225,24 @@ namespace wenku10.Pages
 
         private void Stage_Unloaded( object sender, RoutedEventArgs e )
         {
-            Stage.Draw -= Stage_Draw;
-            Stage.PointerMoved -= Stage_PointerMoved;
-            Stage.PointerReleased -= Stage_PointerReleased;
-            PFSim.Reapers.Clear();
-            PFSim.Fields.Clear();
-            PFSim.Spawners.Clear();
+            lock ( PFSim )
+            {
+                Stage.Draw -= Stage_Draw;
+                Stage.PointerMoved -= Stage_PointerMoved;
+                Stage.PointerReleased -= Stage_PointerReleased;
+                pNote.Dispose();
+                PFSim.Reapers.Clear();
+                PFSim.Fields.Clear();
+                PFSim.Spawners.Clear();
+            }
         }
 
         private async Task CountDownDots()
         {
             if ( dIndex == 3 )
             {
-                PFSim.Spawners.Clear();
+                lock ( PFSim ) PFSim.Spawners.Clear();
+                StartMultiplayer();
                 return;
             }
 

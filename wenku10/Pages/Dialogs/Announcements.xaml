@@ -48,29 +48,32 @@
                   ItemContainerStyle="{StaticResource CommentListItem}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Grid.Column="0" Margin="5">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <HyperlinkButton NavigateUri="{Binding Link}">
-                                <TextBlock TextWrapping="Wrap">
-                                    <Underline>
-                                        <Run Text="{Binding Name}" />
-                                    </Underline>
-                                    <TextBlock.Foreground>
-                                        <SolidColorBrush Color="{Binding FG}" />
-                                    </TextBlock.Foreground>
-                                </TextBlock>
-                            </HyperlinkButton>
-                            <TextBlock Grid.Column="1"
-                                       Margin="0,0,10,0" VerticalAlignment="Center"
-                                       Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"
-                                       Foreground="{StaticResource SubtleBrush}" />
-                        </Grid>
-                        <TextBlock Foreground="{StaticResource SubtleBrush}" Text="{Binding Desc}" TextWrapping="Wrap" />
-                    </StackPanel>
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <HyperlinkButton Grid.Row="0" NavigateUri="{Binding Link}">
+                            <TextBlock TextWrapping="Wrap">
+                                <Underline>
+                                    <Run Text="{Binding Name}" />
+                                </Underline>
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush Color="{Binding FG}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </HyperlinkButton>
+                        <TextBlock Grid.Row="0" Grid.Column="1"
+                                   Margin="0,0,10,0" VerticalAlignment="Center"
+                                   Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"
+                                   Foreground="{StaticResource SubtleBrush}" />
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2"
+                                   Foreground="{StaticResource SubtleBrush}" Text="{Binding Desc}" TextWrapping="Wrap" />
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
