@@ -30,12 +30,12 @@ using Net.Astropenguin.Logging;
 using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Effects.Stage;
-using wenku8.Effects.Stage.CircleParty;
 using wenku8.Effects.Stage.RectangleParty;
 using wenku8.Effects.P2DFlow;
 using wenku8.Effects.P2DFlow.Spawners;
 using wenku8.Effects.P2DFlow.Reapers;
 using wenku8.Effects.P2DFlow.ForceFields;
+using wenku8.Settings.Theme;
 using wenku8.System;
 
 namespace wenku10.Pages
@@ -190,7 +190,9 @@ namespace wenku10.Pages
         }
 
         private PFSimulator PFSim = new PFSimulator();
-        private CanvasBitmap pNote;
+        private TextureLoader Texture = new TextureLoader();
+        private int Texture_Glitter = 1;
+        private int Texture_Circle = 2;
 
         private bool ShowWireFrame = false;
 
@@ -198,13 +200,13 @@ namespace wenku10.Pages
         private CyclicSp CountDown;
 
         private Vector2 PCenter = new Vector2( 16, 16 );
-        private Rect PBounds;
         private Vector2 PScale = Vector2.One;
+        private float LightFactor = 1;
 
         private float[] Dots = new float[]{
             6.2831f / 6,
             6.2831f / 4,
-            6.2831f / 2,
+            6.2831f / 3,
         };
         private int dIndex = 0;
 
@@ -212,8 +214,13 @@ namespace wenku10.Pages
         {
             PFSim.Create( 500 );
 
-            PtrSpawn = new PointerSpawner() { SpawnTrait = PFTrait.TRAIL };
-            CountDown = new CyclicSp();
+            PtrSpawn = new PointerSpawner() { SpawnTrait = PFTrait.TRAIL, Texture = Texture_Circle };
+            CountDown = new CyclicSp() { Texture = Texture_Glitter };
+
+            ColorItem CItem = new ColorItem( "NaN", Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR );
+            Logger.Log( ID, "Theme lightness: " + CItem.L );
+
+            if( 50 < CItem.L ) LightFactor = 0.001f;
 
             var j = CountDownDots();
 
@@ -230,7 +237,7 @@ namespace wenku10.Pages
                 Stage.Draw -= Stage_Draw;
                 Stage.PointerMoved -= Stage_PointerMoved;
                 Stage.PointerReleased -= Stage_PointerReleased;
-                pNote.Dispose();
+                Texture.Dispose();
                 PFSim.Reapers.Clear();
                 PFSim.Fields.Clear();
                 PFSim.Spawners.Clear();
@@ -242,7 +249,6 @@ namespace wenku10.Pages
             if ( dIndex == 3 )
             {
                 lock ( PFSim ) PFSim.Spawners.Clear();
-                StartMultiplayer();
                 return;
             }
 
@@ -260,8 +266,8 @@ namespace wenku10.Pages
 
         private async Task LoadTextures( CanvasAnimatedControl CC )
         {
-            pNote = await CanvasBitmap.LoadAsync( CC, "Assets/glitter.dds" );
-            PBounds = pNote.Bounds;
+            await Texture.Load( CC, Texture_Glitter, "Assets/glitter.dds" );
+            await Texture.Load( CC, Texture_Circle, "Assets/circle.dds" );
         }
 
         private void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
@@ -279,7 +285,7 @@ namespace wenku10.Pages
                 float HSH = 0.5f * SH;
 
                 PFSim.Spawners.Clear();
-                PFSim.Spawners.Add( new Trail() { mf = 1f } );
+                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Glitter } );
 
                 CountDown.Center = new Vector2( HSW, HSH );
                 PFSim.Spawners.Add( CountDown );
@@ -329,11 +335,11 @@ namespace wenku10.Pages
                             P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
                             P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
                             P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
-                        ) * 2;
+                        ) * 2 * LightFactor;
 
                         Tint.W = A * 0.125f;
 
-                        SBatch.Draw( pNote, P.Pos, Tint, PCenter, 0, 0.5f * PScale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
+                        SBatch.Draw( Texture[ P.TextureId ], P.Pos, Tint, PCenter, 0, 0.5f * PScale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
                     }
 
                     if ( ShowWireFrame )
@@ -356,6 +362,8 @@ namespace wenku10.Pages
             public float Span = 1.0471f;
             private float MR = 150;
 
+            public int Texture;
+
             public CyclicSp() { }
 
             public int Acquire( int Quota )
@@ -375,6 +383,7 @@ namespace wenku10.Pages
                 p.Pos = Vector2.Transform( Center - new Vector2( 0, MR ), Matrix3x2.CreateRotation( r + i, Center ) );
                 p.Trait = PFTrait.TRAIL;
                 p.ttl = 2;
+                p.TextureId = Texture;
 
                 MR = 0.965f * MR + 0.035f * R;
 

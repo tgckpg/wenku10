@@ -41,8 +41,6 @@ namespace wenku10
         private Canvas Marquee;
         private bool Init = false;
 
-        private StarField Galaxy;
-
         public Action ClosePoupFrame { get; private set; }
 
         ~MainPage()
@@ -60,7 +58,6 @@ namespace wenku10
                 NavigationSection.DataContext = null;
                 SettingsButton.DataContext = null;
                 FavSectionView.DataContext = null;
-                Galaxy.Stop();
             }
             catch( Exception ex )
             {
@@ -72,8 +69,6 @@ namespace wenku10
         {
             base.OnNavigatedFrom( e );
             Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-
-            if ( Galaxy != null ) Galaxy.Stop();
         }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )
@@ -140,9 +135,7 @@ namespace wenku10
         {
             if ( Init )
             {
-                Galaxy.Draw();
                 FS?.Reload();
-
                 return;
             }
 
@@ -183,8 +176,6 @@ namespace wenku10
         private void WaitUIs()
         {
             // After Login Code
-            Galaxy = new StarField( StarFields, "HomeHub" );
-            var j = Dispatcher.RunIdleAsync( x => Galaxy.Draw() );
             FS = X.Instance<IFavSection>( XProto.FavSection );
 
             MemberSections();
@@ -579,7 +570,6 @@ namespace wenku10
             Floaty.BindTimer( NTimer.Instance );
 
             Floaty.TextSpeed = NTimer.RandDouble( -2, 2 );
-            Galaxy.AssignRoam( NTimer.RandDouble( -100, 100 ), NTimer.RandDouble( -100, 100 ), Floaty );
         }
     }
 

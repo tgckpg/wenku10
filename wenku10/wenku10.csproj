@@ -102,6 +102,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Assets\circle.dds" />
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\glitter.dds" />
     <Content Include="Assets\Samples\BgComments.jpg" />

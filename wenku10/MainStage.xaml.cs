@@ -70,12 +70,10 @@ namespace wenku10
                 var statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
                 var j = statusBar.HideAsync();
                 Logger.Log( ID, "Status bar found. Guessing this is a phone." );
-                global::wenku8.Effects.StarField.NumStars = 50;
             }
             else
             {
                 Logger.Log( ID, "No status bar... not a phone?" );
-                global::wenku8.Effects.StarField.NumStars = 100;
             }
 
             // Register a handler for BackRequested events and set the
