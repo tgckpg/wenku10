@@ -2,16 +2,16 @@
 wenku10 versatile book reader that does many things.
 #### Current features
 - Provide OneDrive syncing for bookmarks
-- Auto bookmarks and custom bookmarks feature
 - A spider that can crawl web content into a book
 - Themes
+- Ebwin: an embed dictionary ( I needed this for learning Japanese, so ... whatever I want! )
 - ...actually it is just a text reader that I created for reading web novel
-- way to go!
 
 #### Going to implement
-- An embed dictionary ( I need this for learning Japanese, so ... whatever I want! )
 - Faster vertical text rendering ( I am planning to switch the core components to native library )
-- Better design. I don't think if I have time to do this
+- Better design. I don't think if I have time to do this tho
+- Script sharing ( a.k.a spider crawing instructions )
+- way to go!
 
 #### Screenshots
 Here are some screenshots as of version 1.2.3b
