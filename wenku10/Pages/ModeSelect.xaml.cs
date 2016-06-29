@@ -199,8 +199,6 @@ namespace wenku10.Pages
         private PointerSpawner PtrSpawn;
         private CyclicSp CountDown;
 
-        private Vector2 PCenter = new Vector2( 16, 16 );
-        private Vector2 PScale = Vector2.One;
         private Vector4 LightFactor = Vector4.One;
 
         private float[] Dots = new float[]{
@@ -210,6 +208,17 @@ namespace wenku10.Pages
         };
 
         private int dIndex = 0;
+
+        enum GestureDir { UP, DOWN, LEFT, RIGHT };
+
+        private bool GPassed = true;
+        private GestureDir[][] PassGesture = new GestureDir[][]{
+            new GestureDir[]{ GestureDir.UP, GestureDir.LEFT }
+            , new GestureDir[]{ GestureDir.LEFT, GestureDir.DOWN, GestureDir.RIGHT  }
+            , new GestureDir[]{ GestureDir.DOWN, GestureDir.RIGHT }
+        };
+
+        private Queue<GestureDir> CurrentSet = new Queue<GestureDir>();
 
         private void SetPField()
         {
@@ -256,13 +265,34 @@ namespace wenku10.Pages
                     Stage.SizeChanged -= Stage_SizeChanged;
                     PFSim.Spawners.Clear();
                 }
+
+                if( GPassed ) StartMultiplayer();
                 return;
             }
+
+            CurrentSet.Clear();
 
             CountDown.Span = Dots[ dIndex ];
             CountDown.Num = 6 - ( 2 * dIndex++ );
             CountDown.R = 80 + 70 * NTimer.LFloat();
-            await Task.Delay( 2500 );
+            await Task.Delay( 3000 );
+
+            if ( GPassed )
+            {
+                GestureDir[] Dirs = PassGesture[ dIndex - 1 ];
+                foreach ( GestureDir Dir in Dirs )
+                {
+                    if ( CurrentSet.Count() == 0 || Dir != CurrentSet.Dequeue() )
+                    {
+                        GPassed = false;
+                        break;
+                    }
+                }
+            }
+#if DEBUG
+            Logger.Log( ID, GPassed ? "Passed" : "Failed" );
+#endif
+
             var j = CountDownDots();
         }
 
@@ -293,7 +323,7 @@ namespace wenku10.Pages
 
                 PFSim.Spawners.Clear();
                 PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Glitter } );
-                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Circle, Bind = PFTrait.TRAIL_O } );
+                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Circle, Bind = PFTrait.TRAIL_O, Scale = new Vector2( 0.125f, 0.125f ) } );
 
                 CountDown.Center = new Vector2( HSW, HSH );
                 PFSim.Spawners.Add( CountDown );
@@ -311,14 +341,36 @@ namespace wenku10.Pages
             }
         }
 
-        private void Button_PointerPressed( object sender, PointerRoutedEventArgs e )
+        private Vector2 StartPoint;
+
+        private void XStage_PointerPressed( object sender, PointerRoutedEventArgs e )
         {
             Stage.IsHitTestVisible = true;
+            StartPoint = e.GetCurrentPoint( Stage ).Position.ToVector2();
         }
 
         private void Stage_PointerReleased( object sender, PointerRoutedEventArgs e )
         {
             Stage.IsHitTestVisible = false;
+            GestureDirection( e.GetCurrentPoint( Stage ).Position.ToVector2() );
+        }
+
+        private void GestureDirection( Vector2 EndPoint )
+        {
+            Vector2 PosDiff = EndPoint - StartPoint;
+            Vector2 AbsDiff = Vector2.Abs( PosDiff );
+
+            bool Horizontal = AbsDiff.Y < AbsDiff.X;
+            bool PositiveDir = Horizontal ? ( 0 < PosDiff.X ) : ( 0 < PosDiff.Y );
+
+            if ( Horizontal )
+            {
+                CurrentSet.Enqueue( PositiveDir ? GestureDir.RIGHT : GestureDir.LEFT );
+            }
+            else
+            {
+                CurrentSet.Enqueue( PositiveDir ? GestureDir.DOWN : GestureDir.UP );
+            }
         }
 
         private void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
@@ -347,7 +399,7 @@ namespace wenku10.Pages
 
                         Tint.W = A * 0.125f;
 
-                        SBatch.Draw( Texture[ P.TextureId ], P.Pos, Tint, PCenter, 0, 0.5f * PScale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
+                        SBatch.Draw( Texture[ P.TextureId ], P.Pos, Tint, Texture.Center[ P.TextureId ], 0, 0.5f * P.Scale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
                     }
 
                     if ( ShowWireFrame )
@@ -399,5 +451,6 @@ namespace wenku10.Pages
                 i += Step;
             }
         }
+
     }
 }

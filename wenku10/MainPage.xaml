@@ -7,6 +7,7 @@
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -41,6 +42,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
+
         <c:PassiveSplitView x:Name="MainSplitPane"
                             EnablePaneSwipe="False"
                             Background="{StaticResource MajorBackgroundBrush}">
@@ -61,7 +63,7 @@
                         <TextBlock x:Name="MarqueeText"
                                    Foreground="{StaticResource RelativeMajorBrush}"
                                    FontSize="30"
-                                   LayoutUpdated="Sb_Completed"
+                                   LayoutUpdated="MarqueeComplete"
                                    VerticalAlignment="Center"
                                    Text="{Binding Title}">
                             <TextBlock.RenderTransform>
@@ -144,21 +146,7 @@
             </c:PassiveSplitView.Pane>
             <c:PassiveSplitView.Content>
                 <Grid>
-                    <!-- Background from data context -->
-                    <Grid Grid.RowSpan="2" Margin="-100" >
-                        <Grid.RenderTransform>
-                            <TranslateTransform
-                                X="{
-                                    Binding ElementName=HomeHub
-                                    , Path=HorizontalOffset
-                                    , Converter={StaticResource ParallaxConverter}
-                                    , ConverterParameter=-0.10
-                                }" />
-                        </Grid.RenderTransform>
-                    </Grid>
-
-                    <Canvas x:Name="StarFields" />
-                    <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.2" />
+                    <canvas:CanvasAnimatedControl x:Name="Stage" CreateResources="Stage_CreateResources" />
 
                     <!-- Loading Background Cover -->
                     <p:StateControl x:Name="BgCover">
@@ -191,10 +179,6 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Rectangle Margin="-10" Grid.ColumnSpan="3" Fill="{StaticResource Shades60}" />
-                                    <!--Polygon Grid.Column="3"
-                                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                             Fill="{StaticResource MinorBrush}"
-                                             Points="0,0 10,5, 0,10" /-->
 
                                     <TextBox Margin="5,0" Grid.Column="0" PlaceholderText="Search BookShelf"
                                              VerticalAlignment="Center"

@@ -1,13 +1,18 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,6 +29,10 @@ using Net.Astropenguin.UI;
 
 using wenku8.CompositeElement;
 using wenku8.Effects;
+using wenku8.Effects.P2DFlow;
+using wenku8.Effects.P2DFlow.ForceFields;
+using wenku8.Effects.P2DFlow.Reapers;
+using wenku8.Effects.P2DFlow.Spawners;
 using wenku8.Ext;
 using wenku8.Model.Book;
 using wenku8.Model.Section;
@@ -133,12 +142,15 @@ namespace wenku10
 
         private void Start()
         {
+            NTimer.Instance.Start();
+
             if ( Init )
             {
                 FS?.Reload();
                 return;
             }
 
+            SetBackground();
             Init = true;
 
             if ( global::wenku8.Config.Properties.LOG_LEVEL == "DEBUG" )
@@ -337,7 +349,7 @@ namespace wenku10
             MarqueeStory.Begin();
         }
 
-        private void Sb_Completed( object sender, object e )
+        private void MarqueeComplete( object sender, object e )
         {
             StartMarquee();
         }
@@ -412,18 +424,16 @@ namespace wenku10
             StringResources stm = new StringResources( "Message" );
 
             bool Go = false;
-            Windows.UI.Popups.MessageDialog Msg = new Windows.UI.Popups.MessageDialog( stx.Text( "Preface" ), stapp.Text( "Settings" ) );
+            MessageDialog Msg = new MessageDialog( stx.Text( "Preface" ), stapp.Text( "Settings" ) );
 
             Msg.Commands.Add(
-                new Windows.UI.Popups.UICommand(
+                new UICommand(
                     stm.Str( "Yes" )
                     , ( c ) => Go = true
                 )
             );
 
-            Msg.Commands.Add(
-                new Windows.UI.Popups.UICommand( stm.Str( "No" ) )
-            );
+            Msg.Commands.Add( new UICommand( stm.Str( "No" ) ) );
 
             await Popups.ShowDialog( Msg );
 
@@ -531,7 +541,7 @@ namespace wenku10
             if ( MarqueeStory == null )
             {
                 MarqueeStory = new Storyboard();
-                MarqueeStory.Completed += Sb_Completed;
+                MarqueeStory.Completed += MarqueeComplete;
             }
 
         }
@@ -571,6 +581,150 @@ namespace wenku10
 
             Floaty.TextSpeed = NTimer.RandDouble( -2, 2 );
         }
+
+        #region Dynamic Background
+        private PFSimulator PFSim = new PFSimulator();
+
+#if DEBUG
+        private bool ShowWireFrame = true;
+#endif
+
+        private TextureLoader Texture;
+
+        private const int Texture_Glitter = 1;
+        private const int Texture_Circle = 2;
+
+
+        private Wind ScrollWind = new Wind();
+
+        private void Stage_Unloaded( object sender, RoutedEventArgs e )
+        {
+            lock ( PFSim )
+            {
+                Stage.Draw -= Stage_Draw;
+                Stage.SizeChanged -= Stage_SizeChanged;
+                Texture.Dispose();
+                PFSim.Reapers.Clear();
+                PFSim.Fields.Clear();
+                PFSim.Spawners.Clear();
+            }
+        }
+
+        private void SetBackground()
+        {
+            PFSim.Create( 500 );
+
+            Texture = new TextureLoader();
+
+            Stage.Draw += Stage_Draw;
+            Stage.SizeChanged += Stage_SizeChanged;
+            Stage.Unloaded += Stage_Unloaded;
+            HomeHub.ViewChanged += HomeHub_ViewChanged;
+        }
+
+
+        private float PrevOffset = 0;
+
+        private void HomeHub_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )
+        {
+            float CurrOffset = ( float ) HomeHub.RefSV.HorizontalOffset;
+            ScrollWind.Strength = CurrOffset - PrevOffset;
+            PrevOffset = CurrOffset;
+        }
+
+        private void Stage_CreateResources( CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args )
+        {
+            args.TrackAsyncAction( LoadTextures( sender ).AsAsyncAction() );
+        }
+
+        private async Task LoadTextures( CanvasAnimatedControl CC )
+        {
+            await Texture.Load( CC, Texture_Glitter, "Assets/glitter.dds" );
+            await Texture.Load( CC, Texture_Circle, "Assets/circle.dds" );
+        }
+
+        private void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
+        {
+            lock ( PFSim )
+            {
+                Size s = e.NewSize;
+                PFSim.Reapers.Clear();
+                PFSim.Reapers.Add( Age.Instance );
+                PFSim.Reapers.Add( new Boundary( new Rect( 0, 0, s.Width * 1.2, s.Height * 1.2 ) ) );
+
+                float SW = ( float ) s.Width;
+                float SH = ( float ) s.Height;
+                float HSW = 0.5f * SW;
+
+                PFSim.Spawners.Clear();
+                PFSim.Spawners.Add( new LinearSpawner( new Vector2( HSW, 10 ), new Vector2( SW, 0 ), new Vector2( 10, 10 ) )
+                {
+                    Chaos = new Vector2( 1, 1 )
+                    , otMin = 10, otMax = 20
+                    , Texture = Texture_Circle
+                    , SpawnTrait = PFTrait.IMMORTAL
+                    , SpawnEx = ( P ) =>
+                    {
+                        P.Tint.M44 = NTimer.LFloat();
+                        P.mf *= NTimer.LFloat();
+                        P.Scale = new Vector2( 0.25f, 0.25f ) + Vector2.One * ( NTimer.LFloat() - 0.125f );
+                    }
+                } );
+
+                ScrollWind.A = new Vector2( SW, 0 );
+                ScrollWind.B = new Vector2( SW, SH );
+                ScrollWind.MaxDist = SW;
+
+                PFSim.Fields.Clear();
+                PFSim.AddField( GenericForce.EARTH_GRAVITY );
+                PFSim.AddField( ScrollWind );
+            }
+        }
+
+        private void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
+        {
+            lock ( PFSim )
+            {
+                var Snapshot = PFSim.Snapshot();
+                using ( CanvasDrawingSession ds = args.DrawingSession )
+                using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+                {
+                    while ( Snapshot.MoveNext() )
+                    {
+                        Particle P = Snapshot.Current;
+
+                        float A = Vector2.Transform( new Vector2( 0, 1 ), Matrix3x2.CreateRotation( P.ttl * 0.01f ) ).X;
+
+                        Vector4 Tint = new Vector4(
+                            P.Tint.M11 + P.Tint.M21 + P.Tint.M31 + P.Tint.M41 + P.Tint.M51,
+                            P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
+                            P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
+                            P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
+                        );
+
+                        Tint.W *= A * 0.5f;
+                        ScrollWind.Strength *= 0.5f;
+
+                        SBatch.Draw(
+                            Texture[ P.TextureId ]
+                            , P.Pos, Tint
+                            , Texture.Center[ P.TextureId ], 0, P.Scale
+                            , CanvasSpriteFlip.None );
+                    }
+#if DEBUG
+                    if ( ShowWireFrame )
+                    {
+                        foreach ( IForceField IFF in PFSim.Fields )
+                        {
+                            IFF.WireFrame( ds );
+                        }
+                    }
+#endif
+                }
+            }
+        }
+        #endregion
+
     }
 
 }
