@@ -201,26 +201,27 @@ namespace wenku10.Pages
 
         private Vector2 PCenter = new Vector2( 16, 16 );
         private Vector2 PScale = Vector2.One;
-        private float LightFactor = 1;
+        private Vector4 LightFactor = Vector4.One;
 
         private float[] Dots = new float[]{
             6.2831f / 6,
             6.2831f / 4,
             6.2831f / 3,
         };
+
         private int dIndex = 0;
 
         private void SetPField()
         {
             PFSim.Create( 500 );
 
-            PtrSpawn = new PointerSpawner() { SpawnTrait = PFTrait.TRAIL, Texture = Texture_Circle };
+            PtrSpawn = new PointerSpawner() { SpawnTrait = PFTrait.TRAIL_O, Texture = Texture_Circle };
             CountDown = new CyclicSp() { Texture = Texture_Glitter };
 
             ColorItem CItem = new ColorItem( "NaN", Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR );
             Logger.Log( ID, "Theme lightness: " + CItem.L );
 
-            if( 50 < CItem.L ) LightFactor = 0.001f;
+            if ( 50 < CItem.L ) LightFactor = new Vector4( 0.092f, 0.005f, 0.001f, 2 );
 
             var j = CountDownDots();
 
@@ -228,6 +229,7 @@ namespace wenku10.Pages
             Stage.PointerMoved += Stage_PointerMoved;
             Stage.PointerReleased += Stage_PointerReleased;
             Stage.Unloaded += Stage_Unloaded;
+            Stage.SizeChanged += Stage_SizeChanged;
         }
 
         private void Stage_Unloaded( object sender, RoutedEventArgs e )
@@ -237,6 +239,7 @@ namespace wenku10.Pages
                 Stage.Draw -= Stage_Draw;
                 Stage.PointerMoved -= Stage_PointerMoved;
                 Stage.PointerReleased -= Stage_PointerReleased;
+                Stage.SizeChanged -= Stage_SizeChanged;
                 Texture.Dispose();
                 PFSim.Reapers.Clear();
                 PFSim.Fields.Clear();
@@ -248,7 +251,11 @@ namespace wenku10.Pages
         {
             if ( dIndex == 3 )
             {
-                lock ( PFSim ) PFSim.Spawners.Clear();
+                lock ( PFSim )
+                {
+                    Stage.SizeChanged -= Stage_SizeChanged;
+                    PFSim.Spawners.Clear();
+                }
                 return;
             }
 
@@ -286,6 +293,7 @@ namespace wenku10.Pages
 
                 PFSim.Spawners.Clear();
                 PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Glitter } );
+                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Circle, Bind = PFTrait.TRAIL_O } );
 
                 CountDown.Center = new Vector2( HSW, HSH );
                 PFSim.Spawners.Add( CountDown );
@@ -360,7 +368,7 @@ namespace wenku10.Pages
             public float Step = 0.005f;
             public int Num = 6;
             public float Span = 1.0471f;
-            private float MR = 150;
+            private float MR = 2500;
 
             public int Texture;
 

@@ -33,7 +33,6 @@
         </Button>
         <canvas:CanvasAnimatedControl x:Name="Stage"
                                       CreateResources="Stage_CreateResources"
-                                      SizeChanged="Stage_SizeChanged"
                                       IsHitTestVisible="False" />
         <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"
                 VerticalAlignment="Center" HorizontalAlignment="Center" >
