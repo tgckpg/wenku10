@@ -32,6 +32,7 @@
             </Grid>
         </Button>
         <canvas:CanvasAnimatedControl x:Name="Stage"
+                                      IsFixedTimeStep="False"
                                       CreateResources="Stage_CreateResources"
                                       IsHitTestVisible="False" />
         <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"

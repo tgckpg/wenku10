@@ -586,7 +586,7 @@ namespace wenku10
         private PFSimulator PFSim = new PFSimulator();
 
 #if DEBUG
-        private bool ShowWireFrame = true;
+        private bool ShowWireFrame = false;
 #endif
 
         private TextureLoader Texture;
@@ -594,41 +594,42 @@ namespace wenku10
         private const int Texture_Glitter = 1;
         private const int Texture_Circle = 2;
 
+        private Vector4 ThemeTint;
 
         private Wind ScrollWind = new Wind();
 
-        private void Stage_Unloaded( object sender, RoutedEventArgs e )
-        {
-            lock ( PFSim )
-            {
-                Stage.Draw -= Stage_Draw;
-                Stage.SizeChanged -= Stage_SizeChanged;
-                Texture.Dispose();
-                PFSim.Reapers.Clear();
-                PFSim.Fields.Clear();
-                PFSim.Spawners.Clear();
-            }
-        }
-
         private void SetBackground()
         {
-            PFSim.Create( 500 );
+            PFSim.Create( MainStage.Instance.IsPhone ? 25 : 50 );
 
             Texture = new TextureLoader();
 
-            Stage.Draw += Stage_Draw;
+            Windows.UI.Color C = wenku8.Config.Properties.APPEARENCE_THEME_HORIZONTAL_RIBBON_COLOR;
+            ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
+
+            Stage.GameLoopStarting += Stage_GameLoopStarting;
+            Stage.GameLoopStopped += Stage_GameLoopStopped;
+
             Stage.SizeChanged += Stage_SizeChanged;
-            Stage.Unloaded += Stage_Unloaded;
             HomeHub.ViewChanged += HomeHub_ViewChanged;
         }
 
+        private void Stage_GameLoopStopped( ICanvasAnimatedControl sender, object args )
+        {
+            Stage.Draw -= Stage_Draw;
+        }
+
+        private void Stage_GameLoopStarting( ICanvasAnimatedControl sender, object args )
+        {
+            Stage.Draw += Stage_Draw;
+        }
 
         private float PrevOffset = 0;
 
         private void HomeHub_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )
         {
             float CurrOffset = ( float ) HomeHub.RefSV.HorizontalOffset;
-            ScrollWind.Strength = CurrOffset - PrevOffset;
+            ScrollWind.Strength = Vector2.Clamp( Vector2.One * ( CurrOffset - PrevOffset ), -3 * Vector2.One, 3 * Vector2.One ).X;
             PrevOffset = CurrOffset;
         }
 
@@ -650,24 +651,30 @@ namespace wenku10
                 Size s = e.NewSize;
                 PFSim.Reapers.Clear();
                 PFSim.Reapers.Add( Age.Instance );
-                PFSim.Reapers.Add( new Boundary( new Rect( 0, 0, s.Width * 1.2, s.Height * 1.2 ) ) );
+                PFSim.Reapers.Add( new Boundary( new Rect( -0.1 * s.Width, -0.1 * s.Height, s.Width * 1.2, s.Height * 1.2 ) ) );
 
                 float SW = ( float ) s.Width;
                 float SH = ( float ) s.Height;
                 float HSW = 0.5f * SW;
+                float HSH = 0.5f * SH;
 
                 PFSim.Spawners.Clear();
-                PFSim.Spawners.Add( new LinearSpawner( new Vector2( HSW, 10 ), new Vector2( SW, 0 ), new Vector2( 10, 10 ) )
+                PFSim.Spawners.Add( new LinearSpawner( new Vector2( HSW, HSH ), new Vector2( HSW, HSH ), new Vector2( 10, 10 ) )
                 {
                     Chaos = new Vector2( 1, 1 )
-                    , otMin = 10, otMax = 20
+                    , otMin = 5, otMax = 10
                     , Texture = Texture_Circle
                     , SpawnTrait = PFTrait.IMMORTAL
                     , SpawnEx = ( P ) =>
                     {
-                        P.Tint.M44 = NTimer.LFloat();
+                        P.Tint.M11 = ThemeTint.X;
+                        P.Tint.M22 = ThemeTint.Y;
+                        P.Tint.M33 = ThemeTint.Z;
+                        P.Tint.M44 = ThemeTint.W * NTimer.LFloat();
+
                         P.mf *= NTimer.LFloat();
-                        P.Scale = new Vector2( 0.25f, 0.25f ) + Vector2.One * ( NTimer.LFloat() - 0.125f );
+                        P.Scale = new Vector2( 0.5f, 0.5f ) + Vector2.One * ( NTimer.LFloat() - 0.25f );
+                        P.vt.Y += 5 * NTimer.RFloat();
                     }
                 } );
 
@@ -702,7 +709,7 @@ namespace wenku10
                             P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
                         );
 
-                        Tint.W *= A * 0.5f;
+                        Tint.W *= A;
                         ScrollWind.Strength *= 0.5f;
 
                         SBatch.Draw(
