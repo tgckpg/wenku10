@@ -495,9 +495,6 @@
   <data name="EBWin_NumSubbooks.Text" xml:space="preserve">
     <value>子書數</value>
   </data>
-  <data name="Size.Text" xml:space="preserve">
-    <value>大小</value>
-  </data>
   <data name="Desc_Language_AE.Text" xml:space="preserve">
     <value>Change the language to English</value>
   </data>

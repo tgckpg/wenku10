@@ -96,7 +96,7 @@ namespace wenku10.Pages
                 PFSim.Spawners.Add( new ExplosionParticle()
                 {
                     Texture = Texture_Circle
-                    , SpawnEx = ( P) => { P.Scale *= 0.125f; }
+                    , SpawnEx = ( P ) => { P.Scale *= 0.125f; }
                 } );
                 PFSim.Spawners.Add( new LinearSpawner( new Vector2( HSW, SH ), new Vector2( 0, 0 ), new Vector2( 50, -200 ) )
                 {

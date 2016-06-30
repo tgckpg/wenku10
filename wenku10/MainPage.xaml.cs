@@ -85,6 +85,8 @@ namespace wenku10
             base.OnNavigatedTo( e );
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
+            NTimer.Instance.Stop();
+
             if ( e.NavigationMode == NavigationMode.Back ) Start();
             if ( e.NavigationMode != NavigationMode.New ) return;
 
