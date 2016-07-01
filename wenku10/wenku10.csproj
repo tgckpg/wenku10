@@ -118,6 +118,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>

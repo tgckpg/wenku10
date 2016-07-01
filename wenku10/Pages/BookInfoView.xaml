@@ -8,16 +8,17 @@
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:ms="using:Microsoft.Phone.Controls"
-    xmlns:Converters="using:wenku8.Converters"
+    xmlns:s="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
     <Page.Resources>
-        <Converters:VDisplayConverter x:Key="VDisplayConverter" />
-        <Converters:ParallaxConverter x:Key="ParallaxConverter" />
-        <Converters:BoolDataConverter x:Key="BoolDataConverter" />
-        <Converters:NumberSimplifier x:Key="NumberSimplifier" />
+        <s:VDisplayConverter x:Key="VDisplayConverter" />
+        <s:ParallaxConverter x:Key="ParallaxConverter" />
+        <s:BoolDataConverter x:Key="BoolDataConverter" />
+        <s:NumberSimplifier x:Key="NumberSimplifier" />
+        <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <v:BoolStateConverter x:Key="BoolStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
@@ -252,7 +253,7 @@
                                                 Tapped="AddOrRemoveFav">
                                             <Grid>
                                                 <Grid.Resources>
-                                                    <Converters:FavConverter x:Key="FavConverter" />
+                                                    <s:FavConverter x:Key="FavConverter" />
                                                 </Grid.Resources>
                                                 <i:IconFaved AutoScale="True"
                                                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
@@ -327,23 +328,25 @@
                                         <ColumnDefinition Width="65" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        x:Uid="/AppBar/TOC"
+                                        VerticalAlignment="{Binding Converter={StaticResource PhoneVAlignConverter}, ConverterParameter=Top|Bottom}"
+                                        HorizontalAlignment="Center"
+                                        TextLineBounds="TrimToBaseline"
+                                        FontSize="50"
+                                        Foreground="{StaticResource Shades80}"
+                                        TextWrapping="Wrap" />
                                     <StackPanel Grid.Column="0"
                                                 Background="{StaticResource Shades70}"
-                                                VerticalAlignment="Stretch">
-                                        <Button Style="{StaticResource PlainButton}" Width="65" Height="65" Click="JumpToBookmark">
+                                                VerticalAlignment="{Binding Converter={StaticResource PhoneVAlignConverter}, ConverterParameter=Center|Stretch}">
+                                        <Button Style="{StaticResource PlainButton}"
+                                                Width="65" Height="65" Click="JumpToBookmark">
                                             <i:IconBookmark AutoScale="True" />
                                         </Button>
                                         <c:OneDriveButton Loaded="SyncButtonLoaded"
                                                 FlowDirection="LeftToRight"
                                                 Width="65" Height="65"  />
                                     </StackPanel>
-                                    <TextBlock
-                                        x:Uid="/AppBar/TOC"
-                                        VerticalAlignment="Bottom" HorizontalAlignment="Center"
-                                        TextLineBounds="TrimToBaseline"
-                                        FontSize="50"
-                                        Foreground="{StaticResource Shades80}"
-                                        TextWrapping="Wrap" />
 
                                     <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}"
                                                     VerticalAlignment="Stretch"

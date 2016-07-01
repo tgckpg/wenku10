@@ -24,7 +24,7 @@
                                       CreateResources="Stage_CreateResources"
                                       IsHitTestVisible="False" />
         <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"
-                VerticalAlignment="Center" HorizontalAlignment="Center" >
+                VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid Height="200" Width="150" Margin="10">
                 <TextBlock x:Name="SenseText" Text="Start"
                            FontSize="30" Opacity="1"

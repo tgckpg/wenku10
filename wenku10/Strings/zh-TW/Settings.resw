@@ -561,4 +561,10 @@
   <data name="Appearance_ContentReader_Clock_ARColor.Text" xml:space="preserve">
     <value>電量弧</value>
   </data>
+  <data name="Size.Text" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
+    <value>確認安裝</value>
+  </data>
 </root>
