@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -293,6 +294,9 @@ namespace wenku10.Pages.ContentReaderPane
 
             ClockTicker.Tick += ClockTicker_Tick;
             ClockTicker.Start();
+
+            AggregateBattery_ReportUpdated( Battery.AggregateBattery, null );
+            Battery.AggregateBattery.ReportUpdated += AggregateBattery_ReportUpdated;
         }
 
         private void ClockStop()
@@ -303,11 +307,24 @@ namespace wenku10.Pages.ContentReaderPane
 
             ClockTicker.Tick -= ClockTicker_Tick;
             ClockTicker = null;
+            Battery.AggregateBattery.ReportUpdated -= AggregateBattery_ReportUpdated;
         }
 
         private void ClockTicker_Tick( object sender, object e )
         {
             RClock.Time = DateTime.Now;
         }
+
+        private void AggregateBattery_ReportUpdated( Battery sender, object args )
+        {
+            BatteryReport Report = sender.GetReport();
+
+            if( Report.RemainingCapacityInMilliwattHours == null ) return;
+            Worker.UIInvoke( () =>
+            {
+                RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
+            } );
+        }
+
     }
 }

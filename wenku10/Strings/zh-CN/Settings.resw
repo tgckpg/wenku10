@@ -551,4 +551,7 @@
   <data name="Help_BugFeature.Text" xml:space="preserve">
     <value>错误报告</value>
   </data>
+  <data name="Appearance_ContentReader_Clock_ARColor.Text" xml:space="preserve">
+    <value>电池弧</value>
+  </data>
 </root>

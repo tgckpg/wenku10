@@ -25,10 +25,6 @@
                         <SolidColorBrush x:Name="SenseBrush" Color="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}" />
                     </TextBlock.Foreground>
                 </TextBlock>
-                <ProgressRing x:Name="LoadingRing"
-                              Foreground="{StaticResource RelativeShadesBrush}"
-                              IsActive="False"
-                              Width="100" Height="100"/>
             </Grid>
         </Button>
         <canvas:CanvasAnimatedControl x:Name="Stage"

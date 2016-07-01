@@ -65,7 +65,7 @@ namespace wenku10.Pages
         {
             if ( ModeSelected ) return;
             ModeSelected = true;
-            LoadingRing.IsActive = true;
+            PFSim.AddField( LoadingWind );
 
             NavigationHandler.OnNavigatedBack -= DisableBack;
 
@@ -197,6 +197,7 @@ namespace wenku10.Pages
         private bool ShowWireFrame = false;
 
         private PointerSpawner PtrSpawn;
+        private Wind LoadingWind;
         private CyclicSp CountDown;
 
         private Vector4 LightFactor = Vector4.One;
@@ -329,7 +330,10 @@ namespace wenku10.Pages
                 PFSim.Spawners.Add( CountDown );
                 PFSim.Spawners.Add( PtrSpawn );
 
+                Vector2 Center = new Vector2( HSW, HSH );
                 PFSim.Fields.Clear();
+
+                LoadingWind = new Wind() { A = Center, B = Center, Strength = 30 };
             }
         }
 
