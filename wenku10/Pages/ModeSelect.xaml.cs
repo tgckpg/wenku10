@@ -78,6 +78,24 @@ namespace wenku10.Pages
         {
             RootFrame = MainStage.Instance.RootFrame;
 
+            Func<UIElement>[] RandIcon = new Func<UIElement>[]
+            {
+                () => new wenku8.ThemeIcons.IconExoticHexa() {
+                    Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
+                    , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
+                }
+                , () => new wenku8.ThemeIcons.IconExoticQuad() {
+                    Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
+                    , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
+                }
+                , () => new wenku8.ThemeIcons.IconExoticTri() {
+                    Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
+                    , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
+                }
+            };
+
+            SenseGround.Children.Add( NTimer.RandChoiceFromList( RandIcon ).Invoke() );
+
             if( MainStage.Instance.IsPhone )
             {
                 NewsButton.HorizontalAlignment = HorizontalAlignment.Left;
@@ -95,8 +113,6 @@ namespace wenku10.Pages
             LayoutRoot.Children.Remove( ForeText );
 
             MainStage.Instance.ObjectLayer.Children.Add( ForeText );
-
-            OSenseText.Visibility = Visibility.Collapsed;
 
             CoverTheWholeScreen();
         }

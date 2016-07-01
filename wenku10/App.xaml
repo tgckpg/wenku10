@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="/Themes/Global/TextBox.xaml" />
                 <ResourceDictionary Source="/Themes/Global/ComboBox.xaml" />
                 <ResourceDictionary Source="/Themes/Global/ListViewItem.xaml" />
+                <ResourceDictionary Source="/Themes/Global/Icons.xaml" />
 
                 <ResourceDictionary Source="/Themes/ListViewItems/CommentListItem.xaml" />
                 <ResourceDictionary Source="/Themes/ListViewItems/ListViewItems.xaml" />
