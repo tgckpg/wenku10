@@ -120,8 +120,14 @@
   <data name="Download" xml:space="preserve">
     <value>Cannot download the content, please check your internet connection</value>
   </data>
+  <data name="InvalidScript" xml:space="preserve">
+    <value>Invalid script</value>
+  </data>
   <data name="ParseFailed" xml:space="preserve">
     <value>Data processing failed, possibly a damaged file</value>
+  </data>
+  <data name="PasswordMismatch" xml:space="preserve">
+    <value>Password mismatch</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Cannot get updates</value>

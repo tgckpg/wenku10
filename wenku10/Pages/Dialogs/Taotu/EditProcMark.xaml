@@ -14,7 +14,7 @@
     PrimaryButtonText="Button1"
     IsSecondaryButtonEnabled="False">
     <ContentDialog.Resources>
-        <v:BoolStateConverter x:Key="BoolStateConverter" />
+        <v:DataStateConverter x:Key="DataStateConverter" />
     </ContentDialog.Resources>
     <ContentDialog.Title>
         <TextBlock x:Uid="/libtaotu/Resources/Marker" Text="Edit Marker"
@@ -89,7 +89,7 @@
                         Click="SubVolume">
                     <Grid Width="30" Height="30">
                         <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
-                        <p:StateControl State="{Binding HasVolProcs, Converter={StaticResource BoolStateConverter}}">
+                        <p:StateControl State="{Binding HasVolProcs, Converter={StaticResource DataStateConverter}}">
                             <i:IconSteps AutoScale="True" Foreground="{StaticResource MajorBrush}" />
                         </p:StateControl>
                     </Grid>
@@ -101,13 +101,13 @@
                         <p:StateControl
                             x:Uid="/libtaotu/Resources/Sync"
                             ToolTipService.ToolTip="Synchronous"
-                            State="{Binding VolAsync, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                            State="{Binding VolAsync, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
                             <i:IconSerial AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
                         </p:StateControl>
                         <p:StateControl
                             x:Uid="/libtaotu/Resources/Async"
                             ToolTipService.ToolTip="Asynchronous"
-                            State="{Binding VolAsync, Converter={StaticResource BoolStateConverter}}">
+                            State="{Binding VolAsync, Converter={StaticResource DataStateConverter}}">
                             <i:IconParallel AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
                         </p:StateControl>
                     </Grid>
@@ -153,7 +153,7 @@
                         Click="SubChapter">
                     <Grid Width="30" Height="30">
                         <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
-                        <p:StateControl State="{Binding HasEpProcs, Converter={StaticResource BoolStateConverter}}">
+                        <p:StateControl State="{Binding HasEpProcs, Converter={StaticResource DataStateConverter}}">
                             <i:IconSteps AutoScale="True" Foreground="{StaticResource MajorBrush}" />
                         </p:StateControl>
                     </Grid>
@@ -165,13 +165,13 @@
                         <p:StateControl
                             x:Uid="/libtaotu/Resources/Sync"
                             ToolTipService.ToolTip="Synchronous"
-                            State="{Binding EpAsync, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                            State="{Binding EpAsync, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
                             <i:IconSerial AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
                         </p:StateControl>
                         <p:StateControl
                             x:Uid="/libtaotu/Resources/ASync"
                             ToolTipService.ToolTip="Asynchronous"
-                            State="{Binding EpAsync, Converter={StaticResource BoolStateConverter}}">
+                            State="{Binding EpAsync, Converter={StaticResource DataStateConverter}}">
                             <i:IconParallel AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
                         </p:StateControl>
                     </Grid>

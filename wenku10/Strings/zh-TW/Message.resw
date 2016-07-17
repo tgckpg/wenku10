@@ -162,4 +162,7 @@
   <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
     <value>若要使用預設背景，應用將會自動搜索並下載文章所提供的插圖(假設已下載插圖所在的章節)，這樣會增加使用流量。繼續？</value>
   </data>
+  <data name="ReportError" xml:space="preserve">
+    <value>{0}，要回報這個問題嗎？</value>
+  </data>
 </root>

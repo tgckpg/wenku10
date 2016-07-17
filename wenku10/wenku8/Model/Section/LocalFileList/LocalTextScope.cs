@@ -18,7 +18,8 @@ namespace wenku8.Model.Section
     using Storage;
     using wenku10.Pages;
     using Windows.Storage;
-    partial class LocalFileList : SearchableContext
+
+    sealed partial class LocalFileList : SearchableContext
     {
         private string _loading = null;
 

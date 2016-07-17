@@ -11,17 +11,13 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Model.Section
 {
     using ListItem;
-    using Storage;
 
-    partial class LocalFileList 
+    sealed partial class LocalFileList 
     {
         public static readonly string ID = typeof( LocalFileList ).Name;
 
-        public async void OpenSpider()
+        public async Task<bool> OpenSpider( IStorageFile ISF )
         {
-            IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
-            if ( ISF == null ) return;
-
             try
             {
                 SpiderBook SBook = new SpiderBook( await ISF.ReadString(), true );
@@ -39,11 +35,22 @@ namespace wenku8.Model.Section
                 NData.Add( SBook );
                 Data = NData;
                 NotifyChanged( "SearchSet" );
+                return true;
             }
             catch( Exception ex )
             {
                 Logger.Log( ID, ex.Message, LogType.ERROR );
             }
+
+            return false;
+        }
+
+        public async void OpenSpider()
+        {
+            IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
+            if ( ISF == null ) return;
+
+            var j = OpenSpider( ISF );
         }
     }
 }

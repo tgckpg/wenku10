@@ -338,7 +338,7 @@ namespace wenku10
             move.KeyTime = KeyTime.FromTimeSpan( TimeSpan.FromSeconds( 8 ) );
 
             d.Duration = new Duration( TimeSpan.FromSeconds( 8 ) );
-            d.RepeatBehavior = new RepeatBehavior( 100 );
+            d.RepeatBehavior = RepeatBehavior.Forever;
 
             d.KeyFrames.Add( still );
             d.KeyFrames.Add( still_still );
@@ -421,21 +421,13 @@ namespace wenku10
 
         private async void GotoSettings( object sender, RoutedEventArgs e )
         {
-            StringResources stx = new StringResources( "Settings" );
-            StringResources stapp = new StringResources( "AppBar" );
-            StringResources stm = new StringResources( "Message" );
+            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
 
             bool Go = false;
-            MessageDialog Msg = new MessageDialog( stx.Text( "Preface" ), stapp.Text( "Settings" ) );
+            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
 
-            Msg.Commands.Add(
-                new UICommand(
-                    stm.Str( "Yes" )
-                    , ( c ) => Go = true
-                )
-            );
-
-            Msg.Commands.Add( new UICommand( stm.Str( "No" ) ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "No", "Message" ) ) );
 
             await Popups.ShowDialog( Msg );
 

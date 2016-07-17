@@ -20,7 +20,6 @@
         <s:NumberSimplifier x:Key="NumberSimplifier" />
         <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
-        <v:BoolStateConverter x:Key="BoolStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
     </Page.Resources>
@@ -31,7 +30,7 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <v:BoolStateConverter x:Key="CachedStateConverter" />
+            <v:DataStateConverter x:Key="CachedStateConverter" />
 
             <!-- Horizontal Chapter List ItemTemplate -->
             <DataTemplate x:Key="ChListItemTemplate">
@@ -95,10 +94,10 @@
                     }" />
             </Grid.RenderTransform>
             <!-- Swapping between 2 image to create fading effect -->
-            <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+            <p:StateControl State="{Binding BGState, Converter={StaticResource DataStateConverter}}">
                 <Image Source="{Binding Background}" Stretch="UniformToFill" />
             </p:StateControl>
-            <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+            <p:StateControl State="{Binding BGState2, Converter={StaticResource DataStateConverter}}">
                 <Image Source="{Binding Background2}" Stretch="UniformToFill" />
             </p:StateControl>
         </Grid>
@@ -141,10 +140,10 @@
                                                 }" />
                                         </Grid.RenderTransform>
                                         <!-- Swapping between 2 image to create fading effect -->
-                                        <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                                        <p:StateControl State="{Binding BGState, Converter={StaticResource DataStateConverter}}">
                                             <Image Source="{Binding Background}" Stretch="UniformToFill"/>
                                         </p:StateControl>
-                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource DataStateConverter}}">
                                             <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
                                         </p:StateControl>
                                     </Grid>
@@ -173,7 +172,7 @@
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
                                                 <p:StateControl Grid.RowSpan="2" State="{Binding Cover, Converter={StaticResource DataStateConverter}}" >
-                                                    <Image MaxWidth="140" Margin="5" Source="{Binding Cover}" />
+                                                    <Image MaxWidth="140" MaxHeight="180" Margin="5" Source="{Binding Cover}" />
                                                 </p:StateControl>
                                                 <StackPanel Grid.Column="1" Margin="5,10,5,5" Grid.Row="0">
                                                     <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
@@ -478,7 +477,7 @@
                             <DataTemplate>
                                 <Grid p:Clip.ToBounds="True">
                                     <Grid.Resources>
-                                        <v:BoolStateConverter x:Key="LoadingStateConverter" />
+                                        <v:DataStateConverter x:Key="LoadingStateConverter" />
                                     </Grid.Resources>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="65" />
@@ -498,10 +497,10 @@
                                                 }" />
                                         </Grid.RenderTransform>
                                         <!-- Swapping between 2 image to create fading effect -->
-                                        <p:StateControl State="{Binding BGState, Converter={StaticResource BoolStateConverter}}">
+                                        <p:StateControl State="{Binding BGState, Converter={StaticResource DataStateConverter}}">
                                             <Image Source="{Binding Background}" Stretch="UniformToFill"/>
                                         </p:StateControl>
-                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource BoolStateConverter}}">
+                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource DataStateConverter}}">
                                             <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
                                         </p:StateControl>
                                     </Grid>
@@ -509,7 +508,7 @@
                                     <Rectangle Grid.ColumnSpan="2"
                                                Fill="#999" Opacity="0.6"/>
                                     <p:StateControl Grid.ColumnSpan="2"
-                                                    State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                                                    State="{Binding IsLoading, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
                                         <Rectangle Fill="#999" Opacity="0.4" />
                                     </p:StateControl>
 

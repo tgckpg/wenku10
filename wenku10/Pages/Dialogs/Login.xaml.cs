@@ -33,7 +33,7 @@ namespace wenku10.Pages.Dialogs
 
             StringResources stx = new StringResources();
             PrimaryButtonText = stx.Text( "Login" );
-            SecondaryButtonText = stx.Text( "Button_Back");
+            SecondaryButtonText = stx.Text( "Button_Back" );
 
             Member.OnStatusChanged += Member_StatusUpdate;
         }

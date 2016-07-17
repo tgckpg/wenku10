@@ -16,7 +16,7 @@
     NavigationCacheMode="Enabled">
 
     <Page.Resources>
-        <n:BoolStateConverter x:Key="BoolStateConverter" />
+        <n:DataStateConverter x:Key="DataStateConverter" />
         <v:BoolDataConverter x:Key="BoolDataConverter" />
         <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
@@ -165,10 +165,6 @@
                         <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}"
                                     Width="400"
                                     MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
-                            <HubSection.Resources>
-                                <n:DataStateConverter x:Key="DataStateConverter" />
-                                <n:BoolStateConverter x:Key="LoadingStateConverter" />
-                            </HubSection.Resources>
                             <HubSection.Header>
                                 <Grid Padding="10">
                                     <Grid.ColumnDefinitions>
@@ -200,7 +196,7 @@
                                     <c:OneDriveButton x:Name="OneDriveResync"
                                                       VerticalAlignment="Center"
                                                       Visibility="Collapsed"
-                                                      Foreground="{StaticResource RelativeMajorBrush}"
+                                                      Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                                       Margin="5,-3,2,-3"
                                                       Grid.Column="2" />
                                 </Grid>
@@ -361,7 +357,7 @@
                                                 <ProgressRing Width="40" Height="40"
                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
                                                               IsActive="{Binding IsLoading}" />
-                                                <p:StateControl State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
+                                                <p:StateControl State="{Binding IsLoading, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
                                                     <i:IconReload AutoScale="True"
                                                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </p:StateControl>

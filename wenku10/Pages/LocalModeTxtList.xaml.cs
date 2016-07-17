@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -18,14 +20,18 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI.Icons;
 
 using libtaotu.Pages;
 
 using wenku8.Config;
+using wenku8.CompositeElement;
 using wenku8.Model.Book;
 using wenku8.Model.ListItem;
 using wenku8.Model.Section;
+using wenku8.Section;
+using wenku8.Settings;
 using wenku8.Storage;
 using wenku8.Model.Book.Spider;
 
@@ -38,6 +44,8 @@ namespace wenku10.Pages
         private LocalFileList FileListContext;
         private LocalBook SelectedBook;
 
+        private SharersHub SHHub;
+
         public LocalModeTxtList()
         {
             this.InitializeComponent();
@@ -48,16 +56,68 @@ namespace wenku10.Pages
         {
             FileListContext = new LocalFileList();
             FileListView.DataContext = FileListContext;
-            ProcessButton.DataContext = FileListContext;
+
+            SHHub = new SharersHub();
+            SharersHub.DataContext = SHHub;
+            MessageBus.OnDelivery += MessageBus_OnDelivery;
 
             if( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
             {
                 OneDriveSync.Instance = new OneDriveSync();
                 await OneDriveSync.Instance.Authenticate();
             }
+        }
 
-            BookStorage BS = new BookStorage();
-            BSOneDrive.SetSync( BS.SyncSettings );
+        private async void MessageBus_OnDelivery( Message Mesg )
+        {
+            if ( Mesg.Content != AppKeys.SH_SCRIPT_DATA ) return;
+            HubScriptItem HSI = Mesg.Payload as HubScriptItem;
+
+            if( await FileListContext.OpenSpider( HSI.ScriptFile ) )
+            {
+                ConfirmScriptParse( HSI );
+            }
+            else
+            {
+                ConfirmErrorReport( HSI );
+            }
+        }
+
+        private async void ConfirmScriptParse( HubScriptItem HSI )
+        {
+            StringResources stx = new StringResources( "Message" );
+            MessageDialog MsgBox = new MessageDialog( "Parse the script right now?" );
+            bool Parse = false;
+
+            MsgBox.Commands.Add( new UICommand(
+                stx.Str( "Yes" )
+                , ( x ) => { Parse = true; } ) );
+
+            MsgBox.Commands.Add( new UICommand( stx.Str( "No" ) ) );
+
+            await Popups.ShowDialog( MsgBox );
+
+            if( Parse )
+            {
+
+            }
+        }
+
+        private async void ConfirmErrorReport( HubScriptItem HSI )
+        {
+            StringResources stx = new StringResources( "Message", "Error" );
+            MessageDialog MsgBox = new MessageDialog(
+                string.Format( stx.Str( "ReportError" ), stx.Str( "InvalidScript", "Error" ) )
+            );
+
+            bool Report = false;
+
+            MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { Report = true; } ) );
+            MsgBox.Commands.Add( new UICommand( stx.Str( "No" ) ) );
+
+            await Popups.ShowDialog( MsgBox );
+
+            if ( Report ) SHHub.ReportStatus( HSI.Id, wenku8.Model.REST.SharersRequest.StatusType.INVALID_SCRIPT );
         }
 
         private void LoadFiles( object sender, RoutedEventArgs e )
@@ -183,30 +243,17 @@ namespace wenku10.Pages
 
         private async void GotoSettings( object sender, RoutedEventArgs e )
         {
-            StringResources stx = new StringResources( "Settings" );
-            StringResources stapp = new StringResources( "AppBar" );
-            StringResources stm = new StringResources( "Message" );
+            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
 
             bool Go = false;
-            Windows.UI.Popups.MessageDialog Msg = new Windows.UI.Popups.MessageDialog( stx.Text( "Preface" ), stapp.Text( "Settings" ) );
+            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
 
-            Msg.Commands.Add(
-                new Windows.UI.Popups.UICommand(
-                    stm.Str( "Yes" )
-                    , ( c ) => Go = true
-                )
-            );
-
-            Msg.Commands.Add(
-                new Windows.UI.Popups.UICommand( stm.Str( "No" ) )
-            );
+            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
 
             await Popups.ShowDialog( Msg );
 
-            if ( Go )
-            {
-                Frame.Navigate( typeof( Settings.MainSettings ) );
-            }
+            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
         }
 
         private void ShowBookAction( object sender, RightTappedRoutedEventArgs e )
@@ -262,6 +309,46 @@ namespace wenku10.Pages
         private void ImportSpider( object sender, RoutedEventArgs e )
         {
             FileListContext.OpenSpider();
+        }
+
+        private void ProcessButtonLoaded( object sender, RoutedEventArgs e )
+        {
+            ( ( Button ) sender ).DataContext = FileListContext;
+        }
+
+        private void LSSync( object sender, RoutedEventArgs e )
+        {
+            BookStorage BS = new BookStorage();
+            ( ( OneDriveButton ) sender ).SetSync( BS.SyncSettings );
+        }
+
+        private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
+        {
+            SharersHub.Focus( FocusState.Pointer );
+            SHHub.SearchTerm = args.QueryText;
+        }
+
+        private void ShHub_ItemCLick( object sender, ItemClickEventArgs e )
+        {
+            PopupFrame.Navigate( typeof( ShHub.ScriptDetails ), e.ClickedItem );
+            PopupPage.State = Net.Astropenguin.UI.ControlState.Reovia;
+        }
+
+        private void ScriptUpload( object sender, RoutedEventArgs e ) { }
+        private void LoginOrInfo( object sender, RoutedEventArgs e ) { LoginOrInfo(); }
+        private void ManageAuths( object sender, RoutedEventArgs e ) { }
+
+        private async void Register( object sender, RoutedEventArgs e )
+        {
+            Dialogs.Sharers.Register RegisterDialog = new Dialogs.Sharers.Register();
+            await Popups.ShowDialog( RegisterDialog );
+            if ( RegisterDialog.Canceled ) return;
+            LoginOrInfo();
+        }
+
+        private void LoginOrInfo()
+        {
+
         }
     }
 }

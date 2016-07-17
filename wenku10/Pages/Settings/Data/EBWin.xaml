@@ -11,7 +11,6 @@
     mc:Ignorable="d">
     <Page.Resources>
         <v:DataStateConverter x:Key="DataStateConverter" />
-        <v:BoolStateConverter x:Key="BoolStateConverter" />
     </Page.Resources>
 
     <Grid Background="{StaticResource MajorBackgroundBrush}"
@@ -35,7 +34,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <p:StateControl Grid.Column="0" State="{Binding HaveChosen, Converter={StaticResource BoolStateConverter}}">
+                <p:StateControl Grid.Column="0" State="{Binding HaveChosen, Converter={StaticResource DataStateConverter}}">
                     <TextBlock Foreground="{StaticResource MajorBrush}"
                                Margin="5"
                                TextWrapping="Wrap"
@@ -46,7 +45,7 @@
                               Foreground="{StaticResource MajorBrush}"
                               IsActive="{Binding Loading}" />
             </Grid>
-            <p:StateControl State="{Binding CanInstall, Converter={StaticResource BoolStateConverter}}">
+            <p:StateControl State="{Binding CanInstall, Converter={StaticResource DataStateConverter}}">
                 <StackPanel>
                     <Button Click="InstallNewDict" >
                         <TextBlock Text="Confirm Install"

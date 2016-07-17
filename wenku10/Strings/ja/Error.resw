@@ -120,9 +120,15 @@
   <data name="Download" xml:space="preserve">
     <value>必要な情報をダウンロードすることができません、ネットワーク接続を確認してください</value>
   </data>
+  <data name="InvalidScript" xml:space="preserve">
+    <value>無効なスクリプト</value>
+  </data>
   <data name="ParseFailed" xml:space="preserve">
     <value>情報処理に失敗しました
 ダウンロードファイルが破損している可能性があり</value>
+  </data>
+  <data name="PasswordMismatch" xml:space="preserve">
+    <value>パスワードが一致しません</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>更新に失敗しました</value>

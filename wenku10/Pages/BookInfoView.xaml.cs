@@ -454,16 +454,15 @@ namespace wenku10.Pages
         }
         private async void DownloadVolume( object sender, RoutedEventArgs e )
         {
-            StringResources stx = new StringResources( "ContextMenu" );
-            StringResources stm = new StringResources( "Message" );
+            StringResources stx = new StringResources( "ContextMenu", "Message" );
 
             MessageDialog Msg = new MessageDialog( RightClickedVolume.VolumeTitle, stx.Text( "ContextMenu_AutoUpdate" ) );
 
             bool Confirmed = false;
             Msg.Commands.Add(
-                new UICommand( stm.Str( "Yes" ), ( x ) => Confirmed = true )
+                new UICommand( stx.Str( "Yes", "Message" ), ( x ) => Confirmed = true )
             );
-            Msg.Commands.Add( new UICommand( stm.Str( "No" ) ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "No", "Message" ) ) );
 
             await Popups.ShowDialog( Msg );
 
@@ -651,12 +650,11 @@ namespace wenku10.Pages
             {
                 bool No = true;
 
-                StringResources stm = new StringResources( "Message" );
-                StringResources stc = new StringResources( "ContextMenu" );
+                StringResources stx = new StringResources( "Message", "ContextMenu" );
 
-                MessageDialog MsgBox = new MessageDialog( stm.Str( "BInfoView_PresetBg_Mesg" ), stc.Text( "PresetBackground" ) );
-                MsgBox.Commands.Add( new UICommand( stm.Str( "Yes" ), x => { No = false; } ) );
-                MsgBox.Commands.Add( new UICommand( stm.Str( "No" ) ) );
+                MessageDialog MsgBox = new MessageDialog( stx.Str( "BInfoView_PresetBg_Mesg" ), stx.Text( "PresetBackground", "ContextMenu" ) );
+                MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { No = false; } ) );
+                MsgBox.Commands.Add( new UICommand( stx.Str( "No" ) ) );
 
                 await Popups.ShowDialog( MsgBox );
 

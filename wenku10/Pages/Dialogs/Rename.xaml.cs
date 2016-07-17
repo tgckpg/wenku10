@@ -38,12 +38,11 @@ namespace wenku10.Pages.Dialogs
         private Rename()
         {
             this.InitializeComponent();
-            StringResources stx = new StringResources( "Message" );
-            StringResources stm = new StringResources( "ContextMenu" );
+            StringResources stx = new StringResources( "Message", "ContextMenu" );
             PrimaryButtonText = stx.Str( "OK" );
             SecondaryButtonText = stx.Str( "Cancel" );
 
-            TitleBlock.Text = stm.Text( "ContextMenu_Rename" );
+            TitleBlock.Text = stx.Text( "ContextMenu_Rename", "ContextMenu" );
         }
 
         // For Activator.CreateInstance

@@ -1,0 +1,160 @@
+﻿<Page
+    x:Class="wenku10.ShHub.ScriptDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.ShHub"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:phone="using:Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <phone:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <v:HubStatusConverter x:Key="HubStatusConverter" />
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer>
+            <!-- Description -->
+            <StackPanel Margin="10,5">
+                <TextBlock x:Name="Name" FontSize="20"
+                           Text="{Binding Name}" Foreground="White" />
+                <TextBlock Margin="20, 0" Text="{Binding ErrorMessage}"
+                           Foreground="White"
+                           TextWrapping="Wrap" />
+                <!-- Status History -->
+                <TextBlock Margin="10, 5" Text="Status History" Foreground="White" />
+                <GridView Margin="10, 0"
+                          ItemsSource="{Binding Histories}"
+                          ItemContainerStyle="{StaticResource PlainGridItem}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="25" Height="25">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding Status, Converter={StaticResource HubStatusConverter}, ConverterParameter=Color}" />
+                                </Rectangle.Fill>
+                                <ToolTipService.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            <Run Text="{Binding Date, Converter={StaticResource RelativeTimeConverter}}" />
+                                            <LineBreak />
+                                            <Run x:Uid="/Book/Status" Text="Status" />:&#160;
+                                            <Run Text="{Binding Status, Converter={StaticResource HubStatusConverter}, ConverterParameter=String}" />
+                                            <Run Text="{Binding DescBR}" />
+                                        </TextBlock>
+                                    </ToolTip>
+                                </ToolTipService.ToolTip>
+                            </Rectangle>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <TextBlock Margin="20, 0" Text="{Binding HistoryError}"
+                           Foreground="White"
+                           TextWrapping="Wrap" />
+
+                <TextBlock x:Name="Desc"
+                           Margin="10,5"
+                           FontSize="15"
+                           Foreground="White"
+                           TextWrapping="Wrap"
+                           Text="{Binding Desc}"/>
+                <TextBlock x:Name="Tags" Foreground="White" Text="Tags"/>
+                <TextBlock x:Name="Zone" Foreground="White" Text="Zone" />
+                <TextBlock x:Name="Type" Foreground="White" Text="Type" />
+                <!-- Related -->
+            </StackPanel>
+
+        </ScrollViewer>
+        <!-- Comments -->
+        <Border x:Name="CommentSection" Margin="0, 10"
+                Visibility="Collapsed"
+                Opacity="0"
+                Background="{StaticResource MajorBackgroundBrush}">
+            <Border.RenderTransform>
+                <TranslateTransform Y="0" />
+            </Border.RenderTransform>
+            <ListView x:Name="CommentList">
+                <ListViewItem>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Grid.Column="0" Grid.RowSpan="2"
+                                   Width="5"
+                                   Margin="10, 0"
+                                   Fill="RoyalBlue"/>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="0, 5, 5, 0"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="Username"
+                                       Foreground="White" />
+                            <TextBlock Margin="10, 0"
+                                       Foreground="Gray" 
+                                       Text="10 minutes ago"/>
+                        </StackPanel>
+                        <TextBlock Text="Comment text, this is a very long comment text. Is this long enough? If not long enough I'll just type type type some more here. Ok, I think this is long enough."
+                                   Margin="10, 0, 10, 5" Grid.Column="1" Grid.Row="2"
+                                   TextWrapping="Wrap"
+                                   Foreground="White"/>
+                    </Grid>
+                </ListViewItem>
+                <ListViewItem>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Grid.Column="0" Grid.RowSpan="2"
+                                   Width="5"
+                                   Margin="25, 0, 10, 0"
+                                   Fill="RoyalBlue"/>
+
+                        <StackPanel Grid.Column="1"
+                                    Margin="0, 5, 5, 0"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="Username"
+                                       Foreground="White" />
+                            <TextBlock Margin="10, 0"
+                                       Foreground="Gray" 
+                                       Text="3 minutes ago"/>
+                        </StackPanel>
+                        <TextBlock Text="Comment text, this is somewhat a shorter comment."
+                                   Margin="10, 0, 10, 5" Grid.Column="1" Grid.Row="2"
+                                   TextWrapping="Wrap"
+                                   Foreground="White"/>
+                    </Grid>
+                </ListViewItem>
+            </ListView>
+        </Border>
+
+        <StackPanel Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Height="50">
+            <Button Style="{StaticResource PlainButton}"
+                    Click="ShowComments"
+                    Width="50">
+                <i:IconComment AutoScale="True" />
+            </Button>
+            <Button Style="{StaticResource PlainButton}" Width="50"
+                    Click="Download">
+                <i:IconLogin AutoScale="True" Direction="Rotate270" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page>

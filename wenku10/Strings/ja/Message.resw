@@ -162,4 +162,7 @@
   <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
     <value>デフォルトの背景を使用するには、アプリケーションが自動的にイラストを提供する記事を検索し、ダウンロードします。（イラストのセクションをダウンロードしていることを前提としています。）これは、データ使用量を増加させます。続ける？</value>
   </data>
+  <data name="ReportError" xml:space="preserve">
+    <value>{0}、この問題を報告するには？</value>
+  </data>
 </root>
