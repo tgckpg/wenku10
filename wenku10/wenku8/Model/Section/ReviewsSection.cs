@@ -16,12 +16,8 @@ namespace wenku8.Model.Section
 {
     using Book;
     using Ext;
-    using Settings;
     using Comments;
-    using CompositeElement;
     using ListItem;
-    using AdvDM;
-    using System;
 
     class ReviewsSection : ActiveData
     {
@@ -235,7 +231,9 @@ namespace wenku8.Model.Section
                 if ( ex.XProp<Enum>( "WCode" ).Equals( X.Const<Enum>( XProto.WCode, "LOGON_REQUIRED" ) ) )
                 {
                     // Prompt login
-                    wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login();
+                    wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login(
+                        X.Singleton<IMember>( XProto.Member )
+                    );
                     await Popups.ShowDialog( Login );
                 }
             }

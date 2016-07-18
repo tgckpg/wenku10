@@ -27,6 +27,7 @@ using libtaotu.Pages;
 
 using wenku8.Config;
 using wenku8.CompositeElement;
+using wenku8.Ext;
 using wenku8.Model.Book;
 using wenku8.Model.ListItem;
 using wenku8.Model.Section;
@@ -60,6 +61,8 @@ namespace wenku10.Pages
             SHHub = new SharersHub();
             SharersHub.DataContext = SHHub;
             MessageBus.OnDelivery += MessageBus_OnDelivery;
+
+            SHHub.Member.OnStatusChanged += SHMem_OnStatusChanged;
 
             if( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
             {
@@ -334,8 +337,12 @@ namespace wenku10.Pages
             PopupPage.State = Net.Astropenguin.UI.ControlState.Reovia;
         }
 
-        private void ScriptUpload( object sender, RoutedEventArgs e ) { }
-        private void LoginOrInfo( object sender, RoutedEventArgs e ) { LoginOrInfo(); }
+        private void ScriptUpload( object sender, RoutedEventArgs e )
+        {
+
+        }
+
+        private void LoginOrLogout( object sender, RoutedEventArgs e ) { LoginOrLogout(); }
         private void ManageAuths( object sender, RoutedEventArgs e ) { }
 
         private async void Register( object sender, RoutedEventArgs e )
@@ -343,12 +350,29 @@ namespace wenku10.Pages
             Dialogs.Sharers.Register RegisterDialog = new Dialogs.Sharers.Register();
             await Popups.ShowDialog( RegisterDialog );
             if ( RegisterDialog.Canceled ) return;
-            LoginOrInfo();
+            LoginOrLogout();
         }
 
-        private void LoginOrInfo()
+        private async void LoginOrLogout()
         {
+            if ( SHHub.Member.WillLogin ) return;
+            if( SHHub.LoggedIn )
+            {
+                SHHub.Member.Logout();
+            }
+            else
+            {
+                Dialogs.Login LoginDialog = new Dialogs.Login( SHHub.Member );
+                await Popups.ShowDialog( LoginDialog );
+            }
+        }
 
+        private void SHMem_OnStatusChanged( object sender, MemberStatus Status )
+        {
+            if( Status == MemberStatus.RE_LOGIN_NEEDED )
+            {
+                LoginOrLogout();
+            }
         }
     }
 }

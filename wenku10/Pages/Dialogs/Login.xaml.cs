@@ -19,21 +19,25 @@ using wenku8.Ext;
 
 namespace wenku10.Pages.Dialogs
 {
-    public sealed partial class Login : ContentDialog
+    sealed partial class Login : ContentDialog
     {
         public bool Canceled = true;
 
         private IMember Member;
 
-        public Login()
+        public Login( IMember Member )
         {
             this.InitializeComponent();
-
-            Member = X.Singleton<IMember>( XProto.Member );
+            this.Member = Member;
 
             StringResources stx = new StringResources();
             PrimaryButtonText = stx.Text( "Login" );
             SecondaryButtonText = stx.Text( "Button_Back" );
+
+            if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+            {
+                ShowMessage( stx.Text( "Login_Expired" ) );
+            }
 
             Member.OnStatusChanged += Member_StatusUpdate;
         }
@@ -52,6 +56,8 @@ namespace wenku10.Pages.Dialogs
                     = Password.IsEnabled
                     = true
                     ;
+
+                ShowMessage( Member.ServerMessage );
                 Account.Focus( FocusState.Keyboard );
             }
         }
@@ -119,9 +125,13 @@ namespace wenku10.Pages.Dialogs
             }
         }
 
-        internal void ShowExpireMessage()
+        private void ShowMessage( string Mesg )
         {
-            ExpireMesg.Visibility = Visibility.Visible;
+            if ( Mesg == null ) return;
+
+            ServerMessage.Text = Mesg;
+            ServerMessage.Visibility = Visibility.Visible;
         }
+
     }
 }

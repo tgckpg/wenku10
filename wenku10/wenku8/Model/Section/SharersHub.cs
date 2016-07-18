@@ -14,6 +14,7 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Section
 {
     using AdvDM;
+    using Ext;
     using Model;
     using Model.ListItem;
     using Model.REST;
@@ -25,6 +26,8 @@ namespace wenku8.Section
         private readonly string ID = typeof( SharersHub ).Name;
 
         RuntimeCache RCache;
+
+        public IMember Member;
 
         private string _mesg;
         public string Message
@@ -49,9 +52,26 @@ namespace wenku8.Section
             }
         }
 
+        public bool LoggedIn { get { return Member.IsLoggedIn; } }
+        public string LLText { get; private set; }
+
         public SharersHub()
         {
             RCache = new RuntimeCache();
+            Member = X.Singleton<IMember>( XProto.SHMember );
+            Member.OnStatusChanged += Member_OnStatusChanged;
+
+            UpdateLLText();
+        }
+
+        ~SharersHub()
+        {
+            Member.OnStatusChanged -= Member_OnStatusChanged;
+        }
+
+        private void Member_OnStatusChanged( object sender, MemberStatus args )
+        {
+            UpdateLLText();
         }
 
         private void Search( string Query )
@@ -136,11 +156,6 @@ namespace wenku8.Section
             }
         }
 
-        protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
-        {
-            return Items;
-        }
-
         private bool TryNotGetId( string Id, out HubScriptItem Target )
         {
             Target = Data.Cast<HubScriptItem>().FirstOrDefault( ( HubScriptItem HSI ) => HSI.Id == Id );
@@ -153,5 +168,18 @@ namespace wenku8.Section
 
             return false;
         }
+
+        private void UpdateLLText()
+        {
+            StringResources stx = new StringResources( "AppResources", "Settings" );
+            LLText = LoggedIn ? stx.Text( "Account_Logout", "Settings" ) : stx.Text( "Login" );
+            NotifyChanged( "LLText", "LoggedIn" );
+        }
+
+        protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
+        {
+            return Items;
+        }
+
     }
 }

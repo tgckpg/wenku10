@@ -12,17 +12,24 @@
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
     <ContentDialog.Title>
-        <TextBlock x:Uid="/AppResources/Login" Text="Login" />
+        <TextBlock x:Uid="/AppResources/Login"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="Login" />
     </ContentDialog.Title>
 
     <StackPanel>
-        <TextBlock x:Name="ExpireMesg"
+        <!-- Message -->
+        <TextBlock x:Name="ServerMessage"
                    Visibility="Collapsed"
-                   x:Uid="/AppResources/Login_Expired" Text="SESSION_EXPIRED"
+                   Text="SESSION_EXPIRED"
                    Foreground="{StaticResource SubtleBrush}" />
+        <!-- Account -->
         <TextBlock x:Uid="/AppResources/Login_AccountName" Text="Account"
                    Foreground="{StaticResource MajorBrush}" />
-        <TextBox x:Name="Account" KeyDown="OnKeyDown"/>
+        <TextBox x:Name="Account"
+                 Margin="0,0,0,10"
+                 KeyDown="OnKeyDown"/>
+        <!-- Password -->
         <TextBlock x:Uid="/AppResources/Login_Password"
                    Foreground="{StaticResource MajorBrush}"
                    Text="Password" />

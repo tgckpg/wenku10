@@ -354,13 +354,13 @@
                                     <MenuFlyoutItem x:Uid="/ContextMenu/ScriptUpload"
                                                     Text="Upload a script"
                                                     Click="ScriptUpload" />
-                                    <MenuFlyoutItem Text="{Binding LoginOrInfo}" Click="LoginOrInfo" />
-                                    <MenuFlyoutItem Visibility="{Binding LoggedIn, Converter={StaticResource DataVisConverter}}"
-                                                    x:Uid="/ContextMenu/Register"
-                                                    Click="Register" />
                                     <MenuFlyoutItem x:Uid="/ContextMenu/ManageAuthTokens"
                                                     Text="Manage auth tokens"
                                                     Click="ManageAuths" />
+                                    <MenuFlyoutItem Text="{Binding LLText}" Click="LoginOrLogout" />
+                                    <MenuFlyoutItem Visibility="{Binding LoggedIn, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                                    x:Uid="/ContextMenu/Register"
+                                                    Click="Register" />
                                 </MenuFlyout>
                             </Button.Flyout>
                             <i:IconLogout AutoScale="True" Direction="Rotate270"

@@ -140,9 +140,10 @@ namespace wenku8.Model.Section
             }
             else
             {
-                wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login();
-                if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
-                    Login.ShowExpireMessage();
+                wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login(
+                    X.Singleton<IMember>( XProto.Member )
+                );
+
                 await Popups.ShowDialog( Login );
             }
         }
@@ -152,5 +153,6 @@ namespace wenku8.Model.Section
             FrameContent = null;
             PageStatus = ControlState.Foreatii;
         }
+
     }
 }

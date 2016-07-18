@@ -118,6 +118,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
@@ -126,6 +127,7 @@
     </Compile>
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
     <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
+    <Compile Include="wenku8\Model\Loaders\HSCommentLoader.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">

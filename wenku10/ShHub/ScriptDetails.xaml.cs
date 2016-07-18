@@ -15,10 +15,13 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Loaders;
+using Net.Astropenguin.DataModel;
+
+using wenku8.AdvDM;
+using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Resources;
-using wenku8.AdvDM;
-using Net.Astropenguin.Loaders;
 
 namespace wenku10.ShHub
 {
@@ -58,18 +61,6 @@ namespace wenku10.ShHub
             CommentStory.Completed += CommentStory_Completed;
         }
 
-        private void ShowComments( object sender, RoutedEventArgs e )
-        {
-            if ( CommentsOpened )
-            {
-                SlideOutComments();
-            }
-            else
-            {
-                SlideInComments();
-            }
-        }
-
         private void Download( object sender, RoutedEventArgs e )
         {
             RuntimeCache RCache = new RuntimeCache();
@@ -84,12 +75,23 @@ namespace wenku10.ShHub
 
         private void DownloadFailed( string CacheName, string Id, Exception ex )
         {
-            throw new NotImplementedException();
         }
 
         private void DownloadComplete( DRequestCompletedEventArgs e, string Id )
         {
             BindItem.SetScriptData( e.ResponseString );
+        }
+
+        private async void ShowComments( object sender, RoutedEventArgs e )
+        {
+            HSCommentLoader CLoader = new HSCommentLoader( BindItem.Id, wenku8.Model.REST.SharersRequest.CommentTarget.SCRIPT );
+            IList<HSComment> FirstPage = await CLoader.NextPage();
+
+            Observables<HSComment, HSComment> CommentsObservables = new Observables<HSComment, HSComment>( FirstPage );
+            CommentsObservables.ConnectLoader( CLoader );
+            CommentList.ItemsSource = CommentsObservables;
+
+            SlideInComments();
         }
 
         private void SlideInComments()

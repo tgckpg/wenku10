@@ -5,13 +5,56 @@
     xmlns:local="using:wenku10.ShHub"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
-    xmlns:phone="using:Microsoft.Phone.Controls"
+    xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <phone:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <v:HubStatusConverter x:Key="HubStatusConverter" />
+        <v:TreeMarginConverter x:Key="TreeMarginConverter" />
+
+        <DataTemplate x:Name="CommentFolded">
+            <Border Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                    Grid.Column="0" Grid.RowSpan="2">
+                <TextBlock Text="Load More" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Name="CommentNormal">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border Margin="10, 0"
+                        Grid.Column="0" Grid.RowSpan="2">
+                    <Rectangle Width="5"
+                               Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                               Fill="RoyalBlue"/>
+                </Border>
+
+                <StackPanel Grid.Column="1"
+                            Margin="0, 5, 5, 0"
+                            Orientation="Horizontal">
+                    <TextBlock Text="{Binding Username}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    <TextBlock Margin="10, 0"
+                               Foreground="{StaticResource SubtleBrush}" 
+                               Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"/>
+                </StackPanel>
+                <TextBlock Text="{Binding Title}"
+                           Margin="10, 0, 10, 5" Grid.Column="1" Grid.Row="2"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+            </Grid>
+        </DataTemplate>
+        <v:HSCTemplateSelector x:Key="CommentSelector"
+                               Folded="{StaticResource CommentFolded}"
+                               Normal="{StaticResource CommentNormal}"/>
     </Page.Resources>
 
     <Grid Background="{StaticResource MajorBackgroundBrush}">
@@ -54,7 +97,7 @@
                     </GridView.ItemTemplate>
                 </GridView>
                 <TextBlock Margin="20, 0" Text="{Binding HistoryError}"
-                           Foreground="White"
+                           Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
 
                 <TextBlock x:Name="Desc"
@@ -78,67 +121,9 @@
             <Border.RenderTransform>
                 <TranslateTransform Y="0" />
             </Border.RenderTransform>
-            <ListView x:Name="CommentList">
-                <ListViewItem>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Column="0" Grid.RowSpan="2"
-                                   Width="5"
-                                   Margin="10, 0"
-                                   Fill="RoyalBlue"/>
-
-                        <StackPanel Grid.Column="1"
-                                    Margin="0, 5, 5, 0"
-                                    Orientation="Horizontal">
-                            <TextBlock Text="Username"
-                                       Foreground="White" />
-                            <TextBlock Margin="10, 0"
-                                       Foreground="Gray" 
-                                       Text="10 minutes ago"/>
-                        </StackPanel>
-                        <TextBlock Text="Comment text, this is a very long comment text. Is this long enough? If not long enough I'll just type type type some more here. Ok, I think this is long enough."
-                                   Margin="10, 0, 10, 5" Grid.Column="1" Grid.Row="2"
-                                   TextWrapping="Wrap"
-                                   Foreground="White"/>
-                    </Grid>
-                </ListViewItem>
-                <ListViewItem>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Rectangle Grid.Column="0" Grid.RowSpan="2"
-                                   Width="5"
-                                   Margin="25, 0, 10, 0"
-                                   Fill="RoyalBlue"/>
-
-                        <StackPanel Grid.Column="1"
-                                    Margin="0, 5, 5, 0"
-                                    Orientation="Horizontal">
-                            <TextBlock Text="Username"
-                                       Foreground="White" />
-                            <TextBlock Margin="10, 0"
-                                       Foreground="Gray" 
-                                       Text="3 minutes ago"/>
-                        </StackPanel>
-                        <TextBlock Text="Comment text, this is somewhat a shorter comment."
-                                   Margin="10, 0, 10, 5" Grid.Column="1" Grid.Row="2"
-                                   TextWrapping="Wrap"
-                                   Foreground="White"/>
-                    </Grid>
-                </ListViewItem>
+            <ListView x:Name="CommentList" ItemTemplateSelector="{StaticResource CommentSelector}">
+                <ListView.Resources>
+                </ListView.Resources>
             </ListView>
         </Border>
 
