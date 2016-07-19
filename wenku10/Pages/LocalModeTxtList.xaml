@@ -27,16 +27,16 @@
                         <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}" Text="{Binding FavContextMenu}" Click="ToggleFav" />
 
                         <MenuFlyoutItem IsEnabled="{Binding CanReprocess}"
-                                        x:Uid="/ContextMenu/ContextMenu_Reanalyze"
+                                        x:Uid="/ContextMenu/Reanalyze"
                                         Click="Reanalyze"
                                         Text="Reanalyze" />
 
-                        <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_DirectView"
+                        <MenuFlyoutItem x:Uid="/ContextMenu/DirectView"
                                         IsEnabled="{Binding File, Converter={StaticResource BoolDataConverter}}"
                                         Click="ViewRaw" />
 
                         <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}"
-                                        x:Uid="/ContextMenu/ContextMenu_Delete"
+                                        x:Uid="/ContextMenu/Delete"
                                         Click="RemoveSource"
                                         Text="Remove Source" />
                     </MenuFlyout>
@@ -121,7 +121,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Tick Icon -->
-                    <p:StateControl State="{Binding Error, Converter={StaticResource DataStateConverter}}"
+                    <p:StateControl State="{Binding Error, Converter={StaticResource DataStateConverter}, ConverterParameter=1}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                     Width="90" Height="90">
                         <i:IconTick AutoScale="True"
@@ -134,22 +134,22 @@
                             Width="90" Height="90">
                         <xi:IconExoticUni Width="100" Height="90" Opacity="0.2" />
                     </Border>
-                    <StackPanel Margin="10, 5">
+                    <StackPanel>
                         <!-- Name -->
                         <Border Background="{StaticResource Shades90}">
                             <TextBlock Text="{Binding Name}"
-                                       FontSize="20"
+                                       FontSize="20" Margin="10,5"
                                        Foreground="{StaticResource RelativeShadesBrush}"
                                        TextTrimming="CharacterEllipsis"
                                        TextWrapping="NoWrap"/>
                         </Border>
                         <!-- Desc -->
-                        <TextBlock Text="{Binding Desc}"
+                        <TextBlock Margin="10, 5" Text="{Binding Desc}"
                                    FontSize="16"
                                    Foreground="{StaticResource RelativeShadesBrush}"
                                    TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
                         <!-- Zone -->
-                        <ItemsControl ItemsSource="{Binding Zones}">
+                        <ItemsControl Margin="10, 5" ItemsSource="{Binding Zones}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"
@@ -164,7 +164,7 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                         <!-- Types -->
-                        <ItemsControl ItemsSource="{Binding Types}">
+                        <ItemsControl Margin="10, 5" ItemsSource="{Binding Types}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"
@@ -179,7 +179,7 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                         <!-- Tags -->
-                        <ItemsControl ItemsSource="{Binding Tags}">
+                        <ItemsControl Margin="10, 5" ItemsSource="{Binding Tags}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}"
@@ -239,9 +239,9 @@
                             <Button x:Name="ScanButton" Style="{StaticResource PlainButton}">
                                 <Button.Flyout>
                                     <MenuFlyout>
-                                        <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_SpiderEdit"
+                                        <MenuFlyoutItem x:Uid="/ContextMenu/SpiderEdit"
                                                         Text="Spider Editor" Click="GotoGrabberPage" />
-                                        <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_ImportSpider"
+                                        <MenuFlyoutItem x:Uid="/ContextMenu/ImportSpider"
                                                         Text="Import a Script" Click="ImportSpider" />
                                     </MenuFlyout>
                                 </Button.Flyout>
@@ -351,11 +351,11 @@
                                 Style="{StaticResource PlainButton}">
                             <Button.Flyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem x:Uid="/ContextMenu/ScriptUpload"
-                                                    Text="Upload a script"
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/ShareScript"
+                                                    Text="Share script"
                                                     Click="ScriptUpload" />
-                                    <MenuFlyoutItem x:Uid="/ContextMenu/ManageAuthTokens"
-                                                    Text="Manage auth tokens"
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/AccessTokens"
+                                                    Text="Access tokens"
                                                     Click="ManageAuths" />
                                     <MenuFlyoutItem Text="{Binding LLText}" Click="LoginOrLogout" />
                                     <MenuFlyoutItem Visibility="{Binding LoggedIn, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"

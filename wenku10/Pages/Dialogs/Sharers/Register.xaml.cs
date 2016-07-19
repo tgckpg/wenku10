@@ -99,8 +99,8 @@ namespace wenku10.Pages.Dialogs.Sharers
 
                 IndicateLoad();
 
-                WRuntimeCache WCache = new WRuntimeCache();
-                WCache.POST(
+                RuntimeCache RCache = new RuntimeCache();
+                RCache.POST(
                     Shared.ShRequest.Server
                     , Shared.ShRequest.Register( Name, Passwd, Email )
                     , RequestComplete, RequestFailed, false );

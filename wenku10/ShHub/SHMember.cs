@@ -19,7 +19,7 @@ namespace wenku10.SHHub
     {
         public static readonly string ID = typeof( SHMember ).Name;
 
-        private RuntimeCache RCache = new WRuntimeCache( 0, false );
+        private RuntimeCache RCache = new RuntimeCache();
 
         public event TypedEventHandler<object, MemberStatus> OnStatusChanged;
 

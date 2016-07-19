@@ -42,7 +42,7 @@ namespace wenku10.Pages.Dialogs
             PrimaryButtonText = stx.Str( "OK" );
             SecondaryButtonText = stx.Str( "Cancel" );
 
-            TitleBlock.Text = stx.Text( "ContextMenu_Rename", "ContextMenu" );
+            TitleBlock.Text = stx.Text( "Rename", "ContextMenu" );
         }
 
         // For Activator.CreateInstance

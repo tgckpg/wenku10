@@ -456,7 +456,7 @@ namespace wenku10.Pages
         {
             StringResources stx = new StringResources( "ContextMenu", "Message" );
 
-            MessageDialog Msg = new MessageDialog( RightClickedVolume.VolumeTitle, stx.Text( "ContextMenu_AutoUpdate" ) );
+            MessageDialog Msg = new MessageDialog( RightClickedVolume.VolumeTitle, stx.Text( "AutoUpdate" ) );
 
             bool Confirmed = false;
             Msg.Commands.Add(

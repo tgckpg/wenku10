@@ -214,14 +214,14 @@
                                                 <Border>
                                                     <Border.Resources>
                                                         <MenuFlyout x:Key="FavContextMenu">
-                                                            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_PinToStart"
+                                                            <MenuFlyoutItem x:Uid="/ContextMenu/PinToStart"
                                                                         Text="Pin to Desktop"
                                                                         Click="FavContext" Tag="Pin"/>
                                                             <MenuFlyoutItem Text="{Binding AutoCacheText}"
                                                                         Click="FavContext" Tag="AutoCache"/>
                                                             <MenuFlyoutItem Text="{Binding RSync}"
                                                                         Click="FavContext" Tag="RSync"/>
-                                                            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Delete"
+                                                            <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
                                                                         Text="Delete" 
                                                                         Click="FavContext" Tag="Delete"/>
                                                         </MenuFlyout>
@@ -280,7 +280,7 @@
                                                                        TextTrimming="WordEllipsis"
                                                                        DataContext="{Binding AutoCacheObj}"
                                                                        Margin="5">
-                                                                    <Run x:Uid="/ContextMenu/ContextMenu_AutoUpdate" Text="AutoUpdate"/>
+                                                                    <Run x:Uid="/ContextMenu/AutoUpdate" Text="AutoUpdate"/>
                                                                     <Run Text="{Binding StatusText}" />
                                                             </TextBlock>
                                                         </Border>

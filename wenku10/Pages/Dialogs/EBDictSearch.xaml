@@ -12,7 +12,7 @@
     Background="{StaticResource MajorBackgroundBrush}"
     IsSecondaryButtonEnabled="False">
     <ContentDialog.Title>
-        <TextBlock x:Uid="/ContextMenu/ContextMenu_Search_Dict"
+        <TextBlock x:Uid="/ContextMenu/Search_Dict"
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                    Text="Search word" />
     </ContentDialog.Title>

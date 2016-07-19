@@ -117,49 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContextMenu_AutoUpdate.Text" xml:space="preserve">
+  <data name="AccessTokens.Text" xml:space="preserve">
+    <value>アクセストークン</value>
+  </data>
+  <data name="AutoUpdate.Text" xml:space="preserve">
     <value>自動ダウンロード</value>
   </data>
-  <data name="ContextMenu_Copy.Text" xml:space="preserve">
+  <data name="Copy.Text" xml:space="preserve">
     <value>コピー</value>
   </data>
-  <data name="ContextMenu_Delete.Text" xml:space="preserve">
+  <data name="Delete.Text" xml:space="preserve">
     <value>削除</value>
   </data>
-  <data name="ContextMenu_DirectView.Text" xml:space="preserve">
+  <data name="DirectView.Text" xml:space="preserve">
     <value>ソースを表示</value>
   </data>
-  <data name="ContextMenu_DisAutomation.Text" xml:space="preserve">
+  <data name="DisAutomation.Text" xml:space="preserve">
     <value>自動ダウンロードを無効</value>
   </data>
-  <data name="ContextMenu_Edit.Text" xml:space="preserve">
+  <data name="Edit.Text" xml:space="preserve">
     <value>編集</value>
   </data>
-  <data name="ContextMenu_ImportSpider.Text" xml:space="preserve">
+  <data name="ImportSpider.Text" xml:space="preserve">
     <value>輸入クモ</value>
   </data>
-  <data name="ContextMenu_PinToStart.Text" xml:space="preserve">
+  <data name="PinToStart.Text" xml:space="preserve">
     <value>スタートピン</value>
   </data>
-  <data name="ContextMenu_Reanalyze.Text" xml:space="preserve">
+  <data name="Reanalyze.Text" xml:space="preserve">
     <value>再分析</value>
   </data>
-  <data name="ContextMenu_Rename.Text" xml:space="preserve">
+  <data name="Rename.Text" xml:space="preserve">
     <value>名前を変更</value>
   </data>
-  <data name="ContextMenu_Search_Dict.Text" xml:space="preserve">
+  <data name="Search_Dict.Text" xml:space="preserve">
     <value>検索ワード</value>
   </data>
-  <data name="ContextMenu_SpiderEdit.Text" xml:space="preserve">
+  <data name="SpiderEdit.Text" xml:space="preserve">
     <value>クモエディタ</value>
   </data>
-  <data name="ContextMenu_ViewHorz.Text" xml:space="preserve">
+  <data name="ViewHorz.Text" xml:space="preserve">
     <value>水平方向に表示</value>
   </data>
-  <data name="ContextMenu_WSync.Text" xml:space="preserve">
+  <data name="WSync.Text" xml:space="preserve">
     <value>文庫に同期</value>
   </data>
-  <data name="ContextMenu_WUnsync.Text" xml:space="preserve">
+  <data name="WUnsync.Text" xml:space="preserve">
     <value>ローカルに移動</value>
   </data>
   <data name="CustomBackground.Text" xml:space="preserve">
@@ -179,5 +182,8 @@
   </data>
   <data name="SystemBackground.Text" xml:space="preserve">
     <value>システムの背景</value>
+  </data>
+  <data name="ShareScript.Text" xml:space="preserve">
+    <value>スクリプト共有します</value>
   </data>
 </root>
