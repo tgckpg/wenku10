@@ -339,7 +339,8 @@ namespace wenku10.Pages
 
         private void ScriptUpload( object sender, RoutedEventArgs e )
         {
-
+            PopupFrame.Content = new ShHub.ScriptUpload();
+            PopupPage.State = Net.Astropenguin.UI.ControlState.Reovia;
         }
 
         private void LoginOrLogout( object sender, RoutedEventArgs e ) { LoginOrLogout(); }

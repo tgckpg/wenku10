@@ -186,4 +186,7 @@
   <data name="ShareScript.Text" xml:space="preserve">
     <value>Share script</value>
   </data>
+  <data name="AccessTokens.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>This is used to identify the scripts ownership</value>
+  </data>
 </root>

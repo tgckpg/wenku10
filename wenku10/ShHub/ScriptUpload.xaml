@@ -1,0 +1,93 @@
+﻿<Page
+    x:Class="wenku10.ShHub.ScriptUpload"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.ShHub"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:vp="using:Net.Astropenguin.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <vp:DataVisConverter x:Key="DataVisConverter" />
+        <v:BoolDataConverter x:Key="BoolDataConverter" />
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Margin="10" FontSize="20"
+                   Text="Submit script" x:Uid="/AppResources/SubmitScript"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="15, 10">
+                <TextBlock Text="Script" x:Uid="/AppResources/Script"
+                           Foreground="{StaticResource MajorBrush}" />
+                <HyperlinkButton>
+                    <TextBlock Text="Pick a file" />
+                </HyperlinkButton>
+
+                <TextBlock Text="Zone" x:Uid="/AppResources/HS_Zone"
+                           Foreground="{StaticResource MajorBrush}" />
+                <AutoSuggestBox x:Name="Zone" x:Uid="/AppResources/SeperatedByCommas"
+                                PlaceholderText="Seperated by commas"
+                                Margin="0,2,0,10" />
+                <TextBlock Text="Type" x:Uid="/AppResources/Type"
+                           Foreground="{StaticResource MajorBrush}" />
+                <AutoSuggestBox x:Name="Type" x:Uid="/AppResources/SeperatedByCommas"
+                                PlaceholderText="Seperated by commas"
+                                Margin="0,2,0,10"  />
+                <TextBlock Text="Tags" x:Uid="/AppResources/HS_Tags"
+                           Foreground="{StaticResource MajorBrush}" />
+                <AutoSuggestBox x:Name="Tags" x:Uid="/AppResources/SeperatedByCommas"
+                                PlaceholderText="Seperated by commas"
+                                Margin="0,2,0,10" />
+
+                <CheckBox x:Name="Anon">
+                    <TextBlock x:Uid="/AppResources/Anonymous"
+                               Text="Anonymous" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                </CheckBox>
+                <TextBlock Text="AnonWarning" x:Uid="/AppResources/AnonWarning"
+                           x:Name="AnonWarning" TextWrapping="Wrap"
+                           Margin="0,2,0,10"
+                           Visibility="{Binding ElementName=Anon, Path=IsChecked, Converter={StaticResource DataVisConverter}}"
+                           Foreground="{StaticResource SubtleBrush}" />
+
+                <TextBlock Text="Access Token" x:Uid="/ContextMenu/AccessTokens"
+                           Foreground="{StaticResource MajorBrush}" />
+                <ComboBox x:Name="AccessTokens" />
+
+                <!-- Encryption -->
+                <CheckBox x:Name="Encrypt">
+                    <TextBlock Text="Encryption" x:Uid="/AppResources/Encryption"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                </CheckBox>
+                <StackPanel Margin="10, 5"
+                            Visibility="{Binding ElementName=Encrypt, Path=IsChecked, Converter={StaticResource DataVisConverter}}" >
+                    <TextBlock Text="Secret" x:Uid="/AppResources/Secret" Foreground="{StaticResource MajorBrush}" />
+                    <ComboBox x:Name="Secret" />
+                    <CheckBox x:Name="ForceCommentEnc">
+                        <TextBlock x:Uid="/AppResources/ForceCommentEnc"
+                                   Text="Force comment encryption"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    </CheckBox>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button Style="{StaticResource PlainButton}"
+                    Width="50" Height="50">
+                <i:IconLogout AutoScale="True" Direction="Rotate270" />
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Page>

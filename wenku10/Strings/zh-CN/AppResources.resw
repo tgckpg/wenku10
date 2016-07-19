@@ -177,7 +177,7 @@
   <data name="Reviews_MinLimit.Text" xml:space="preserve">
     <value>字数不足，</value>
   </data>
-  <data name="Reviews_Topic_Type0.Text" xml:space="preserve">
+  <data name="Type.Text" xml:space="preserve">
     <value>类型</value>
   </data>
   <data name="Reviews_Topic_Type1.Text" xml:space="preserve">
@@ -280,5 +280,41 @@
   </data>
   <data name="Login_Expired.Text" xml:space="preserve">
     <value>您的登入期限已过，请重新登入。</value>
+  </data>
+  <data name="HS_Tags.Text" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="HS_Zone.Text" xml:space="preserve">
+    <value>区域</value>
+  </data>
+  <data name="Anonymous.Text" xml:space="preserve">
+    <value>匿名</value>
+  </data>
+  <data name="Script.Text" xml:space="preserve">
+    <value>脚本</value>
+  </data>
+  <data name="SubmitScript.Text" xml:space="preserve">
+    <value>提交脚本</value>
+  </data>
+  <data name="SeperatedByCommas.PlaceholderText" xml:space="preserve">
+    <value>请以「,」作分隔</value>
+  </data>
+  <data name="Secret.Text" xml:space="preserve">
+    <value>密钥</value>
+  </data>
+  <data name="AnonWarning.Text" xml:space="preserve">
+    <value>您选择匿名。这让你和这个脚本之间的唯一关系是权杖。失去你的权杖也将失去修改此脚本的特权。请妥善保管您的权杖。</value>
+  </data>
+  <data name="Encryption.Text" xml:space="preserve">
+    <value>加密</value>
+  </data>
+  <data name="Secret.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>以此密钥加密脚本</value>
+  </data>
+  <data name="ForceCommentEnc.Text" xml:space="preserve">
+    <value>强制加密评论</value>
+  </data>
+  <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>强制所有用户于评论区使用加密</value>
   </data>
 </root>

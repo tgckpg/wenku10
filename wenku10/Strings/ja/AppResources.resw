@@ -177,7 +177,7 @@
   <data name="Reviews_MinLimit.Text" xml:space="preserve">
     <value>字數不足，</value>
   </data>
-  <data name="Reviews_Topic_Type0.Text" xml:space="preserve">
+  <data name="Type.Text" xml:space="preserve">
     <value>タイプ</value>
   </data>
   <data name="Reviews_Topic_Type1.Text" xml:space="preserve">
@@ -280,5 +280,41 @@
   </data>
   <data name="Login_Expired.Text" xml:space="preserve">
     <value>あなたの利用期間が期限切れになった、もう一度ログインしてください。</value>
+  </data>
+  <data name="HS_Tags.Text" xml:space="preserve">
+    <value>タグ</value>
+  </data>
+  <data name="HS_Zone.Text" xml:space="preserve">
+    <value>地域</value>
+  </data>
+  <data name="Anonymous.Text" xml:space="preserve">
+    <value>匿名</value>
+  </data>
+  <data name="Script.Text" xml:space="preserve">
+    <value>スクリプト</value>
+  </data>
+  <data name="SubmitScript.Text" xml:space="preserve">
+    <value>スクリプトを提出</value>
+  </data>
+  <data name="SeperatedByCommas.PlaceholderText" xml:space="preserve">
+    <value>「,」で分離してください</value>
+  </data>
+  <data name="Secret.Text" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="AnonWarning.Text" xml:space="preserve">
+    <value>あなたが匿名であることを選択します。このスクリプトとあなたの関係のみがアクセストークンになります。トークンを失うことはスクリプトを変更する権限を失うことになります。慎重にトークンを保管してください。</value>
+  </data>
+  <data name="Encryption.Text" xml:space="preserve">
+    <value>暗号化</value>
+  </data>
+  <data name="Secret.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>この秘密鍵でスクリプトを暗号化します</value>
+  </data>
+  <data name="ForceCommentEnc.Text" xml:space="preserve">
+    <value>強制的にコメントの暗号化</value>
+  </data>
+  <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>強制的にユーザーがコメント欄で暗号化を使用します。</value>
   </data>
 </root>

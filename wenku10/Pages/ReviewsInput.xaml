@@ -31,7 +31,7 @@
                           SelectionChanged="STopicType_SelectionChanged"
                           Background="White" Foreground="Black" Margin="12, 0">
                     <ComboBox.Items>
-                        <TextBlock x:Uid="/AppResources/Reviews_Topic_Type0" Text="Select Type" />
+                        <TextBlock x:Uid="/AppResources/Type" Text="Select Type" />
                         <TextBlock x:Uid="/AppResources/Reviews_Topic_Type1" Text="Thoughts" />
                         <TextBlock x:Uid="/AppResources/Reviews_Topic_Type2" Text="Spoiler" />
                     </ComboBox.Items>
