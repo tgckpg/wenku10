@@ -24,66 +24,135 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Margin="10" FontSize="20"
-                   Text="Submit script" x:Uid="/AppResources/SubmitScript"
-                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+        <StackPanel Margin="10">
+            <TextBlock FontSize="20"
+                       Text="Submit script" x:Uid="/AppResources/SubmitScript"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+            <TextBlock Margin="10,0" x:Name="Message"
+                       Foreground="{StaticResource MajorBrush}" />
+        </StackPanel>
         <ScrollViewer Grid.Row="1">
             <StackPanel Margin="15, 10">
                 <TextBlock Text="Script" x:Uid="/AppResources/Script"
                            Foreground="{StaticResource MajorBrush}" />
-                <HyperlinkButton>
-                    <TextBlock Text="Pick a file" />
+                <HyperlinkButton Click="PickFile">
+                    <TextBlock x:Name="FileName" Text="Pick a file" />
                 </HyperlinkButton>
 
+                <!-- Name -->
+                <TextBlock Text="Name" x:Uid="/AppResources/Name"
+                           Foreground="{StaticResource MajorBrush}" />
+                <TextBox x:Name="NameInput"
+                         Margin="0,2,0,10" />
+
+                <!-- Desc -->
+                <TextBlock Text="Descrption" x:Uid="/AppResources/Descrption"
+                           Foreground="{StaticResource MajorBrush}" />
+                <TextBox x:Name="DescInput" AcceptsReturn="True"
+                         Height="50"
+                         Margin="0,2,0,10" />
+
+                <!-- Zone -->
                 <TextBlock Text="Zone" x:Uid="/AppResources/HS_Zone"
                            Foreground="{StaticResource MajorBrush}" />
-                <AutoSuggestBox x:Name="Zone" x:Uid="/AppResources/SeperatedByCommas"
+                <AutoSuggestBox x:Name="ZoneInput" x:Uid="/AppResources/SeperatedByCommas"
                                 PlaceholderText="Seperated by commas"
                                 Margin="0,2,0,10" />
+                <!-- Type -->
                 <TextBlock Text="Type" x:Uid="/AppResources/Type"
                            Foreground="{StaticResource MajorBrush}" />
-                <AutoSuggestBox x:Name="Type" x:Uid="/AppResources/SeperatedByCommas"
+                <AutoSuggestBox x:Name="TypesInput" x:Uid="/AppResources/SeperatedByCommas"
                                 PlaceholderText="Seperated by commas"
                                 Margin="0,2,0,10"  />
+                <!-- Tags -->
                 <TextBlock Text="Tags" x:Uid="/AppResources/HS_Tags"
                            Foreground="{StaticResource MajorBrush}" />
-                <AutoSuggestBox x:Name="Tags" x:Uid="/AppResources/SeperatedByCommas"
+                <AutoSuggestBox x:Name="TagsInput" x:Uid="/AppResources/SeperatedByCommas"
                                 PlaceholderText="Seperated by commas"
                                 Margin="0,2,0,10" />
 
+                <!-- Anonymous -->
                 <CheckBox x:Name="Anon">
                     <TextBlock x:Uid="/AppResources/Anonymous"
                                Text="Anonymous" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                 </CheckBox>
                 <TextBlock Text="AnonWarning" x:Uid="/AppResources/AnonWarning"
                            x:Name="AnonWarning" TextWrapping="Wrap"
-                           Margin="0,2,0,10"
+                           Margin="20,2,0,10"
                            Visibility="{Binding ElementName=Anon, Path=IsChecked, Converter={StaticResource DataVisConverter}}"
                            Foreground="{StaticResource SubtleBrush}" />
 
+                <!-- AccessToken -->
                 <TextBlock Text="Access Token" x:Uid="/ContextMenu/AccessTokens"
                            Foreground="{StaticResource MajorBrush}" />
-                <ComboBox x:Name="AccessTokens" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Click="AddToken"
+                            Style="{StaticResource PlainButton}"
+                            Width="35" Height="35">
+                        <i:IconPlusSign AutoScale="True" />
+                    </Button>
+                    <ComboBox x:Name="AccessTokens"
+                              ItemsSource="{Binding TokList}"
+                              Loaded="PreSelectToken">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Key}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
 
                 <!-- Encryption -->
                 <CheckBox x:Name="Encrypt">
                     <TextBlock Text="Encryption" x:Uid="/AppResources/Encryption"
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                 </CheckBox>
-                <StackPanel Margin="10, 5"
+                <Grid Margin="20,0,0,0"
                             Visibility="{Binding ElementName=Encrypt, Path=IsChecked, Converter={StaticResource DataVisConverter}}" >
-                    <TextBlock Text="Secret" x:Uid="/AppResources/Secret" Foreground="{StaticResource MajorBrush}" />
-                    <ComboBox x:Name="Secret" />
-                    <CheckBox x:Name="ForceCommentEnc">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.ColumnSpan="2" Text="Secret" x:Uid="/AppResources/Secret" Foreground="{StaticResource MajorBrush}" />
+
+                    <!-- Key selection -->
+                    <Button Grid.Row="1" Grid.Column="0"
+                            Click="AddKey"
+                            Style="{StaticResource PlainButton}"
+                            Width="35" Height="35">
+                        <i:IconPlusSign AutoScale="True" />
+                    </Button>
+                    <ComboBox Grid.Row="1" Grid.Column="1"
+                              ItemsSource="{Binding KeyList}"
+                              Loaded="PreSelectKey"
+                              x:Name="Keys">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <CheckBox Grid.Row="2" Grid.ColumnSpan="2" x:Name="ForceCommentEnc">
                         <TextBlock x:Uid="/AppResources/ForceCommentEnc"
                                    Text="Force comment encryption"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                     </CheckBox>
-                </StackPanel>
+                </Grid>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
+        <StackPanel Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <ProgressRing x:Name="LoadingRing"
+                          Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                          Width="50" Height="50"/>
             <Button Style="{StaticResource PlainButton}"
+                    Click="Upload"
                     Width="50" Height="50">
                 <i:IconLogout AutoScale="True" Direction="Rotate270" />
             </Button>

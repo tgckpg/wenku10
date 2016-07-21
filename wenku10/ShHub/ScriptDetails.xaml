@@ -3,6 +3,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.ShHub"
+    xmlns:c="using:Net.Astropenguin.UI"
+    xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
     xmlns:ms="using:Microsoft.Phone.Controls"
@@ -12,16 +14,18 @@
     <Page.Resources>
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <v:HubStatusConverter x:Key="HubStatusConverter" />
+        <p:DataStateConverter x:Key="DataStateConverter" />
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
 
         <DataTemplate x:Name="CommentFolded">
-            <Border Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+            <Border Margin="10"
                     Grid.Column="0" Grid.RowSpan="2">
-                <TextBlock Text="Load More" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                <TextBlock Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                           Text="Load More" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
             </Border>
         </DataTemplate>
         <DataTemplate x:Name="CommentNormal">
-            <Grid>
+            <Grid Margin="10,0,15,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -30,15 +34,13 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Border Margin="10, 0"
-                        Grid.Column="0" Grid.RowSpan="2">
-                    <Rectangle Width="5"
-                               Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
-                               Fill="RoyalBlue"/>
-                </Border>
+                <Rectangle Grid.Column="0" Grid.RowSpan="3"
+                           Width="5"
+                           Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                           Fill="{StaticResource VerticalRibbonBrush}"/>
 
                 <StackPanel Grid.Column="1"
-                            Margin="0, 5, 5, 0"
+                            Margin="10,5,5,0"
                             Orientation="Horizontal">
                     <TextBlock Text="{Binding Username}"
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
@@ -46,10 +48,21 @@
                                Foreground="{StaticResource SubtleBrush}" 
                                Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"/>
                 </StackPanel>
+
                 <TextBlock Text="{Binding Title}"
-                           Margin="10, 0, 10, 5" Grid.Column="1" Grid.Row="2"
+                           Margin="10,0,10,5" Grid.Column="1" Grid.Row="1"
                            TextWrapping="Wrap"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+
+                <c:StateControl Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5"
+                                VerticalAlignment="Top" HorizontalAlignment="Right"
+                                State="{Binding Selected, Converter={StaticResource DataStateConverter}}">
+                    <Button Style="{StaticResource PlainButton}">
+                        <TextBlock Text="Reply" TextWrapping="NoWrap"
+                                   Margin="10,5"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                    </Button>
+                </c:StateControl>
             </Grid>
         </DataTemplate>
         <v:HSCTemplateSelector x:Key="CommentSelector"
@@ -121,11 +134,20 @@
             <Border.RenderTransform>
                 <TranslateTransform Y="0" />
             </Border.RenderTransform>
-            <ListView x:Name="CommentList" ItemTemplateSelector="{StaticResource CommentSelector}">
-                <ListView.Resources>
-                </ListView.Resources>
-            </ListView>
+            <ListView x:Name="CommentList"
+                      IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
+                      ItemContainerStyle="{StaticResource BareListItem}"
+                      ItemTemplateSelector="{StaticResource CommentSelector}" />
         </Border>
+
+        <c:StateControl x:Name="LoadingState"
+                        Margin="10"
+                        Width="40" Height="40" 
+                        HorizontalAlignment="Right" VerticalAlignment="Top">
+            <ProgressRing x:Name="LoadingRing" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Width="30" Height="30" />
+        </c:StateControl>
 
         <StackPanel Grid.Row="1"
                     HorizontalAlignment="Right"

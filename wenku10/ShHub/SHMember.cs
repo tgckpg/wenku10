@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Windows.Foundation;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
@@ -12,6 +13,7 @@ using wenku8.Ext;
 using wenku8.Resources;
 using wenku8.Settings;
 using wenku8.Model.REST;
+using CryptAES = wenku8.System.CryptAES;
 
 namespace wenku10.SHHub
 {

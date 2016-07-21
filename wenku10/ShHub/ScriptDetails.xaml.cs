@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.DataModel;
@@ -25,33 +26,24 @@ using wenku8.Resources;
 
 namespace wenku10.ShHub
 {
-    public sealed partial class ScriptDetails : Page
+    sealed partial class ScriptDetails : Page
     {
         public static readonly string ID = typeof( ScriptDetails ).Name;
 
         private Storyboard CommentStory;
+        private Observables<HSComment, HSComment> CommentsSource;
         private bool CommentsOpened = false;
+        private volatile bool CommInit = false;
 
         private HubScriptItem BindItem;
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-        }
-
-        protected override void OnNavigatedTo( NavigationEventArgs e )
-        {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
-
-            BindItem = e.Parameter as HubScriptItem;
-            DataContext = BindItem;
-        }
-
-        public ScriptDetails()
+        public ScriptDetails( HubScriptItem Item )
         {
             this.InitializeComponent();
+
+            BindItem = Item as HubScriptItem;
+            DataContext = BindItem;
+
             SetTemplate();
         }
 
@@ -84,14 +76,32 @@ namespace wenku10.ShHub
 
         private async void ShowComments( object sender, RoutedEventArgs e )
         {
-            HSCommentLoader CLoader = new HSCommentLoader( BindItem.Id, wenku8.Model.REST.SharersRequest.CommentTarget.SCRIPT );
-            IList<HSComment> FirstPage = await CLoader.NextPage();
+            if ( CommentsOpened )
+            {
+                SlideOutComments();
+            }
+            else
+            {
+                SlideInComments();
 
-            Observables<HSComment, HSComment> CommentsObservables = new Observables<HSComment, HSComment>( FirstPage );
-            CommentsObservables.ConnectLoader( CLoader );
-            CommentList.ItemsSource = CommentsObservables;
+                if ( !CommInit )
+                {
+                    CommInit = true;
 
-            SlideInComments();
+                    MarkLoading();
+                    HSCommentLoader CLoader = new HSCommentLoader( BindItem.Id, wenku8.Model.REST.SharersRequest.CommentTarget.SCRIPT );
+                    IList<HSComment> FirstPage = await CLoader.NextPage();
+                    MarkNotLoading();
+
+                    CommentsSource = new Observables<HSComment, HSComment>( FirstPage );
+                    CommentsSource.LoadStart += ( x, y ) => MarkLoading();
+                    CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();
+
+                    CommentsSource.ConnectLoader( CLoader );
+                    CommentList.ItemsSource = CommentsSource;
+                }
+            }
+
         }
 
         private void SlideInComments()
@@ -169,6 +179,23 @@ namespace wenku10.ShHub
             Storyboard.SetTarget( d, Element );
             Storyboard.SetTargetProperty( d, Property );
             Board.Children.Add( d );
+        }
+
+        private void CommentList_ItemClick( object sender, ItemClickEventArgs e )
+        {
+            ( ( HSComment ) e.ClickedItem ).MarkSelect();
+        }
+
+        private void MarkLoading()
+        {
+            LoadingRing.IsActive = true;
+            LoadingState.State = Net.Astropenguin.UI.ControlState.Reovia;
+        }
+
+        private void MarkNotLoading()
+        {
+            LoadingRing.IsActive = false;
+            LoadingState.State = Net.Astropenguin.UI.ControlState.Foreatii;
         }
     }
 }

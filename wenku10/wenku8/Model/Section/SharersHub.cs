@@ -74,11 +74,11 @@ namespace wenku8.Section
             UpdateLLText();
         }
 
-        private void Search( string Query )
+        public void Search( string Query, IEnumerable<string> AccessTokens = null )
         {
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.Search( Query )
+                , Shared.ShRequest.Search( Query, AccessTokens )
                 , SearchResponse
                 , Utils.DoNothing
                 , false

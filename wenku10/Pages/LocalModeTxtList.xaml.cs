@@ -16,11 +16,13 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
+using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
 using libtaotu.Pages;
@@ -29,12 +31,12 @@ using wenku8.Config;
 using wenku8.CompositeElement;
 using wenku8.Ext;
 using wenku8.Model.Book;
+using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.Section;
 using wenku8.Section;
 using wenku8.Settings;
 using wenku8.Storage;
-using wenku8.Model.Book.Spider;
 
 namespace wenku10.Pages
 {
@@ -55,6 +57,8 @@ namespace wenku10.Pages
 
         private async void SetTemplate()
         {
+            NavigationHandler.OnNavigatedBack += OnBackRequested;
+
             FileListContext = new LocalFileList();
             FileListView.DataContext = FileListContext;
 
@@ -68,6 +72,20 @@ namespace wenku10.Pages
             {
                 OneDriveSync.Instance = new OneDriveSync();
                 await OneDriveSync.Instance.Authenticate();
+            }
+        }
+
+        private void OnBackRequested( object sender, XBackRequestedEventArgs e )
+        {
+            if( !Frame.CanGoBack )
+            {
+                if( PopupPage.State == ControlState.Reovia )
+                {
+                    e.Handled = true;
+                    PopupPage.State = ControlState.Foreatii;
+                    PopupFrame.Content = null;
+                    return;
+                }
             }
         }
 
@@ -333,14 +351,21 @@ namespace wenku10.Pages
 
         private void ShHub_ItemCLick( object sender, ItemClickEventArgs e )
         {
-            PopupFrame.Navigate( typeof( ShHub.ScriptDetails ), e.ClickedItem );
-            PopupPage.State = Net.Astropenguin.UI.ControlState.Reovia;
+            PopupFrame.Content = new ShHub.ScriptDetails( e.ClickedItem as HubScriptItem );
+            PopupPage.State = ControlState.Reovia;
         }
 
         private void ScriptUpload( object sender, RoutedEventArgs e )
         {
-            PopupFrame.Content = new ShHub.ScriptUpload();
-            PopupPage.State = Net.Astropenguin.UI.ControlState.Reovia;
+            PopupFrame.Content = new ShHub.ScriptUpload( UploadExit );
+            PopupPage.State = ControlState.Reovia;
+        }
+
+        private void UploadExit( string Id, string AccessToken )
+        {
+            PopupFrame.Content = null;
+            PopupPage.State = ControlState.Foreatii;
+            SHHub.Search( "uuid: " + Id, new string[] { AccessToken } );
         }
 
         private void LoginOrLogout( object sender, RoutedEventArgs e ) { LoginOrLogout(); }
