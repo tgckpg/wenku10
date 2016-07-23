@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.AdvDM;
@@ -99,7 +100,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 
                 IndicateLoad();
 
-                RuntimeCache RCache = new RuntimeCache();
+                RuntimeCache RCache = new RuntimeCache() { EN_UI_Thead = true };
                 RCache.POST(
                     Shared.ShRequest.Server
                     , Shared.ShRequest.Register( Name, Passwd, Email )
@@ -153,8 +154,11 @@ namespace wenku10.Pages.Dialogs.Sharers
 
         private void IndicateIdle()
         {
-            LoadingRing.IsActive = false;
-            LoadingRing.Visibility = Visibility.Collapsed;
+            Worker.UIInvoke( () =>
+            {
+                LoadingRing.IsActive = false;
+                LoadingRing.Visibility = Visibility.Collapsed;
+            } );
         }
     }
 }

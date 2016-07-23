@@ -11,10 +11,6 @@ namespace Microsoft.Phone.Controls
     // This is a hack
     class ControlResources : StringResources
     {
-        public ControlResources()
-            : base( "DateTimeUnits" )
-        {
-
-        }
+        public ControlResources() : base( "DateTimeUnits" ) { }
     }
 }

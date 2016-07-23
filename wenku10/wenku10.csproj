@@ -295,6 +295,7 @@
     <Compile Include="wenku8\System\UnitTest.cs" />
     <Compile Include="wenku8\Taotu\WenkuMarker.cs" />
     <Compile Include="wenku8\Taotu\WenkuExtractor.cs" />
+    <Compile Include="Microsoft.Phone.Controls\WrapPanel.cs" />
     <Page Include="MainStage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -636,6 +637,10 @@
     <ProjectReference Include="..\libs\libwenku8\libwenku8.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
       <Name>libwenku8</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
+      <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>
+      <Name>wenku8-protocol</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

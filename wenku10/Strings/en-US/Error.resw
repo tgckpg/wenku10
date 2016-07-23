@@ -129,6 +129,9 @@
   <data name="PasswordMismatch" xml:space="preserve">
     <value>Password mismatch</value>
   </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Server error, please try again later</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>Cannot get updates</value>
   </data>

@@ -17,6 +17,17 @@
         <p:DataStateConverter x:Key="DataStateConverter" />
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
 
+        <DataTemplate x:Name="TagsTemplate">
+            <Border Margin="5" Background="{StaticResource MinorBackgroundBrush}" >
+                <TextBlock Text="{Binding}"
+                           Margin="8,2" 
+                           TextWrapping="NoWrap" Foreground="{StaticResource SubtleBrush}" />
+            </Border>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Name="WrapPanelTemplate">
+            <ms:WrapPanel Orientation="Horizontal"/>
+        </ItemsPanelTemplate>
+
         <DataTemplate x:Name="CommentFolded">
             <Border Margin="10"
                     Grid.Column="0" Grid.RowSpan="2">
@@ -24,6 +35,7 @@
                            Text="Load More" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
             </Border>
         </DataTemplate>
+
         <DataTemplate x:Name="CommentNormal">
             <Grid Margin="10,0,15,0">
                 <Grid.RowDefinitions>
@@ -70,7 +82,7 @@
                                Normal="{StaticResource CommentNormal}"/>
     </Page.Resources>
 
-    <Grid Background="{StaticResource MajorBackgroundBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -78,13 +90,13 @@
         <ScrollViewer>
             <!-- Description -->
             <StackPanel Margin="10,5">
-                <TextBlock x:Name="Name" FontSize="20"
-                           Text="{Binding Name}" Foreground="White" />
+                <TextBlock FontSize="20"
+                           Text="{Binding Name}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                 <TextBlock Margin="20, 0" Text="{Binding ErrorMessage}"
-                           Foreground="White"
+                           Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
                 <!-- Status History -->
-                <TextBlock Margin="10, 5" Text="Status History" Foreground="White" />
+                <TextBlock Margin="10, 5" Text="Status History" Foreground="{StaticResource SubtleBrush}" />
                 <GridView Margin="10, 0"
                           ItemsSource="{Binding Histories}"
                           ItemContainerStyle="{StaticResource PlainGridItem}">
@@ -113,15 +125,54 @@
                            Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
 
-                <TextBlock x:Name="Desc"
-                           Margin="10,5"
+                <TextBlock Margin="10,5"
                            FontSize="15"
-                           Foreground="White"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                            TextWrapping="Wrap"
                            Text="{Binding Desc}"/>
-                <TextBlock x:Name="Tags" Foreground="White" Text="Tags"/>
-                <TextBlock x:Name="Zone" Foreground="White" Text="Zone" />
-                <TextBlock x:Name="Type" Foreground="White" Text="Type" />
+                <Grid Margin="10, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Margin="5"
+                               x:Uid="/AppResources/HSAuthor"
+                               Text="Maintainer"
+                               Foreground="{StaticResource SubtleBrush}" />
+                    <TextBlock Grid.Row="1"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Zone"/>
+                    <TextBlock x:Name="Zone" Grid.Row="2"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Type" />
+                    <TextBlock x:Name="Type" Grid.Row="3"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Tags" />
+                    <TextBlock Grid.Row="0" Grid.Column="2"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="{Binding Author}" />
+                    <!-- Zone -->
+                    <ItemsControl Grid.Row="1" Grid.Column="2"
+                                  ItemTemplate="{StaticResource TagsTemplate}"
+                                  ItemsPanel="{StaticResource WrapPanelTemplate}"
+                                  ItemsSource="{Binding Zone}" />
+                    <!-- Types -->
+                    <ItemsControl Grid.Row="2" Grid.Column="2"
+                                  ItemTemplate="{StaticResource TagsTemplate}"
+                                  ItemsPanel="{StaticResource WrapPanelTemplate}"
+                                  ItemsSource="{Binding Type}" />
+                    <!-- Tags -->
+                    <ItemsControl Grid.Row="3" Grid.Column="2"
+                                  ItemTemplate="{StaticResource TagsTemplate}"
+                                  ItemsPanel="{StaticResource WrapPanelTemplate}"
+                                  ItemsSource="{Binding Tags}" />
+                </Grid>
                 <!-- Related -->
             </StackPanel>
 

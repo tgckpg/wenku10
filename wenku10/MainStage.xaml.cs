@@ -92,7 +92,7 @@ namespace wenku10
                 , Windows.System.VirtualKey.F
             );
 
-            // Escape
+            // Escape / Backspace = Back
             App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Escape );
             App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Back );
 

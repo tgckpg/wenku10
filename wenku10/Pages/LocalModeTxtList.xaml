@@ -6,112 +6,21 @@
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:xi="using:wenku8.ThemeIcons"
-    xmlns:v="using:wenku8.Converters"
-    xmlns:vp="using:Net.Astropenguin.UI.Converters"
+    xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
     <Page.Resources>
-        <v:BoolDataConverter x:Key="BoolDataConverter" />
-        <vp:DataStateConverter x:Key="DataStateConverter" />
-        <vp:DataVisConverter x:Key="DataVisConverter" />
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
+        <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:DataVisConverter x:Key="DataVisConverter" />
 
-        <DataTemplate x:Key="BookItemTemplate">
-            <Border Background="{StaticResource Shades90}"
-                    Margin="0,10"
-                    MinHeight="120" >
-                <Border.Resources>
-                    <MenuFlyout x:Key="BookAction">
-                        <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}" Text="{Binding FavContextMenu}" Click="ToggleFav" />
-
-                        <MenuFlyoutItem IsEnabled="{Binding CanReprocess}"
-                                        x:Uid="/ContextMenu/Reanalyze"
-                                        Click="Reanalyze"
-                                        Text="Reanalyze" />
-
-                        <MenuFlyoutItem x:Uid="/ContextMenu/DirectView"
-                                        IsEnabled="{Binding File, Converter={StaticResource BoolDataConverter}}"
-                                        Click="ViewRaw" />
-
-                        <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}"
-                                        x:Uid="/ContextMenu/Delete"
-                                        Click="RemoveSource"
-                                        Text="Remove Source" />
-                    </MenuFlyout>
-                </Border.Resources>
-
-                <Grid RightTapped="ShowBookAction"
-                      FlyoutBase.AttachedFlyout="{StaticResource BookAction}">
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="33" />
-                    </Grid.RowDefinitions>
-
-                    <!-- Tick Icon -->
-                    <p:StateControl State="{Binding ProcessSuccess, Converter={StaticResource DataStateConverter}}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Width="90" Height="90">
-                        <i:IconTick AutoScale="True"
-                                    Foreground="{StaticResource MinorBackgroundBrush}"
-                                    Width="120" Height="120" />
-                    </p:StateControl>
-
-                    <!-- Fav Icon -->
-                    <p:StateControl State="{Binding IsFav, Converter={StaticResource DataStateConverter}}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                                    Width="90" Height="90">
-                        <Grid VerticalAlignment="Top" HorizontalAlignment="Right"
-                              Width="180" Height="180">
-                            <i:IconFav AutoScale="True" Opacity="0.5"
-                                       Foreground="#DD1450" />
-                        </Grid>
-                    </p:StateControl>
-
-                    <!-- Spider Icon -->
-                    <p:StateControl State="{Binding IsSpider, Converter={StaticResource DataStateConverter}}" p:Clip.ToBounds="True"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Width="90" Height="90">
-                        <Grid Width="100" Height="90">
-                            <i:IconSpider AutoScale="True" Opacity="0.5" />
-                        </Grid>
-                    </p:StateControl>
-
-                    <!-- Name -->
-                    <Border Background="{StaticResource Shades90}">
-                        <TextBlock Text="{Binding Name}"
-                                   FontSize="20" Margin="5"
-                                   Foreground="{StaticResource RelativeShadesBrush}"
-                                   TextTrimming="CharacterEllipsis"
-                                   TextWrapping="Wrap"/>
-                    </Border>
-                    <!-- Desc -->
-                    <TextBlock Text="{Binding Desc}"
-                               Grid.Row="1"
-                               FontSize="18" Margin="5"
-                               Foreground="{StaticResource RelativeShadesBrush}"
-                               TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
-                    <ProgressRing IsActive="{Binding Processing}"
-                                  Width="40" Height="40" Margin="10"
-                                  HorizontalAlignment="Right" VerticalAlignment="Top"
-                                  Foreground="{StaticResource RelativeShadesBrush}"/>
-
-                    <!-- Error Indicator -->
-                    <p:StateControl Width="90" Height="90"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    State="{Binding ProcessFailed, Converter={StaticResource DataStateConverter}}">
-                        <i:IconCross AutoScale="True"
-                                     Foreground="OrangeRed"
-                                     Width="120" Height="120" />
-                    </p:StateControl>
-                </Grid>
-            </Border>
-        </DataTemplate>
         <DataTemplate x:Key="SHHubItemTemplate">
             <Border Background="{StaticResource Shades90}"
-                    Margin="0,10"
+                    Margin="10"
                     Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                     MaxWidth="300"
                     MinHeight="120" >
@@ -148,48 +57,21 @@
                                    FontSize="16"
                                    Foreground="{StaticResource RelativeShadesBrush}"
                                    TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
-                        <!-- Zone -->
-                        <ItemsControl Margin="10, 5" ItemsSource="{Binding Zones}">
+                        <!-- Zone / Type / Tags -->
+                        <ItemsControl Margin="10,0"
+                                      ItemsSource="{Binding ZoneTypeTags}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding}"
-                                               Margin="8,2" 
-                                               TextWrapping="NoWrap" Foreground="{StaticResource SubtleBrush}" />
+                                    <Border Margin="5" Background="{StaticResource MinorBackgroundBrush}" >
+                                        <TextBlock Text="{Binding}"
+                                                   Margin="8,2" 
+                                                   TextWrapping="NoWrap" Foreground="{StaticResource SubtleBrush}" />
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <VariableSizedWrapGrid Margin="2" Background="{StaticResource MinorBackgroundBrush}" Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                        <!-- Types -->
-                        <ItemsControl Margin="10, 5" ItemsSource="{Binding Types}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"
-                                               Margin="8,2" 
-                                               TextWrapping="NoWrap" Foreground="{StaticResource SubtleBrush}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VariableSizedWrapGrid Margin="2" Background="{StaticResource MinorBackgroundBrush}" Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                        <!-- Tags -->
-                        <ItemsControl Margin="10, 5" ItemsSource="{Binding Tags}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding}"
-                                               Margin="8,2" 
-                                               TextWrapping="NoWrap" Foreground="{StaticResource SubtleBrush}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <ItemsWrapGrid Margin="2" Background="{StaticResource MinorBackgroundBrush}" Orientation="Horizontal"/>
+                                    <ms:WrapPanel Orientation="Horizontal"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
@@ -230,10 +112,41 @@
                         <ListView Grid.Row="1" Margin="5"
                                   ItemsSource="{Binding SearchSet}"
                                   IsItemClickEnabled="True"
-                                  HorizontalAlignment="Center"
-                                  ItemTemplate="{StaticResource BookItemTemplate}"
                                   ItemContainerStyle="{StaticResource BareListItem}"
-                                  ItemClick="FileList_ItemClick" />
+                                  ItemClick="FileList_ItemClick">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border MinHeight="120">
+                                        <Border.Resources>
+                                            <MenuFlyout x:Key="BookAction">
+                                                <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}" Text="{Binding FavContextMenu}" Click="ToggleFav" />
+
+                                                <MenuFlyoutItem IsEnabled="{Binding CanReprocess}"
+                                                                x:Uid="/ContextMenu/Reanalyze"
+                                                                Click="Reanalyze"
+                                                                Text="Reanalyze" />
+
+                                                <MenuFlyoutItem x:Uid="/ContextMenu/DirectView"
+                                                                IsEnabled="{Binding File, Converter={StaticResource DataBoolConverter}}"
+                                                                Click="ViewRaw" />
+
+                                                <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}"
+                                                                x:Uid="/ContextMenu/Delete"
+                                                                Click="RemoveSource"
+                                                                Text="Remove Source" />
+                                            </MenuFlyout>
+                                        </Border.Resources>
+                                        <c:LSBookItem Title="{Binding Name}" Desc="{Binding Desc}"
+                                                      FavState="{Binding IsFav, Converter={StaticResource DataStateConverter}}"
+                                                      IsLoading="{Binding Processing}"
+                                                      SpiderState="{Binding IsSpider, Converter={StaticResource DataStateConverter}}"
+                                                      CheckedState="{Binding ProcessSuccess, Converter={StaticResource DataStateConverter}}"
+                                                      FailedState="{Binding ProcessFailed, Converter={StaticResource DataStateConverter}}"
+                                                      RightTapped="ShowBookAction" FlyoutBase.AttachedFlyout="{StaticResource BookAction}" />
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                         <StackPanel Margin="5" Grid.RowSpan="2" Grid.Column="1">
                             <!-- Spider Control -->
                             <Button x:Name="ScanButton" Style="{StaticResource PlainButton}">
@@ -270,7 +183,7 @@
                             <Button Loaded="ProcessButtonLoaded"
                                     Click="ProcessAll"
                                     Width="50" Height="50"
-                                    IsEnabled="{Binding SearchSet, Converter={StaticResource BoolDataConverter}}"
+                                    IsEnabled="{Binding SearchSet, Converter={StaticResource DataBoolConverter}}"
                                     Style="{StaticResource PlainButton}">
                                 <Grid>
                                     <ProgressRing x:Name="ProcessingRing"
@@ -397,8 +310,9 @@
         </c:ParallaxHub>
 
         <!-- Popup Script Info -->
-        <p:StateControl x:Name="PopupPage"
+        <p:StateControl State="{Binding Path=Content, ElementName=PopupFrame, Converter={StaticResource DataStateConverter}}"
                         Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                        Background="{StaticResource MajorBackgroundBrush}"
                         MaxWidth="500">
             <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
         </p:StateControl>
@@ -414,7 +328,7 @@
                        Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
             <ProgressRing Grid.Column="1"
                           Margin="10" Width="40" Height="40"
-                          IsActive="{Binding Loading, Converter={StaticResource BoolDataConverter}}"
+                          IsActive="{Binding Loading, Converter={StaticResource DataBoolConverter}}"
                           Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
         </Grid>
         <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />

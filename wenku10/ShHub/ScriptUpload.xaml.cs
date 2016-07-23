@@ -19,11 +19,9 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Helpers;
 
 using wenku8.AdvDM;
-using wenku8.Ext;
 using wenku8.Model.ListItem;
 using wenku8.Model.REST;
 using wenku8.Resources;
-using wenku8.Settings;
 using CryptAES = wenku8.System.CryptAES;
 using AuthManager = wenku8.System.AuthManager;
 
@@ -119,6 +117,7 @@ namespace wenku10.ShHub
             string[] Types = TypesInput.Text.Split( ',' );
             string[] Tags = TagsInput.Text.Split( ',' );
 
+            SelectedBook.AssignId( Id );
             string Data = SelectedBook.PSettings.ToString();
 
             if ( Crypt != null ) Data = Crypt.Encrypt( Data );

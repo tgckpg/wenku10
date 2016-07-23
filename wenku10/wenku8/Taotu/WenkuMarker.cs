@@ -246,7 +246,7 @@ namespace wenku8.Taotu
 
                         if( VolAsync )
                         {
-                            VInst.SetProcId( VolProcs.GUID.ToString() );
+                            VInst.SetProcId( VolProcs.GUID );
                             VInst.PushConvoyParam( FParam );
                         }
                         else
@@ -300,7 +300,7 @@ namespace wenku8.Taotu
 
                         if( EpAsync )
                         {
-                            EInst.SetProcId( EpProcs.GUID.ToString() );
+                            EInst.SetProcId( EpProcs.GUID );
                             EInst.PushConvoyParam( FParam );
                         }
                         else

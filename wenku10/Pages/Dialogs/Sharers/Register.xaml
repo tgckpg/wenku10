@@ -52,15 +52,15 @@
                      Margin="0,0,0,10"
                      KeyDown="OnKeyDown"/>
         <!-- Confirm Possword -->
-        <TextBlock x:Uid="/AppResources/Register_ConfirmPassword"
+        <TextBlock x:Uid="/AppResources/ConfirmPassword"
                    Foreground="{StaticResource MinorBrush}"
                    Text="Confirm password" />
         <PasswordBox x:Name="PasswordV"
                      Margin="0,0,0,10"
                      KeyDown="OnKeyDown"/>
         <!-- Email -->
-        <TextBlock x:Uid="/AppResources/Register_Email"
-                   Text="Email"
+        <TextBlock x:Uid="/AppResources/EmailAddress"
+                   Text="Email Address"
                    Foreground="{StaticResource MinorBrush}" />
         <TextBox x:Name="EmailInput"
                  KeyDown="OnKeyDown"/>

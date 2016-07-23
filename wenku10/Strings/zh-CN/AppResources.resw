@@ -317,4 +317,16 @@
   <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>强制所有用户于评论区使用加密</value>
   </data>
+  <data name="ConfirmPassword.Text" xml:space="preserve">
+    <value>确认密码</value>
+  </data>
+  <data name="EmailAddress.Text" xml:space="preserve">
+    <value>电邮地址</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="Name.Text" xml:space="preserve">
+    <value>名称</value>
+  </data>
 </root>

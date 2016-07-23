@@ -12,8 +12,6 @@ namespace wenku8.Converters
 {
     public class HubStatusConverter : IValueConverter
     {
-        public static readonly string ID = typeof( BoolDataConverter ).Name;
-
         private StringResources stx = new StringResources( "Error" );
 
         public object Convert( object value, Type targetType, object parameter, string language )

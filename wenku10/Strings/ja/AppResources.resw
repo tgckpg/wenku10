@@ -317,4 +317,16 @@
   <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>強制的にユーザーがコメント欄で暗号化を使用します。</value>
   </data>
+  <data name="ConfirmPassword.Text" xml:space="preserve">
+    <value>パスワードを再確認</value>
+  </data>
+  <data name="EmailAddress.Text" xml:space="preserve">
+    <value>Eメールアドレス</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Name.Text" xml:space="preserve">
+    <value>名前</value>
+  </data>
 </root>

@@ -3,109 +3,56 @@
 // Please see http://go.microsoft.com/fwlink/?LinkID=131993 for details.
 // All other rights reserved.
 
-
 using System;
 using System.Globalization;
 using Windows.UI.Xaml.Data;
 
 namespace Microsoft.Phone.Controls
 {
-    /// <summary>
-    /// Time converter to display elapsed time relatively to the present.
-    /// </summary>
-    /// <QualityBand>Preview</QualityBand>
     public class RelativeTimeConverter : IValueConverter
     {
         // Control Resources Hack
         private ControlResources ControlResources = new ControlResources();
-        /// <summary>
-        /// A minute defined in seconds.
-        /// </summary>
+
         private const double Minute = 60.0;
-
-        /// <summary>
-        /// An hour defined in seconds.
-        /// </summary>
         private const double Hour = 60.0 * Minute;
-
-        /// <summary>
-        /// A day defined in seconds.
-        /// </summary>
         private const double Day = 24 * Hour;
-
-        /// <summary>
-        /// A week defined in seconds.
-        /// </summary>
         private const double Week = 7 * Day;
-
-        /// <summary>
-        /// A month defined in seconds.
-        /// </summary>
         private const double Month = 30.5 * Day;
-
-        /// <summary>
-        /// A year defined in seconds.
-        /// </summary>
         private const double Year = 365 * Day;
 
-        /// <summary>
-        /// Abbreviation for the default culture used by resources files.
-        /// </summary>
         private const string DefaultCulture = "en-US";
 
-        /// <summary>
-        /// Four different strings to express hours in plural.
-        /// </summary>
         private string[] PluralHourStrings;
-
-        /// <summary>
-        /// Four different strings to express minutes in plural.
-        /// </summary>
         private string[] PluralMinuteStrings;
-
-        /// <summary>
-        /// Four different strings to express seconds in plural.
-        /// </summary>
         private string[] PluralSecondStrings;
 
-        /// <summary>
-        /// Resources use the culture in the system locale by default.
-        /// The converter must use the culture specified the ConverterCulture.
-        /// The ConverterCulture defaults to en-US when not specified.
-        /// Thus, change the resources culture only if ConverterCulture is set.
-        /// </summary>
-        /// <param name="culture">The culture to use in the converter.</param>
         private void SetLocalizationCulture( string language )
         {
             ControlResources.Language = language;
 
-            PluralHourStrings = new string[4] {
+            PluralHourStrings = new string[ 4 ] {
                   ControlResources.Str( "XHoursAgo_2To4" ),
                   ControlResources.Str( "XHoursAgo_EndsIn1Not11" ),
                   ControlResources.Str( "XHoursAgo_EndsIn2To4Not12To14" ),
-                  ControlResources.Str( "XHoursAgo_Other" ) 
+                  ControlResources.Str( "XHoursAgo_Other" )
               };
 
-            PluralMinuteStrings = new string[4] { 
-                  ControlResources.Str( "XMinutesAgo_2To4" ), 
-                  ControlResources.Str( "XMinutesAgo_EndsIn1Not11" ), 
-                  ControlResources.Str( "XMinutesAgo_EndsIn2To4Not12To14" ), 
-                  ControlResources.Str( "XMinutesAgo_Other" ) 
+            PluralMinuteStrings = new string[ 4 ] {
+                  ControlResources.Str( "XMinutesAgo_2To4" ),
+                  ControlResources.Str( "XMinutesAgo_EndsIn1Not11" ),
+                  ControlResources.Str( "XMinutesAgo_EndsIn2To4Not12To14" ),
+                  ControlResources.Str( "XMinutesAgo_Other" )
               };
 
-            PluralSecondStrings = new string[4] { 
-                  ControlResources.Str( "XSecondsAgo_2To4" ), 
-                  ControlResources.Str( "XSecondsAgo_EndsIn1Not11" ), 
-                  ControlResources.Str( "XSecondsAgo_EndsIn2To4Not12To14" ), 
-                  ControlResources.Str( "XSecondsAgo_Other" ) 
+            PluralSecondStrings = new string[ 4 ] {
+                  ControlResources.Str( "XSecondsAgo_2To4" ),
+                  ControlResources.Str( "XSecondsAgo_EndsIn1Not11" ),
+                  ControlResources.Str( "XSecondsAgo_EndsIn2To4Not12To14" ),
+                  ControlResources.Str( "XSecondsAgo_Other" )
               };
         }
 
-        /// <summary>
-        /// Returns a localized text string to express months in plural.
-        /// </summary>
-        /// <param name="month">Number of months.</param>
-        /// <returns>Localized text string.</returns>
         private static string GetPluralMonth( int month )
         {
             ControlResources C = new ControlResources();
@@ -125,16 +72,6 @@ namespace Microsoft.Phone.Controls
             }
         }
 
-        /// <summary>
-        /// Returns a localized text string to express time units in plural.
-        /// </summary>
-        /// <param name="units">
-        /// Number of time units, e.g. 5 for five months.
-        /// </param>
-        /// <param name="resources">
-        /// Resources related to the specified time unit.
-        /// </param>
-        /// <returns>Localized text string.</returns>
         private static string GetPluralTimeUnits( int units, string[] resources )
         {
             int modTen = units % 10;
@@ -163,17 +100,12 @@ namespace Microsoft.Phone.Controls
                 return string.Format( i, resources[ 3 ], units.ToString( i ) );
             }
         }
-        
-        /// <summary>
-        /// Returns a localized text string for the "ast" + "day of week as {0}".
-        /// </summary>
-        /// <param name="dow">Last Day of week.</param>
-        /// <returns>Localized text string.</returns>
-        private static string GetLastDayOfWeek(DayOfWeek dow)
+
+        private static string GetLastDayOfWeek( DayOfWeek dow )
         {
             string result;
             ControlResources ControlResources = new ControlResources();
-            switch (dow)
+            switch ( dow )
             {
                 case DayOfWeek.Monday:
                     result = ControlResources.Str( "last Monday" );
@@ -205,18 +137,12 @@ namespace Microsoft.Phone.Controls
         }
 
 
-        /// <summary>
-        /// Returns a localized text string to express "on {0}"
-        /// where {0} is a day of the week, e.g. Sunday.
-        /// </summary>
-        /// <param name="dow">Day of week.</param>
-        /// <returns>Localized text string.</returns>
-        private static string GetOnDayOfWeek(DayOfWeek dow)
+        private static string GetOnDayOfWeek( DayOfWeek dow )
         {
             string result;
 
             ControlResources ControlResources = new ControlResources();
-            switch (dow)
+            switch ( dow )
             {
                 case DayOfWeek.Monday:
                     result = ControlResources.Str( "on Monday" );
@@ -244,76 +170,58 @@ namespace Microsoft.Phone.Controls
                     break;
             }
 
-            return result;            
+            return result;
         }
 
-        /// <summary>
-        /// Converts a 
-        /// <see cref="T:System.DateTime"/>
-        /// object into a string the represents the elapsed time 
-        /// relatively to the present.
-        /// </summary>
-        /// <param name="value">The given date and time.</param>
-        /// <param name="targetType">
-        /// The type corresponding to the binding property, which must be of
-        /// <see cref="T:System.String"/>.
-        /// </param>
-        /// <param name="parameter">(Not used).</param>
-        /// <param name="culture">
-        /// The culture to use in the converter.
-        /// When not specified, the converter uses the current culture
-        /// as specified by the system locale.
-        /// </param>
-        /// <returns>The given date and time as a string.</returns>
-        public object Convert(object value, Type targetType, object parameter, string language)
+        public object Convert( object value, Type targetType, object parameter, string language )
         {
             // Target value must be a System.DateTime object.
-            if (!(value is DateTime))
+            if ( !( value is DateTime ) )
             {
                 throw new ArgumentException( "Not a valid DateTime object" );
             }
 
             string result;
 
-            DateTime given = ((DateTime)value).ToLocalTime();
+            DateTime given = ( ( DateTime ) value ).ToLocalTime();
 
             DateTime current = DateTime.Now;
 
             TimeSpan difference = current - given;
 
-			SetLocalizationCulture( language );
+            SetLocalizationCulture( language );
 
-            if (DateTimeFormatHelper.IsFutureDateTime(current, given))
+            if ( DateTimeFormatHelper.IsFutureDateTime( current, given ) )
             {
                 // Future dates and times are not supported, but to prevent crashing an app
                 // if the time they receive from a server is slightly ahead of the phone's clock
                 // we'll just default to the minimum, which is "2 seconds ago".
-                result = GetPluralTimeUnits(2, PluralSecondStrings);
+                result = GetPluralTimeUnits( 2, PluralSecondStrings );
             }
 
-            if (difference.TotalSeconds > Year)
+            if ( difference.TotalSeconds > Year )
             {
                 // "over a year ago"
                 result = ControlResources.Str( "OverAYearAgo" );
             }
-            else if (difference.TotalSeconds > (1.5 * Month))
+            else if ( difference.TotalSeconds > ( 1.5 * Month ) )
             {
                 // "x months ago"
-                int nMonths = (int)((difference.TotalSeconds + Month / 2) / Month);
-                result = GetPluralMonth(nMonths);
+                int nMonths = ( int ) ( ( difference.TotalSeconds + Month / 2 ) / Month );
+                result = GetPluralMonth( nMonths );
             }
-            else if (difference.TotalSeconds >= (3.5 * Week))
+            else if ( difference.TotalSeconds >= ( 3.5 * Week ) )
             {
                 // "about a month ago"
                 result = ControlResources.Str( "AboutAMonthAgo" );
             }
-            else if (difference.TotalSeconds >= Week)
+            else if ( difference.TotalSeconds >= Week )
             {
-                int nWeeks = (int)(difference.TotalSeconds / Week);
-                if (nWeeks > 1)
+                int nWeeks = ( int ) ( difference.TotalSeconds / Week );
+                if ( nWeeks > 1 )
                 {
                     // "x weeks ago"
-                    result = string.Format(CultureInfo.CurrentUICulture, ControlResources.Str( "XWeeksAgo_2To4" ), nWeeks.ToString(ControlResources.Str( "Culture" )));
+                    result = string.Format( CultureInfo.CurrentUICulture, ControlResources.Str( "XWeeksAgo_2To4" ), nWeeks.ToString( ControlResources.Str( "Culture" ) ) );
                 }
                 else
                 {
@@ -321,34 +229,34 @@ namespace Microsoft.Phone.Controls
                     result = ControlResources.Str( "AboutAWeekAgo" );
                 }
             }
-            else if (difference.TotalSeconds >= (5 * Day))
+            else if ( difference.TotalSeconds >= ( 5 * Day ) )
             {
                 // "last <dayofweek>"    
-                result = GetLastDayOfWeek(given.DayOfWeek);
+                result = GetLastDayOfWeek( given.DayOfWeek );
             }
-            else if (difference.TotalSeconds >= Day)
+            else if ( difference.TotalSeconds >= Day )
             {
                 // "on <dayofweek>"
-                result = GetOnDayOfWeek(given.DayOfWeek);
+                result = GetOnDayOfWeek( given.DayOfWeek );
             }
-            else if (difference.TotalSeconds >= (2 * Hour))
+            else if ( difference.TotalSeconds >= ( 2 * Hour ) )
             {
                 // "x hours ago"
-                int nHours = (int)(difference.TotalSeconds / Hour);
-                result = GetPluralTimeUnits(nHours, PluralHourStrings);
+                int nHours = ( int ) ( difference.TotalSeconds / Hour );
+                result = GetPluralTimeUnits( nHours, PluralHourStrings );
             }
-            else if (difference.TotalSeconds >= Hour)
+            else if ( difference.TotalSeconds >= Hour )
             {
                 // "about an hour ago"
                 result = ControlResources.Str( "AboutAnHourAgo" );
             }
-            else if (difference.TotalSeconds >= (2 * Minute))
+            else if ( difference.TotalSeconds >= ( 2 * Minute ) )
             {
                 // "x minutes ago"
-                int nMinutes = (int)(difference.TotalSeconds / Minute);
-                result = GetPluralTimeUnits(nMinutes, PluralMinuteStrings);
+                int nMinutes = ( int ) ( difference.TotalSeconds / Minute );
+                result = GetPluralTimeUnits( nMinutes, PluralMinuteStrings );
             }
-            else if (difference.TotalSeconds >= Minute)
+            else if ( difference.TotalSeconds >= Minute )
             {
                 // "about a minute ago"
                 result = ControlResources.Str( "AboutAMinuteAgo" );
@@ -356,22 +264,14 @@ namespace Microsoft.Phone.Controls
             else
             {
                 // "x seconds ago" or default to "2 seconds ago" if less than two seconds.
-                int nSeconds = ((int)difference.TotalSeconds > 1.0) ? (int)difference.TotalSeconds : 2;
-                result = GetPluralTimeUnits(nSeconds, PluralSecondStrings);
+                int nSeconds = ( ( int ) difference.TotalSeconds > 1.0 ) ? ( int ) difference.TotalSeconds : 2;
+                result = GetPluralTimeUnits( nSeconds, PluralSecondStrings );
             }
 
             return result;
         }
 
-        /// <summary>
-        /// Not implemented.
-        /// </summary>
-        /// <param name="value">(Not used).</param>
-        /// <param name="targetType">(Not used).</param>
-        /// <param name="parameter">(Not used).</param>
-        /// <param name="culture">(Not used).</param>
-        /// <returns>null</returns>
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
+        public object ConvertBack( object value, Type targetType, object parameter, string language )
         {
             throw new NotImplementedException();
         }

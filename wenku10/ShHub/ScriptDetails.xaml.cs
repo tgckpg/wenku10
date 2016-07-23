@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.Controls;
+using Net.Astropenguin.UI;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.DataModel;
@@ -23,6 +23,7 @@ using wenku8.AdvDM;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Resources;
+using AuthManager = wenku8.System.AuthManager;
 
 namespace wenku10.ShHub
 {
@@ -56,9 +57,10 @@ namespace wenku10.ShHub
         private void Download( object sender, RoutedEventArgs e )
         {
             RuntimeCache RCache = new RuntimeCache();
+
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.ScriptDownload( BindItem.Id )
+                , Shared.ShRequest.ScriptDownload( BindItem.Id, new AuthManager().GetATokenById( BindItem.Id ) )
                 , DownloadComplete
                 , DownloadFailed
                 , false
@@ -67,6 +69,7 @@ namespace wenku10.ShHub
 
         private void DownloadFailed( string CacheName, string Id, Exception ex )
         {
+            BindItem.ErrorMessage = ex.Message;
         }
 
         private void DownloadComplete( DRequestCompletedEventArgs e, string Id )
@@ -189,13 +192,13 @@ namespace wenku10.ShHub
         private void MarkLoading()
         {
             LoadingRing.IsActive = true;
-            LoadingState.State = Net.Astropenguin.UI.ControlState.Reovia;
+            LoadingState.State = ControlState.Reovia;
         }
 
         private void MarkNotLoading()
         {
             LoadingRing.IsActive = false;
-            LoadingState.State = Net.Astropenguin.UI.ControlState.Foreatii;
+            LoadingState.State = ControlState.Foreatii;
         }
     }
 }

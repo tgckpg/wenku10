@@ -76,6 +76,11 @@ namespace wenku8.Section
 
         public void Search( string Query, IEnumerable<string> AccessTokens = null )
         {
+            if( AccessTokens == null )
+            {
+                AccessTokens = new AuthManager().TokList.Remap( x => x.Value );
+            }
+
             RCache.POST(
                 Shared.ShRequest.Server
                 , Shared.ShRequest.Search( Query, AccessTokens )

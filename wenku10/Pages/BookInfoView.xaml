@@ -16,9 +16,9 @@
     <Page.Resources>
         <s:VDisplayConverter x:Key="VDisplayConverter" />
         <s:ParallaxConverter x:Key="ParallaxConverter" />
-        <s:BoolDataConverter x:Key="BoolDataConverter" />
         <s:NumberSimplifier x:Key="NumberSimplifier" />
         <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
@@ -241,7 +241,7 @@
                                                 FlowDirection="LeftToRight">
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
-                                                IsEnabled="{Binding OriginalUrl, Converter={StaticResource BoolDataConverter}}"
+                                                IsEnabled="{Binding OriginalUrl, Converter={StaticResource DataBoolConverter}}"
                                                 Height="65" Width="65"
                                                 Click="OpenInBrowser" >
                                                 <i:IconMSEdge AutoScale="True" />

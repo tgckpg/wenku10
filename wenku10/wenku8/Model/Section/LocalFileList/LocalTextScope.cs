@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+
+using wenku10.Pages;
 
 namespace wenku8.Model.Section
 {
     using AdvDM;
     using ListItem;
-    using Net.Astropenguin.Loaders;
     using Resources;
     using Settings;
     using Storage;
-    using wenku10.Pages;
-    using Windows.Storage;
 
     sealed partial class LocalFileList : SearchableContext
     {
@@ -143,14 +144,20 @@ namespace wenku8.Model.Section
             Processing = true;
             Terminate = false;
             NotifyChanged( "Processing" );
-            foreach( LocalBook b in SearchSet )
+            ActiveItem[] Books = SearchSet.ToArray();
+            foreach ( LocalBook b in Books )
             {
                 await b.Process();
-                if( Terminate ) break;
+                if ( Terminate ) break;
             }
             Terminate = true;
             Processing = false;
             NotifyChanged( "Processing" );
+        }
+
+        public LocalBook GetById( string Id )
+        {
+            return Data.Cast<LocalBook>().FirstOrDefault( x => x.aid == Id );
         }
 
         protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )

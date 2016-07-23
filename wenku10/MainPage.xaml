@@ -7,6 +7,7 @@
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:vp="using:Net.Astropenguin.UI.Converters"
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -17,7 +18,7 @@
 
     <Page.Resources>
         <n:DataStateConverter x:Key="DataStateConverter" />
-        <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <vp:DataBoolConverter x:Key="DataBoolConverter" />
         <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
         <v:FavConverter x:Key="FavConverter" />

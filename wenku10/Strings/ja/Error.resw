@@ -130,6 +130,9 @@
   <data name="PasswordMismatch" xml:space="preserve">
     <value>パスワードが一致しません</value>
   </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>サーバーエラー、後で再試行してください。</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>更新に失敗しました</value>
   </data>

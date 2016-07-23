@@ -78,7 +78,7 @@ namespace wenku10.Pages.Settings.Advanced
             }
             catch ( DllNotFoundException ex )
             {
-                Logger.Log( ID, "Protocol not present", LogType.INFO );
+                Logger.Log( ID, "Protocol not present: " + ex.Message, LogType.INFO );
                 EnableSS.IsEnabled = false;
             }
             catch ( Exception ex )

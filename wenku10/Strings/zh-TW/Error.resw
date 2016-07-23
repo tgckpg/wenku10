@@ -129,6 +129,9 @@
   <data name="PasswordMismatch" xml:space="preserve">
     <value>所輸入的密碼不一致</value>
   </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>伺服器錯誤，請稍候再試。</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>無法取得更新</value>
   </data>

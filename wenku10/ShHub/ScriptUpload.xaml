@@ -5,19 +5,18 @@
     xmlns:local="using:wenku10.ShHub"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:xi="using:wenku8.ThemeIcons"
-    xmlns:v="using:wenku8.Converters"
-    xmlns:vp="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <vp:DataVisConverter x:Key="DataVisConverter" />
-        <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <v:DataVisConverter x:Key="DataVisConverter" />
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
     </Page.Resources>
 
-    <Grid Background="{StaticResource MajorBackgroundBrush}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -46,7 +45,7 @@
                          Margin="0,2,0,10" />
 
                 <!-- Desc -->
-                <TextBlock Text="Descrption" x:Uid="/AppResources/Descrption"
+                <TextBlock Text="Descrption" x:Uid="/AppResources/Description"
                            Foreground="{StaticResource MajorBrush}" />
                 <TextBox x:Name="DescInput" AcceptsReturn="True"
                          Height="50"

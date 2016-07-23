@@ -68,6 +68,8 @@ namespace wenku10.Pages
 
             SHHub.Member.OnStatusChanged += SHMem_OnStatusChanged;
 
+            SHHub.SearchTerm = "";
+
             if( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
             {
                 OneDriveSync.Instance = new OneDriveSync();
@@ -79,13 +81,8 @@ namespace wenku10.Pages
         {
             if( !Frame.CanGoBack )
             {
-                if( PopupPage.State == ControlState.Reovia )
-                {
-                    e.Handled = true;
-                    PopupPage.State = ControlState.Foreatii;
-                    PopupFrame.Content = null;
-                    return;
-                }
+                e.Handled = true;
+                PopupFrame.Content = null;
             }
         }
 
@@ -118,10 +115,10 @@ namespace wenku10.Pages
 
             await Popups.ShowDialog( MsgBox );
 
-            if( Parse )
-            {
+            if ( Parse ) ProcessBook( FileListContext.GetById( HSI.Id ) );
 
-            }
+            MainHub.RefSV.ChangeView( 0, 0, null, false );
+            PopupFrame.Content = null;
         }
 
         private async void ConfirmErrorReport( HubScriptItem HSI )
@@ -161,38 +158,6 @@ namespace wenku10.Pages
             FileListContext.LoadUrl( UrlC );
         }
 
-        public class DownloadBookContext : INamable
-        {
-            private Uri _url;
-
-            public Regex Re = new Regex( @"https?://.+/(\d+)\.([\w\W]+\.)?txt$" );
-
-            public Uri Url { get { return _url; } }
-
-            public string Id { get; private set; }
-            public string Title { get; private set; }
-
-            public string Name
-            {
-                get { return _url == null ? "" : _url.ToString(); }
-                set
-                {
-                    Match m = Re.Match( value );
-                    if ( !m.Success )
-                    {
-                        throw new Exception( "Invalid Url" );
-                    }
-                    else
-                    {
-                        Id = m.Groups[ 1 ].Value;
-                        Title = m.Groups[ 2 ].Value;
-                    }
-
-                    _url = new Uri( value );
-                }
-            }
-        }
-
         protected override void OnNavigatedFrom( NavigationEventArgs e )
         {
             base.OnNavigatedFrom( e );
@@ -205,9 +170,15 @@ namespace wenku10.Pages
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
         }
 
-        private void FileList_ItemClick( object sender, ItemClickEventArgs e )
+        private void FileList_ItemClick( object sender, ItemClickEventArgs e ) { ProcessBook( e.ClickedItem as LocalBook ); }
+
+        private void ProcessBook( LocalBook Item )
         {
-            LocalBook Item = e.ClickedItem as LocalBook;
+            if ( Item == null )
+            {
+                Logger.Log( ID, "Item is null, invalid casting to SpiderBook?", LogType.WARNING );
+                return;
+            }
 
             // Prevent double processing on the already processed item
             if ( !Item.ProcessSuccess )
@@ -279,10 +250,10 @@ namespace wenku10.Pages
 
         private void ShowBookAction( object sender, RightTappedRoutedEventArgs e )
         {
-            Grid G = sender as Grid;
+            LSBookItem G = ( LSBookItem ) sender;
             FlyoutBase.ShowAttachedFlyout( G );
 
-            SelectedBook = G.DataContext as LocalBook;
+            SelectedBook = ( LocalBook ) G.DataContext;
         }
 
         private void ToggleFav( object sender, RoutedEventArgs e )
@@ -352,19 +323,16 @@ namespace wenku10.Pages
         private void ShHub_ItemCLick( object sender, ItemClickEventArgs e )
         {
             PopupFrame.Content = new ShHub.ScriptDetails( e.ClickedItem as HubScriptItem );
-            PopupPage.State = ControlState.Reovia;
         }
 
         private void ScriptUpload( object sender, RoutedEventArgs e )
         {
             PopupFrame.Content = new ShHub.ScriptUpload( UploadExit );
-            PopupPage.State = ControlState.Reovia;
         }
 
         private void UploadExit( string Id, string AccessToken )
         {
             PopupFrame.Content = null;
-            PopupPage.State = ControlState.Foreatii;
             SHHub.Search( "uuid: " + Id, new string[] { AccessToken } );
         }
 
@@ -398,6 +366,38 @@ namespace wenku10.Pages
             if( Status == MemberStatus.RE_LOGIN_NEEDED )
             {
                 LoginOrLogout();
+            }
+        }
+
+        public class DownloadBookContext : INamable
+        {
+            private Uri _url;
+
+            public Regex Re = new Regex( @"https?://.+/(\d+)\.([\w\W]+\.)?txt$" );
+
+            public Uri Url { get { return _url; } }
+
+            public string Id { get; private set; }
+            public string Title { get; private set; }
+
+            public string Name
+            {
+                get { return _url == null ? "" : _url.ToString(); }
+                set
+                {
+                    Match m = Re.Match( value );
+                    if ( !m.Success )
+                    {
+                        throw new Exception( "Invalid Url" );
+                    }
+                    else
+                    {
+                        Id = m.Groups[ 1 ].Value;
+                        Title = m.Groups[ 2 ].Value;
+                    }
+
+                    _url = new Uri( value );
+                }
             }
         }
     }

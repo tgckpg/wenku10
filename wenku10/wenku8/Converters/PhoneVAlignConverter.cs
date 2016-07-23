@@ -7,8 +7,6 @@ namespace wenku8.Converters
 {
     public class PhoneVAlignConverter : IValueConverter
     {
-        public static readonly string ID = typeof( BoolDataConverter ).Name;
-
         public object Convert( object value, Type targetType, object parameter, string language )
         {
             string[] TF = parameter.ToString().Split( '|' );
