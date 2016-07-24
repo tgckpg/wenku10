@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>下載中...</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>載入中...</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -198,9 +198,8 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>條件</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>沒有哦</value>
-    <comment>NaN</comment>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
     <value>共找到</value>
@@ -210,7 +209,6 @@
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>不支援內文搜索</value>
-    <comment>NaN</comment>
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>文庫暫沒有收錄此作品</value>
@@ -328,5 +326,8 @@
   </data>
   <data name="HS_Maintainer.Text" xml:space="preserve">
     <value>維護者</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>此腳本的創作者已設定了評論加密，可惜閣下沒有所需密鑰以加密您的評論。請先提出密鑰請求取得密鑰。</value>
   </data>
 </root>

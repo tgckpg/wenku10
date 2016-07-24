@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>Downloading</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>Loading</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>By</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>Nope</value>
     <comment>NaN</comment>
   </data>
@@ -331,5 +331,8 @@
   </data>
   <data name="HS_Maintainer.Text" xml:space="preserve">
     <value>Maintainer</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>The creator of this script has explicitly set the comment to be encrypted. Unfortunately you do not have the key to encrypt your comment. You need to place a key request to get the key before making comments.</value>
   </data>
 </root>

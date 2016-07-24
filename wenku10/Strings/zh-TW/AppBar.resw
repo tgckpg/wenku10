@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddComment" xml:space="preserve">
-    <value>發表書評</value>
+    <value>發表評論</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>搜作者</value>
@@ -153,7 +153,7 @@
   <data name="ReloadChapter" xml:space="preserve">
     <value>重新下載此章節</value>
   </data>
-  <data name="Reply" xml:space="preserve">
+  <data name="Reply.Text" xml:space="preserve">
     <value>回覆</value>
   </data>
   <data name="Save" xml:space="preserve">

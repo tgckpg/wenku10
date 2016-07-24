@@ -15,6 +15,7 @@
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <v:HubStatusConverter x:Key="HubStatusConverter" />
         <p:DataStateConverter x:Key="DataStateConverter" />
+        <p:DataVisConverter x:Key="DataVisConverter" />
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
 
         <DataTemplate x:Name="TagsTemplate">
@@ -69,10 +70,11 @@
                 <c:StateControl Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5"
                                 VerticalAlignment="Top" HorizontalAlignment="Right"
                                 State="{Binding Selected, Converter={StaticResource DataStateConverter}}">
-                    <Button Style="{StaticResource PlainButton}">
-                        <TextBlock Text="Reply" TextWrapping="NoWrap"
+                    <Button Style="{StaticResource PlainButton}"
+                            Click="NewReply">
+                        <TextBlock x:Uid="/AppBar/Reply" Text="Reply" TextWrapping="NoWrap"
                                    Margin="10,5"
-                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                                   Foreground="{StaticResource RelativeShadesBrush}"/>
                     </Button>
                 </c:StateControl>
             </Grid>
@@ -154,6 +156,7 @@
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                            TextWrapping="Wrap"
                            Text="{Binding Desc}"/>
+
                 <Grid Margin="10, 5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -203,42 +206,74 @@
 
         </ScrollViewer>
         <!-- Comments -->
-        <Border x:Name="CommentSection" Margin="0, 10"
+        <Grid x:Name="CommentSection" Margin="0, 10"
                 Visibility="Collapsed"
                 Opacity="0"
                 Background="{StaticResource MajorBackgroundBrush}">
-            <Border.RenderTransform>
+            <Grid.RenderTransform>
                 <TranslateTransform Y="0" />
-            </Border.RenderTransform>
+            </Grid.RenderTransform>
+            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
+                <TextBlock x:Uid="/AppResources/NoComments" Text="No comments"
+                           Visibility="{Binding Path=ItemsSource, ElementName=CommentList, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                           Foreground="{StaticResource MajorBrush}" />
+            </c:StateControl>
+            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}">
+                    <TextBlock x:Uid="/AppResources/Loading" Text="Loading"
+                               Foreground="{StaticResource MajorBrush}" />
+            </c:StateControl>
             <ListView x:Name="CommentList"
                       IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
                       ItemContainerStyle="{StaticResource BareListItem}"
                       ItemTemplateSelector="{StaticResource CommentSelector}" />
-        </Border>
+        </Grid>
 
-        <c:StateControl x:Name="LoadingState"
+        <c:StateControl State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}"
                         Margin="10"
                         Width="40" Height="40" 
-                        HorizontalAlignment="Right" VerticalAlignment="Top">
+                        HorizontalAlignment="Left" VerticalAlignment="Top">
             <ProgressRing x:Name="LoadingRing" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                           HorizontalAlignment="Center" VerticalAlignment="Center"
                           Width="30" Height="30" />
         </c:StateControl>
 
-        <StackPanel Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal"
-                    Height="50">
-            <Button Style="{StaticResource PlainButton}"
-                    Click="ShowComments"
-                    Width="50">
-                <i:IconComment Background="{StaticResource MajorBrush}"
-                               AutoScale="True" />
-            </Button>
-            <Button Style="{StaticResource PlainButton}" Width="50"
-                    Click="Download">
-                <i:IconLogin AutoScale="True" Direction="Rotate270" />
-            </Button>
-        </StackPanel>
+        <ListView x:Name="ControlsList" Grid.Row="1"
+                  HorizontalAlignment="Right"
+                  IsItemClickEnabled="True" ItemClick="ControlClick"
+                  ItemContainerStyle="{StaticResource BareListItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Child="{Binding Icon}"
+                            Background="{StaticResource Shades90}"
+                            Width="50" Height="50" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+
+        <c:StateControl x:Name="CommentEditor" Grid.Row="0"
+                        Background="{StaticResource MajorBackgroundBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Margin="10">
+                    <TextBlock x:Name="CommentModeLabel"
+                               Foreground="{StaticResource MajorBrush}"
+                               FontSize="30" />
+                    <TextBlock Margin="20,0" x:Name="CommentError"
+                               Visibility="{Binding Path=Text, RelativeSource={RelativeSource Self}, Converter={StaticResource DataVisConverter}}"
+                               Foreground="{StaticResource MinorBrush}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+                <RichEditBox x:Name="CommentInput"
+                             Grid.Row="1" Margin="20,0,20,10" />
+            </Grid>
+        </c:StateControl>
     </Grid>
 </Page>

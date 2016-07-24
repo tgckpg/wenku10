@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>ダウンロード中...</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>読み込んでいます…</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>條件</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>ありません</value>
     <comment>NaN</comment>
   </data>
@@ -331,5 +331,8 @@
   </data>
   <data name="HS_Maintainer.Text" xml:space="preserve">
     <value>整備員</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>このスクリプトの作成者が明示的に暗号化するコメントを設定しています。残念ながら、あなたはコメントを暗号化するための鍵を持っていません。コメントをする前に、キーを取得するためのキー要求を配置してください。</value>
   </data>
 </root>

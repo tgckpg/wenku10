@@ -156,7 +156,7 @@
   <data name="ReloadChapter" xml:space="preserve">
     <value>Reload this Chapter</value>
   </data>
-  <data name="Reply" xml:space="preserve">
+  <data name="Reply.Text" xml:space="preserve">
     <value>Reply</value>
   </data>
   <data name="Save" xml:space="preserve">

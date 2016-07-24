@@ -62,7 +62,7 @@ namespace wenku10.Pages
             IsReview = true;
 
             StringResources stx = new StringResources( "AppBar" );
-            Title.Text = stx.Str( "Reply" );
+            Title.Text = stx.Text( "Reply" );
             TitleSection.Visibility = Visibility.Collapsed;
         }
 

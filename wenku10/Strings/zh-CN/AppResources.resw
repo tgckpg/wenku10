@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>正在下载...</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>载入中...</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>条件</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>沒有哦</value>
     <comment>NaN</comment>
   </data>
@@ -331,5 +331,8 @@
   </data>
   <data name="HS_Maintainer.Text" xml:space="preserve">
     <value>维护者</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>此脚本的创建者已设置了评论加密，可惜阁下没有所需密钥以加密您的评论。请先提出密钥请求取得密钥。</value>
   </data>
 </root>
