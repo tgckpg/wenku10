@@ -329,4 +329,7 @@
   <data name="Name.Text" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="HS_Maintainer.Text" xml:space="preserve">
+    <value>Maintainer</value>
+  </data>
 </root>

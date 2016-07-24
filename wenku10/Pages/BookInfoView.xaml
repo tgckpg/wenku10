@@ -17,8 +17,10 @@
         <s:VDisplayConverter x:Key="VDisplayConverter" />
         <s:ParallaxConverter x:Key="ParallaxConverter" />
         <s:NumberSimplifier x:Key="NumberSimplifier" />
+        <s:FavConverter x:Key="FavConverter" />
         <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <v:DataBoolConverter x:Key="DataBoolConverter" />
+        <v:DataVisConverter x:Key="DataVisConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
@@ -174,25 +176,37 @@
                                                 <p:StateControl Grid.RowSpan="2" State="{Binding Cover, Converter={StaticResource DataStateConverter}}" >
                                                     <Image MaxWidth="140" MaxHeight="180" Margin="5" Source="{Binding Cover}" />
                                                 </p:StateControl>
+                                                <!-- Author / Press / StatusLong / Length -->
                                                 <StackPanel Grid.Column="1" Margin="5,10,5,5" Grid.Row="0">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}"
+                                                               Visibility="{Binding Author, Converter={StaticResource DataVisConverter}}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}"
+                                                               Visibility="{Binding Press, Converter={StaticResource DataVisConverter}}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}"
+                                                               Visibility="{Binding StatusLong, Converter={StaticResource DataVisConverter}}"
+                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                     <TextBlock TextWrapping="Wrap"
                                                                ToolTipService.ToolTip="{Binding Length}"
                                                                Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                                               Visibility="{Binding Length, Converter={StaticResource DataVisConverter}}"
                                                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
+                                                <!-- TotalCount / TodayCount / PushCount / FavCount -->
                                                 <StackPanel Grid.Column="1" Margin="5" Grid.Row="1">
                                                     <TextBlock TextWrapping="Wrap"
                                                                ToolTipService.ToolTip="{Binding TotalHitCount}"
                                                                Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                               Visibility="{Binding TotalHitCount, Converter={StaticResource DataVisConverter}}"
                                                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                     <TextBlock TextWrapping="Wrap"
                                                                ToolTipService.ToolTip="{Binding TodayHitCount}"
                                                                Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                               Visibility="{Binding TodayHitCount, Converter={StaticResource DataVisConverter}}"
                                                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <Grid Loaded="PushCountGridLoaded">
+                                                    <Grid Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}"
+                                                          Loaded="PushCountGridLoaded" >
                                                         <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
                                                         <TextBlock Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
                                                                    ToolTipService.ToolTip="{Binding PushCount}">
@@ -224,10 +238,10 @@
                                                             </Storyboard>
                                                         </Grid.Resources>
                                                     </Grid>
-
                                                     <TextBlock TextWrapping="Wrap"
                                                                Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
                                                                ToolTipService.ToolTip="{Binding FavCount}"
+                                                               Visibility="{Binding FavCount, Converter={StaticResource DataVisConverter}}"
                                                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                                 </StackPanel>
 
@@ -251,9 +265,6 @@
                                                 Height="65" Width="65"
                                                 Tapped="AddOrRemoveFav">
                                             <Grid>
-                                                <Grid.Resources>
-                                                    <s:FavConverter x:Key="FavConverter" />
-                                                </Grid.Resources>
                                                 <i:IconFaved AutoScale="True"
                                                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                              Visibility="{Binding IsFav, Converter={StaticResource FavConverter}, ConverterParameter=1}"/>

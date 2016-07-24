@@ -316,7 +316,7 @@
                         </HubSection>
 
                         <!-- Staff picks -->
-                        <HubSection x:Name="RectileSection" Visibility="Collapsed">
+                        <HubSection x:Name="StaffPicksSection" Visibility="Collapsed">
                             <DataTemplate>
                                 <c:StarCanvas
                                     ItemsSource="{Binding Data}"

@@ -166,9 +166,9 @@ namespace wenku10
 
             if( ns.MainPage_Settings.IsStaffPicksEnabled )
             {
-                RectileSection.Visibility = Visibility.Visible;
-                ISectionItem sp = X.Instance<ISectionItem>( XProto.RectileSection );
-                RectileSection.DataContext = sp;
+                StaffPicksSection.Visibility = Visibility.Visible;
+                ISectionItem sp = X.Instance<ISectionItem>( XProto.StaffPicksSection );
+                StaffPicksSection.DataContext = sp;
                 sp.Load( X.Call<XKey[]>( XProto.WRequest, "GetStaffPicks" ) );
             }
 

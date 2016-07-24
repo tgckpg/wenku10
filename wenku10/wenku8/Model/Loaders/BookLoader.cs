@@ -21,7 +21,7 @@ namespace wenku8.Model.Loaders
     using System.Messages;
     using Text;
 
-    class BookLoader : IBookLoader
+    sealed class BookLoader : IBookLoader
     {
         public static readonly string ID = typeof( BookLoader ).Name;
 

@@ -37,6 +37,7 @@ using wenku8.Model.Section;
 using wenku8.Section;
 using wenku8.Settings;
 using wenku8.Storage;
+using StatusType = wenku8.Model.REST.SharersRequest.StatusType;
 
 namespace wenku10.Pages
 {
@@ -68,7 +69,7 @@ namespace wenku10.Pages
 
             SHHub.Member.OnStatusChanged += SHMem_OnStatusChanged;
 
-            SHHub.SearchTerm = "";
+            SHHub.Search( "" );
 
             if( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
             {
@@ -86,25 +87,52 @@ namespace wenku10.Pages
             }
         }
 
+        private void ClosePopup( object sender, RoutedEventArgs e )
+        {
+            PopupFrame.Content = null;
+        }
+
         private async void MessageBus_OnDelivery( Message Mesg )
         {
-            if ( Mesg.Content != AppKeys.SH_SCRIPT_DATA ) return;
-            HubScriptItem HSI = Mesg.Payload as HubScriptItem;
+            switch ( Mesg.Content )
+            {
+                case AppKeys.SH_SCRIPT_DATA:
+                    HubScriptItem HSI = ( HubScriptItem ) Mesg.Payload;
 
-            if( await FileListContext.OpenSpider( HSI.ScriptFile ) )
-            {
-                ConfirmScriptParse( HSI );
-            }
-            else
-            {
-                ConfirmErrorReport( HSI );
+                    if ( await FileListContext.OpenSpider( HSI.ScriptFile ) )
+                    {
+                        ConfirmScriptParse( HSI );
+                    }
+                    else
+                    {
+                        ConfirmErrorReport( HSI );
+                    }
+                    break;
+                case AppKeys.HS_DECRYPT_FAIL:
+                    StringResources stx = new StringResources( "Message" );
+                    MessageDialog MsgBox = new MessageDialog( stx.Str( "HubScriptDecryptFail" ) );
+
+                    HSI = ( HubScriptItem ) Mesg.Payload;
+                    bool PlaceRequest = false;
+
+                    MsgBox.Commands.Add( new UICommand(
+                        stx.Str( "PlaceKeyRequest" )
+                        , ( x ) => { PlaceRequest = true; } ) );
+
+                    MsgBox.Commands.Add( new UICommand( stx.Str( "OK" ) ) );
+
+                    await Popups.ShowDialog( MsgBox );
+
+                    if ( PlaceRequest ) SHHub.PlaceKeyRequest( HSI.Id );
+
+                    break;
             }
         }
 
         private async void ConfirmScriptParse( HubScriptItem HSI )
         {
             StringResources stx = new StringResources( "Message" );
-            MessageDialog MsgBox = new MessageDialog( "Parse the script right now?" );
+            MessageDialog MsgBox = new MessageDialog( stx.Str( "ConfirmScriptParse" ) );
             bool Parse = false;
 
             MsgBox.Commands.Add( new UICommand(
@@ -115,10 +143,12 @@ namespace wenku10.Pages
 
             await Popups.ShowDialog( MsgBox );
 
-            if ( Parse ) ProcessBook( FileListContext.GetById( HSI.Id ) );
-
-            MainHub.RefSV.ChangeView( 0, 0, null, false );
-            PopupFrame.Content = null;
+            if ( Parse )
+            {
+                ProcessItem( FileListContext.GetById( HSI.Id ) );
+                MainHub.RefSV.ChangeView( 0, 0, null, false );
+                PopupFrame.Content = null;
+            }
         }
 
         private async void ConfirmErrorReport( HubScriptItem HSI )
@@ -135,7 +165,7 @@ namespace wenku10.Pages
 
             await Popups.ShowDialog( MsgBox );
 
-            if ( Report ) SHHub.ReportStatus( HSI.Id, wenku8.Model.REST.SharersRequest.StatusType.INVALID_SCRIPT );
+            if ( Report ) SHHub.ReportStatus( HSI.Id, StatusType.INVALID_SCRIPT );
         }
 
         private void LoadFiles( object sender, RoutedEventArgs e )
@@ -170,25 +200,16 @@ namespace wenku10.Pages
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
         }
 
-        private void FileList_ItemClick( object sender, ItemClickEventArgs e ) { ProcessBook( e.ClickedItem as LocalBook ); }
-
-        private void ProcessBook( LocalBook Item )
+        private void FileList_ItemClick( object sender, ItemClickEventArgs e )
         {
-            if ( Item == null )
-            {
-                Logger.Log( ID, "Item is null, invalid casting to SpiderBook?", LogType.WARNING );
-                return;
-            }
+            LocalBook Item = ( LocalBook ) e.ClickedItem;
 
             // Prevent double processing on the already processed item
-            if ( !Item.ProcessSuccess )
-            {
-                ProcessItem( Item );
-            }
+            if ( !Item.ProcessSuccess ) ProcessItem( Item );
 
             if ( Item.ProcessSuccess )
             {
-                if( Item is SpiderBook )
+                if ( Item is SpiderBook )
                 {
                     BackMask.HandleForward(
                         Frame, () => Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() )
@@ -317,7 +338,7 @@ namespace wenku10.Pages
         private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
         {
             SharersHub.Focus( FocusState.Pointer );
-            SHHub.SearchTerm = args.QueryText;
+            SHHub.Search( args.QueryText );
         }
 
         private void ShHub_ItemCLick( object sender, ItemClickEventArgs e )

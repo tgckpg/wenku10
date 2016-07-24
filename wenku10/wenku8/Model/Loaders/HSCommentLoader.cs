@@ -68,7 +68,6 @@ namespace wenku8.Model.Comments
                     {
                         Logger.Log( ID, ex.Message, LogType.WARNING );
                         PageEnded = true;
-
                         HSComments.TrySetResult( new HSComment[ 0 ] );
                     }
                 }
@@ -76,6 +75,7 @@ namespace wenku8.Model.Comments
                 {
                     Logger.Log( ID, ex.Message, LogType.WARNING );
                     PageEnded = true;
+                    HSComments.TrySetResult( new HSComment[ 0 ] );
                 }
                 , false
             );

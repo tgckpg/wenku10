@@ -90,8 +90,32 @@
         <ScrollViewer>
             <!-- Description -->
             <StackPanel Margin="10,5">
-                <TextBlock FontSize="20"
-                           Text="{Binding Name}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                <Grid Margin="0,0,40,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Key Button -->
+                    <c:StateControl State="{Binding Encrypted, Converter={StaticResource DataStateConverter}}">
+                        <Button Width="40" Height="40"
+                                Background="Transparent"
+                                Style="{StaticResource PlainButton}">
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/PlaceKeyRequest"
+                                                    Text="Place a key request" Click="PlaceKeyRequest" />
+                                </MenuFlyout>
+                            </Button.Flyout>
+                            <i:IconKey Foreground="{StaticResource VerticalRibbonBrush}"
+                                       Direction="Rotate270" AutoScale="True" />
+                        </Button>
+                    </c:StateControl>
+                    <TextBlock Grid.Column="1" FontSize="20"
+                               VerticalAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="{Binding Name}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                </Grid>
                 <TextBlock Margin="20, 0" Text="{Binding ErrorMessage}"
                            Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
@@ -141,19 +165,20 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Margin="5"
-                               x:Uid="/AppResources/HSAuthor"
-                               Text="Maintainer"
+                    <TextBlock Grid.Row="0" x:Uid="/AppResources/HS_Maintainer"
+                               Margin="5" Text="Maintainer"
                                Foreground="{StaticResource SubtleBrush}" />
-                    <TextBlock Grid.Row="1"
+                    <TextBlock Grid.Row="1" x:Uid="/AppResources/HS_Zone"
                                Foreground="{StaticResource SubtleBrush}"
                                Margin="5" Text="Zone"/>
-                    <TextBlock x:Name="Zone" Grid.Row="2"
+                    <TextBlock Grid.Row="2" x:Uid="/AppResources/Type"
                                Foreground="{StaticResource SubtleBrush}"
                                Margin="5" Text="Type" />
-                    <TextBlock x:Name="Type" Grid.Row="3"
+                    <TextBlock Grid.Row="3" x:Uid="/AppResources/HS_Tags"
                                Foreground="{StaticResource SubtleBrush}"
                                Margin="5" Text="Tags" />
+
+                    <!-- Maintainer -->
                     <TextBlock Grid.Row="0" Grid.Column="2"
                                Foreground="{StaticResource SubtleBrush}"
                                Margin="5" Text="{Binding Author}" />
@@ -207,7 +232,8 @@
             <Button Style="{StaticResource PlainButton}"
                     Click="ShowComments"
                     Width="50">
-                <i:IconComment AutoScale="True" />
+                <i:IconComment Background="{StaticResource MajorBrush}"
+                               AutoScale="True" />
             </Button>
             <Button Style="{StaticResource PlainButton}" Width="50"
                     Click="Download">

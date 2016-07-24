@@ -183,7 +183,7 @@ namespace wenku10.Pages
 
         private async void GetAnnouncements()
         {
-            global::wenku8.Model.Loader.NewsLoader AS = new global::wenku8.Model.Loader.NewsLoader();
+            global::wenku8.Model.Loaders.NewsLoader AS = new global::wenku8.Model.Loaders.NewsLoader();
             await AS.Load();
 
             NewsLoading.IsActive = false;

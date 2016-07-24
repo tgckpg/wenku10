@@ -25,6 +25,12 @@ namespace wenku8.Model.Section
                 List<ActiveItem> NData;
                 if( Data != null )
                 {
+                    if ( Data.Cast<LocalBook>().Any( x => x.aid == SBook.aid ) )
+                    {
+                        Logger.Log( ID, "Already in collection", LogType.DEBUG );
+                        return true;
+                    }
+
                     NData = new List<ActiveItem>( Data );
                 }
                 else

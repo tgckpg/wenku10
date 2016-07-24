@@ -15,7 +15,7 @@ namespace wenku8.Model.Loaders
     using Resources;
     using Text;
 
-    class VolumeLoader
+    sealed class VolumeLoader
     {
         public static readonly string ID = typeof( VolumeLoader ).Name;
 

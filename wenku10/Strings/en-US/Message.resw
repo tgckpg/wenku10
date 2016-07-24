@@ -162,4 +162,7 @@
   <data name="ReportError" xml:space="preserve">
     <value>{0}. Report this incident?</value>
   </data>
+  <data name="ConfirmScriptParse" xml:space="preserve">
+    <value>Parse the script meow?</value>
+  </data>
 </root>

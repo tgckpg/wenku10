@@ -125,7 +125,13 @@ namespace wenku10.ShHub
             RuntimeCache RCache = new RuntimeCache();
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.ScriptUpload( Token.Value, Id, Data, Name, Desc, Zone, Types, Tags )
+                , Shared.ShRequest.ScriptUpload(
+                    Token.Value, Id
+                    , Data, Name, Desc
+                    , Zone, Types, Tags
+                    , Encrypt.IsChecked == true
+                    , ForceCommentEnc.IsChecked == true
+                    , Anon.IsChecked == true )
                 , ( Res, QueryId ) =>
                 {
                     try

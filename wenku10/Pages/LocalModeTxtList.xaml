@@ -30,7 +30,7 @@
                     </Grid.RowDefinitions>
 
                     <!-- Tick Icon -->
-                    <p:StateControl State="{Binding Error, Converter={StaticResource DataStateConverter}, ConverterParameter=1}"
+                    <p:StateControl State="{Binding InCollection, Converter={StaticResource DataStateConverter}}"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right"
                                     Width="90" Height="90">
                         <i:IconTick AutoScale="True"
@@ -314,7 +314,16 @@
                         Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                         Background="{StaticResource MajorBackgroundBrush}"
                         MaxWidth="500">
-            <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
+            <Grid>
+                <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
+                <Button Style="{StaticResource PlainButton}"
+                        Width="35" Height="35"
+                        Background="{StaticResource MinorBrush}"
+                        VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Click="ClosePopup">
+                    <i:IconCross AutoScale="True" />
+                </Button>
+            </Grid>
         </p:StateControl>
 
         <!-- Loading Message -->

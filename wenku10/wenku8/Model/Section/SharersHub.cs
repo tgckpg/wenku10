@@ -10,18 +10,20 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
 namespace wenku8.Section
 {
     using AdvDM;
     using Ext;
-    using Model;
     using Model.ListItem;
+    using Model.Loaders;
     using Model.REST;
     using Resources;
+    using Settings;
     using System;
 
-    sealed class SharersHub : SearchableContext
+    sealed class SharersHub : ActiveData
     {
         private readonly string ID = typeof( SharersHub ).Name;
 
@@ -40,26 +42,20 @@ namespace wenku8.Section
             }
         }
 
-        private string Query;
-
-        override public string SearchTerm
-        {
-            get { return Query; }
-            set
-            {
-                Query = value;
-                Search( Query );
-            }
-        }
+        public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
 
         public bool LoggedIn { get { return Member.IsLoggedIn; } }
         public string LLText { get; private set; }
 
         public SharersHub()
         {
+            SearchSet = new Observables<HubScriptItem, HubScriptItem>();
+
             RCache = new RuntimeCache();
             Member = X.Singleton<IMember>( XProto.SHMember );
             Member.OnStatusChanged += Member_OnStatusChanged;
+
+            MessageBus.OnDelivery += MessageBus_OnDelivery;
 
             UpdateLLText();
         }
@@ -67,6 +63,7 @@ namespace wenku8.Section
         ~SharersHub()
         {
             Member.OnStatusChanged -= Member_OnStatusChanged;
+            MessageBus.OnDelivery -= MessageBus_OnDelivery;
         }
 
         private void Member_OnStatusChanged( object sender, MemberStatus args )
@@ -74,34 +71,15 @@ namespace wenku8.Section
             UpdateLLText();
         }
 
-        public void Search( string Query, IEnumerable<string> AccessTokens = null )
+        public async void Search( string Query, IEnumerable<string> AccessTokens = null )
         {
-            if( AccessTokens == null )
-            {
+            if ( AccessTokens == null )
                 AccessTokens = new AuthManager().TokList.Remap( x => x.Value );
-            }
 
-            RCache.POST(
-                Shared.ShRequest.Server
-                , Shared.ShRequest.Search( Query, AccessTokens )
-                , SearchResponse
-                , Utils.DoNothing
-                , false
-            );
-        }
+            SHSearchLoader SHLoader = new SHSearchLoader( Query, AccessTokens );
 
-        private void SearchResponse( DRequestCompletedEventArgs e, string id )
-        {
-            try
-            {
-                JsonObject JResponse = JsonStatus.Parse( e.ResponseString );
-                Data = JResponse.GetNamedArray( "data" ).Remap( x => new HubScriptItem( x.GetObject() ) );
-            }
-            catch ( Exception ex )
-            {
-                Logger.Log( ID, ex.Message, LogType.INFO );
-                Message = ex.Message;
-            }
+            SearchSet.ConnectLoader( SHLoader );
+            SearchSet.UpdateSource( await SHLoader.NextPage() );
 
             NotifyChanged( "SearchSet" );
         }
@@ -148,7 +126,7 @@ namespace wenku8.Section
                 JsonStatus.Parse( e.ResponseString );
                 RCache.POST(
                     Shared.ShRequest.Server
-                    , Shared.ShRequest.Search( "uuid: " + Id )
+                    , Shared.ShRequest.Search( "uuid: " + Id, 0, 1 )
                     // Pass the uuid instead of the query id
                     , ( re, q ) => SearchItemUpdate( re, Id )
                     , Utils.DoNothing
@@ -161,9 +139,14 @@ namespace wenku8.Section
             }
         }
 
+        public void PlaceKeyRequest( string Id )
+        {
+
+        }
+
         private bool TryNotGetId( string Id, out HubScriptItem Target )
         {
-            Target = Data.Cast<HubScriptItem>().FirstOrDefault( ( HubScriptItem HSI ) => HSI.Id == Id );
+            Target = SearchSet.Cast<HubScriptItem>().FirstOrDefault( ( HubScriptItem HSI ) => HSI.Id == Id );
 
             if( Target == null )
             {
@@ -181,10 +164,20 @@ namespace wenku8.Section
             NotifyChanged( "LLText", "LoggedIn" );
         }
 
-        protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
+        private void MessageBus_OnDelivery( Message Mesg )
         {
-            return Items;
-        }
+            if ( Mesg.Content != AppKeys.SP_PROCESS_COMP ) return;
 
+            LocalBook SBook = ( LocalBook ) Mesg.Payload;
+            HubScriptItem HSC = SearchSet.Cast<HubScriptItem>().FirstOrDefault( x => x.Id == SBook.aid );
+
+            if ( HSC == null )
+            {
+                Logger.Log( ID, "Book is not from Sharer's hub", LogType.DEBUG );
+                return;
+            }
+
+            HSC.InCollection = SBook.ProcessSuccess;
+        }
     }
 }

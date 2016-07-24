@@ -200,5 +200,10 @@ namespace wenku10.ShHub
             LoadingRing.IsActive = false;
             LoadingState.State = ControlState.Foreatii;
         }
+
+        private void PlaceKeyRequest( object sender, RoutedEventArgs e )
+        {
+
+        }
     }
 }

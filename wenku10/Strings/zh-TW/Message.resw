@@ -165,4 +165,7 @@
   <data name="ReportError" xml:space="preserve">
     <value>{0}，要回報這個問題嗎？</value>
   </data>
+  <data name="ConfirmScriptParse" xml:space="preserve">
+    <value>需要現在解析腳本喵？</value>
+  </data>
 </root>
