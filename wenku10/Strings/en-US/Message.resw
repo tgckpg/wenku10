@@ -165,4 +165,7 @@
   <data name="ConfirmScriptParse" xml:space="preserve">
     <value>Parse the script meow?</value>
   </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>Decryption failed. It seemed that you don't have the correct key for this item.</value>
+  </data>
 </root>

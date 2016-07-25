@@ -224,17 +224,8 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="VersionUpdate.Text" xml:space="preserve">
-    <value>New update has been found</value>
-  </data>
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>Current version</value>
-  </data>
-  <data name="VersionUpdateExpire.Text" xml:space="preserve">
-    <value>days until expired</value>
-  </data>
-  <data name="VersionUpdateWill.Text" xml:space="preserve">
-    <value>will</value>
   </data>
   <data name="ViewList.Text" xml:space="preserve">
     <value>View</value>
@@ -334,5 +325,8 @@
   </data>
   <data name="CommentsEncrypted.Text" xml:space="preserve">
     <value>The creator of this script has explicitly set the comment to be encrypted. Unfortunately you do not have the key to encrypt your comment. You need to place a key request to get the key before making comments.</value>
+  </data>
+  <data name="EncryptedContent.Text" xml:space="preserve">
+    <value>Encrypted Content</value>
   </data>
 </root>

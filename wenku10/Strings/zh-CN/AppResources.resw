@@ -224,17 +224,8 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="VersionUpdate.Text" xml:space="preserve">
-    <value>已经有新版本</value>
-  </data>
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>当前版本</value>
-  </data>
-  <data name="VersionUpdateExpire.Text" xml:space="preserve">
-    <value>天后失效</value>
-  </data>
-  <data name="VersionUpdateWill.Text" xml:space="preserve">
-    <value>将于</value>
   </data>
   <data name="ViewList.Text" xml:space="preserve">
     <value>查看</value>
@@ -334,5 +325,8 @@
   </data>
   <data name="CommentsEncrypted.Text" xml:space="preserve">
     <value>此脚本的创建者已设置了评论加密，可惜阁下没有所需密钥以加密您的评论。请先提出密钥请求取得密钥。</value>
+  </data>
+  <data name="EncryptedContent.Text" xml:space="preserve">
+    <value>加密的内容</value>
   </data>
 </root>

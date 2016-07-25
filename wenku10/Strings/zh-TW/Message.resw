@@ -168,4 +168,7 @@
   <data name="ConfirmScriptParse" xml:space="preserve">
     <value>需要現在解析腳本喵？</value>
   </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>無法解密。找不到此項目的密鑰。</value>
+  </data>
 </root>

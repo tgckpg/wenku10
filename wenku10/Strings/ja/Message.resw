@@ -168,4 +168,7 @@
   <data name="ConfirmScriptParse" xml:space="preserve">
     <value>今すぐスクリプトを解析したいですにゃ？</value>
   </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>復号化に失敗しました。あなたがこのアイテムのキーを持っていないようです。</value>
+  </data>
 </root>

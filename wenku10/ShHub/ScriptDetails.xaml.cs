@@ -193,7 +193,8 @@ namespace wenku10.ShHub
                 }
                 catch ( Exception )
                 {
-                    HSC.Title = "[Failed to decrypt]\n" + CryptAES.RawBytes( HSC.Title );
+                    HSC.DecFailed = true;
+                    HSC.Title = CryptAES.RawBytes( HSC.Title );
                 }
             }
 
@@ -204,7 +205,8 @@ namespace wenku10.ShHub
         {
             foreach( HSComment HSC in Comments )
             {
-                HSC.Title = "[Encrypted Comment]\n" + CryptAES.RawBytes( HSC.Title );
+                HSC.DecFailed = true;
+                HSC.Title = CryptAES.RawBytes( HSC.Title );
             }
 
             return Comments;
@@ -268,17 +270,22 @@ namespace wenku10.ShHub
 
         private void NewComment( string Label )
         {
-            if( Crypt == null )
+            CommentEditor.State = ControlState.Reovia;
+            CommentModeLabel.Text = Label;
+
+            if( BindItem.ForceEncryption && Crypt == null )
             {
+                CommentInput.IsEnabled = false;
                 StringResources stx = new StringResources();
                 CommentError.Text = stx.Text( "CommentsEncrypted" );
-                return;
+                DisplayControls( "Discard" );
             }
-
-            CommentEditor.State = ControlState.Reovia;
-            DisplayControls( "Submit", "Discard" );
-            CommentError.Text = "";
-            CommentModeLabel.Text = Label;
+            else
+            {
+                CommentInput.IsEnabled = true;
+                DisplayControls( "Submit", "Discard" );
+                CommentError.Text = "";
+            }
         }
 
         private void SubmitComment()
@@ -297,7 +304,7 @@ namespace wenku10.ShHub
 
             new RuntimeCache() { EN_UI_Thead = true }.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.Comment( CCTarget, CCId, Data )
+                , Shared.ShRequest.Comment( CCTarget, CCId, Data, Crypt != null )
                 , CommentSuccess
                 , CommentFailed 
                 , false
@@ -313,6 +320,7 @@ namespace wenku10.ShHub
         {
             try
             {
+                CommentInput.Document.SetText( Windows.UI.Text.TextSetOptions.None, "" );
                 JsonStatus.Parse( e.ResponseString );
                 DiscardComment();
                 ReloadComments();

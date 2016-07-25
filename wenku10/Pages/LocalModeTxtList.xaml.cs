@@ -108,15 +108,16 @@ namespace wenku10.Pages
                         ConfirmErrorReport( HSI );
                     }
                     break;
+
                 case AppKeys.HS_DECRYPT_FAIL:
-                    StringResources stx = new StringResources( "Message" );
-                    MessageDialog MsgBox = new MessageDialog( stx.Str( "HubScriptDecryptFail" ) );
+                    StringResources stx = new StringResources( "Message", "ContextMenu" );
+                    MessageDialog MsgBox = new MessageDialog( stx.Str( "DecryptionFailed" ) );
 
                     HSI = ( HubScriptItem ) Mesg.Payload;
                     bool PlaceRequest = false;
 
                     MsgBox.Commands.Add( new UICommand(
-                        stx.Str( "PlaceKeyRequest" )
+                        stx.Text( "PlaceKeyRequest", "ContextMenu" )
                         , ( x ) => { PlaceRequest = true; } ) );
 
                     MsgBox.Commands.Add( new UICommand( stx.Str( "OK" ) ) );

@@ -224,18 +224,6 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="VersionUpdate.Text" xml:space="preserve">
-    <value>已經有新版本</value>
-  </data>
-  <data name="VersionUpdateCurrent.Text" xml:space="preserve">
-    <value>當前版本</value>
-  </data>
-  <data name="VersionUpdateExpire.Text" xml:space="preserve">
-    <value>天後失效</value>
-  </data>
-  <data name="VersionUpdateWill.Text" xml:space="preserve">
-    <value>將於</value>
-  </data>
   <data name="ViewList.Text" xml:space="preserve">
     <value>查看</value>
   </data>
@@ -334,5 +322,11 @@
   </data>
   <data name="CommentsEncrypted.Text" xml:space="preserve">
     <value>このスクリプトの作成者が明示的に暗号化するコメントを設定しています。残念ながら、あなたはコメントを暗号化するための鍵を持っていません。コメントをする前に、キーを取得するためのキー要求を配置してください。</value>
+  </data>
+  <data name="EncryptedContent.Text" xml:space="preserve">
+    <value>暗号化されたデータ</value>
+  </data>
+  <data name="VersionUpdateCurrent.Text" xml:space="preserve">
+    <value>現在のバージョン</value>
   </data>
 </root>
