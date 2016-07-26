@@ -196,7 +196,7 @@ namespace wenku8.Taotu
             TargetUrl = Param.GetValue( "TargetUrl" );
             Incoming = Param.GetBool( "Incoming" );
 
-            XParameter[] ExtParams = Param.GetParametersWithKey( "i" );
+            XParameter[] ExtParams = Param.Parameters( "i" );
             foreach ( XParameter ExtParam in ExtParams )
             {
                 PropDefs.Add( new PropExt( ExtParam ) );
@@ -276,7 +276,7 @@ namespace wenku8.Taotu
                 string SType = Param.GetValue( "Type" );
                 this.SubProc = new ProcManager();
 
-                XParameter Sub = Param.GetParameter( "SubProc" );
+                XParameter Sub = Param.Parameter( "SubProc" );
                 if ( Sub != null ) SubProc.ReadParam( Sub );
 
                 PType = Enum.GetValues( BINF )

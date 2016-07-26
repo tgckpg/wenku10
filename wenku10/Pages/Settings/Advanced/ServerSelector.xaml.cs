@@ -91,7 +91,7 @@ namespace wenku10.Pages.Settings.Advanced
         {
             IEnumerable<ServerChoice> SC = null;
 
-            XParameter[] Params = ServerReg.GetParametersWithKey( "uri" );
+            XParameter[] Params = ServerReg.Parameters( "uri" );
 
             try
             {

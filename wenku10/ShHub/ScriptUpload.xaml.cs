@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
+using Windows.Data.Json;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -17,20 +19,25 @@ using Windows.Storage;
 
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Logging;
 
 using wenku8.AdvDM;
 using wenku8.Model.ListItem;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using CryptAES = wenku8.System.CryptAES;
-using AuthManager = wenku8.System.AuthManager;
+using AESManager = wenku8.System.AESManager;
+using TokenManager = wenku8.System.TokenManager;
 
 namespace wenku10.ShHub
 {
     public sealed partial class ScriptUpload : Page
     {
+        public static readonly string ID = typeof( ScriptUpload ).Name;
+
         private SpiderBook SelectedBook;
-        private AuthManager AuthMgr;
+        private AESManager AESMgr;
+        private TokenManager TokMgr;
         private Action<string,string> OnExit;
 
         public ScriptUpload()
@@ -47,27 +54,27 @@ namespace wenku10.ShHub
 
         private void SetTemplate()
         {
-            AuthMgr = new AuthManager();
-            AuthMgr.PropertyChanged += KeyMgr_PropertyChanged;
-            Keys.DataContext = AuthMgr;
-            AccessTokens.DataContext = AuthMgr;
+            AESMgr = new AESManager();
+            AESMgr.PropertyChanged += KeyMgr_PropertyChanged;
+            TokMgr = new TokenManager();
+            TokMgr.PropertyChanged += TokMgr_PropertyChanged;
+
+            Keys.DataContext = AESMgr;
+            AccessTokens.DataContext = TokMgr;
         }
 
         private void KeyMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
-            switch( e.PropertyName )
-            {
-                case "SelectedKey":
-                    Keys.SelectedItem = AuthMgr.SelectedKey;
-                    break;
-                case "SelectedToken":
-                    AccessTokens.SelectedItem = AuthMgr.SelectedToken;
-                    break;
-            }
+            if( e.PropertyName == "SelectedItem" ) Keys.SelectedItem = AESMgr.SelectedItem;
         }
 
-        private void PreSelectKey( object sender, RoutedEventArgs e ) { Keys.SelectedItem = AuthMgr.SelectedKey; }
-        private void PreSelectToken( object sender, RoutedEventArgs e ) { AccessTokens.SelectedItem = AuthMgr.SelectedToken; }
+        private void TokMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+        {
+            if( e.PropertyName == "SelectedItem" ) AccessTokens.SelectedItem = TokMgr.SelectedItem;
+        }
+
+        private void PreSelectKey( object sender, RoutedEventArgs e ) { Keys.SelectedItem = AESMgr.SelectedItem; }
+        private void PreSelectToken( object sender, RoutedEventArgs e ) { AccessTokens.SelectedItem = TokMgr.SelectedItem; }
 
         private async void Upload( object sender, RoutedEventArgs e )
         {
@@ -100,7 +107,7 @@ namespace wenku10.ShHub
 
             // Check whether the script uuid is reserved
             KeyValuePair<string, string> Token = ( KeyValuePair<string, string> ) AccessTokens.SelectedItem;
-            string Id = await AuthMgr.ReserveId( Token.Value );
+            string Id = await ReserveId( Token.Value );
 
             string Name = NameInput.Text.Trim();
             if ( string.IsNullOrEmpty( Name ) )
@@ -137,8 +144,8 @@ namespace wenku10.ShHub
                     try
                     {
                         JsonStatus.Parse( Res.ResponseString );
-                        AuthMgr.AssignTokenId( Token.Key, Id );
-                        if ( Crypt != null ) AuthMgr.AssignKeyId( Crypt.Name, Id );
+                        TokMgr.AssignId( Token.Key, Id );
+                        if ( Crypt != null ) AESMgr.AssignId( Crypt.Name, Id );
 
                         Worker.UIInvoke( () => { OnExit( Id, Token.Value ); } );
                     }
@@ -174,13 +181,46 @@ namespace wenku10.ShHub
             LoadingRing.IsActive = false;
         }
 
+        public async Task<string> ReserveId( string AccessToken )
+        {
+            TaskCompletionSource<string> TCS = new TaskCompletionSource<string>();
+
+            RuntimeCache RCache = new RuntimeCache();
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.ReserveId( AccessToken )
+                , ( e, QueryId ) =>
+                {
+                    try
+                    {
+                        JsonObject JDef = JsonStatus.Parse( e.ResponseString );
+                        string Id = JDef.GetNamedString( "data" );
+                        TCS.SetResult( Id );
+                    }
+                    catch( Exception ex )
+                    {
+                        Logger.Log( ID, ex.Message, LogType.WARNING );
+                        TCS.SetCanceled();
+                    }
+                }
+                , ( cache, Id, ex ) =>
+                {
+                    Logger.Log( ID, ex.Message, LogType.WARNING );
+                    TCS.SetCanceled();
+                }
+                , false
+            );
+
+            return await TCS.Task;
+        }
+
         private void ServerMessage( string Mesg )
         {
             Worker.UIInvoke( () => { Message.Text = Mesg; } );
         }
 
-        private void AddKey( object sender, RoutedEventArgs e ) { AuthMgr.NewKey(); }
-        private void AddToken( object sender, RoutedEventArgs e ) { AuthMgr.NewAccessToken(); }
+        private void AddKey( object sender, RoutedEventArgs e ) { AESMgr.NewAuth(); }
+        private void AddToken( object sender, RoutedEventArgs e ) { TokMgr.NewAuth(); }
 
         private class ValidationError : Exception { public ValidationError( string Mesg ) : base( Mesg ) { } }
     }

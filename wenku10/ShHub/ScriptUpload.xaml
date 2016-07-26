@@ -91,7 +91,7 @@
                         <i:IconPlusSign AutoScale="True" />
                     </Button>
                     <ComboBox x:Name="AccessTokens"
-                              ItemsSource="{Binding TokList}"
+                              ItemsSource="{Binding AuthList}"
                               Loaded="PreSelectToken">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
@@ -127,7 +127,7 @@
                         <i:IconPlusSign AutoScale="True" />
                     </Button>
                     <ComboBox Grid.Row="1" Grid.Column="1"
-                              ItemsSource="{Binding KeyList}"
+                              ItemsSource="{Binding AuthList}"
                               Loaded="PreSelectKey"
                               x:Name="Keys">
                         <ComboBox.ItemTemplate>

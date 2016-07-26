@@ -97,13 +97,13 @@ namespace wenku8.Settings.Layout
         {
             get
             {
-                return LayoutSettings.GetParametersWithKey( "custom" );
+                return LayoutSettings.Parameters( "custom" );
             }
         }
 
         public bool IsCustomSectionEnabled
         {
-            get { return LayoutSettings.GetParameter( EN_CUSTOM ).GetBool( "enable" ); }
+            get { return LayoutSettings.Parameter( EN_CUSTOM ).GetBool( "enable" ); }
             set
             {
                 LayoutSettings.SetParameter( EN_CUSTOM, new XKey( "enable", value ) );
@@ -113,7 +113,7 @@ namespace wenku8.Settings.Layout
 
         public bool IsStaffPicksEnabled
         {
-            get { return LayoutSettings.GetParameter( EN_SPICKS ).GetBool( "enable" ); }
+            get { return LayoutSettings.Parameter( EN_SPICKS ).GetBool( "enable" ); }
             set
             {
                 LayoutSettings.SetParameter( EN_SPICKS, new XKey( "enable", value ) );
@@ -166,7 +166,7 @@ namespace wenku8.Settings.Layout
             // Create Item if not availble
             foreach ( string Key in SectionDefs.Keys )
             {
-                SectionKey = LayoutSettings.GetParameter( Key );
+                SectionKey = LayoutSettings.Parameter( Key );
                 if ( SectionKey == null )
                 {
                     LayoutSettings.SetParameter( Key, new XKey( "custom", false ) );
@@ -174,7 +174,7 @@ namespace wenku8.Settings.Layout
                 }
             }
 
-            SectionKey = LayoutSettings.GetParameters().FirstOrDefault(
+            SectionKey = LayoutSettings.Parameters().FirstOrDefault(
                 ( x ) => x.GetBool( "custom" )
             );
 

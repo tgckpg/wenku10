@@ -23,6 +23,8 @@ namespace wenku8.Section
     using Settings;
     using System;
 
+    using RequestTarget = Model.REST.SharersRequest.RequestTarget;
+
     sealed class SharersHub : ActiveData
     {
         private readonly string ID = typeof( SharersHub ).Name;
@@ -74,7 +76,7 @@ namespace wenku8.Section
         public async void Search( string Query, IEnumerable<string> AccessTokens = null )
         {
             if ( AccessTokens == null )
-                AccessTokens = new AuthManager().TokList.Remap( x => x.Value );
+                AccessTokens = new TokenManager().AuthList.Remap( x => x.Value );
 
             SHSearchLoader SHLoader = new SHSearchLoader( Query, AccessTokens );
 
@@ -139,9 +141,24 @@ namespace wenku8.Section
             }
         }
 
-        public void PlaceKeyRequest( string Id )
+        public void PlaceRequest( RequestTarget Target, string PubKey, string Id, string Remarks )
         {
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.PlaceRequest( Target, PubKey, Id, Remarks )
+                , PlaceSuccess
+                , PlaceFailed 
+                , false
+            );
+        }
 
+        private void PlaceSuccess( DRequestCompletedEventArgs e, string Id )
+        {
+        }
+
+        private void PlaceFailed( string CacheName, string Id, Exception e )
+        {
+            global::System.Diagnostics.Debugger.Break();
         }
 
         private bool TryNotGetId( string Id, out HubScriptItem Target )

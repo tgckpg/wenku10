@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.UI.Icons;
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.DataModel;
@@ -30,7 +31,8 @@ using wenku8.ThemeIcons;
 
 namespace wenku10.ShHub
 {
-    using AuthManager = wenku8.System.AuthManager;
+    using AESManager = wenku8.System.AESManager;
+    using TokenManager = wenku8.System.TokenManager;
     using CryptAES = wenku8.System.CryptAES;
     using CommentTarget = SharersRequest.CommentTarget;
 
@@ -63,7 +65,7 @@ namespace wenku10.ShHub
 
             if( BindItem.Encrypted )
             {
-                Crypt = new AuthManager().GetKeyById( BindItem.Id );
+                Crypt = new AESManager().GetAuthById( BindItem.Id );
             }
 
             SetTemplate();
@@ -113,9 +115,10 @@ namespace wenku10.ShHub
 
         private void Download()
         {
+            KeyValuePair<string, string> AccessToken = new TokenManager().GetAuthById( BindItem.Id );
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.ScriptDownload( BindItem.Id, new AuthManager().GetATokenById( BindItem.Id ) )
+                , Shared.ShRequest.ScriptDownload( BindItem.Id, AccessToken.Value )
                 , DownloadComplete
                 , DownloadFailed
                 , false

@@ -122,8 +122,8 @@ namespace wenku8.Taotu
             EpPattern = Param.GetValue( "EpPattern" );
             EpParam = Param.GetValue( "EpParam" );
 
-            VolProcs = new ProcManager( Param.GetParameter( "VolProcs" ) );
-            EpProcs = new ProcManager( Param.GetParameter( "EpProcs" ) );
+            VolProcs = new ProcManager( Param.Parameter( "VolProcs" ) );
+            EpProcs = new ProcManager( Param.Parameter( "EpProcs" ) );
         }
 
         public override XParameter ToXParam()

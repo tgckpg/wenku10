@@ -38,9 +38,12 @@ using wenku8.Section;
 using wenku8.Settings;
 using wenku8.Storage;
 using StatusType = wenku8.Model.REST.SharersRequest.StatusType;
+using RequestTarget = wenku8.Model.REST.SharersRequest.RequestTarget;
 
 namespace wenku10.Pages
 {
+    using Dialogs.Sharers;
+
     public sealed partial class LocalModeTxtList : Page
     {
         private static readonly string ID = typeof( LocalModeTxtList ).Name;
@@ -124,8 +127,15 @@ namespace wenku10.Pages
 
                     await Popups.ShowDialog( MsgBox );
 
-                    if ( PlaceRequest ) SHHub.PlaceKeyRequest( HSI.Id );
+                    if ( PlaceRequest )
+                    {
+                        PlaceRequest RequestBox = new PlaceRequest( HSI );
+                        await Popups.ShowDialog( RequestBox );
 
+                        if ( RequestBox.Canceled ) break;
+
+                        SHHub.PlaceRequest( RequestTarget.KEY, RequestBox.PubKey, HSI.Id, RequestBox.Remarks );
+                    }
                     break;
             }
         }

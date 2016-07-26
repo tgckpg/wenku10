@@ -36,7 +36,7 @@ namespace wenku8.Settings.Layout
         {
             get
             {
-                return LayoutSettings.GetParameter( RightToLeft ).GetBool( "enable" );
+                return LayoutSettings.Parameter( RightToLeft ).GetBool( "enable" );
             }
             set
             {
@@ -49,7 +49,7 @@ namespace wenku8.Settings.Layout
         {
             get
             {
-                return LayoutSettings.GetParameter( HrTOCName ).GetBool( "enable" );
+                return LayoutSettings.Parameter( HrTOCName ).GetBool( "enable" );
             }
             set
             {
@@ -63,7 +63,7 @@ namespace wenku8.Settings.Layout
 
         private XParameter[] Modules
         {
-            get { return LayoutSettings.GetParametersWithKey( "order" ); }
+            get { return LayoutSettings.Parameters( "order" ); }
         }
 
         private Type[] LayoutDefs = new Type[]
@@ -117,7 +117,7 @@ namespace wenku8.Settings.Layout
                 }
             }
 
-            if ( LayoutSettings.GetParameter( RightToLeft ) == null )
+            if ( LayoutSettings.Parameter( RightToLeft ) == null )
             {
                 LayoutSettings.SetParameter(
                     RightToLeft
@@ -125,7 +125,7 @@ namespace wenku8.Settings.Layout
                 );
             }
 
-            if ( LayoutSettings.GetParameter( HrTOCName ) == null )
+            if ( LayoutSettings.Parameter( HrTOCName ) == null )
             {
                 LayoutSettings.SetParameter(
                     HrTOCName
@@ -139,7 +139,7 @@ namespace wenku8.Settings.Layout
                 ThumbnailBase Tb = Activator.CreateInstance( P ) as ThumbnailBase;
                 TBInstance.Add( Tb.ModName, Tb );
 
-                XParameter LayoutKey = LayoutSettings.GetParameter( Tb.ModName );
+                XParameter LayoutKey = LayoutSettings.Parameter( Tb.ModName );
                 if ( LayoutKey == null )
                 {
                     LayoutSettings.SetParameter(
@@ -207,9 +207,9 @@ namespace wenku8.Settings.Layout
 
         public void Insert( string Name )
         {
-            if ( LayoutSettings.GetParameter( Name ).GetBool( "enable" ) ) return;
+            if ( LayoutSettings.Parameter( Name ).GetBool( "enable" ) ) return;
 
-            int Index = LayoutSettings.GetParameter( Name ).GetSaveInt( "order" );
+            int Index = LayoutSettings.Parameter( Name ).GetSaveInt( "order" );
             IEnumerable<XParameter> Params = Modules.OrderBy(
                 ( x ) => -x.GetSaveInt( "order" )
             );
@@ -235,7 +235,7 @@ namespace wenku8.Settings.Layout
 
         public bool Toggle( string Name )
         {
-            return LayoutSettings.GetParameter( Name ).GetBool( "enable" );
+            return LayoutSettings.Parameter( Name ).GetBool( "enable" );
         }
 
         private void OnReorder( ListViewBase sender, DragItemsCompletedEventArgs args )
@@ -326,7 +326,7 @@ namespace wenku8.Settings.Layout
 
             public async void ApplyBackgrounds()
             {
-                XParameter P = LayoutSettings.GetParameter( Section );
+                XParameter P = LayoutSettings.Parameter( Section );
 
                 // Default value
                 if ( P == null )
@@ -420,7 +420,7 @@ namespace wenku8.Settings.Layout
 
             public async void SetBackground( string type )
             {
-                XParameter SecParam = LayoutSettings.GetParameter( Section );
+                XParameter SecParam = LayoutSettings.Parameter( Section );
                 if ( SecParam == null ) SecParam = new XParameter( Section );
 
                 string value = null;

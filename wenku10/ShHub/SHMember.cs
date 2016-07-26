@@ -43,7 +43,7 @@ namespace wenku10.SHHub
 
             AuthReg = new XRegistry( "<SHAuth />", FileLinks.ROOT_SETTING + FileLinks.SH_AUTH_REG );
 
-            XParameter MemberAuth = AuthReg.GetParameter( "member-auth" );
+            XParameter MemberAuth = AuthReg.Parameter( "member-auth" );
             if ( MemberAuth != null ) RestoreAuth( MemberAuth );
         }
 
