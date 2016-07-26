@@ -177,7 +177,7 @@ namespace wenku8.Settings.Layout
             {
                 if ( !Param.GetBool( "enable" ) ) continue;
 
-                Disp.Items.Add( TBInstance[ Param.ID ] );
+                Disp.Items.Add( TBInstance[ Param.Id ] );
             }
         }
 
@@ -189,7 +189,7 @@ namespace wenku8.Settings.Layout
                     .Where( ( x ) => x.GetBool( "enable" ) )
                     .OrderBy( ( x ) => x.GetSaveInt( "order" ) )
             ) {
-                Names.Add( TBInstance[ P.ID ].ViewName );
+                Names.Add( TBInstance[ P.Id ].ViewName );
             }
 
             return Names;
@@ -221,7 +221,7 @@ namespace wenku8.Settings.Layout
                 if ( Param.GetSaveInt( "order" ) <= Index )
                 {
                     InsertIdx = Disp.Items.IndexOf(
-                        TBInstance[ Param.ID ]
+                        TBInstance[ Param.Id ]
                     ) + 1;
                     break;
                 }

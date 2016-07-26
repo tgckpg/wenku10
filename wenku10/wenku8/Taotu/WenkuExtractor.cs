@@ -216,7 +216,7 @@ namespace wenku8.Taotu
             foreach( PropExt Extr in PropDefs )
             {
                 XParameter ExtParam = Extr.ToXParam();
-                ExtParam.ID += i;
+                ExtParam.Id += i;
                 ExtParam.SetValue( new XKey( "i", i++ ) );
 
                 Param.SetParameter( ExtParam );
@@ -290,7 +290,7 @@ namespace wenku8.Taotu
                 Param.SetValue( new XKey( "Type", PType ) );
 
                 XParameter SubParam = SubProc.ToXParam();
-                SubParam.ID = "SubProc";
+                SubParam.Id = "SubProc";
                 Param.SetParameter( SubParam );
 
                 return Param;

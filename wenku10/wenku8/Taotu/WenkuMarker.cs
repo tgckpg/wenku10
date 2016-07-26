@@ -140,11 +140,11 @@ namespace wenku8.Taotu
             } );
 
             XParameter VProc = VolProcs.ToXParam();
-            VProc.ID = "VolProcs";
+            VProc.Id = "VolProcs";
             Param.SetParameter( VProc  );
 
             XParameter EProc = EpProcs.ToXParam();
-            EProc.ID = "EpProcs";
+            EProc.Id = "EpProcs";
             Param.SetParameter( EProc );
 
             return Param;

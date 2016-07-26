@@ -7,36 +7,31 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    Background="{StaticResource MajorBackgroundBrush}"
     PrimaryButtonText="Send"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
 
     <ContentDialog.Title>
-        <TextBlock x:Uid="/ContextMenu/PlaceRequest"
-                   FontSize="20"
-                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                   Text="Place request" />
+        <StackPanel Orientation="Horizontal">
+            <ProgressRing x:Name="LoadingRing"
+                          Grid.Column="0" Margin="5"
+                          Width="30" Height="30"
+                          Visibility="Collapsed" IsActive="False"
+                          Foreground="{StaticResource MajorBrush}" />
+            <TextBlock x:Uid="/ContextMenu/PlaceRequest"
+                       FontSize="20" VerticalAlignment="Center"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       Text="Place request" />
+        </StackPanel>
     </ContentDialog.Title>
 
     <StackPanel Margin="10, 0">
-        <Grid Margin="10, 5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <ProgressRing x:Name="LoadingRing"
-                          Grid.Column="0"
-                          Visibility="Collapsed"
-                          Margin="5"
-                          IsActive="False"
-                          Foreground="{StaticResource MajorBrush}" />
-
-            <TextBlock x:Name="ServerMessage"
-                       Grid.Column="1"
-                       VerticalAlignment="Center"
-                       TextWrapping="Wrap"
-                       Foreground="{StaticResource MajorBrush}" />
-        </Grid>
+        <TextBlock x:Name="ServerMessage"
+                   Margin="0, 5"
+                   VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Foreground="{StaticResource MajorBrush}" />
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -49,10 +44,12 @@
                     Width="35" Height="35">
                 <i:IconPlusSign AutoScale="True" />
             </Button>
-            <ComboBox Grid.Row="1" Grid.Column="1"
-                      ItemsSource="{Binding KeyList}"
-                      Loaded="PreSelectKey"
-                      x:Name="Keys">
+            <ComboBox Name="Keys"
+                       Grid.Row="1" Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding AuthList}"
+                      VerticalAlignment="Center"
+                      Loaded="PreSelectKey" IsEnabled="False" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}" />

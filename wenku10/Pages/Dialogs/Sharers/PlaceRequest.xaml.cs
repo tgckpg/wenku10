@@ -31,20 +31,59 @@ namespace wenku10.Pages.Dialogs.Sharers
         public PlaceRequest( HubScriptItem HSI )
         {
             this.InitializeComponent();
+
+            BindItem = HSI;
             SetTemplate();
         }
 
-        private void SetTemplate()
+        private async void SetTemplate()
         {
-            RSA = new RSAManager();
             Canceled = true;
+            MarkLoading();
+
+            RSA = await RSAManager.CreateAsync();
+            RSA.PropertyChanged += RSA_PropertyChanged;
+            Keys.DataContext = RSA;
+            PreSelectKey();
+
+            Keys.IsEnabled = true;
+            MarkIdle();
+        }
+
+        private void RSA_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+        {
+            if( e.PropertyName == "SelectedItem" ) Keys.SelectedItem = RSA.SelectedItem;
         }
 
         private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
         {
         }
 
-        private void PreSelectKey( object sender, RoutedEventArgs e ) { Keys.SelectedItem = RSA.SelectedItem; }
-        private void AddKey( object sender, RoutedEventArgs e ) { RSA.NewAuth(); }
+        private void PreSelectKey( object sender, RoutedEventArgs e ) { PreSelectKey(); }
+
+        private void PreSelectKey()
+        {
+            if ( !( RSA == null || Keys == null ) ) Keys.SelectedItem = RSA.SelectedItem;
+        }
+
+        private async void AddKey( object sender, RoutedEventArgs e )
+        {
+            if ( LoadingRing.IsActive ) return;
+            MarkLoading();
+            await RSA.NewAuthAsync();
+            MarkIdle();
+        }
+
+        private void MarkLoading()
+        {
+            LoadingRing.IsActive = true;
+            LoadingRing.Visibility = Visibility.Visible;
+        }
+
+        private void MarkIdle()
+        {
+            LoadingRing.IsActive = false;
+            LoadingRing.Visibility = Visibility.Collapsed;
+        }
     }
 }
