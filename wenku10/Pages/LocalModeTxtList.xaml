@@ -315,6 +315,12 @@
                         Background="{StaticResource MajorBackgroundBrush}"
                         MaxWidth="500">
             <Grid>
+                <Rectangle Width="10" Fill="{StaticResource MinorBrush}"
+                           VerticalAlignment="Stretch" HorizontalAlignment="Left">
+                    <Rectangle.RenderTransform>
+                        <TranslateTransform X="-10" />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
                 <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
                 <Button Style="{StaticResource PlainButton}"
                         Width="35" Height="35"

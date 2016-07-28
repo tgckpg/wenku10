@@ -22,7 +22,6 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
-using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
 using libtaotu.Pages;
@@ -113,33 +112,36 @@ namespace wenku10.Pages
                     break;
 
                 case AppKeys.HS_DECRYPT_FAIL:
-                    StringResources stx = new StringResources( "Message", "ContextMenu", "AppResources" );
+                    StringResources stx = new StringResources( "Message", "ContextMenu" );
                     MessageDialog MsgBox = new MessageDialog( stx.Str( "Desc_DecryptionFailed" ), stx.Str( "DecryptionFailed" ) );
 
                     HSI = ( HubScriptItem ) Mesg.Payload;
-                    bool PlaceRequest = false;
+                    bool Place = false;
 
                     MsgBox.Commands.Add( new UICommand(
                         stx.Text( "PlaceRequest", "ContextMenu" )
-                        , ( x ) => { PlaceRequest = true; } ) );
+                        , ( x ) => { Place = true; } ) );
 
                     MsgBox.Commands.Add( new UICommand( stx.Str( "OK" ) ) );
 
                     await Popups.ShowDialog( MsgBox );
 
-                    if ( PlaceRequest )
-                    {
-                        PlaceRequest RequestBox = new PlaceRequest( SHTarget.KEY, HSI, stx.Text( "KeyRequest", "AppResources" ) );
-                        await Popups.ShowDialog( RequestBox );
-
-                        if ( !RequestBox.Canceled )
-                        {
-                            ShHub.ScriptDetails Details = PopupFrame.Content as ShHub.ScriptDetails;
-                            Details.ToggleRequests();
-                        }
-                    }
+                    if ( Place ) TransferRequest( SHTarget.KEY, HSI );
                     break;
             }
+        }
+
+        private void TransferRequest( SHTarget Target, HubScriptItem HSI )
+        {
+            ShHub.ScriptDetails Details = PopupFrame.Content as ShHub.ScriptDetails;
+
+            if ( Details == null )
+            {
+                Details = new ShHub.ScriptDetails( HSI );
+                PopupFrame.Content = Details;
+            }
+
+            Details.PlaceRequest( Target, HSI );
         }
 
         private async void ConfirmScriptParse( HubScriptItem HSI )
@@ -216,7 +218,7 @@ namespace wenku10.Pages
             LocalBook Item = ( LocalBook ) e.ClickedItem;
 
             // Prevent double processing on the already processed item
-            if ( !Item.ProcessSuccess ) ProcessItem( Item );
+            if ( !Item.ProcessSuccess && Item.CanProcess ) ProcessItem( Item );
 
             if ( Item.ProcessSuccess )
             {

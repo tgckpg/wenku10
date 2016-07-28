@@ -136,6 +136,7 @@
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
+    <Compile Include="wenku8\System\Migration.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>

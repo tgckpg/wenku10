@@ -76,11 +76,12 @@ namespace wenku10.Pages.Dialogs.Sharers
 
         private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
         {
+            args.Cancel = true;
+
             if ( Keys.SelectedItem == null )
             {
                 StringResources stx = new StringResources();
                 ServerMessage.Text = "Please Select a key";
-                args.Cancel = true;
                 return;
             }
 
@@ -107,14 +108,13 @@ namespace wenku10.Pages.Dialogs.Sharers
             {
                 JsonStatus.Parse( e.ResponseString );
                 Canceled = false;
-                this.Hide();
+                Worker.UIInvoke( () => { Hide(); } );
             }
             catch( Exception ex )
             {
                 Error( ex.Message );
             }
         }
-
 
         private void Error( string Mesg )
         {

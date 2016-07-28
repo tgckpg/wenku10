@@ -30,13 +30,15 @@ using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.ThemeIcons;
 
-namespace wenku10.ShHub
+namespace wenku10.Pages.ShHub
 {
+    using Dialogs.Sharers;
+
     using AESManager = wenku8.System.AESManager;
     using TokenManager = wenku8.System.TokenManager;
     using CryptAES = wenku8.System.CryptAES;
     using SHTarget = SharersRequest.SHTarget;
-    using RequestTarget = SharersRequest.SHTarget;
+    using Net.Astropenguin.Helpers;
 
     sealed partial class ScriptDetails : Page
     {
@@ -54,7 +56,7 @@ namespace wenku10.ShHub
         private volatile bool CommInit = false;
 
         private bool RequestsOpened = false;
-        private volatile bool ReqInit = false;
+        private volatile SHTarget ReqTarget;
 
         private HubScriptItem BindItem;
         private RuntimeCache RCache = new RuntimeCache();
@@ -154,86 +156,74 @@ namespace wenku10.ShHub
         #endregion
 
         #region Requests
-        public void ToggleRequests()
+        public async void PlaceRequest( SHTarget Target, HubScriptItem HSI )
         {
+            StringResources stx = new StringResources();
+
+            PlaceRequest RequestBox = new PlaceRequest(
+                Target, HSI
+                , stx.Text( ( Target ^ SHTarget.KEY ) == 0 ? "KeyRequest" : "TokenRequest" )
+            );
+
+            await Popups.ShowDialog( RequestBox );
+
+            if ( !RequestBox.Canceled )
+            {
+                ShowKeyRequest();
+                if ( !RequestsOpened )
+                {
+                    ToggleRequests();
+                }
+            }
+        }
+
+        private void ToggleRequests()
+        {
+            if ( RequestStory.GetCurrentState() != ClockState.Stopped ) return;
+            RequestStory.Children.Clear();
+
+            // Slide In / Slide Out
             if ( RequestsOpened )
             {
-                SlideOutRequests();
+                DisplayControls( HomeControls );
+
+                SetDoubleAnimation(
+                    RequestStory
+                    , RequestSection
+                    , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                    , 0, 0.25 * LayoutSettings.ScreenHeight
+                );
+
+                SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 1, 0 );
             }
             else
             {
-                SlideInRequests();
+                DisplayControls(
+                    BindItem.Encrypted
+                    ? new string[] { "KeyRequest", "TokenRequest", "CloseRequest" }
+                    : new string[] { "TokenRequest", "CloseRequest" }
+                );
+
+                ControlsList.SelectedIndex = 0;
+
+                SetDoubleAnimation(
+                    RequestStory
+                    , RequestSection
+                    , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                    , 0.25 * LayoutSettings.ScreenHeight, 0
+                );
+
+                SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 0, 1 );
+
+                RequestSection.Visibility = Visibility.Visible;
+
+                if ( ( ReqTarget ^ SHTarget.KEY ) != 0 )
+                {
+                    ShowKeyRequest();
+                }
             }
-        }
-
-        private void SlideInRequests()
-        {
-            if ( RequestStory.GetCurrentState() != ClockState.Stopped ) return;
-
-            DisplayControls( "TokenRequest", "KeyRequest", "CloseRequest" );
-
-            RequestStory.Children.Clear();
-
-            SetDoubleAnimation(
-                RequestStory
-                , RequestSection
-                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
-                , 0.25 * LayoutSettings.ScreenHeight, 0
-            );
-
-            SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 0, 1 );
-
-            RequestSection.Visibility = Visibility.Visible;
-            RequestStory.Begin();
-        }
-
-        private void SlideOutRequests()
-        {
-            if ( RequestStory.GetCurrentState() != ClockState.Stopped ) return;
-
-            DisplayControls( HomeControls );
-
-            RequestStory.Children.Clear();
-
-            SetDoubleAnimation(
-                RequestStory
-                , RequestSection
-                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
-                , 0, 0.25 * LayoutSettings.ScreenHeight
-            );
-
-            SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 1, 0 );
 
             RequestStory.Begin();
-        }
-
-        private void ShowKeyRequest() { ReloadRequests( SHTarget.KEY ); }
-        private void ShowTokenRequest() { ReloadRequests( SHTarget.TOKEN ); }
-
-        private async void ReloadRequests( SHTarget Target )
-        {
-            if ( LoadingRing.IsActive ) return;
-
-            MarkLoading();
-            HSLoader<SHRequest> CLoader = new HSLoader<SHRequest>(
-                BindItem.Id
-                , Target
-                , ( _Target, _Skip, _Limit, _Ids ) => Shared.ShRequest.GetRequests( _Target, _Ids[0], _Skip, _Limit )
-            );
-
-            IList<SHRequest> FirstPage = await CLoader.NextPage();
-            MarkNotLoading();
-
-            RequestsSource = new Observables<SHRequest, SHRequest>( FirstPage );
-            RequestsSource.ConnectLoader( CLoader );
-
-            RequestsSource.LoadStart += ( x, y ) => MarkLoading();
-            RequestsSource.LoadEnd += ( x, y ) => MarkNotLoading();
-            RequestList.ItemsSource = RequestsSource;
-        }
-
-        private void RequestList_ItemClick( object sender, ItemClickEventArgs e )
-        {
         }
 
         private void RequestStory_Completed( object sender, object e )
@@ -251,24 +241,90 @@ namespace wenku10.ShHub
                 RequestsOpened = false;
             }
         }
+
+        private void ShowKeyRequest() { ReloadRequests( SHTarget.KEY ); }
+        private void ShowTokenRequest() { ReloadRequests( SHTarget.TOKEN ); }
+
+        private async void ReloadRequests( SHTarget Target )
+        {
+            if ( LoadingRing.IsActive ) return;
+
+            ReqTarget = Target;
+            MarkLoading();
+            HSLoader<SHRequest> CLoader = new HSLoader<SHRequest>(
+                BindItem.Id
+                , Target
+                , ( _Target, _Skip, _Limit, _Ids ) => Shared.ShRequest.GetRequests( _Target, _Ids[0], _Skip, _Limit )
+            );
+
+            IList<SHRequest> FirstPage = await CLoader.NextPage();
+            MarkNotLoading();
+
+            RequestsSource = new Observables<SHRequest, SHRequest>( FirstPage );
+            RequestsSource.ConnectLoader( CLoader );
+
+            RequestsSource.LoadStart += ( x, y ) => MarkLoading();
+            RequestsSource.LoadEnd += ( x, y ) => MarkNotLoading();
+            RequestList.ItemsSource = RequestsSource;
+        }
         #endregion
 
         #region Comments
         private void ToggleComments()
         {
+            if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
+            CommentStory.Children.Clear();
+
+            // Slide In / Slide Out
             if ( CommentsOpened )
             {
-                SlideOutComments();
+                DisplayControls( HomeControls );
+
+                SetDoubleAnimation(
+                    CommentStory, CommentSection
+                    , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                    , 0, 0.25 * LayoutSettings.ScreenHeight
+                );
+
+                SetDoubleAnimation( CommentStory, CommentSection, "Opacity", 1, 0 );
             }
             else
             {
-                SlideInComments();
+                DisplayControls( CommentControls );
+
+                SetDoubleAnimation(
+                    CommentStory, CommentSection
+                    , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                    , 0.25 * LayoutSettings.ScreenHeight, 0
+                );
+
+                SetDoubleAnimation( CommentStory, CommentSection, "Opacity", 0, 1 );
+
+                CommentSection.Visibility = Visibility.Visible;
 
                 if ( !CommInit )
                 {
                     CommInit = true;
                     ReloadComments();
                 }
+            }
+
+            CommentStory.Begin();
+        }
+
+        private void CommentStory_Completed( object sender, object e )
+        {
+            CommentStory.Stop();
+            if ( !CommentsOpened )
+            {
+                CommentSection.Opacity = 1;
+                CommentsOpened = true;
+            }
+            else if( CommentsOpened )
+            {
+                CommentSection.Visibility = Visibility.Collapsed;
+                CommentSection.Opacity = 0;
+                CommentsOpened = false;
             }
         }
 
@@ -336,47 +392,6 @@ namespace wenku10.ShHub
             }
 
             return Comments;
-        }
-
-        private void SlideInComments()
-        {
-            if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
-
-            DisplayControls( CommentControls );
-
-            CommentStory.Children.Clear();
-
-            SetDoubleAnimation(
-                CommentStory
-                , CommentSection
-                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
-                , 0.25 * LayoutSettings.ScreenHeight, 0
-            );
-
-            SetDoubleAnimation( CommentStory, CommentSection, "Opacity", 0, 1 );
-
-            CommentSection.Visibility = Visibility.Visible;
-            CommentStory.Begin();
-        }
-
-        private void SlideOutComments()
-        {
-            if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
-
-            DisplayControls( HomeControls );
-
-            CommentStory.Children.Clear();
-
-            SetDoubleAnimation(
-                CommentStory
-                , CommentSection
-                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
-                , 0, 0.25 * LayoutSettings.ScreenHeight
-            );
-
-            SetDoubleAnimation( CommentStory, CommentSection, "Opacity", 1, 0 );
-
-            CommentStory.Begin();
         }
 
         private void CommentList_ItemClick( object sender, ItemClickEventArgs e )
@@ -462,22 +477,6 @@ namespace wenku10.ShHub
             DisplayControls( CommentControls );
             CommentEditor.State = ControlState.Foreatii;
         }
-
-        private void CommentStory_Completed( object sender, object e )
-        {
-            CommentStory.Stop();
-            if ( !CommentsOpened )
-            {
-                CommentSection.Opacity = 1;
-                CommentsOpened = true;
-            }
-            else if( CommentsOpened )
-            {
-                CommentSection.Visibility = Visibility.Collapsed;
-                CommentSection.Opacity = 0;
-                CommentsOpened = false;
-            }
-        }
         #endregion
 
         private void SetDoubleAnimation( Storyboard Board, UIElement Element, string Property, double From, double To, double Duration = 350 )
@@ -514,8 +513,6 @@ namespace wenku10.ShHub
             LoadingRing.IsActive = false;
         }
 
-        private void PlaceKeyRequest( object sender, RoutedEventArgs e )
-        {
-        }
+        private void PlaceKeyRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.KEY, BindItem ); }
     }
 }

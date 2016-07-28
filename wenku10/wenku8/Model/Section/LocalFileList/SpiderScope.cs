@@ -22,20 +22,19 @@ namespace wenku8.Model.Section
             {
                 SpiderBook SBook = await SpiderBook.CreateAsnyc( await ISF.ReadString(), true );
 
-                List<ActiveItem> NData;
+                List<LocalBook> NData;
                 if( Data != null )
                 {
-                    if ( Data.Cast<LocalBook>().Any( x => x.aid == SBook.aid ) )
+                    NData = new List<LocalBook>( Data.Cast<LocalBook>() );
+                    if ( NData.Any( x => x.aid == SBook.aid ) )
                     {
-                        Logger.Log( ID, "Already in collection", LogType.DEBUG );
-                        return true;
+                        Logger.Log( ID, "Already in collection, updating the data", LogType.DEBUG );
+                        NData.Remove( NData.First( x => x.aid == SBook.aid ) );
                     }
-
-                    NData = new List<ActiveItem>( Data );
                 }
                 else
                 {
-                    NData = new List<ActiveItem>();
+                    NData = new List<LocalBook>();
                 }
 
                 NData.Add( SBook );

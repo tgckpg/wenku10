@@ -10,21 +10,33 @@ namespace wenku8.System
     using Ext;
     using Storage;
 
-    internal class Bootstrap
+    internal sealed class Bootstrap
 	{
         public static readonly string ID = typeof( Bootstrap ).Name;
 
         public static FileSystemLog LogInstance;
 
+        public static string Version = AppSettings.SimpVersion
+#if DEBUG || TESTING
+            + "t";
+#elif BETA
+            + "b";
+#else
+            + "+";
+#endif
+
         public Bootstrap() { }
 
-		public void Start()
+		public async void Start()
 		{
 			// Must follow Order!
 			//// Fixed Orders
 			// 1. Setting is the first to initialize
 			AppSettingsInit();
             Logger.Log( ID, "Application Settings Initilizated", LogType.INFO );
+            // 2. Migrate
+            Logger.Log( ID, "Migration", LogType.INFO );
+            await new Migration().Migrate();
             // 2. following the appstorage, prepare directories.
             Resources.Shared.Storage = new GeneralStorage();
             Net.Astropenguin.IO.XRegistry.AStorage = Resources.Shared.Storage;
@@ -60,7 +72,7 @@ namespace wenku8.System
             Logger.Log( ID, "WRuntimeTransfer Initilizated", LogType.INFO );
         }
 
-        protected void AppSettingsInit()
+        private void AppSettingsInit()
 		{
 			AppSettings.Initialize();
 			if( Properties.ENABLE_SYSTEM_LOG )
