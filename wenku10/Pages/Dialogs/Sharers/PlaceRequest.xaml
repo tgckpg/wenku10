@@ -5,24 +5,29 @@
     xmlns:local="using:wenku10.Pages.Dialogs.Sharers"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
     mc:Ignorable="d"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     Background="{StaticResource MajorBackgroundBrush}"
     PrimaryButtonText="Send"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
+    <ContentDialog.Resources>
+        <v:DataVisConverter x:Key="DataVisConverter" />
+    </ContentDialog.Resources>
 
     <ContentDialog.Title>
         <StackPanel Orientation="Horizontal">
-            <ProgressRing x:Name="LoadingRing"
-                          Grid.Column="0" Margin="5"
-                          Width="30" Height="30"
-                          Visibility="Collapsed" IsActive="False"
-                          Foreground="{StaticResource MajorBrush}" />
             <TextBlock x:Uid="/ContextMenu/PlaceRequest"
-                       FontSize="20" VerticalAlignment="Center"
+                       FontSize="20" Margin="5"
+                       VerticalAlignment="Center"
                        Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                        Text="Place request" />
+            <ProgressRing x:Name="LoadingRing"
+                          Grid.Column="0"
+                          Width="25" Height="25"
+                          Visibility="Collapsed" IsActive="False"
+                          Foreground="{StaticResource MajorBrush}" />
         </StackPanel>
     </ContentDialog.Title>
 
@@ -31,6 +36,7 @@
                    Margin="0, 5"
                    VerticalAlignment="Center"
                    TextWrapping="Wrap"
+                   Visibility="{Binding Path=Text, RelativeSource={RelativeSource Self}, Converter={StaticResource DataVisConverter}}"
                    Foreground="{StaticResource MajorBrush}" />
         <Grid>
             <Grid.ColumnDefinitions>

@@ -189,7 +189,7 @@
   <data name="AccessTokens.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>これは、スクリプトの所有権を識別するために使用されます。</value>
   </data>
-  <data name="PlaceKeyRequest.Text" xml:space="preserve">
-    <value>キーを要求</value>
+  <data name="PlaceRequest.Text" xml:space="preserve">
+    <value>要求を配置</value>
   </data>
 </root>

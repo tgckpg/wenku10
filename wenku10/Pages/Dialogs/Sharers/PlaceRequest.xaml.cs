@@ -13,34 +13,53 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Loaders;
+
+using wenku8.AdvDM;
 using wenku8.Model.ListItem;
-using RSAManager = wenku8.System.RSAManager;
+using wenku8.Model.REST;
+using wenku8.Resources;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {
+    using RSAManager = wenku8.System.RSAManager;
+    using SHTarget = SharersRequest.SHTarget;
+
     sealed partial class PlaceRequest : ContentDialog
     {
+        public bool Canceled { get; private set; }
         private HubScriptItem BindItem;
 
-        public bool Canceled { get; private set; }
-        public string PubKey { get; private set; }
-        public string Remarks { get; private set; }
-
+        private SHTarget Target;
+        private RuntimeCache RCache;
         private RSAManager RSA;
+        private string RemarksPlaceholder;
 
-        public PlaceRequest( HubScriptItem HSI )
+        public PlaceRequest( SHTarget Target, HubScriptItem HSI, string Placeholder )
         {
             this.InitializeComponent();
 
+            StringResources stx = new StringResources( "Message" );
+
+            PrimaryButtonText = stx.Str( "OK" );
+            SecondaryButtonText = stx.Str( "Cancel" );
+
+            this.Target = Target;
+
+            Canceled = true;
             BindItem = HSI;
+            RemarksPlaceholder = Placeholder;
+
             SetTemplate();
         }
 
         private async void SetTemplate()
         {
-            Canceled = true;
             MarkLoading();
 
+            RCache = new RuntimeCache();
+            RemarksInput.PlaceholderText = RemarksPlaceholder;
             RSA = await RSAManager.CreateAsync();
             RSA.PropertyChanged += RSA_PropertyChanged;
             Keys.DataContext = RSA;
@@ -52,18 +71,65 @@ namespace wenku10.Pages.Dialogs.Sharers
 
         private void RSA_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
-            if( e.PropertyName == "SelectedItem" ) Keys.SelectedItem = RSA.SelectedItem;
+            if ( e.PropertyName == "SelectedItem" ) Keys.SelectedItem = RSA.SelectedItem;
         }
 
         private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
         {
+            if ( Keys.SelectedItem == null )
+            {
+                StringResources stx = new StringResources();
+                ServerMessage.Text = "Please Select a key";
+                args.Cancel = true;
+                return;
+            }
+
+            string PubKey = RSA.SelectedItem.GenPublicKey();
+            string Remarks = RemarksInput.Text.Trim();
+
+            if ( string.IsNullOrEmpty( Remarks ) )
+            {
+                Remarks = RemarksPlaceholder;
+            }
+
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.PlaceRequest( Target, PubKey, BindItem.Id, Remarks )
+                , PlaceSuccess
+                , ( c, Id, ex ) => { Error( ex.Message ); }
+                , false
+            );
+        }
+
+        private void PlaceSuccess( DRequestCompletedEventArgs e, string Id )
+        {
+            try
+            {
+                JsonStatus.Parse( e.ResponseString );
+                Canceled = false;
+                this.Hide();
+            }
+            catch( Exception ex )
+            {
+                Error( ex.Message );
+            }
+        }
+
+
+        private void Error( string Mesg )
+        {
+            Worker.UIInvoke( () =>
+            {
+                ServerMessage.Text = Mesg;
+            } );
         }
 
         private void PreSelectKey( object sender, RoutedEventArgs e ) { PreSelectKey(); }
 
         private void PreSelectKey()
         {
-            if ( !( RSA == null || Keys == null ) ) Keys.SelectedItem = RSA.SelectedItem;
+            if ( !( RSA == null || Keys == null ) )
+                Keys.SelectedItem = RSA.SelectedItem;
         }
 
         private async void AddKey( object sender, RoutedEventArgs e )

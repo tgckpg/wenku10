@@ -189,7 +189,7 @@
   <data name="AccessTokens.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>This is used to identify the scripts ownership</value>
   </data>
-  <data name="PlaceKeyRequest.Text" xml:space="preserve">
-    <value>Place a key request</value>
+  <data name="PlaceRequest.Text" xml:space="preserve">
+    <value>Place a request</value>
   </data>
 </root>

@@ -15,72 +15,77 @@ namespace wenku8.Model.Comments
     using Resources;
     using REST;
 
-    sealed class HSCommentLoader : ILoader<HSComment>
+    sealed class HSLoader<T> : ILoader<T>
     {
-        public static readonly string ID = typeof( HSCommentLoader ).Name;
+        public static readonly string ID = typeof( HSLoader<T> ).Name;
 
-        public Action<IList<HSComment>> Connector { get; set; }
+        public Action<IList<T>> Connector { get; set; }
+        public Func<IList<T>, T[]> ConvertResult = ( x ) => { return x.ToArray(); };
 
         public int CurrentPage { get; set; }
 
         public bool PageEnded { get; private set; }
+        public Func<SharersRequest.SHTarget, int, uint, string[], PostData> PostArgs;
 
         private string Id;
-        private SharersRequest.CommentTarget Target;
+        private SharersRequest.SHTarget Target;
 
         private RuntimeCache RCache;
+        private Type TType = typeof( T );
+        private SharersRequest.SHTarget sCRIPT;
 
-        public HSCommentLoader( string Id, SharersRequest.CommentTarget Target )
+        public HSLoader( string Id, SharersRequest.SHTarget Target, Func<SharersRequest.SHTarget, int, uint, string[], PostData> PostArgs )
         {
             RCache = new RuntimeCache();
             this.Id = Id;
             this.Target = Target;
+            this.PostArgs = PostArgs;
         }
 
-        public async Task<IList<HSComment>> NextPage( uint ExpectedCount = 30 )
+        public async Task<IList<T>> NextPage( uint ExpectedCount = 30 )
         {
-            TaskCompletionSource<HSComment[]> HSComments = new TaskCompletionSource<HSComment[]>();
+            TaskCompletionSource<T[]> Ts = new TaskCompletionSource<T[]>();
 
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.GetComments( Target, CurrentPage, ExpectedCount, Id )
+                , PostArgs( Target, CurrentPage, ExpectedCount, new string[] { Id } )
                 , ( e, Id ) =>
                 {
                     try
                     {
                         JsonObject JObj = JsonStatus.Parse( e.ResponseString );
-                        JsonArray JComms = JObj.GetNamedArray( "data" );
+                        JsonArray JData = JObj.GetNamedArray( "data" );
 
-                        int LoadedCount = JComms.Count();
+                        int LoadedCount = JData.Count();
 
-                        List<HSComment> HSC = new List<HSComment>( LoadedCount );
-                        foreach( JsonValue ItemDef in JComms )
+                        List<T> HSI = new List<T>( LoadedCount );
+                        foreach( JsonValue ItemDef in JData )
                         {
-                            HSC.Add( new HSComment( ItemDef.GetObject() ) );
+                            HSI.Add( ( T ) Activator.CreateInstance( TType, ItemDef.GetObject() ) );
                         }
 
                         PageEnded = LoadedCount < ExpectedCount;
                         CurrentPage += LoadedCount;
 
-                        HSComments.SetResult( HSC.Flattern( x => x.Replies ) );
+                        Ts.SetResult( ConvertResult( HSI ) );
                     }
                     catch ( Exception ex )
                     {
                         Logger.Log( ID, ex.Message, LogType.WARNING );
                         PageEnded = true;
-                        HSComments.TrySetResult( new HSComment[ 0 ] );
+                        Ts.TrySetResult( new T[ 0 ] );
                     }
                 }
                 , ( cacheName, Id, ex ) =>
                 {
                     Logger.Log( ID, ex.Message, LogType.WARNING );
                     PageEnded = true;
-                    HSComments.TrySetResult( new HSComment[ 0 ] );
+                    Ts.TrySetResult( new T[ 0 ] );
                 }
                 , false
             );
 
-            HSComment[] Cs = await HSComments.Task;
+            T[] Cs = await Ts.Task;
             return Cs;
         }
     }

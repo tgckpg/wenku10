@@ -329,4 +329,10 @@
   <data name="EncryptedContent.Text" xml:space="preserve">
     <value>Encrypted Content</value>
   </data>
+  <data name="KeyRequest.Text" xml:space="preserve">
+    <value>Key request</value>
+  </data>
+  <data name="Remarks.Text" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
 </root>

@@ -41,7 +41,7 @@ namespace wenku8.Model.Section
                 NData.Add( SBook );
                 Data = NData;
                 NotifyChanged( "SearchSet" );
-                return true;
+                return SBook.CanProcess || SBook.ProcessSuccess;
             }
             catch( Exception ex )
             {

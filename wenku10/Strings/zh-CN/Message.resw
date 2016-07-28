@@ -171,6 +171,9 @@
     <value>需要现在解析脚本喵？</value>
   </data>
   <data name="DecryptionFailed" xml:space="preserve">
-    <value>解密失败。找不到此项目的密钥。</value>
+    <value>解密失败</value>
+  </data>
+  <data name="Desc_DecryptionFailed" xml:space="preserve">
+    <value>找不到此项目的密钥。</value>
   </data>
 </root>

@@ -23,8 +23,6 @@ namespace wenku8.Section
     using Settings;
     using System;
 
-    using RequestTarget = Model.REST.SharersRequest.RequestTarget;
-
     sealed class SharersHub : ActiveData
     {
         private readonly string ID = typeof( SharersHub ).Name;
@@ -139,26 +137,6 @@ namespace wenku8.Section
             {
                 Target.ErrorMessage = ex.Message;
             }
-        }
-
-        public void PlaceRequest( RequestTarget Target, string PubKey, string Id, string Remarks )
-        {
-            RCache.POST(
-                Shared.ShRequest.Server
-                , Shared.ShRequest.PlaceRequest( Target, PubKey, Id, Remarks )
-                , PlaceSuccess
-                , PlaceFailed 
-                , false
-            );
-        }
-
-        private void PlaceSuccess( DRequestCompletedEventArgs e, string Id )
-        {
-        }
-
-        private void PlaceFailed( string CacheName, string Id, Exception e )
-        {
-            global::System.Diagnostics.Debugger.Break();
         }
 
         private bool TryNotGetId( string Id, out HubScriptItem Target )

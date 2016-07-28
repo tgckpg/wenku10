@@ -324,4 +324,10 @@
   <data name="EncryptedContent.Text" xml:space="preserve">
     <value>加密的内容</value>
   </data>
+  <data name="KeyRequest.Text" xml:space="preserve">
+    <value>請求密鑰</value>
+  </data>
+  <data name="Remarks.Text" xml:space="preserve">
+    <value>備註</value>
+  </data>
 </root>

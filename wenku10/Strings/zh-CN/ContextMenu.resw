@@ -189,7 +189,7 @@
   <data name="AccessTokens.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>这是用来识别脚本的所有权</value>
   </data>
-  <data name="PlaceKeyRequest.Text" xml:space="preserve">
-    <value>请求密钥</value>
+  <data name="PlaceRequest.Text" xml:space="preserve">
+    <value>放置请求</value>
   </data>
 </root>

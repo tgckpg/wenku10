@@ -38,7 +38,7 @@ using wenku8.Section;
 using wenku8.Settings;
 using wenku8.Storage;
 using StatusType = wenku8.Model.REST.SharersRequest.StatusType;
-using RequestTarget = wenku8.Model.REST.SharersRequest.RequestTarget;
+using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
 
 namespace wenku10.Pages
 {
@@ -113,14 +113,14 @@ namespace wenku10.Pages
                     break;
 
                 case AppKeys.HS_DECRYPT_FAIL:
-                    StringResources stx = new StringResources( "Message", "ContextMenu" );
-                    MessageDialog MsgBox = new MessageDialog( stx.Str( "DecryptionFailed" ) );
+                    StringResources stx = new StringResources( "Message", "ContextMenu", "AppResources" );
+                    MessageDialog MsgBox = new MessageDialog( stx.Str( "Desc_DecryptionFailed" ), stx.Str( "DecryptionFailed" ) );
 
                     HSI = ( HubScriptItem ) Mesg.Payload;
                     bool PlaceRequest = false;
 
                     MsgBox.Commands.Add( new UICommand(
-                        stx.Text( "PlaceKeyRequest", "ContextMenu" )
+                        stx.Text( "PlaceRequest", "ContextMenu" )
                         , ( x ) => { PlaceRequest = true; } ) );
 
                     MsgBox.Commands.Add( new UICommand( stx.Str( "OK" ) ) );
@@ -129,12 +129,14 @@ namespace wenku10.Pages
 
                     if ( PlaceRequest )
                     {
-                        PlaceRequest RequestBox = new PlaceRequest( HSI );
+                        PlaceRequest RequestBox = new PlaceRequest( SHTarget.KEY, HSI, stx.Text( "KeyRequest", "AppResources" ) );
                         await Popups.ShowDialog( RequestBox );
 
-                        if ( RequestBox.Canceled ) break;
-
-                        SHHub.PlaceRequest( RequestTarget.KEY, RequestBox.PubKey, HSI.Id, RequestBox.Remarks );
+                        if ( !RequestBox.Canceled )
+                        {
+                            ShHub.ScriptDetails Details = PopupFrame.Content as ShHub.ScriptDetails;
+                            Details.ToggleRequests();
+                        }
                     }
                     break;
             }
@@ -144,12 +146,10 @@ namespace wenku10.Pages
         {
             StringResources stx = new StringResources( "Message" );
             MessageDialog MsgBox = new MessageDialog( stx.Str( "ConfirmScriptParse" ) );
+
             bool Parse = false;
 
-            MsgBox.Commands.Add( new UICommand(
-                stx.Str( "Yes" )
-                , ( x ) => { Parse = true; } ) );
-
+            MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { Parse = true; } ) );
             MsgBox.Commands.Add( new UICommand( stx.Str( "No" ) ) );
 
             await Popups.ShowDialog( MsgBox );

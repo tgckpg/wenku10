@@ -7,6 +7,7 @@
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:xi="using:wenku8.ThemeIcons"
     xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -144,12 +145,12 @@
                                 Style="{StaticResource PlainButton}">
                             <Button.Flyout>
                                 <MenuFlyout>
-                                    <MenuFlyoutItem x:Uid="/ContextMenu/PlaceKeyRequest"
-                                                    Text="Place a key request" Click="PlaceKeyRequest" />
+                                    <MenuFlyoutItem x:Uid="/AppResources/KeyRequest"
+                                                    Text="Key Request" Click="PlaceKeyRequest" />
                                 </MenuFlyout>
                             </Button.Flyout>
-                            <i:IconKey Foreground="{StaticResource VerticalRibbonBrush}"
-                                       Direction="Rotate270" AutoScale="True" />
+                            <xi:IconRawDocument Foreground="{StaticResource VerticalRibbonBrush}"
+                                                AutoScale="True" />
                         </Button>
                     </c:StateControl>
                     <TextBlock Grid.Column="1" FontSize="20"
@@ -274,6 +275,52 @@
                       ItemContainerStyle="{StaticResource BareListItem}"
                       ItemTemplateSelector="{StaticResource CommentSelector}" />
         </Grid>
+        <!-- Requests -->
+        <Grid x:Name="RequestSection"
+                Visibility="Collapsed"
+                Opacity="0"
+                Background="{StaticResource MajorBackgroundBrush}">
+            <Grid.RenderTransform>
+                <TranslateTransform Y="0" />
+            </Grid.RenderTransform>
+            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
+                <TextBlock x:Uid="/AppResources/NoRequests" Text="No requests"
+                           Visibility="{Binding Path=ItemsSource, ElementName=RequestList, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                           Foreground="{StaticResource MajorBrush}" />
+            </c:StateControl>
+            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}">
+                    <TextBlock x:Uid="/AppResources/Loading" Text="Loading"
+                               Foreground="{StaticResource MajorBrush}" />
+            </c:StateControl>
+            <ListView x:Name="RequestList"
+                      Margin="10"
+                      IsItemClickEnabled="True" ItemClick="RequestList_ItemClick"
+                      ItemContainerStyle="{StaticResource ListItemNoSelect}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0, 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{StaticResource PlainButton}">
+                                <TextBlock Margin="10" Text="Grant" />
+                            </Button>
+                            <TextBlock Margin="5"  Grid.Column="1"
+                                       TextWrapping="Wrap"
+                                       Text="{Binding Title}" />
+                            <Rectangle Grid.Column="2" Fill="{StaticResource MajorBrush}"
+                                       HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                                       Width="5" />
+                            <TextBlock Margin="20,5"  Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding Username}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
 
         <c:StateControl State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}"
                         Margin="10"
@@ -284,6 +331,7 @@
                           Width="30" Height="30" />
         </c:StateControl>
 
+        <!-- Control buttons -->
         <ListView x:Name="ControlsList" Grid.Row="1"
                   HorizontalAlignment="Right"
                   IsItemClickEnabled="True" ItemClick="ControlClick"

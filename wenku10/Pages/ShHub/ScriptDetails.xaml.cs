@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.UI.Icons;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.UI;
@@ -34,27 +35,36 @@ namespace wenku10.ShHub
     using AESManager = wenku8.System.AESManager;
     using TokenManager = wenku8.System.TokenManager;
     using CryptAES = wenku8.System.CryptAES;
-    using CommentTarget = SharersRequest.CommentTarget;
+    using SHTarget = SharersRequest.SHTarget;
+    using RequestTarget = SharersRequest.SHTarget;
 
     sealed partial class ScriptDetails : Page
     {
         public static readonly string ID = typeof( ScriptDetails ).Name;
 
         private Storyboard CommentStory;
+        private Storyboard RequestStory;
         private ObservableCollection<PaneNavButton> BottomControls;
         private Observables<HSComment, HSComment> CommentsSource;
+        private Observables<SHRequest, SHRequest> RequestsSource;
 
         private Dictionary<string, PaneNavButton> AvailControls;
 
         private bool CommentsOpened = false;
         private volatile bool CommInit = false;
 
+        private bool RequestsOpened = false;
+        private volatile bool ReqInit = false;
+
         private HubScriptItem BindItem;
         private RuntimeCache RCache = new RuntimeCache();
 
-        private CommentTarget CCTarget = CommentTarget.SCRIPT;
+        private SHTarget CCTarget = SHTarget.SCRIPT;
         private CryptAES Crypt;
         private string CCId;
+
+        private string[] HomeControls = new string[] { "OpenRequest", "Comment", "Download" };
+        private string[] CommentControls = new string[] { "NewComment", "HideComment" };
 
         public ScriptDetails( HubScriptItem Item )
         {
@@ -78,25 +88,31 @@ namespace wenku10.ShHub
             AvailControls = new Dictionary<string, PaneNavButton>()
             {
                 { "Download", new PaneNavButton( new IconLogin() { AutoScale = true, Direction = Direction.Rotate270 }, Download ) }
-                , { "Comment", new PaneNavButton( new IconComment() { AutoScale = true }, ShowComments ) }
-                , { "HideComment", new PaneNavButton( new IconNavigateArrow() { AutoScale = true, Direction = Direction.MirrorHorizontal }, ShowComments ) }
+                , { "Comment", new PaneNavButton( new IconComment() { AutoScale = true }, ToggleComments ) }
+                , { "HideComment", new PaneNavButton( new IconNavigateArrow() { AutoScale = true, Direction = Direction.MirrorHorizontal }, ToggleComments ) }
                 , { "NewComment", new PaneNavButton( new IconPlusSign() { AutoScale = true }, () => {
                     StringResources stx = new StringResources( "AppBar" );
-                    CCTarget = CommentTarget.SCRIPT;
+                    CCTarget = SHTarget.SCRIPT;
                     CCId = BindItem.Id;
                     NewComment( stx.Str( "AddComment" ) );
                 } ) }
-                , { "KeyRequest", new PaneNavButton( new IconManTalksAboutKey() { AutoScale = true }, OpenKeyRequests ) }
+                , { "OpenRequest", new PaneNavButton( new IconKeyRequest() { AutoScale = true }, ToggleRequests ) }
+                , { "KeyRequest", new PaneNavButton( new IconRawDocument() { AutoScale = true }, ShowKeyRequest ) }
+                , { "TokenRequest", new PaneNavButton( new IconMasterKey() { AutoScale = true }, ShowTokenRequest ) }
+                , { "CloseRequest", new PaneNavButton( new IconNavigateArrow() { AutoScale = true, Direction = Direction.MirrorHorizontal }, ToggleRequests ) }
                 , { "Submit", new PaneNavButton( new IconTick() { AutoScale = true }, SubmitComment ) }
                 , { "Discard", new PaneNavButton( new IconCross() { AutoScale = true }, DiscardComment ) }
             };
 
-            DisplayControls( "KeyRequest", "Comment", "Download" );
+            DisplayControls( HomeControls );
 
             ControlsList.ItemsSource = BottomControls;
 
             CommentStory = new Storyboard();
             CommentStory.Completed += CommentStory_Completed;
+
+            RequestStory = new Storyboard();
+            RequestStory.Completed += RequestStory_Completed;
         }
 
         private void ControlClick( object sender, ItemClickEventArgs e )
@@ -113,6 +129,7 @@ namespace wenku10.ShHub
             }
         }
 
+        #region Download
         private void Download()
         {
             KeyValuePair<string, string> AccessToken = new TokenManager().GetAuthById( BindItem.Id );
@@ -134,8 +151,110 @@ namespace wenku10.ShHub
         {
             BindItem.SetScriptData( e.ResponseString );
         }
+        #endregion
 
-        private void ShowComments()
+        #region Requests
+        public void ToggleRequests()
+        {
+            if ( RequestsOpened )
+            {
+                SlideOutRequests();
+            }
+            else
+            {
+                SlideInRequests();
+            }
+        }
+
+        private void SlideInRequests()
+        {
+            if ( RequestStory.GetCurrentState() != ClockState.Stopped ) return;
+
+            DisplayControls( "TokenRequest", "KeyRequest", "CloseRequest" );
+
+            RequestStory.Children.Clear();
+
+            SetDoubleAnimation(
+                RequestStory
+                , RequestSection
+                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                , 0.25 * LayoutSettings.ScreenHeight, 0
+            );
+
+            SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 0, 1 );
+
+            RequestSection.Visibility = Visibility.Visible;
+            RequestStory.Begin();
+        }
+
+        private void SlideOutRequests()
+        {
+            if ( RequestStory.GetCurrentState() != ClockState.Stopped ) return;
+
+            DisplayControls( HomeControls );
+
+            RequestStory.Children.Clear();
+
+            SetDoubleAnimation(
+                RequestStory
+                , RequestSection
+                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                , 0, 0.25 * LayoutSettings.ScreenHeight
+            );
+
+            SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 1, 0 );
+
+            RequestStory.Begin();
+        }
+
+        private void ShowKeyRequest() { ReloadRequests( SHTarget.KEY ); }
+        private void ShowTokenRequest() { ReloadRequests( SHTarget.TOKEN ); }
+
+        private async void ReloadRequests( SHTarget Target )
+        {
+            if ( LoadingRing.IsActive ) return;
+
+            MarkLoading();
+            HSLoader<SHRequest> CLoader = new HSLoader<SHRequest>(
+                BindItem.Id
+                , Target
+                , ( _Target, _Skip, _Limit, _Ids ) => Shared.ShRequest.GetRequests( _Target, _Ids[0], _Skip, _Limit )
+            );
+
+            IList<SHRequest> FirstPage = await CLoader.NextPage();
+            MarkNotLoading();
+
+            RequestsSource = new Observables<SHRequest, SHRequest>( FirstPage );
+            RequestsSource.ConnectLoader( CLoader );
+
+            RequestsSource.LoadStart += ( x, y ) => MarkLoading();
+            RequestsSource.LoadEnd += ( x, y ) => MarkNotLoading();
+            RequestList.ItemsSource = RequestsSource;
+        }
+
+        private void RequestList_ItemClick( object sender, ItemClickEventArgs e )
+        {
+        }
+
+        private void RequestStory_Completed( object sender, object e )
+        {
+            RequestStory.Stop();
+            if ( !RequestsOpened )
+            {
+                RequestSection.Opacity = 1;
+                RequestsOpened = true;
+            }
+            else if( RequestsOpened )
+            {
+                RequestSection.Visibility = Visibility.Collapsed;
+                RequestSection.Opacity = 0;
+                RequestsOpened = false;
+            }
+        }
+        #endregion
+
+        #region Comments
+        private void ToggleComments()
         {
             if ( CommentsOpened )
             {
@@ -158,7 +277,11 @@ namespace wenku10.ShHub
             if ( LoadingRing.IsActive ) return;
 
             MarkLoading();
-            HSCommentLoader CLoader = new HSCommentLoader( BindItem.Id, CommentTarget.SCRIPT );
+            HSLoader<HSComment> CLoader = new HSLoader<HSComment>( BindItem.Id, SHTarget.SCRIPT, Shared.ShRequest.GetComments )
+            {
+                ConvertResult = ( x ) => x.Flattern( y => y.Replies )
+            };
+
             IList<HSComment> FirstPage = await CLoader.NextPage();
             MarkNotLoading();
 
@@ -219,7 +342,7 @@ namespace wenku10.ShHub
         {
             if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
 
-            DisplayControls( "NewComment", "HideComment" );
+            DisplayControls( CommentControls );
 
             CommentStory.Children.Clear();
 
@@ -240,7 +363,7 @@ namespace wenku10.ShHub
         {
             if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
 
-            DisplayControls( "KeyRequest", "Comment", "Download" );
+            DisplayControls( HomeControls );
 
             CommentStory.Children.Clear();
 
@@ -266,7 +389,7 @@ namespace wenku10.ShHub
             HSComment HSC = ( HSComment ) ( ( FrameworkElement ) sender ).DataContext;
             StringResources stx = new StringResources( "AppBar" );
 
-            CCTarget = CommentTarget.COMMENT;
+            CCTarget = SHTarget.COMMENT;
             CCId = HSC.Id;
             NewComment( stx.Text( "Reply" ) );
         }
@@ -336,7 +459,7 @@ namespace wenku10.ShHub
 
         private void DiscardComment()
         {
-            DisplayControls( "NewComment", "Comment", "Download" );
+            DisplayControls( CommentControls );
             CommentEditor.State = ControlState.Foreatii;
         }
 
@@ -355,6 +478,7 @@ namespace wenku10.ShHub
                 CommentsOpened = false;
             }
         }
+        #endregion
 
         private void SetDoubleAnimation( Storyboard Board, UIElement Element, string Property, double From, double To, double Duration = 350 )
         {
@@ -380,11 +504,6 @@ namespace wenku10.ShHub
             Board.Children.Add( d );
         }
 
-        private void OpenKeyRequests()
-        {
-
-        }
-
         private void MarkLoading()
         {
             LoadingRing.IsActive = true;
@@ -397,7 +516,6 @@ namespace wenku10.ShHub
 
         private void PlaceKeyRequest( object sender, RoutedEventArgs e )
         {
-
         }
     }
 }

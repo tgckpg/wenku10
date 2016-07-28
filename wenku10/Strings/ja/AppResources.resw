@@ -329,4 +329,10 @@
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>現在のバージョン</value>
   </data>
+  <data name="KeyRequest.Text" xml:space="preserve">
+    <value>キーを要求</value>
+  </data>
+  <data name="Remarks.Text" xml:space="preserve">
+    <value>備考</value>
+  </data>
 </root>

@@ -169,6 +169,9 @@
     <value>今すぐスクリプトを解析したいですにゃ？</value>
   </data>
   <data name="DecryptionFailed" xml:space="preserve">
-    <value>復号化に失敗しました。あなたがこのアイテムのキーを持っていないようです。</value>
+    <value>復号化に失敗しました</value>
+  </data>
+  <data name="Desc_DecryptionFailed" xml:space="preserve">
+    <value>あなたがこのアイテムのキーを持っていないようです。</value>
   </data>
 </root>
