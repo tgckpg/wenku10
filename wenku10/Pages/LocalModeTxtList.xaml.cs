@@ -181,6 +181,42 @@ namespace wenku10.Pages
             if ( Report ) SHHub.ReportStatus( HSI.Id, StatusType.INVALID_SCRIPT );
         }
 
+        protected override void OnNavigatedFrom( NavigationEventArgs e )
+        {
+            base.OnNavigatedFrom( e );
+            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
+        }
+
+        protected override void OnNavigatedTo( NavigationEventArgs e )
+        {
+            base.OnNavigatedTo( e );
+            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
+        }
+
+        #region Local Section
+
+        #region Right Control Buttons
+        private void ProcessAll( object sender, RoutedEventArgs e )
+        {
+            FileListContext.Terminate = !FileListContext.Terminate;
+            FileListContext.ProcessAll();
+        }
+
+        private void FavMode( object sender, RoutedEventArgs e )
+        {
+            FileListContext.ToggleFavs();
+
+            IconBase b = ( sender as Button ).ChildAt<IconBase>( 0, 0, 0 );
+            if ( FileListContext.FavOnly )
+            {
+                b.Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_COLOR );
+            }
+            else
+            {
+                b.Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR );
+            }
+        }
+
         private void LoadFiles( object sender, RoutedEventArgs e )
         {
             FileListContext.Load();
@@ -201,17 +237,27 @@ namespace wenku10.Pages
             FileListContext.LoadUrl( UrlC );
         }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
+        private void GotoGrabberPage( object sender, RoutedEventArgs e )
         {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
+            Frame.Navigate( typeof( ProceduresPanel ) );
         }
 
-        protected override void OnNavigatedTo( NavigationEventArgs e )
+        private void ImportSpider( object sender, RoutedEventArgs e )
         {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
+            FileListContext.OpenSpider();
         }
+
+        private void ProcessButtonLoaded( object sender, RoutedEventArgs e )
+        {
+            ( ( Button ) sender ).DataContext = FileListContext;
+        }
+
+        private void LSSync( object sender, RoutedEventArgs e )
+        {
+            BookStorage BS = new BookStorage();
+            ( ( OneDriveButton ) sender ).SetSync( BS.SyncSettings );
+        }
+        #endregion
 
         private void FileList_ItemClick( object sender, ItemClickEventArgs e )
         {
@@ -246,42 +292,7 @@ namespace wenku10.Pages
             FileListContext.SearchTerm = sender.Text.Trim();
         }
 
-        private void ProcessAll( object sender, RoutedEventArgs e )
-        {
-            FileListContext.Terminate = !FileListContext.Terminate;
-            FileListContext.ProcessAll();
-        }
-
-        private void FavMode( object sender, RoutedEventArgs e )
-        {
-            FileListContext.ToggleFavs();
-
-            IconBase b = ( sender as Button ).ChildAt<IconBase>( 0, 0, 0 );
-            if ( FileListContext.FavOnly )
-            {
-                b.Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_COLOR );
-            }
-            else
-            {
-                b.Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR );
-            }
-        }
-
-        private async void GotoSettings( object sender, RoutedEventArgs e )
-        {
-            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
-
-            bool Go = false;
-            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
-
-            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
-            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
-
-            await Popups.ShowDialog( Msg );
-
-            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
-        }
-
+        #region Local item Right Click Context Menu
         private void ShowBookAction( object sender, RightTappedRoutedEventArgs e )
         {
             LSBookItem G = ( LSBookItem ) sender;
@@ -313,6 +324,7 @@ namespace wenku10.Pages
         {
             ProcessItem( SelectedBook );
         }
+        #endregion
 
         private async void ProcessItem( LocalBook LB )
         {
@@ -326,28 +338,26 @@ namespace wenku10.Pages
                 }
             }
         }
+        #endregion
 
-        private void GotoGrabberPage( object sender, RoutedEventArgs e )
+        #region Highlights Section
+        private async void GotoSettings( object sender, RoutedEventArgs e )
         {
-            Frame.Navigate( typeof( ProceduresPanel ) );
-        }
+            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
 
-        private void ImportSpider( object sender, RoutedEventArgs e )
-        {
-            FileListContext.OpenSpider();
-        }
+            bool Go = false;
+            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
 
-        private void ProcessButtonLoaded( object sender, RoutedEventArgs e )
-        {
-            ( ( Button ) sender ).DataContext = FileListContext;
-        }
+            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
 
-        private void LSSync( object sender, RoutedEventArgs e )
-        {
-            BookStorage BS = new BookStorage();
-            ( ( OneDriveButton ) sender ).SetSync( BS.SyncSettings );
-        }
+            await Popups.ShowDialog( Msg );
 
+            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
+        }
+        #endregion
+
+        #region Sharers Hub
         private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
         {
             SharersHub.Focus( FocusState.Pointer );
@@ -356,7 +366,16 @@ namespace wenku10.Pages
 
         private void ShHub_ItemCLick( object sender, ItemClickEventArgs e )
         {
-            PopupFrame.Content = new ShHub.ScriptDetails( e.ClickedItem as HubScriptItem );
+            HubScriptItem HSI = ( HubScriptItem ) e.ClickedItem;
+
+            if ( HSI.Faultered )
+            {
+                // Report to admin
+            }
+            else
+            {
+                PopupFrame.Content = new ShHub.ScriptDetails( HSI );
+            }
         }
 
         private void ScriptUpload( object sender, RoutedEventArgs e )
@@ -402,6 +421,7 @@ namespace wenku10.Pages
                 LoginOrLogout();
             }
         }
+        #endregion
 
         public class DownloadBookContext : INamable
         {

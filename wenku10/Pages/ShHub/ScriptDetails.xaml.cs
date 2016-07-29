@@ -37,6 +37,7 @@ namespace wenku10.Pages.ShHub
     using AESManager = wenku8.System.AESManager;
     using TokenManager = wenku8.System.TokenManager;
     using CryptAES = wenku8.System.CryptAES;
+    using CryptRSA = wenku8.System.CryptRSA;
     using SHTarget = SharersRequest.SHTarget;
     using Net.Astropenguin.Helpers;
 
@@ -62,6 +63,7 @@ namespace wenku10.Pages.ShHub
         private RuntimeCache RCache = new RuntimeCache();
 
         private SHTarget CCTarget = SHTarget.SCRIPT;
+        private string AccessToken;
         private CryptAES Crypt;
         private string CCId;
 
@@ -77,6 +79,7 @@ namespace wenku10.Pages.ShHub
 
             if( BindItem.Encrypted )
             {
+                ReqTarget = SHTarget.KEY;
                 Crypt = new AESManager().GetAuthById( BindItem.Id );
             }
 
@@ -86,6 +89,7 @@ namespace wenku10.Pages.ShHub
         private void SetTemplate()
         {
             BottomControls = new ObservableCollection<PaneNavButton>();
+            AccessToken = new TokenManager().GetAuthById( BindItem.Id ).Value;
 
             AvailControls = new Dictionary<string, PaneNavButton>()
             {
@@ -99,8 +103,8 @@ namespace wenku10.Pages.ShHub
                     NewComment( stx.Str( "AddComment" ) );
                 } ) }
                 , { "OpenRequest", new PaneNavButton( new IconKeyRequest() { AutoScale = true }, ToggleRequests ) }
-                , { "KeyRequest", new PaneNavButton( new IconRawDocument() { AutoScale = true }, ShowKeyRequest ) }
-                , { "TokenRequest", new PaneNavButton( new IconMasterKey() { AutoScale = true }, ShowTokenRequest ) }
+                , { "KeyRequest", new PaneNavButton( new IconRawDocument() { AutoScale = true }, () => { ShowRequest( SHTarget.KEY ); } ) }
+                , { "TokenRequest", new PaneNavButton( new IconMasterKey() { AutoScale = true }, () => { ShowRequest( SHTarget.TOKEN ); } ) }
                 , { "CloseRequest", new PaneNavButton( new IconNavigateArrow() { AutoScale = true, Direction = Direction.MirrorHorizontal }, ToggleRequests ) }
                 , { "Submit", new PaneNavButton( new IconTick() { AutoScale = true }, SubmitComment ) }
                 , { "Discard", new PaneNavButton( new IconCross() { AutoScale = true }, DiscardComment ) }
@@ -134,10 +138,9 @@ namespace wenku10.Pages.ShHub
         #region Download
         private void Download()
         {
-            KeyValuePair<string, string> AccessToken = new TokenManager().GetAuthById( BindItem.Id );
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.ScriptDownload( BindItem.Id, AccessToken.Value )
+                , Shared.ShRequest.ScriptDownload( BindItem.Id, AccessToken )
                 , DownloadComplete
                 , DownloadFailed
                 , false
@@ -156,6 +159,9 @@ namespace wenku10.Pages.ShHub
         #endregion
 
         #region Requests
+        private void PlaceKeyRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.KEY, BindItem ); }
+        private void PlaceTokenRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.TOKEN, BindItem ); }
+
         public async void PlaceRequest( SHTarget Target, HubScriptItem HSI )
         {
             StringResources stx = new StringResources();
@@ -169,9 +175,13 @@ namespace wenku10.Pages.ShHub
 
             if ( !RequestBox.Canceled )
             {
-                ShowKeyRequest();
-                if ( !RequestsOpened )
+                if ( RequestsOpened )
                 {
+                    ShowRequest( Target );
+                }
+                else
+                {
+                    ReqTarget = Target;
                     ToggleRequests();
                 }
             }
@@ -204,8 +214,6 @@ namespace wenku10.Pages.ShHub
                     : new string[] { "TokenRequest", "CloseRequest" }
                 );
 
-                ControlsList.SelectedIndex = 0;
-
                 SetDoubleAnimation(
                     RequestStory
                     , RequestSection
@@ -216,11 +224,7 @@ namespace wenku10.Pages.ShHub
                 SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 0, 1 );
 
                 RequestSection.Visibility = Visibility.Visible;
-
-                if ( ( ReqTarget ^ SHTarget.KEY ) != 0 )
-                {
-                    ShowKeyRequest();
-                }
+                ShowRequest( ReqTarget );
             }
 
             RequestStory.Begin();
@@ -229,21 +233,88 @@ namespace wenku10.Pages.ShHub
         private void RequestStory_Completed( object sender, object e )
         {
             RequestStory.Stop();
-            if ( !RequestsOpened )
-            {
-                RequestSection.Opacity = 1;
-                RequestsOpened = true;
-            }
-            else if( RequestsOpened )
+            if ( RequestsOpened )
             {
                 RequestSection.Visibility = Visibility.Collapsed;
                 RequestSection.Opacity = 0;
                 RequestsOpened = false;
             }
+            else
+            {
+                RequestSection.Opacity = 1;
+                RequestsOpened = true;
+            }
         }
 
-        private void ShowKeyRequest() { ReloadRequests( SHTarget.KEY ); }
-        private void ShowTokenRequest() { ReloadRequests( SHTarget.TOKEN ); }
+        private void ShowRequest( SHTarget Target )
+        {
+            // User have the thing. So he / she can grant requests for this script
+            if ( ( Target ^ SHTarget.KEY ) == 0 )
+            {
+                ControlsList.SelectedIndex = 0;
+                RequestList.Tag = BindItem.Encrypted && Crypt != null;
+            }
+            else
+            {
+                ControlsList.SelectedIndex = Crypt != null ? 1 : 0;
+                RequestList.Tag = AccessToken;
+            }
+
+            ReloadRequests( Target );
+        }
+
+        private void GrantRequest( object sender, RoutedEventArgs e )
+        {
+            SHRequest Req = ( ( Button ) sender ).DataContext as SHRequest;
+            if ( Req == null ) return;
+
+            try
+            {
+                CryptRSA RSA = new CryptRSA( Req.Pubkey );
+                string GrantData = null;
+
+                switch ( ReqTarget )
+                {
+                    case SHTarget.TOKEN:
+                        if ( !string.IsNullOrEmpty( AccessToken ) )
+                        {
+                            GrantData = RSA.Encrypt( AccessToken );
+                        }
+                        break;
+                    case SHTarget.KEY:
+                        if ( Crypt != null )
+                        {
+                            GrantData = RSA.Encrypt( Crypt.KeyBuffer );
+                        }
+                        break;
+                }
+
+                if ( !string.IsNullOrEmpty( GrantData ) )
+                {
+                    RCache.POST(
+                        Shared.ShRequest.Server
+                        , Shared.ShRequest.GrantRequest( BindItem.Id, GrantData )
+                        , GrantComplete
+                        , GrantFailed
+                        , false
+                    );
+                }
+            }
+            catch ( Exception ex )
+            {
+                Logger.Log( ID, ex.Message );
+            }
+        }
+
+        private void GrantFailed( string CacheName, string Id, Exception ex )
+        {
+            System.Diagnostics.Debugger.Break();
+        }
+
+        private void GrantComplete( DRequestCompletedEventArgs e, string Id )
+        {
+            System.Diagnostics.Debugger.Break();
+        }
 
         private async void ReloadRequests( SHTarget Target )
         {
@@ -512,7 +583,5 @@ namespace wenku10.Pages.ShHub
         {
             LoadingRing.IsActive = false;
         }
-
-        private void PlaceKeyRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.KEY, BindItem ); }
     }
 }

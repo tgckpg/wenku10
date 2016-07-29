@@ -32,7 +32,6 @@ namespace wenku8.Model.Comments
 
         private RuntimeCache RCache;
         private Type TType = typeof( T );
-        private SharersRequest.SHTarget sCRIPT;
 
         public HSLoader( string Id, SharersRequest.SHTarget Target, Func<SharersRequest.SHTarget, int, uint, string[], PostData> PostArgs )
         {

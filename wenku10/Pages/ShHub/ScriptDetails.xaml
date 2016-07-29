@@ -140,20 +140,29 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <!-- Key Button -->
-                    <c:StateControl State="{Binding Encrypted, Converter={StaticResource DataStateConverter}}">
-                        <Button Width="40" Height="40"
-                                Background="Transparent"
-                                Style="{StaticResource PlainButton}">
-                            <Button.Flyout>
-                                <MenuFlyout>
-                                    <MenuFlyoutItem x:Uid="/AppResources/KeyRequest"
-                                                    Text="Key Request" Click="PlaceKeyRequest" />
-                                </MenuFlyout>
-                            </Button.Flyout>
-                            <xi:IconRawDocument Foreground="{StaticResource VerticalRibbonBrush}"
-                                                AutoScale="True" />
-                        </Button>
-                    </c:StateControl>
+                    <Button Width="40" Height="40"
+                            Background="Transparent"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Style="{StaticResource PlainButton}">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Uid="/AppResources/KeyRequest"
+                                                Visibility="{Binding Encrypted, Converter={StaticResource DataVisConverter}}"
+                                                Text="Key Request" Click="PlaceKeyRequest" />
+                                <MenuFlyoutItem x:Uid="/AppResources/TokenRequest"
+                                                Text="Token Request" Click="PlaceTokenRequest" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                        <Grid>
+                            <xi:IconMasterKey Foreground="{StaticResource VerticalRibbonBrush}"
+                                       Visibility="{Binding Encrypted, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                       AutoScale="True" />
+                            <i:IconKey Foreground="{StaticResource VerticalRibbonBrush}"
+                                       Direction="Rotate270"
+                                       Visibility="{Binding Encrypted, Converter={StaticResource DataVisConverter}}"
+                                       AutoScale="True" />
+                        </Grid>
+                    </Button>
                     <TextBlock Grid.Column="1" FontSize="20"
                                VerticalAlignment="Center"
                                TextWrapping="Wrap"
@@ -325,8 +334,11 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Button Style="{StaticResource PlainButton}">
-                                <TextBlock Margin="10" Text="Grant" />
+                            <Button Style="{StaticResource PlainThemeButton}"
+                                    Click="GrantRequest"
+                                    Visibility="{Binding Path=Tag, ElementName=RequestList, Converter={StaticResource DataVisConverter}}">
+                                <TextBlock x:Uid="/AppResources/Grant" Margin="10"
+                                           Text="Grant" />
                             </Button>
                             <TextBlock Margin="5"  Grid.Column="1"
                                        TextWrapping="Wrap"

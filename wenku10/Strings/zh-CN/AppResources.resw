@@ -227,9 +227,6 @@
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>当前版本</value>
   </data>
-  <data name="ViewList.Text" xml:space="preserve">
-    <value>查看</value>
-  </data>
   <data name="But_There_Is_Nothing.Text" xml:space="preserve">
     <value>正在下载必要资讯，请稍等…完成后将会直接为你跳至正文页面</value>
   </data>
@@ -334,5 +331,11 @@
   </data>
   <data name="Remarks.Text" xml:space="preserve">
     <value>备注</value>
+  </data>
+  <data name="Grant.Text" xml:space="preserve">
+    <value>授予</value>
+  </data>
+  <data name="TokenRequest.Text" xml:space="preserve">
+    <value>令牌请求</value>
   </data>
 </root>

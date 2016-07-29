@@ -56,7 +56,7 @@ namespace wenku8.Model.Loaders
                         PageEnded = LoadedCount < ExpectedCount;
                         CurrentPage += LoadedCount;
 
-                        HSItems.SetResult( JHS.Remap( x => new HubScriptItem( x.GetObject() ) ).ToArray() );
+                        HSItems.SetResult( JHS.Remap( x => HubScriptItem.Create( x.GetObject() ) ).ToArray() );
                     }
                     catch ( Exception ex )
                     {

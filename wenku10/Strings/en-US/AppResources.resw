@@ -227,9 +227,6 @@
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>Current version</value>
   </data>
-  <data name="ViewList.Text" xml:space="preserve">
-    <value>View</value>
-  </data>
   <data name="But_There_Is_Nothing.Text" xml:space="preserve">
     <value>Please wail wile downloading necessary info. You will be directed to Content Page automatically.</value>
   </data>
@@ -334,5 +331,11 @@
   </data>
   <data name="Remarks.Text" xml:space="preserve">
     <value>Remarks</value>
+  </data>
+  <data name="Grant.Text" xml:space="preserve">
+    <value>Grant</value>
+  </data>
+  <data name="TokenRequest.Text" xml:space="preserve">
+    <value>Access Request</value>
   </data>
 </root>

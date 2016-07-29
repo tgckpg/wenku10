@@ -224,9 +224,6 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="ViewList.Text" xml:space="preserve">
-    <value>查看</value>
-  </data>
   <data name="But_There_Is_Nothing.Text" xml:space="preserve">
     <value>必要な情報をダウンロードし、しばらくお待ちください...完了すると、ページの本文に直接スキップします</value>
   </data>
@@ -334,5 +331,8 @@
   </data>
   <data name="Remarks.Text" xml:space="preserve">
     <value>備考</value>
+  </data>
+  <data name="TokenRequest.Text" xml:space="preserve">
+    <value>アクセストークンを要求</value>
   </data>
 </root>
