@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.Data.Json;
 
 using Net.Astropenguin.DataModel;
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
@@ -31,24 +33,38 @@ namespace wenku8.Section
 
         public IMember Member;
 
-        private string _mesg;
-        public string Message
+        public ObservableCollection<KeyValuePair<string, Action>> Activities { get; private set; }
+        public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
+        public IEnumerable<SHGrant> Grants { get; private set; }
+
+        private bool _Loading = false;
+        public bool Loading
         {
-            get { return _mesg; }
+            get { return _Loading; }
             private set
             {
-                _mesg = value;
-                NotifyChanged( "Message" );
+                _Loading = value;
+                NotifyChanged( "Loading" );
             }
         }
 
-        public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
+        private bool _Searching = false;
+        public bool Searching
+        {
+            get { return _Searching; }
+            private set
+            {
+                _Searching = value;
+                NotifyChanged( "Searching" );
+            }
+        }
 
         public bool LoggedIn { get { return Member.IsLoggedIn; } }
         public string LLText { get; private set; }
 
         public SharersHub()
         {
+            Activities = new ObservableCollection<KeyValuePair<string, Action>>();
             SearchSet = new Observables<HubScriptItem, HubScriptItem>();
 
             RCache = new RuntimeCache();
@@ -57,7 +73,20 @@ namespace wenku8.Section
 
             MessageBus.OnDelivery += MessageBus_OnDelivery;
 
+            SearchSet.LoadStart += ( s, e ) => { Searching = true; };
+            SearchSet.LoadEnd += ( s, e ) => { Searching = false; };
+
             UpdateLLText();
+        }
+
+        public async void CheckActivity( KeyValuePair<string, Action> Activity )
+        {
+            Activity.Value();
+
+            // Roughly wait a moment then remove it
+            await Task.Delay( 500 );
+            Activities.Remove( Activity );
+            NotifyChanged( "Activities" );
         }
 
         ~SharersHub()
@@ -69,6 +98,69 @@ namespace wenku8.Section
         private void Member_OnStatusChanged( object sender, MemberStatus args )
         {
             UpdateLLText();
+            if( Member.IsLoggedIn )
+            {
+                GetMyRequests();
+            }
+        }
+
+        public void GetMyRequests()
+        {
+            Loading = true;
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.MyRequests()
+                , ( a, b ) =>
+                {
+                    RequestsStatus( a, b );
+                    Loading = false;
+                }
+                , ( a, b, c ) => { Loading = false; }
+                , false
+            );
+        }
+
+        private void RequestsStatus( DRequestCompletedEventArgs e, string QId )
+        {
+            try
+            {
+                int NGrants = 0;
+                int NScripts = 0;
+                JsonObject JMesg = JsonStatus.Parse( e.ResponseString );
+                JsonArray JData = JMesg.GetNamedArray( "data" );
+                Grants = JData.Remap( x =>
+                {
+                    SHGrant G = new SHGrant( x.GetObject() );
+
+                    int l = G.Grants.Length;
+                    if ( 0 < l ) NScripts++;
+                    NGrants += l;
+
+                    return G;
+                } );
+
+                if ( 0 < NGrants )
+                {
+                    AddActivity( () =>
+                    {
+                        StringResources stx = new StringResources();
+                        return string.Format( stx.Text( "GrantsReceived" ), NGrants, NScripts );
+                    }, () => MessageBus.SendUI( new Message( typeof( SharersHub ), AppKeys.SH_SHOW_GRANTS ) ) );
+                }
+            }
+            catch ( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.WARNING );
+            }
+        }
+
+        private void AddActivity( Func<string> StxText, Action A )
+        {
+            Worker.UIInvoke( () =>
+            {
+                Activities.Add( new KeyValuePair<string, Action>( StxText(), A ) );
+                NotifyChanged( "Activities" );
+            } );
         }
 
         public async void Search( string Query, IEnumerable<string> AccessTokens = null )
@@ -76,11 +168,13 @@ namespace wenku8.Section
             if ( AccessTokens == null )
                 AccessTokens = new TokenManager().AuthList.Remap( x => x.Value );
 
+            Searching = true;
             SHSearchLoader SHLoader = new SHSearchLoader( Query, AccessTokens );
 
             SearchSet.ConnectLoader( SHLoader );
             SearchSet.UpdateSource( await SHLoader.NextPage() );
 
+            Searching = false;
             NotifyChanged( "SearchSet" );
         }
 

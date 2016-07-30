@@ -16,6 +16,7 @@
     <Page.Resources>
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:DataCountConverter x:Key="DataCountConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
 
         <DataTemplate x:Key="SHHubItemTemplate">
@@ -244,7 +245,7 @@
 
             <!-- Sharer's Hub -->
             <HubSection x:Name="SharersHub" Style="{StaticResource ContainerHead}"
-                        Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
+                        Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
@@ -267,8 +268,8 @@
                                     <MenuFlyoutItem x:Uid="/ContextMenu/ShareScript"
                                                     Text="Share script"
                                                     Click="ScriptUpload" />
-                                    <MenuFlyoutItem x:Uid="/ContextMenu/AccessTokens"
-                                                    Text="Access tokens"
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/ManageAuths"
+                                                    Text="Manage Auths"
                                                     Click="ManageAuths" />
                                     <MenuFlyoutItem Text="{Binding LLText}" Click="LoginOrLogout" />
                                     <MenuFlyoutItem Visibility="{Binding LoggedIn, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
@@ -287,16 +288,19 @@
                                         Grid.Column="1" Margin="10"
                                         PlaceholderText="zone: &lt;Zone&gt; type: &lt;Type&gt; tags: &lt;Tag&gt;" />
 
-                        <Button Grid.Column="2"
-                                VerticalAlignment="Stretch"
-                                HorizontalAlignment="Stretch"
+                        <Button x:Name="ActivityButton" Grid.Column="2"
+                                Click="ToggleActivities"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                 Style="{StaticResource PlainButton}">
-                            <StackPanel Orientation="Horizontal" Margin="10">
-                                <TextBlock x:Name="Status" Margin="5" 
+                            <Grid Margin="5">
+                                <TextBlock Text="{Binding Activities, Converter={StaticResource DataCountConverter}}"
+                                           VerticalAlignment="Center" HorizontalAlignment="Center"
                                            Foreground="{StaticResource RelativeMajorBrush}" />
-                                <ProgressRing x:Name="IsLoading"
+                                <ProgressRing IsActive="{Binding Loading}"
+                                              Width="30" Height="30"
+                                              VerticalAlignment="Center" HorizontalAlignment="Center"
                                               Foreground="{StaticResource RelativeMajorBrush}"/>
-                            </StackPanel>
+                            </Grid>
                         </Button>
 
                         <GridView Grid.Row="1" Grid.ColumnSpan="3"
@@ -304,6 +308,39 @@
                                   ItemClick="ShHub_ItemCLick"
                                   ItemsSource="{Binding SearchSet}"
                                   ItemTemplate="{StaticResource SHHubItemTemplate}" />
+
+                        <p:StateControl State="{Binding Searching, Converter={StaticResource DataStateConverter}}"
+                                        Margin="10"
+                                        Grid.Row="1" Grid.Column="1"
+                                        Width="40" Height="40" 
+                                        HorizontalAlignment="Right" VerticalAlignment="Top">
+                            <ProgressRing Foreground="{StaticResource MinorBrush}"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Width="30" Height="30"
+                                          IsActive="{Binding Searching}" />
+                        </p:StateControl>
+
+                        <p:StateControl Grid.Row="1" Grid.ColumnSpan="3"
+                                        State="{Binding Path=Tag, ElementName=ActivityButton, Converter={StaticResource DataStateConverter}}"
+                                        MaxWidth="400" Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                                        VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <Grid>
+                                <Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
+                                         Margin="0,0,5,0"
+                                         Fill="{StaticResource MinorBrush}" />
+                                <ListView Margin="0,15,0,0" Padding="10"
+                                          IsItemClickEnabled="True" ItemClick="Activities_ItemClick"
+                                          ItemsSource="{Binding Activities}"
+                                          Background="{StaticResource MinorBrush}">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                       Text="{Binding Key}" />
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </p:StateControl>
                     </Grid>
                 </DataTemplate>
             </HubSection>
@@ -323,11 +360,12 @@
                 </Rectangle>
                 <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
                 <Button Style="{StaticResource PlainButton}"
-                        Width="35" Height="35"
                         Background="{StaticResource MinorBrush}"
+                        Width="35" Height="35"
                         VerticalAlignment="Top" HorizontalAlignment="Right"
                         Click="ClosePopup">
-                    <i:IconCross AutoScale="True" />
+                        <i:IconCross Foreground="{StaticResource RelativeMajorBrush}"
+                                     AutoScale="True" />
                 </Button>
             </Grid>
         </p:StateControl>

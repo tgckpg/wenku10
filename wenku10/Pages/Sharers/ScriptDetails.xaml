@@ -1,5 +1,5 @@
 ﻿<Page
-    x:Class="wenku10.Pages.ShHub.ScriptDetails"
+    x:Class="wenku10.Pages.Sharers.ScriptDetails"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.ShHub"
@@ -334,12 +334,18 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <Button Style="{StaticResource PlainThemeButton}"
-                                    Click="GrantRequest"
-                                    Visibility="{Binding Path=Tag, ElementName=RequestList, Converter={StaticResource DataVisConverter}}">
-                                <TextBlock x:Uid="/AppResources/Grant" Margin="10"
-                                           Text="Grant" />
-                            </Button>
+                            <c:StateControl State="{Binding Granted, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
+                                <Button Style="{StaticResource PlainThemeButton}"
+                                        Click="GrantRequest"
+                                        Visibility="{Binding Path=Tag, ElementName=RequestList, Converter={StaticResource DataVisConverter}}">
+                                    <TextBlock x:Uid="/AppResources/Grant" Margin="10"
+                                               Text="Grant" />
+                                </Button>
+                            </c:StateControl>
+                            <i:IconTick Width="30" Height="30"
+                                        Visibility="{Binding Granted, Converter={StaticResource DataVisConverter}}"
+                                        Foreground="{StaticResource MajorBrush}"
+                                        AutoScale="True" />
                             <TextBlock Margin="5"  Grid.Column="1"
                                        TextWrapping="Wrap"
                                        Text="{Binding Title}" />

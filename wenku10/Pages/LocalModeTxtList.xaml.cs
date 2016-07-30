@@ -41,14 +41,14 @@ using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
 
 namespace wenku10.Pages
 {
-    using Dialogs.Sharers;
-
     public sealed partial class LocalModeTxtList : Page
     {
         private static readonly string ID = typeof( LocalModeTxtList ).Name;
 
         private LocalFileList FileListContext;
         private LocalBook SelectedBook;
+
+        private Button ActivityButton;
 
         private SharersHub SHHub;
 
@@ -128,16 +128,20 @@ namespace wenku10.Pages
 
                     if ( Place ) TransferRequest( SHTarget.KEY, HSI );
                     break;
+
+                case AppKeys.SH_SHOW_GRANTS:
+                    PopupFrame.Content = new Sharers.ManageAuth( SHHub, PopupFrame );
+                    break;
             }
         }
 
         private void TransferRequest( SHTarget Target, HubScriptItem HSI )
         {
-            ShHub.ScriptDetails Details = PopupFrame.Content as ShHub.ScriptDetails;
+            Sharers.ScriptDetails Details = PopupFrame.Content as Sharers.ScriptDetails;
 
             if ( Details == null )
             {
-                Details = new ShHub.ScriptDetails( HSI );
+                Details = new Sharers.ScriptDetails( HSI );
                 PopupFrame.Content = Details;
             }
 
@@ -358,6 +362,28 @@ namespace wenku10.Pages
         #endregion
 
         #region Sharers Hub
+
+        private void ToggleActivities( object sender, RoutedEventArgs e )
+        {
+            ActivityButton = ( Button ) sender;
+            if ( SHHub.Activities.Count() == 0 )
+            {
+                SHHub.GetMyRequests();
+            }
+            else
+            {
+                if ( ActivityButton.Tag == null ) ActivityButton.Tag = true;
+                else ActivityButton.Tag = null;
+            }
+        }
+
+        private void Activities_ItemClick( object sender, ItemClickEventArgs e )
+        {
+            KeyValuePair<string, Action> Activity = ( KeyValuePair<string, Action> ) e.ClickedItem;
+            SHHub.CheckActivity( Activity );
+            ActivityButton.Tag = null;
+        }
+
         private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
         {
             SharersHub.Focus( FocusState.Pointer );
@@ -374,13 +400,13 @@ namespace wenku10.Pages
             }
             else
             {
-                PopupFrame.Content = new ShHub.ScriptDetails( HSI );
+                PopupFrame.Content = new Sharers.ScriptDetails( HSI );
             }
         }
 
         private void ScriptUpload( object sender, RoutedEventArgs e )
         {
-            PopupFrame.Content = new ShHub.ScriptUpload( UploadExit );
+            PopupFrame.Content = new Sharers.ScriptUpload( UploadExit );
         }
 
         private void UploadExit( string Id, string AccessToken )
@@ -390,7 +416,10 @@ namespace wenku10.Pages
         }
 
         private void LoginOrLogout( object sender, RoutedEventArgs e ) { LoginOrLogout(); }
-        private void ManageAuths( object sender, RoutedEventArgs e ) { }
+        private void ManageAuths( object sender, RoutedEventArgs e )
+        {
+            PopupFrame.Content = new Sharers.ManageAuth( SHHub, PopupFrame );
+        }
 
         private async void Register( object sender, RoutedEventArgs e )
         {

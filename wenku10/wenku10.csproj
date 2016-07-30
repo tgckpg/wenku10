@@ -121,14 +121,17 @@
     <Compile Include="Pages\Dialogs\Sharers\PlaceRequest.xaml.cs">
       <DependentUpon>PlaceRequest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ShHub\ScriptUpload.xaml.cs">
+    <Compile Include="Pages\Sharers\ManageAuth.xaml.cs">
+      <DependentUpon>ManageAuth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\ScriptUpload.xaml.cs">
       <DependentUpon>ScriptUpload.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ShHub\ScriptDetails.xaml.cs">
+    <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
       <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
@@ -473,11 +476,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ShHub\ScriptDetails.xaml">
+    <Page Include="Pages\Sharers\ManageAuth.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ShHub\ScriptUpload.xaml">
+    <Page Include="Pages\Sharers\ScriptDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sharers\ScriptUpload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

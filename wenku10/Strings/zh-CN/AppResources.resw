@@ -338,4 +338,7 @@
   <data name="TokenRequest.Text" xml:space="preserve">
     <value>令牌请求</value>
   </data>
+  <data name="GrantsReceived.Text" xml:space="preserve">
+    <value>从 {1} 个脚本中收到 {0} 个权限授予</value>
+  </data>
 </root>

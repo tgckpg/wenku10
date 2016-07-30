@@ -29,7 +29,7 @@ using CryptAES = wenku8.System.CryptAES;
 using AESManager = wenku8.System.AESManager;
 using TokenManager = wenku8.System.TokenManager;
 
-namespace wenku10.Pages.ShHub
+namespace wenku10.Pages.Sharers
 {
     public sealed partial class ScriptUpload : Page
     {

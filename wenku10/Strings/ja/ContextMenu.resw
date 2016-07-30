@@ -192,4 +192,7 @@
   <data name="PlaceRequest.Text" xml:space="preserve">
     <value>要求を配置</value>
   </data>
+  <data name="ManageAuths.Text" xml:space="preserve">
+    <value>認証を管理する</value>
+  </data>
 </root>

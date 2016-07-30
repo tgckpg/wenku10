@@ -335,4 +335,10 @@
   <data name="TokenRequest.Text" xml:space="preserve">
     <value>アクセストークンを要求</value>
   </data>
+  <data name="GrantsReceived.Text" xml:space="preserve">
+    <value>{1}っ のスクリプトから {0}っ の許可を受けていました</value>
+  </data>
+  <data name="Grant.Text" xml:space="preserve">
+    <value>許可</value>
+  </data>
 </root>

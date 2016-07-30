@@ -566,7 +566,4 @@
   <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
     <value>インストール確認</value>
   </data>
-  <data name="Grant.Text" xml:space="preserve">
-    <value>許可</value>
-  </data>
 </root>

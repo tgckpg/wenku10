@@ -1,0 +1,76 @@
+﻿<Page
+    x:Class="wenku10.Pages.Sharers.ManageAuth"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Sharers"
+    xmlns:c="using:Net.Astropenguin.UI"
+    xmlns:p="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <p:DataBoolConverter x:Key="DataBoolConverter" />
+        <p:DataStateConverter x:Key="DataStateConverter" />
+        <p:DataCountConverter x:Key="DataCountConverter" />
+        <p:DataVisConverter x:Key="DataVisConverter" />
+    </Page.Resources>
+
+    <Pivot>
+        <PivotItem Header="Keys">
+        </PivotItem>
+        <PivotItem Header="Tokens">
+        </PivotItem>
+        <PivotItem Header="Requests">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView x:Name="RequestsList"
+                          IsItemClickEnabled="True" ItemClick="GotoScriptDetail"
+                          ItemContainerStyle="{StaticResource ListItemNoSelect}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Margin="10" Grid.Column="0"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding Title}" />
+                                <ProgressRing Grid.Column="1"
+                                              Width="30" Height="30"
+                                              Foreground="{StaticResource RelativeMajorBrush}"
+                                              VerticalAlignment="Center" HorizontalAlignment="Center"
+                                              IsActive="{Binding IsLoading}" />
+                                <c:StateControl Grid.Column="1"
+                                                State="{Binding Processed, Converter={StaticResource DataStateConverter}, ConverterParameter=1}"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Button Click="ParseGrant"
+                                            IsEnabled="{Binding NGrants, Converter={StaticResource DataBoolConverter}}"
+                                            Style="{StaticResource PlainThemeButton}">
+                                        <TextBlock Margin="20,10" Text="{Binding NGrants}" />
+                                    </Button>
+                                </c:StateControl>
+                                <c:StateControl Grid.Column="1"
+                                                State="{Binding Processed, Converter={StaticResource DataStateConverter}}"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Grid Margin="10,0" Width="30" Height="30">
+                                        <i:IconTick Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}}"
+                                                    Foreground="{StaticResource MajorBrush}"
+                                                    AutoScale="True" />
+                                        <i:IconCross Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                                    Foreground="{StaticResource MajorBrush}"
+                                                    AutoScale="True" />
+                                    </Grid>
+                                </c:StateControl>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </PivotItem>
+    </Pivot>
+</Page>

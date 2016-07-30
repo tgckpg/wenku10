@@ -192,4 +192,7 @@
   <data name="PlaceRequest.Text" xml:space="preserve">
     <value>放置請求</value>
   </data>
+  <data name="ManageAuths.Text" xml:space="preserve">
+    <value>管理 AUTH</value>
+  </data>
 </root>

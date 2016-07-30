@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.UI.Icons;
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Linq;
@@ -24,13 +25,14 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.UI;
 
 using wenku8.AdvDM;
+using wenku8.Effects;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.ThemeIcons;
 
-namespace wenku10.Pages.ShHub
+namespace wenku10.Pages.Sharers
 {
     using Dialogs.Sharers;
 
@@ -39,7 +41,6 @@ namespace wenku10.Pages.ShHub
     using CryptAES = wenku8.System.CryptAES;
     using CryptRSA = wenku8.System.CryptRSA;
     using SHTarget = SharersRequest.SHTarget;
-    using Net.Astropenguin.Helpers;
 
     sealed partial class ScriptDetails : Page
     {
@@ -51,6 +52,7 @@ namespace wenku10.Pages.ShHub
         private Observables<HSComment, HSComment> CommentsSource;
         private Observables<SHRequest, SHRequest> RequestsSource;
 
+        private XRegistry XGrant = new XRegistry( "<xg />", wenku8.Settings.FileLinks.ROOT_SETTING + "XGrant.tmp" );
         private Dictionary<string, PaneNavButton> AvailControls;
 
         private bool CommentsOpened = false;
@@ -71,10 +73,26 @@ namespace wenku10.Pages.ShHub
         private string[] CommentControls = new string[] { "NewComment", "HideComment" };
 
         public ScriptDetails( HubScriptItem Item )
+            :this()
+        {
+            BindItem = Item;
+            SetTemplate();
+        }
+
+        public ScriptDetails()
         {
             this.InitializeComponent();
+        }
 
-            BindItem = Item;
+        protected override void OnNavigatedTo( NavigationEventArgs e )
+        {
+            base.OnNavigatedTo( e );
+            BindItem = ( HubScriptItem ) e.Parameter;
+            SetTemplate();
+        }
+
+        private void SetTemplate()
+        {
             DataContext = BindItem;
 
             if( BindItem.Encrypted )
@@ -83,13 +101,9 @@ namespace wenku10.Pages.ShHub
                 Crypt = new AESManager().GetAuthById( BindItem.Id );
             }
 
-            SetTemplate();
-        }
-
-        private void SetTemplate()
-        {
             BottomControls = new ObservableCollection<PaneNavButton>();
             AccessToken = new TokenManager().GetAuthById( BindItem.Id ).Value;
+            XGrant.SetParameter( BindItem.Id, wenku8.Storage.BookStorage.TimeKey );
 
             AvailControls = new Dictionary<string, PaneNavButton>()
             {
@@ -172,18 +186,19 @@ namespace wenku10.Pages.ShHub
             );
 
             await Popups.ShowDialog( RequestBox );
+            if ( !RequestBox.Canceled ) OpenRequest( Target );
+        }
 
-            if ( !RequestBox.Canceled )
+        public void OpenRequest( SHTarget Target )
+        {
+            if ( RequestsOpened )
             {
-                if ( RequestsOpened )
-                {
-                    ShowRequest( Target );
-                }
-                else
-                {
-                    ReqTarget = Target;
-                    ToggleRequests();
-                }
+                ShowRequest( Target );
+            }
+            else
+            {
+                ReqTarget = Target;
+                ToggleRequests();
             }
         }
 
@@ -197,14 +212,14 @@ namespace wenku10.Pages.ShHub
             {
                 DisplayControls( HomeControls );
 
-                SetDoubleAnimation(
+                SimpleStory.DoubleAnimation(
                     RequestStory
                     , RequestSection
                     , "(UIElement.RenderTransform).(TranslateTransform.Y)"
                     , 0, 0.25 * LayoutSettings.ScreenHeight
                 );
 
-                SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 1, 0 );
+                SimpleStory.DoubleAnimation( RequestStory, RequestSection, "Opacity", 1, 0 );
             }
             else
             {
@@ -214,14 +229,14 @@ namespace wenku10.Pages.ShHub
                     : new string[] { "TokenRequest", "CloseRequest" }
                 );
 
-                SetDoubleAnimation(
+                SimpleStory.DoubleAnimation(
                     RequestStory
                     , RequestSection
                     , "(UIElement.RenderTransform).(TranslateTransform.Y)"
                     , 0.25 * LayoutSettings.ScreenHeight, 0
                 );
 
-                SetDoubleAnimation( RequestStory, RequestSection, "Opacity", 0, 1 );
+                SimpleStory.DoubleAnimation( RequestStory, RequestSection, "Opacity", 0, 1 );
 
                 RequestSection.Visibility = Visibility.Visible;
                 ShowRequest( ReqTarget );
@@ -293,7 +308,7 @@ namespace wenku10.Pages.ShHub
                 {
                     RCache.POST(
                         Shared.ShRequest.Server
-                        , Shared.ShRequest.GrantRequest( BindItem.Id, GrantData )
+                        , Shared.ShRequest.GrantRequest( Req.Id, GrantData )
                         , GrantComplete
                         , GrantFailed
                         , false
@@ -313,7 +328,33 @@ namespace wenku10.Pages.ShHub
 
         private void GrantComplete( DRequestCompletedEventArgs e, string Id )
         {
-            System.Diagnostics.Debugger.Break();
+            try
+            {
+                JsonStatus.Parse( e.ResponseString );
+                SetGranted( Id );
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message );
+            }
+        }
+
+        private void SetGranted( string Id )
+        {
+            RequestsSource.Any( x =>
+            {
+                if ( x.Id == Id )
+                {
+                    x.Granted = true;
+                    return true;
+                }
+                return false;
+            } );
+
+            XParameter XParam = XGrant.Parameter( BindItem.Id );
+            XParam.SetParameter( new XParameter( Id ) );
+            XGrant.SetParameter( XParam );
+            XGrant.Save();
         }
 
         private async void ReloadRequests( SHTarget Target )
@@ -327,6 +368,18 @@ namespace wenku10.Pages.ShHub
                 , Target
                 , ( _Target, _Skip, _Limit, _Ids ) => Shared.ShRequest.GetRequests( _Target, _Ids[0], _Skip, _Limit )
             );
+            CLoader.ConvertResult = xs =>
+            {
+                XParameter XParam = XGrant.Parameter( BindItem.Id );
+                if ( XParam != null )
+                {
+                    foreach ( SHRequest x in xs )
+                    {
+                        x.Granted = XParam.FindParameter( x.Id ) != null;
+                    }
+                }
+                return xs.ToArray();
+            };
 
             IList<SHRequest> FirstPage = await CLoader.NextPage();
             MarkNotLoading();
@@ -351,25 +404,25 @@ namespace wenku10.Pages.ShHub
             {
                 DisplayControls( HomeControls );
 
-                SetDoubleAnimation(
+                SimpleStory.DoubleAnimation(
                     CommentStory, CommentSection
                     , "(UIElement.RenderTransform).(TranslateTransform.Y)"
                     , 0, 0.25 * LayoutSettings.ScreenHeight
                 );
 
-                SetDoubleAnimation( CommentStory, CommentSection, "Opacity", 1, 0 );
+                SimpleStory.DoubleAnimation( CommentStory, CommentSection, "Opacity", 1, 0 );
             }
             else
             {
                 DisplayControls( CommentControls );
 
-                SetDoubleAnimation(
+                SimpleStory.DoubleAnimation(
                     CommentStory, CommentSection
                     , "(UIElement.RenderTransform).(TranslateTransform.Y)"
                     , 0.25 * LayoutSettings.ScreenHeight, 0
                 );
 
-                SetDoubleAnimation( CommentStory, CommentSection, "Opacity", 0, 1 );
+                SimpleStory.DoubleAnimation( CommentStory, CommentSection, "Opacity", 0, 1 );
 
                 CommentSection.Visibility = Visibility.Visible;
 
@@ -549,30 +602,6 @@ namespace wenku10.Pages.ShHub
             CommentEditor.State = ControlState.Foreatii;
         }
         #endregion
-
-        private void SetDoubleAnimation( Storyboard Board, UIElement Element, string Property, double From, double To, double Duration = 350 )
-        {
-            DoubleAnimationUsingKeyFrames d = new DoubleAnimationUsingKeyFrames();
-
-            EasingDoubleKeyFrame still = new EasingDoubleKeyFrame();
-            still.Value = From;
-            still.KeyTime = KeyTime.FromTimeSpan( TimeSpan.FromSeconds( 0 ) );
-            still.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
-
-            EasingDoubleKeyFrame move = new EasingDoubleKeyFrame();
-            move.Value = To;
-            move.EasingFunction = new CubicEase() { EasingMode = EasingMode.EaseOut };
-            move.KeyTime = KeyTime.FromTimeSpan( TimeSpan.FromMilliseconds( Duration ) );
-
-            d.Duration = new Duration( TimeSpan.FromMilliseconds( Duration ) );
-
-            d.KeyFrames.Add( still );
-            d.KeyFrames.Add( move );
-
-            Storyboard.SetTarget( d, Element );
-            Storyboard.SetTargetProperty( d, Property );
-            Board.Children.Add( d );
-        }
 
         private void MarkLoading()
         {

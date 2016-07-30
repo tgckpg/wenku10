@@ -338,4 +338,7 @@
   <data name="TokenRequest.Text" xml:space="preserve">
     <value>Access Request</value>
   </data>
+  <data name="GrantsReceived.Text" xml:space="preserve">
+    <value>You have received {0} grant(s) from {1} script(s).</value>
+  </data>
 </root>
