@@ -174,4 +174,10 @@
   <data name="Desc_DecryptionFailed" xml:space="preserve">
     <value>找不到此項目的密鑰。</value>
   </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>刪除此密鑰將失去解密相關腳本和評論的能力。繼續？</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>您將失去與權杖關聯的腳本編輯權限。繼續？</value>
+  </data>
 </root>

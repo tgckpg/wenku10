@@ -171,4 +171,10 @@
   <data name="Desc_DecryptionFailed" xml:space="preserve">
     <value>It seemed that you don't have the correct key for this item.</value>
   </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>Removing this key will also remove the abilities to decrypt associated script and comments. Continue?</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>You will lost the permissions to edit the scripts associated with this access token. Continue?</value>
+  </data>
 </root>

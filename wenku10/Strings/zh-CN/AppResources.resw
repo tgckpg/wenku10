@@ -341,4 +341,7 @@
   <data name="GrantsReceived.Text" xml:space="preserve">
     <value>从 {1} 个脚本中收到 {0} 个权限授予</value>
   </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>请求</value>
+  </data>
 </root>

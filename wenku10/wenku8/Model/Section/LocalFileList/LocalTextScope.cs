@@ -38,32 +38,41 @@ namespace wenku8.Model.Section
 
         public LocalFileList()
         {
-            IEnumerable<string> ids = Shared.Storage.ListDirs( FileLinks.ROOT_LOCAL_VOL );
-            string[] favs = new BookStorage().GetIdList();
+            StringResources stx = new StringResources( "LoadingMessage" );
+            string LoadText = stx.Str( "ProgressIndicator_Message" );
 
-            List<LocalBook> Items = new List<LocalBook>();
-            foreach( string id in ids )
+            var j = Task.Run( async () =>
             {
-                LocalBook LB = new LocalBook( id );
-                if( LB.ProcessSuccess )
-                {
-                    Items.Add( LB );
-                    LB.IsFav = favs.Contains( id );
-                }
-            }
+                IEnumerable<string> BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_LOCAL_VOL );
+                string[] favs = new BookStorage().GetIdList();
 
-            ids = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
-            foreach( string id in ids )
-            {
-                SpiderBook LB = new SpiderBook( id );
-                if( LB.ProcessSuccess )
+                List<LocalBook> Items = new List<LocalBook>();
+                foreach ( string Id in BookIds )
                 {
-                    Items.Add( LB );
-                    LB.IsFav = favs.Contains( id );
+                    Loading = LoadText + ": " + Id;
+                    LocalBook LB = await LocalBook.CreateAsync( Id );
+                    if ( LB.ProcessSuccess )
+                    {
+                        Items.Add( LB );
+                        LB.IsFav = favs.Contains( Id );
+                    }
                 }
-            }
 
-            if( 0 < Items.Count ) SearchSet = Items;
+                BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
+                foreach ( string Id in BookIds )
+                {
+                    Loading = LoadText + ": " + Id;
+                    SpiderBook LB = await SpiderBook.CreateAsyncSpider( Id );
+                    if ( LB.ProcessSuccess )
+                    {
+                        Items.Add( LB );
+                        LB.IsFav = favs.Contains( Id );
+                    }
+                }
+
+                if ( 0 < Items.Count ) SearchSet = Items;
+                Loading = null;
+            } );
         }
 
         public async void Load()
@@ -182,26 +191,26 @@ namespace wenku8.Model.Section
             NotifyChanged( "SearchSet" );
         }
 
-        public void ToggleFavs()
+        public async void ToggleFavs()
         {
             if ( !FavOnly )
             {
                 BookStorage BS = new BookStorage();
-                string[] ids = BS.GetIdList();
+                string[] BookIds = BS.GetIdList();
 
                 List<ActiveItem> SS = new List<ActiveItem>();
 
-                foreach ( string id in ids )
+                foreach ( string Id in BookIds )
                 {
-                    if ( Data != null && Data.Any( x => ( x as LocalBook ).aid == id ) )
+                    if ( Data != null && Data.Any( x => ( x as LocalBook ).aid == Id ) )
                     {
                         continue;
                     }
 
-                    LocalBook LB = new LocalBook( id );
+                    LocalBook LB = await LocalBook.CreateAsync( Id );
                     if ( !( LB.CanProcess || LB.ProcessSuccess ) )
                     {
-                        XParameter Param = BS.GetBook( id );
+                        XParameter Param = BS.GetBook( Id );
                         LB.Name = Param.GetValue( AppKeys.GLOBAL_NAME );
                         LB.Desc = "Source is unavailable";
                         LB.CanProcess = false;

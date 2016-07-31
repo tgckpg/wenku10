@@ -335,7 +335,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
-                                                       Text="{Binding Key}" />
+                                                       Text="{Binding Name}" />
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -371,19 +371,23 @@
         </p:StateControl>
 
         <!-- Loading Message -->
-        <Grid Grid.Row="1" VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Loading}"
-                       HorizontalAlignment="Right" VerticalAlignment="Center"
-                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-            <ProgressRing Grid.Column="1"
-                          Margin="10" Width="40" Height="40"
-                          IsActive="{Binding Loading, Converter={StaticResource DataBoolConverter}}"
-                          Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-        </Grid>
+        <p:StateControl Grid.Row="1" VerticalAlignment="Top"
+                        State="{Binding Loading, Converter={StaticResource DataStateConverter}}"
+                        Background="{StaticResource MinorBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Loading}"
+                           HorizontalAlignment="Right" VerticalAlignment="Center"
+                           Foreground="{StaticResource RelativeMajorBrush}" />
+                <ProgressRing Grid.Column="1"
+                              Margin="10" Width="40" Height="40"
+                              IsActive="{Binding Loading, Converter={StaticResource DataBoolConverter}}"
+                              Foreground="{StaticResource RelativeMajorBrush}" />
+            </Grid>
+        </p:StateControl>
         <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
     </Grid>
 </Page>

@@ -174,4 +174,10 @@
   <data name="Desc_DecryptionFailed" xml:space="preserve">
     <value>あなたがこのアイテムのキーを持っていないようです。</value>
   </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>このキーを削除すると、関連付けられているスクリプトやコメントを復号化するための能力を削除します。 続ける？</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>あなたは、このアクセストークンに関連付けられたスクリプトを編集する権限を失っます。 続ける？</value>
+  </data>
 </root>

@@ -33,7 +33,7 @@ namespace wenku8.Section
 
         public IMember Member;
 
-        public ObservableCollection<KeyValuePair<string, Action>> Activities { get; private set; }
+        public ObservableCollection<NameValue<Action>> Activities { get; private set; }
         public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
         public IEnumerable<SHGrant> Grants { get; private set; }
 
@@ -64,7 +64,7 @@ namespace wenku8.Section
 
         public SharersHub()
         {
-            Activities = new ObservableCollection<KeyValuePair<string, Action>>();
+            Activities = new ObservableCollection<NameValue<Action>>();
             SearchSet = new Observables<HubScriptItem, HubScriptItem>();
 
             RCache = new RuntimeCache();
@@ -79,7 +79,7 @@ namespace wenku8.Section
             UpdateLLText();
         }
 
-        public async void CheckActivity( KeyValuePair<string, Action> Activity )
+        public async void CheckActivity( NameValue<Action> Activity )
         {
             Activity.Value();
 
@@ -158,7 +158,7 @@ namespace wenku8.Section
         {
             Worker.UIInvoke( () =>
             {
-                Activities.Add( new KeyValuePair<string, Action>( StxText(), A ) );
+                Activities.Add( new NameValue<Action>( StxText(), A ) );
                 NotifyChanged( "Activities" );
             } );
         }

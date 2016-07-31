@@ -176,4 +176,10 @@
   <data name="Desc_DecryptionFailed" xml:space="preserve">
     <value>找不到此项目的密钥。</value>
   </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>删除此密钥将失去解密相关脚本和评论的能力。 继续？</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>您将失去与访问令牌关联的脚本编辑权限。继续？</value>
+  </data>
 </root>

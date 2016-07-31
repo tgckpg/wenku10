@@ -20,7 +20,7 @@ namespace wenku8.Model.Section
         {
             try
             {
-                SpiderBook SBook = await SpiderBook.CreateAsnyc( await ISF.ReadString(), true );
+                SpiderBook SBook = await SpiderBook.ImportFile( await ISF.ReadString() );
 
                 List<LocalBook> NData;
                 if( Data != null )

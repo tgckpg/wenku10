@@ -341,4 +341,10 @@
   <data name="Grant.Text" xml:space="preserve">
     <value>許可</value>
   </data>
+  <data name="Secrets.Header" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>リクエスト</value>
+  </data>
 </root>

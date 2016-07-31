@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -14,7 +15,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.DataModel;
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 
 using wenku8.Model.Loaders;
 using wenku8.Model.ListItem;
@@ -22,30 +26,124 @@ using wenku8.Section;
 
 namespace wenku10.Pages.Sharers
 {
+    using CryptAES = wenku8.System.CryptAES;
     using RSAManager = wenku8.System.RSAManager;
+    using AESManager = wenku8.System.AESManager;
     using TokenManager = wenku8.System.TokenManager;
+    using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
 
     sealed partial class ManageAuth : Page
     {
         private SharersHub ShHub;
         private RSAManager RSAMgr;
+        private AESManager AESMgr;
+        private TokenManager TokMgr;
 
         new Frame Frame { get; set; }
+
+        private AuthItem SelectedItem;
 
         public ManageAuth( SharersHub ShHub, Frame PopupFrame )
         {
             this.InitializeComponent();
             this.ShHub = ShHub;
+            ShHub.PropertyChanged += ShHub_PropertyChanged;
 
             Frame = PopupFrame;
             SetTemplate();
         }
 
+        private void ShHub_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+        {
+            if( e.PropertyName == "Loading" )
+            {
+                if ( !ShHub.Loading )
+                {
+                    RequestsList.ItemsSource = ShHub.Grants.Remap( x => new GrantProcess( x ) );
+                }
+            }
+        }
+
         private async void SetTemplate()
         {
+            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+            KeysSection.Header = stx.Text( "Secret" );
+            TokensSection.Header = stx.Text( "AccessTokens", "ContextMenu" );
+            RequestsSection.Header = stx.Text( "Requests" );
+
             RSAMgr = await RSAManager.CreateAsync();
+
+            AESMgr = new AESManager();
+            ReloadAuths( KeyList, SHTarget.KEY, AESMgr );
+
+            TokMgr = new TokenManager();
+            ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
+
             RequestsList.ItemsSource = ShHub.Grants.Remap( x => new GrantProcess( x ) );
+            ShHub.GetMyRequests();
         }
+
+        private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
+        {
+            Border B = ( Border ) sender;
+            SelectedItem = ( AuthItem ) B.DataContext;
+
+            FlyoutBase.ShowAttachedFlyout( B );
+        }
+
+        private async void Rename( object sender, RoutedEventArgs e )
+        {
+            string OName = SelectedItem.Name;
+
+            Dialogs.Rename RenameBox = new Dialogs.Rename( SelectedItem );
+            await Popups.ShowDialog( RenameBox );
+
+            if ( RenameBox.Canceled ) return;
+
+            string NewName = SelectedItem.Name;
+
+            if ( SelectedItem.Value is CryptAES )
+            {
+                AESMgr.RenameAuth( OName, NewName );
+            }
+            else
+            {
+                TokMgr.RenameAuth( OName, NewName );
+            }
+        }
+
+        private async void Delete( object sender, RoutedEventArgs e )
+        {
+            bool DoDelete = SelectedItem.Count == 0;
+
+            if ( !DoDelete )
+            {
+                StringResources stx = new StringResources( "Message" );
+                MessageDialog MsgBox = new MessageDialog( SelectedItem.DeleteMessage );
+
+                MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { DoDelete = true; } ) );
+                MsgBox.Commands.Add( new UICommand( stx.Str( "No" ) ) );
+                await Popups.ShowDialog( MsgBox );
+            }
+
+            if ( DoDelete )
+            {
+                if ( SelectedItem.Value is CryptAES )
+                {
+                    AESMgr.RemoveAuth( SelectedItem.Value.Value, ( CryptAES ) SelectedItem.Value );
+                    ReloadAuths( KeyList, SHTarget.KEY, AESMgr );
+                }
+                else
+                {
+                    TokMgr.RemoveAuth( SelectedItem.Value.Value, SelectedItem.Value );
+                    ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
+                }
+
+                SelectedItem = null;
+            }
+        }
+
+        public void GotoRequests() { MasterPivot.SelectedItem = RequestsSection; }
 
         private void ParseGrant( object sender, RoutedEventArgs e )
         {
@@ -58,7 +156,7 @@ namespace wenku10.Pages.Sharers
             if ( GProc.IsLoading ) return;
 
             GProc.IsLoading = true;
-            string AccessToken = new TokenManager().GetAuthById( GProc.ScriptId ).Value;
+            string AccessToken = TokMgr.GetAuthById( GProc.ScriptId )?.Value;
 
             SHSearchLoader SHLoader = new SHSearchLoader(
                 "uuid: " + GProc.ScriptId
@@ -91,5 +189,46 @@ namespace wenku10.Pages.Sharers
             }
         }
 
+        private void ReloadAuths<T>( ListView LView, SHTarget Target, wenku8.System.AuthManager<T> Mgr )
+        {
+            LView.ItemsSource = Mgr.AuthList.Remap( x =>
+            {
+                NameValue<string> NX = x as NameValue<string>;
+                AuthItem Item = new AuthItem( NX, Target );
+                Item.Count = Mgr.ControlCount( NX.Value );
+                return Item;
+            } );
+        }
+
+        private class AuthItem : NameValue<NameValue<string>>
+        {
+            public override string Name
+            {
+                get { return base.Value.Name; }
+                set
+                {
+                    base.Value.Name = value;
+                    NotifyChanged( "Name" );
+                }
+            }
+
+            public SHTarget AuthType { get; set; }
+            public int Count { get; set; }
+
+            public string DeleteMessage
+            {
+                get
+                {
+                    StringResources stx = new StringResources( "Message" );
+                    return stx.Str( "DeleteEffective" + AuthType.ToString() );
+                }
+            }
+
+            public AuthItem( NameValue<string> Value, SHTarget AuthType )
+                : base( Value.Name, Value )
+            {
+                this.AuthType = AuthType;
+            }
+        }
     }
 }

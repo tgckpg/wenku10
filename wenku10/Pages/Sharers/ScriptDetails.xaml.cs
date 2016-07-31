@@ -102,7 +102,7 @@ namespace wenku10.Pages.Sharers
             }
 
             BottomControls = new ObservableCollection<PaneNavButton>();
-            AccessToken = new TokenManager().GetAuthById( BindItem.Id ).Value;
+            AccessToken = new TokenManager().GetAuthById( BindItem.Id )?.Value;
             XGrant.SetParameter( BindItem.Id, wenku8.Storage.BookStorage.TimeKey );
 
             AvailControls = new Dictionary<string, PaneNavButton>()

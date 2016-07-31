@@ -200,7 +200,6 @@
   </data>
   <data name="NoComments.Text" xml:space="preserve">
     <value>Nope</value>
-    <comment>NaN</comment>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
     <value>Total</value>
@@ -210,7 +209,6 @@
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>Does not support content searching</value>
-    <comment>NaN</comment>
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>Not yet have this article</value>
@@ -340,5 +338,8 @@
   </data>
   <data name="GrantsReceived.Text" xml:space="preserve">
     <value>You have received {0} grant(s) from {1} script(s).</value>
+  </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>Requests</value>
   </data>
 </root>

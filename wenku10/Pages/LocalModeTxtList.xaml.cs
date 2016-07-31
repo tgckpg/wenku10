@@ -130,7 +130,10 @@ namespace wenku10.Pages
                     break;
 
                 case AppKeys.SH_SHOW_GRANTS:
-                    PopupFrame.Content = new Sharers.ManageAuth( SHHub, PopupFrame );
+                    Sharers.ManageAuth ManageAuth = new Sharers.ManageAuth( SHHub, PopupFrame );
+                    PopupFrame.Content = ManageAuth;
+
+                    ManageAuth.GotoRequests();
                     break;
             }
         }
@@ -379,8 +382,7 @@ namespace wenku10.Pages
 
         private void Activities_ItemClick( object sender, ItemClickEventArgs e )
         {
-            KeyValuePair<string, Action> Activity = ( KeyValuePair<string, Action> ) e.ClickedItem;
-            SHHub.CheckActivity( Activity );
+            SHHub.CheckActivity( ( NameValue<Action> ) e.ClickedItem );
             ActivityButton.Tag = null;
         }
 

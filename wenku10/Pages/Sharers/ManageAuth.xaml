@@ -14,14 +14,49 @@
         <p:DataStateConverter x:Key="DataStateConverter" />
         <p:DataCountConverter x:Key="DataCountConverter" />
         <p:DataVisConverter x:Key="DataVisConverter" />
+        <MenuFlyout x:Key="AuthContext">
+            <MenuFlyoutItem x:Uid="/ContextMenu/Rename" Click="Rename" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Delete" Click="Delete" />
+        </MenuFlyout>
+        <DataTemplate x:Key="AuthItem">
+            <Border FlyoutBase.AttachedFlyout="{StaticResource AuthContext}"
+                    RightTapped="ShowContextMenu">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="10,5,13,5"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="{Binding Count}" />
+                    <Rectangle Width="3" Fill="{StaticResource MajorBrush}"
+                               HorizontalAlignment="Right" VerticalAlignment="Stretch" />
+                    <TextBlock Grid.Column="2"
+                               Margin="10,5" Text="{Binding Name}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
-    <Pivot>
-        <PivotItem Header="Keys">
+    <Pivot x:Name="MasterPivot">
+        <PivotItem x:Name="KeysSection" Header="Keys">
+            <Grid>
+                <ListView x:Name="KeyList"
+                          ItemTemplate="{StaticResource AuthItem}"
+                          ItemContainerStyle="{StaticResource ListItemNoSelect}" />
+            </Grid>
         </PivotItem>
-        <PivotItem Header="Tokens">
+        <PivotItem x:Name="TokensSection" Header="Tokens">
+            <Grid>
+                <ListView x:Name="TokenList"
+                          ItemTemplate="{StaticResource AuthItem}"
+                          ItemContainerStyle="{StaticResource ListItemNoSelect}" />
+            </Grid>
         </PivotItem>
-        <PivotItem Header="Requests">
+        <PivotItem x:Name="RequestsSection" Header="Requests">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />

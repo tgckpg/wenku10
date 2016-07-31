@@ -168,7 +168,7 @@ namespace wenku10.Pages.Sharers
 
             try
             {
-                SelectedBook = await SpiderBook.CreateAsnyc( await ISF.ReadString(), true );
+                SelectedBook = await SpiderBook.ImportFile( await ISF.ReadString() );
                 FileName.Text = ISF.Name;
                 int LDot = ISF.Name.LastIndexOf( '.' );
                 NameInput.PlaceholderText = ~LDot == 0 ? ISF.Name : ISF.Name.Substring( 0, LDot );

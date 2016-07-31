@@ -336,4 +336,7 @@
   <data name="GrantsReceived.Text" xml:space="preserve">
     <value>從 {1} 個腳本中收到 {0} 個權限授予</value>
   </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>請求</value>
+  </data>
 </root>

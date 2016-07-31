@@ -15,6 +15,6 @@
     </ContentDialog.Title>
 
     <Grid Margin="5">
-        <TextBox x:Name="NewName" />
+        <TextBox x:Name="NewName" KeyDown="OnKeyDown"/>
     </Grid>
 </ContentDialog>

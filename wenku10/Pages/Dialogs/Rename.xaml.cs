@@ -56,13 +56,26 @@ namespace wenku10.Pages.Dialogs
             NewName.Text = Target.Name;
             NewName.IsReadOnly = ReadOnly;
 
+            NewName.SelectAll();
+
             if ( !string.IsNullOrEmpty( Title ) )
             {
                 TitleBlock.Text = Title;
             }
         }
 
-        private async void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+        private void OnKeyDown( object sender, KeyRoutedEventArgs e )
+        {
+            if ( e.Key == Windows.System.VirtualKey.Enter ) Confirmed();
+        }
+
+        private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs e )
+        {
+            e.Cancel = true;
+            Confirmed();
+        }
+
+        private async void Confirmed()
         {
             string NName = NewName.Text.Trim();
             string Error = "";
@@ -77,6 +90,8 @@ namespace wenku10.Pages.Dialogs
                 {
                     NamingTarget.Name = NName;
                     Canceled = false;
+                    this.Hide();
+                    return;
                 }
                 catch ( Exception ex )
                 {
@@ -86,7 +101,6 @@ namespace wenku10.Pages.Dialogs
 
             if ( Error != "" )
             {
-                args.Cancel = true;
                 MessageDialog Msg = new MessageDialog( Error );
                 // Should NOT use Popups.ShowDialog because it closes the rename dialog
                 // Making the caller await step thru, causing undesired behaviour
@@ -94,5 +108,6 @@ namespace wenku10.Pages.Dialogs
                 NewName.Focus( FocusState.Keyboard );
             }
         }
+
     }
 }
