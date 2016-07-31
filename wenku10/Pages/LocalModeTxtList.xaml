@@ -131,6 +131,10 @@
                                                                 IsEnabled="{Binding File, Converter={StaticResource DataBoolConverter}}"
                                                                 Click="ViewRaw" />
 
+                                                <MenuFlyoutItem x:Uid="/ContextMenu/Edit"
+                                                                Click="EditSource"
+                                                                Text="Edit Source" />
+
                                                 <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}"
                                                                 x:Uid="/ContextMenu/Delete"
                                                                 Click="RemoveSource"

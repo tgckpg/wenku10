@@ -21,7 +21,7 @@
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
     </ContentDialog.Title>
 
-    <Grid x:Name="LayoutRoot">
+    <Grid x:Name="LayoutRoot" MinWidth="400">
         <Grid.RowDefinitions>
             <!-- Control Buttons -->
             <RowDefinition Height="Auto" />

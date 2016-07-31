@@ -75,22 +75,21 @@ namespace wenku8.Model.Loaders
 
         public async void LoadInstruction( BookInstruction B, bool useCache )
         {
+            SpiderBook SBook = new SpiderBook( B );
+
             if ( useCache && Shared.Storage.FileExists( B.TOCPath ) )
             {
-                await CacheCover( B );
-                OnComplete( B );
-                return;
+                B.PackSavedVols( SBook.PSettings );
             }
 
-            if ( !B.Packable )
+            if ( B.Packed != true && B.Packable )
             {
-                SpiderBook SBook = new SpiderBook( B );
                 await SBook.Process();
+                B.PackVolumes();
             }
 
             await CacheCover( B );
 
-            B.PackVolumes();
             OnComplete( B );
         }
 

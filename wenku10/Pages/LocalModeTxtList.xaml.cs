@@ -327,6 +327,11 @@ namespace wenku10.Pages
             }
         }
 
+        private void EditSource( object sender, RoutedEventArgs e )
+        {
+            EditItem( SelectedBook );
+        }
+
         private void Reanalyze( object sender, RoutedEventArgs e )
         {
             ProcessItem( SelectedBook );
@@ -343,6 +348,14 @@ namespace wenku10.Pages
                 {
                     BS.PackVolumes();
                 }
+            }
+        }
+
+        private void EditItem( LocalBook LB )
+        {
+            if( LB is SpiderBook )
+            {
+                Frame.Navigate( typeof( ProceduresPanel ), ( ( SpiderBook ) LB ).MetaLocation );
             }
         }
         #endregion

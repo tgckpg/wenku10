@@ -73,7 +73,7 @@ namespace wenku8.Model.Loaders
             }
 
             Shared.LoadMessage( "CompilingTOC", b.Title );
-            await b.CompileTOC( Vols );
+            await b.SaveTOC( Vols );
             OnComplete( b );
         }
 

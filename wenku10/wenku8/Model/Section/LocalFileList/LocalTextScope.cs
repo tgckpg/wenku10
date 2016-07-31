@@ -63,7 +63,7 @@ namespace wenku8.Model.Section
                 {
                     Loading = LoadText + ": " + Id;
                     SpiderBook LB = await SpiderBook.CreateAsyncSpider( Id );
-                    if ( LB.ProcessSuccess )
+                    if ( LB.ProcessSuccess || LB.CanProcess )
                     {
                         Items.Add( LB );
                         LB.IsFav = favs.Contains( Id );
