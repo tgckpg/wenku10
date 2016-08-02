@@ -18,10 +18,10 @@
 
     <Page.Resources>
         <n:DataStateConverter x:Key="DataStateConverter" />
+        <n:DataVisConverter x:Key="DataVisConverter" />
         <vp:DataBoolConverter x:Key="DataBoolConverter" />
         <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
-        <v:FavConverter x:Key="FavConverter" />
         <CollectionViewSource x:Name="favItems" />
         <CollectionViewSource x:Name="Section3Items" />
     </Page.Resources>
@@ -275,7 +275,7 @@
                                                             </TextBlock>
                                                         </StackPanel>
                                                         <Border Grid.Column="0" Grid.Row="1"
-                                                                Visibility="{Binding UpdateActive, Converter={StaticResource FavConverter}, ConverterParameter=1}"
+                                                                Visibility="{Binding UpdateActive, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
                                                                 Background="{StaticResource Shades40}">
                                                             <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
                                                                        TextTrimming="WordEllipsis"

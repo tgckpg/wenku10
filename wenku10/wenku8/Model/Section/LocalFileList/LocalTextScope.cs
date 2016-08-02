@@ -191,7 +191,7 @@ namespace wenku8.Model.Section
             NotifyChanged( "SearchSet" );
         }
 
-        public async void ToggleFavs()
+        public async Task ToggleFavs()
         {
             if ( !FavOnly )
             {

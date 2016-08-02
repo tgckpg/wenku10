@@ -180,4 +180,7 @@
   <data name="DeleteEffectiveTOKEN" xml:space="preserve">
     <value>あなたは、このアクセストークンに関連付けられたスクリプトを編集する権限を失っます。 続ける？</value>
   </data>
+  <data name="ConfirmScriptRemove" xml:space="preserve">
+    <value>コメントを含む、このスクリプトは、サーバーから削除されます。 続行しますか？</value>
+  </data>
 </root>

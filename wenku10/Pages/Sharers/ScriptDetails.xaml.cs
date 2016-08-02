@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -21,6 +22,7 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.UI;
 
@@ -30,6 +32,7 @@ using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.REST;
 using wenku8.Resources;
+using wenku8.Settings;
 using wenku8.ThemeIcons;
 
 namespace wenku10.Pages.Sharers
@@ -105,6 +108,11 @@ namespace wenku10.Pages.Sharers
             AccessToken = new TokenManager().GetAuthById( BindItem.Id )?.Value;
             XGrant.SetParameter( BindItem.Id, wenku8.Storage.BookStorage.TimeKey );
 
+            if ( !string.IsNullOrEmpty( AccessToken ) )
+            {
+                AccessControls.Visibility = Visibility.Visible;
+            }
+
             AvailControls = new Dictionary<string, PaneNavButton>()
             {
                 { "Download", new PaneNavButton( new IconLogin() { AutoScale = true, Direction = Direction.Rotate270 }, Download ) }
@@ -148,6 +156,56 @@ namespace wenku10.Pages.Sharers
                 BottomControls.Add( AvailControls[ Cont ] );
             }
         }
+
+        #region Priviledged Controls
+        private async void Delete( object sender, RoutedEventArgs e )
+        {
+            StringResources stx = new StringResources( "Message" );
+            MessageDialog MsgBox = new MessageDialog( "ConfirmRemove" );
+
+            bool DoDelete = false;
+
+            MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { DoDelete = true; } ) );
+            MsgBox.Commands.Add( new UICommand( stx.Str( "No" ) ) );
+            await Popups.ShowDialog( MsgBox );
+
+            if ( DoDelete )
+            {
+                // Since we cannot close the Frame from here
+                // We call for help
+                MessageBus.SendUI( new Message( GetType(), AppKeys.SH_SCRIPT_REMOVE, BindItem ) );
+            }
+        }
+
+        private void TogglePublic( object sender, RoutedEventArgs e )
+        {
+            MarkLoading();
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.Publish( BindItem.Id, !BindItem.Public, AccessToken )
+                , ( e2, QId ) =>
+                {
+                    try
+                    {
+                        JsonStatus.Parse( e2.ResponseString );
+                        BindItem.Public = !BindItem.Public;
+                    }
+                    catch ( Exception ex )
+                    {
+                        BindItem.ErrorMessage = ex.Message;
+                    }
+                    MarkNotLoading();
+                }
+                , ( a, b, ex ) =>
+                {
+                    BindItem.ErrorMessage = ex.Message;
+                    MarkNotLoading();
+                }
+                , false
+            );
+        }
+
+        #endregion
 
         #region Download
         private void Download()
@@ -605,12 +663,19 @@ namespace wenku10.Pages.Sharers
 
         private void MarkLoading()
         {
-            LoadingRing.IsActive = true;
+            Worker.UIInvoke( () =>
+            {
+                LoadingRing.IsActive = true;
+            } );
         }
 
         private void MarkNotLoading()
         {
-            LoadingRing.IsActive = false;
+            Worker.UIInvoke( () =>
+            {
+                LoadingRing.IsActive = false;
+            } );
         }
+
     }
 }

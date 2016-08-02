@@ -278,6 +278,45 @@
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                Text="{Binding Hits, Converter={StaticResource NumberSimplifier}}" />
                 </Grid>
+                <Grid x:Name="AccessControls" Margin="10,5"
+                      Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <c:StateControl State="{Binding Public, Converter={StaticResource DataStateConverter}}">
+                        <Button Style="{StaticResource PlainThemeButton}"
+                                Margin="5" Click="TogglePublic"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock x:Uid="/AppResources/Public" Margin="10,5" Text="Public" />
+                        </Button>
+                    </c:StateControl>
+
+                    <c:StateControl State="{Binding Public, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
+                        <Button Style="{StaticResource PlainThemeButton}"
+                                Margin="5" Opacity="0.5" Click="TogglePublic"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <TextBlock x:Uid="/AppResources/PRivate" Margin="10,5" Text="Private" />
+                        </Button>
+                    </c:StateControl>
+
+                    <Button Style="{StaticResource PlainThemeButton}"
+                            Grid.Column="1"
+                            Margin="5" Background="{StaticResource HorizontalRibbonBrush}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/AppResources/Update" Margin="10,5" Text="Update" />
+                    </Button>
+
+                    <Button Style="{StaticResource PlainThemeButton}"
+                            Grid.Column="2"
+                            Click="Delete"
+                            Margin="5" Background="{StaticResource VerticalRibbonBrush}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/ContextMenu/Delete" Margin="10,5" Text="Remove" />
+                    </Button>
+                </Grid>
                 <!-- Related -->
                 <TextBlock Text="Relateed Scripts" />
             </StackPanel>
@@ -285,9 +324,9 @@
         </ScrollViewer>
         <!-- Comments -->
         <Grid x:Name="CommentSection"
-                Visibility="Collapsed"
-                Opacity="0"
-                Background="{StaticResource MajorBackgroundBrush}">
+              Visibility="Collapsed"
+              Opacity="0"
+              Background="{StaticResource MajorBackgroundBrush}">
             <Grid.RenderTransform>
                 <TranslateTransform Y="0" />
             </Grid.RenderTransform>
@@ -347,13 +386,14 @@
                                         Foreground="{StaticResource MajorBrush}"
                                         AutoScale="True" />
                             <TextBlock Margin="5"  Grid.Column="1"
-                                       TextWrapping="Wrap"
+                                       TextWrapping="Wrap" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                        Text="{Binding Title}" />
                             <Rectangle Grid.Column="2" Fill="{StaticResource MajorBrush}"
                                        HorizontalAlignment="Left" VerticalAlignment="Stretch"
                                        Width="5" />
                             <TextBlock Margin="20,5"  Grid.Column="2"
                                        VerticalAlignment="Center"
+                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                        Text="{Binding Username}" />
                         </Grid>
                     </DataTemplate>

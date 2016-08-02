@@ -17,7 +17,6 @@
         <s:VDisplayConverter x:Key="VDisplayConverter" />
         <s:ParallaxConverter x:Key="ParallaxConverter" />
         <s:NumberSimplifier x:Key="NumberSimplifier" />
-        <s:FavConverter x:Key="FavConverter" />
         <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
@@ -267,9 +266,9 @@
                                             <Grid>
                                                 <i:IconFaved AutoScale="True"
                                                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                                             Visibility="{Binding IsFav, Converter={StaticResource FavConverter}, ConverterParameter=1}"/>
+                                                             Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}}"/>
                                                 <i:IconFav AutoScale="True"
-                                                           Visibility="{Binding IsFav, Converter={StaticResource FavConverter}, ConverterParameter=0}"/>
+                                                           Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"/>
                                             </Grid>
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"

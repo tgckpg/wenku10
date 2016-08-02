@@ -106,7 +106,7 @@ namespace wenku10.Pages.Sharers
             }
 
             // Check whether the script uuid is reserved
-            KeyValuePair<string, string> Token = ( KeyValuePair<string, string> ) AccessTokens.SelectedItem;
+            NameValue<string> Token = ( NameValue<string> ) AccessTokens.SelectedItem;
             string Id = await ReserveId( Token.Value );
 
             string Name = NameInput.Text.Trim();
@@ -129,8 +129,7 @@ namespace wenku10.Pages.Sharers
 
             if ( Crypt != null ) Data = Crypt.Encrypt( Data );
 
-            RuntimeCache RCache = new RuntimeCache();
-            RCache.POST(
+            new RuntimeCache().POST(
                 Shared.ShRequest.Server
                 , Shared.ShRequest.ScriptUpload(
                     Token.Value, Id
@@ -144,7 +143,7 @@ namespace wenku10.Pages.Sharers
                     try
                     {
                         JsonStatus.Parse( Res.ResponseString );
-                        TokMgr.AssignId( Token.Key, Id );
+                        TokMgr.AssignId( Token.Name, Id );
                         if ( Crypt != null ) AESMgr.AssignId( Crypt.Name, Id );
 
                         Worker.UIInvoke( () => { OnExit( Id, Token.Value ); } );

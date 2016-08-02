@@ -6,6 +6,7 @@
     xmlns:c="using:Net.Astropenguin.UI"
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:v="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -39,6 +40,75 @@
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <DataTemplate x:Key="GrantNormal">
+            <Grid Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Margin="10" Grid.Column="0"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           Text="{Binding Title}" />
+                <ProgressRing Grid.Column="1"
+                              Width="30" Height="30"
+                              Foreground="{StaticResource RelativeMajorBrush}"
+                              VerticalAlignment="Center" HorizontalAlignment="Center"
+                              IsActive="{Binding IsLoading}" />
+                <c:StateControl Grid.Column="1"
+                                State="{Binding Processed, Converter={StaticResource DataStateConverter}, ConverterParameter=1}"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Button Click="ParseGrant"
+                            IsEnabled="{Binding NGrants, Converter={StaticResource DataBoolConverter}}"
+                            Style="{StaticResource PlainThemeButton}">
+                        <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
+                                   Margin="20,10" Text="{Binding NGrants}" />
+                    </Button>
+                </c:StateControl>
+                <c:StateControl Grid.Column="1"
+                                State="{Binding Processed, Converter={StaticResource DataStateConverter}}"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid Margin="10,0" Width="30" Height="30">
+                        <i:IconTick Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}}"
+                                    Foreground="{StaticResource MajorBrush}"
+                                    AutoScale="True" />
+                        <i:IconCross Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                     Foreground="{StaticResource MajorBrush}"
+                                     AutoScale="True" />
+                    </Grid>
+                </c:StateControl>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="GrantRemoved">
+            <Grid Margin="0,5" Opacity="0.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Margin="10" Grid.Column="0"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           Text="Removed" x:Uid="/AppResources/HS_Removed" />
+
+                <ProgressRing Grid.Column="1"
+                              Width="30" Height="30"
+                              Foreground="{StaticResource RelativeMajorBrush}"
+                              VerticalAlignment="Center" HorizontalAlignment="Center"
+                              IsActive="{Binding IsLoading}" />
+
+                <Button Grid.Column="1" Click="WithdrawRequest"
+                        Width="35" Height="35"
+                        Style="{StaticResource PlainThemeButton}">
+                    <i:IconCross AutoScale="true" />
+                </Button>
+            </Grid>
+        </DataTemplate>
+
+        <v:SHRequestTemplateSelector x:Key="SHRTemplateSelector" Normal="{StaticResource GrantNormal}"
+                                     Removed="{StaticResource GrantRemoved}" />
     </Page.Resources>
 
     <Pivot x:Name="MasterPivot">
@@ -62,49 +132,13 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <TextBlock x:Name="ReqPlaceholder"
+                           Foreground="{StaticResource MajorBrush}"
+                           Text="" />
                 <ListView x:Name="RequestsList"
+                          ItemTemplateSelector="{StaticResource SHRTemplateSelector}"
                           IsItemClickEnabled="True" ItemClick="GotoScriptDetail"
-                          ItemContainerStyle="{StaticResource ListItemNoSelect}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,5">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Margin="10" Grid.Column="0"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding Title}" />
-                                <ProgressRing Grid.Column="1"
-                                              Width="30" Height="30"
-                                              Foreground="{StaticResource RelativeMajorBrush}"
-                                              VerticalAlignment="Center" HorizontalAlignment="Center"
-                                              IsActive="{Binding IsLoading}" />
-                                <c:StateControl Grid.Column="1"
-                                                State="{Binding Processed, Converter={StaticResource DataStateConverter}, ConverterParameter=1}"
-                                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Button Click="ParseGrant"
-                                            IsEnabled="{Binding NGrants, Converter={StaticResource DataBoolConverter}}"
-                                            Style="{StaticResource PlainThemeButton}">
-                                        <TextBlock Margin="20,10" Text="{Binding NGrants}" />
-                                    </Button>
-                                </c:StateControl>
-                                <c:StateControl Grid.Column="1"
-                                                State="{Binding Processed, Converter={StaticResource DataStateConverter}}"
-                                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Grid Margin="10,0" Width="30" Height="30">
-                                        <i:IconTick Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}}"
-                                                    Foreground="{StaticResource MajorBrush}"
-                                                    AutoScale="True" />
-                                        <i:IconCross Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
-                                                    Foreground="{StaticResource MajorBrush}"
-                                                    AutoScale="True" />
-                                    </Grid>
-                                </c:StateControl>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                          ItemContainerStyle="{StaticResource ListItemNoSelect}" />
             </Grid>
         </PivotItem>
     </Pivot>

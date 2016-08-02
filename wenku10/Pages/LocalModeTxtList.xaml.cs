@@ -118,10 +118,7 @@ namespace wenku10.Pages
                     HSI = ( HubScriptItem ) Mesg.Payload;
                     bool Place = false;
 
-                    MsgBox.Commands.Add( new UICommand(
-                        stx.Text( "PlaceRequest", "ContextMenu" )
-                        , ( x ) => { Place = true; } ) );
-
+                    MsgBox.Commands.Add( new UICommand( stx.Text( "PlaceRequest", "ContextMenu" ), ( x ) => { Place = true; } ) );
                     MsgBox.Commands.Add( new UICommand( stx.Str( "OK" ) ) );
 
                     await Popups.ShowDialog( MsgBox );
@@ -134,6 +131,13 @@ namespace wenku10.Pages
                     PopupFrame.Content = ManageAuth;
 
                     ManageAuth.GotoRequests();
+                    break;
+
+                case AppKeys.SH_SCRIPT_REMOVE:
+                    if( await SHHub.Remove( ( HubScriptItem ) Mesg.Payload ) )
+                    {
+                        PopupFrame.Content = null;
+                    }
                     break;
             }
         }
@@ -209,9 +213,9 @@ namespace wenku10.Pages
             FileListContext.ProcessAll();
         }
 
-        private void FavMode( object sender, RoutedEventArgs e )
+        private async void FavMode( object sender, RoutedEventArgs e )
         {
-            FileListContext.ToggleFavs();
+            await FileListContext.ToggleFavs();
 
             IconBase b = ( sender as Button ).ChildAt<IconBase>( 0, 0, 0 );
             if ( FileListContext.FavOnly )

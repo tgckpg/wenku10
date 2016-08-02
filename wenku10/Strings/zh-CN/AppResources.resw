@@ -344,4 +344,16 @@
   <data name="Requests.Text" xml:space="preserve">
     <value>请求</value>
   </data>
+  <data name="Update.Text" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Private.Text" xml:space="preserve">
+    <value>封闭</value>
+  </data>
+  <data name="Public.Text" xml:space="preserve">
+    <value>公开</value>
+  </data>
+  <data name="HS_Removed.Text" xml:space="preserve">
+    <value>该脚本已被删除</value>
+  </data>
 </root>

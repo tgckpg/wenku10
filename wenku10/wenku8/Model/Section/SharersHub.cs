@@ -68,6 +68,7 @@ namespace wenku8.Section
             SearchSet = new Observables<HubScriptItem, HubScriptItem>();
 
             RCache = new RuntimeCache();
+            Grants = new SHGrant[ 0 ];
             Member = X.Singleton<IMember>( XProto.SHMember );
             Member.OnStatusChanged += Member_OnStatusChanged;
 
@@ -104,7 +105,7 @@ namespace wenku8.Section
             }
         }
 
-        public void GetMyRequests()
+        public void GetMyRequests( Action Success = null )
         {
             Loading = true;
             RCache.POST(
@@ -112,8 +113,9 @@ namespace wenku8.Section
                 , Shared.ShRequest.MyRequests()
                 , ( a, b ) =>
                 {
-                    RequestsStatus( a, b );
                     Loading = false;
+                    RequestsStatus( a, b );
+                    if ( Success != null ) Worker.UIInvoke( Success );
                 }
                 , ( a, b, c ) => { Loading = false; }
                 , false
@@ -128,16 +130,34 @@ namespace wenku8.Section
                 int NScripts = 0;
                 JsonObject JMesg = JsonStatus.Parse( e.ResponseString );
                 JsonArray JData = JMesg.GetNamedArray( "data" );
-                Grants = JData.Remap( x =>
+
+                if ( 0 < Grants.Count() )
                 {
-                    SHGrant G = new SHGrant( x.GetObject() );
+                    List<SHGrant> CurrGrants = new List<SHGrant>( Grants );
+                    foreach( JsonValue JValue in JData )
+                    {
+                        SHGrant G = new SHGrant( JValue.GetObject() );
+                        if ( Grants.Any( x => x.Id == G.Id ) ) continue;
+                        CurrGrants.Add( G );
+                    }
+                    Grants = CurrGrants.ToArray();
+                }
+                else
+                {
+                    Grants = JData.Remap( x =>
+                    {
+                        SHGrant G = new SHGrant( x.GetObject() );
 
-                    int l = G.Grants.Length;
-                    if ( 0 < l ) NScripts++;
-                    NGrants += l;
+                        int l = G.Grants.Length;
+                        if ( !G.SourceRemoved )
+                        {
+                            if ( 0 < l ) NScripts++;
+                            NGrants += l;
+                        }
 
-                    return G;
-                } );
+                        return G;
+                    } );
+                }
 
                 if ( 0 < NGrants )
                 {
@@ -192,6 +212,42 @@ namespace wenku8.Section
             {
                 Target.ErrorMessage = ex.Message;
             }
+        }
+
+        public async Task<bool> Remove( HubScriptItem HSI )
+        {
+            TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
+            TokenManager TokMgr = new TokenManager();
+            AESManager AESMgr = new AESManager();
+
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.ScriptRemove( TokMgr.GetAuthById( HSI.Id )?.Value, HSI.Id )
+                , ( e2, QId ) =>
+                {
+                    try
+                    {
+                        JsonStatus.Parse( e2.ResponseString );
+                        TCS.TrySetResult( true );
+                        Worker.UIInvoke( () => SearchSet.Remove( HSI ) );
+                        TokMgr.UnassignId( HSI.Id );
+                        AESMgr.UnassignId( HSI.Id );
+                    }
+                    catch ( Exception ex )
+                    {
+                        HSI.ErrorMessage = ex.Message;
+                        TCS.TrySetResult( false );
+                    }
+                }
+                , ( a, b, ex ) =>
+                {
+                    HSI.ErrorMessage = ex.Message;
+                    TCS.TrySetResult( false );
+                }
+                , false
+            );
+
+            return await TCS.Task;
         }
 
         public void ReportStatus( string Id, SharersRequest.StatusType SType, string Desc = "" )

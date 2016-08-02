@@ -342,4 +342,16 @@
   <data name="Requests.Text" xml:space="preserve">
     <value>Requests</value>
   </data>
+  <data name="Update.Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Public.Text" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Private.Text" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="HS_Removed.Text" xml:space="preserve">
+    <value>The script has been removed</value>
+  </data>
 </root>

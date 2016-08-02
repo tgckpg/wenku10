@@ -180,4 +180,7 @@
   <data name="DeleteEffectiveTOKEN" xml:space="preserve">
     <value>您將失去與權杖關聯的腳本編輯權限。繼續？</value>
   </data>
+  <data name="ConfirmScriptRemove" xml:space="preserve">
+    <value>包括評論，這個腳本會從服務器上刪除。繼續？</value>
+  </data>
 </root>

@@ -347,4 +347,16 @@
   <data name="Requests.Text" xml:space="preserve">
     <value>リクエスト</value>
   </data>
+  <data name="Update.Text" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Private.Text" xml:space="preserve">
+    <value>非公開</value>
+  </data>
+  <data name="Public.Text" xml:space="preserve">
+    <value>公開</value>
+  </data>
+  <data name="HS_Removed.Text" xml:space="preserve">
+    <value>スクリプトは削除されました</value>
+  </data>
 </root>

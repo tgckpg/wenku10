@@ -15,7 +15,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
@@ -66,10 +65,24 @@ namespace wenku10.Pages.Sharers
 
         private async void SetTemplate()
         {
-            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+            StringResources stx = new StringResources( "AppResources", "ContextMenu", "WMessage", "LoadingMessage" );
             KeysSection.Header = stx.Text( "Secret" );
             TokensSection.Header = stx.Text( "AccessTokens", "ContextMenu" );
             RequestsSection.Header = stx.Text( "Requests" );
+
+            if ( !ShHub.Member.IsLoggedIn )
+            {
+                ReqPlaceholder.Text = stx.Str( "4", "WMessage" );
+            }
+            else
+            {
+                ReqPlaceholder.Text = stx.Str( "ProgressIndicator_PleaseWait", "LoadingMessage" );
+                ShHub.GetMyRequests( () =>
+                {
+                    ReqPlaceholder.Visibility = Visibility.Collapsed;
+                    RequestsList.ItemsSource = ShHub.Grants.Remap( x => new GrantProcess( x ) );
+                } );
+            }
 
             RSAMgr = await RSAManager.CreateAsync();
 
@@ -78,9 +91,6 @@ namespace wenku10.Pages.Sharers
 
             TokMgr = new TokenManager();
             ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
-
-            RequestsList.ItemsSource = ShHub.Grants.Remap( x => new GrantProcess( x ) );
-            ShHub.GetMyRequests();
         }
 
         private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
@@ -150,10 +160,20 @@ namespace wenku10.Pages.Sharers
             ( ( GrantProcess ) ( ( Button ) sender ).DataContext ).Parse( RSAMgr.AuthList );
         }
 
+        private async void WithdrawRequest( object sender, RoutedEventArgs e )
+        {
+            GrantProcess GP = ( GrantProcess ) ( ( Button ) sender ).DataContext;
+            if ( await GP.Withdraw() )
+            {
+                RequestsList.ItemsSource = ( ( IEnumerable<GrantProcess> ) RequestsList.ItemsSource )
+                    .Where( x => x != GP );
+            }
+        }
+
         private async void GotoScriptDetail( object sender, ItemClickEventArgs e )
         {
             GrantProcess GProc = ( GrantProcess ) e.ClickedItem;
-            if ( GProc.IsLoading ) return;
+            if ( GProc.GrantDef.SourceRemoved || GProc.IsLoading ) return;
 
             GProc.IsLoading = true;
             string AccessToken = TokMgr.GetAuthById( GProc.ScriptId )?.Value;
@@ -162,6 +182,7 @@ namespace wenku10.Pages.Sharers
                 "uuid: " + GProc.ScriptId
                 , AccessToken == null ? null : new string[] { AccessToken }
             );
+
             IList<HubScriptItem> HSIs = await SHLoader.NextPage();
             HubScriptItem HSI = HSIs.FirstOrDefault();
 
