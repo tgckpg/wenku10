@@ -286,6 +286,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- Publish Button -->
                     <c:StateControl State="{Binding Public, Converter={StaticResource DataStateConverter}}">
                         <Button Style="{StaticResource PlainThemeButton}"
                                 Margin="5" Click="TogglePublic"
@@ -302,16 +303,17 @@
                         </Button>
                     </c:StateControl>
 
+                    <!-- Update button -->
                     <Button Style="{StaticResource PlainThemeButton}"
-                            Grid.Column="1"
+                            Grid.Column="1" Click="Update"
                             Margin="5" Background="{StaticResource HorizontalRibbonBrush}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <TextBlock x:Uid="/AppResources/Update" Margin="10,5" Text="Update" />
                     </Button>
 
+                    <!-- Remove button -->
                     <Button Style="{StaticResource PlainThemeButton}"
-                            Grid.Column="2"
-                            Click="Delete"
+                            Grid.Column="2" Click="Delete"
                             Margin="5" Background="{StaticResource VerticalRibbonBrush}"
                             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                         <TextBlock x:Uid="/ContextMenu/Delete" Margin="10,5" Text="Remove" />

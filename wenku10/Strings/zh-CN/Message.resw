@@ -125,18 +125,15 @@
   </data>
   <data name="NameAlreadyExists" xml:space="preserve">
     <value>相同名称已存在</value>
-    <comment>#</comment>
   </data>
   <data name="NameCannetEmpty" xml:space="preserve">
     <value>名称不能为空</value>
-    <comment>#</comment>
   </data>
   <data name="NeedRestart" xml:space="preserve">
     <value>更改这个设定文库需要重新启动。</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
-    <comment>#</comment>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>离线模式</value>
@@ -149,11 +146,9 @@
   </data>
   <data name="Update_Confirm" xml:space="preserve">
     <value>正在检查更新，要跳过这个步骤吗？</value>
-    <comment>#</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>
-    <comment>#</comment>
   </data>
   <data name="Cencorship" xml:space="preserve">
     <value>檢測到不當言詞，請返回修改。</value>

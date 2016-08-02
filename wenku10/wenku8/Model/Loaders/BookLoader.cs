@@ -81,10 +81,13 @@ namespace wenku8.Model.Loaders
             {
                 B.PackSavedVols( SBook.PSettings );
             }
+            else
+            {
+                await SBook.Process();
+            }
 
             if ( B.Packed != true && B.Packable )
             {
-                await SBook.Process();
                 B.PackVolumes();
             }
 

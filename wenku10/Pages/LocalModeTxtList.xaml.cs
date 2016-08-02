@@ -107,7 +107,7 @@ namespace wenku10.Pages
                     }
                     else
                     {
-                        ConfirmErrorReport( HSI );
+                        ConfirmErrorReport( HSI.Id, StatusType.HS_INVALID );
                     }
                     break;
 
@@ -138,6 +138,10 @@ namespace wenku10.Pages
                     {
                         PopupFrame.Content = null;
                     }
+                    break;
+
+                case AppKeys.HS_NO_VOLDATA:
+                    ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).Id, StatusType.HS_NO_VOLDATA );
                     break;
             }
         }
@@ -175,11 +179,11 @@ namespace wenku10.Pages
             }
         }
 
-        private async void ConfirmErrorReport( HubScriptItem HSI )
+        private async void ConfirmErrorReport( string Id, StatusType ErrorType )
         {
             StringResources stx = new StringResources( "Message", "Error" );
             MessageDialog MsgBox = new MessageDialog(
-                string.Format( stx.Str( "ReportError" ), stx.Str( "InvalidScript", "Error" ) )
+                string.Format( stx.Str( "ReportError" ), stx.Str( ErrorType.ToString(), "Error" ) )
             );
 
             bool Report = false;
@@ -189,7 +193,7 @@ namespace wenku10.Pages
 
             await Popups.ShowDialog( MsgBox );
 
-            if ( Report ) SHHub.ReportStatus( HSI.Id, StatusType.INVALID_SCRIPT );
+            if ( Report ) SHHub.ReportStatus( Id, ErrorType );
         }
 
         protected override void OnNavigatedFrom( NavigationEventArgs e )

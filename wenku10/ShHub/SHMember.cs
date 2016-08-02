@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using Windows.Foundation;
-using Windows.Web.Http;
-using Windows.Web.Http.Filters;
 
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
@@ -85,7 +84,7 @@ namespace wenku10.SHHub
             WillLogin = false;
             if ( e.ResponseHeaders[ "Set-Cookie" ] != null )
             {
-                SaveAuth();
+                SaveAuth( e.Cookies );
                 return;
             }
 
@@ -135,18 +134,15 @@ namespace wenku10.SHHub
 
         private void RestoreAuth( XParameter MAuth )
         {
-            HttpBaseProtocolFilter Filter = new HttpBaseProtocolFilter();
-            HttpCookieManager CookieMgr = Filter.CookieManager;
-
             try
             {
-                HttpCookie MCookie = new HttpCookie(
+                Cookie MCookie = new Cookie(
                     MAuth.GetValue( "name" )
                     , MAuth.GetValue( "domain" )
                     , MAuth.GetValue( "path" )
                 );
                 MCookie.Value = MAuth.GetValue( "value" );
-                CookieMgr.SetCookie( MCookie );
+                WHTTPRequest.Cookies.Add( Shared.ShRequest.Server, MCookie );
             }
             catch ( Exception ex )
             {
@@ -156,11 +152,9 @@ namespace wenku10.SHHub
             ValidateSession();
         }
 
-        private void SaveAuth()
+        private void SaveAuth( CookieCollection Cookies )
         {
-            HttpBaseProtocolFilter Filter = new HttpBaseProtocolFilter();
-            HttpCookieManager CookieMgr = Filter.CookieManager;
-            foreach ( HttpCookie cookie in CookieMgr.GetCookies( Shared.ShRequest.Server ) )
+            foreach ( Cookie cookie in Cookies )
             {
                 if ( cookie.Name == "sid" )
                 {
@@ -187,12 +181,7 @@ namespace wenku10.SHHub
         private void ClearAuth( DRequestCompletedEventArgs arg1, string arg2 ) { ClearAuth(); }
         private void ClearAuth()
         {
-            HttpBaseProtocolFilter Filter = new HttpBaseProtocolFilter();
-            HttpCookieManager CookieMgr = Filter.CookieManager;
-            foreach ( HttpCookie cookie in CookieMgr.GetCookies( Shared.ShRequest.Server ) )
-            {
-                CookieMgr.DeleteCookie( cookie );
-            }
+            WHTTPRequest.Cookies = new CookieContainer();
 
             AuthReg.RemoveParameter( "member-auth" );
             AuthReg.Save();

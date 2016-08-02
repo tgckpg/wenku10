@@ -158,6 +158,11 @@ namespace wenku10.Pages.Sharers
         }
 
         #region Priviledged Controls
+        private void Update( object sender, RoutedEventArgs e )
+        {
+
+        }
+
         private async void Delete( object sender, RoutedEventArgs e )
         {
             StringResources stx = new StringResources( "Message" );
@@ -204,7 +209,6 @@ namespace wenku10.Pages.Sharers
                 , false
             );
         }
-
         #endregion
 
         #region Download
@@ -578,7 +582,12 @@ namespace wenku10.Pages.Sharers
 
         private void CommentList_ItemClick( object sender, ItemClickEventArgs e )
         {
-            ( ( HSComment ) e.ClickedItem ).MarkSelect();
+            HSComment HSC = ( HSComment ) e.ClickedItem;
+            HSC.MarkSelect();
+
+            if ( HSC.Folded )
+            {
+            }
         }
 
         private void NewReply( object sender, RoutedEventArgs e )
