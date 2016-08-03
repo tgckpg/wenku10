@@ -12,11 +12,10 @@ using wenku8.Ext;
 using wenku8.Resources;
 using wenku8.Settings;
 using wenku8.Model.REST;
-using CryptAES = wenku8.System.CryptAES;
 
 namespace wenku10.SHHub
 {
-    class SHMember : IMember
+    sealed class SHMember : IMember
     {
         public static readonly string ID = typeof( SHMember ).Name;
 

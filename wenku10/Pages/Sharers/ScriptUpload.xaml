@@ -85,20 +85,15 @@
                 <TextBlock Text="Access Token" x:Uid="/ContextMenu/AccessTokens"
                            Foreground="{StaticResource MajorBrush}" />
                 <StackPanel Orientation="Horizontal">
-                    <Button Click="AddToken"
+                    <Button x:Name="AddToken_Btn" Click="AddToken"
                             Style="{StaticResource PlainButton}"
                             Width="35" Height="35">
                         <i:IconPlusSign AutoScale="True" />
                     </Button>
                     <ComboBox x:Name="AccessTokens"
                               ItemsSource="{Binding AuthList}"
-                              Loaded="PreSelectToken">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              DisplayMemberPath="Name" SelectedValuePath="Value"
+                              Loaded="PreSelectToken" />
                 </StackPanel>
 
                 <!-- Encryption -->
@@ -121,7 +116,7 @@
 
                     <!-- Key selection -->
                     <Button Grid.Row="1" Grid.Column="0"
-                            Click="AddKey"
+                            x:Name="AddKey_Btn" Click="AddKey"
                             Style="{StaticResource PlainButton}"
                             Width="35" Height="35">
                         <i:IconPlusSign AutoScale="True" />
@@ -129,13 +124,8 @@
                     <ComboBox Grid.Row="1" Grid.Column="1"
                               ItemsSource="{Binding AuthList}"
                               Loaded="PreSelectKey"
-                              x:Name="Keys">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
+                              DisplayMemberPath="Name" SelectedValuePath="Value"
+                              x:Name="Keys" />
 
                     <CheckBox Grid.Row="2" Grid.ColumnSpan="2" x:Name="ForceCommentEnc">
                         <TextBlock x:Uid="/AppResources/ForceCommentEnc"
@@ -151,7 +141,7 @@
                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                           Width="50" Height="50"/>
             <Button Style="{StaticResource PlainButton}"
-                    Click="Upload"
+                    x:Name="Upload_Btn"  Click="Upload"
                     Width="50" Height="50">
                 <i:IconLogout AutoScale="True" Direction="Rotate270" />
             </Button>

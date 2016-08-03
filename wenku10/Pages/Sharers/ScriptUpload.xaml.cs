@@ -18,7 +18,6 @@ using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
 
 using wenku8.AdvDM;
@@ -31,7 +30,7 @@ using TokenManager = wenku8.System.TokenManager;
 
 namespace wenku10.Pages.Sharers
 {
-    public sealed partial class ScriptUpload : Page
+    sealed partial class ScriptUpload : Page
     {
         public static readonly string ID = typeof( ScriptUpload ).Name;
 
@@ -40,16 +39,56 @@ namespace wenku10.Pages.Sharers
         private TokenManager TokMgr;
         private Action<string,string> OnExit;
 
+        private string ReservedId;
+        private volatile bool Uploading = false;
+
         public ScriptUpload()
         {
             this.InitializeComponent();
             SetTemplate();
         }
 
+        public ScriptUpload( HubScriptItem HSI, Action<string, string> OnExit )
+            :this()
+        {
+            // Set Update template
+            ReservedId = HSI.Id;
+
+            Anon.IsChecked = string.IsNullOrEmpty( HSI.AuthorId );
+
+            Encrypt.IsChecked = HSI.Encrypted;
+            ForceCommentEnc.IsChecked = HSI.ForceEncryption;
+
+            NameInput.Text = HSI.Name;
+            DescInput.Text = HSI.Desc;
+
+            ZoneInput.Text = string.Join( ", ", HSI.Zone );
+            TypesInput.Text = string.Join( ", ", HSI.Type );
+            TagsInput.Text = string.Join( ", ", HSI.Tags );
+
+            AddToken_Btn.IsEnabled = false;
+            AddKey_Btn.IsEnabled = false;
+            ForceCommentEnc.IsEnabled = false;
+            Encrypt.IsEnabled = false;
+            Anon.IsEnabled = false;
+            Keys.IsEnabled = false;
+            AccessTokens.IsEnabled = false;
+
+            PredefineFile( HSI );
+
+            this.OnExit = OnExit;
+        }
+
         public ScriptUpload( Action<string,string> OnExit )
             :this()
         {
             this.OnExit = OnExit;
+        }
+
+        private async void PredefineFile( HubScriptItem HSI )
+        {
+            SelectedBook = await SpiderBook.CreateAsyncSpider( HSI.Id );
+            FileName.Text = SelectedBook.MetaLocation;
         }
 
         private void SetTemplate()
@@ -73,11 +112,34 @@ namespace wenku10.Pages.Sharers
             if( e.PropertyName == "SelectedItem" ) AccessTokens.SelectedItem = TokMgr.SelectedItem;
         }
 
-        private void PreSelectKey( object sender, RoutedEventArgs e ) { Keys.SelectedItem = AESMgr.SelectedItem; }
-        private void PreSelectToken( object sender, RoutedEventArgs e ) { AccessTokens.SelectedItem = TokMgr.SelectedItem; }
+        private void PreSelectKey( object sender, RoutedEventArgs e )
+        {
+            if( string.IsNullOrEmpty( ReservedId ) )
+            {
+                Keys.SelectedItem = AESMgr.SelectedItem;
+            }
+            else
+            {
+                Keys.SelectedValue = AESMgr.GetAuthById( ReservedId )?.Value;
+            }
+        }
+
+        private void PreSelectToken( object sender, RoutedEventArgs e )
+        {
+            if ( string.IsNullOrEmpty( ReservedId ) )
+            {
+                AccessTokens.SelectedItem = TokMgr.SelectedItem;
+            }
+            else
+            {
+                AccessTokens.SelectedValue = TokMgr.GetAuthById( ReservedId )?.Value;
+            }
+        }
 
         private async void Upload( object sender, RoutedEventArgs e )
         {
+            if ( MarkUpload() ) return;
+
             CryptAES Crypt = null;
 
             // Validate inputs
@@ -102,13 +164,18 @@ namespace wenku10.Pages.Sharers
             catch( ValidationError ex )
             {
                 Message.Text = ex.Message;
+                MarkNotUpload();
                 return;
             }
 
             // Check whether the script uuid is reserved
             NameValue<string> Token = ( NameValue<string> ) AccessTokens.SelectedItem;
-            string Id = await ReserveId( Token.Value );
+            if ( string.IsNullOrEmpty( ReservedId ) )
+            {
+                ReservedId = await ReserveId( Token.Value );
+            }
 
+            string Id = ReservedId;
             string Name = NameInput.Text.Trim();
             if ( string.IsNullOrEmpty( Name ) )
                 Name = NameInput.PlaceholderText;
@@ -146,7 +213,8 @@ namespace wenku10.Pages.Sharers
                         TokMgr.AssignId( Token.Name, Id );
                         if ( Crypt != null ) AESMgr.AssignId( Crypt.Name, Id );
 
-                        Worker.UIInvoke( () => { OnExit( Id, Token.Value ); } );
+                        MarkNotUpload();
+                        var j = Dispatcher.RunIdleAsync( ( x ) => { OnExit( Id, Token.Value ); } );
                     }
                     catch ( Exception ex )
                     {
@@ -215,11 +283,35 @@ namespace wenku10.Pages.Sharers
 
         private void ServerMessage( string Mesg )
         {
-            Worker.UIInvoke( () => { Message.Text = Mesg; } );
+            var j = Dispatcher.RunIdleAsync( ( x ) => { Message.Text = Mesg; } );
         }
 
         private void AddKey( object sender, RoutedEventArgs e ) { AESMgr.NewAuth(); }
         private void AddToken( object sender, RoutedEventArgs e ) { TokMgr.NewAuth(); }
+
+        private bool MarkUpload()
+        {
+            if ( Uploading ) return true;
+            Uploading = true;
+
+            var j = Dispatcher.RunIdleAsync( ( x ) =>
+            {
+                LoadingRing.IsActive = true;
+                Upload_Btn.IsEnabled = false;
+            } );
+
+            return false;
+        }
+
+        private void MarkNotUpload()
+        {
+            Uploading = false;
+            var j = Dispatcher.RunIdleAsync( ( x ) =>
+            {
+                LoadingRing.IsActive = false;
+                Upload_Btn.IsEnabled = true;
+            } );
+        }
 
         private class ValidationError : Exception { public ValidationError( string Mesg ) : base( Mesg ) { } }
     }

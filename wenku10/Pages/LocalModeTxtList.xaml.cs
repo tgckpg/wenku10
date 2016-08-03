@@ -126,6 +126,10 @@ namespace wenku10.Pages
                     if ( Place ) TransferRequest( SHTarget.KEY, HSI );
                     break;
 
+                case AppKeys.HS_DETAIL_VIEW:
+                    PopupFrame.Content = new Sharers.ScriptDetails( ( HubScriptItem ) Mesg.Payload );
+                    break;
+
                 case AppKeys.SH_SHOW_GRANTS:
                     Sharers.ManageAuth ManageAuth = new Sharers.ManageAuth( SHHub, PopupFrame );
                     PopupFrame.Content = ManageAuth;

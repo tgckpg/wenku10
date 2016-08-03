@@ -63,10 +63,42 @@ namespace wenku8.Model.Section
                 {
                     Loading = LoadText + ": " + Id;
                     SpiderBook LB = await SpiderBook.CreateAsyncSpider( Id );
+
+                    if( LB.aid != Id )
+                    {
+                        try
+                        {
+                            Logger.Log( ID, "Fixing misplaced spider book" );
+                            Shared.Storage.MoveDir( FileLinks.ROOT_SPIDER_VOL + Id, LB.MetaLocation );
+                        }
+                        catch( Exception ex )
+                        {
+                            Logger.Log( ID
+                                , string.Format(
+                                    "Unable to move script: {0} => {1}, {2} "
+                                    , Id, LB.aid, ex.Message )
+                                    , LogType.WARNING );
+
+                            continue;
+                        }
+                    }
+
                     if ( LB.ProcessSuccess || LB.CanProcess )
                     {
                         Items.Add( LB );
                         LB.IsFav = favs.Contains( Id );
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Logger.Log( ID, "Removing invalid script: " + Id, LogType.INFO );
+                            Shared.Storage.RemoveDir( LB.MetaRoot );
+                        }
+                        catch ( Exception ex )
+                        {
+                            Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
+                        }
                     }
                 }
 

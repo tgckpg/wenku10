@@ -160,7 +160,38 @@ namespace wenku10.Pages.Sharers
         #region Priviledged Controls
         private void Update( object sender, RoutedEventArgs e )
         {
+            Content = new ScriptUpload( BindItem, Updated );
+        }
 
+        private void Updated( string Id, string Token )
+        {
+            AccessToken = Token;
+
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.Search( "uuid: " + Id, 0, 1, new string[] { Token } )
+                , ( e, QId ) =>
+                {
+                    try
+                    {
+                        BindItem.Update(
+                            JsonStatus.Parse( e.ResponseString )
+                                .GetNamedArray( "data" )
+                                .First().GetObject()
+                        );
+
+                        // Since we cannot set the Content property here anymore
+                        // We call for help
+                        MessageBus.SendUI( new Message( GetType(), AppKeys.HS_DETAIL_VIEW, BindItem ) );
+                    }
+                    catch ( Exception )
+                    {
+
+                    }
+                }
+                , wenku8.System.Utils.DoNothing
+                , false
+            );
         }
 
         private async void Delete( object sender, RoutedEventArgs e )
@@ -672,7 +703,7 @@ namespace wenku10.Pages.Sharers
 
         private void MarkLoading()
         {
-            Worker.UIInvoke( () =>
+            var j = Dispatcher.RunIdleAsync( ( x ) =>
             {
                 LoadingRing.IsActive = true;
             } );
@@ -680,7 +711,7 @@ namespace wenku10.Pages.Sharers
 
         private void MarkNotLoading()
         {
-            Worker.UIInvoke( () =>
+            var j = Dispatcher.RunIdleAsync( ( x ) =>
             {
                 LoadingRing.IsActive = false;
             } );
