@@ -28,6 +28,7 @@ using Net.Astropenguin.UI;
 
 using wenku8.AdvDM;
 using wenku8.Effects;
+using wenku8.Ext;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.REST;
@@ -57,6 +58,8 @@ namespace wenku10.Pages.Sharers
 
         private XRegistry XGrant = new XRegistry( "<xg />", wenku8.Settings.FileLinks.ROOT_SETTING + "XGrant.tmp" );
         private Dictionary<string, PaneNavButton> AvailControls;
+
+        private IMember Member;
 
         private bool CommentsOpened = false;
         private volatile bool CommInit = false;
@@ -141,6 +144,16 @@ namespace wenku10.Pages.Sharers
 
             RequestStory = new Storyboard();
             RequestStory.Completed += RequestStory_Completed;
+
+            Member = X.Singleton<IMember>( XProto.SHMember );
+            Unloaded += ScriptDetails_Unloaded;
+        }
+
+        private void ScriptDetails_Unloaded( object sender, RoutedEventArgs e )
+        {
+            DataContext = null;
+            CommentsSource = null;
+            HSComment.ActiveInstance = null;
         }
 
         private void ControlClick( object sender, ItemClickEventArgs e )
@@ -614,11 +627,35 @@ namespace wenku10.Pages.Sharers
         private void CommentList_ItemClick( object sender, ItemClickEventArgs e )
         {
             HSComment HSC = ( HSComment ) e.ClickedItem;
-            HSC.MarkSelect();
 
             if ( HSC.Folded )
             {
+                if ( HSC == HSComment.ActiveInstance ) return;
+                int i = CommentsSource.IndexOf( HSC );
+
+                // The Load more always appeared in the next level
+                // i.e. previous item is always a parent
+                HSComment ParentHSC = CommentsSource[ i - 1 ];
+
+                HSLoader<HSComment> CLoader = new HSLoader<HSComment>( ParentHSC.Id, SHTarget.COMMENT, Shared.ShRequest.GetComments )
+                {
+                    ConvertResult = ( x ) =>
+                        x.Flattern( y =>
+                        {
+                            y.Level += HSC.Level;
+                            return y.Replies;
+                        } )
+                };
+
+                CommentsSource.LoadStart += ( x, y ) => MarkLoading();
+                CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();
+
+                // Remove the LoadMore thing
+                CommentsSource.RemoveAt( i );
+                CommentsSource.InsertLoader( i, CLoader );
             }
+
+            HSC.MarkSelect();
         }
 
         private void NewReply( object sender, RoutedEventArgs e )
@@ -651,16 +688,23 @@ namespace wenku10.Pages.Sharers
             }
         }
 
-        private void SubmitComment()
+        private async void SubmitComment()
         {
             string Data;
             CommentInput.Document.GetText( Windows.UI.Text.TextGetOptions.None, out Data );
             Data = Data.Trim();
 
-            if( string.IsNullOrEmpty( Data) )
+            if ( string.IsNullOrEmpty( Data ) )
             {
                 CommentInput.Focus( FocusState.Keyboard );
                 return;
+            }
+
+            if ( !Member.IsLoggedIn )
+            {
+                Dialogs.Login LoginBox = new Dialogs.Login( Member );
+                await Popups.ShowDialog( LoginBox );
+                if ( !Member.IsLoggedIn ) return;
             }
 
             if ( Crypt != null ) Data = Crypt.Encrypt( Data );
@@ -683,8 +727,8 @@ namespace wenku10.Pages.Sharers
         {
             try
             {
-                CommentInput.Document.SetText( Windows.UI.Text.TextSetOptions.None, "" );
                 JsonStatus.Parse( e.ResponseString );
+                CommentInput.Document.SetText( Windows.UI.Text.TextSetOptions.None, "" );
                 DiscardComment();
                 ReloadComments();
             }

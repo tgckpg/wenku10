@@ -213,15 +213,20 @@ namespace wenku10.Pages.Sharers
                         TokMgr.AssignId( Token.Name, Id );
                         if ( Crypt != null ) AESMgr.AssignId( Crypt.Name, Id );
 
-                        MarkNotUpload();
                         var j = Dispatcher.RunIdleAsync( ( x ) => { OnExit( Id, Token.Value ); } );
                     }
                     catch ( Exception ex )
                     {
                         ServerMessage( ex.Message );
                     }
+
+                    MarkNotUpload();
                 }
-                , ( c1, c2, ex ) => ServerMessage( ex.Message )
+                , ( c1, c2, ex ) =>
+                {
+                    ServerMessage( ex.Message );
+                    MarkNotUpload();
+                }
                 , false
             );
         }

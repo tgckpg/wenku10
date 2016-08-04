@@ -390,7 +390,6 @@ namespace wenku10.Pages
         #endregion
 
         #region Sharers Hub
-
         private void ToggleActivities( object sender, RoutedEventArgs e )
         {
             ActivityButton = ( Button ) sender;
