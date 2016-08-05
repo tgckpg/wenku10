@@ -360,4 +360,7 @@
   <data name="PickAFile.Text" xml:space="preserve">
     <value>Pick a file</value>
   </data>
+  <data name="HS_StatusHistory.Text" xml:space="preserve">
+    <value>Status History</value>
+  </data>
 </root>

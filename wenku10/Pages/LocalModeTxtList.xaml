@@ -135,8 +135,7 @@
                                                                 Click="EditSource"
                                                                 Text="Edit Source" />
 
-                                                <MenuFlyoutItem IsEnabled="{Binding Processed}"
-                                                                x:Uid="/ContextMenu/Delete"
+                                                <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
                                                                 Click="RemoveSource"
                                                                 Text="Remove Source" />
                                             </MenuFlyout>

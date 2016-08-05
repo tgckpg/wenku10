@@ -362,4 +362,7 @@
   <data name="PickAFile.Text" xml:space="preserve">
     <value>选择文件</value>
   </data>
+  <data name="HS_StatusHistory.Text" xml:space="preserve">
+    <value>状态历史</value>
+  </data>
 </root>

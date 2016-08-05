@@ -75,7 +75,7 @@ namespace wenku10.Pages.Sharers
                 = Anon.IsEnabled
                 = Keys.IsEnabled
                 = AccessTokens.IsEnabled
-                = true;
+                = false;
 
             PredefineFile( HSI );
 

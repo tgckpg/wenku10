@@ -174,7 +174,9 @@
                            Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
                 <!-- Status History -->
-                <TextBlock Margin="10, 5" Text="Status History" Foreground="{StaticResource SubtleBrush}" />
+                <TextBlock Margin="10, 5"
+                           x:Uid="/AppResources/HS_StatusHistory" Text="Status History"
+                           Foreground="{StaticResource SubtleBrush}" />
                 <GridView Margin="10, 0"
                           ItemsSource="{Binding Histories}"
                           ItemContainerStyle="{StaticResource PlainGridItem}">
