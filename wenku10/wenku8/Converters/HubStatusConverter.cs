@@ -23,7 +23,8 @@ namespace wenku8.Converters
                 case "String":
                     switch ( ( int ) value )
                     {
-                        case -1: return stx.Str( "InvalidScript" );
+                        case -1: return stx.Str( "HS_INVALID" );
+                        case -2: return stx.Str( "HS_NO_VOLDATA" );
                         default: return value;
                     }
 

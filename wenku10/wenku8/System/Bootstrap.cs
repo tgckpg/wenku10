@@ -29,6 +29,9 @@ namespace wenku8.System
 
 		public async void Start()
 		{
+#if ARM && DEBUG
+            Resources.Shared.ShRequest.Server = new global::System.Uri( "http://w10srv.astropenguin.net/" );
+#endif
 			// Must follow Order!
 			//// Fixed Orders
 			// 1. Setting is the first to initialize
@@ -58,7 +61,7 @@ namespace wenku8.System
 
             // Set Logger for libeburc
             EBDictManager.SetLogger();
-		}
+        }
 
         private static bool L2 = false;
         public void Level2()

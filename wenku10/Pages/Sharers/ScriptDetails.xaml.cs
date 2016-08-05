@@ -281,6 +281,16 @@ namespace wenku10.Pages.Sharers
         #region Requests
         private void PlaceKeyRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.KEY, BindItem ); }
         private void PlaceTokenRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.TOKEN, BindItem ); }
+        private async void AssignToken( object sender, RoutedEventArgs e )
+        {
+            AssignAuth RequestBox = new AssignAuth( new TokenManager(), "Assign Token" );
+            await Popups.ShowDialog( RequestBox );
+
+            if ( RequestBox.Canceled ) return;
+
+            AccessToken = RequestBox.SelectedAuth.Value;
+            AccessControls.Visibility = Visibility.Visible;
+        }
 
         public async void PlaceRequest( SHTarget Target, HubScriptItem HSI )
         {

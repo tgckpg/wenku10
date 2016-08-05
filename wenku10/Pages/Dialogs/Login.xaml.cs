@@ -97,7 +97,7 @@ namespace wenku10.Pages.Dialogs
             string Name = Account.Text.Trim();
             string Passwd = Password.Password;
 
-            if ( string.IsNullOrEmpty( Name ) || String.IsNullOrEmpty( Passwd ) )
+            if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Passwd ) )
             {
                 if ( string.IsNullOrEmpty( Name ) )
                 {

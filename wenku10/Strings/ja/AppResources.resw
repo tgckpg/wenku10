@@ -359,4 +359,7 @@
   <data name="HS_Removed.Text" xml:space="preserve">
     <value>スクリプトは削除されました</value>
   </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>新しい</value>
+  </data>
 </root>

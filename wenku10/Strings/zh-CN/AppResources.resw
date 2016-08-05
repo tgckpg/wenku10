@@ -356,4 +356,7 @@
   <data name="HS_Removed.Text" xml:space="preserve">
     <value>该脚本已被删除</value>
   </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>新</value>
+  </data>
 </root>

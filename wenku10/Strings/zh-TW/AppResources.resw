@@ -351,4 +351,7 @@
   <data name="HS_Removed.Text" xml:space="preserve">
     <value>該腳本已被刪除</value>
   </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>新</value>
+  </data>
 </root>

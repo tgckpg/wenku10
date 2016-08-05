@@ -275,6 +275,9 @@
                                     <MenuFlyoutItem x:Uid="/ContextMenu/ManageAuths"
                                                     Text="Manage Auths"
                                                     Click="ManageAuths" />
+                                    <MenuFlyoutItem Visibility="{Binding LoggedIn, Converter={StaticResource DataVisConverter}}"
+                                                    x:Uid="/AppResources/Login_AccountName"
+                                                    Click="EditInfo" />
                                     <MenuFlyoutItem Text="{Binding LLText}" Click="LoginOrLogout" />
                                     <MenuFlyoutItem Visibility="{Binding LoggedIn, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
                                                     x:Uid="/ContextMenu/Register"

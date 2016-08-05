@@ -442,6 +442,11 @@ namespace wenku10.Pages
         }
 
         private void LoginOrLogout( object sender, RoutedEventArgs e ) { LoginOrLogout(); }
+
+        private void EditInfo( object sender, RoutedEventArgs e )
+        {
+        }
+
         private void ManageAuths( object sender, RoutedEventArgs e )
         {
             PopupFrame.Content = new Sharers.ManageAuth( SHHub, PopupFrame );

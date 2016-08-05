@@ -354,4 +354,7 @@
   <data name="HS_Removed.Text" xml:space="preserve">
     <value>The script has been removed</value>
   </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>New</value>
+  </data>
 </root>

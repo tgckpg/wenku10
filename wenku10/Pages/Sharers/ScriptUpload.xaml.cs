@@ -66,13 +66,14 @@ namespace wenku10.Pages.Sharers
             TypesInput.Text = string.Join( ", ", HSI.Type );
             TagsInput.Text = string.Join( ", ", HSI.Tags );
 
-            AddToken_Btn.IsEnabled = false;
-            AddKey_Btn.IsEnabled = false;
-            ForceCommentEnc.IsEnabled = false;
-            Encrypt.IsEnabled = false;
-            Anon.IsEnabled = false;
-            Keys.IsEnabled = false;
-            AccessTokens.IsEnabled = false;
+            AddToken_Btn.IsEnabled
+                = AddKey_Btn.IsEnabled
+                = ForceCommentEnc.IsEnabled
+                = Encrypt.IsEnabled
+                = Anon.IsEnabled
+                = Keys.IsEnabled
+                = AccessTokens.IsEnabled
+                = true;
 
             PredefineFile( HSI );
 

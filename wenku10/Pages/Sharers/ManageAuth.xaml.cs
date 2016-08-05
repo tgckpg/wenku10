@@ -54,7 +54,7 @@ namespace wenku10.Pages.Sharers
 
         private void ShHub_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
-            if( e.PropertyName == "Loading" )
+            if ( e.PropertyName == "Loading" )
             {
                 if ( !ShHub.Loading )
                 {
@@ -250,6 +250,39 @@ namespace wenku10.Pages.Sharers
             {
                 this.AuthType = AuthType;
             }
+        }
+
+        private async void ImportKey( object sender, RoutedEventArgs e )
+        {
+            NameValue<string> NV = new NameValue<string>( "", "" );
+            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+            Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
+                NV, stx.Text( "New" ) + stx.Text( "Secret" )
+                , stx.Text( "Name" ), stx.Text( "Secret" )
+            );
+
+            await Popups.ShowDialog( NVInput );
+
+            if ( NVInput.Canceled ) return;
+
+            new AESManager().ImportAuth( NV.Name, NV.Value );
+        }
+
+        private async void ImportToken( object sender, RoutedEventArgs e )
+        {
+            NameValue<string> NV = new NameValue<string>( "", "" );
+
+            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+            Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
+                NV, stx.Text( "New" ) + stx.Text( "AccessTokens", "ContextMenu" )
+                , stx.Text( "Name" ), stx.Text( "AccessTokens", "ContextMenu" )
+            );
+
+            await Popups.ShowDialog( NVInput );
+
+            if ( NVInput.Canceled ) return;
+
+            new TokenManager().ImportAuth( NV.Name, NV.Value );
         }
     }
 }

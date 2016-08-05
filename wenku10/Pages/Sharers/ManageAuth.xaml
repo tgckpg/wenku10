@@ -100,7 +100,7 @@
                               IsActive="{Binding IsLoading}" />
 
                 <Button Grid.Column="1" Click="WithdrawRequest"
-                        Width="35" Height="35"
+                        Width="45" Height="45"
                         Style="{StaticResource PlainThemeButton}">
                     <i:IconCross AutoScale="true" />
                 </Button>
@@ -112,18 +112,42 @@
     </Page.Resources>
 
     <Pivot x:Name="MasterPivot">
-        <PivotItem x:Name="KeysSection" Header="Keys">
+        <PivotItem Margin="0" x:Name="KeysSection" Header="Keys">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <ListView x:Name="KeyList"
+                          Margin="10"
                           ItemTemplate="{StaticResource AuthItem}"
                           ItemContainerStyle="{StaticResource ListItemNoSelect}" />
+                <Button Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource PlainButton}"
+                        Width="45" Height="45"
+                        Click="ImportKey">
+                    <i:IconPlusSign AutoScale="True" />
+                </Button>
             </Grid>
         </PivotItem>
-        <PivotItem x:Name="TokensSection" Header="Tokens">
+        <PivotItem Margin="0" x:Name="TokensSection" Header="Tokens">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <ListView x:Name="TokenList"
+                          Margin="10"
                           ItemTemplate="{StaticResource AuthItem}"
                           ItemContainerStyle="{StaticResource ListItemNoSelect}" />
+                <Button Grid.Row="1"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource PlainButton}"
+                        Width="45" Height="45"
+                        Click="ImportToken">
+                    <i:IconPlusSign AutoScale="True" />
+                </Button>
             </Grid>
         </PivotItem>
         <PivotItem x:Name="RequestsSection" Header="Requests">

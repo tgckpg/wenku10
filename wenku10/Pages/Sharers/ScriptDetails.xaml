@@ -151,6 +151,8 @@
                                                 Text="Key Request" Click="PlaceKeyRequest" />
                                 <MenuFlyoutItem x:Uid="/AppResources/TokenRequest"
                                                 Text="Token Request" Click="PlaceTokenRequest" />
+                                <MenuFlyoutItem x:Uid="/AppResources/AssignToken"
+                                                Text="Assign Token" Click="AssignToken" />
                             </MenuFlyout>
                         </Button.Flyout>
                         <Grid>
@@ -345,7 +347,13 @@
                       Margin="10"
                       IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
                       ItemContainerStyle="{StaticResource BareListItem}"
-                      ItemTemplateSelector="{StaticResource CommentSelector}" />
+                      ItemTemplateSelector="{StaticResource CommentSelector}">
+                <ListView.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition />
+                    </TransitionCollection>
+                </ListView.ItemContainerTransitions>
+            </ListView>
         </Grid>
         <!-- Requests -->
         <Grid x:Name="RequestSection"
