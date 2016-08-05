@@ -133,6 +133,9 @@
     <Compile Include="Pages\Sharers\ScriptUpload.xaml.cs">
       <DependentUpon>ScriptUpload.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Sharers\UserInfo.xaml.cs">
+      <DependentUpon>UserInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
@@ -499,6 +502,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Sharers\ScriptUpload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sharers\UserInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

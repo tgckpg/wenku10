@@ -354,4 +354,7 @@
   <data name="New.Text" xml:space="preserve">
     <value>新</value>
   </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>選擇文件</value>
+  </data>
 </root>

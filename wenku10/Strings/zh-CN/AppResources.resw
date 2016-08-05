@@ -252,7 +252,7 @@
     <value>在这里你可以自订书签,设定好的书签可以在菜单里面查看</value>
   </data>
   <data name="PickAColor.Text" xml:space="preserve">
-    <value>請選擇顏色</value>
+    <value>请选择颜色</value>
   </data>
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>请再按一次退出</value>
@@ -358,5 +358,8 @@
   </data>
   <data name="New.Text" xml:space="preserve">
     <value>新</value>
+  </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>选择文件</value>
   </data>
 </root>

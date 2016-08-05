@@ -17,7 +17,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.AdvDM;
@@ -101,6 +103,9 @@ namespace wenku10.Pages.Sharers
 
             Keys.DataContext = AESMgr;
             AccessTokens.DataContext = TokMgr;
+
+            StringResources stx = new StringResources();
+            FileName.Text = stx.Text( "PickAFile" );
         }
 
         private void KeyMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
@@ -234,6 +239,7 @@ namespace wenku10.Pages.Sharers
 
         private async void PickFile( object sender, RoutedEventArgs e )
         {
+            Message.Text = "";
             IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
             if ( ISF == null ) return;
 
@@ -241,7 +247,13 @@ namespace wenku10.Pages.Sharers
 
             try
             {
-                SelectedBook = await SpiderBook.ImportFile( await ISF.ReadString() );
+                SelectedBook = await SpiderBook.ImportFile( await ISF.ReadString(), false );
+                if ( !SelectedBook.CanProcess )
+                {
+                    StringResources stx = new StringResources( "ERROR" );
+                    throw new InvalidDataException( stx.Str( "HS_INVALID" ) );
+                }
+
                 FileName.Text = ISF.Name;
                 int LDot = ISF.Name.LastIndexOf( '.' );
                 NameInput.PlaceholderText = ~LDot == 0 ? ISF.Name : ISF.Name.Substring( 0, LDot );

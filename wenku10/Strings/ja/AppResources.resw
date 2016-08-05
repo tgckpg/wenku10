@@ -362,4 +362,7 @@
   <data name="New.Text" xml:space="preserve">
     <value>新しい</value>
   </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>ファイルを選択</value>
+  </data>
 </root>

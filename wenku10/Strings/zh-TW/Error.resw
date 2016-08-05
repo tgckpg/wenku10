@@ -120,11 +120,11 @@
   <data name="Download" xml:space="preserve">
     <value>無法加載所需資訊，請檢查網絡連線</value>
   </data>
+  <data name="HS_INVALID" xml:space="preserve">
+    <value>無效的腳本</value>
+  </data>
   <data name="HS_NO_VOLDATA" xml:space="preserve">
     <value>無卷目數據</value>
-  </data>
-  <data name="InvalidScript" xml:space="preserve">
-    <value>無效的腳本</value>
   </data>
   <data name="ParseFailed" xml:space="preserve">
     <value>資訊處理失敗，可能是下載檔案損壞</value>

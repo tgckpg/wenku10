@@ -1,0 +1,47 @@
+﻿<Page
+    x:Class="wenku10.Pages.Sharers.UserInfo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Sharers"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:DataVisConverter x:Key="DataVisConverter" />
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <StackPanel Margin="10">
+            <p:StateControl State="{Binding Path=Text, ElementName=ErrorMessage, Converter={StaticResource DataStateConverter}}">
+                <TextBlock x:Name="ErrorMessage" />
+            </p:StateControl>
+            <TextBlock x:Uid="/Settings/Account_AName"
+                       Text="Account AName"
+                       Foreground="{StaticResource MajorBrush}" />
+            <TextBox Margin="10"
+                     KeyDown="DispNameEnter"
+                     LostFocus="DispNameLostFocus"
+                     x:Name="DisplayName" />
+        </StackPanel>
+        <p:StateControl State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+            <Grid>
+                <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.8"/>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressRing x:Name="LoadingRing"
+                                  IsActive="True"
+                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                    <TextBlock x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                </StackPanel>
+            </Grid>
+        </p:StateControl>
+    </Grid>
+</Page>

@@ -2,7 +2,6 @@
     x:Class="wenku10.Pages.Sharers.ScriptDetails"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:wenku10.ShHub"
     xmlns:c="using:Net.Astropenguin.UI"
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"

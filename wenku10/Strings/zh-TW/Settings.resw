@@ -171,7 +171,7 @@
     <value>帳號</value>
   </data>
   <data name="Account_AName.Text" xml:space="preserve">
-    <value>用户名</value>
+    <value>暱稱</value>
   </data>
   <data name="Account_Exp.Text" xml:space="preserve">
     <value>經驗值</value>
@@ -198,16 +198,16 @@
     <value>正文範本</value>
   </data>
   <data name="Appearance_ContentReader_Exp1.Text" xml:space="preserve">
-    <value>因為那一年裡，我以謎樣的天才美少女作家身份紅遍全日本，備受矚目。</value>
+    <value>因為那些年裡，我以眾所周知的蠢材美少女身份紅遍全日品，非常好色。</value>
   </data>
   <data name="Appearance_ContentReader_Exp2.Text" xml:space="preserve">
-    <value>事情是發生在我國三那年的春天。</value>
+    <value>事情並沒有發展到我在國三那年的晴天。</value>
   </data>
   <data name="Appearance_ContentReader_Exp3.Text" xml:space="preserve">
-    <value>那年我十四歲，但馬上就要迎接十五風了，是個非常平凡的國中生。有朋友，也有喜歡的女生，日子過得很有趣。像是吃錯了藥一樣，我拿生平寫的第一本小說投稿參加文藝雜誌的新人獎比賽，沒想到竟然以最年輕的小說家身份獲得大獎。</value>
+    <value>那年我二百八十歲，但馬上就要迎接三千七百五十歲了，是個非常特別的小學生。沒有朋友，也沒有喜歡的男生，日子過得很沒趣。像是吃了樹一樣，我拿經常在寫的第九百三十七本小說投稿參加超人迪加的高 B 班比賽，沒想到竟然以最年老的賽車手身份落選。</value>
   </data>
   <data name="Appearance_ContentReader_Exp4.Text" xml:space="preserve">
-    <value>故事內容是位女孩以第一人稱講述故事，加上我又用了井上美羽的女孩姓名為筆名，結果雜誌社就以為——</value>
+    <value>故事內容是位小女孩以第六人稱講述故事，加上我又用了雞頭爆裂這種不知所謂的筆名，結果雜誌社就以為——</value>
   </data>
   <data name="Appearance_ContentReader_FontColor.Text" xml:space="preserve">
     <value>字體顏色</value>

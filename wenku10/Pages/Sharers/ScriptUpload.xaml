@@ -2,7 +2,6 @@
     x:Class="wenku10.Pages.Sharers.ScriptUpload"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:wenku10.ShHub"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
@@ -12,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
+        <v:DataStateConverter x:Key="DataStateConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <v:DataBoolConverter x:Key="DataBoolConverter" />
     </Page.Resources>
@@ -27,14 +27,16 @@
             <TextBlock FontSize="20"
                        Text="Submit script" x:Uid="/AppResources/SubmitScript"
                        Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-            <TextBlock Margin="10,0" x:Name="Message"
-                       Foreground="{StaticResource MajorBrush}" />
+            <p:StateControl State="{Binding Path=Text, ElementName=Message, Converter={StaticResource DataStateConverter}}">
+                <TextBlock Margin="10,0" x:Name="Message"
+                           Foreground="{StaticResource MajorBrush}" />
+            </p:StateControl>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
             <StackPanel Margin="15, 10">
                 <TextBlock Text="Script" x:Uid="/AppResources/Script"
                            Foreground="{StaticResource MajorBrush}" />
-                <HyperlinkButton Click="PickFile">
+                <HyperlinkButton Margin="10,0" Click="PickFile">
                     <TextBlock x:Name="FileName" Text="Pick a file" />
                 </HyperlinkButton>
 

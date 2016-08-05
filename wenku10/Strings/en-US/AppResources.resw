@@ -357,4 +357,7 @@
   <data name="New.Text" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>Pick a file</value>
+  </data>
 </root>

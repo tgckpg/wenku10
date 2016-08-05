@@ -445,6 +445,7 @@ namespace wenku10.Pages
 
         private void EditInfo( object sender, RoutedEventArgs e )
         {
+            PopupFrame.Content = new Sharers.UserInfo();
         }
 
         private void ManageAuths( object sender, RoutedEventArgs e )

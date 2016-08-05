@@ -1,4 +1,9 @@
-﻿using System;
+﻿#if RELEASE
+    You are building on Production channel
+    Please remove this block if production build is ready
+#endif
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
