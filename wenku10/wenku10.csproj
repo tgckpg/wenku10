@@ -111,6 +111,10 @@
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\ja\Resources.resw" />
+    <PRIResource Include="Strings\zh-TW\Resources.resw" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
     <None Include="wenku10_StoreKey.pfx" />
     <PRIResource Include="Strings\en-US\AppResources.resw" />
   </ItemGroup>
@@ -123,6 +127,9 @@
     </Compile>
     <Compile Include="Pages\Dialogs\Sharers\AssignAuth.xaml.cs">
       <DependentUpon>AssignAuth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Sharers\ChangePassword.xaml.cs">
+      <DependentUpon>ChangePassword.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Dialogs\Sharers\PlaceRequest.xaml.cs">
       <DependentUpon>PlaceRequest.xaml</DependentUpon>
@@ -386,6 +393,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Dialogs\Sharers\AssignAuth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Sharers\ChangePassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

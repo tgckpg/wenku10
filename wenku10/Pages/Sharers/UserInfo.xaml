@@ -29,6 +29,9 @@
                      KeyDown="DispNameEnter"
                      LostFocus="DispNameLostFocus"
                      x:Name="DisplayName" />
+            <HyperlinkButton Margin="10,0" Click="ChangePassword">
+                <TextBlock x:Uid="/AppResources/ChangePassword" Text="Change Password" />
+            </HyperlinkButton>
         </StackPanel>
         <p:StateControl State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >

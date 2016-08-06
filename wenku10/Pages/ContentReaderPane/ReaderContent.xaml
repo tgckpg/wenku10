@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -92,5 +93,19 @@
                 </DataTemplate>
             </ListView.Resources>
         </ListView>
+        <p:StateControl x:Name="UndoButton"
+                        Margin="10"
+                        VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Button Click="UndoAnchorJump"
+                    Style="{StaticResource PlainButton}">
+                <Grid>
+                    <i:IconReload AutoScale="True"
+                                  Width="45" Height="45"/>
+                    <TextBlock x:Name="HCount" Text="{Binding Count}"
+                               Foreground="{StaticResource RelativeShadesBrush}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+            </Button>
+        </p:StateControl>
     </Grid>
 </Page>

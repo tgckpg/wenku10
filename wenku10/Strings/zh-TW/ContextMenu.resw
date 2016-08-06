@@ -195,4 +195,7 @@
   <data name="ManageAuths.Text" xml:space="preserve">
     <value>管理 AUTH</value>
   </data>
+  <data name="AssignToken.Text" xml:space="preserve">
+    <value>設置權杖</value>
+  </data>
 </root>

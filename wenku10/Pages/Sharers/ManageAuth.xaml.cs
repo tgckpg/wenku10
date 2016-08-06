@@ -265,7 +265,13 @@ namespace wenku10.Pages.Sharers
 
             if ( NVInput.Canceled ) return;
 
-            new AESManager().ImportAuth( NV.Name, NV.Value );
+            try
+            {
+                AESMgr.ImportAuth( NV.Name, NV.Value );
+                ReloadAuths( KeyList, SHTarget.KEY, AESMgr );
+            }
+            catch ( Exception )
+            { }
         }
 
         private async void ImportToken( object sender, RoutedEventArgs e )
@@ -282,7 +288,13 @@ namespace wenku10.Pages.Sharers
 
             if ( NVInput.Canceled ) return;
 
-            new TokenManager().ImportAuth( NV.Name, NV.Value );
+            try
+            {
+                TokMgr.ImportAuth( NV.Name, NV.Value );
+                ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
+            }
+            catch( Exception )
+            { }
         }
     }
 }

@@ -363,4 +363,10 @@
   <data name="HS_StatusHistory.Text" xml:space="preserve">
     <value>Status History</value>
   </data>
+  <data name="ChangePassword.Text" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="NewPassword.Text" xml:space="preserve">
+    <value>New Password</value>
+  </data>
 </root>

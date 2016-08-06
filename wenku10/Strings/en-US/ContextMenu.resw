@@ -195,4 +195,7 @@
   <data name="AccessTokens.Text" xml:space="preserve">
     <value>Access Tokens</value>
   </data>
+  <data name="AssignToken.Text" xml:space="preserve">
+    <value>Assign Token</value>
+  </data>
 </root>

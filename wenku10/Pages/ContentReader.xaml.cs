@@ -85,7 +85,7 @@ namespace wenku10.Pages
                 Disposed = false;
                 NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
 
-                // First Trigger won't need redraw
+                // First Trigger don't redraw
                 TriggerOrientation();
                 SetTemplate();
                 Window.Current.SizeChanged += Current_SizeChanged;
@@ -386,7 +386,10 @@ namespace wenku10.Pages
             Sections.Add( new PaneNavButton( new IconImage() { AutoScale = true }, typeof( ImageList ) ) );
 
             Sections.Add( new PaneNavButton( new IconReload() { AutoScale = true }, Reload ) );
-            Sections.Add( new PaneNavButton( new IconFastForword() { AutoScale = true }, () => ContentView.GoTop() ) );
+            Sections.Add( new PaneNavButton(
+                new IconFastForword() { AutoScale = true }
+                , () => ContentView.GoTop()
+            ) );
             Sections.Add( new PaneNavButton(
                 new IconFastForword() { AutoScale = true, Direction = Direction.MirrorVertical }
                 , () => ContentView.GoBottom()

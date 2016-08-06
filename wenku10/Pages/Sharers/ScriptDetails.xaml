@@ -150,7 +150,7 @@
                                                 Text="Key Request" Click="PlaceKeyRequest" />
                                 <MenuFlyoutItem x:Uid="/AppResources/TokenRequest"
                                                 Text="Token Request" Click="PlaceTokenRequest" />
-                                <MenuFlyoutItem x:Uid="/AppResources/AssignToken"
+                                <MenuFlyoutItem x:Uid="/ContextMenu/AssignToken"
                                                 Text="Assign Token" Click="AssignToken" />
                             </MenuFlyout>
                         </Button.Flyout>

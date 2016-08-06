@@ -110,6 +110,9 @@ namespace wenku10
             object o = FocusManager.GetFocusedElement();
             if ( o != null && SpecialElement.Contains( o.GetType() ) ) return;
 
+            // Always Close the dialog first
+            if ( Net.Astropenguin.Helpers.Popups.CloseDialog() ) return;
+
             NavigationHandler.MasterNavigationHandler( RootFrame, null );
         }
 

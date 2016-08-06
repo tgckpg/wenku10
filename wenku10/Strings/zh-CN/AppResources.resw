@@ -365,4 +365,10 @@
   <data name="HS_StatusHistory.Text" xml:space="preserve">
     <value>状态历史</value>
   </data>
+  <data name="ChangePassword.Text" xml:space="preserve">
+    <value>更改密码</value>
+  </data>
+  <data name="NewPassword.Text" xml:space="preserve">
+    <value>新密码</value>
+  </data>
 </root>

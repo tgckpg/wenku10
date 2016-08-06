@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
+
 using wenku8.AdvDM;
 using wenku8.Model.REST;
 using wenku8.Resources;
@@ -136,5 +138,9 @@ namespace wenku10.Pages.Sharers
             } );
         }
 
+        private async void ChangePassword( object sender, RoutedEventArgs e )
+        {
+            await Popups.ShowDialog( new Dialogs.Sharers.ChangePassword() );
+        }
     }
 }

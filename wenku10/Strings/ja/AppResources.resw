@@ -368,4 +368,10 @@
   <data name="HS_StatusHistory.Text" xml:space="preserve">
     <value>ステータス履歴</value>
   </data>
+  <data name="ChangePassword.Text" xml:space="preserve">
+    <value>パスワードを変更</value>
+  </data>
+  <data name="NewPassword.Text" xml:space="preserve">
+    <value>新しいパスワード</value>
+  </data>
 </root>

@@ -47,15 +47,7 @@ namespace wenku8.System
             Logger.Log( ID, "AppGate Initilizated", LogType.INFO );
             // Connection Mode
 
-			#if TESTING
-			WHTTPRequest.UA = "wenku8 Universal Windows App ( Testing Channel )";
-			#elif BETA
-			WHTTPRequest.UA = "wenku8 Universal Windows App ( Beta Channel )";
-            #elif DEBUG
-			WHTTPRequest.UA = "wenku8 Universal Windows App - ( Dev Channel )";
-            #else
-			WHTTPRequest.UA = "wenku8 Universal Windows App ( Production Channel )";
-            #endif
+			WHTTPRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by tgckpg", Version );
 
 			WCacheMode.Initialize();
             Logger.Log( ID, "WCacheMode Initilizated", LogType.INFO );
