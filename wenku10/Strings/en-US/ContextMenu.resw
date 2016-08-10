@@ -198,4 +198,7 @@
   <data name="AssignToken.Text" xml:space="preserve">
     <value>Assign Token</value>
   </data>
+  <data name="AssignKey.Text" xml:space="preserve">
+    <value>Assign Key</value>
+  </data>
 </root>

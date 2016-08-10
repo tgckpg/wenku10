@@ -155,12 +155,6 @@ namespace wenku10.Pages
             }
         }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-        }
-
         protected override void OnNavigatedTo( NavigationEventArgs e )
         {
             base.OnNavigatedTo( e );

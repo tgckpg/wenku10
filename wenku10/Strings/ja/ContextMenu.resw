@@ -198,4 +198,7 @@
   <data name="AssignToken.Text" xml:space="preserve">
     <value>トークンを割り当て</value>
   </data>
+  <data name="AssignKey.Text" xml:space="preserve">
+    <value>キーを割り当て</value>
+  </data>
 </root>

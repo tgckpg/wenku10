@@ -141,7 +141,7 @@ namespace wenku10.SHHub
                     , MAuth.GetValue( "path" )
                 );
                 MCookie.Value = MAuth.GetValue( "value" );
-                WHTTPRequest.Cookies.Add( Shared.ShRequest.Server, MCookie );
+                WHttpRequest.Cookies.Add( Shared.ShRequest.Server, MCookie );
             }
             catch ( Exception ex )
             {
@@ -180,7 +180,7 @@ namespace wenku10.SHHub
         private void ClearAuth( DRequestCompletedEventArgs arg1, string arg2 ) { ClearAuth(); }
         private void ClearAuth()
         {
-            WHTTPRequest.Cookies = new CookieContainer();
+            WHttpRequest.Cookies = new CookieContainer();
 
             AuthReg.RemoveParameter( "member-auth" );
             AuthReg.Save();

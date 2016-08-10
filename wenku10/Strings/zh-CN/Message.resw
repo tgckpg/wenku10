@@ -178,6 +178,6 @@
     <value>您将失去与访问令牌关联的脚本编辑权限。继续？</value>
   </data>
   <data name="ConfirmScriptRemove" xml:space="preserve">
-    <value>包括评论，这个脚本会从服务器上删除。 继续？</value>
+    <value>这个脚本会从服务器上删除。 继续？</value>
   </data>
 </root>

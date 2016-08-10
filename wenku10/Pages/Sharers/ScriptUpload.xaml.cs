@@ -24,6 +24,7 @@ using Net.Astropenguin.Logging;
 
 using wenku8.AdvDM;
 using wenku8.Model.ListItem;
+using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using CryptAES = wenku8.System.CryptAES;
@@ -285,13 +286,13 @@ namespace wenku10.Pages.Sharers
                     catch( Exception ex )
                     {
                         Logger.Log( ID, ex.Message, LogType.WARNING );
-                        TCS.SetCanceled();
+                        TCS.TrySetResult( null );
                     }
                 }
                 , ( cache, Id, ex ) =>
                 {
                     Logger.Log( ID, ex.Message, LogType.WARNING );
-                    TCS.SetCanceled();
+                    TCS.TrySetResult( null );
                 }
                 , false
             );

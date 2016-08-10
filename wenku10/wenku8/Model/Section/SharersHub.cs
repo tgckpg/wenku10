@@ -19,6 +19,7 @@ namespace wenku8.Section
     using AdvDM;
     using Ext;
     using Model.ListItem;
+    using Model.ListItem.Sharers;
     using Model.Loaders;
     using Model.REST;
     using Resources;
@@ -37,13 +38,14 @@ namespace wenku8.Section
         public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
         public IEnumerable<SHGrant> Grants { get; private set; }
 
-        private bool _Loading = false;
+        private int _Loading = 0;
         public bool Loading
         {
-            get { return _Loading; }
+            get { return 0 < _Loading; }
             private set
             {
-                _Loading = value;
+                _Loading += value ? 1 : -1;
+
                 NotifyChanged( "Loading" );
             }
         }
@@ -122,6 +124,42 @@ namespace wenku8.Section
             );
         }
 
+        public void GetMyInbox( Action Success = null )
+        {
+            Loading = true;
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.MyInbox()
+                , ( a, b ) =>
+                {
+                    Loading = false;
+                    ProcessInbox( a, b );
+                    if ( Success != null ) Worker.UIInvoke( Success );
+                }
+                , ( a, b, c ) => { Loading = false; }
+                , false
+            );
+        }
+
+        private void ProcessInbox( DRequestCompletedEventArgs e, string QId )
+        {
+            try
+            {
+                JsonObject JDef = JsonStatus.Parse( e.ResponseString );
+                JsonArray JData = JDef.GetNamedArray( "data" );
+                foreach( JsonValue JItem in JData )
+                {
+                    InboxMessage BoxMessage = new InboxMessage( JItem.GetObject() );
+                    Activities.Add( BoxMessage.Activity );
+                }
+
+                NotifyChanged( "Activities" );
+            }
+            catch( Exception )
+            {
+            }
+        }
+
         private void RequestsStatus( DRequestCompletedEventArgs e, string QId )
         {
             try
@@ -186,7 +224,7 @@ namespace wenku8.Section
         public async void Search( string Query, IEnumerable<string> AccessTokens = null )
         {
             if ( AccessTokens == null )
-                AccessTokens = new TokenManager().AuthList.Remap( x => x.Value );
+                AccessTokens = new TokenManager().AuthList.Remap( x => ( string ) x.Value );
 
             Searching = true;
             SHSearchLoader SHLoader = new SHSearchLoader( Query, AccessTokens );
@@ -222,7 +260,7 @@ namespace wenku8.Section
 
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.ScriptRemove( TokMgr.GetAuthById( HSI.Id )?.Value, HSI.Id )
+                , Shared.ShRequest.ScriptRemove( ( string ) TokMgr.GetAuthById( HSI.Id )?.Value, HSI.Id )
                 , ( e2, QId ) =>
                 {
                     try

@@ -54,6 +54,7 @@ namespace wenku10.Pages
         private bool OpenLock = false;
         private bool NeedRedraw = false;
         private bool Disposed = true;
+        private bool EVLoopbackBlockade = false;
 
         private ApplicationViewOrientation? Orientation;
 
@@ -68,12 +69,6 @@ namespace wenku10.Pages
         }
 
         ~ContentReader() { Dispose(); }
-
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-        }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )
         {
@@ -144,6 +139,8 @@ namespace wenku10.Pages
             RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Right ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.H ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.L ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.U ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Z ) );
 
             // `:
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), ( Windows.System.VirtualKey ) 192 ) );
@@ -343,7 +340,7 @@ namespace wenku10.Pages
         private void SelectCurrentEp()
         {
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
-            ChangedManually = false;
+            EVLoopbackBlockade = false;
             EPStepper.SelectedItem = Eps.First( x => x.Payload == CurrentChapter.cid );
 
             if ( ContentPane != null && ContentPane.Context is TableOfContents )
@@ -568,18 +565,15 @@ namespace wenku10.Pages
             InfoMask.State = ControlState.Foreatii;
         }
 
-        private bool ChangedManually = true;
         private void EPStepper_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
             if ( e.AddedItems.Count < 1 ) return;
 
-            if ( ChangedManually )
+            if ( EVLoopbackBlockade )
             {
-                ChangedManually = false;
+                EVLoopbackBlockade = false;
                 return;
             }
-
-            ChangedManually = true;
 
             string EP = ( e.AddedItems[ 0 ] as ActiveItem ).Payload;
 
@@ -600,6 +594,7 @@ namespace wenku10.Pages
 
             if ( ( VolStepper.SelectedItem as ActiveItem ).Payload != Vid )
             {
+                EVLoopbackBlockade = true;
                 VolStepper.SelectedItem = Vols.First( x => x.Payload == Vid );
             }
 
@@ -617,13 +612,11 @@ namespace wenku10.Pages
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
             if ( Eps == null ) return;
 
-            if ( ChangedManually )
+            if ( EVLoopbackBlockade )
             {
-                ChangedManually = false;
+                EVLoopbackBlockade = false;
                 return;
             }
-
-            ChangedManually = true;
 
             string cid = null;
             for ( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
@@ -639,6 +632,7 @@ namespace wenku10.Pages
 
             if ( EPStepper.SelectedItem != ShouldBeEp )
             {
+                EVLoopbackBlockade = true;
                 EPStepper.SelectedItem = ShouldBeEp;
 
                 var j = EPStepper.Dispatcher.RunIdleAsync(

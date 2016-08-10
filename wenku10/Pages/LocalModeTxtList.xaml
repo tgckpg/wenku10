@@ -296,16 +296,23 @@
 
                         <Button x:Name="ActivityButton" Grid.Column="2"
                                 Click="ToggleActivities"
+                                Width="50" Height="50"
                                 VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                 Style="{StaticResource PlainButton}">
-                            <Grid Margin="5">
-                                <TextBlock Text="{Binding Activities, Converter={StaticResource DataCountConverter}}"
-                                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                            <Grid>
+                                <i:IconMail AutoScale="True"/>
+                                <p:StateControl State="{Binding Activities, Converter={StaticResource DataStateConverter}}">
+                                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                          Background="{StaticResource MajorBrush}" >
+                                        <TextBlock Margin="5, 0" Text="{Binding Activities, Converter={StaticResource DataCountConverter}}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}" />
+                                    </Grid>
+                                </p:StateControl>
                                 <ProgressRing IsActive="{Binding Loading}"
                                               Width="30" Height="30"
                                               VerticalAlignment="Center" HorizontalAlignment="Center"
                                               Foreground="{StaticResource RelativeMajorBrush}"/>
+
                             </Grid>
                         </Button>
 
@@ -326,6 +333,7 @@
                                           IsActive="{Binding Searching}" />
                         </p:StateControl>
 
+                        <!-- Activities -->
                         <p:StateControl Grid.Row="1" Grid.ColumnSpan="3"
                                         State="{Binding Path=Tag, ElementName=ActivityButton, Converter={StaticResource DataStateConverter}}"
                                         MaxWidth="400" Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
@@ -341,6 +349,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                       TextTrimming="CharacterEllipsis"
                                                        Text="{Binding Name}" />
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

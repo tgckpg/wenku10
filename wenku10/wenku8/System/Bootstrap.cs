@@ -10,6 +10,8 @@ namespace wenku8.System
     using Ext;
     using Storage;
 
+    using ResTaotu = libtaotu.Resources.Shared;
+
     internal sealed class Bootstrap
 	{
         public static readonly string ID = typeof( Bootstrap ).Name;
@@ -47,17 +49,18 @@ namespace wenku8.System
             Logger.Log( ID, "AppGate Initilizated", LogType.INFO );
             // Connection Mode
 
-			WHTTPRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by tgckpg", Version );
+			WHttpRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by Astropenguin", Version );
 
 			WCacheMode.Initialize();
             Logger.Log( ID, "WCacheMode Initilizated", LogType.INFO );
             //// End fixed orders
 
             // Shared Resources
-            libtaotu.Resources.Shared.SourceView = typeof( global::wenku10.Pages.DirectTextViewer );
-            libtaotu.Resources.Shared.RenameDialog = typeof( global::wenku10.Pages.Dialogs.Rename );
-            libtaotu.Resources.Shared.SetExtractor( typeof( Taotu.WenkuExtractor ) );
-            libtaotu.Resources.Shared.SetMarker( typeof( Taotu.WenkuMarker ) );
+            ResTaotu.SourceView = typeof( global::wenku10.Pages.DirectTextViewer );
+            ResTaotu.RenameDialog = typeof( global::wenku10.Pages.Dialogs.Rename );
+            ResTaotu.SetExtractor( typeof( Taotu.WenkuExtractor ) );
+            ResTaotu.SetMarker( typeof( Taotu.WenkuMarker ) );
+            ResTaotu.CreateRequest = x => new SHttpRequest( x );
 
             // Unlocking libraries
             Net.Astropenguin.UI.VerticalStack.LOCKED = false;

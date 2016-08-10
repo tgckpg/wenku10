@@ -19,11 +19,11 @@ using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {
-    using StringAuthManager = wenku8.System.AuthManager<NameValue<string>>;
+    using StringAuthManager = wenku8.System.AuthManager<INameValue>;
 
     sealed partial class AssignAuth : ContentDialog
     {
-        public NameValue<string> SelectedAuth { get; set; }
+        public INameValue SelectedAuth { get; set; }
         public bool Canceled { get; private set; }
 
         private StringAuthManager AuthMgr;
@@ -57,7 +57,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 
         private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
         {
-            SelectedAuth = ( NameValue<string> ) Keys.SelectedItem;
+            SelectedAuth = ( INameValue ) Keys.SelectedItem;
             Canceled = false;
         }
 
@@ -66,7 +66,7 @@ namespace wenku10.Pages.Dialogs.Sharers
         private void PreSelectKey()
         {
             if ( !( AuthMgr == null || Keys == null ) )
-                Keys.SelectedValue = AuthMgr.SelectedItem.Value;
+                Keys.SelectedValue = AuthMgr.SelectedItem?.Value;
         }
 
     }

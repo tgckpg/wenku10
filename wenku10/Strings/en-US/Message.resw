@@ -178,6 +178,6 @@
     <value>You will lost the permissions to edit the scripts associated with this access token. Continue?</value>
   </data>
   <data name="ConfirmScriptRemove" xml:space="preserve">
-    <value>Including comments, this script will be removed from server. Continue?</value>
+    <value>The script will be removed from server. Continue?</value>
   </data>
 </root>

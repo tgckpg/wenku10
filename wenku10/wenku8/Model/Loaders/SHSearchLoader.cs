@@ -13,7 +13,7 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Model.Loaders
 {
     using AdvDM;
-    using ListItem;
+    using ListItem.Sharers;
     using Resources;
     using REST;
 

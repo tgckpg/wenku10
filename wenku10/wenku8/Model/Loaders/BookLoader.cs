@@ -190,7 +190,7 @@ namespace wenku8.Model.Loaders
 
                 // Set the referer, as it is required by some site such as fanfiction.net
                 new RuntimeCache( a => {
-                    HttpRequest R = new WHTTPRequest( a );
+                    HttpRequest R = new WHttpRequest( a );
                     R.EN_UITHREAD = true;
 
                     if ( !string.IsNullOrEmpty( B.OriginalUrl ) )

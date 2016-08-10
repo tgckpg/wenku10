@@ -198,4 +198,7 @@
   <data name="AssignToken.Text" xml:space="preserve">
     <value>設置權杖</value>
   </data>
+  <data name="AssignKey.Text" xml:space="preserve">
+    <value>設置密鑰</value>
+  </data>
 </root>

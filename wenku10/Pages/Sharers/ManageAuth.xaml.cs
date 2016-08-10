@@ -21,6 +21,7 @@ using Net.Astropenguin.Loaders;
 
 using wenku8.Model.Loaders;
 using wenku8.Model.ListItem;
+using wenku8.Model.ListItem.Sharers;
 using wenku8.Section;
 
 namespace wenku10.Pages.Sharers
@@ -176,7 +177,7 @@ namespace wenku10.Pages.Sharers
             if ( GProc.GrantDef.SourceRemoved || GProc.IsLoading ) return;
 
             GProc.IsLoading = true;
-            string AccessToken = TokMgr.GetAuthById( GProc.ScriptId )?.Value;
+            string AccessToken = ( string ) TokMgr.GetAuthById( GProc.ScriptId )?.Value;
 
             SHSearchLoader SHLoader = new SHSearchLoader(
                 "uuid: " + GProc.ScriptId

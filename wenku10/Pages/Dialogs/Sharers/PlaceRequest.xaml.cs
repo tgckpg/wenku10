@@ -17,7 +17,7 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.AdvDM;
-using wenku8.Model.ListItem;
+using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.REST;
 using wenku8.Resources;
 

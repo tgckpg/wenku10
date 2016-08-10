@@ -32,6 +32,7 @@ using wenku8.Ext;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
+using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.Section;
 using wenku8.Section;
 using wenku8.Settings;
@@ -396,6 +397,7 @@ namespace wenku10.Pages
             if ( SHHub.Activities.Count() == 0 )
             {
                 SHHub.GetMyRequests();
+                SHHub.GetMyInbox();
             }
             else
             {

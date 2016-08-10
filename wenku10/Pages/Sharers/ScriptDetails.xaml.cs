@@ -31,6 +31,7 @@ using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
+using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.Settings;
@@ -104,11 +105,11 @@ namespace wenku10.Pages.Sharers
             if( BindItem.Encrypted )
             {
                 ReqTarget = SHTarget.KEY;
-                Crypt = new AESManager().GetAuthById( BindItem.Id );
+                Crypt = ( CryptAES ) new AESManager().GetAuthById( BindItem.Id );
             }
 
             BottomControls = new ObservableCollection<PaneNavButton>();
-            AccessToken = new TokenManager().GetAuthById( BindItem.Id )?.Value;
+            AccessToken = ( string ) new TokenManager().GetAuthById( BindItem.Id )?.Value;
             XGrant.SetParameter( BindItem.Id, wenku8.Storage.BookStorage.TimeKey );
 
             if ( !string.IsNullOrEmpty( AccessToken ) )
@@ -210,7 +211,7 @@ namespace wenku10.Pages.Sharers
         private async void Delete( object sender, RoutedEventArgs e )
         {
             StringResources stx = new StringResources( "Message" );
-            MessageDialog MsgBox = new MessageDialog( "ConfirmRemove" );
+            MessageDialog MsgBox = new MessageDialog( stx.Str( "ConfirmScriptRemove" ) );
 
             bool DoDelete = false;
 
@@ -281,15 +282,26 @@ namespace wenku10.Pages.Sharers
         #region Requests
         private void PlaceKeyRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.KEY, BindItem ); }
         private void PlaceTokenRequest( object sender, RoutedEventArgs e ) { PlaceRequest( SHTarget.TOKEN, BindItem ); }
+
         private async void AssignToken( object sender, RoutedEventArgs e )
         {
             AssignAuth RequestBox = new AssignAuth( new TokenManager(), "Assign Token" );
             await Popups.ShowDialog( RequestBox );
 
-            if ( RequestBox.Canceled ) return;
+            if ( RequestBox.Canceled || RequestBox.SelectedAuth == null ) return;
 
-            AccessToken = RequestBox.SelectedAuth.Value;
+            AccessToken = ( string ) RequestBox.SelectedAuth.Value;
             AccessControls.Visibility = Visibility.Visible;
+        }
+
+        private async void AssignKey( object sender, RoutedEventArgs e )
+        {
+            AssignAuth RequestBox = new AssignAuth( new AESManager(), "Assign Key" );
+            await Popups.ShowDialog( RequestBox );
+
+            if ( RequestBox.Canceled || RequestBox.SelectedAuth == null ) return;
+
+            Crypt = ( CryptAES ) RequestBox.SelectedAuth;
         }
 
         public async void PlaceRequest( SHTarget Target, HubScriptItem HSI )

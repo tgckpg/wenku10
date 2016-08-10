@@ -198,4 +198,7 @@
   <data name="AssignToken.Text" xml:space="preserve">
     <value>设置令牌</value>
   </data>
+  <data name="AssignKey.Text" xml:space="preserve">
+    <value>设置密钥</value>
+  </data>
 </root>
