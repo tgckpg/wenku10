@@ -61,7 +61,7 @@ namespace wenku8.Taotu
             await Popups.ShowDialog( new EditProcExtract( this ) );
             if( SubEdit != null )
             {
-                MessageBus.Send( new Message( typeof( ProceduresPanel ), "SubEdit", this ) );
+                MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
             }
         }
 

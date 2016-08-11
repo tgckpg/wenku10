@@ -203,7 +203,7 @@ namespace wenku8.Section
                     {
                         StringResources stx = new StringResources();
                         return string.Format( stx.Text( "GrantsReceived" ), NGrants, NScripts );
-                    }, () => MessageBus.SendUI( new Message( typeof( SharersHub ), AppKeys.SH_SHOW_GRANTS ) ) );
+                    }, () => MessageBus.SendUI( typeof( SharersHub ), AppKeys.SH_SHOW_GRANTS ) );
                 }
             }
             catch ( Exception ex )
@@ -318,7 +318,7 @@ namespace wenku8.Section
                     // Pass the uuid instead of the query id
                     , ( re, q ) => SearchItemUpdate( re, Id )
                     , Utils.DoNothing
-                    , false
+                    , true
                 );
             }
             catch( Exception ex )

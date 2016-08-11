@@ -97,7 +97,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
             if ( string.IsNullOrEmpty( Url ) )
             {
-                MessageBus.SendUI( new Message( typeof( ProceduresPanel ), "RUN", EditTarget ) );
+                MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
                 return;
             }
 

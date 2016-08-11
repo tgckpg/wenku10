@@ -131,6 +131,13 @@ namespace wenku10.Pages
                     PopupFrame.Content = new Sharers.ScriptDetails( ( HubScriptItem ) Mesg.Payload );
                     break;
 
+                case AppKeys.HS_OPEN_COMMENT:
+                    InboxMessage BoxMessage = ( InboxMessage ) Mesg.Payload;
+                    Sharers.ScriptDetails SSDetails = new Sharers.ScriptDetails( BoxMessage.HubScript );
+                    PopupFrame.Content = SSDetails;
+                    SSDetails.ToggleComments();
+                    break;
+
                 case AppKeys.SH_SHOW_GRANTS:
                     Sharers.ManageAuth ManageAuth = new Sharers.ManageAuth( SHHub, PopupFrame );
                     PopupFrame.Content = ManageAuth;

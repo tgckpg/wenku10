@@ -77,7 +77,7 @@ namespace wenku10.Pages.Dialogs.Taotu
         private void RunTilHere( object sender, RoutedEventArgs e )
         {
             TestRunning.IsActive = true;
-            MessageBus.SendUI( new Message( typeof( ProceduresPanel ), "RUN", EditTarget ) );
+            MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
         }
 
         private void MessageBus_OnDelivery( Message Mesg )

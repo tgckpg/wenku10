@@ -196,7 +196,7 @@ namespace wenku10.Pages.Sharers
 
                         // Since we cannot set the Content property here anymore
                         // We call for help
-                        MessageBus.SendUI( new Message( GetType(), AppKeys.HS_DETAIL_VIEW, BindItem ) );
+                        MessageBus.SendUI( GetType(), AppKeys.HS_DETAIL_VIEW, BindItem );
                     }
                     catch ( Exception )
                     {
@@ -223,7 +223,7 @@ namespace wenku10.Pages.Sharers
             {
                 // Since we cannot close the Frame from here
                 // We call for help
-                MessageBus.SendUI( new Message( GetType(), AppKeys.SH_SCRIPT_REMOVE, BindItem ) );
+                MessageBus.SendUI( GetType(), AppKeys.SH_SCRIPT_REMOVE, BindItem );
             }
         }
 
@@ -264,7 +264,7 @@ namespace wenku10.Pages.Sharers
                 , Shared.ShRequest.ScriptDownload( BindItem.Id, AccessToken )
                 , DownloadComplete
                 , DownloadFailed
-                , false
+                , true
             );
         }
 
@@ -522,7 +522,7 @@ namespace wenku10.Pages.Sharers
         #endregion
 
         #region Comments
-        private void ToggleComments()
+        public void ToggleComments()
         {
             if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
             CommentStory.Children.Clear();

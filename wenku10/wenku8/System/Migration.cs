@@ -32,17 +32,21 @@ namespace wenku8.System
                 switch ( Properties.VERSION )
                 {
                     // Keep up to 5 migration versions
-                    case "1.6.19t":
                     case "1.7.0t":
                     case "1.7.1t":
                     case "1.7.2t":
                     case "1.7.3t":
+                        v174t();
+                        break;
+                    case "1.7.4t":
+                        break;
 
                     case "1.2.6b":
                     case "1.2.7b":
                     case "1.2.8b":
                     case "1.2.9b":
                     case "1.2.10b":
+                        v1211b();
                         break;
 
                     default:
@@ -62,6 +66,17 @@ namespace wenku8.System
         }
 
         private void Migrate_Latest()
+        {
+            // Latest Migration
+            // TODO: Move auto anchors into bookmarks
+        }
+
+        private void v1211b()
+        {
+            v174t();
+        }
+
+        private void v174t()
         {
             // Setting -> Settings
             AppStorage Storage = new AppStorage();
