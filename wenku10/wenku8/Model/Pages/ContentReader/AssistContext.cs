@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
-
 namespace wenku8.Model.Pages.ContentReader
 {
     using Config;
-    class AssistContext
+    sealed class AssistContext
     {
         private Settings.Layout.ContentReader Settings;
         public SolidColorBrush AssistBG

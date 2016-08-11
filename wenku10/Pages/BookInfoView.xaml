@@ -352,6 +352,8 @@
                                                 Width="65" Height="65" Click="JumpToBookmark">
                                             <i:IconBookmark AutoScale="True" />
                                         </Button>
+                                        <Button Content="{Binding ToggleDir}" Style="{StaticResource PlainButton}"
+                                                Width="65" Height="65" Click="ToggleDirection" />
                                         <c:OneDriveButton Loaded="SyncButtonLoaded"
                                                 FlowDirection="LeftToRight"
                                                 Width="65" Height="65"  />

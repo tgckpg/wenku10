@@ -488,4 +488,28 @@
         </Setter>
     </Style>
 
+    <Style TargetType="i:IconAlign">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconAlign">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3" CenterX="-98.6" CenterY="-169.1"/>
+                            </Canvas.RenderTransform>
+                            <Path Data="M 275.9,487.99 L 517.7,487.99 517.7,502.29 275.9,502.29 z
+                                        M 275.9,514.38 L 470.34,514.38 470.34,528.68 275.9,528.68 z
+                                        M 275.91,540.77 L 430.45,540.77 430.45,555.07 275.91,555.07 z
+                                        M 275.9,567.17 L 517.7,567.17 517.7,581.47 275.9,581.47 z
+                                        M 275.9,593.56 L 459.88,593.56 459.88,607.86 275.9,607.86 z
+                                        M 275.9,619.95 L 418.61,619.95 418.61,634.25 275.9,634.25 z"
+                                  Fill="{TemplateBinding Foreground}" />
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

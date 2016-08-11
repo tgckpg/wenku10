@@ -58,12 +58,16 @@ namespace wenku10.Pages
             set
             {
                 _inSync = value;
-                if( InSync != null ) InSync.IsActive = _inSync;
+                if ( InSync != null ) InSync.IsActive = _inSync;
             }
         }
 
         private List<string> ViewOrder;
 
+        private bool ViewTOC { get { return ViewOrder.IndexOf( "TOCSection" ) != -1; } }
+        private bool ViewComments { get { return ViewOrder.IndexOf( "CommentSection" ) != -1; } }
+        private bool ViewInfo { get { return ViewOrder.IndexOf( "BookInfoSection" ) != -1; } }
+ 
         private ProgressRing InSync;
         private Grid InfoBgGrid;
         private Grid PushGrid;
@@ -100,7 +104,7 @@ namespace wenku10.Pages
                     BookInfoSection.DataContext = null;
                 } );
             }
-            catch( Exception ) { }
+            catch ( Exception ) { }
         }
 
         private void ReorderModules()
@@ -117,42 +121,76 @@ namespace wenku10.Pages
 
             IEnumerable<UIElement> Modules = MasterContainer.Children.OrderBy( ( x ) => ViewOrder.IndexOf( ( x as Border ).Name ) );
 
-            foreach( UIElement e in Modules )
+            foreach ( UIElement e in Modules )
             {
                 Border Mod = e as Border;
                 Logger.Log( ID, "Placing in Order: " + Mod.Name, LogType.DEBUG );
 
                 MasterContainer.Children.Remove( e );
-                if( ViewOrder.IndexOf( Mod.Name ) != -1 )
+                if ( ViewOrder.IndexOf( Mod.Name ) != -1 )
                 {
                     MasterContainer.Children.Add( e );
                 }
             }
 
-            if( ViewOrder.Count() == 0 )
+            if ( ViewOrder.Count() == 0 )
             {
-                StringResources stx = new StringResources();
-                TextBlock ButThereIsNothing = new TextBlock();
-                ButThereIsNothing.Text = stx.Text( "But_There_Is_Nothing" );
-                ButThereIsNothing.TextWrapping = TextWrapping.Wrap;
-                ButThereIsNothing.Foreground = new SolidColorBrush(
-                    global::wenku8.Config.Properties.APPEARENCE_THEME_MAJOR_COLOR
-                );
-                ButThereIsNothing.TextAlignment = TextAlignment.Center;
-
-                ProgressRing Pring = new ProgressRing();
-                Pring.Height = Pring.Width = 40;
-                Pring.IsActive = true;
-
-                MasterContainer.Orientation = Orientation.Vertical;
-                MasterContainer.HorizontalAlignment = HorizontalAlignment.Center;
-                MasterContainer.VerticalAlignment = VerticalAlignment.Center;
-                MasterContainer.Children.Add( Pring );
-                MasterContainer.Children.Add( ButThereIsNothing );
-
-                Logger.Log( ID, "Everything is disabled, this section will be skipped", LogType.INFO );
-                SkipThisPage = true;
+                SetTemplateNone();
             }
+        }
+
+        private void ToggleDirection( object sender, RoutedEventArgs e )
+        {
+            TOCData.ToggleDirection();
+        }
+
+        private async void SetTemplateComment( BookItem b )
+        {
+            ReviewsSection = new ReviewsSection( b );
+            // Let's try the async method this time
+            await ReviewsSection.Load();
+            CommentSection.DataContext = ReviewsSection;
+        }
+
+        private void SetTemplateTOC( BookItem b )
+        {
+            TOCData = new TOCSection( b );
+            TOCData.TemplateSelector.IsHorizontal = LayoutSettings.HorizontalTOC;
+
+            TOCSection.DataContext = TOCData;
+            TOCFloatSection.DataContext = TOCData;
+
+            TOCData.SetViewSource( VolumesViewSource );
+
+            if ( VolList != null && 0 < VolList.Items.Count() )
+            {
+                VolList.SelectedIndex = 0;
+            }
+        }
+
+        private void SetTemplateNone()
+        {
+            StringResources stx = new StringResources();
+            TextBlock ButThereIsNothing = new TextBlock();
+            ButThereIsNothing.Text = stx.Text( "But_There_Is_Nothing" );
+            ButThereIsNothing.TextWrapping = TextWrapping.Wrap;
+            ButThereIsNothing.Foreground = new SolidColorBrush(
+                global::wenku8.Config.Properties.APPEARENCE_THEME_MAJOR_COLOR
+            );
+            ButThereIsNothing.TextAlignment = TextAlignment.Center;
+
+            ProgressRing Pring = new ProgressRing();
+            Pring.Height = Pring.Width = 40;
+            Pring.IsActive = true;
+
+            MasterContainer.Orientation = Orientation.Vertical;
+            MasterContainer.HorizontalAlignment = HorizontalAlignment.Center;
+            MasterContainer.VerticalAlignment = VerticalAlignment.Center;
+            MasterContainer.Children.Add( Pring );
+            MasterContainer.Children.Add( ButThereIsNothing );
+
+            Logger.Log( ID, "Everything is disabled, this section will be skipped", LogType.INFO );
+            SkipThisPage = true;
         }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )
@@ -164,7 +202,7 @@ namespace wenku10.Pages
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
             NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
 
-            if( e.NavigationMode == NavigationMode.New )
+            if ( e.NavigationMode == NavigationMode.New )
             {
                 TOCSection.DataContext = null;
                 TOCFloatSection.DataContext = null;
@@ -177,13 +215,12 @@ namespace wenku10.Pages
             LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
             LayoutSettings.GetBgContext( "COMMENTS" ).ApplyBackgrounds();
 
-            if( SkipThisPage && e.NavigationMode == NavigationMode.Back )
+            if ( SkipThisPage && e.NavigationMode == NavigationMode.Back )
             {
                 MasterContainer.Children.Clear();
                 GauBack();
                 return;
             }
-
         }
 
         private void OpenType( object parameter )
@@ -210,18 +247,18 @@ namespace wenku10.Pages
             IEnumerable<UIElement> Modules = MasterContainer.Children;
 
             // Remove Everything and only give toc
-            foreach( UIElement e in Modules.ToArray() )
+            foreach ( UIElement e in Modules.ToArray() )
             {
                 Border Mod = e as Border;
 
                 MasterContainer.Children.Remove( e );
-                if( Mod.Name == "TOCSection" )
+                if ( Mod.Name == "TOCSection" )
                 {
                     MasterContainer.Children.Add( e );
                 }
             }
 
-            VolumeLoaded(
+            SetTemplateTOC(
                 ThisBook = X.Instance<BookItem>( XProto.BookItemEx, Doc )
             );
         }
@@ -230,7 +267,7 @@ namespace wenku10.Pages
         {
             BookLoader BL = new BookLoader( ( NaN ) =>
             {
-                if( SkipThisPage )
+                if ( SkipThisPage )
                 {
                     new VolumeLoader( GoToContentReader ).Load( ThisBook );
                     return;
@@ -238,9 +275,9 @@ namespace wenku10.Pages
 
                 UpdateBookInfoSection( Book );
 
-                if( ViewOrder.IndexOf( "TOCSection" ) != -1 )
+                if ( ViewTOC )
                 {
-                    new VolumeLoader( VolumeLoaded ).Load( ThisBook );
+                    new VolumeLoader( SetTemplateTOC ).Load( ThisBook );
                 }
             } );
 
@@ -278,27 +315,27 @@ namespace wenku10.Pages
 
             ThisBook = BookEx;
 
-            if( SkipThisPage )
+            if ( SkipThisPage )
             {
                 new VolumeLoader( GoToContentReader ).Load( ThisBook );
                 return;
             }
 
-            if( ViewOrder.IndexOf( "BookInfoSection" ) != -1 )
+            if ( ViewInfo )
             {
                 BookLoader BL = new BookLoader( UpdateBookInfoSection );
                 BL.Load( ThisBook, true );
                 BL.LoadIntro( ThisBook, true );
             }
 
-            if( ViewOrder.IndexOf( "TOCSection" ) != -1 )
+            if ( ViewTOC )
             {
-                new VolumeLoader( VolumeLoaded ).Load( ThisBook );
+                new VolumeLoader( SetTemplateTOC ).Load( ThisBook );
             }
 
-            if( ViewOrder.IndexOf( "CommentSection" ) != -1 )
+            if ( ViewComments )
             {
-                InitCommentSection( ThisBook );
+                SetTemplateComment( ThisBook );
             }
         }
 
@@ -306,7 +343,7 @@ namespace wenku10.Pages
         {
             if ( SyncStarted || ThisBook == null ) return;
             SyncStarted = true;
-            if( OneDriveSync.Instance == null )
+            if ( OneDriveSync.Instance == null )
             {
                 OneDriveSync.Instance = new OneDriveSync();
             }
@@ -346,7 +383,7 @@ namespace wenku10.Pages
                     typeof( ContentReader )
                     , new Chapter( ES.currentEpTitle, b.Id, ES.currentVid, ES.currentCid )
                 )
-            ); 
+            );
         }
 
         private async void GauBack()
@@ -363,22 +400,6 @@ namespace wenku10.Pages
         }
 
         #region TOC Section
-        private void VolumeLoaded( BookItem b )
-        {
-            TOCData = new TOCSection( b );
-            TOCData.TemplateSelector.IsHorizontal = LayoutSettings.HorizontalTOC;
-
-            TOCSection.DataContext = TOCData;
-            TOCFloatSection.DataContext = TOCData;
-
-            TOCData.SetViewSource( VolumesViewSource );
-
-            if( VolList != null && 0 < VolList.Items.Count() )
-            {
-                VolList.SelectedIndex = 0;
-            }
-        }
-
         private void VolumeChanged( object sender, SelectionChangedEventArgs e )
         {
             if ( e.AddedItems.Count() < 1 ) return;
@@ -467,7 +488,7 @@ namespace wenku10.Pages
 
         private async void JumpToBookmark( object sender, RoutedEventArgs e )
         {
-            if( TOCData.AnchorAvailable )
+            if ( TOCData.AnchorAvailable )
             {
                 BackMask.HandleForward(
                     Frame, () => Frame.Navigate( typeof( ContentReader ), TOCData.AutoAnchor )
@@ -496,7 +517,7 @@ namespace wenku10.Pages
 
         private void ChFixedListLayoutUpdate( object sender, object e )
         {
-            if( !ChLayoutUpdate )
+            if ( !ChLayoutUpdate )
             {
                 ChLayoutUpdate = true;
                 FloatList();
@@ -513,7 +534,7 @@ namespace wenku10.Pages
             Point LB = ChLeftBoundary.TransformToVisual( this ).TransformPoint( new Point() );
             Point RB = ChRightBoundary.TransformToVisual( this ).TransformPoint( new Point() );
 
-            if( TOCSection.ActualWidth < SW )
+            if ( TOCSection.ActualWidth < SW )
             {
                 ChFixedList.Opacity = 1;
                 ChFixedList.HorizontalAlignment = HorizontalAlignment.Left;
@@ -570,14 +591,6 @@ namespace wenku10.Pages
         }
         #endregion
 
-        private async void InitCommentSection( wenku8.Model.Book.BookItem b )
-        {
-            ReviewsSection = new ReviewsSection( b );
-            // Let's try the async method this time
-            await ReviewsSection.Load();
-            CommentSection.DataContext = ReviewsSection;
-        }
-
         private async void OpenComment( object sender, ItemClickEventArgs e )
         {
             await ReviewsSection.OpenReview( e.ClickedItem as Review );
@@ -617,7 +630,7 @@ namespace wenku10.Pages
 
         private void Vote( object sender, RoutedEventArgs e )
         {
-            if( ThisBook.XTest( XProto.BookItemEx ) )
+            if ( ThisBook.XTest( XProto.BookItemEx ) )
             {
                 Expression<Action> handler = () => BeginStory();
                 ThisBook.XCall<object>( "Vote", handler.Compile() );
