@@ -522,7 +522,53 @@ namespace wenku10.Pages.Sharers
         #endregion
 
         #region Comments
-        public void ToggleComments()
+        public async void OpenCommentStack( string CommId )
+        {
+            CommInit = true;
+
+            DisplayControls( CommentControls );
+
+            SimpleStory.DoubleAnimation(
+                CommentStory, CommentSection
+                , "(UIElement.RenderTransform).(TranslateTransform.Y)"
+                , 0.25 * LayoutSettings.ScreenHeight, 0
+            );
+
+            SimpleStory.DoubleAnimation( CommentStory, CommentSection, "Opacity", 0, 1 );
+
+            CommentSection.Visibility = Visibility.Visible;
+
+            bool LoadFirst = true;
+            Func<SHTarget, int, uint, string[], PostData> StackRequest = ( a, b, c, Ids ) =>
+            {
+                if ( LoadFirst )
+                {
+                    LoadFirst = false;
+                    return Shared.ShRequest.GetCommentStack( Ids[ 0 ] );
+                }
+
+                return Shared.ShRequest.GetComments( a, b, c, Ids );
+            };
+
+            HSLoader<HSComment> CLoader = new HSLoader<HSComment>( CommId, SHTarget.COMMENT, StackRequest )
+            {
+                ConvertResult = ( x ) => x.Flattern( y => y.Replies )
+            };
+
+            IEnumerable<HSComment> FirstPage = await CLoader.NextPage();
+
+            CommentsSource = new Observables<HSComment, HSComment>( FirstPage.Flattern( x => x.Replies ) );
+
+            CommentsSource.LoadStart += ( x, y ) => MarkLoading();
+            CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();
+
+            CommentsSource.ConnectLoader( CLoader );
+            CommentList.ItemsSource = CommentsSource;
+
+            CommentStory.Begin();
+        }
+
+        private void ToggleComments()
         {
             if ( CommentStory.GetCurrentState() != ClockState.Stopped ) return;
             CommentStory.Children.Clear();

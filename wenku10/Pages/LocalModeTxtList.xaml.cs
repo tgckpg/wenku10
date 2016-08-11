@@ -135,7 +135,7 @@ namespace wenku10.Pages
                     InboxMessage BoxMessage = ( InboxMessage ) Mesg.Payload;
                     Sharers.ScriptDetails SSDetails = new Sharers.ScriptDetails( BoxMessage.HubScript );
                     PopupFrame.Content = SSDetails;
-                    SSDetails.ToggleComments();
+                    SSDetails.OpenCommentStack( BoxMessage.CommId );
                     break;
 
                 case AppKeys.SH_SHOW_GRANTS:
@@ -415,7 +415,7 @@ namespace wenku10.Pages
 
         private void Activities_ItemClick( object sender, ItemClickEventArgs e )
         {
-            SHHub.CheckActivity( ( NameValue<Action> ) e.ClickedItem );
+            SHHub.CheckActivity( ( Activity ) e.ClickedItem );
             ActivityButton.Tag = null;
         }
 

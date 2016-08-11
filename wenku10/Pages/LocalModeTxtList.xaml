@@ -18,6 +18,7 @@
         <v:DataStateConverter x:Key="DataStateConverter" />
         <v:DataCountConverter x:Key="DataCountConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
+        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
 
         <DataTemplate x:Key="SHHubItemTemplate">
             <Border Background="{StaticResource Shades90}"
@@ -344,13 +345,20 @@
                                          Fill="{StaticResource MinorBrush}" />
                                 <ListView Margin="0,15,0,0" Padding="10"
                                           IsItemClickEnabled="True" ItemClick="Activities_ItemClick"
+                                          ItemContainerStyle="{StaticResource BareListItem}"
                                           ItemsSource="{Binding Activities}"
                                           Background="{StaticResource MinorBrush}">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       Text="{Binding Name}" />
+                                            <StackPanel Margin="10,5">
+                                                <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Text="{Binding Name}" />
+                                                <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                           TextAlignment="Right" Opacity="0.8"
+                                                           Visibility="{Binding TimeStamp, Converter={StaticResource DataVisConverter}}"
+                                                           Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" />
+                                            </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>

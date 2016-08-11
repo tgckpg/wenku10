@@ -34,7 +34,7 @@ namespace wenku8.Section
 
         public IMember Member;
 
-        public ObservableCollection<NameValue<Action>> Activities { get; private set; }
+        public ObservableCollection<Activity> Activities { get; private set; }
         public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
         public IEnumerable<SHGrant> Grants { get; private set; }
 
@@ -66,7 +66,7 @@ namespace wenku8.Section
 
         public SharersHub()
         {
-            Activities = new ObservableCollection<NameValue<Action>>();
+            Activities = new ObservableCollection<Activity>();
             SearchSet = new Observables<HubScriptItem, HubScriptItem>();
 
             RCache = new RuntimeCache();
@@ -82,13 +82,13 @@ namespace wenku8.Section
             UpdateLLText();
         }
 
-        public async void CheckActivity( NameValue<Action> Activity )
+        public async void CheckActivity( Activity Act )
         {
-            Activity.Value();
+            Act.Value();
 
             // Roughly wait a moment then remove it
             await Task.Delay( 500 );
-            Activities.Remove( Activity );
+            Activities.Remove( Act );
             NotifyChanged( "Activities" );
         }
 
@@ -104,6 +104,7 @@ namespace wenku8.Section
             if( Member.IsLoggedIn )
             {
                 GetMyRequests();
+                GetMyInbox();
             }
         }
 
@@ -150,7 +151,10 @@ namespace wenku8.Section
                 foreach( JsonValue JItem in JData )
                 {
                     InboxMessage BoxMessage = new InboxMessage( JItem.GetObject() );
-                    Activities.Add( BoxMessage.Activity );
+                    AddActivity( new Activity( BoxMessage.Name, BoxMessage.OpenComment )
+                    {
+                        TimeStamp = BoxMessage.TimeStamp
+                    } );
                 }
 
                 NotifyChanged( "Activities" );
@@ -216,7 +220,16 @@ namespace wenku8.Section
         {
             Worker.UIInvoke( () =>
             {
-                Activities.Add( new NameValue<Action>( StxText(), A ) );
+                Activities.Add( new Activity( StxText(), A ) );
+                NotifyChanged( "Activities" );
+            } );
+        }
+
+        private void AddActivity( Activity NValue )
+        {
+            Worker.UIInvoke( () =>
+            {
+                Activities.Add( NValue );
                 NotifyChanged( "Activities" );
             } );
         }
