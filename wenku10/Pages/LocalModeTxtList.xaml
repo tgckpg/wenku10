@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
     xmlns:c="using:wenku8.CompositeElement"
+    xmlns:n="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
@@ -16,6 +18,7 @@
     <Page.Resources>
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <n:TransStateConverter x:Key="TransStateConverter" />
         <v:DataCountConverter x:Key="DataCountConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
@@ -32,13 +35,13 @@
                     </Grid.RowDefinitions>
 
                     <!-- Tick Icon -->
-                    <p:StateControl State="{Binding InCollection, Converter={StaticResource DataStateConverter}}"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    Width="90" Height="90">
+                    <Border e:TransitionDisplay.State="{Binding InCollection, Converter={StaticResource TransStateConverter}}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                            Width="90" Height="90">
                         <i:IconTick AutoScale="True"
                                     Foreground="{StaticResource MinorBackgroundBrush}"
                                     Width="120" Height="120" />
-                    </p:StateControl>
+                    </Border>
                     <!-- Uni Icon -->
                     <Border p:Clip.ToBounds="True"
                             VerticalAlignment="Top" HorizontalAlignment="Right"
@@ -79,13 +82,13 @@
                         </ItemsControl>
                     </StackPanel>
                     <!-- Error Indicator -->
-                    <p:StateControl Width="90" Height="90"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                    State="{Binding Error, Converter={StaticResource DataStateConverter}}">
+                    <Border e:TransitionDisplay.State="{Binding Error, Converter={StaticResource TransStateConverter}}"
+                            Width="90" Height="90"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right">
                         <i:IconCross AutoScale="True"
                                      Foreground="OrangeRed"
                                      Width="120" Height="120" />
-                    </p:StateControl>
+                    </Border>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -142,9 +145,9 @@
                                             </MenuFlyout>
                                         </Border.Resources>
                                         <c:LSBookItem Title="{Binding Name}" Desc="{Binding Desc}"
-                                                      FavState="{Binding IsFav, Converter={StaticResource DataStateConverter}}"
+                                                      FavState="{Binding IsFav, Converter={StaticResource TransStateConverter}}"
                                                       IsLoading="{Binding Processing}"
-                                                      SpiderState="{Binding IsSpider, Converter={StaticResource DataStateConverter}}"
+                                                      SpiderState="{Binding IsSpider, Converter={StaticResource TransStateConverter}}"
                                                       CheckedState="{Binding ProcessSuccess, Converter={StaticResource DataStateConverter}}"
                                                       FailedState="{Binding ProcessFailed, Converter={StaticResource DataStateConverter}}"
                                                       RightTapped="ShowBookAction" FlyoutBase.AttachedFlyout="{StaticResource BookAction}" />
@@ -163,12 +166,8 @@
                                                         Text="Import a Script" Click="ImportSpider" />
                                     </MenuFlyout>
                                 </Button.Flyout>
-                                <Grid>
-                                    <p:StateControl State="{Binding Terminate, Converter={StaticResource DataStateConverter}}">
-                                        <i:IconScan Width="50" Height="50"
-                                                    AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
-                                    </p:StateControl>
-                                </Grid>
+                                <i:IconScan Width="50" Height="50"
+                                            AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
                             </Button>
                             <!-- Open Directory -->
                             <Button Width="50" Height="50"
@@ -195,14 +194,12 @@
                                                   Width="50" Height="50"
                                                   IsActive="{Binding Processing}"
                                                   Foreground="{StaticResource RelativeShadesBrush}" />
-                                    <p:StateControl State="{Binding Terminate, Converter={StaticResource DataStateConverter}}">
-                                        <i:IconPlay Width="35" Height="35"
-                                                    AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
-                                    </p:StateControl>
-                                    <p:StateControl State="{Binding Terminate, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                                        <i:IconPause Width="35" Height="35"
-                                                     AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
-                                    </p:StateControl>
+                                    <i:IconPlay e:TransitionDisplay.State="{Binding Terminate, Converter={StaticResource TransStateConverter}}"
+                                                Width="35" Height="35"
+                                                AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
+                                    <i:IconPause e:TransitionDisplay.State="{Binding Terminate, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                                 Width="35" Height="35"
+                                                 AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
                                 </Grid>
                             </Button>
                             <!-- Toggle Fav -->
@@ -302,13 +299,12 @@
                                 Style="{StaticResource PlainButton}">
                             <Grid>
                                 <i:IconMail AutoScale="True"/>
-                                <p:StateControl State="{Binding Activities, Converter={StaticResource DataStateConverter}}">
-                                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                          Background="{StaticResource MajorBrush}" >
-                                        <TextBlock Margin="5, 0" Text="{Binding Activities, Converter={StaticResource DataCountConverter}}"
-                                                   Foreground="{StaticResource RelativeMajorBrush}" />
-                                    </Grid>
-                                </p:StateControl>
+                                <Grid e:TransitionDisplay.State="{Binding Activities, Converter={StaticResource TransStateConverter}}"
+                                      VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                                      Background="{StaticResource MajorBrush}" >
+                                    <TextBlock Margin="5, 0" Text="{Binding Activities, Converter={StaticResource DataCountConverter}}"
+                                               Foreground="{StaticResource RelativeMajorBrush}" />
+                                </Grid>
                                 <ProgressRing IsActive="{Binding Loading}"
                                               Width="30" Height="30"
                                               VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -323,94 +319,83 @@
                                   ItemsSource="{Binding SearchSet}"
                                   ItemTemplate="{StaticResource SHHubItemTemplate}" />
 
-                        <p:StateControl State="{Binding Searching, Converter={StaticResource DataStateConverter}}"
-                                        Margin="10"
-                                        Grid.Row="1" Grid.Column="1"
-                                        Width="40" Height="40" 
-                                        HorizontalAlignment="Right" VerticalAlignment="Top">
-                            <ProgressRing Foreground="{StaticResource MinorBrush}"
-                                          HorizontalAlignment="Center" VerticalAlignment="Center"
-                                          Width="30" Height="30"
-                                          IsActive="{Binding Searching}" />
-                        </p:StateControl>
+                        <ProgressRing Grid.Row="1" Grid.Column="1" Margin="10"
+                                      HorizontalAlignment="Right" VerticalAlignment="Top"
+                                      Foreground="{StaticResource MinorBrush}"
+                                      Width="30" Height="30"
+                                      IsActive="{Binding Searching}" />
 
                         <!-- Activities -->
-                        <p:StateControl Grid.Row="1" Grid.ColumnSpan="3"
-                                        State="{Binding Path=Tag, ElementName=ActivityButton, Converter={StaticResource DataStateConverter}}"
-                                        MaxWidth="400" Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                                        VerticalAlignment="Top" HorizontalAlignment="Right">
-                            <Grid>
-                                <Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
-                                         Margin="0,0,5,0"
-                                         Fill="{StaticResource MinorBrush}" />
-                                <ListView Margin="0,15,0,0" Padding="10"
-                                          IsItemClickEnabled="True" ItemClick="Activities_ItemClick"
-                                          ItemContainerStyle="{StaticResource BareListItem}"
-                                          ItemsSource="{Binding Activities}"
-                                          Background="{StaticResource MinorBrush}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Margin="10,5">
-                                                <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
-                                                           TextTrimming="CharacterEllipsis"
-                                                           Text="{Binding Name}" />
-                                                <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
-                                                           TextAlignment="Right" Opacity="0.8"
-                                                           Visibility="{Binding TimeStamp, Converter={StaticResource DataVisConverter}}"
-                                                           Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                        </p:StateControl>
+                        <Grid Grid.Row="1" Grid.ColumnSpan="3"
+                              e:TransitionDisplay.State="{Binding Path=Tag, ElementName=ActivityButton, Converter={StaticResource TransStateConverter}}"
+                              MaxWidth="400" Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                              VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
+                                     Margin="0,0,5,0"
+                                     Fill="{StaticResource MinorBrush}" />
+                            <ListView Margin="0,15,0,0" Padding="10"
+                                      IsItemClickEnabled="True" ItemClick="Activities_ItemClick"
+                                      ItemContainerStyle="{StaticResource BareListItem}"
+                                      ItemsSource="{Binding Activities}"
+                                      Background="{StaticResource MinorBrush}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="10,5">
+                                            <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding Name}" />
+                                            <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                       TextAlignment="Right" Opacity="0.8"
+                                                       Visibility="{Binding TimeStamp, Converter={StaticResource DataVisConverter}}"
+                                                       Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </HubSection>
         </c:ParallaxHub>
 
         <!-- Popup Script Info -->
-        <p:StateControl State="{Binding Path=Content, ElementName=PopupFrame, Converter={StaticResource DataStateConverter}}"
-                        Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                        Background="{StaticResource MajorBackgroundBrush}"
-                        MaxWidth="500">
-            <Grid>
-                <Rectangle Width="10" Fill="{StaticResource MinorBrush}"
-                           VerticalAlignment="Stretch" HorizontalAlignment="Left">
-                    <Rectangle.RenderTransform>
-                        <TranslateTransform X="-10" />
-                    </Rectangle.RenderTransform>
-                </Rectangle>
-                <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
-                <Button Style="{StaticResource PlainButton}"
-                        Background="{StaticResource MinorBrush}"
-                        Width="35" Height="35"
-                        VerticalAlignment="Top" HorizontalAlignment="Right"
-                        Click="ClosePopup">
-                        <i:IconCross Foreground="{StaticResource RelativeMajorBrush}"
-                                     AutoScale="True" />
-                </Button>
-            </Grid>
-        </p:StateControl>
+        <Grid e:TransitionDisplay.State="{Binding Path=Content, ElementName=PopupFrame, Converter={StaticResource TransStateConverter}}"
+              Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+              Background="{StaticResource MajorBackgroundBrush}"
+              MaxWidth="500">
+            <Rectangle Width="10" Fill="{StaticResource MinorBrush}"
+                       VerticalAlignment="Stretch" HorizontalAlignment="Left">
+                <Rectangle.RenderTransform>
+                    <TranslateTransform X="-10" />
+                </Rectangle.RenderTransform>
+            </Rectangle>
+            <Frame x:Name="PopupFrame" Content="{Binding FrameContent}"/>
+            <Button Style="{StaticResource PlainButton}"
+                    Background="{StaticResource MinorBrush}"
+                    Width="35" Height="35"
+                    VerticalAlignment="Top" HorizontalAlignment="Right"
+                    Click="ClosePopup">
+                    <i:IconCross Foreground="{StaticResource RelativeMajorBrush}"
+                                 AutoScale="True" />
+            </Button>
+        </Grid>
 
         <!-- Loading Message -->
-        <p:StateControl Grid.Row="1" VerticalAlignment="Top"
-                        State="{Binding Loading, Converter={StaticResource DataStateConverter}}"
-                        Background="{StaticResource MinorBrush}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Loading}"
-                           HorizontalAlignment="Right" VerticalAlignment="Center"
-                           Foreground="{StaticResource RelativeMajorBrush}" />
-                <ProgressRing Grid.Column="1"
-                              Margin="10" Width="40" Height="40"
-                              IsActive="{Binding Loading, Converter={StaticResource DataBoolConverter}}"
-                              Foreground="{StaticResource RelativeMajorBrush}" />
-            </Grid>
-        </p:StateControl>
+        <Grid Grid.Row="1" VerticalAlignment="Top"
+              e:TransitionDisplay.State="{Binding Loading, Converter={StaticResource TransStateConverter}}"
+              Background="{StaticResource MinorBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Loading}"
+                       HorizontalAlignment="Right" VerticalAlignment="Center"
+                       Foreground="{StaticResource RelativeMajorBrush}" />
+            <ProgressRing Grid.Column="1"
+                          Margin="10" Width="40" Height="40"
+                          IsActive="{Binding Loading, Converter={StaticResource DataBoolConverter}}"
+                          Foreground="{StaticResource RelativeMajorBrush}" />
+        </Grid>
         <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
     </Grid>
 </Page>

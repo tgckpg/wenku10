@@ -738,7 +738,7 @@ namespace wenku10.Pages.Sharers
 
         private void NewComment( string Label )
         {
-            CommentEditor.State = ControlState.Reovia;
+            TransitionDisplay.SetState( CommentEditor, TransitionState.Active );
             CommentModeLabel.Text = Label;
 
             if( BindItem.ForceEncryption && Crypt == null )
@@ -809,7 +809,7 @@ namespace wenku10.Pages.Sharers
         private void DiscardComment()
         {
             DisplayControls( CommentControls );
-            CommentEditor.State = ControlState.Foreatii;
+            TransitionDisplay.SetState( CommentEditor, TransitionState.Inactive );
         }
         #endregion
 

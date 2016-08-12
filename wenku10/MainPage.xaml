@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10"
     xmlns:c="using:wenku8.CompositeElement"
+    xmlns:e="using:wenku8.Effects"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
-    xmlns:vp="using:Net.Astropenguin.UI.Converters"
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -18,10 +18,11 @@
 
     <Page.Resources>
         <n:DataStateConverter x:Key="DataStateConverter" />
+        <n:DataBoolConverter x:Key="DataBoolConverter" />
         <n:DataVisConverter x:Key="DataVisConverter" />
-        <vp:DataBoolConverter x:Key="DataBoolConverter" />
         <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
         <CollectionViewSource x:Name="favItems" />
         <CollectionViewSource x:Name="Section3Items" />
     </Page.Resources>
@@ -150,9 +151,9 @@
                     <canvas:CanvasAnimatedControl x:Name="Stage" CreateResources="Stage_CreateResources" />
 
                     <!-- Loading Background Cover -->
-                    <p:StateControl x:Name="BgCover">
+                    <Border x:Name="BgCover">
                         <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.6" />
-                    </p:StateControl>
+                    </Border>
 
                     <c:ParallaxHub x:Name="HomeHub">
                         <c:ParallaxHub.ScrollerRibbon>
@@ -358,10 +359,9 @@
                                                 <ProgressRing Width="40" Height="40"
                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
                                                               IsActive="{Binding IsLoading}" />
-                                                <p:StateControl State="{Binding IsLoading, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                                                    <i:IconReload AutoScale="True"
-                                                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                </p:StateControl>
+                                                <i:IconReload AutoScale="True"
+                                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                                              e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"/>
                                             </Grid>
                                         </Button>
                                         <p:VerticalStack Grid.Column="0"
@@ -469,24 +469,19 @@
                     </Grid>
 
                     <!-- Popup Login / Account Info -->
-                    <p:StateControl x:Name="PopupPage" State="{Binding PageStatus}"
-                                    MaxWidth="350">
-                        <Frame Content="{Binding FrameContent}"/>
-                    </p:StateControl>
+                    <Frame x:Name="PopupPage"
+                           e:TransitionDisplay.State="{Binding FrameContent, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_N30_0"
+                           MaxWidth="350" Content="{Binding FrameContent}"/>
 
-                    <Grid Visibility="Collapsed">
-                        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-                        <ProgressRing IsActive="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Grid>
-
-                    <p:StateControl x:Name="BackAgainMessage"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <StackPanel Background="{StaticResource MajorBrush}">
-                            <TextBlock x:Uid="/AppResources/PressAgainExit"
-                                       Text="Press again to exit"
-                                       Foreground="{StaticResource RelativeMajorBrush}" Margin="5" />
-                        </StackPanel>
-                    </p:StateControl>
+                    <StackPanel x:Name="BackAgainMessage"
+                                e:TransitionDisplay.State="Inactive"
+                                VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Background="{StaticResource MajorBrush}" >
+                        <TextBlock x:Uid="/AppResources/PressAgainExit"
+                                   Text="Press again to exit"
+                                   Foreground="{StaticResource RelativeMajorBrush}" Margin="5" />
+                    </StackPanel>
                 </Grid>
             </c:PassiveSplitView.Content>
         </c:PassiveSplitView>

@@ -246,7 +246,6 @@ namespace wenku8.Section
             SearchSet.UpdateSource( await SHLoader.NextPage() );
 
             Searching = false;
-            NotifyChanged( "SearchSet" );
         }
 
         private void SearchItemUpdate( DRequestCompletedEventArgs e, string Id )

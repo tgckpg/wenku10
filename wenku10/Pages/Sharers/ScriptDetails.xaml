@@ -6,6 +6,7 @@
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:xi="using:wenku8.ThemeIcons"
     xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +15,7 @@
     <Page.Resources>
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <v:HubStatusConverter x:Key="HubStatusConverter" />
-        <p:DataStateConverter x:Key="DataStateConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
         <p:DataVisConverter x:Key="DataVisConverter" />
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
         <v:NumberSimplifier x:Key="NumberSimplifier" />
@@ -107,16 +108,16 @@
                            TextWrapping="Wrap"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
 
-                <c:StateControl Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5"
-                                VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                                State="{Binding Selected, Converter={StaticResource DataStateConverter}}">
-                    <Button Style="{StaticResource PlainButton}"
-                            Click="NewReply">
-                        <TextBlock x:Uid="/AppBar/Reply" Text="Reply" TextWrapping="NoWrap"
-                                   Margin="10,5"
-                                   Foreground="{StaticResource RelativeShadesBrush}"/>
-                    </Button>
-                </c:StateControl>
+                <Button Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                        e:TransitionDisplay.State="{Binding Selected, Converter={StaticResource TransStateConverter}}"
+                        e:TransitionDisplay.Mode="A01_X_30_30"
+                        Style="{StaticResource PlainButton}"
+                        Click="NewReply">
+                    <TextBlock x:Uid="/AppBar/Reply" Text="Reply" TextWrapping="NoWrap"
+                               Margin="10,5"
+                               Foreground="{StaticResource RelativeShadesBrush}"/>
+                </Button>
             </Grid>
         </DataTemplate>
         <v:HSCTemplateSelector x:Key="CommentSelector"
@@ -125,7 +126,7 @@
                                Normal="{StaticResource CommentNormal}"/>
     </Page.Resources>
 
-    <Grid>
+    <Grid c:Clip.ToBounds="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -292,21 +293,19 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Publish Button -->
-                    <c:StateControl State="{Binding Public, Converter={StaticResource DataStateConverter}}">
-                        <Button Style="{StaticResource PlainThemeButton}"
-                                Margin="5" Click="TogglePublic"
-                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TextBlock x:Uid="/AppResources/Public" Margin="10,5" Text="Public" />
-                        </Button>
-                    </c:StateControl>
+                    <Button e:TransitionDisplay.State="{Binding Public, Converter={StaticResource TransStateConverter}}"
+                            Style="{StaticResource PlainThemeButton}"
+                            Margin="5" Click="TogglePublic"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/AppResources/Public" Margin="10,5" Text="Public" />
+                    </Button>
 
-                    <c:StateControl State="{Binding Public, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                        <Button Style="{StaticResource PlainThemeButton}"
-                                Margin="5" Opacity="0.5" Click="TogglePublic"
-                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                            <TextBlock x:Uid="/AppResources/PRivate" Margin="10,5" Text="Private" />
-                        </Button>
-                    </c:StateControl>
+                    <Button e:TransitionDisplay.State="{Binding Public, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                            Style="{StaticResource PlainThemeButton}"
+                            Margin="5" Opacity="0.5" Click="TogglePublic"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/AppResources/PRivate" Margin="10,5" Text="Private" />
+                    </Button>
 
                     <!-- Update button -->
                     <Button Style="{StaticResource PlainThemeButton}"
@@ -337,15 +336,14 @@
             <Grid.RenderTransform>
                 <TranslateTransform Y="0" />
             </Grid.RenderTransform>
-            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                <TextBlock x:Uid="/AppResources/NoComments" Text="No comments"
+            <Border e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}, ConverterParameter=1}">
+                <TextBlock x:Uid="/AppResources/NoComments" Text="No comments" Margin="10"
                            Visibility="{Binding Path=ItemsSource, ElementName=CommentList, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
                            Foreground="{StaticResource MajorBrush}" />
-            </c:StateControl>
-            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}">
-                    <TextBlock x:Uid="/AppResources/Loading" Text="Loading"
-                               Foreground="{StaticResource MajorBrush}" />
-            </c:StateControl>
+            </Border>
+            <TextBlock x:Uid="/AppResources/Loading" Text="Loading" Margin="10"
+                       e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
+                       Foreground="{StaticResource MajorBrush}" />
             <ListView x:Name="CommentList"
                       Margin="10"
                       IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
@@ -366,15 +364,14 @@
             <Grid.RenderTransform>
                 <TranslateTransform Y="0" />
             </Grid.RenderTransform>
-            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                <TextBlock x:Uid="/AppResources/NoComments" Text="No requests"
+            <Border e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}, ConverterParameter=1}">
+                <TextBlock x:Uid="/AppResources/NoComments" Text="No requests" Margin="10"
                            Visibility="{Binding Path=ItemsSource, ElementName=RequestList, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
                            Foreground="{StaticResource MajorBrush}" />
-            </c:StateControl>
-            <c:StateControl Margin="10" State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}">
-                    <TextBlock x:Uid="/AppResources/Loading" Text="Loading"
-                               Foreground="{StaticResource MajorBrush}" />
-            </c:StateControl>
+            </Border>
+            <TextBlock x:Uid="/AppResources/Loading" Text="Loading" Margin="10"
+                       e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
+                       Foreground="{StaticResource MajorBrush}" />
             <ListView x:Name="RequestList"
                       Margin="10"
                       ItemContainerStyle="{StaticResource ListItemNoSelect}">
@@ -386,14 +383,13 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <c:StateControl State="{Binding Granted, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                                <Button Style="{StaticResource PlainThemeButton}"
-                                        Click="GrantRequest"
-                                        Visibility="{Binding Path=Tag, ElementName=RequestList, Converter={StaticResource DataVisConverter}}">
-                                    <TextBlock x:Uid="/AppResources/Grant" Margin="10"
-                                               Text="Grant" />
-                                </Button>
-                            </c:StateControl>
+                            <Button e:TransitionDisplay.State="{Binding Granted, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                    Style="{StaticResource PlainThemeButton}"
+                                    Click="GrantRequest"
+                                    Visibility="{Binding Path=Tag, ElementName=RequestList, Converter={StaticResource DataVisConverter}}">
+                                <TextBlock x:Uid="/AppResources/Grant" Margin="10"
+                                           Text="Grant" />
+                            </Button>
                             <i:IconTick Width="30" Height="30"
                                         Visibility="{Binding Granted, Converter={StaticResource DataVisConverter}}"
                                         Foreground="{StaticResource MajorBrush}"
@@ -414,14 +410,14 @@
             </ListView>
         </Grid>
 
-        <c:StateControl State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}"
-                        Margin="10"
-                        Width="40" Height="40" 
-                        HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Border e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
+                Margin="10"
+                Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top">
             <ProgressRing x:Name="LoadingRing" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                           HorizontalAlignment="Center" VerticalAlignment="Center"
                           Width="30" Height="30" />
-        </c:StateControl>
+        </Border>
 
         <!-- Control buttons -->
         <ListView x:Name="ControlsList" Grid.Row="1"
@@ -442,25 +438,25 @@
             </ListView.ItemsPanel>
         </ListView>
 
-        <c:StateControl x:Name="CommentEditor" Grid.Row="0"
-                        Background="{StaticResource MajorBackgroundBrush}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Margin="10">
-                    <TextBlock x:Name="CommentModeLabel"
-                               Foreground="{StaticResource MajorBrush}"
-                               FontSize="30" />
-                    <TextBlock Margin="20,0" x:Name="CommentError"
-                               Visibility="{Binding Path=Text, RelativeSource={RelativeSource Self}, Converter={StaticResource DataVisConverter}}"
-                               Foreground="{StaticResource MinorBrush}"
-                               TextWrapping="Wrap" />
-                </StackPanel>
-                <RichEditBox x:Name="CommentInput"
-                             Grid.Row="1" Margin="20,0,20,10" />
-            </Grid>
-        </c:StateControl>
+        <Grid x:Name="CommentEditor" Grid.Row="0"
+              e:TransitionDisplay.State="Inactive"
+              e:TransitionDisplay.Mode="A01_X_N30_30"
+              Background="{StaticResource MajorBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Margin="10">
+                <TextBlock x:Name="CommentModeLabel"
+                           Foreground="{StaticResource MajorBrush}"
+                           FontSize="30" />
+                <TextBlock Margin="20,0" x:Name="CommentError"
+                           Visibility="{Binding Path=Text, RelativeSource={RelativeSource Self}, Converter={StaticResource DataVisConverter}}"
+                           Foreground="{StaticResource MinorBrush}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+            <RichEditBox x:Name="CommentInput"
+                         Grid.Row="1" Margin="20,0,20,10" />
+        </Grid>
     </Grid>
 </Page>

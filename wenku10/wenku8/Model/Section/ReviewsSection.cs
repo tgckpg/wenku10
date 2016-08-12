@@ -19,7 +19,7 @@ namespace wenku8.Model.Section
     using Comments;
     using ListItem;
 
-    class ReviewsSection : ActiveData
+    sealed class ReviewsSection : ActiveData
     {
         public static readonly string ID = typeof( ReviewsSection ).Name;
 
@@ -39,20 +39,29 @@ namespace wenku8.Model.Section
             }
         }
 
-        public Page SubListView { get; private set; }
-
-        public Observables<Comment, Comment> Comments { get; private set; }
-
-        public ControlState RInputState { get; private set; }
-        public wenku10.Pages.ReviewsInput ReviewsInput { get; private set; }
-
-        public ControlState ReplyPageOpened
+        private Page _SubListView;
+        public Page SubListView
         {
-            get
+            get { return _SubListView; }
+            private set
             {
-                return SubListView == null ? ControlState.Foreatii : ControlState.Reovia;
+                _SubListView = value;
+                NotifyChanged( "SubListView" );
             }
         }
+
+        private wenku10.Pages.ReviewsInput _ReviewsInput;
+        public wenku10.Pages.ReviewsInput ReviewsInput
+        {
+            get { return _ReviewsInput; }
+            private set
+            {
+                _ReviewsInput = value;
+                NotifyChanged( "ReviewsInput" );
+            }
+        }
+
+        public Observables<Comment, Comment> Comments { get; private set; }
 
         public ReviewsSection( BookItem b )
         {
@@ -89,7 +98,6 @@ namespace wenku8.Model.Section
 
             SubListView = RView;
 
-            NotifyChanged( "SubListView", "ReplyPageOpened" );
             SetControls( "NewComment", "Reload", "Back" );
         }
 
@@ -242,7 +250,6 @@ namespace wenku8.Model.Section
         public void CC_Cancel()
         {
             ReviewsInput = null;
-            RInputState = ControlState.Foreatii;
             NotifyChanged( "ReviewsInput", "RInputState" );
 
             if ( CurrentReview == null )
@@ -271,7 +278,6 @@ namespace wenku8.Model.Section
                 ReviewsInput = new wenku10.Pages.ReviewsInput( CurrentReview );
             }
 
-            RInputState = ControlState.Reovia;
             NotifyChanged( "ReviewsInput", "RInputState" );
             SetControls( "Submit", "Cancel" );
         }

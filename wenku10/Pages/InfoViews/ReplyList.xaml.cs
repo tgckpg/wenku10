@@ -45,8 +45,8 @@ namespace wenku10.Pages.InfoViews
 
             IList<Comment> FirstLoad = await CL.NextPage();
 
-            Replies.UpdateSource( FirstLoad );
             Replies.ConnectLoader( CL );
+            Replies.UpdateSource( FirstLoad );
         }
 
         private Comment[] GetReplies( string xml, out int PageCount )

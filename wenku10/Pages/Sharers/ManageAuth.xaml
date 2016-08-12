@@ -7,12 +7,13 @@
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
         <p:DataBoolConverter x:Key="DataBoolConverter" />
-        <p:DataStateConverter x:Key="DataStateConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
         <p:DataCountConverter x:Key="DataCountConverter" />
         <p:DataVisConverter x:Key="DataVisConverter" />
         <MenuFlyout x:Key="AuthContext">
@@ -56,28 +57,24 @@
                               Foreground="{StaticResource RelativeMajorBrush}"
                               VerticalAlignment="Center" HorizontalAlignment="Center"
                               IsActive="{Binding IsLoading}" />
-                <c:StateControl Grid.Column="1"
-                                State="{Binding Processed, Converter={StaticResource DataStateConverter}, ConverterParameter=1}"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Button Click="ParseGrant"
-                            IsEnabled="{Binding NGrants, Converter={StaticResource DataBoolConverter}}"
-                            Style="{StaticResource PlainThemeButton}">
-                        <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
-                                   Margin="20,10" Text="{Binding NGrants}" />
-                    </Button>
-                </c:StateControl>
-                <c:StateControl Grid.Column="1"
-                                State="{Binding Processed, Converter={StaticResource DataStateConverter}}"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Grid Margin="10,0" Width="30" Height="30">
-                        <i:IconTick Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}}"
-                                    Foreground="{StaticResource MajorBrush}"
-                                    AutoScale="True" />
-                        <i:IconCross Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
-                                     Foreground="{StaticResource MajorBrush}"
-                                     AutoScale="True" />
-                    </Grid>
-                </c:StateControl>
+                <Button Grid.Column="1"
+                        e:TransitionDisplay.State="{Binding Processed, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                        VerticalAlignment="Center" HorizontalAlignment="Center" Click="ParseGrant"
+                        IsEnabled="{Binding NGrants, Converter={StaticResource DataBoolConverter}}"
+                        Style="{StaticResource PlainThemeButton}">
+                    <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
+                               Margin="20,10" Text="{Binding NGrants}" />
+                </Button>
+                <Grid Grid.Column="1"
+                      e:TransitionDisplay.State="{Binding Processed, Converter={StaticResource TransStateConverter}}"
+                      VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0" Width="30" Height="30">
+                    <i:IconTick Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}}"
+                                Foreground="{StaticResource MajorBrush}"
+                                AutoScale="True" />
+                    <i:IconCross Visibility="{Binding ProcessSuccess, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                 Foreground="{StaticResource MajorBrush}"
+                                 AutoScale="True" />
+                </Grid>
             </Grid>
         </DataTemplate>
 

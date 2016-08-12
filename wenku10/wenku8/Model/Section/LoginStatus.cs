@@ -6,7 +6,6 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
-using Net.Astropenguin.UI;
 
 namespace wenku8.Model.Section
 {
@@ -33,20 +32,6 @@ namespace wenku8.Model.Section
         private const string AvatarLocation = FileLinks.ROOT_IMAGE + "USER_AVATAR";
 
         public BitmapImage Avatar { get; private set; }
-
-        private ControlState _pagestatus = ControlState.Foreatii;
-        public ControlState PageStatus
-        {
-            get
-            {
-                return _pagestatus;
-            }
-            private set
-            {
-                _pagestatus = value;
-                NotifyChanged( "PageStatus" );
-            }
-        }
 
         private string _loginOrInfo;
         public string LoginOrInfo
@@ -136,7 +121,6 @@ namespace wenku8.Model.Section
             if ( Member.IsLoggedIn )
             {
                 FrameContent = new wenku10.Pages.Account( ClosePopup );
-                PageStatus = ControlState.Reovia;
             }
             else
             {
@@ -151,7 +135,6 @@ namespace wenku8.Model.Section
         private void ClosePopup()
         {
             FrameContent = null;
-            PageStatus = ControlState.Foreatii;
         }
 
     }

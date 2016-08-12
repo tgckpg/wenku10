@@ -9,6 +9,7 @@
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:s="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -20,7 +21,7 @@
         <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
-        <v:DataStateConverter x:Key="DataStateConverter" />
+        <s:TransStateConverter x:Key="TransStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
     </Page.Resources>
@@ -31,12 +32,11 @@
         </Grid.RowDefinitions>
 
         <Grid.Resources>
-            <v:DataStateConverter x:Key="CachedStateConverter" />
 
             <!-- Horizontal Chapter List ItemTemplate -->
             <DataTemplate x:Key="ChListItemTemplate">
                 <Grid>
-                    <p:StateControl Width="30" State="{Binding IsCached, Converter={StaticResource CachedStateConverter}}"
+                    <Border Width="30" e:TransitionDisplay.State="{Binding IsCached, Converter={StaticResource TransStateConverter}}"
                             FlowDirection="LeftToRight" >
                         <i:IconStar Width="60" Height="60" AutoScale="True"
                             Margin="0,-30,-25,0"
@@ -47,7 +47,7 @@
                                 <CompositeTransform Rotation="-10" CenterX="30" CenterY="30" />
                             </i:IconStar.RenderTransform>
                         </i:IconStar>
-                    </p:StateControl>
+                    </Border>
                     <p:VerticalStack
                         Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
                         HorizontalAlignment="Center"
@@ -61,10 +61,10 @@
             <!-- Vertical ChapterList ItemTemplate -->
             <DataTemplate x:Key="ChListVertical">
                 <Grid>
-                    <p:StateControl Width="30"
-                                    State="{Binding IsCached, Converter={StaticResource CachedStateConverter}}"
-                                    VerticalAlignment="Top" HorizontalAlignment="Left"
-                                    FlowDirection="LeftToRight" >
+                    <Border Width="30"
+                            e:TransitionDisplay.State="{Binding IsCached, Converter={StaticResource TransStateConverter}}"
+                            VerticalAlignment="Top" HorizontalAlignment="Left"
+                            FlowDirection="LeftToRight" >
                         <i:IconStar Width="60" Height="60" AutoScale="True"
                                     Margin="-30,0,-25,0"
                                     Foreground="{StaticResource MajorBrush}"
@@ -73,7 +73,7 @@
                                 <CompositeTransform Rotation="-10" CenterX="30" CenterY="30" />
                             </i:IconStar.RenderTransform>
                         </i:IconStar>
-                    </p:StateControl>
+                    </Border>
                     <TextBlock Margin="10"
                                Foreground="{StaticResource RelativeShadesBrush}"
                                FontSize="20" TextWrapping="Wrap"
@@ -95,12 +95,10 @@
                     }" />
             </Grid.RenderTransform>
             <!-- Swapping between 2 image to create fading effect -->
-            <p:StateControl State="{Binding BGState, Converter={StaticResource DataStateConverter}}">
-                <Image Source="{Binding Background}" Stretch="UniformToFill" />
-            </p:StateControl>
-            <p:StateControl State="{Binding BGState2, Converter={StaticResource DataStateConverter}}">
-                <Image Source="{Binding Background2}" Stretch="UniformToFill" />
-            </p:StateControl>
+            <Image Source="{Binding Background}" Stretch="UniformToFill"
+                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
+            <Image Source="{Binding Background2}" Stretch="UniformToFill"
+                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
         </Grid>
 
         <ScrollViewer
@@ -141,12 +139,10 @@
                                                 }" />
                                         </Grid.RenderTransform>
                                         <!-- Swapping between 2 image to create fading effect -->
-                                        <p:StateControl State="{Binding BGState, Converter={StaticResource DataStateConverter}}">
-                                            <Image Source="{Binding Background}" Stretch="UniformToFill"/>
-                                        </p:StateControl>
-                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource DataStateConverter}}">
-                                            <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
-                                        </p:StateControl>
+                                        <Image Source="{Binding Background}" Stretch="UniformToFill"
+                                               e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}"/>
+                                        <Image Source="{Binding Background2}" Stretch="UniformToFill"
+                                               e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}"/>
                                     </Grid>
                                     <Rectangle Grid.RowSpan="2"
                                                Fill="{StaticResource MinorBackgroundBrush}"/>
@@ -172,9 +168,10 @@
                                                     <RowDefinition Height="*" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
-                                                <p:StateControl Grid.RowSpan="2" State="{Binding Cover, Converter={StaticResource DataStateConverter}}" >
-                                                    <Image MaxWidth="140" MaxHeight="180" Margin="5" Source="{Binding Cover}" />
-                                                </p:StateControl>
+                                                <Image Grid.RowSpan="2" Margin="5"
+                                                       MaxWidth="140" MaxHeight="180"
+                                                       Source="{Binding Cover}"
+                                                       e:TransitionDisplay.State="{Binding Cover, Converter={StaticResource TransStateConverter}}" />
                                                 <!-- Author / Press / StatusLong / Length -->
                                                 <StackPanel Grid.Column="1" Margin="5,10,5,5" Grid.Row="0">
                                                     <TextBlock TextWrapping="Wrap" Text="{Binding Author}"
@@ -488,9 +485,6 @@
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
                                 <Grid p:Clip.ToBounds="True">
-                                    <Grid.Resources>
-                                        <v:DataStateConverter x:Key="LoadingStateConverter" />
-                                    </Grid.Resources>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="65" />
                                         <ColumnDefinition Width="*" />
@@ -509,20 +503,16 @@
                                                 }" />
                                         </Grid.RenderTransform>
                                         <!-- Swapping between 2 image to create fading effect -->
-                                        <p:StateControl State="{Binding BGState, Converter={StaticResource DataStateConverter}}">
-                                            <Image Source="{Binding Background}" Stretch="UniformToFill"/>
-                                        </p:StateControl>
-                                        <p:StateControl State="{Binding BGState2, Converter={StaticResource DataStateConverter}}">
-                                            <Image Source="{Binding Background2}" Stretch="UniformToFill"/>
-                                        </p:StateControl>
+                                        <Image Source="{Binding Background}" Stretch="UniformToFill"
+                                               e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
+                                        <Image Source="{Binding Background2}" Stretch="UniformToFill"
+                                               e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
                                     </Grid>
 
                                     <Rectangle Grid.ColumnSpan="2"
                                                Fill="#999" Opacity="0.6"/>
-                                    <p:StateControl Grid.ColumnSpan="2"
-                                                    State="{Binding IsLoading, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                                        <Rectangle Fill="#999" Opacity="0.4" />
-                                    </p:StateControl>
+                                    <Rectangle Fill="#999" Opacity="0.4"
+                                               e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}, ConverterParameter=1}" />
 
                                     <ListView Grid.Column="0" Background="{StaticResource Shades90}"
                                               ItemsSource="{Binding Controls}"
@@ -564,19 +554,18 @@
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
-                                    <p:StateControl Grid.Column="1" State="{Binding ReplyPageOpened}" FlowDirection="LeftToRight">
-                                        <Frame Content="{Binding SubListView}" />
-                                    </p:StateControl>
-                                    <p:StateControl Grid.Column="1" State="{Binding RInputState}">
-                                        <Frame FlowDirection="LeftToRight" Content="{Binding ReviewsInput}"/>
-                                    </p:StateControl>
-                                    <p:StateControl State="{Binding IsLoading, Converter={StaticResource LoadingStateConverter}}">
-                                        <ProgressRing IsActive="{Binding IsLoading}"
-                                                      Width="45" Height="45"
-                                                      Margin="10"
-                                                      VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                      Foreground="{StaticResource RelativeMajorBrush}" />
-                                    </p:StateControl>
+
+                                    <Frame Grid.Column="1" Content="{Binding SubListView}" FlowDirection="LeftToRight"
+                                           e:TransitionDisplay.State="{Binding SubListView, Converter={StaticResource TransStateConverter}}"/>
+                                    <Frame Grid.Column="1" Content="{Binding ReviewsInput}" FlowDirection="LeftToRight"
+                                           e:TransitionDisplay.State="{Binding ReviewsInput, Converter={StaticResource TransStateConverter}}"/>
+
+                                    <ProgressRing IsActive="{Binding IsLoading}"
+                                                  Width="45" Height="45"
+                                                  Margin="10"
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                  Foreground="{StaticResource RelativeMajorBrush}"
+                                                  e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}" />
                                 </Grid>
                             </DataTemplate>
                         </ContentControl.ContentTemplate>

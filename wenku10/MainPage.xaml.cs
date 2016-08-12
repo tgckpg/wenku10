@@ -208,7 +208,7 @@ namespace wenku10
         {
             if ( e.PropertyName == "IsLoading" )
             {
-                BgCover.State = FS.IsLoading ? ControlState.Foreatii : ControlState.Reovia;
+                TransitionDisplay.SetState( BgCover, FS.IsLoading ? TransitionState.Inactive : TransitionState.Active );
             }
         }
 
@@ -483,7 +483,7 @@ namespace wenku10
 
         private void BackAgainToExit( XBackRequestedEventArgs e )
         {
-            if( BackAgainMessage.State == ControlState.Reovia )
+            if( TransitionDisplay.GetState( BackAgainMessage ) == TransitionState.Active )
             {
                 Windows.ApplicationModel.Core.CoreApplication.Exit();
                 return;
@@ -494,9 +494,9 @@ namespace wenku10
         }
         private async void ShowBackMessage()
         {
-            BackAgainMessage.State = ControlState.Reovia;
+            TransitionDisplay.SetState( BackAgainMessage, TransitionState.Active );
             await Task.Delay( 2000 );
-            BackAgainMessage.State = ControlState.Foreatii;
+            TransitionDisplay.SetState( BackAgainMessage, TransitionState.Inactive );
         }
 
         private void ShowFavContext( object sender, RightTappedRoutedEventArgs e )

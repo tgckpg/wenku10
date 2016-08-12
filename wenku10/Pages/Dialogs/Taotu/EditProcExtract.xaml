@@ -3,10 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Dialogs.Taotu"
+    xmlns:e="using:wenku8.Effects"
+    xmlns:n="using:wenku8.Converters"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:v="using:Net.Astropenguin.UI.Converters"
-    xmlns:vp="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -20,8 +20,8 @@
             <Setter Property="Padding" Value="0" />
         </Style>
 
-        <v:DataStateConverter x:Key="DataStateConverter" />
-        <vp:BookInfoConverter x:Key="BookInfoConverter" />
+        <n:BookInfoConverter x:Key="BookInfoConverter" />
+        <n:TransStateConverter x:Key="TransStateConverter" />
     </ContentDialog.Resources>
 
     <ContentDialog.Title>
@@ -133,12 +133,11 @@
                                           Margin="3"
                                           Width="30" Height="30" >
                                         <i:IconTick AutoScale="True" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                        <p:StateControl State="{Binding Valid, Converter={StaticResource DataStateConverter}, ConverterParameter=1}">
-                                            <Border Width="30" Height="30" Background="OrangeRed">
-                                                <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="20"
-                                                           HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                            </Border>
-                                        </p:StateControl>
+                                        <Border e:TransitionDisplay.State="{Binding Valid, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                                Width="30" Height="30" Background="OrangeRed">
+                                            <TextBlock Text="!" Foreground="White" FontWeight="Bold" FontSize="20"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </Border>
                                     </Grid>
 
                                     <!-- Subprocess -->
@@ -147,9 +146,8 @@
                                             Click="Subprocess">
                                         <Grid Width="30" Height="30">
                                             <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
-                                            <p:StateControl State="{Binding HasSubProcs, Converter={StaticResource DataStateConverter}}">
-                                                <i:IconSteps AutoScale="True" Foreground="{StaticResource MajorBrush}" />
-                                            </p:StateControl>
+                                            <i:IconSteps e:TransitionDisplay.State="{Binding HasSubProcs, Converter={StaticResource TransStateConverter}}"
+                                                         AutoScale="True" Foreground="{StaticResource MajorBrush}" />
                                         </Grid>
                                     </Button>
 
