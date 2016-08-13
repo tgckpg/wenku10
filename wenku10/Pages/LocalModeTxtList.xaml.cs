@@ -394,6 +394,12 @@ namespace wenku10.Pages
         #region Sharers Hub
         private void ToggleActivities( object sender, RoutedEventArgs e )
         {
+            if( !SHHub.LoggedIn )
+            {
+                LoginOrLogout();
+                return;
+            }
+
             ActivityButton = ( Button ) sender;
             if ( SHHub.Activities.Count() == 0 )
             {
@@ -458,9 +464,7 @@ namespace wenku10.Pages
 
         private async void Register( object sender, RoutedEventArgs e )
         {
-            Dialogs.Sharers.Register RegisterDialog = new Dialogs.Sharers.Register();
-            await Popups.ShowDialog( RegisterDialog );
-            if ( RegisterDialog.Canceled ) return;
+            await SHHub.Member.Register();
             LoginOrLogout();
         }
 

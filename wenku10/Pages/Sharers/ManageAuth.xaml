@@ -119,13 +119,21 @@
                           Margin="10"
                           ItemTemplate="{StaticResource AuthItem}"
                           ItemContainerStyle="{StaticResource ListItemNoSelect}" />
-                <Button Grid.Row="1"
-                        HorizontalAlignment="Right"
-                        Style="{StaticResource PlainButton}"
-                        Width="45" Height="45"
-                        Click="ImportKey">
-                    <i:IconPlusSign AutoScale="True" />
-                </Button>
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <Button Style="{StaticResource PlainButton}"
+                            e:TransitionDisplay.State="{Binding Path=ItemsSource, ElementName=KeyList, Converter={StaticResource TransStateConverter}}"
+                            Width="45" Height="45" Tag="Keys"
+                            Click="ExportAuths">
+                        <i:IconLogout Direction="Rotate270" AutoScale="True" />
+                    </Button>
+                    <Button Style="{StaticResource PlainButton}"
+                            Width="45" Height="45"
+                            Click="ImportKey">
+                        <i:IconPlusSign AutoScale="True" />
+                    </Button>
+                </StackPanel>
             </Grid>
         </PivotItem>
         <PivotItem Margin="0" x:Name="TokensSection" Header="Tokens">
@@ -138,13 +146,21 @@
                           Margin="10"
                           ItemTemplate="{StaticResource AuthItem}"
                           ItemContainerStyle="{StaticResource ListItemNoSelect}" />
-                <Button Grid.Row="1"
-                        HorizontalAlignment="Right"
-                        Style="{StaticResource PlainButton}"
-                        Width="45" Height="45"
-                        Click="ImportToken">
-                    <i:IconPlusSign AutoScale="True" />
-                </Button>
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <Button Style="{StaticResource PlainButton}"
+                            e:TransitionDisplay.State="{Binding Path=ItemsSource, ElementName=TokenList, Converter={StaticResource TransStateConverter}}"
+                            Width="45" Height="45" Tag="Tokens"
+                            Click="ExportAuths">
+                        <i:IconLogout Direction="Rotate270" AutoScale="True" />
+                    </Button>
+                    <Button Style="{StaticResource PlainButton}"
+                            Width="45" Height="45"
+                            Click="ImportToken">
+                        <i:IconPlusSign AutoScale="True" />
+                    </Button>
+                </StackPanel>
             </Grid>
         </PivotItem>
         <PivotItem x:Name="RequestsSection" Header="Requests">

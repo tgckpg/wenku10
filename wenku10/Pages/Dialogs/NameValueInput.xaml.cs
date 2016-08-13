@@ -38,7 +38,7 @@ namespace wenku10.Pages.Dialogs
             PrimaryButtonText = stx.Str( BtnLeft );
             SecondaryButtonText = stx.Str( BtnRight );
 
-            this.Title = Title;
+            TitleText.Text = Title;
             NameLbl.Text = NameLabel;
             ValueLbl.Text = ValueLabel;
         }
@@ -52,6 +52,7 @@ namespace wenku10.Pages.Dialogs
         {
             if ( e.Key == Windows.System.VirtualKey.Enter )
             {
+                e.Handled = true;
                 DetectInput();
             }
         }

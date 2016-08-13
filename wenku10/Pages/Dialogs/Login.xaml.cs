@@ -40,6 +40,11 @@ namespace wenku10.Pages.Dialogs
             }
 
             Member.OnStatusChanged += Member_StatusUpdate;
+
+            if( Member.CanRegister )
+            {
+                RegisterBtn.Visibility = Visibility.Visible;
+            }
         }
 
         void Member_StatusUpdate( object sender, MemberStatus st )
@@ -88,11 +93,11 @@ namespace wenku10.Pages.Dialogs
         {
             if ( e.Key == Windows.System.VirtualKey.Enter )
             {
-                DetectInputLogin();
+                e.Handled = DetectInputLogin();
             }
         }
 
-        private void DetectInputLogin()
+        private bool DetectInputLogin()
         {
             string Name = Account.Text.Trim();
             string Passwd = Password.Password;
@@ -107,7 +112,7 @@ namespace wenku10.Pages.Dialogs
                 {
                     Password.Focus( FocusState.Keyboard );
                 }
-                return;
+                return false;
             }
             else
             {
@@ -122,6 +127,8 @@ namespace wenku10.Pages.Dialogs
                 this.Focus( FocusState.Pointer );
                 // Request string
                 Member.Login( Name, Passwd );
+
+                return true;
             }
         }
 
@@ -133,5 +140,10 @@ namespace wenku10.Pages.Dialogs
             ServerMessage.Visibility = Visibility.Visible;
         }
 
+        private void RegisterBtn_Click( object sender, RoutedEventArgs e )
+        {
+            this.Hide();
+            Member.Register();
+        }
     }
 }

@@ -12,6 +12,8 @@ using wenku8.Ext;
 using wenku8.Resources;
 using wenku8.Settings;
 using wenku8.Model.REST;
+using Net.Astropenguin.Helpers;
+using System.Threading.Tasks;
 
 namespace wenku10.SHHub
 {
@@ -23,6 +25,7 @@ namespace wenku10.SHHub
 
         public event TypedEventHandler<object, MemberStatus> OnStatusChanged;
 
+        public bool CanRegister { get { return true; } }
         public bool IsLoggedIn { get; private set; }
         public bool WillLogin { get; private set; }
 
@@ -43,6 +46,13 @@ namespace wenku10.SHHub
 
             XParameter MemberAuth = AuthReg.Parameter( "member-auth" );
             if ( MemberAuth != null ) RestoreAuth( MemberAuth );
+        }
+
+        public async Task<bool> Register()
+        {
+            Pages.Dialogs.Sharers.Register RegisterDialog = new Pages.Dialogs.Sharers.Register();
+            await Popups.ShowDialog( RegisterDialog );
+            return !RegisterDialog.Canceled;
         }
 
         public void Login( string Account, string Password )

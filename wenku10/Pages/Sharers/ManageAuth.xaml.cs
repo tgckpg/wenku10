@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
@@ -273,6 +275,32 @@ namespace wenku10.Pages.Sharers
             }
             catch ( Exception )
             { }
+        }
+
+        private async void ExportAuths( object sender, RoutedEventArgs e )
+        {
+            Button Btn = ( Button ) sender;
+            string Tag = ( string ) Btn.Tag;
+            IStorageFile ISF = await AppStorage.SaveFileAsync( "wenku10 Auth", new List<string>() { ".xml" }, Tag );
+            if ( ISF == null ) return;
+
+            try
+            {
+                using ( Stream s = await ISF.OpenStreamForWriteAsync() )
+                {
+                    await wenku8.Resources.Shared.Storage.GetStream(
+                        Tag == "Keys"
+                            ? AESMgr.SettingsFile
+                            : TokMgr.SettingsFile
+                    ).CopyToAsync( s );
+
+                    await s.FlushAsync();
+                }
+            }
+            catch( Exception )
+            {
+                // Failed to save file
+            }
         }
 
         private async void ImportToken( object sender, RoutedEventArgs e )

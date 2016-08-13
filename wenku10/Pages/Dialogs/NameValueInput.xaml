@@ -11,8 +11,8 @@
     Background="{StaticResource MajorBackgroundBrush}"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <ContentDialog.Title>
-        <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                   Text="Name value input" />
+        <TextBlock x:Name="TitleText" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="{Binding}" />
     </ContentDialog.Title>
 
     <StackPanel>

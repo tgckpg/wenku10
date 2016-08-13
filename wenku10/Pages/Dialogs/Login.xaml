@@ -34,5 +34,9 @@
                    Foreground="{StaticResource MajorBrush}"
                    Text="Password" />
         <PasswordBox x:Name="Password" KeyDown="OnKeyDown"/>
+        <HyperlinkButton x:Name="RegisterBtn" Click="RegisterBtn_Click"
+                         Visibility="Collapsed" HorizontalAlignment="Right">
+            <TextBlock x:Uid="/ContextMenu/Register" Text="Register"/>
+        </HyperlinkButton>
     </StackPanel>
 </ContentDialog>
