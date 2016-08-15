@@ -29,6 +29,7 @@ using Net.Astropenguin.UI;
 using wenku8.AdvDM;
 using wenku8.Effects;
 using wenku8.Ext;
+using wenku8.Model.Book;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
@@ -86,6 +87,39 @@ namespace wenku10.Pages.Sharers
             SetTemplate();
         }
 
+        public ScriptDetails( BookItem b )
+            :this()
+        {
+            AccessToken = ( string ) new TokenManager().GetAuthById( b.Id )?.Value;
+
+            RCache.POST(
+                Shared.ShRequest.Server
+                , Shared.ShRequest.Search( "uuid: " + b.Id, 0, 1, new string[] { AccessToken } )
+                , ( e, QId ) =>
+                {
+                    try
+                    {
+                        BindItem = new HubScriptItem(
+                            JsonStatus.Parse( e.ResponseString )
+                                .GetNamedArray( "data" )
+                                .First().GetObject()
+                        );
+
+                        var j = Dispatcher.RunIdleAsync( ( x ) => SetTemplate() );
+                    }
+                    catch ( Exception )
+                    {
+
+                    }
+                }
+                , ( CacheName, QId, ex ) =>
+                {
+                    // TODO: Not in ShHub
+                }
+                , false
+            );
+        }
+
         public ScriptDetails()
         {
             this.InitializeComponent();
@@ -100,7 +134,7 @@ namespace wenku10.Pages.Sharers
 
         private void SetTemplate()
         {
-            DataContext = BindItem;
+            LayoutRoot.DataContext = BindItem;
 
             if( BindItem.Encrypted )
             {
@@ -114,7 +148,7 @@ namespace wenku10.Pages.Sharers
 
             if ( !string.IsNullOrEmpty( AccessToken ) )
             {
-                AccessControls.Visibility = Visibility.Visible;
+                TransitionDisplay.SetState( AccessControls, TransitionState.Active );
             }
 
             AvailControls = new Dictionary<string, PaneNavButton>()
@@ -291,7 +325,7 @@ namespace wenku10.Pages.Sharers
             if ( RequestBox.Canceled || RequestBox.SelectedAuth == null ) return;
 
             AccessToken = ( string ) RequestBox.SelectedAuth.Value;
-            AccessControls.Visibility = Visibility.Visible;
+            TransitionDisplay.SetState( AccessControls, TransitionState.Active );
         }
 
         private async void AssignKey( object sender, RoutedEventArgs e )

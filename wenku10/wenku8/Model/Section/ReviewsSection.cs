@@ -93,7 +93,7 @@ namespace wenku8.Model.Section
         public async Task OpenReview( Review R )
         {
             CurrentReview = R;
-            wenku10.Pages.InfoViews.ReplyList RView = new wenku10.Pages.InfoViews.ReplyList();
+            wenku10.Pages.BookInfoControls.ReplyList RView = new wenku10.Pages.BookInfoControls.ReplyList();
             await RView.OpenReview( R );
 
             SubListView = RView;

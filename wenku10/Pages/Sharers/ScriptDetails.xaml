@@ -126,15 +126,15 @@
                                Normal="{StaticResource CommentNormal}"/>
     </Page.Resources>
 
-    <Grid c:Clip.ToBounds="True">
+    <Grid x:Name="LayoutRoot" c:Clip.ToBounds="True" FlowDirection="LeftToRight">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ScrollViewer>
             <!-- Description -->
-            <StackPanel Margin="10,5">
-                <Grid Margin="0,0,40,0">
+            <StackPanel Margin="10,5" >
+                <Grid Margin="0,0,40,0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -143,6 +143,8 @@
                     <Button Width="40" Height="40"
                             Background="Transparent"
                             VerticalAlignment="Center" HorizontalAlignment="Center"
+                            e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                            e:TransitionDisplay.Mode="A01_X_N30_0"
                             Style="{StaticResource PlainButton}">
                         <Button.Flyout>
                             <MenuFlyout>
@@ -169,6 +171,8 @@
                     </Button>
                     <TextBlock Grid.Column="1" FontSize="20"
                                VerticalAlignment="Center"
+                               e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                               e:TransitionDisplay.Mode="A01_Y_N30_0"
                                TextWrapping="Wrap"
                                Text="{Binding Name}"
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
@@ -179,8 +183,12 @@
                 <!-- Status History -->
                 <TextBlock Margin="10, 5"
                            x:Uid="/AppResources/HS_StatusHistory" Text="Status History"
+                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_N30_0"
                            Foreground="{StaticResource SubtleBrush}" />
                 <GridView Margin="10, 0"
+                          e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                          e:TransitionDisplay.Mode="A01_Y_30_0"
                           ItemsSource="{Binding Histories}"
                           ItemContainerStyle="{StaticResource PlainGridItem}">
                     <GridView.ItemTemplate>
@@ -210,11 +218,15 @@
 
                 <TextBlock Margin="10,5"
                            FontSize="15"
+                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_Y_N30_0"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                            TextWrapping="Wrap"
                            Text="{Binding Desc}"/>
 
-                <Grid Margin="10, 5">
+                <Grid Margin="10, 5"
+                      e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                      e:TransitionDisplay.Mode="A01_Y_30_0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -264,7 +276,9 @@
                                   ItemsPanel="{StaticResource WrapPanelTemplate}"
                                   ItemsSource="{Binding Tags}" />
                 </Grid>
-                <Grid Margin="10, 5">
+                <Grid Margin="10, 5"
+                      e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                      e:TransitionDisplay.Mode="A01_X_N30_0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -332,6 +346,7 @@
         <Grid x:Name="CommentSection"
               Visibility="Collapsed"
               Opacity="0"
+              Grid.RowSpan="2"
               Background="{StaticResource MajorBackgroundBrush}">
             <Grid.RenderTransform>
                 <TranslateTransform Y="0" />
@@ -345,7 +360,7 @@
                        e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
                        Foreground="{StaticResource MajorBrush}" />
             <ListView x:Name="CommentList"
-                      Margin="10"
+                      Margin="10,10,10,50"
                       IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
                       ItemContainerStyle="{StaticResource BareListItem}"
                       ItemTemplateSelector="{StaticResource CommentSelector}">
@@ -360,6 +375,7 @@
         <Grid x:Name="RequestSection"
                 Visibility="Collapsed"
                 Opacity="0"
+                Grid.RowSpan="2"
                 Background="{StaticResource MajorBackgroundBrush}">
             <Grid.RenderTransform>
                 <TranslateTransform Y="0" />
@@ -373,7 +389,7 @@
                        e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
                        Foreground="{StaticResource MajorBrush}" />
             <ListView x:Name="RequestList"
-                      Margin="10"
+                      Margin="10,10,10,50"
                       ItemContainerStyle="{StaticResource ListItemNoSelect}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

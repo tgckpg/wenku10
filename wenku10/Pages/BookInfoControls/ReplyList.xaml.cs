@@ -22,7 +22,7 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.DataModel;
 using wenku8.Ext;
 
-namespace wenku10.Pages.InfoViews
+namespace wenku10.Pages.BookInfoControls
 {
     sealed partial class ReplyList : Page
     {

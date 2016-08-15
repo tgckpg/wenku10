@@ -7,7 +7,6 @@
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:s="using:wenku8.Converters"
     xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,7 +21,6 @@
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <s:TransStateConverter x:Key="TransStateConverter" />
-        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
         <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
     </Page.Resources>
     <Grid x:Name="LayoutRoot">
@@ -124,7 +122,7 @@
                                 <Grid p:Clip.ToBounds="True">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*"/>
-                                        <RowDefinition Height="65"/>
+                                        <RowDefinition Height="50"/>
                                     </Grid.RowDefinitions>
                                     <!-- Background from data context -->
                                     <Grid Grid.RowSpan="2" Margin="-100, -100, -100, -100" 
@@ -148,7 +146,7 @@
                                                Fill="{StaticResource MinorBackgroundBrush}"/>
                                     <ScrollViewer Grid.RowSpan="2" Margin="10" FlowDirection="LeftToRight"
                                                   VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
-                                        <StackPanel Margin="0, 0, 0, 65">
+                                        <StackPanel Margin="0, 0, 0, 50">
                                             <TextBlock Text="{Binding Title}" FontSize="30"
                                                        Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap" />
                                             <TextBlock Margin="5, 0"
@@ -252,13 +250,13 @@
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
                                                 IsEnabled="{Binding OriginalUrl, Converter={StaticResource DataBoolConverter}}"
-                                                Height="65" Width="65"
+                                                Height="50" Width="50"
                                                 Click="OpenInBrowser" >
                                                 <i:IconMSEdge AutoScale="True" />
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
-                                                Height="65" Width="65"
+                                                Height="50" Width="50"
                                                 Tapped="AddOrRemoveFav">
                                             <Grid>
                                                 <i:IconFaved AutoScale="True"
@@ -270,7 +268,7 @@
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
-                                                Height="65" Width="65">
+                                                Height="50" Width="50">
                                             <Button.Flyout>
                                                 <MenuFlyout>
                                                     <MenuFlyoutSubItem x:Uid="/AppBar/TOC" Text="Table of Contents">
@@ -297,13 +295,13 @@
                                         <!-- Obsolete buttons
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
-                                                Height="65" Width="65"
+                                                Height="50" Width="50"
                                                 Click="Vote" >
                                             <TextBlock x:Uid="/AppBar/Push" FontSize="30" Foreground="White" />
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
-                                                Height="65" Width="65"
+                                                Height="50" Width="50"
                                                 Click="SearchAuthor" >
                                             <TextBlock Text="Seach Author"
                                                        Foreground="White"
@@ -331,7 +329,7 @@
                             <DataTemplate>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="65" />
+                                        <ColumnDefinition Width="50" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock
@@ -339,21 +337,21 @@
                                         VerticalAlignment="{Binding Converter={StaticResource PhoneVAlignConverter}, ConverterParameter=Top|Bottom}"
                                         HorizontalAlignment="Center"
                                         TextLineBounds="TrimToBaseline"
-                                        FontSize="50"
+                                        FontSize="35"
                                         Foreground="{StaticResource Shades80}"
                                         TextWrapping="Wrap" />
                                     <StackPanel Grid.Column="0"
                                                 Background="{StaticResource Shades70}"
                                                 VerticalAlignment="{Binding Converter={StaticResource PhoneVAlignConverter}, ConverterParameter=Center|Stretch}">
                                         <Button Style="{StaticResource PlainButton}"
-                                                Width="65" Height="65" Click="JumpToBookmark">
+                                                Width="50" Height="50" Click="JumpToBookmark">
                                             <i:IconBookmark AutoScale="True" />
                                         </Button>
                                         <Button Content="{Binding ToggleDir}" Style="{StaticResource PlainButton}"
-                                                Width="65" Height="65" Click="ToggleDirection" />
+                                                Width="50" Height="50" Click="ToggleDirection" />
                                         <c:OneDriveButton Loaded="SyncButtonLoaded"
                                                 FlowDirection="LeftToRight"
-                                                Width="65" Height="65"  />
+                                                Width="50" Height="50"  />
                                     </StackPanel>
 
                                     <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}"
@@ -481,95 +479,32 @@
                         </TransitionCollection>
                     </Border.Transitions>
 
-                    <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                        <ContentControl.ContentTemplate>
-                            <DataTemplate>
-                                <Grid p:Clip.ToBounds="True">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="65" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                    <Grid p:Clip.ToBounds="True">
+                        <!-- Background from data context -->
+                        <Grid Margin="-200, -30, -200, -30" 
+                              Loaded="CommentsBgLoaded">
+                            <Grid.RenderTransform>
+                                <TranslateTransform
+                                    X="{
+                                        Binding ElementName=ContentScroll
+                                        , Path=HorizontalOffset
+                                        , Converter={StaticResource ParallaxConverter}
+                                        , ConverterParameter=-0.10
+                                    }" />
+                            </Grid.RenderTransform>
+                            <!-- Swapping between 2 image to create fading effect -->
+                            <Image Source="{Binding Background}" Stretch="UniformToFill"
+                                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
+                            <Image Source="{Binding Background2}" Stretch="UniformToFill"
+                                   e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
+                        </Grid>
 
-                                    <!-- Background from data context -->
-                                    <Grid Grid.ColumnSpan="2" Margin="-200, -30, -200, -30" 
-                                          Loaded="CommentsBgLoaded">
-                                        <Grid.RenderTransform>
-                                            <TranslateTransform
-                                                X="{
-                                                    Binding ElementName=ContentScroll
-                                                    , Path=HorizontalOffset
-                                                    , Converter={StaticResource ParallaxConverter}
-                                                    , ConverterParameter=-0.10
-                                                }" />
-                                        </Grid.RenderTransform>
-                                        <!-- Swapping between 2 image to create fading effect -->
-                                        <Image Source="{Binding Background}" Stretch="UniformToFill"
-                                               e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
-                                        <Image Source="{Binding Background2}" Stretch="UniformToFill"
-                                               e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
-                                    </Grid>
+                        <Rectangle Fill="#999" Opacity="0.6"/>
+                        <Rectangle Fill="#999" Opacity="0.4"
+                                   e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}, ConverterParameter=1}" />
 
-                                    <Rectangle Grid.ColumnSpan="2"
-                                               Fill="#999" Opacity="0.6"/>
-                                    <Rectangle Fill="#999" Opacity="0.4"
-                                               e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}, ConverterParameter=1}" />
-
-                                    <ListView Grid.Column="0" Background="{StaticResource Shades90}"
-                                              ItemsSource="{Binding Controls}"
-                                              IsItemClickEnabled="True"
-                                              ItemClick="ControlClick"
-                                              ItemContainerStyle="{StaticResource BareListItem}"
-                                              FlowDirection="LeftToRight">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Child="{Binding Icon}"
-                                                        Background="{StaticResource Shades90}"
-                                                        Width="65" Height="65" />
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                    <TextBlock
-                                        x:Uid="/AppResources/Comments"
-                                        VerticalAlignment="Bottom"
-                                        HorizontalAlignment="Center"
-                                        TextLineBounds="TrimToBaseline"
-                                        FontSize="50"
-                                        Foreground="{StaticResource Shades90}"
-                                        TextWrapping="Wrap" />
-                                    <ListView ItemsSource="{Binding Comments}"
-                                              Grid.Column="1" FlowDirection="LeftToRight"
-                                              IsItemClickEnabled="True"
-                                              ItemClick="OpenComment"
-                                              ItemContainerStyle="{StaticResource CommentListItem}">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel x:Name="Reply" Margin="10">
-                                                    <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                                        <TextBlock VerticalAlignment="Bottom" Foreground="Black" FontSize="18" Text="{Binding Username}" TextWrapping="Wrap" />
-                                                        <TextBlock VerticalAlignment="Bottom" Margin="5, 0" Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" Foreground="#1122FF" />
-                                                        <TextBlock VerticalAlignment="Bottom" Margin="5, 0" Text="{Binding NumReplies}" Foreground="Red" />
-                                                    </StackPanel>
-                                                    <TextBlock Margin="5,0,5,0" Foreground="#222" Text="{Binding Title}" TextWrapping="Wrap" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-
-                                    <Frame Grid.Column="1" Content="{Binding SubListView}" FlowDirection="LeftToRight"
-                                           e:TransitionDisplay.State="{Binding SubListView, Converter={StaticResource TransStateConverter}}"/>
-                                    <Frame Grid.Column="1" Content="{Binding ReviewsInput}" FlowDirection="LeftToRight"
-                                           e:TransitionDisplay.State="{Binding ReviewsInput, Converter={StaticResource TransStateConverter}}"/>
-
-                                    <ProgressRing IsActive="{Binding IsLoading}"
-                                                  Width="45" Height="45"
-                                                  Margin="10"
-                                                  VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                  Foreground="{StaticResource RelativeMajorBrush}"
-                                                  e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ContentControl.ContentTemplate>
-                    </ContentControl>
+                        <Frame x:Name="CommentFrame" />
+                    </Grid>
                 </Border>
 
             </StackPanel>

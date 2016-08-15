@@ -27,8 +27,7 @@ using Net.Astropenguin.Logging;
 using wenku8.Ext;
 using wenku8.CompositeElement;
 using wenku8.Model.Book;
-using wenku8.Model.Comments;
-using wenku8.Model.ListItem;
+using wenku8.Model.Book.Spider;
 using wenku8.Model.Loaders;
 using wenku8.Model.Section;
 using wenku8.Storage;
@@ -45,7 +44,6 @@ namespace wenku10.Pages
 
         private TOCSection TOCData;
         private ListView VolList;
-        private ReviewsSection ReviewsSection;
         private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
 
         private bool SkipThisPage = false;
@@ -92,7 +90,6 @@ namespace wenku10.Pages
             ThisBook = null;
             TOCData = null;
             VolList = null;
-            ReviewsSection = null;
 
             try
             {
@@ -144,12 +141,16 @@ namespace wenku10.Pages
             TOCData.ToggleDirection();
         }
 
-        private async void SetTemplateComment( BookItem b )
+        private void SetTemplateComment( BookItem b )
         {
-            ReviewsSection = new ReviewsSection( b );
-            // Let's try the async method this time
-            await ReviewsSection.Load();
-            CommentSection.DataContext = ReviewsSection;
+            if ( b is BookInstruction )
+            {
+                CommentFrame.Content = new Sharers.ScriptDetails( b );
+            }
+            else
+            {
+                CommentFrame.Content = new BookInfoControls.Comments( b );
+            }
         }
 
         private void SetTemplateTOC( BookItem b )
@@ -280,6 +281,8 @@ namespace wenku10.Pages
                     new VolumeLoader( SetTemplateTOC ).Load( ThisBook );
                 }
             } );
+
+            if ( ViewComments ) SetTemplateComment( Book );
 
             BL.Load( ThisBook, useCache );
         }
@@ -590,16 +593,6 @@ namespace wenku10.Pages
             ChFloatList.Visibility = Visibility.Collapsed;
         }
         #endregion
-
-        private async void OpenComment( object sender, ItemClickEventArgs e )
-        {
-            await ReviewsSection.OpenReview( e.ClickedItem as Review );
-        }
-
-        private void ControlClick( object sender, ItemClickEventArgs e )
-        {
-            ReviewsSection.ControlAction( e.ClickedItem as PaneNavButton );
-        }
 
         private void AddOrRemoveFav( object sender, TappedRoutedEventArgs e )
         {

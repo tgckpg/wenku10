@@ -122,6 +122,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
+      <DependentUpon>Comments.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Dialogs\NameValueInput.xaml.cs">
       <DependentUpon>NameValueInput.xaml</DependentUpon>
     </Compile>
@@ -257,7 +260,7 @@
     <Compile Include="Pages\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\InfoViews\ReplyList.xaml.cs">
+    <Compile Include="Pages\BookInfoControls\ReplyList.xaml.cs">
       <DependentUpon>ReplyList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\NavList.xaml.cs">
@@ -329,6 +332,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Account.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BookInfoControls\Comments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -428,7 +435,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\InfoViews\ReplyList.xaml">
+    <Page Include="Pages\BookInfoControls\ReplyList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
