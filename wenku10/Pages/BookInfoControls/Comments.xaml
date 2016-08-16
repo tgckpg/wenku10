@@ -51,11 +51,20 @@
                 <DataTemplate>
                     <StackPanel x:Name="Reply" Margin="10">
                         <StackPanel Orientation="Horizontal" Grid.Row="0">
-                            <TextBlock VerticalAlignment="Bottom" Foreground="Black" FontSize="18" Text="{Binding Username}" TextWrapping="Wrap" />
-                            <TextBlock VerticalAlignment="Bottom" Margin="5, 0" Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" Foreground="#1122FF" />
-                            <TextBlock VerticalAlignment="Bottom" Margin="5, 0" Text="{Binding NumReplies}" Foreground="Red" />
+                            <TextBlock VerticalAlignment="Bottom"
+                                       Text="{Binding Username}"
+                                       Foreground="{StaticResource SubtleBrush}" 
+                                       TextWrapping="Wrap" />
+                            <TextBlock VerticalAlignment="Bottom" Margin="5, 0"
+                                       Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"
+                                       Foreground="{StaticResource HorizontalRibbonBrush}" />
+                            <TextBlock VerticalAlignment="Bottom" Margin="5, 0" Text="{Binding NumReplies}"
+                                       Foreground="{StaticResource SubtleBrush}" />
                         </StackPanel>
-                        <TextBlock Margin="5,0,5,0" Foreground="#222" Text="{Binding Title}" TextWrapping="Wrap" />
+                        <TextBlock Margin="5,0,5,0"
+                                   Text="{Binding Title}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
+                                   TextWrapping="Wrap" />
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

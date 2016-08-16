@@ -23,11 +23,11 @@ using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
-using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
 using wenku8.CompositeElement;
+using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Loaders;
 using wenku8.Model.Book;
@@ -358,7 +358,7 @@ namespace wenku10.Pages
         public void RenderComplete( IdleDispatchedHandlerArgs e )
         {
             RenderMask.State = ControlState.Foreatii;
-            InfoMask.State = ControlState.Foreatii;
+            TransitionDisplay.SetState( InfoMask, TransitionState.Inactive );
         }
 
         private void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
@@ -518,9 +518,9 @@ namespace wenku10.Pages
             }
 
             // Popup info mask
-            if ( InfoMask.State == ControlState.Foreatii )
+            if ( TransitionDisplay.GetState( InfoMask ) == TransitionState.Inactive )
             {
-                InfoMask.State = ControlState.Reovia;
+                TransitionDisplay.SetState( InfoMask, TransitionState.Active );
                 e.Handled = true;
                 return;
             }
@@ -562,7 +562,7 @@ namespace wenku10.Pages
 
         private void BeginRead( object sender, TappedRoutedEventArgs e )
         {
-            InfoMask.State = ControlState.Foreatii;
+            TransitionDisplay.SetState( InfoMask, TransitionState.Inactive );
         }
 
         private void EPStepper_SelectionChanged( object sender, SelectionChangedEventArgs e )

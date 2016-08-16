@@ -103,7 +103,9 @@
                                         <ColumnDefinition Width="140" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Margin="5" Source="{Binding Cover}" />
+                                    <Image Margin="5" Source="{Binding Cover}"
+                                           e:TransitionDisplay.Mode="A01_X_30_0"
+                                           e:TransitionDisplay.State="{Binding Cover, Converter={StaticResource TransStateConverter}}"/>
                                     <Grid Grid.Column="1">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -133,8 +135,10 @@
                                         </StackPanel>
                                     </Grid>
                                     <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
-                                           TextWrapping="Wrap" Text="{Binding Intro}"
-                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                                               e:TransitionDisplay.Mode="A01_Y_30_0"
+                                               e:TransitionDisplay.State="{Binding Intro, Converter={StaticResource TransStateConverter}}"
+                                               TextWrapping="Wrap" Text="{Binding Intro}"
+                                               Foreground="{StaticResource RelativeMajorBrush}" />
                             </Grid>
                             </StackPanel>
                         </p:StateControl>

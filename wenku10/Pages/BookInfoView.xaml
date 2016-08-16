@@ -94,19 +94,20 @@
             </Grid.RenderTransform>
             <!-- Swapping between 2 image to create fading effect -->
             <Image Source="{Binding Background}" Stretch="UniformToFill"
+                   e:TransitionDisplay.Mode="A01"
                    e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
             <Image Source="{Binding Background2}" Stretch="UniformToFill"
-                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
+                   e:TransitionDisplay.Mode="A01"
+                   e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
         </Grid>
 
-        <ScrollViewer
-            x:Name="ContentScroll"
-            Grid.Row="0" Grid.RowSpan="2"
-            VerticalScrollMode="Disabled"
-            VerticalScrollBarVisibility="Disabled"
-            HorizontalScrollMode="Enabled"
-            HorizontalScrollBarVisibility="Auto"
-            ViewChanged="ContentScroll_ViewChanged" >
+        <ScrollViewer x:Name="ContentScroll"
+                      Grid.Row="0" Grid.RowSpan="2"
+                      VerticalScrollMode="Disabled"
+                      VerticalScrollBarVisibility="Disabled"
+                      HorizontalScrollMode="Enabled"
+                      HorizontalScrollBarVisibility="Auto"
+                      ViewChanged="ContentScroll_ViewChanged" >
             <StackPanel x:Name="MasterContainer" Orientation="Horizontal">
                 <!-- Section Book Info -->
                 <Border x:Name="BookInfoSection"
@@ -499,9 +500,7 @@
                                    e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
                         </Grid>
 
-                        <Rectangle Fill="#999" Opacity="0.6"/>
-                        <Rectangle Fill="#999" Opacity="0.4"
-                                   e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}, ConverterParameter=1}" />
+                        <Border Background="{StaticResource MajorBackgroundBrush}" Opacity="0.8" />
 
                         <Frame x:Name="CommentFrame" />
                     </Grid>
