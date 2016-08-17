@@ -1,0 +1,32 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.Sharers.AssignAuth"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs.Sharers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    Background="{StaticResource MajorBackgroundBrush}"
+    PrimaryButtonText="Send"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
+
+    <StackPanel Margin="10, 0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!-- Key selection -->
+            <ComboBox x:Name="Keys"
+                      Grid.Row="1" Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding AuthList}"
+                      DisplayMemberPath="Name" SelectedValuePath="Value"
+                      VerticalAlignment="Center"
+                      Loaded="PreSelectKey" />
+        </Grid>
+
+    </StackPanel>
+</ContentDialog>

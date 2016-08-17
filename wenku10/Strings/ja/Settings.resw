@@ -557,4 +557,13 @@
   <data name="Help_BugFeature.Text" xml:space="preserve">
     <value>バグレポート</value>
   </data>
+  <data name="Appearance_ContentReader_Clock_ARColor.Text" xml:space="preserve">
+    <value>バッテリーアーク</value>
+  </data>
+  <data name="Size.Text" xml:space="preserve">
+    <value>サイズ</value>
+  </data>
+  <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
+    <value>インストール確認</value>
+  </data>
 </root>

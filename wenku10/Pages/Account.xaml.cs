@@ -13,7 +13,6 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.UI;
 using wenku8.Ext;
 
 namespace wenku10.Pages
@@ -47,7 +46,6 @@ namespace wenku10.Pages
         private void PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
         {
             Settings.PropertyChanged -= PropertyChanged;
-            InfoState.State = ControlState.Reovia;
             InfoBubble.IsActive = false;
         }
 

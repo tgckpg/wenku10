@@ -6,7 +6,6 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
-using Net.Astropenguin.UI;
 
 namespace wenku8.Model.Section
 {
@@ -34,20 +33,6 @@ namespace wenku8.Model.Section
 
         public BitmapImage Avatar { get; private set; }
 
-        private ControlState _pagestatus = ControlState.Foreatii;
-        public ControlState PageStatus
-        {
-            get
-            {
-                return _pagestatus;
-            }
-            private set
-            {
-                _pagestatus = value;
-                NotifyChanged( "PageStatus" );
-            }
-        }
-
         private string _loginOrInfo;
         public string LoginOrInfo
         {
@@ -67,7 +52,7 @@ namespace wenku8.Model.Section
         public LoginStatus()
         {
             Member = X.Singleton<IMember>( XProto.Member );
-            Member_OnStatusChanged();
+            MemberStatusChanged();
             Member.OnStatusChanged += Member_OnStatusChanged;
         }
 
@@ -76,7 +61,12 @@ namespace wenku8.Model.Section
             Member.OnStatusChanged -= Member_OnStatusChanged;
         }
 
-        private void Member_OnStatusChanged()
+        private void Member_OnStatusChanged( object sender, MemberStatus e )
+        {
+            MemberStatusChanged();
+        }
+
+        private void MemberStatusChanged()
         {
             StringResources stx = new StringResources();
             LoginOrInfo = Member.IsLoggedIn
@@ -105,7 +95,6 @@ namespace wenku8.Model.Section
             );
         }
 
-
         private void AvatarLoaded( DRequestCompletedEventArgs e, string id )
         {
             Shared.Storage.WriteBytes( AvatarLocation, e.ResponseBytes );
@@ -132,11 +121,13 @@ namespace wenku8.Model.Section
             if ( Member.IsLoggedIn )
             {
                 FrameContent = new wenku10.Pages.Account( ClosePopup );
-                PageStatus = ControlState.Reovia;
             }
             else
             {
-                wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login();
+                wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login(
+                    X.Singleton<IMember>( XProto.Member )
+                );
+
                 await Popups.ShowDialog( Login );
             }
         }
@@ -144,7 +135,7 @@ namespace wenku8.Model.Section
         private void ClosePopup()
         {
             FrameContent = null;
-            PageStatus = ControlState.Foreatii;
         }
+
     }
 }

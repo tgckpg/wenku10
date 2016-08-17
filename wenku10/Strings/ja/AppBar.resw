@@ -156,7 +156,7 @@
   <data name="ReloadChapter" xml:space="preserve">
     <value>セクションで再ダウンロード</value>
   </data>
-  <data name="Reply" xml:space="preserve">
+  <data name="Reply.Text" xml:space="preserve">
     <value>返事</value>
   </data>
   <data name="Save" xml:space="preserve">

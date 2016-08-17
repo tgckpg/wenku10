@@ -12,21 +12,31 @@
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
     <ContentDialog.Title>
-        <TextBlock x:Uid="/AppResources/Login" Text="Login" />
+        <TextBlock x:Uid="/AppResources/Login"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="Login" />
     </ContentDialog.Title>
 
     <StackPanel>
+        <!-- Message -->
+        <TextBlock x:Name="ServerMessage"
+                   Visibility="Collapsed"
+                   Text="SESSION_EXPIRED"
+                   Foreground="{StaticResource SubtleBrush}" />
+        <!-- Account -->
         <TextBlock x:Uid="/AppResources/Login_AccountName" Text="Account"
                    Foreground="{StaticResource MajorBrush}" />
-        <TextBox x:Name="Account" KeyDown="OnKeyDown"/>
+        <TextBox x:Name="Account"
+                 Margin="0,0,0,10"
+                 KeyDown="OnKeyDown"/>
+        <!-- Password -->
         <TextBlock x:Uid="/AppResources/Login_Password"
                    Foreground="{StaticResource MajorBrush}"
                    Text="Password" />
         <PasswordBox x:Name="Password" KeyDown="OnKeyDown"/>
-        <CheckBox x:Name="IsRemember" IsChecked="True">
-            <TextBlock Foreground="{StaticResource MinorBrush}"
-                       x:Uid="/Settings/Account_Remember"
-                       Text="RememberMe" />
-        </CheckBox>
+        <HyperlinkButton x:Name="RegisterBtn" Click="RegisterBtn_Click"
+                         Visibility="Collapsed" HorizontalAlignment="Right">
+            <TextBlock x:Uid="/ContextMenu/Register" Text="Register"/>
+        </HyperlinkButton>
     </StackPanel>
 </ContentDialog>

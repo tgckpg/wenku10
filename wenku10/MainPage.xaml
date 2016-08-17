@@ -4,9 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10"
     xmlns:c="using:wenku8.CompositeElement"
+    xmlns:e="using:wenku8.Effects"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:v="using:wenku8.Converters"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,11 +17,12 @@
     NavigationCacheMode="Enabled">
 
     <Page.Resources>
-        <n:BoolStateConverter x:Key="BoolStateConverter" />
-        <v:BoolDataConverter x:Key="BoolDataConverter" />
+        <n:DataStateConverter x:Key="DataStateConverter" />
+        <n:DataBoolConverter x:Key="DataBoolConverter" />
+        <n:DataVisConverter x:Key="DataVisConverter" />
         <v:NumberSimplifier x:Key="NumberSimplifier" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
-        <v:FavConverter x:Key="FavConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
         <CollectionViewSource x:Name="favItems" />
         <CollectionViewSource x:Name="Section3Items" />
     </Page.Resources>
@@ -41,6 +44,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
+
         <c:PassiveSplitView x:Name="MainSplitPane"
                             EnablePaneSwipe="False"
                             Background="{StaticResource MajorBackgroundBrush}">
@@ -61,7 +65,7 @@
                         <TextBlock x:Name="MarqueeText"
                                    Foreground="{StaticResource RelativeMajorBrush}"
                                    FontSize="30"
-                                   LayoutUpdated="Sb_Completed"
+                                   LayoutUpdated="MarqueeComplete"
                                    VerticalAlignment="Center"
                                    Text="{Binding Title}">
                             <TextBlock.RenderTransform>
@@ -99,7 +103,9 @@
                                         <ColumnDefinition Width="140" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Margin="5" Source="{Binding Cover}" />
+                                    <Image Margin="5" Source="{Binding Cover}"
+                                           e:TransitionDisplay.Mode="A01_X_30_0"
+                                           e:TransitionDisplay.State="{Binding Cover, Converter={StaticResource TransStateConverter}}"/>
                                     <Grid Grid.Column="1">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="*" />
@@ -129,8 +135,10 @@
                                         </StackPanel>
                                     </Grid>
                                     <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="5"
-                                           TextWrapping="Wrap" Text="{Binding Intro}"
-                                           Foreground="{StaticResource RelativeMajorBrush}" />
+                                               e:TransitionDisplay.Mode="A01_Y_30_0"
+                                               e:TransitionDisplay.State="{Binding Intro, Converter={StaticResource TransStateConverter}}"
+                                               TextWrapping="Wrap" Text="{Binding Intro}"
+                                               Foreground="{StaticResource RelativeMajorBrush}" />
                             </Grid>
                             </StackPanel>
                         </p:StateControl>
@@ -144,26 +152,12 @@
             </c:PassiveSplitView.Pane>
             <c:PassiveSplitView.Content>
                 <Grid>
-                    <!-- Background from data context -->
-                    <Grid Grid.RowSpan="2" Margin="-100" >
-                        <Grid.RenderTransform>
-                            <TranslateTransform
-                                X="{
-                                    Binding ElementName=HomeHub
-                                    , Path=HorizontalOffset
-                                    , Converter={StaticResource ParallaxConverter}
-                                    , ConverterParameter=-0.10
-                                }" />
-                        </Grid.RenderTransform>
-                    </Grid>
-
-                    <Canvas x:Name="StarFields" />
-                    <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.2" />
+                    <canvas:CanvasAnimatedControl x:Name="Stage" CreateResources="Stage_CreateResources" />
 
                     <!-- Loading Background Cover -->
-                    <p:StateControl x:Name="BgCover">
+                    <Border x:Name="BgCover">
                         <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.6" />
-                    </p:StateControl>
+                    </Border>
 
                     <c:ParallaxHub x:Name="HomeHub">
                         <c:ParallaxHub.ScrollerRibbon>
@@ -177,10 +171,6 @@
                         <HubSection x:Name="FavSectionView" Style="{StaticResource ContainerHead}"
                                     Width="400"
                                     MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
-                            <HubSection.Resources>
-                                <n:DataStateConverter x:Key="DataStateConverter" />
-                                <n:BoolStateConverter x:Key="LoadingStateConverter" />
-                            </HubSection.Resources>
                             <HubSection.Header>
                                 <Grid Padding="10">
                                     <Grid.ColumnDefinitions>
@@ -191,10 +181,6 @@
                                     </Grid.ColumnDefinitions>
 
                                     <Rectangle Margin="-10" Grid.ColumnSpan="3" Fill="{StaticResource Shades60}" />
-                                    <!--Polygon Grid.Column="3"
-                                             VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                             Fill="{StaticResource MinorBrush}"
-                                             Points="0,0 10,5, 0,10" /-->
 
                                     <TextBox Margin="5,0" Grid.Column="0" PlaceholderText="Search BookShelf"
                                              VerticalAlignment="Center"
@@ -216,7 +202,7 @@
                                     <c:OneDriveButton x:Name="OneDriveResync"
                                                       VerticalAlignment="Center"
                                                       Visibility="Collapsed"
-                                                      Foreground="{StaticResource RelativeMajorBrush}"
+                                                      Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                                       Margin="5,-3,2,-3"
                                                       Grid.Column="2" />
                                 </Grid>
@@ -234,14 +220,14 @@
                                                 <Border>
                                                     <Border.Resources>
                                                         <MenuFlyout x:Key="FavContextMenu">
-                                                            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_PinToStart"
+                                                            <MenuFlyoutItem x:Uid="/ContextMenu/PinToStart"
                                                                         Text="Pin to Desktop"
                                                                         Click="FavContext" Tag="Pin"/>
                                                             <MenuFlyoutItem Text="{Binding AutoCacheText}"
                                                                         Click="FavContext" Tag="AutoCache"/>
                                                             <MenuFlyoutItem Text="{Binding RSync}"
                                                                         Click="FavContext" Tag="RSync"/>
-                                                            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Delete"
+                                                            <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
                                                                         Text="Delete" 
                                                                         Click="FavContext" Tag="Delete"/>
                                                         </MenuFlyout>
@@ -294,13 +280,13 @@
                                                             </TextBlock>
                                                         </StackPanel>
                                                         <Border Grid.Column="0" Grid.Row="1"
-                                                                Visibility="{Binding UpdateActive, Converter={StaticResource FavConverter}, ConverterParameter=1}"
+                                                                Visibility="{Binding UpdateActive, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
                                                                 Background="{StaticResource Shades40}">
                                                             <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
                                                                        TextTrimming="WordEllipsis"
                                                                        DataContext="{Binding AutoCacheObj}"
                                                                        Margin="5">
-                                                                    <Run x:Uid="/ContextMenu/ContextMenu_AutoUpdate" Text="AutoUpdate"/>
+                                                                    <Run x:Uid="/ContextMenu/AutoUpdate" Text="AutoUpdate"/>
                                                                     <Run Text="{Binding StatusText}" />
                                                             </TextBlock>
                                                         </Border>
@@ -335,7 +321,7 @@
                         </HubSection>
 
                         <!-- Staff picks -->
-                        <HubSection x:Name="RectileSection" Visibility="Collapsed">
+                        <HubSection x:Name="StaffPicksSection" Visibility="Collapsed">
                             <DataTemplate>
                                 <c:StarCanvas
                                     ItemsSource="{Binding Data}"
@@ -377,10 +363,9 @@
                                                 <ProgressRing Width="40" Height="40"
                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" 
                                                               IsActive="{Binding IsLoading}" />
-                                                <p:StateControl State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}, ConverterParameter=1}">
-                                                    <i:IconReload AutoScale="True"
-                                                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                </p:StateControl>
+                                                <i:IconReload AutoScale="True"
+                                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                                              e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"/>
                                             </Grid>
                                         </Button>
                                         <p:VerticalStack Grid.Column="0"
@@ -488,24 +473,19 @@
                     </Grid>
 
                     <!-- Popup Login / Account Info -->
-                    <p:StateControl x:Name="PopupPage" State="{Binding PageStatus}"
-                                    MaxWidth="350">
-                        <Frame Content="{Binding FrameContent}"/>
-                    </p:StateControl>
+                    <Frame x:Name="PopupPage"
+                           e:TransitionDisplay.State="{Binding FrameContent, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_N30_0"
+                           MaxWidth="350" Content="{Binding FrameContent}"/>
 
-                    <Grid Visibility="Collapsed">
-                        <Rectangle VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
-                        <ProgressRing IsActive="True" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </Grid>
-
-                    <p:StateControl x:Name="BackAgainMessage"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <StackPanel Background="{StaticResource MajorBrush}">
-                            <TextBlock x:Uid="/AppResources/PressAgainExit"
-                                       Text="Press again to exit"
-                                       Foreground="{StaticResource RelativeMajorBrush}" Margin="5" />
-                        </StackPanel>
-                    </p:StateControl>
+                    <StackPanel x:Name="BackAgainMessage"
+                                e:TransitionDisplay.State="Inactive"
+                                VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Background="{StaticResource MajorBrush}" >
+                        <TextBlock x:Uid="/AppResources/PressAgainExit"
+                                   Text="Press again to exit"
+                                   Foreground="{StaticResource RelativeMajorBrush}" Margin="5" />
+                    </StackPanel>
                 </Grid>
             </c:PassiveSplitView.Content>
         </c:PassiveSplitView>

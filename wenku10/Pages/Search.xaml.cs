@@ -120,7 +120,7 @@ namespace wenku10.Pages
         {
             IsLoading.IsActive = true;
             SearchTerm.MinWidth = 0;
-            Status.Text = stx.Text( "ImageViewer_Loading" );
+            Status.Text = stx.Text( "Loading" );
 
             Expression<Action<IList<BookItem>>> handler = x => BookLoaded( x );
             LL = X.Instance<IListLoader>( XProto.ListLoader

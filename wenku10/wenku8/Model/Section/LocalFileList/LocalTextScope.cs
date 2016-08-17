@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.Storage;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+
+using wenku10.Pages;
 
 namespace wenku8.Model.Section
 {
     using AdvDM;
     using ListItem;
-    using Net.Astropenguin.Loaders;
     using Resources;
     using Settings;
     using Storage;
-    using wenku10.Pages;
-    using Windows.Storage;
-    partial class LocalFileList : SearchableContext
+
+    sealed partial class LocalFileList : SearchableContext
     {
         private string _loading = null;
 
@@ -36,32 +38,73 @@ namespace wenku8.Model.Section
 
         public LocalFileList()
         {
-            IEnumerable<string> ids = Shared.Storage.ListDirs( FileLinks.ROOT_LOCAL_VOL );
-            string[] favs = new BookStorage().GetIdList();
+            StringResources stx = new StringResources( "LoadingMessage" );
+            string LoadText = stx.Str( "ProgressIndicator_Message" );
 
-            List<LocalBook> Items = new List<LocalBook>();
-            foreach( string id in ids )
+            var j = Task.Run( async () =>
             {
-                LocalBook LB = new LocalBook( id );
-                if( LB.ProcessSuccess )
-                {
-                    Items.Add( LB );
-                    LB.IsFav = favs.Contains( id );
-                }
-            }
+                IEnumerable<string> BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_LOCAL_VOL );
+                string[] favs = new BookStorage().GetIdList();
 
-            ids = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
-            foreach( string id in ids )
-            {
-                SpiderBook LB = new SpiderBook( id );
-                if( LB.ProcessSuccess )
+                List<LocalBook> Items = new List<LocalBook>();
+                foreach ( string Id in BookIds )
                 {
-                    Items.Add( LB );
-                    LB.IsFav = favs.Contains( id );
+                    Loading = LoadText + ": " + Id;
+                    LocalBook LB = await LocalBook.CreateAsync( Id );
+                    if ( LB.ProcessSuccess )
+                    {
+                        Items.Add( LB );
+                        LB.IsFav = favs.Contains( Id );
+                    }
                 }
-            }
 
-            if( 0 < Items.Count ) SearchSet = Items;
+                BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
+                foreach ( string Id in BookIds )
+                {
+                    Loading = LoadText + ": " + Id;
+                    SpiderBook LB = await SpiderBook.CreateAsyncSpider( Id );
+
+                    if( LB.aid != Id )
+                    {
+                        try
+                        {
+                            Logger.Log( ID, "Fixing misplaced spider book" );
+                            Shared.Storage.MoveDir( FileLinks.ROOT_SPIDER_VOL + Id, LB.MetaLocation );
+                        }
+                        catch( Exception ex )
+                        {
+                            Logger.Log( ID
+                                , string.Format(
+                                    "Unable to move script: {0} => {1}, {2} "
+                                    , Id, LB.aid, ex.Message )
+                                    , LogType.WARNING );
+
+                            continue;
+                        }
+                    }
+
+                    if ( LB.ProcessSuccess || LB.CanProcess )
+                    {
+                        Items.Add( LB );
+                        LB.IsFav = favs.Contains( Id );
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Logger.Log( ID, "Removing invalid script: " + Id, LogType.INFO );
+                            Shared.Storage.RemoveDir( LB.MetaRoot );
+                        }
+                        catch ( Exception ex )
+                        {
+                            Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
+                        }
+                    }
+                }
+
+                if ( 0 < Items.Count ) SearchSet = Items;
+                Loading = null;
+            } );
         }
 
         public async void Load()
@@ -142,14 +185,20 @@ namespace wenku8.Model.Section
             Processing = true;
             Terminate = false;
             NotifyChanged( "Processing" );
-            foreach( LocalBook b in SearchSet )
+            ActiveItem[] Books = SearchSet.ToArray();
+            foreach ( LocalBook b in Books )
             {
                 await b.Process();
-                if( Terminate ) break;
+                if ( Terminate ) break;
             }
             Terminate = true;
             Processing = false;
             NotifyChanged( "Processing" );
+        }
+
+        public LocalBook GetById( string Id )
+        {
+            return Data.Cast<LocalBook>().FirstOrDefault( x => x.aid == Id );
         }
 
         protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
@@ -174,26 +223,26 @@ namespace wenku8.Model.Section
             NotifyChanged( "SearchSet" );
         }
 
-        public void ToggleFavs()
+        public async Task ToggleFavs()
         {
             if ( !FavOnly )
             {
                 BookStorage BS = new BookStorage();
-                string[] ids = BS.GetIdList();
+                string[] BookIds = BS.GetIdList();
 
                 List<ActiveItem> SS = new List<ActiveItem>();
 
-                foreach ( string id in ids )
+                foreach ( string Id in BookIds )
                 {
-                    if ( Data != null && Data.Any( x => ( x as LocalBook ).aid == id ) )
+                    if ( Data != null && Data.Any( x => ( x as LocalBook ).aid == Id ) )
                     {
                         continue;
                     }
 
-                    LocalBook LB = new LocalBook( id );
+                    LocalBook LB = await LocalBook.CreateAsync( Id );
                     if ( !( LB.CanProcess || LB.ProcessSuccess ) )
                     {
-                        XParameter Param = BS.GetBook( id );
+                        XParameter Param = BS.GetBook( Id );
                         LB.Name = Param.GetValue( AppKeys.GLOBAL_NAME );
                         LB.Desc = "Source is unavailable";
                         LB.CanProcess = false;

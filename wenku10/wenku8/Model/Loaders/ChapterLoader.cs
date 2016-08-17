@@ -14,10 +14,9 @@ namespace wenku8.Model.Loaders
     using Book;
     using Book.Spider;
     using Resources;
-    using Settings;
     using System.Messages;
 
-    class ChapterLoader
+    sealed class ChapterLoader
     {
         public static readonly string ID = typeof( ChapterLoader ).Name;
 

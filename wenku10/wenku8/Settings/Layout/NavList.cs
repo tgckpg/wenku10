@@ -20,7 +20,7 @@ namespace wenku8.Settings.Layout
         {
             get
             {
-                return LayoutSettings.GetParameter( Horizontal ).GetBool( "enable" );
+                return LayoutSettings.Parameter( Horizontal ).GetBool( "enable" );
             }
             set
             {
@@ -37,7 +37,7 @@ namespace wenku8.Settings.Layout
 
         private void InitParams()
         {
-            if( LayoutSettings.GetParameter( Horizontal ) == null )
+            if( LayoutSettings.Parameter( Horizontal ) == null )
             {
                 IsHorizontal = true;
             }

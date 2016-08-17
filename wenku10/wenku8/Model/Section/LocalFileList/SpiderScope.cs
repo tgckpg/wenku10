@@ -11,39 +11,51 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Model.Section
 {
     using ListItem;
-    using Storage;
 
-    partial class LocalFileList 
+    sealed partial class LocalFileList 
     {
         public static readonly string ID = typeof( LocalFileList ).Name;
+
+        public async Task<bool> OpenSpider( IStorageFile ISF )
+        {
+            try
+            {
+                SpiderBook SBook = await SpiderBook.ImportFile( await ISF.ReadString(), true );
+
+                List<LocalBook> NData;
+                if( Data != null )
+                {
+                    NData = new List<LocalBook>( Data.Cast<LocalBook>() );
+                    if ( NData.Any( x => x.aid == SBook.aid ) )
+                    {
+                        Logger.Log( ID, "Already in collection, updating the data", LogType.DEBUG );
+                        NData.Remove( NData.First( x => x.aid == SBook.aid ) );
+                    }
+                }
+                else
+                {
+                    NData = new List<LocalBook>();
+                }
+
+                NData.Add( SBook );
+                Data = NData;
+                NotifyChanged( "SearchSet" );
+                return SBook.CanProcess || SBook.ProcessSuccess;
+            }
+            catch( Exception ex )
+            {
+                Logger.Log( ID, ex.Message, LogType.ERROR );
+            }
+
+            return false;
+        }
 
         public async void OpenSpider()
         {
             IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
             if ( ISF == null ) return;
 
-            try
-            {
-                SpiderBook SBook = new SpiderBook( await ISF.ReadString(), true );
-
-                List<ActiveItem> NData;
-                if( Data != null )
-                {
-                    NData = new List<ActiveItem>( Data );
-                }
-                else
-                {
-                    NData = new List<ActiveItem>();
-                }
-
-                NData.Add( SBook );
-                Data = NData;
-                NotifyChanged( "SearchSet" );
-            }
-            catch( Exception ex )
-            {
-                Logger.Log( ID, ex.Message, LogType.ERROR );
-            }
+            var j = OpenSpider( ISF );
         }
     }
 }

@@ -19,14 +19,17 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
 using libtaotu.Crawler;
 using libtaotu.Controls;
 using libtaotu.Models.Procedure;
+using libtaotu.Pages;
 
 using wenku8.Taotu;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
+using System.Threading.Tasks;
 
 namespace wenku10.Pages.Dialogs.Taotu
 {
@@ -47,15 +50,20 @@ namespace wenku10.Pages.Dialogs.Taotu
         {
             StringResources stx = new StringResources( "Message" );
             PrimaryButtonText = stx.Str( "OK" );
+
+            MessageBus.OnDelivery += MessageBus_OnDelivery;
         }
 
         public void Dispose()
         {
+            MessageBus.OnDelivery -= MessageBus_OnDelivery;
             if ( PreviewFile != null )
             {
                 var j = PreviewFile.DeleteAsync();
             }
         }
+
+        ~EditProcExtract() { Dispose(); }
 
         public EditProcExtract( WenkuExtractor EditTarget )
             : this()
@@ -80,17 +88,21 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private async void TestDef( object sender, RoutedEventArgs e )
         {
+            if ( TestRunning.IsActive ) return;
+
             string Url = UrlInput.Text.Trim();
-            if ( string.IsNullOrEmpty( Url ) ) return;
+            TestRunning.IsActive = true;
 
-            Button B = sender as Button;
-            ProgressRing Pring = B.FindName( "TestRunning" ) as ProgressRing;
+            if ( PreviewFile == null ) PreviewFile = await AppStorage.MkTemp();
 
-            Pring.IsActive = true;
+            if ( string.IsNullOrEmpty( Url ) )
+            {
+                MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
+                return;
+            }
+
             try
             {
-                if ( PreviewFile == null ) PreviewFile = await AppStorage.MkTemp();
-
                 IStorageFile ISF = await ProceduralSpider.DownloadSource( Url );
                 string Content = await ISF.ReadString();
 
@@ -106,18 +118,14 @@ namespace wenku10.Pages.Dialogs.Taotu
                     throw new Exception( "Unable to find the generated book convoy" );
                 }
 
-                await PreviewFile.WriteString( ( Convoy.Payload as BookInstruction ).PlainTextInfo );
-
-                var j = Dispatcher.RunIdleAsync(
-                    x => Frame.Navigate( typeof( DirectTextViewer ), PreviewFile )
-                );
+                await ViewTestResult( ( BookInstruction ) Convoy.Payload );
             }
             catch( Exception ex )
             {
                 ProcManager.PanelMessage( ID, ex.Message, LogType.INFO );
             }
 
-            Pring.IsActive = false;
+            TestRunning.IsActive = false;
         }
 
         private void AddPropDef( object sender, RoutedEventArgs e )
@@ -177,5 +185,32 @@ namespace wenku10.Pages.Dialogs.Taotu
             WenkuExtractor.PropExt Ext = Cb.DataContext as WenkuExtractor.PropExt;
             Ext.PType = NType.Data;
         }
+
+        private void MessageBus_OnDelivery( Message Mesg )
+        {
+            ProcConvoy Convoy = Mesg.Payload as ProcConvoy;
+            if ( Mesg.Content == "RUN_RESULT"
+                && Convoy != null
+                && Convoy.Dispatcher == EditTarget )
+            {
+                TestRunning.IsActive = false;
+
+                BookInstruction BookInst = Convoy.Payload as BookInstruction;
+                if( BookInst != null )
+                {
+                    var j = ViewTestResult( BookInst );
+                }
+            }
+        }
+
+        private async Task ViewTestResult( BookInstruction Payload )
+        {
+            await PreviewFile.WriteString( Payload.PlainTextInfo );
+
+            var j = Dispatcher.RunIdleAsync(
+                x => Frame.Navigate( typeof( DirectTextViewer ), PreviewFile )
+            );
+        }
+
     }
 }

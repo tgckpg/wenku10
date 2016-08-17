@@ -45,7 +45,7 @@
 
         <ListView x:Name="ChapterList">
             <ListView.Resources>
-                <v:BoolStateConverter x:Key="CachedStateConverter" />
+                <v:DataStateConverter x:Key="CachedStateConverter" />
             </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate>

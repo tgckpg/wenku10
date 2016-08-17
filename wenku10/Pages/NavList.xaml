@@ -13,7 +13,7 @@
     NavigationCacheMode="Enabled">
 
     <Page.Resources>
-        <v:BoolStateConverter x:Key="BoolStateConverter" />
+        <v:DataStateConverter x:Key="DataStateConverter" />
         <t:NumberSimplifier x:Key="NumberSimplifier" />
     </Page.Resources>
 
@@ -98,7 +98,7 @@
                         </ItemsPanelTemplate>
                     </GridView.ItemsPanel>
                 </c:VariableGridView>
-                <p:StateControl State="{Binding IsLoading, Converter={StaticResource BoolStateConverter}}"
+                <p:StateControl State="{Binding IsLoading, Converter={StaticResource DataStateConverter}}"
                                 Margin="10"
                                 Width="40" Height="40" 
                                 HorizontalAlignment="Right" VerticalAlignment="Top"

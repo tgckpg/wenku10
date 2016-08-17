@@ -29,19 +29,6 @@ namespace wenku10.Pages
         public ImageView()
         {
             this.InitializeComponent();
-
-            // Override the Left Pane
-            NavigationHandler.InsertHandlerOnNavigatedBack( GoBack );
-        }
-
-        private void GoBack( object sender, XBackRequestedEventArgs e )
-        {
-            NavigationHandler.OnNavigatedBack -= GoBack;
-            if( Frame.CanGoBack )
-            {
-                Frame.GoBack();
-                e.Handled = true;
-            }
         }
 
         protected override void OnNavigatedFrom( NavigationEventArgs e )

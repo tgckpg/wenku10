@@ -89,7 +89,7 @@ namespace wenku8.Taotu
             await Popups.ShowDialog( new EditProcMark( this ) );
             if( SubEdit != null )
             {
-                MessageBus.Send( new Message( typeof( ProceduresPanel ), "SubEdit", this ) );
+                MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
             }
         }
 
@@ -122,8 +122,8 @@ namespace wenku8.Taotu
             EpPattern = Param.GetValue( "EpPattern" );
             EpParam = Param.GetValue( "EpParam" );
 
-            VolProcs = new ProcManager( Param.GetParameter( "VolProcs" ) );
-            EpProcs = new ProcManager( Param.GetParameter( "EpProcs" ) );
+            VolProcs = new ProcManager( Param.Parameter( "VolProcs" ) );
+            EpProcs = new ProcManager( Param.Parameter( "EpProcs" ) );
         }
 
         public override XParameter ToXParam()
@@ -140,11 +140,11 @@ namespace wenku8.Taotu
             } );
 
             XParameter VProc = VolProcs.ToXParam();
-            VProc.ID = "VolProcs";
+            VProc.Id = "VolProcs";
             Param.SetParameter( VProc  );
 
             XParameter EProc = EpProcs.ToXParam();
-            EProc.ID = "EpProcs";
+            EProc.Id = "EpProcs";
             Param.SetParameter( EProc );
 
             return Param;
@@ -246,7 +246,7 @@ namespace wenku8.Taotu
 
                         if( VolAsync )
                         {
-                            VInst.SetProcId( VolProcs.GUID.ToString() );
+                            VInst.SetProcId( VolProcs.GUID );
                             VInst.PushConvoyParam( FParam );
                         }
                         else
@@ -300,7 +300,7 @@ namespace wenku8.Taotu
 
                         if( EpAsync )
                         {
-                            EInst.SetProcId( EpProcs.GUID.ToString() );
+                            EInst.SetProcId( EpProcs.GUID );
                             EInst.PushConvoyParam( FParam );
                         }
                         else

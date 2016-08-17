@@ -1,0 +1,69 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.Sharers.PlaceRequest"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs.Sharers"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    mc:Ignorable="d"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    Background="{StaticResource MajorBackgroundBrush}"
+    PrimaryButtonText="Send"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
+    <ContentDialog.Resources>
+        <v:DataVisConverter x:Key="DataVisConverter" />
+    </ContentDialog.Resources>
+
+    <ContentDialog.Title>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Uid="/ContextMenu/PlaceRequest"
+                       FontSize="20" Margin="5"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       Text="Place request" />
+            <ProgressRing x:Name="LoadingRing"
+                          Grid.Column="0"
+                          Width="25" Height="25"
+                          Visibility="Collapsed" IsActive="False"
+                          Foreground="{StaticResource MajorBrush}" />
+        </StackPanel>
+    </ContentDialog.Title>
+
+    <StackPanel Margin="10, 0">
+        <TextBlock x:Name="ServerMessage"
+                   Margin="0, 5"
+                   VerticalAlignment="Center"
+                   TextWrapping="Wrap"
+                   Visibility="{Binding Path=Text, RelativeSource={RelativeSource Self}, Converter={StaticResource DataVisConverter}}"
+                   Foreground="{StaticResource MajorBrush}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!-- Key selection -->
+            <Button Grid.Row="1" Grid.Column="0"
+                    Click="AddKey"
+                    Style="{StaticResource PlainButton}"
+                    Width="35" Height="35">
+                <i:IconPlusSign AutoScale="True" />
+            </Button>
+            <ComboBox x:Name="Keys"
+                      Grid.Row="1" Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding AuthList}"
+                      DisplayMemberPath="Name" SelectedValuePath="Value"
+                      VerticalAlignment="Center"
+                      Loaded="PreSelectKey" IsEnabled="False" />
+        </Grid>
+
+        <!-- Remarks -->
+        <TextBlock x:Uid="/AppResources/Remarks"
+                   Text="Remarks"
+                   Foreground="{StaticResource MinorBrush}" />
+        <TextBox x:Name="RemarksInput" />
+
+    </StackPanel>
+</ContentDialog>

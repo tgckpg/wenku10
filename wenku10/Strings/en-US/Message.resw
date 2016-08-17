@@ -134,7 +134,6 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
-    <comment>#</comment>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>Offline</value>
@@ -147,11 +146,9 @@
   </data>
   <data name="Update_Confirm" xml:space="preserve">
     <value>Check for updates, Cancel?</value>
-    <comment>#</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
-    <comment>#</comment>
   </data>
   <data name="Cencorship" xml:space="preserve">
     <value>Somethings not right, please check your content.</value>
@@ -161,5 +158,26 @@
   </data>
   <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
     <value>By switching to preset background, app will try to search and download illustrations within the book. Assume that you have already downloaded the a chapter with illustrations. This may cause bandwidth, continue?</value>
+  </data>
+  <data name="ReportError" xml:space="preserve">
+    <value>{0}. Report this incident?</value>
+  </data>
+  <data name="ConfirmScriptParse" xml:space="preserve">
+    <value>Parse the script meow?</value>
+  </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>Decryption failed</value>
+  </data>
+  <data name="Desc_DecryptionFailed" xml:space="preserve">
+    <value>It seemed that you don't have the correct key for this item.</value>
+  </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>Removing this key will also remove the abilities to decrypt associated script and comments. Continue?</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>You will lost the permissions to edit the scripts associated with this access token. Continue?</value>
+  </data>
+  <data name="ConfirmScriptRemove" xml:space="preserve">
+    <value>The script will be removed from server. Continue?</value>
   </data>
 </root>

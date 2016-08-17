@@ -14,6 +14,7 @@ namespace wenku8.Model.Pages.ContentReader
     using Config;
     class ClockContext : ActiveData, IDisposable
     {
+        public SolidColorBrush ARBrush { get; private set; }
         public SolidColorBrush HHBrush { get; private set; }
         public SolidColorBrush MHBrush { get; private set; }
         public SolidColorBrush SBrush { get; private set; }
@@ -27,6 +28,7 @@ namespace wenku8.Model.Pages.ContentReader
             RenderTransform = new ScaleTransform();
             RenderTransform.ScaleX = RenderTransform.ScaleY = 1.5;
 
+            UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR );
             UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR );
             UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR );
             UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR );
@@ -48,6 +50,10 @@ namespace wenku8.Model.Pages.ContentReader
         {
             switch ( Choice )
             {
+                case Parameters.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR:
+                    ARBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR );
+                    NotifyChanged( "ARBrush" );
+                    break;
                 case Parameters.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR:
                     HHBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR );
                     NotifyChanged( "HHBrush" );

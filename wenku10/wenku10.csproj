@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\ARM\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;ARM</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>ARM</PlatformTarget>
@@ -102,13 +102,19 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Package.StoreAssociation.xml" />
+    <Content Include="Assets\circle.dds" />
     <Content Include="Assets\OpacityChecker.png" />
+    <Content Include="Assets\glitter.dds" />
     <Content Include="Assets\Samples\BgComments.jpg" />
     <Content Include="Assets\Samples\BgTOC.jpg" />
     <Content Include="Assets\Samples\BgInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
+    <PRIResource Include="Strings\en-US\Resources.resw" />
+    <PRIResource Include="Strings\ja\Resources.resw" />
+    <PRIResource Include="Strings\zh-TW\Resources.resw" />
+    <PRIResource Include="Strings\zh-CN\Resources.resw" />
     <None Include="wenku10_StoreKey.pfx" />
     <PRIResource Include="Strings\en-US\AppResources.resw" />
   </ItemGroup>
@@ -116,6 +122,44 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
+      <DependentUpon>Comments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\NameValueInput.xaml.cs">
+      <DependentUpon>NameValueInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Sharers\AssignAuth.xaml.cs">
+      <DependentUpon>AssignAuth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Sharers\ChangePassword.xaml.cs">
+      <DependentUpon>ChangePassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\Sharers\PlaceRequest.xaml.cs">
+      <DependentUpon>PlaceRequest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\ManageAuth.xaml.cs">
+      <DependentUpon>ManageAuth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\ScriptUpload.xaml.cs">
+      <DependentUpon>ScriptUpload.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\UserInfo.xaml.cs">
+      <DependentUpon>UserInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShHub\SHMember.cs" />
+    <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
+      <DependentUpon>Register.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
+      <DependentUpon>ScriptDetails.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
+    <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
+    <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
+    <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
+    <Compile Include="wenku8\Model\Section\SharersHub.cs" />
+    <Compile Include="wenku8\System\Migration.cs" />
+    <Compile Include="wenku8\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>
     </Compile>
@@ -216,7 +260,7 @@
     <Compile Include="Pages\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\InfoViews\ReplyList.xaml.cs">
+    <Compile Include="Pages\BookInfoControls\ReplyList.xaml.cs">
       <DependentUpon>ReplyList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\NavList.xaml.cs">
@@ -278,6 +322,7 @@
     <Compile Include="wenku8\System\UnitTest.cs" />
     <Compile Include="wenku8\Taotu\WenkuMarker.cs" />
     <Compile Include="wenku8\Taotu\WenkuExtractor.cs" />
+    <Compile Include="Microsoft.Phone.Controls\WrapPanel.cs" />
     <Page Include="MainStage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -287,6 +332,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Account.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BookInfoControls\Comments.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -346,6 +395,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Dialogs\NameValueInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Sharers\AssignAuth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Sharers\ChangePassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Sharers\PlaceRequest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\Sharers\Register.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Dialogs\Taotu\EditProcExtract.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -366,7 +435,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\InfoViews\ReplyList.xaml">
+    <Page Include="Pages\BookInfoControls\ReplyList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -442,6 +511,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Sharers\ManageAuth.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sharers\ScriptDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sharers\ScriptUpload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sharers\UserInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Global\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -469,6 +554,11 @@
     <Page Include="Themes\Global\ToggleSwitch.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Global\Icons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\ListViewItems\CommentListItem.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -569,7 +659,6 @@
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -581,9 +670,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Icons\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

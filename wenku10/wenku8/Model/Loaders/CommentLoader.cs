@@ -10,10 +10,8 @@ using Net.Astropenguin.Loaders;
 namespace wenku8.Model.Comments
 {
     using Ext;
-    using Interfaces;
-    using System;
 
-    class CommentLoader : ILoader<Comment>
+    sealed class CommentLoader : ILoader<Comment>
     {
         public delegate Comment[] CommentXMLParser( string s, out int p );
 
@@ -61,14 +59,14 @@ namespace wenku8.Model.Comments
                     }
                     , ( string id, string uri, Exception ex ) =>
                     {
-                        Comments.SetResult( new Comment[0] );
+                        Comments.SetResult( new Comment[ 0 ] );
                     }
                     , true
                 );
             }
             else
             {
-                Comments.SetResult( new Comment[0] );
+                Comments.SetResult( new Comment[ 0 ] );
             }
 
             Comment[] Cs = await Comments.Task;

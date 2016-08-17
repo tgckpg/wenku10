@@ -7,7 +7,7 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-namespace wenku8.Model.Loader
+namespace wenku8.Model.Loaders
 {
     using AdvDM;
     using Topics;

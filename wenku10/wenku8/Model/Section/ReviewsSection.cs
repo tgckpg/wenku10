@@ -16,14 +16,10 @@ namespace wenku8.Model.Section
 {
     using Book;
     using Ext;
-    using Settings;
     using Comments;
-    using CompositeElement;
     using ListItem;
-    using AdvDM;
-    using System;
 
-    class ReviewsSection : ActiveData
+    sealed class ReviewsSection : ActiveData
     {
         public static readonly string ID = typeof( ReviewsSection ).Name;
 
@@ -43,20 +39,29 @@ namespace wenku8.Model.Section
             }
         }
 
-        public Page SubListView { get; private set; }
-
-        public Observables<Comment, Comment> Comments { get; private set; }
-
-        public ControlState RInputState { get; private set; }
-        public wenku10.Pages.ReviewsInput ReviewsInput { get; private set; }
-
-        public ControlState ReplyPageOpened
+        private Page _SubListView;
+        public Page SubListView
         {
-            get
+            get { return _SubListView; }
+            private set
             {
-                return SubListView == null ? ControlState.Foreatii : ControlState.Reovia;
+                _SubListView = value;
+                NotifyChanged( "SubListView" );
             }
         }
+
+        private wenku10.Pages.ReviewsInput _ReviewsInput;
+        public wenku10.Pages.ReviewsInput ReviewsInput
+        {
+            get { return _ReviewsInput; }
+            private set
+            {
+                _ReviewsInput = value;
+                NotifyChanged( "ReviewsInput" );
+            }
+        }
+
+        public Observables<Comment, Comment> Comments { get; private set; }
 
         public ReviewsSection( BookItem b )
         {
@@ -88,12 +93,11 @@ namespace wenku8.Model.Section
         public async Task OpenReview( Review R )
         {
             CurrentReview = R;
-            wenku10.Pages.InfoViews.ReplyList RView = new wenku10.Pages.InfoViews.ReplyList();
+            wenku10.Pages.BookInfoControls.ReplyList RView = new wenku10.Pages.BookInfoControls.ReplyList();
             await RView.OpenReview( R );
 
             SubListView = RView;
 
-            NotifyChanged( "SubListView", "ReplyPageOpened" );
             SetControls( "NewComment", "Reload", "Back" );
         }
 
@@ -235,7 +239,9 @@ namespace wenku8.Model.Section
                 if ( ex.XProp<Enum>( "WCode" ).Equals( X.Const<Enum>( XProto.WCode, "LOGON_REQUIRED" ) ) )
                 {
                     // Prompt login
-                    wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login();
+                    wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login(
+                        X.Singleton<IMember>( XProto.Member )
+                    );
                     await Popups.ShowDialog( Login );
                 }
             }
@@ -244,7 +250,6 @@ namespace wenku8.Model.Section
         public void CC_Cancel()
         {
             ReviewsInput = null;
-            RInputState = ControlState.Foreatii;
             NotifyChanged( "ReviewsInput", "RInputState" );
 
             if ( CurrentReview == null )
@@ -273,7 +278,6 @@ namespace wenku8.Model.Section
                 ReviewsInput = new wenku10.Pages.ReviewsInput( CurrentReview );
             }
 
-            RInputState = ControlState.Reovia;
             NotifyChanged( "ReviewsInput", "RInputState" );
             SetControls( "Submit", "Cancel" );
         }

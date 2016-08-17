@@ -117,49 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContextMenu_AutoUpdate.Text" xml:space="preserve">
+  <data name="AutoUpdate.Text" xml:space="preserve">
     <value>Auto Update</value>
   </data>
-  <data name="ContextMenu_Copy.Text" xml:space="preserve">
+  <data name="Copy.Text" xml:space="preserve">
     <value>Copy</value>
   </data>
-  <data name="ContextMenu_Delete.Text" xml:space="preserve">
+  <data name="Delete.Text" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="ContextMenu_DirectView.Text" xml:space="preserve">
+  <data name="DirectView.Text" xml:space="preserve">
     <value>View source</value>
   </data>
-  <data name="ContextMenu_DisAutomation.Text" xml:space="preserve">
+  <data name="DisAutomation.Text" xml:space="preserve">
     <value>No auto update</value>
   </data>
-  <data name="ContextMenu_Edit.Text" xml:space="preserve">
+  <data name="Edit.Text" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="ContextMenu_ImportSpider.Text" xml:space="preserve">
+  <data name="ImportSpider.Text" xml:space="preserve">
     <value>Import Spider</value>
   </data>
-  <data name="ContextMenu_PinToStart.Text" xml:space="preserve">
+  <data name="PinToStart.Text" xml:space="preserve">
     <value>Pin to Start</value>
   </data>
-  <data name="ContextMenu_Reanalyze.Text" xml:space="preserve">
+  <data name="Reanalyze.Text" xml:space="preserve">
     <value>Reanalyze</value>
   </data>
-  <data name="ContextMenu_Rename.Text" xml:space="preserve">
+  <data name="Rename.Text" xml:space="preserve">
     <value>Rename</value>
   </data>
-  <data name="ContextMenu_Search_Dict.Text" xml:space="preserve">
+  <data name="Search_Dict.Text" xml:space="preserve">
     <value>Search words</value>
   </data>
-  <data name="ContextMenu_SpiderEdit.Text" xml:space="preserve">
+  <data name="SpiderEdit.Text" xml:space="preserve">
     <value>Spider Edit</value>
   </data>
-  <data name="ContextMenu_ViewHorz.Text" xml:space="preserve">
+  <data name="ViewHorz.Text" xml:space="preserve">
     <value>View Horizontally</value>
   </data>
-  <data name="ContextMenu_WSync.Text" xml:space="preserve">
+  <data name="WSync.Text" xml:space="preserve">
     <value>Sync to Website</value>
   </data>
-  <data name="ContextMenu_WUnsync.Text" xml:space="preserve">
+  <data name="WUnsync.Text" xml:space="preserve">
     <value>Move to Local</value>
   </data>
   <data name="CustomBackground.Text" xml:space="preserve">
@@ -174,7 +174,31 @@
   <data name="PresetBackground.Text" xml:space="preserve">
     <value>Preset Background</value>
   </data>
+  <data name="Register.Text" xml:space="preserve">
+    <value>Register</value>
+  </data>
   <data name="SystemBackground.Text" xml:space="preserve">
     <value>System Background</value>
+  </data>
+  <data name="ShareScript.Text" xml:space="preserve">
+    <value>Share script</value>
+  </data>
+  <data name="AccessTokens.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>This is used to identify the scripts ownership</value>
+  </data>
+  <data name="PlaceRequest.Text" xml:space="preserve">
+    <value>Place a request</value>
+  </data>
+  <data name="ManageAuths.Text" xml:space="preserve">
+    <value>Manage Auths</value>
+  </data>
+  <data name="AccessTokens.Text" xml:space="preserve">
+    <value>Access Tokens</value>
+  </data>
+  <data name="AssignToken.Text" xml:space="preserve">
+    <value>Assign Token</value>
+  </data>
+  <data name="AssignKey.Text" xml:space="preserve">
+    <value>Assign Key</value>
   </data>
 </root>

@@ -20,7 +20,7 @@ namespace wenku8.Model.Loaders
 
     using TransferInst = wenku8.AdvDM.WRuntimeTransfer.TransferInst;
 
-    class AutoCache : ActiveData, IAutoCache
+    sealed class AutoCache : ActiveData, IAutoCache
     {
         public static readonly string ID = typeof( AutoCache ).Name;
 

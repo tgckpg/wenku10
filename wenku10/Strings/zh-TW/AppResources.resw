@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>下載中...</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>載入中...</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -177,7 +177,7 @@
   <data name="Reviews_MinLimit.Text" xml:space="preserve">
     <value>字數不足，</value>
   </data>
-  <data name="Reviews_Topic_Type0.Text" xml:space="preserve">
+  <data name="Type.Text" xml:space="preserve">
     <value>類型</value>
   </data>
   <data name="Reviews_Topic_Type1.Text" xml:space="preserve">
@@ -198,9 +198,8 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>條件</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>沒有哦</value>
-    <comment>NaN</comment>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
     <value>共找到</value>
@@ -210,7 +209,6 @@
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>不支援內文搜索</value>
-    <comment>NaN</comment>
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>文庫暫沒有收錄此作品</value>
@@ -224,20 +222,8 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="VersionUpdate.Text" xml:space="preserve">
-    <value>已經有新版本</value>
-  </data>
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>當前版本</value>
-  </data>
-  <data name="VersionUpdateExpire.Text" xml:space="preserve">
-    <value>天後失效</value>
-  </data>
-  <data name="VersionUpdateWill.Text" xml:space="preserve">
-    <value>將於</value>
-  </data>
-  <data name="ViewList.Text" xml:space="preserve">
-    <value>查看</value>
   </data>
   <data name="But_There_Is_Nothing.Text" xml:space="preserve">
     <value>正在下載必要資訊，請稍候…完成後將會直接為你跳至正文頁面</value>
@@ -274,5 +260,110 @@
   </data>
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>反白以搜尋</value>
+  </data>
+  <data name="Login_Expired.Text" xml:space="preserve">
+    <value>您的登入期限已過，請重新登入。</value>
+  </data>
+  <data name="HS_Tags.Text" xml:space="preserve">
+    <value>標籤</value>
+  </data>
+  <data name="HS_Zone.Text" xml:space="preserve">
+    <value>區域</value>
+  </data>
+  <data name="Anonymous.Text" xml:space="preserve">
+    <value>匿名</value>
+  </data>
+  <data name="Script.Text" xml:space="preserve">
+    <value>腳本</value>
+  </data>
+  <data name="SubmitScript.Text" xml:space="preserve">
+    <value>提交腳本</value>
+  </data>
+  <data name="SeperatedByCommas.PlaceholderText" xml:space="preserve">
+    <value>請以「,」作分隔</value>
+  </data>
+  <data name="Secret.Text" xml:space="preserve">
+    <value>密鑰</value>
+  </data>
+  <data name="AnonWarning.Text" xml:space="preserve">
+    <value>您選擇匿名。這讓你和這個腳本之間的唯一關係是權杖。失去你的權杖也將失去修改此腳本的特權。請妥善保管您的權杖。</value>
+  </data>
+  <data name="Encryption.Text" xml:space="preserve">
+    <value>加密</value>
+  </data>
+  <data name="Secret.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>以此密鑰加密腳本</value>
+  </data>
+  <data name="ForceCommentEnc.Text" xml:space="preserve">
+    <value>強制加密評論</value>
+  </data>
+  <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>強制所有用戶於評論區使用加密</value>
+  </data>
+  <data name="ConfirmPassword.Text" xml:space="preserve">
+    <value>確認密碼</value>
+  </data>
+  <data name="EmailAddress.Text" xml:space="preserve">
+    <value>電郵地址</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="Name.Text" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="HS_Maintainer.Text" xml:space="preserve">
+    <value>維護者</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>此腳本的創作者已設定了評論加密，可惜閣下沒有所需密鑰以加密您的評論。請先提出密鑰請求取得密鑰。</value>
+  </data>
+  <data name="EncryptedContent.Text" xml:space="preserve">
+    <value>加密的内容</value>
+  </data>
+  <data name="KeyRequest.Text" xml:space="preserve">
+    <value>請求密鑰</value>
+  </data>
+  <data name="Remarks.Text" xml:space="preserve">
+    <value>備註</value>
+  </data>
+  <data name="Grant.Text" xml:space="preserve">
+    <value>授與</value>
+  </data>
+  <data name="TokenRequest.Text" xml:space="preserve">
+    <value>權杖請求</value>
+  </data>
+  <data name="GrantsReceived.Text" xml:space="preserve">
+    <value>從 {1} 個腳本中收到 {0} 個權限授予</value>
+  </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>請求</value>
+  </data>
+  <data name="Update.Text" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Private.Text" xml:space="preserve">
+    <value>封閉</value>
+  </data>
+  <data name="Public.Text" xml:space="preserve">
+    <value>公開</value>
+  </data>
+  <data name="HS_Removed.Text" xml:space="preserve">
+    <value>該腳本已被刪除</value>
+  </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>新</value>
+  </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>選擇文件</value>
+  </data>
+  <data name="HS_StatusHistory.Text" xml:space="preserve">
+    <value>狀態歷史</value>
+  </data>
+  <data name="ChangePassword.Text" xml:space="preserve">
+    <value>變更密碼</value>
+  </data>
+  <data name="NewPassword.Text" xml:space="preserve">
+    <value>新密碼</value>
   </data>
 </root>

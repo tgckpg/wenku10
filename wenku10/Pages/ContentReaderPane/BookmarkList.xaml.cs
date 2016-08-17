@@ -34,11 +34,6 @@ namespace wenku10.Pages.ContentReaderPane
             MainList.ItemsSource = Reader.ContentView.Reader.CustomAnchors;
         }
 
-        ~BookmarkList()
-        {
-            Reader.ContentView.Reader.PropertyChanged -= Reader_PropertyChanged;
-        }
-
         private void Reader_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
         {
             if( e.PropertyName == "CustomAnchors" )

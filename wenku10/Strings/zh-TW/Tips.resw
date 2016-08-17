@@ -139,7 +139,7 @@
     <value>正文：上下的線是輔助線，可以在設定裏設成「透明」關閉</value>
   </data>
   <data name="3" xml:space="preserve">
-    <value>正文：主選單中的★可以查看插圖</value>
+    <value>正文：主選單中可以查看插圖</value>
   </data>
   <data name="4" xml:space="preserve">
     <value>正文：長按段落可以叫出段落選單</value>

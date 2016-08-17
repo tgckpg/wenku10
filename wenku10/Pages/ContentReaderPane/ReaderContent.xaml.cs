@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -20,6 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.UI;
 
 using wenku8.Model.Book;
 using wenku8.Model.Pages.ContentReader;
@@ -40,6 +43,11 @@ namespace wenku10.Pages.ContentReaderPane
         private BookItem CurrentBook { get { return Container.CurrentBook; } }
         private Chapter CurrentChapter { get { return Container.CurrentChapter; } }
         private Paragraph SelectedParagraph;
+
+        private volatile bool HoldOneMore = false;
+        private volatile int UndoingJump = 0;
+
+        private AHQueue AnchorHistory;
 
         public ReaderContent( ContentReader Container, int Anchor )
         {
@@ -74,6 +82,9 @@ namespace wenku10.Pages.ContentReaderPane
 
             Reader = new ReaderView( CurrentBook, CurrentChapter );
             Reader.ApplyCustomAnchor( Anchor );
+
+            AnchorHistory = new AHQueue( 20 );
+            HCount.DataContext = AnchorHistory;
 
             MasterGrid.DataContext = Reader;
             Reader.PropertyChanged += ScrollToParagraph;
@@ -163,6 +174,7 @@ namespace wenku10.Pages.ContentReaderPane
             ContentGrid.SelectedIndex = i;
             ContentGrid.ScrollIntoView( ContentGrid.SelectedItem, ScrollIntoViewAlignment.Leading );
             Reader.SelectIndex( i );
+            ShowUndoButton();
         }
 
         // This calls onLoaded
@@ -195,6 +207,7 @@ namespace wenku10.Pages.ContentReaderPane
                 case "SelectedIndex":
                     if ( !UserStartReading )
                         ContentGrid.SelectedItem = Reader.SelectedData;
+                    RecordUndo( Reader.SelectedIndex );
                     break;
                 case "Data":
                     Shared.LoadMessage( "PleaseWaitSecondsForUI", "2" );
@@ -277,6 +290,8 @@ namespace wenku10.Pages.ContentReaderPane
         {
             Paragraph P = e.ClickedItem as Paragraph;
             if ( P == SelectedParagraph ) return;
+
+            RecordUndo( ContentGrid.SelectedIndex );
             Reader.SelectAndAnchor( SelectedParagraph = P );
         }
 
@@ -293,6 +308,9 @@ namespace wenku10.Pages.ContentReaderPane
 
             ClockTicker.Tick += ClockTicker_Tick;
             ClockTicker.Start();
+
+            AggregateBattery_ReportUpdated( Battery.AggregateBattery, null );
+            Battery.AggregateBattery.ReportUpdated += AggregateBattery_ReportUpdated;
         }
 
         private void ClockStop()
@@ -303,11 +321,84 @@ namespace wenku10.Pages.ContentReaderPane
 
             ClockTicker.Tick -= ClockTicker_Tick;
             ClockTicker = null;
+            Battery.AggregateBattery.ReportUpdated -= AggregateBattery_ReportUpdated;
         }
 
         private void ClockTicker_Tick( object sender, object e )
         {
             RClock.Time = DateTime.Now;
+        }
+
+        private void AggregateBattery_ReportUpdated( Battery sender, object args )
+        {
+            BatteryReport Report = sender.GetReport();
+
+            if( Report.RemainingCapacityInMilliwattHours == null ) return;
+            Worker.UIInvoke( () =>
+            {
+                RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
+            } );
+        }
+
+        private void UndoAnchorJump( object sender, RoutedEventArgs e ) { UndoJump(); }
+
+        internal void UndoJump()
+        {
+            while ( 0 < AnchorHistory.Count && AnchorHistory.Peek() == Reader.SelectedIndex )
+                AnchorHistory.Pop();
+
+            if ( AnchorHistory.Count == 0 ) return;
+
+            UndoingJump++;
+            GotoIndex( AnchorHistory.Pop() );
+        }
+
+        private async void ShowUndoButton()
+        {
+            HoldOneMore = true;
+
+            if( UndoButton.State == ControlState.Reovia ) return;
+            UndoButton.State = ControlState.Reovia;
+            while( HoldOneMore )
+            {
+                HoldOneMore = false;
+                await Task.Delay( 3000 );
+            }
+            UndoButton.State = ControlState.Foreatii;
+        }
+
+        private void RecordUndo( int Index )
+        {
+            if ( 0 < UndoingJump )
+            {
+                UndoingJump--;
+                return;
+            }
+
+            AnchorHistory.Push( Index );
+            AnchorHistory.TrimExcess();
+        }
+
+        private class AHQueue : Stack<int>, INotifyPropertyChanged
+        {
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            public AHQueue( int Capacity ) : base( Capacity ) { }
+
+            new public void Push( int i )
+            {
+                if ( 0 < Count && Peek() == i ) return;
+
+                base.Push( i );
+                PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( "Count" ) );
+            }
+
+            new public int Pop()
+            {
+                int i = base.Pop();
+                PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( "Count" ) );
+                return i;
+            }
         }
     }
 }

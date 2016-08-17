@@ -23,11 +23,11 @@ using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
-using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
 using wenku8.CompositeElement;
+using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Loaders;
 using wenku8.Model.Book;
@@ -54,6 +54,7 @@ namespace wenku10.Pages
         private bool OpenLock = false;
         private bool NeedRedraw = false;
         private bool Disposed = true;
+        private bool EVLoopbackBlockade = false;
 
         private ApplicationViewOrientation? Orientation;
 
@@ -69,12 +70,6 @@ namespace wenku10.Pages
 
         ~ContentReader() { Dispose(); }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-        }
-
         protected override void OnNavigatedTo( NavigationEventArgs e )
         {
             base.OnNavigatedTo( e );
@@ -85,7 +80,7 @@ namespace wenku10.Pages
                 Disposed = false;
                 NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
 
-                // First Trigger won't need redraw
+                // First Trigger don't redraw
                 TriggerOrientation();
                 SetTemplate();
                 Window.Current.SizeChanged += Current_SizeChanged;
@@ -144,6 +139,8 @@ namespace wenku10.Pages
             RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Right ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.H ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.L ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.U ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Z ) );
 
             // `:
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), ( Windows.System.VirtualKey ) 192 ) );
@@ -343,7 +340,7 @@ namespace wenku10.Pages
         private void SelectCurrentEp()
         {
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
-            ChangedManually = false;
+            EVLoopbackBlockade = false;
             EPStepper.SelectedItem = Eps.First( x => x.Payload == CurrentChapter.cid );
 
             if ( ContentPane != null && ContentPane.Context is TableOfContents )
@@ -361,7 +358,7 @@ namespace wenku10.Pages
         public void RenderComplete( IdleDispatchedHandlerArgs e )
         {
             RenderMask.State = ControlState.Foreatii;
-            InfoMask.State = ControlState.Foreatii;
+            TransitionDisplay.SetState( InfoMask, TransitionState.Inactive );
         }
 
         private void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
@@ -370,10 +367,10 @@ namespace wenku10.Pages
             RollOutLeftPane();
         }
 
-        private void RollOutLeftPane()
+        public void RollOutLeftPane()
         {
             // Config is open, do not roll out the pane
-            if ( Config.State == ControlState.Reovia ) return;
+            if ( Overlay.State == ControlState.Reovia && OverlayFrame.Content is Settings.Themes.ContentReader ) return;
             ContentView.UserStartReading = false;
             MainSplitView.OpenPane();
         }
@@ -386,7 +383,10 @@ namespace wenku10.Pages
             Sections.Add( new PaneNavButton( new IconImage() { AutoScale = true }, typeof( ImageList ) ) );
 
             Sections.Add( new PaneNavButton( new IconReload() { AutoScale = true }, Reload ) );
-            Sections.Add( new PaneNavButton( new IconFastForword() { AutoScale = true }, () => ContentView.GoTop() ) );
+            Sections.Add( new PaneNavButton(
+                new IconFastForword() { AutoScale = true }
+                , () => ContentView.GoTop()
+            ) );
             Sections.Add( new PaneNavButton(
                 new IconFastForword() { AutoScale = true, Direction = Direction.MirrorVertical }
                 , () => ContentView.GoBottom()
@@ -401,6 +401,8 @@ namespace wenku10.Pages
 
             PaneGrid.DataContext = ContentPane;
             MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
+
+            Overlay.OnStateChanged += Overlay_OnStateChanged;
         }
 
         private PaneNavButton InertiaButton()
@@ -475,8 +477,14 @@ namespace wenku10.Pages
         private void GotoSettings()
         {
             MainSplitView.ClosePane();
-            Config.State = ControlState.Reovia;
-            ConfigPopup.Content = new Settings.Themes.ContentReader();
+            Overlay.State = ControlState.Reovia;
+            OverlayFrame.Content = new Settings.Themes.ContentReader();
+        }
+
+        public void OverNavigate( Type Page, object Param )
+        {
+            Overlay.State = ControlState.Reovia;
+            OverlayFrame.Navigate( Page, Param );
         }
 
         private void ToggleFullScreen()
@@ -488,16 +496,16 @@ namespace wenku10.Pages
         private void OnBackRequested( object sender, XBackRequestedEventArgs e )
         {
             // Close the settings first
-            if ( Config.State == ControlState.Reovia )
+            if ( Overlay.State == ControlState.Reovia )
             {
-                Config.State = ControlState.Foreatii;
-                Settings.Themes.ContentReader Settings = ConfigPopup.Content as Settings.Themes.ContentReader;
+                Overlay.State = ControlState.Foreatii;
+                Settings.Themes.ContentReader Settings = OverlayFrame.Content as Settings.Themes.ContentReader;
                 MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
                 FocusHelper.DataContext = new global::wenku8.Model.Pages.ContentReader.AssistContext();
 
-                if ( Settings.NeedRedraw ) Redraw();
+                // If the overlay frame content is settings, and the settings is changed
+                if ( Settings != null && Settings.NeedRedraw ) Redraw();
 
-                ConfigPopup.Content = null;
                 e.Handled = true;
                 return;
             }
@@ -510,9 +518,9 @@ namespace wenku10.Pages
             }
 
             // Popup info mask
-            if ( InfoMask.State == ControlState.Foreatii )
+            if ( TransitionDisplay.GetState( InfoMask ) == TransitionState.Inactive )
             {
-                InfoMask.State = ControlState.Reovia;
+                TransitionDisplay.SetState( InfoMask, TransitionState.Active );
                 e.Handled = true;
                 return;
             }
@@ -521,6 +529,14 @@ namespace wenku10.Pages
             RenderMask.Text = stx.Text( "ProgressIndicator_PleaseWait" );
             RenderMask.HandleBack( Frame, e );
             Dispose();
+        }
+
+        private void Overlay_OnStateChanged( object sender, ControlState args )
+        {
+            if ( args == ControlState.Foreatii )
+            {
+                OverlayFrame.Content = null;
+            }
         }
 
         private void Redraw()
@@ -546,21 +562,18 @@ namespace wenku10.Pages
 
         private void BeginRead( object sender, TappedRoutedEventArgs e )
         {
-            InfoMask.State = ControlState.Foreatii;
+            TransitionDisplay.SetState( InfoMask, TransitionState.Inactive );
         }
 
-        private bool ChangedManually = true;
         private void EPStepper_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
             if ( e.AddedItems.Count < 1 ) return;
 
-            if ( ChangedManually )
+            if ( EVLoopbackBlockade )
             {
-                ChangedManually = false;
+                EVLoopbackBlockade = false;
                 return;
             }
-
-            ChangedManually = true;
 
             string EP = ( e.AddedItems[ 0 ] as ActiveItem ).Payload;
 
@@ -581,6 +594,7 @@ namespace wenku10.Pages
 
             if ( ( VolStepper.SelectedItem as ActiveItem ).Payload != Vid )
             {
+                EVLoopbackBlockade = true;
                 VolStepper.SelectedItem = Vols.First( x => x.Payload == Vid );
             }
 
@@ -598,13 +612,11 @@ namespace wenku10.Pages
             List<ActiveItem> Eps = EPStepper.ItemsSource as List<ActiveItem>;
             if ( Eps == null ) return;
 
-            if ( ChangedManually )
+            if ( EVLoopbackBlockade )
             {
-                ChangedManually = false;
+                EVLoopbackBlockade = false;
                 return;
             }
-
-            ChangedManually = true;
 
             string cid = null;
             for ( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
@@ -620,6 +632,7 @@ namespace wenku10.Pages
 
             if ( EPStepper.SelectedItem != ShouldBeEp )
             {
+                EVLoopbackBlockade = true;
                 EPStepper.SelectedItem = ShouldBeEp;
 
                 var j = EPStepper.Dispatcher.RunIdleAsync(

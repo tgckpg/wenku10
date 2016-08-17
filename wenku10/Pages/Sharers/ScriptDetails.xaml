@@ -1,0 +1,478 @@
+﻿<Page
+    x:Class="wenku10.Pages.Sharers.ScriptDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:Net.Astropenguin.UI"
+    xmlns:p="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
+    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:ms="using:Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <v:HubStatusConverter x:Key="HubStatusConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
+        <p:DataVisConverter x:Key="DataVisConverter" />
+        <v:TreeMarginConverter x:Key="TreeMarginConverter" />
+        <v:NumberSimplifier x:Key="NumberSimplifier" />
+
+        <DataTemplate x:Name="TagsTemplate">
+            <Border Margin="5" Background="{StaticResource MinorBackgroundBrush}" >
+                <TextBlock Text="{Binding}"
+                           Margin="8,2" 
+                           TextWrapping="NoWrap" Foreground="{StaticResource SubtleBrush}" />
+            </Border>
+        </DataTemplate>
+        <ItemsPanelTemplate x:Name="WrapPanelTemplate">
+            <ms:WrapPanel Orientation="Horizontal"/>
+        </ItemsPanelTemplate>
+
+        <DataTemplate x:Name="CommentFolded">
+            <Border Margin="10"
+                    Grid.Column="0" Grid.RowSpan="2">
+                <TextBlock Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                           Text="Load More" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Name="CommentEnc">
+            <Grid Margin="10,0,15,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" Grid.RowSpan="3"
+                           Width="5"
+                           Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                           Fill="{StaticResource VerticalRibbonBrush}"/>
+
+                <StackPanel Grid.Column="1"
+                            Margin="10,5,5,0"
+                            Orientation="Horizontal">
+                    <TextBlock Text="{Binding Username}"
+                               ToolTipService.ToolTip="{Binding UserId}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    <TextBlock Margin="10, 0"
+                               Foreground="{StaticResource SubtleBrush}" 
+                               Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"/>
+                </StackPanel>
+                <StackPanel Margin="10,0,10,5" Grid.Column="1" Grid.Row="1">
+                    <TextBlock Foreground="{StaticResource MinorBrush}">
+                        [<Run x:Uid="/AppResources/EncryptedContent"
+                              Text="Encrypted content" />]
+                    </TextBlock>
+                    <TextBlock Text="{Binding Title}"
+                               MaxLines="2"
+                               TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Name="CommentNormal">
+            <Grid Margin="10,0,15,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" Grid.RowSpan="3"
+                           Width="5"
+                           Margin="{Binding Level, Converter={StaticResource TreeMarginConverter}}"
+                           Fill="{StaticResource VerticalRibbonBrush}"/>
+
+                <StackPanel Grid.Column="1"
+                            Margin="10,5,5,0"
+                            Orientation="Horizontal">
+                    <TextBlock Text="{Binding Username}"
+                               ToolTipService.ToolTip="{Binding UserId}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    <TextBlock Margin="10, 0"
+                               Foreground="{StaticResource SubtleBrush}" 
+                               Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"/>
+                </StackPanel>
+
+                <TextBlock Text="{Binding Title}"
+                           Margin="10,0,10,5" Grid.Column="1" Grid.Row="1"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+
+                <Button Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                        e:TransitionDisplay.State="{Binding Selected, Converter={StaticResource TransStateConverter}}"
+                        e:TransitionDisplay.Mode="A01_X_30_30"
+                        Style="{StaticResource PlainButton}"
+                        Click="NewReply">
+                    <TextBlock x:Uid="/AppBar/Reply" Text="Reply" TextWrapping="NoWrap"
+                               Margin="10,5"
+                               Foreground="{StaticResource RelativeShadesBrush}"/>
+                </Button>
+            </Grid>
+        </DataTemplate>
+        <v:HSCTemplateSelector x:Key="CommentSelector"
+                               Folded="{StaticResource CommentFolded}"
+                               Encrypted="{StaticResource CommentEnc}"
+                               Normal="{StaticResource CommentNormal}"/>
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot" c:Clip.ToBounds="True" FlowDirection="LeftToRight">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer>
+            <!-- Description -->
+            <StackPanel Margin="10,5" >
+                <Grid Margin="0,0,40,0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <!-- Key Button -->
+                    <Button Width="40" Height="40"
+                            Background="Transparent"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                            e:TransitionDisplay.Mode="A01_X_N30_0"
+                            Style="{StaticResource PlainButton}">
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem x:Uid="/AppResources/KeyRequest"
+                                                Visibility="{Binding Encrypted, Converter={StaticResource DataVisConverter}}"
+                                                Text="Key Request" Click="PlaceKeyRequest" />
+                                <MenuFlyoutItem x:Uid="/AppResources/TokenRequest"
+                                                Text="Token Request" Click="PlaceTokenRequest" />
+                                <MenuFlyoutItem x:Uid="/ContextMenu/AssignToken"
+                                                Text="Assign Token" Click="AssignToken" />
+                                <MenuFlyoutItem x:Uid="/ContextMenu/AssignKey"
+                                                Text="Assign Key" Click="AssignKey" />
+                            </MenuFlyout>
+                        </Button.Flyout>
+                        <Grid>
+                            <xi:IconMasterKey Foreground="{StaticResource VerticalRibbonBrush}"
+                                       Visibility="{Binding Encrypted, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                       AutoScale="True" />
+                            <i:IconKey Foreground="{StaticResource VerticalRibbonBrush}"
+                                       Direction="Rotate270"
+                                       Visibility="{Binding Encrypted, Converter={StaticResource DataVisConverter}}"
+                                       AutoScale="True" />
+                        </Grid>
+                    </Button>
+                    <TextBlock Grid.Column="1" FontSize="20"
+                               VerticalAlignment="Center"
+                               e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                               e:TransitionDisplay.Mode="A01_Y_N30_0"
+                               TextWrapping="Wrap"
+                               Text="{Binding Name}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                </Grid>
+                <TextBlock Margin="20, 0" Text="{Binding ErrorMessage}"
+                           Foreground="{StaticResource MinorBrush}"
+                           TextWrapping="Wrap" />
+                <!-- Status History -->
+                <TextBlock Margin="10, 5"
+                           x:Uid="/AppResources/HS_StatusHistory" Text="Status History"
+                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_N30_0"
+                           Foreground="{StaticResource SubtleBrush}" />
+                <GridView Margin="10, 0"
+                          e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                          e:TransitionDisplay.Mode="A01_Y_30_0"
+                          ItemsSource="{Binding Histories}"
+                          ItemContainerStyle="{StaticResource PlainGridItem}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="25" Height="25">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding Status, Converter={StaticResource HubStatusConverter}, ConverterParameter=Color}" />
+                                </Rectangle.Fill>
+                                <ToolTipService.ToolTip>
+                                    <ToolTip>
+                                        <TextBlock>
+                                            <Run Text="{Binding Date, Converter={StaticResource RelativeTimeConverter}}" />
+                                            <LineBreak />
+                                            <Run x:Uid="/Book/Status" Text="Status" />:&#160;
+                                            <Run Text="{Binding Status, Converter={StaticResource HubStatusConverter}, ConverterParameter=String}" />
+                                            <Run Text="{Binding DescBR}" />
+                                        </TextBlock>
+                                    </ToolTip>
+                                </ToolTipService.ToolTip>
+                            </Rectangle>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <TextBlock Margin="20, 0" Text="{Binding HistoryError}"
+                           Foreground="{StaticResource MinorBrush}"
+                           TextWrapping="Wrap" />
+
+                <TextBlock Margin="10,5"
+                           FontSize="15"
+                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_Y_N30_0"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           TextWrapping="Wrap"
+                           Text="{Binding Desc}"/>
+
+                <Grid Margin="10, 5"
+                      e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                      e:TransitionDisplay.Mode="A01_Y_30_0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" x:Uid="/AppResources/HS_Maintainer"
+                               Margin="5" Text="Maintainer"
+                               Foreground="{StaticResource SubtleBrush}" />
+                    <TextBlock Grid.Row="1" x:Uid="/AppResources/HS_Zone"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Zone"/>
+                    <TextBlock Grid.Row="2" x:Uid="/AppResources/Type"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Type" />
+                    <TextBlock Grid.Row="3" x:Uid="/AppResources/HS_Tags"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Tags" />
+
+                    <!-- Maintainer -->
+                    <TextBlock Grid.Row="0" Grid.Column="2"
+                               x:Uid="/AppResources/Anonymous"
+                               Visibility="{Binding Author, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Margin="5" Text="Anon" />
+                    <TextBlock Grid.Row="0" Grid.Column="2"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Visibility="{Binding Author, Converter={StaticResource DataVisConverter}}"
+                               Margin="5" Text="{Binding Author}" />
+                    <!-- Zone -->
+                    <ItemsControl Grid.Row="1" Grid.Column="2"
+                                  ItemTemplate="{StaticResource TagsTemplate}"
+                                  ItemsPanel="{StaticResource WrapPanelTemplate}"
+                                  ItemsSource="{Binding Zone}" />
+                    <!-- Types -->
+                    <ItemsControl Grid.Row="2" Grid.Column="2"
+                                  ItemTemplate="{StaticResource TagsTemplate}"
+                                  ItemsPanel="{StaticResource WrapPanelTemplate}"
+                                  ItemsSource="{Binding Type}" />
+                    <!-- Tags -->
+                    <ItemsControl Grid.Row="3" Grid.Column="2"
+                                  ItemTemplate="{StaticResource TagsTemplate}"
+                                  ItemsPanel="{StaticResource WrapPanelTemplate}"
+                                  ItemsSource="{Binding Tags}" />
+                </Grid>
+                <Grid Margin="10, 5"
+                      e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
+                      e:TransitionDisplay.Mode="A01_X_N30_0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" x:Uid="/Book/TotalHitsCount"
+                               Foreground="{StaticResource SubtleBrush}"
+                               Margin="5" Text="Total Hits" />
+
+                    <!-- Hits -->
+                    <TextBlock Grid.Row="1" Grid.Column="2"
+                               Margin="5"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="{Binding Hits, Converter={StaticResource NumberSimplifier}}" />
+                </Grid>
+                <Grid x:Name="AccessControls" Margin="10,5"
+                      Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Publish Button -->
+                    <Button e:TransitionDisplay.State="{Binding Public, Converter={StaticResource TransStateConverter}}"
+                            Style="{StaticResource PlainThemeButton}"
+                            Margin="5" Click="TogglePublic"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/AppResources/Public" Margin="10,5" Text="Public" />
+                    </Button>
+
+                    <Button e:TransitionDisplay.State="{Binding Public, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                            Style="{StaticResource PlainThemeButton}"
+                            Margin="5" Opacity="0.5" Click="TogglePublic"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/AppResources/PRivate" Margin="10,5" Text="Private" />
+                    </Button>
+
+                    <!-- Update button -->
+                    <Button Style="{StaticResource PlainThemeButton}"
+                            Grid.Column="1" Click="Update"
+                            Margin="5" Background="{StaticResource HorizontalRibbonBrush}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/AppResources/Update" Margin="10,5" Text="Update" />
+                    </Button>
+
+                    <!-- Remove button -->
+                    <Button Style="{StaticResource PlainThemeButton}"
+                            Grid.Column="2" Click="Delete"
+                            Margin="5" Background="{StaticResource VerticalRibbonBrush}"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <TextBlock x:Uid="/ContextMenu/Delete" Margin="10,5" Text="Remove" />
+                    </Button>
+                </Grid>
+                <!-- Related -->
+                <TextBlock Text="Relateed Scripts" />
+            </StackPanel>
+
+        </ScrollViewer>
+        <!-- Comments -->
+        <Grid x:Name="CommentSection"
+              Visibility="Collapsed"
+              Opacity="0"
+              Grid.RowSpan="2"
+              Background="{StaticResource MajorBackgroundBrush}">
+            <Grid.RenderTransform>
+                <TranslateTransform Y="0" />
+            </Grid.RenderTransform>
+            <Border e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}, ConverterParameter=1}">
+                <TextBlock x:Uid="/AppResources/NoComments" Text="No comments" Margin="10"
+                           Visibility="{Binding Path=ItemsSource, ElementName=CommentList, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                           Foreground="{StaticResource MajorBrush}" />
+            </Border>
+            <TextBlock x:Uid="/AppResources/Loading" Text="Loading" Margin="10"
+                       e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
+                       Foreground="{StaticResource MajorBrush}" />
+            <ListView x:Name="CommentList"
+                      Margin="10,10,10,50"
+                      IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
+                      ItemContainerStyle="{StaticResource BareListItem}"
+                      ItemTemplateSelector="{StaticResource CommentSelector}">
+                <ListView.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition />
+                    </TransitionCollection>
+                </ListView.ItemContainerTransitions>
+            </ListView>
+        </Grid>
+        <!-- Requests -->
+        <Grid x:Name="RequestSection"
+                Visibility="Collapsed"
+                Opacity="0"
+                Grid.RowSpan="2"
+                Background="{StaticResource MajorBackgroundBrush}">
+            <Grid.RenderTransform>
+                <TranslateTransform Y="0" />
+            </Grid.RenderTransform>
+            <Border e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}, ConverterParameter=1}">
+                <TextBlock x:Uid="/AppResources/NoComments" Text="No requests" Margin="10"
+                           Visibility="{Binding Path=ItemsSource, ElementName=RequestList, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                           Foreground="{StaticResource MajorBrush}" />
+            </Border>
+            <TextBlock x:Uid="/AppResources/Loading" Text="Loading" Margin="10"
+                       e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
+                       Foreground="{StaticResource MajorBrush}" />
+            <ListView x:Name="RequestList"
+                      Margin="10,10,10,50"
+                      ItemContainerStyle="{StaticResource ListItemNoSelect}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0, 5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Button e:TransitionDisplay.State="{Binding Granted, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                    Style="{StaticResource PlainThemeButton}"
+                                    Click="GrantRequest"
+                                    Visibility="{Binding Path=Tag, ElementName=RequestList, Converter={StaticResource DataVisConverter}}">
+                                <TextBlock x:Uid="/AppResources/Grant" Margin="10"
+                                           Text="Grant" />
+                            </Button>
+                            <i:IconTick Width="30" Height="30"
+                                        Visibility="{Binding Granted, Converter={StaticResource DataVisConverter}}"
+                                        Foreground="{StaticResource MajorBrush}"
+                                        AutoScale="True" />
+                            <TextBlock Margin="5"  Grid.Column="1"
+                                       TextWrapping="Wrap" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                       Text="{Binding Title}" />
+                            <Rectangle Grid.Column="2" Fill="{StaticResource MajorBrush}"
+                                       HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                                       Width="5" />
+                            <TextBlock Margin="20,5"  Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                       Text="{Binding Username}" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <Border e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}"
+                Margin="10"
+                Width="40" Height="40" 
+                HorizontalAlignment="Left" VerticalAlignment="Top">
+            <ProgressRing x:Name="LoadingRing" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Width="30" Height="30" />
+        </Border>
+
+        <!-- Control buttons -->
+        <ListView x:Name="ControlsList" Grid.Row="1"
+                  HorizontalAlignment="Right"
+                  IsItemClickEnabled="True" ItemClick="ControlClick"
+                  ItemContainerStyle="{StaticResource BareListItem}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Child="{Binding Icon}"
+                            Background="{StaticResource Shades90}"
+                            Width="50" Height="50" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+
+        <Grid x:Name="CommentEditor" Grid.Row="0"
+              e:TransitionDisplay.State="Inactive"
+              e:TransitionDisplay.Mode="A01_X_N30_30"
+              Background="{StaticResource MajorBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Margin="10">
+                <TextBlock x:Name="CommentModeLabel"
+                           Foreground="{StaticResource MajorBrush}"
+                           FontSize="30" />
+                <TextBlock Margin="20,0" x:Name="CommentError"
+                           Visibility="{Binding Path=Text, RelativeSource={RelativeSource Self}, Converter={StaticResource DataVisConverter}}"
+                           Foreground="{StaticResource MinorBrush}"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+            <RichEditBox x:Name="CommentInput"
+                         Grid.Row="1" Margin="20,0,20,10" />
+        </Grid>
+    </Grid>
+</Page>

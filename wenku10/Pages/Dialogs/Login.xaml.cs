@@ -16,38 +16,41 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Loaders;
 
 using wenku8.Ext;
-using wenku8.Config;
 
 namespace wenku10.Pages.Dialogs
 {
-    public sealed partial class Login : ContentDialog
+    sealed partial class Login : ContentDialog
     {
         public bool Canceled = true;
 
         private IMember Member;
 
-        public Login()
+        public Login( IMember Member )
         {
             this.InitializeComponent();
-
-            Member = X.Singleton<IMember>( XProto.Member );
+            this.Member = Member;
 
             StringResources stx = new StringResources();
             PrimaryButtonText = stx.Text( "Login" );
-            SecondaryButtonText = stx.Text( "Button_Back");
+            SecondaryButtonText = stx.Text( "Button_Back" );
+
+            if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+            {
+                ShowMessage( stx.Text( "Login_Expired" ) );
+            }
 
             Member.OnStatusChanged += Member_StatusUpdate;
+
+            if( Member.CanRegister )
+            {
+                RegisterBtn.Visibility = Visibility.Visible;
+            }
         }
 
-        void Member_StatusUpdate()
+        void Member_StatusUpdate( object sender, MemberStatus st )
         {
             if ( Member.IsLoggedIn )
             {
-                if ( IsRemember.IsChecked == true )
-                {
-                    Properties.ACCOUNT_NAME = Account.Text;
-                    Properties.ACCOUNT_PASSWD = Password.Password;
-                }
                 Hide();
             }
             else
@@ -58,6 +61,8 @@ namespace wenku10.Pages.Dialogs
                     = Password.IsEnabled
                     = true
                     ;
+
+                ShowMessage( Member.ServerMessage );
                 Account.Focus( FocusState.Keyboard );
             }
         }
@@ -88,16 +93,16 @@ namespace wenku10.Pages.Dialogs
         {
             if ( e.Key == Windows.System.VirtualKey.Enter )
             {
-                DetectInputLogin();
+                e.Handled = DetectInputLogin();
             }
         }
 
-        private void DetectInputLogin()
+        private bool DetectInputLogin()
         {
             string Name = Account.Text.Trim();
             string Passwd = Password.Password;
 
-            if ( string.IsNullOrEmpty( Name ) || String.IsNullOrEmpty( Passwd ) )
+            if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Passwd ) )
             {
                 if ( string.IsNullOrEmpty( Name ) )
                 {
@@ -107,7 +112,7 @@ namespace wenku10.Pages.Dialogs
                 {
                     Password.Focus( FocusState.Keyboard );
                 }
-                return;
+                return false;
             }
             else
             {
@@ -122,7 +127,23 @@ namespace wenku10.Pages.Dialogs
                 this.Focus( FocusState.Pointer );
                 // Request string
                 Member.Login( Name, Passwd );
+
+                return true;
             }
+        }
+
+        private void ShowMessage( string Mesg )
+        {
+            if ( Mesg == null ) return;
+
+            ServerMessage.Text = Mesg;
+            ServerMessage.Visibility = Visibility.Visible;
+        }
+
+        private void RegisterBtn_Click( object sender, RoutedEventArgs e )
+        {
+            this.Hide();
+            Member.Register();
         }
     }
 }

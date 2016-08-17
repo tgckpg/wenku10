@@ -125,18 +125,15 @@
   </data>
   <data name="NameAlreadyExists" xml:space="preserve">
     <value>相同名称已存在</value>
-    <comment>#</comment>
   </data>
   <data name="NameCannetEmpty" xml:space="preserve">
     <value>名称不能为空</value>
-    <comment>#</comment>
   </data>
   <data name="NeedRestart" xml:space="preserve">
     <value>更改这个设定文库需要重新启动。</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
-    <comment>#</comment>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>离线模式</value>
@@ -149,11 +146,9 @@
   </data>
   <data name="Update_Confirm" xml:space="preserve">
     <value>正在检查更新，要跳过这个步骤吗？</value>
-    <comment>#</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>
-    <comment>#</comment>
   </data>
   <data name="Cencorship" xml:space="preserve">
     <value>檢測到不當言詞，請返回修改。</value>
@@ -163,5 +158,26 @@
   </data>
   <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
     <value>若要使用预设背景，应用将会自动搜索并下载文章所提供的插图(假设已下载插图所在的章节)，这样会增加使用流量。继续？</value>
+  </data>
+  <data name="ReportError" xml:space="preserve">
+    <value>{0}，要回报这个问题吗？</value>
+  </data>
+  <data name="ConfirmScriptParse" xml:space="preserve">
+    <value>需要现在解析脚本喵？</value>
+  </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>解密失败</value>
+  </data>
+  <data name="Desc_DecryptionFailed" xml:space="preserve">
+    <value>找不到此项目的密钥。</value>
+  </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>删除此密钥将失去解密相关脚本和评论的能力。 继续？</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>您将失去与访问令牌关联的脚本编辑权限。继续？</value>
+  </data>
+  <data name="ConfirmScriptRemove" xml:space="preserve">
+    <value>这个脚本会从服务器上删除。 继续？</value>
   </data>
 </root>

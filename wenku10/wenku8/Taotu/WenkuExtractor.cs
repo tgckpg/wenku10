@@ -61,7 +61,7 @@ namespace wenku8.Taotu
             await Popups.ShowDialog( new EditProcExtract( this ) );
             if( SubEdit != null )
             {
-                MessageBus.Send( new Message( typeof( ProceduresPanel ), "SubEdit", this ) );
+                MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
             }
         }
 
@@ -196,7 +196,7 @@ namespace wenku8.Taotu
             TargetUrl = Param.GetValue( "TargetUrl" );
             Incoming = Param.GetBool( "Incoming" );
 
-            XParameter[] ExtParams = Param.GetParametersWithKey( "i" );
+            XParameter[] ExtParams = Param.Parameters( "i" );
             foreach ( XParameter ExtParam in ExtParams )
             {
                 PropDefs.Add( new PropExt( ExtParam ) );
@@ -216,7 +216,7 @@ namespace wenku8.Taotu
             foreach( PropExt Extr in PropDefs )
             {
                 XParameter ExtParam = Extr.ToXParam();
-                ExtParam.ID += i;
+                ExtParam.Id += i;
                 ExtParam.SetValue( new XKey( "i", i++ ) );
 
                 Param.SetParameter( ExtParam );
@@ -276,7 +276,7 @@ namespace wenku8.Taotu
                 string SType = Param.GetValue( "Type" );
                 this.SubProc = new ProcManager();
 
-                XParameter Sub = Param.GetParameter( "SubProc" );
+                XParameter Sub = Param.Parameter( "SubProc" );
                 if ( Sub != null ) SubProc.ReadParam( Sub );
 
                 PType = Enum.GetValues( BINF )
@@ -290,7 +290,7 @@ namespace wenku8.Taotu
                 Param.SetValue( new XKey( "Type", PType ) );
 
                 XParameter SubParam = SubProc.ToXParam();
-                SubParam.ID = "SubProc";
+                SubParam.Id = "SubProc";
                 Param.SetParameter( SubParam );
 
                 return Param;

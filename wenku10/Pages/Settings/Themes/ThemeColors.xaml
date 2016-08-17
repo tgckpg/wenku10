@@ -11,10 +11,10 @@
     mc:Ignorable="d">
     <Page.Resources>
         <MenuFlyout x:Key="ThemeContextMenu">
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Copy" Tapped="ThemeCopy" Text="Copy" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Edit" Visibility="{Binding IsSystemSet}" Click="ThemeEdit" Text="Edit" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Delete" Visibility="{Binding IsSystemSet}" Click="ThemeDelete" Text="Delete" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Rename" Visibility="{Binding IsSystemSet}" Click="ThemeRename" Text="Rename" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Copy" Click="ThemeCopy" Text="Copy" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Edit" Visibility="{Binding IsSystemSet}" Click="ThemeEdit" Text="Edit" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Delete" Visibility="{Binding IsSystemSet}" Click="ThemeDelete" Text="Delete" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Rename" Visibility="{Binding IsSystemSet}" Click="ThemeRename" Text="Rename" />
         </MenuFlyout>
     </Page.Resources>
 

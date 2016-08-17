@@ -1,15 +1,15 @@
 [submodule "libs/libtranslate"]
 	path = libs/libtranslate
-	url = git@github.com:tgckpg/libtranslate.git
+	url = https://github.com/tgckpg/libtranslate.git
 [submodule "libs/libpenguin"]
 	path = libs/libpenguin
-	url = git@github.com:tgckpg/libpenguin.git
+	url = https://github.com/tgckpg/libpenguin.git
 [submodule "libs/libwenku8"]
 	path = libs/libwenku8
-	url = git@github.com:tgckpg/libwenku8.git
+	url = https://github.com/tgckpg/libwenku8.git
 [submodule "libs/libtaotu"]
 	path = libs/libtaotu
-	url = git@github.com:tgckpg/libtaotu.git
+	url = https://github.com/tgckpg/libtaotu.git
 [submodule "libs/libeburc"]
 	path = libs/libeburc
-	url = git@github.com:tgckpg/libeburc
+	url = https://github.com/tgckpg/libeburc

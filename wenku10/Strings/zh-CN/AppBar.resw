@@ -124,7 +124,7 @@
     <value>关于</value>
   </data>
   <data name="AddComment" xml:space="preserve">
-    <value>发表书评</value>
+    <value>发表评论</value>
   </data>
   <data name="Author" xml:space="preserve">
     <value>搜作者</value>
@@ -159,7 +159,7 @@
   <data name="ReloadChapter" xml:space="preserve">
     <value>重新下载此章节</value>
   </data>
-  <data name="Reply" xml:space="preserve">
+  <data name="Reply.Text" xml:space="preserve">
     <value>回复</value>
   </data>
   <data name="Save" xml:space="preserve">

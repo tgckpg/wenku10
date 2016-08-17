@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,9 +13,9 @@
     <Page.Resources>
         <v:VDisplayConverter x:Key="VDisplayConverter" />
         <MenuFlyout x:Key="ParagraphFlyout" Placement="Bottom">
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Copy" Text="Copy" Click="ContextCopyClicked" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_Search_Dict" Text="Search words" Click="SearchWords" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ContextMenu_ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Copy" Text="Copy" Click="ContextCopyClicked" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
             <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
         </MenuFlyout>
     </Page.Resources>
@@ -24,6 +25,7 @@
           FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" 
           Background="{Binding BackgroundBrush}">
         <c:QClock x:Name="RClock"
+                  ArcHandBrush="{Binding ARBrush}"
                   HourHandBrush="{Binding HHBrush}"
                   MinuteHandBrush="{Binding MHBrush}"
                   ScalesBrush="{Binding SBrush}"
@@ -91,5 +93,19 @@
                 </DataTemplate>
             </ListView.Resources>
         </ListView>
+        <p:StateControl x:Name="UndoButton"
+                        Margin="10"
+                        VerticalAlignment="Top" HorizontalAlignment="Right">
+            <Button Click="UndoAnchorJump"
+                    Style="{StaticResource PlainButton}">
+                <Grid>
+                    <i:IconReload AutoScale="True"
+                                  Width="45" Height="45"/>
+                    <TextBlock x:Name="HCount" Text="{Binding Count}"
+                               Foreground="{StaticResource RelativeShadesBrush}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+            </Button>
+        </p:StateControl>
     </Grid>
 </Page>

@@ -1,8 +1,13 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -25,8 +30,12 @@ using Net.Astropenguin.Logging;
 using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Effects.Stage;
-using wenku8.Effects.Stage.CircleParty;
 using wenku8.Effects.Stage.RectangleParty;
+using wenku8.Effects.P2DFlow;
+using wenku8.Effects.P2DFlow.Spawners;
+using wenku8.Effects.P2DFlow.Reapers;
+using wenku8.Effects.P2DFlow.ForceFields;
+using wenku8.Settings.Theme;
 using wenku8.System;
 
 namespace wenku10.Pages
@@ -56,7 +65,7 @@ namespace wenku10.Pages
         {
             if ( ModeSelected ) return;
             ModeSelected = true;
-            LoadingRing.IsActive = true;
+            PFSim.AddField( LoadingWind );
 
             NavigationHandler.OnNavigatedBack -= DisableBack;
 
@@ -69,39 +78,32 @@ namespace wenku10.Pages
         {
             RootFrame = MainStage.Instance.RootFrame;
 
-            var j = Dispatcher.RunIdleAsync( x =>
+            Func<UIElement>[] RandIcon = new Func<UIElement>[]
             {
-                BaumkuchenSecret( new Baumkuchen( ReactorRings ) );
-            } );
-
-            GetAnnouncements();
-        }
-
-        private void BaumkuchenSecret( Baumkuchen BCret )
-        {
-            int[] Sequence = new int[] { 1, 2, 3, 4, 5, 4, 3, 2, 3, 4, 5, 6, 7, 8 };
-
-            int j = 0;
-            int l = Sequence.Length;
-
-            BCret.TouchHandler = ( i ) =>
-            {
-                if ( i == 1 ) j = 0;
-                if ( i != Sequence[ j ] )
-                {
-                    j = 0;
+                () => new wenku8.ThemeIcons.IconExoticHexa() {
+                    Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
+                    , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
-                else
-                {
-                    j++;
-                    if( l == j )
-                    {
-                        BCret.TouchHandler = null;
-                        BCret.Flush();
-                        StartMultiplayer();
-                    }
+                , () => new wenku8.ThemeIcons.IconExoticQuad() {
+                    Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
+                    , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
+                }
+                , () => new wenku8.ThemeIcons.IconExoticTri() {
+                    Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
+                    , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
             };
+
+            SenseGround.Children.Add( NTimer.RandChoiceFromList( RandIcon ).Invoke() );
+
+            if( MainStage.Instance.IsPhone )
+            {
+                NewsButton.HorizontalAlignment = HorizontalAlignment.Left;
+                NewsButton.VerticalAlignment = VerticalAlignment.Bottom;
+            }
+
+            GetAnnouncements();
+            SetPField();
         }
 
         private void StartMultiplayer()
@@ -112,12 +114,7 @@ namespace wenku10.Pages
 
             MainStage.Instance.ObjectLayer.Children.Add( ForeText );
 
-            OSenseText.Visibility = Visibility.Collapsed;
-
-            Storyboard SB = SenseGround.Resources[ "Multiplayer" ] as Storyboard;
-            SB.Begin();
-
-            SB.Completed += ( x2, e2 ) => CoverTheWholeScreen();
+            CoverTheWholeScreen();
         }
 
         private void CoverTheWholeScreen()
@@ -186,7 +183,7 @@ namespace wenku10.Pages
 
         private async void GetAnnouncements()
         {
-            global::wenku8.Model.Loader.NewsLoader AS = new global::wenku8.Model.Loader.NewsLoader();
+            global::wenku8.Model.Loaders.NewsLoader AS = new global::wenku8.Model.Loaders.NewsLoader();
             await AS.Load();
 
             NewsLoading.IsActive = false;
@@ -207,5 +204,273 @@ namespace wenku10.Pages
             Storyboard sb = ( Storyboard ) NotiRect.Resources[ "Notify" ];
             sb?.Stop();
         }
+
+        private PFSimulator PFSim = new PFSimulator();
+        private TextureLoader Texture = new TextureLoader();
+        private int Texture_Glitter = 1;
+        private int Texture_Circle = 2;
+
+        private bool ShowWireFrame = false;
+
+        private PointerSpawner PtrSpawn;
+        private Wind LoadingWind;
+        private CyclicSp CountDown;
+
+        private Vector4 LightFactor = Vector4.One;
+
+        private float[] Dots = new float[]{
+            6.2831f / 6,
+            6.2831f / 4,
+            6.2831f / 3,
+        };
+
+        private int dIndex = 0;
+
+        enum GestureDir { UP, DOWN, LEFT, RIGHT };
+
+        private bool GPassed = true;
+        private GestureDir[][] PassGesture = new GestureDir[][]{
+            new GestureDir[]{ GestureDir.UP, GestureDir.LEFT }
+            , new GestureDir[]{ GestureDir.LEFT, GestureDir.DOWN, GestureDir.RIGHT  }
+            , new GestureDir[]{ GestureDir.DOWN, GestureDir.RIGHT }
+        };
+
+        private Queue<GestureDir> CurrentSet = new Queue<GestureDir>();
+
+        private void SetPField()
+        {
+            PFSim.Create( 500 );
+
+            PtrSpawn = new PointerSpawner() { SpawnTrait = PFTrait.TRAIL_O, Texture = Texture_Circle };
+            CountDown = new CyclicSp() { Texture = Texture_Glitter };
+
+            ColorItem CItem = new ColorItem( "NaN", Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR );
+            Logger.Log( ID, "Theme lightness: " + CItem.L );
+
+            if ( 50 < CItem.L ) LightFactor = new Vector4( 0.092f, 0.005f, 0.001f, 2 );
+
+            var j = CountDownDots();
+
+            Stage.Draw += Stage_Draw;
+            Stage.PointerMoved += Stage_PointerMoved;
+            Stage.PointerReleased += Stage_PointerReleased;
+            Stage.Unloaded += Stage_Unloaded;
+            Stage.SizeChanged += Stage_SizeChanged;
+        }
+
+        private void Stage_Unloaded( object sender, RoutedEventArgs e )
+        {
+            lock ( PFSim )
+            {
+                Stage.Draw -= Stage_Draw;
+                Stage.PointerMoved -= Stage_PointerMoved;
+                Stage.PointerReleased -= Stage_PointerReleased;
+                Stage.SizeChanged -= Stage_SizeChanged;
+                Texture.Dispose();
+                PFSim.Reapers.Clear();
+                PFSim.Fields.Clear();
+                PFSim.Spawners.Clear();
+            }
+        }
+
+        private async Task CountDownDots()
+        {
+            if ( dIndex == 3 )
+            {
+                lock ( PFSim )
+                {
+                    Stage.SizeChanged -= Stage_SizeChanged;
+                    PFSim.Spawners.Clear();
+                }
+
+                if( GPassed ) StartMultiplayer();
+                return;
+            }
+
+            CurrentSet.Clear();
+
+            CountDown.Span = Dots[ dIndex ];
+            CountDown.Num = 6 - ( 2 * dIndex++ );
+            CountDown.R = 80 + 70 * NTimer.LFloat();
+            await Task.Delay( 3000 );
+
+            if ( GPassed )
+            {
+                GestureDir[] Dirs = PassGesture[ dIndex - 1 ];
+                foreach ( GestureDir Dir in Dirs )
+                {
+                    if ( CurrentSet.Count() == 0 || Dir != CurrentSet.Dequeue() )
+                    {
+                        GPassed = false;
+                        break;
+                    }
+                }
+            }
+#if DEBUG
+            Logger.Log( ID, GPassed ? "Passed" : "Failed" );
+#endif
+
+            var j = CountDownDots();
+        }
+
+        private void Stage_CreateResources( CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args )
+        {
+            args.TrackAsyncAction( LoadTextures( sender ).AsAsyncAction() );
+        }
+
+        private async Task LoadTextures( CanvasAnimatedControl CC )
+        {
+            await Texture.Load( CC, Texture_Glitter, "Assets/glitter.dds" );
+            await Texture.Load( CC, Texture_Circle, "Assets/circle.dds" );
+        }
+
+        private void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
+        {
+            lock ( PFSim )
+            {
+                Size s = e.NewSize;
+                PFSim.Reapers.Clear();
+                PFSim.Reapers.Add( Age.Instance );
+                PFSim.Reapers.Add( new Boundary( new Rect( 0, 0, s.Width * 1.2, s.Height * 1.2 ) ) );
+
+                float SW = ( float ) s.Width;
+                float SH = ( float ) s.Height;
+                float HSW = 0.5f * SW;
+                float HSH = 0.5f * SH;
+
+                PFSim.Spawners.Clear();
+                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Glitter } );
+                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Circle, Bind = PFTrait.TRAIL_O, Scale = new Vector2( 0.125f, 0.125f ) } );
+
+                CountDown.Center = new Vector2( HSW, HSH );
+                PFSim.Spawners.Add( CountDown );
+                PFSim.Spawners.Add( PtrSpawn );
+
+                Vector2 Center = new Vector2( HSW, HSH );
+                PFSim.Fields.Clear();
+
+                LoadingWind = new Wind() { A = Center, B = Center, Strength = 30 };
+            }
+        }
+
+        private void Stage_PointerMoved( object sender, PointerRoutedEventArgs e )
+        {
+            if ( e.Pointer.IsInContact )
+            {
+                PtrSpawn.FeedPosition( e.GetCurrentPoint( Stage ).Position.ToVector2() );
+            }
+        }
+
+        private Vector2 StartPoint;
+
+        private void XStage_PointerPressed( object sender, PointerRoutedEventArgs e )
+        {
+            Stage.IsHitTestVisible = true;
+            StartPoint = e.GetCurrentPoint( Stage ).Position.ToVector2();
+        }
+
+        private void Stage_PointerReleased( object sender, PointerRoutedEventArgs e )
+        {
+            Stage.IsHitTestVisible = false;
+            GestureDirection( e.GetCurrentPoint( Stage ).Position.ToVector2() );
+        }
+
+        private void GestureDirection( Vector2 EndPoint )
+        {
+            Vector2 PosDiff = EndPoint - StartPoint;
+            Vector2 AbsDiff = Vector2.Abs( PosDiff );
+
+            bool Horizontal = AbsDiff.Y < AbsDiff.X;
+            bool PositiveDir = Horizontal ? ( 0 < PosDiff.X ) : ( 0 < PosDiff.Y );
+
+            if ( Horizontal )
+            {
+                CurrentSet.Enqueue( PositiveDir ? GestureDir.RIGHT : GestureDir.LEFT );
+            }
+            else
+            {
+                CurrentSet.Enqueue( PositiveDir ? GestureDir.DOWN : GestureDir.UP );
+            }
+        }
+
+        private void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
+        {
+            lock ( PFSim )
+            {
+                var Snapshot = PFSim.Snapshot();
+                using ( CanvasDrawingSession ds = args.DrawingSession )
+                using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+                {
+                    while ( Snapshot.MoveNext() )
+                    {
+                        Particle P = Snapshot.Current;
+
+                        float A = ( P.Trait & PFTrait.IMMORTAL ) == 0 ? P.ttl * 0.033f : 1;
+
+                        P.Tint.M12 = 4 * ( 1 - A );
+                        P.Tint.M21 = 3 * A;
+
+                        Vector4 Tint = new Vector4(
+                            P.Tint.M11 + P.Tint.M21 + P.Tint.M31 + P.Tint.M41 + P.Tint.M51,
+                            P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
+                            P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
+                            P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
+                        ) * 2 * LightFactor;
+
+                        Tint.W = A * 0.125f;
+
+                        SBatch.Draw( Texture[ P.TextureId ], P.Pos, Tint, Texture.Center[ P.TextureId ], 0, 0.5f * P.Scale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
+                    }
+
+                    if ( ShowWireFrame )
+                    {
+                        foreach ( IForceField IFF in PFSim.Fields )
+                        {
+                            IFF.WireFrame( ds );
+                        }
+                    }
+                }
+            }
+        }
+
+        private class CyclicSp : ISpawner
+        {
+            public Vector2 Center;
+            public float R = 150;
+            public float Step = 0.005f;
+            public int Num = 6;
+            public float Span = 1.0471f;
+            private float MR = 2500;
+
+            public int Texture;
+
+            public CyclicSp() { }
+
+            public int Acquire( int Quota )
+            {
+                return Num;
+            }
+
+            private float i = 0;
+            private float r = 0;
+
+            public void Prepare( IEnumerable<Particle> currParticles )
+            {
+            }
+
+            public void Spawn( Particle p )
+            {
+                p.Pos = Vector2.Transform( Center - new Vector2( 0, MR ), Matrix3x2.CreateRotation( r + i, Center ) );
+                p.Trait = PFTrait.TRAIL;
+                p.ttl = 2;
+                p.TextureId = Texture;
+
+                MR = 0.965f * MR + 0.035f * R;
+
+                r += Span;
+                i += Step;
+            }
+        }
+
     }
 }

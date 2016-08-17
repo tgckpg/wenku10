@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -92,6 +93,11 @@ namespace wenku10.Pages.Settings.Themes
             ClockColorList.ItemsSource = new ColorItem[]
             {
                 new ColorItem(
+                    stx.Text( "Appearance_ContentReader_Clock_ARColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR = c; } }
+
+                , new ColorItem(
                     stx.Text( "Appearance_ContentReader_Clock_HHColor" )
                     , Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR
                 ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR = c; } }
@@ -108,6 +114,12 @@ namespace wenku10.Pages.Settings.Themes
             };
 
             RClock.DataContext = new ClockContext();
+
+            BatteryReport Report = Battery.AggregateBattery.GetReport();
+            if ( Report.RemainingCapacityInMilliwattHours != null )
+            {
+                RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
+            }
 
             FontSizeSlider.Value = Properties.APPEARANCE_CONTENTREADER_FONTSIZE;
             LineSpacingSlider.Value = Properties.APPEARANCE_CONTENTREADER_LINEHEIGHT;

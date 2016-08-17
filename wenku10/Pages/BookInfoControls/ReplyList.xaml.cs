@@ -22,7 +22,7 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.DataModel;
 using wenku8.Ext;
 
-namespace wenku10.Pages.InfoViews
+namespace wenku10.Pages.BookInfoControls
 {
     sealed partial class ReplyList : Page
     {
@@ -45,8 +45,8 @@ namespace wenku10.Pages.InfoViews
 
             IList<Comment> FirstLoad = await CL.NextPage();
 
-            Replies.UpdateSource( FirstLoad );
             Replies.ConnectLoader( CL );
+            Replies.UpdateSource( FirstLoad );
         }
 
         private Comment[] GetReplies( string xml, out int PageCount )

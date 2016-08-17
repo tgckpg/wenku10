@@ -162,4 +162,25 @@
   <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
     <value>若要使用預設背景，應用將會自動搜索並下載文章所提供的插圖(假設已下載插圖所在的章節)，這樣會增加使用流量。繼續？</value>
   </data>
+  <data name="ReportError" xml:space="preserve">
+    <value>{0}，要回報這個問題嗎？</value>
+  </data>
+  <data name="ConfirmScriptParse" xml:space="preserve">
+    <value>需要現在解析腳本喵？</value>
+  </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>無法解密</value>
+  </data>
+  <data name="Desc_DecryptionFailed" xml:space="preserve">
+    <value>找不到此項目的密鑰。</value>
+  </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>刪除此密鑰將失去解密相關腳本和評論的能力。繼續？</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>您將失去與權杖關聯的腳本編輯權限。繼續？</value>
+  </data>
+  <data name="ConfirmScriptRemove" xml:space="preserve">
+    <value>這個腳本會從服務器上刪除。繼續？</value>
+  </data>
 </root>

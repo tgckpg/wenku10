@@ -120,8 +120,20 @@
   <data name="Download" xml:space="preserve">
     <value>Cannot download the content, please check your internet connection</value>
   </data>
+  <data name="HS_INVALID" xml:space="preserve">
+    <value>Invalid Script</value>
+  </data>
+  <data name="HS_NO_VOLDATA" xml:space="preserve">
+    <value>No Volume Data</value>
+  </data>
   <data name="ParseFailed" xml:space="preserve">
     <value>Data processing failed, possibly a damaged file</value>
+  </data>
+  <data name="PasswordMismatch" xml:space="preserve">
+    <value>Password mismatch</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Server error, please try again later</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Cannot get updates</value>

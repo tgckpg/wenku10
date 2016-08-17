@@ -120,8 +120,20 @@
   <data name="Download" xml:space="preserve">
     <value>无法加载所需数据，请检查网络是否连接</value>
   </data>
+  <data name="HS_INVALID" xml:space="preserve">
+    <value>无效的脚本</value>
+  </data>
+  <data name="HS_NO_VOLDATA" xml:space="preserve">
+    <value>无卷目数据</value>
+  </data>
   <data name="ParseFailed" xml:space="preserve">
     <value>数据处理失败，可能是下载的数据损坏</value>
+  </data>
+  <data name="PasswordMismatch" xml:space="preserve">
+    <value>密码不匹配</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>服务器错误，请稍后再试。</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>无法获取更新</value>

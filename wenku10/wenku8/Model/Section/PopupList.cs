@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.UI;
 
 namespace wenku8.Model.Section
 {
@@ -14,7 +13,6 @@ namespace wenku8.Model.Section
 
     class PopupList : ActiveData
     {
-        public ControlState PageStatus { get; private set; }
         public Page FrameContent { get; private set; }
         public SubtleUpdateItem Item { get; set; }
 
@@ -24,18 +22,14 @@ namespace wenku8.Model.Section
             Item = S;
             this.F = F;
 
-            PageStatus = ControlState.Reovia;
             FrameContent = Activator.CreateInstance( S.Nav, this ) as Page;
 
-            NotifyChanged( "PageStatus" );
             NotifyChanged( "FrameContent" );
         }
 
         public void Close()
         {
             FrameContent = null;
-            PageStatus = ControlState.Foreatii;
-            NotifyChanged( "PageStatus" );
             NotifyChanged( "FrameContent" );
         }
 

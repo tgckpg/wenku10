@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
     xmlns:c="using:wenku8.CompositeElement"
+    xmlns:e="using:wenku8.Effects"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -46,69 +47,68 @@
                         <Rectangle Fill="{Binding AssistBG}" Width="{Binding W}" Height="{Binding H}" VerticalAlignment="{Binding VATop}" HorizontalAlignment="{Binding HALeft}" />
                         <Rectangle Fill="{Binding AssistBG}" Width="{Binding W}" Height="{Binding H}" VerticalAlignment="{Binding VABottom}" HorizontalAlignment="{Binding HARight}" />
                     </Grid>
-                    <p:StateControl x:Name="Config">
-                        <Frame x:Name="ConfigPopup" />
+                    <p:StateControl x:Name="Overlay">
+                        <Frame x:Name="OverlayFrame" />
                     </p:StateControl>
                 </Grid>
             </c:PassiveSplitView.Content>
         </c:PassiveSplitView>
 
-        <p:StateControl x:Name="InfoMask" State="Reovia">
-            <Grid Background="{StaticResource Shades90}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <FlipView x:Name="VolStepper" Grid.Row="0"
-                       SelectionChanged="VolStepper_SelectionChanged"
-                       Background="{StaticResource Shades90}" >
-                    <FlipView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Foreground="{StaticResource MajorBrush}"
-                                       Margin="10"
-                                       FontSize="25"
-                                       TextWrapping="Wrap"
-                                       Text="{Binding Name}" />
-                        </DataTemplate>
-                    </FlipView.ItemTemplate>
-                </FlipView>
-                <Rectangle Grid.Row="1" Fill="{StaticResource Shades50}"
-                           Height="47"
-                           VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                <!-- Chapter Selector -->
-                <Pivot x:Name="EPStepper" Grid.Row="1"
-                       SelectionChanged="EPStepper_SelectionChanged"
-                       Margin="20,0"
-                       VerticalContentAlignment="Stretch"
-                       HorizontalContentAlignment="Stretch">
-                    <Pivot.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock FontSize="18"
-                                       TextWrapping="Wrap"
-                                       Text="{Binding Name}" />
-                        </DataTemplate>
-                    </Pivot.HeaderTemplate>
-                    <Pivot.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <StackPanel Background="{StaticResource Shades90}"
-                                            VerticalAlignment="Center" HorizontalAlignment="Center" >
-                                    <TextBlock Foreground="{StaticResource RelativeShadesBrush}" Margin="10"
-                                               x:Uid="/AppResources/ClickToRead"
-                                               Text="Click to Read" />
-                                </StackPanel>
-                                <Rectangle StrokeDashArray="4 0 4 0"
-                                           StrokeThickness="1"
-                                           Fill="Transparent"
-                                           Tapped="BeginRead"
-                                           Stroke="{StaticResource Shades90}"
-                                           VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-                            </Grid>
-                        </DataTemplate>
-                    </Pivot.ItemTemplate>
-                </Pivot>
-            </Grid>
-        </p:StateControl>
+        <Grid x:Name="InfoMask" Background="{StaticResource Shades90}"
+              e:TransitionDisplay.Mode="A01_Y_N30_30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <FlipView x:Name="VolStepper" Grid.Row="0"
+                   SelectionChanged="VolStepper_SelectionChanged"
+                   Background="{StaticResource Shades90}" >
+                <FlipView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="{StaticResource MajorBrush}"
+                                   Margin="10"
+                                   FontSize="25"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Name}" />
+                    </DataTemplate>
+                </FlipView.ItemTemplate>
+            </FlipView>
+            <Rectangle Grid.Row="1" Fill="{StaticResource Shades50}"
+                       Height="47"
+                       VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+            <!-- Chapter Selector -->
+            <Pivot x:Name="EPStepper" Grid.Row="1"
+                   SelectionChanged="EPStepper_SelectionChanged"
+                   Margin="20,0"
+                   VerticalContentAlignment="Stretch"
+                   HorizontalContentAlignment="Stretch">
+                <Pivot.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="18"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Name}" />
+                    </DataTemplate>
+                </Pivot.HeaderTemplate>
+                <Pivot.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel Background="{StaticResource Shades90}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                <TextBlock Foreground="{StaticResource RelativeShadesBrush}" Margin="10"
+                                           x:Uid="/AppResources/ClickToRead"
+                                           Text="Click to Read" />
+                            </StackPanel>
+                            <Rectangle StrokeDashArray="4 0 4 0"
+                                       StrokeThickness="1"
+                                       Fill="Transparent"
+                                       Tapped="BeginRead"
+                                       Stroke="{StaticResource Shades90}"
+                                       VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                        </Grid>
+                    </DataTemplate>
+                </Pivot.ItemTemplate>
+            </Pivot>
+        </Grid>
         <c:TipMask x:Name="RenderMask" State="Reovia" />
     </Grid>
 </Page>

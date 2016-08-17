@@ -162,4 +162,25 @@
   <data name="BInfoView_PresetBg_Mesg" xml:space="preserve">
     <value>デフォルトの背景を使用するには、アプリケーションが自動的にイラストを提供する記事を検索し、ダウンロードします。（イラストのセクションをダウンロードしていることを前提としています。）これは、データ使用量を増加させます。続ける？</value>
   </data>
+  <data name="ReportError" xml:space="preserve">
+    <value>{0}、この問題を報告するには？</value>
+  </data>
+  <data name="ConfirmScriptParse" xml:space="preserve">
+    <value>今すぐスクリプトを解析したいですにゃ？</value>
+  </data>
+  <data name="DecryptionFailed" xml:space="preserve">
+    <value>復号化に失敗しました</value>
+  </data>
+  <data name="Desc_DecryptionFailed" xml:space="preserve">
+    <value>あなたがこのアイテムのキーを持っていないようです。</value>
+  </data>
+  <data name="DeleteEffectiveKEY" xml:space="preserve">
+    <value>このキーを削除すると、関連付けられているスクリプトやコメントを復号化するための能力を削除します。 続ける？</value>
+  </data>
+  <data name="DeleteEffectiveTOKEN" xml:space="preserve">
+    <value>あなたは、このアクセストークンに関連付けられたスクリプトを編集する権限を失っます。 続ける？</value>
+  </data>
+  <data name="ConfirmScriptRemove" xml:space="preserve">
+    <value>このスクリプトは、サーバーから削除されます。 続行しますか？</value>
+  </data>
 </root>

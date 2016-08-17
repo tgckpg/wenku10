@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>ダウンロード中...</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>読み込んでいます…</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -177,7 +177,7 @@
   <data name="Reviews_MinLimit.Text" xml:space="preserve">
     <value>字數不足，</value>
   </data>
-  <data name="Reviews_Topic_Type0.Text" xml:space="preserve">
+  <data name="Type.Text" xml:space="preserve">
     <value>タイプ</value>
   </data>
   <data name="Reviews_Topic_Type1.Text" xml:space="preserve">
@@ -198,7 +198,7 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>條件</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>ありません</value>
     <comment>NaN</comment>
   </data>
@@ -223,21 +223,6 @@
   </data>
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
-  </data>
-  <data name="VersionUpdate.Text" xml:space="preserve">
-    <value>已經有新版本</value>
-  </data>
-  <data name="VersionUpdateCurrent.Text" xml:space="preserve">
-    <value>當前版本</value>
-  </data>
-  <data name="VersionUpdateExpire.Text" xml:space="preserve">
-    <value>天後失效</value>
-  </data>
-  <data name="VersionUpdateWill.Text" xml:space="preserve">
-    <value>將於</value>
-  </data>
-  <data name="ViewList.Text" xml:space="preserve">
-    <value>查看</value>
   </data>
   <data name="But_There_Is_Nothing.Text" xml:space="preserve">
     <value>必要な情報をダウンロードし、しばらくお待ちください...完了すると、ページの本文に直接スキップします</value>
@@ -277,5 +262,113 @@
   </data>
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>検索する単語をハイライトしてください。</value>
+  </data>
+  <data name="Login_Expired.Text" xml:space="preserve">
+    <value>あなたの利用期間が期限切れになった、もう一度ログインしてください。</value>
+  </data>
+  <data name="HS_Tags.Text" xml:space="preserve">
+    <value>タグ</value>
+  </data>
+  <data name="HS_Zone.Text" xml:space="preserve">
+    <value>地域</value>
+  </data>
+  <data name="Anonymous.Text" xml:space="preserve">
+    <value>匿名</value>
+  </data>
+  <data name="Script.Text" xml:space="preserve">
+    <value>スクリプト</value>
+  </data>
+  <data name="SubmitScript.Text" xml:space="preserve">
+    <value>スクリプトを提出</value>
+  </data>
+  <data name="SeperatedByCommas.PlaceholderText" xml:space="preserve">
+    <value>「,」で分離してください</value>
+  </data>
+  <data name="Secret.Text" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="AnonWarning.Text" xml:space="preserve">
+    <value>あなたが匿名であることを選択します。このスクリプトとあなたの関係のみがアクセストークンになります。トークンを失うことはスクリプトを変更する権限を失うことになります。慎重にトークンを保管してください。</value>
+  </data>
+  <data name="Encryption.Text" xml:space="preserve">
+    <value>暗号化</value>
+  </data>
+  <data name="Secret.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>この秘密鍵でスクリプトを暗号化します</value>
+  </data>
+  <data name="ForceCommentEnc.Text" xml:space="preserve">
+    <value>強制的にコメントの暗号化</value>
+  </data>
+  <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>強制的にユーザーがコメント欄で暗号化を使用します。</value>
+  </data>
+  <data name="ConfirmPassword.Text" xml:space="preserve">
+    <value>パスワードを再確認</value>
+  </data>
+  <data name="EmailAddress.Text" xml:space="preserve">
+    <value>Eメールアドレス</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>説明</value>
+  </data>
+  <data name="Name.Text" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="HS_Maintainer.Text" xml:space="preserve">
+    <value>整備員</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>このスクリプトの作成者が明示的に暗号化するコメントを設定しています。残念ながら、あなたはコメントを暗号化するための鍵を持っていません。コメントをする前に、キーを取得するためのキー要求を配置してください。</value>
+  </data>
+  <data name="EncryptedContent.Text" xml:space="preserve">
+    <value>暗号化されたデータ</value>
+  </data>
+  <data name="VersionUpdateCurrent.Text" xml:space="preserve">
+    <value>現在のバージョン</value>
+  </data>
+  <data name="KeyRequest.Text" xml:space="preserve">
+    <value>キーを要求</value>
+  </data>
+  <data name="Remarks.Text" xml:space="preserve">
+    <value>備考</value>
+  </data>
+  <data name="TokenRequest.Text" xml:space="preserve">
+    <value>アクセストークンを要求</value>
+  </data>
+  <data name="GrantsReceived.Text" xml:space="preserve">
+    <value>{1}っ のスクリプトから {0}っ の許可を受けていました</value>
+  </data>
+  <data name="Grant.Text" xml:space="preserve">
+    <value>許可</value>
+  </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>リクエスト</value>
+  </data>
+  <data name="Update.Text" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Private.Text" xml:space="preserve">
+    <value>非公開</value>
+  </data>
+  <data name="Public.Text" xml:space="preserve">
+    <value>公開</value>
+  </data>
+  <data name="HS_Removed.Text" xml:space="preserve">
+    <value>スクリプトは削除されました</value>
+  </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>新しい</value>
+  </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>ファイルを選択</value>
+  </data>
+  <data name="HS_StatusHistory.Text" xml:space="preserve">
+    <value>ステータス履歴</value>
+  </data>
+  <data name="ChangePassword.Text" xml:space="preserve">
+    <value>パスワードを変更</value>
+  </data>
+  <data name="NewPassword.Text" xml:space="preserve">
+    <value>新しいパスワード</value>
   </data>
 </root>

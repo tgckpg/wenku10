@@ -21,7 +21,7 @@ namespace wenku8.Settings.Layout
         {
             get
             {
-                return LayoutSettings.GetParameter( Horizontal ).GetBool( "enable" );
+                return LayoutSettings.Parameter( Horizontal ).GetBool( "enable" );
             }
             set
             {
@@ -34,7 +34,7 @@ namespace wenku8.Settings.Layout
         {
             get
             {
-                return LayoutSettings.GetParameter( RightToLeft ).GetBool( "enable" );
+                return LayoutSettings.Parameter( RightToLeft ).GetBool( "enable" );
             }
             set
             {
@@ -51,12 +51,12 @@ namespace wenku8.Settings.Layout
 
         private void InitParams()
         {
-            if( LayoutSettings.GetParameter( Horizontal ) == null )
+            if( LayoutSettings.Parameter( Horizontal ) == null )
             {
                 IsHorizontal = Shared.LocaleDefaults.Get<bool>( "ContentReader.IsHorizontal" );
             }
 
-            if( LayoutSettings.GetParameter( RightToLeft ) == null )
+            if( LayoutSettings.Parameter( RightToLeft ) == null )
             {
                 IsRightToLeft = Shared.LocaleDefaults.Get<bool>( "ContentReader.IsRightToLeft" );
             }

@@ -551,4 +551,13 @@
   <data name="Help_BugFeature.Text" xml:space="preserve">
     <value>错误报告</value>
   </data>
+  <data name="Appearance_ContentReader_Clock_ARColor.Text" xml:space="preserve">
+    <value>电池弧</value>
+  </data>
+  <data name="Size.Text" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
+    <value>确认安装</value>
+  </data>
 </root>

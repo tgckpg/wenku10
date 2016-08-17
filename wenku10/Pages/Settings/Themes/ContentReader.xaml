@@ -136,6 +136,7 @@
                     </Grid.Resources>
 
                     <c:QClock x:Name="RClock"
+                              ArcHandBrush="{Binding ARBrush}"
                               HourHandBrush="{Binding HHBrush}"
                               MinuteHandBrush="{Binding MHBrush}"
                               ScalesBrush="{Binding SBrush}"

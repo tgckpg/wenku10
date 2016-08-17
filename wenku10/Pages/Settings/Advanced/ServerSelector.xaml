@@ -11,7 +11,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <v:BoolStateConverter x:Key="BoolStateConverter" />
+        <v:DataStateConverter x:Key="DataStateConverter" />
     </Page.Resources>
 
     <Grid Background="{StaticResource MajorBackgroundBrush}">
@@ -110,7 +110,7 @@
                             </Grid.ColumnDefinitions>
 
                             <Rectangle Grid.Column="0" Fill="{StaticResource MajorBrush}" Opacity="0.2" />
-                            <p:StateControl State="{Binding Preferred, Converter={StaticResource BoolStateConverter}}"
+                            <p:StateControl State="{Binding Preferred, Converter={StaticResource DataStateConverter}}"
                                             Grid.Column="0">
                                 <Rectangle Fill="{StaticResource MajorBrush}" />
                             </p:StateControl>

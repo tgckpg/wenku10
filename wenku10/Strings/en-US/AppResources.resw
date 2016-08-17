@@ -156,7 +156,7 @@
   <data name="ImageViewer_Download.Text" xml:space="preserve">
     <value>Downloading</value>
   </data>
-  <data name="ImageViewer_Loading.Text" xml:space="preserve">
+  <data name="Loading.Text" xml:space="preserve">
     <value>Loading</value>
   </data>
   <data name="introText.Text" xml:space="preserve">
@@ -177,7 +177,7 @@
   <data name="Reviews_MinLimit.Text" xml:space="preserve">
     <value>too few text</value>
   </data>
-  <data name="Reviews_Topic_Type0.Text" xml:space="preserve">
+  <data name="Type.Text" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="Reviews_Topic_Type1.Text" xml:space="preserve">
@@ -198,9 +198,8 @@
   <data name="Search_Condition.Text" xml:space="preserve">
     <value>By</value>
   </data>
-  <data name="Search_Example.Text" xml:space="preserve">
+  <data name="NoComments.Text" xml:space="preserve">
     <value>Nope</value>
-    <comment>NaN</comment>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
     <value>Total</value>
@@ -210,7 +209,6 @@
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>Does not support content searching</value>
-    <comment>NaN</comment>
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>Not yet have this article</value>
@@ -224,20 +222,8 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="VersionUpdate.Text" xml:space="preserve">
-    <value>New update has been found</value>
-  </data>
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>Current version</value>
-  </data>
-  <data name="VersionUpdateExpire.Text" xml:space="preserve">
-    <value>days until expired</value>
-  </data>
-  <data name="VersionUpdateWill.Text" xml:space="preserve">
-    <value>will</value>
-  </data>
-  <data name="ViewList.Text" xml:space="preserve">
-    <value>View</value>
   </data>
   <data name="But_There_Is_Nothing.Text" xml:space="preserve">
     <value>Please wail wile downloading necessary info. You will be directed to Content Page automatically.</value>
@@ -277,5 +263,110 @@
   </data>
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>Please highlight a word to search</value>
+  </data>
+  <data name="Login_Expired.Text" xml:space="preserve">
+    <value>Sorry, session expired. Please re-login first.</value>
+  </data>
+  <data name="HS_Tags.Text" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="HS_Zone.Text" xml:space="preserve">
+    <value>Zone</value>
+  </data>
+  <data name="Anonymous.Text" xml:space="preserve">
+    <value>Anonymous</value>
+  </data>
+  <data name="Script.Text" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="SubmitScript.Text" xml:space="preserve">
+    <value>Submit a script</value>
+  </data>
+  <data name="SeperatedByCommas.PlaceholderText" xml:space="preserve">
+    <value>Please use "," for separation</value>
+  </data>
+  <data name="Secret.Text" xml:space="preserve">
+    <value>Secret</value>
+  </data>
+  <data name="AnonWarning.Text" xml:space="preserve">
+    <value>You choose to be anonymous. The only relationship between you and this script is the access token. Losing your token will also lose the privilege to further modify this script. Please protect your tokens carefully.</value>
+  </data>
+  <data name="Encryption.Text" xml:space="preserve">
+    <value>Encryption</value>
+  </data>
+  <data name="Secret.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>This will encrypt the script with this secret key.</value>
+  </data>
+  <data name="ForceCommentEnc.Text" xml:space="preserve">
+    <value>Force comment encryption</value>
+  </data>
+  <data name="ForceCommentEnc.[using:Windows.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Forces all users to use encryption in comments section</value>
+  </data>
+  <data name="ConfirmPassword.Text" xml:space="preserve">
+    <value>Confirm Password</value>
+  </data>
+  <data name="EmailAddress.Text" xml:space="preserve">
+    <value>Email Address</value>
+  </data>
+  <data name="Description.Text" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Name.Text" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="HS_Maintainer.Text" xml:space="preserve">
+    <value>Maintainer</value>
+  </data>
+  <data name="CommentsEncrypted.Text" xml:space="preserve">
+    <value>The creator of this script has explicitly set the comment to be encrypted. Unfortunately you do not have the key to encrypt your comment. You need to place a key request to get the key before making comments.</value>
+  </data>
+  <data name="EncryptedContent.Text" xml:space="preserve">
+    <value>Encrypted Content</value>
+  </data>
+  <data name="KeyRequest.Text" xml:space="preserve">
+    <value>Key request</value>
+  </data>
+  <data name="Remarks.Text" xml:space="preserve">
+    <value>Remarks</value>
+  </data>
+  <data name="Grant.Text" xml:space="preserve">
+    <value>Grant</value>
+  </data>
+  <data name="TokenRequest.Text" xml:space="preserve">
+    <value>Access Request</value>
+  </data>
+  <data name="GrantsReceived.Text" xml:space="preserve">
+    <value>You have received {0} grant(s) from {1} script(s).</value>
+  </data>
+  <data name="Requests.Text" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="Update.Text" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Public.Text" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Private.Text" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="HS_Removed.Text" xml:space="preserve">
+    <value>The script has been removed</value>
+  </data>
+  <data name="New.Text" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="PickAFile.Text" xml:space="preserve">
+    <value>Pick a file</value>
+  </data>
+  <data name="HS_StatusHistory.Text" xml:space="preserve">
+    <value>Status History</value>
+  </data>
+  <data name="ChangePassword.Text" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="NewPassword.Text" xml:space="preserve">
+    <value>New Password</value>
   </data>
 </root>

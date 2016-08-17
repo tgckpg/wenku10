@@ -1,0 +1,153 @@
+﻿<Page
+    x:Class="wenku10.Pages.Sharers.ScriptUpload"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:DataVisConverter x:Key="DataVisConverter" />
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="10">
+            <TextBlock FontSize="20"
+                       Text="Submit script" x:Uid="/AppResources/SubmitScript"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+            <p:StateControl State="{Binding Path=Text, ElementName=Message, Converter={StaticResource DataStateConverter}}">
+                <TextBlock Margin="10,0" x:Name="Message"
+                           Foreground="{StaticResource MajorBrush}" />
+            </p:StateControl>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Margin="15, 10">
+                <TextBlock Text="Script" x:Uid="/AppResources/Script"
+                           Foreground="{StaticResource MajorBrush}" />
+                <HyperlinkButton Margin="10,0" Click="PickFile">
+                    <TextBlock x:Name="FileName" Text="Pick a file" />
+                </HyperlinkButton>
+
+                <!-- Name -->
+                <TextBlock Text="Name" x:Uid="/AppResources/Name"
+                           Foreground="{StaticResource MajorBrush}" />
+                <TextBox x:Name="NameInput"
+                         Margin="0,2,0,10" />
+
+                <!-- Desc -->
+                <TextBlock Text="Descrption" x:Uid="/AppResources/Description"
+                           Foreground="{StaticResource MajorBrush}" />
+                <TextBox x:Name="DescInput" AcceptsReturn="True"
+                         Height="50"
+                         Margin="0,2,0,10" />
+
+                <!-- Zone -->
+                <TextBlock Text="Zone" x:Uid="/AppResources/HS_Zone"
+                           Foreground="{StaticResource MajorBrush}" />
+                <AutoSuggestBox x:Name="ZoneInput" x:Uid="/AppResources/SeperatedByCommas"
+                                PlaceholderText="Seperated by commas"
+                                Margin="0,2,0,10" />
+                <!-- Type -->
+                <TextBlock Text="Type" x:Uid="/AppResources/Type"
+                           Foreground="{StaticResource MajorBrush}" />
+                <AutoSuggestBox x:Name="TypesInput" x:Uid="/AppResources/SeperatedByCommas"
+                                PlaceholderText="Seperated by commas"
+                                Margin="0,2,0,10"  />
+                <!-- Tags -->
+                <TextBlock Text="Tags" x:Uid="/AppResources/HS_Tags"
+                           Foreground="{StaticResource MajorBrush}" />
+                <AutoSuggestBox x:Name="TagsInput" x:Uid="/AppResources/SeperatedByCommas"
+                                PlaceholderText="Seperated by commas"
+                                Margin="0,2,0,10" />
+
+                <!-- Anonymous -->
+                <CheckBox x:Name="Anon">
+                    <TextBlock x:Uid="/AppResources/Anonymous"
+                               Text="Anonymous" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                </CheckBox>
+                <TextBlock Text="AnonWarning" x:Uid="/AppResources/AnonWarning"
+                           x:Name="AnonWarning" TextWrapping="Wrap"
+                           Margin="20,2,0,10"
+                           Visibility="{Binding ElementName=Anon, Path=IsChecked, Converter={StaticResource DataVisConverter}}"
+                           Foreground="{StaticResource SubtleBrush}" />
+
+                <!-- AccessToken -->
+                <TextBlock Text="Access Token" x:Uid="/ContextMenu/AccessTokens"
+                           Foreground="{StaticResource MajorBrush}" />
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="AddToken_Btn" Click="AddToken"
+                            Style="{StaticResource PlainButton}"
+                            Width="35" Height="35">
+                        <i:IconPlusSign AutoScale="True" />
+                    </Button>
+                    <ComboBox x:Name="AccessTokens"
+                              ItemsSource="{Binding AuthList}"
+                              DisplayMemberPath="Name" SelectedValuePath="Value"
+                              Loaded="PreSelectToken" />
+                </StackPanel>
+
+                <!-- Encryption -->
+                <CheckBox x:Name="Encrypt">
+                    <TextBlock Text="Encryption" x:Uid="/AppResources/Encryption"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                </CheckBox>
+                <Grid Margin="20,0,0,0"
+                            Visibility="{Binding ElementName=Encrypt, Path=IsChecked, Converter={StaticResource DataVisConverter}}" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.ColumnSpan="2" Text="Secret" x:Uid="/AppResources/Secret" Foreground="{StaticResource MajorBrush}" />
+
+                    <!-- Key selection -->
+                    <Button Grid.Row="1" Grid.Column="0"
+                            x:Name="AddKey_Btn" Click="AddKey"
+                            Style="{StaticResource PlainButton}"
+                            Width="35" Height="35">
+                        <i:IconPlusSign AutoScale="True" />
+                    </Button>
+                    <ComboBox Grid.Row="1" Grid.Column="1"
+                              ItemsSource="{Binding AuthList}"
+                              Loaded="PreSelectKey"
+                              DisplayMemberPath="Name" SelectedValuePath="Value"
+                              x:Name="Keys" />
+
+                    <CheckBox Grid.Row="2" Grid.ColumnSpan="2" x:Name="ForceCommentEnc">
+                        <TextBlock x:Uid="/AppResources/ForceCommentEnc"
+                                   Text="Force comment encryption"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    </CheckBox>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Grid.Row="2" Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <ProgressRing x:Name="LoadingRing"
+                          Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                          Width="50" Height="50"/>
+            <Button Style="{StaticResource PlainButton}"
+                    x:Name="Upload_Btn"  Click="Upload"
+                    Width="50" Height="50">
+                <i:IconLogout AutoScale="True" Direction="Rotate270" />
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Page>
