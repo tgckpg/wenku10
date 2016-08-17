@@ -1,16 +1,15 @@
-# What is wenku10
-wenku10 versatile book reader that does many things.
-#### Current features
-- Provide OneDrive syncing for bookmarks
-- A spider that can crawl web content into a book
+# Grimoire Reaper ( wenku10 )
+This is a versatile book reader with:
+- OneDrive syncing for bookmarks
+- A spider that can crawl web content into a book ( with an editor )
+- A sharing platform for users to share their crawling instructions ( spider script )
 - Themes
-- Ebwin: an embed dictionary ( I needed this for learning Japanese, so ... whatever I want! )
+- Ebwin: an embed dictionary ( I needed this for learning Japanese )
 - ...actually it is just a text reader that I created for reading web novel
 
 #### Going to implement
-- Faster vertical text rendering ( I am planning to switch the core components to native library )
+- Faster vertical text rendering ( I am still planning to switch the core components to native library )
 - Better design. I don't think if I have time to do this tho
-- Script sharing ( a.k.a spider crawing instructions )
 - way to go!
 
 #### Screenshots
