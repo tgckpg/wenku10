@@ -111,12 +111,8 @@
             <StackPanel x:Name="MasterContainer" Orientation="Horizontal">
                 <!-- Section Book Info -->
                 <Border x:Name="BookInfoSection"
+                        e:TransitionDisplay.State="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TransStateConverter}}"
                         Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
-                    <Border.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition />
-                        </TransitionCollection>
-                    </Border.Transitions>
                     <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
@@ -319,12 +315,9 @@
                 </Border>
 
                 <!-- Section Table of Contents -->
-                <Border x:Name="TOCSection" Grid.Column="2" Background="{StaticResource Shades90}">
-                    <Border.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition />
-                        </TransitionCollection>
-                    </Border.Transitions>
+                <Border x:Name="TOCSection" Grid.Column="2"
+                        e:TransitionDisplay.State="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TransStateConverter}}"
+                        Background="{StaticResource Shades90}">
                     <ContentControl VerticalContentAlignment="Stretch">
                         <ContentControl.ContentTemplate>
                             <DataTemplate>
@@ -473,13 +466,8 @@
 
                 <!-- Section Comments -->
                 <Border x:Name="CommentSection" Grid.Column="1"
+                        e:TransitionDisplay.State="{Binding Path=Content, ElementName=CommentFrame, Converter={StaticResource TransStateConverter}}"
                         Width="450" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
-                    <Border.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition />
-                        </TransitionCollection>
-                    </Border.Transitions>
-
                     <Grid p:Clip.ToBounds="True">
                         <!-- Background from data context -->
                         <Grid Margin="-200, -30, -200, -30" 

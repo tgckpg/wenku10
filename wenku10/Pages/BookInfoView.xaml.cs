@@ -97,7 +97,7 @@ namespace wenku10.Pages
                 Worker.UIInvoke( () =>
                 {
                     TOCSection.DataContext = null;
-                    CommentSection.DataContext = null;
+                    CommentFrame.Content = null;
                     BookInfoSection.DataContext = null;
                 } );
             }
@@ -207,7 +207,7 @@ namespace wenku10.Pages
             {
                 TOCSection.DataContext = null;
                 TOCFloatSection.DataContext = null;
-                CommentSection.DataContext = null;
+                CommentFrame.Content = null;
                 BookInfoSection.DataContext = null;
                 OpenType( e.Parameter );
             }
@@ -246,22 +246,7 @@ namespace wenku10.Pages
         private void LoadBookInfo( LocalTextDocument Doc )
         {
             IEnumerable<UIElement> Modules = MasterContainer.Children;
-
-            // Remove Everything and only give toc
-            foreach ( UIElement e in Modules.ToArray() )
-            {
-                Border Mod = e as Border;
-
-                MasterContainer.Children.Remove( e );
-                if ( Mod.Name == "TOCSection" )
-                {
-                    MasterContainer.Children.Add( e );
-                }
-            }
-
-            SetTemplateTOC(
-                ThisBook = X.Instance<BookItem>( XProto.BookItemEx, Doc )
-            );
+            SetTemplateTOC( ThisBook = X.Instance<BookItem>( XProto.BookItemEx, Doc ) );
         }
 
         private void LoadBookInfo( BookItem Book )
