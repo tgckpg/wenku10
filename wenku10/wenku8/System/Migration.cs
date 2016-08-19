@@ -32,21 +32,19 @@ namespace wenku8.System
                 switch ( Properties.VERSION )
                 {
                     // Keep up to 5 migration versions
-                    case "1.7.1t":
-                    case "1.7.2t":
-                    case "1.7.3t":
-                        v174t();
-                        break;
                     case "1.7.4t":
                     case "1.7.5t":
+                    case "1.7.6t":
+                    case "1.7.7t":
+                    case "1.7.8t":
                         break;
 
-                    case "1.2.6b":
                     case "1.2.7b":
                     case "1.2.8b":
                     case "1.2.9b":
                     case "1.2.10b":
-                        v130b();
+                    case "1.3.0b":
+                        v131b();
                         break;
 
                     default:
@@ -55,7 +53,6 @@ namespace wenku8.System
                         await Task.Delay( 1 );
                         break;
                 }
-                Migrate_Latest();
             }
             catch ( Exception ex )
             {
@@ -65,17 +62,7 @@ namespace wenku8.System
             Properties.VERSION = Bootstrap.Version;
         }
 
-        private void Migrate_Latest()
-        {
-            // Latest Migration
-        }
-
-        private void v130b()
-        {
-            v174t();
-        }
-
-        private void v174t()
+        private void v131b()
         {
             // Setting -> Settings
             AppStorage Storage = new AppStorage();

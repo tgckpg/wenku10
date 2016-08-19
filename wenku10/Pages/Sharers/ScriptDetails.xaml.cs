@@ -752,6 +752,7 @@ namespace wenku10.Pages.Sharers
                 CommentsSource.LoadStart += ( x, y ) => MarkLoading();
                 CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();
 
+
                 // Remove the LoadMore thing
                 CommentsSource.RemoveAt( i );
                 CommentsSource.InsertLoader( i, CLoader );
