@@ -329,8 +329,21 @@ namespace wenku10.Pages
 
         private void RemoveSource( object sender, RoutedEventArgs e )
         {
-            SelectedBook.RemoveSource();
+            try
+            {
+                SelectedBook.RemoveSource();
+            }
+            catch ( Exception ) { }
+
             FileListContext.CleanUp();
+        }
+
+        private async void CopySource( object sender, RoutedEventArgs e )
+        {
+            SpiderBook Book = SelectedBook as SpiderBook;
+            if ( Book == null ) return;
+
+            FileListContext.Add( await Book.Clone() );
         }
 
         private void ViewRaw( object sender, RoutedEventArgs e )
@@ -346,8 +359,9 @@ namespace wenku10.Pages
             EditItem( SelectedBook );
         }
 
-        private void Reanalyze( object sender, RoutedEventArgs e )
+        private async void Reanalyze( object sender, RoutedEventArgs e )
         {
+            await SelectedBook.Reload();
             ProcessItem( SelectedBook );
         }
         #endregion

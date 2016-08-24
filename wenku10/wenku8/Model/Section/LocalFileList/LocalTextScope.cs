@@ -277,5 +277,15 @@ namespace wenku8.Model.Section
 
             NotifyChanged( "SearchSet" );
         }
+
+        public void Add( params LocalBook[] Book )
+        {
+            List<LocalBook> NData = new List<LocalBook>( Data.Cast<LocalBook>() );
+            NData.AddRange( Book );
+            Data = NData;
+
+            NotifyChanged( "SearchSet" );
+        }
+
     }
 }

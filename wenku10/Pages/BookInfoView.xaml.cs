@@ -238,6 +238,7 @@ namespace wenku10.Pages
             }
             else if ( parameter is BookItem )
             {
+                useCache = false;
                 ThisBook = ( BookItem ) parameter;
                 LoadBookInfo( ThisBook as BookItem );
             }

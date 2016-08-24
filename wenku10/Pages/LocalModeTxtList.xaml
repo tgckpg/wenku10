@@ -19,6 +19,7 @@
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataStateConverter x:Key="DataStateConverter" />
         <n:TransStateConverter x:Key="TransStateConverter" />
+        <n:IsSpiderConverter x:Key="IsSpiderConverter" />
         <v:DataCountConverter x:Key="DataCountConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
@@ -124,7 +125,9 @@
                                     <Border MinHeight="120">
                                         <Border.Resources>
                                             <MenuFlyout x:Key="BookAction">
-                                                <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}" Text="{Binding FavContextMenu}" Click="ToggleFav" />
+                                                <MenuFlyoutItem IsEnabled="{Binding ProcessSuccess}"
+                                                                Click="ToggleFav"
+                                                                Text="{Binding FavContextMenu}" />
 
                                                 <MenuFlyoutItem IsEnabled="{Binding CanReprocess}"
                                                                 x:Uid="/ContextMenu/Reanalyze"
@@ -135,7 +138,13 @@
                                                                 IsEnabled="{Binding File, Converter={StaticResource DataBoolConverter}}"
                                                                 Click="ViewRaw" />
 
+                                                <MenuFlyoutItem x:Uid="/ContextMenu/Copy"
+                                                                IsEnabled="{Binding Converter={StaticResource IsSpiderConverter}}"
+                                                                Click="CopySource"
+                                                                Text="Copy" />
+
                                                 <MenuFlyoutItem x:Uid="/ContextMenu/Edit"
+                                                                IsEnabled="{Binding Converter={StaticResource IsSpiderConverter}}"
                                                                 Click="EditSource"
                                                                 Text="Edit Source" />
 

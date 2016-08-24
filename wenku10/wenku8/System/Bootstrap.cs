@@ -32,7 +32,7 @@ namespace wenku8.System
 		public async void Start()
 		{
 #if ARM && DEBUG
-            Resources.Shared.ShRequest.Server = new global::System.Uri( "http://w10srv.astropenguin.net/" );
+            Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
 			// Must follow Order!
 			//// Fixed Orders

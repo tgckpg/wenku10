@@ -154,6 +154,7 @@
       <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
+    <Compile Include="wenku8\Converters\IsSpiderConverter.cs" />
     <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
