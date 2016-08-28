@@ -144,7 +144,7 @@
                             Background="Transparent"
                             VerticalAlignment="Center" HorizontalAlignment="Center"
                             e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                            e:TransitionDisplay.Mode="A01_X_N30_0"
+                            e:TransitionDisplay.Mode="A01_Y_N30_30"
                             Style="{StaticResource PlainButton}">
                         <Button.Flyout>
                             <MenuFlyout>
@@ -172,7 +172,7 @@
                     <TextBlock Grid.Column="1" FontSize="20"
                                VerticalAlignment="Center"
                                e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                               e:TransitionDisplay.Mode="A01_Y_N30_0"
+                               e:TransitionDisplay.Mode="A01_Y_N30_30"
                                TextWrapping="Wrap"
                                Text="{Binding Name}"
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
@@ -184,11 +184,11 @@
                 <TextBlock Margin="10, 5"
                            x:Uid="/AppResources/HS_StatusHistory" Text="Status History"
                            e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                           e:TransitionDisplay.Mode="A01_X_N30_0"
+                           e:TransitionDisplay.Mode="A01_Y_N30_30"
                            Foreground="{StaticResource SubtleBrush}" />
                 <GridView Margin="10, 0"
                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                          e:TransitionDisplay.Mode="A01_Y_30_0"
+                          e:TransitionDisplay.Mode="A01_Y_N30_30"
                           ItemsSource="{Binding Histories}"
                           ItemContainerStyle="{StaticResource PlainGridItem}">
                     <GridView.ItemTemplate>
@@ -219,7 +219,7 @@
                 <TextBlock Margin="10,5"
                            FontSize="15"
                            e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                           e:TransitionDisplay.Mode="A01_Y_N30_0"
+                           e:TransitionDisplay.Mode="A01_Y_30_N30"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                            TextWrapping="Wrap"
                            Text="{Binding Desc}"/>

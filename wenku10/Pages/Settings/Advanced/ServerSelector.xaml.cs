@@ -53,6 +53,7 @@ namespace wenku10.Pages.Settings.Advanced
         private void ToggleSS( object sender, RoutedEventArgs e )
         {
             ToggleSettings( Properties.ENABLE_SERVER_SEL = EnableSS.IsOn );
+            RefreshServers();
         }
 
         private void MaxPing_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
@@ -70,7 +71,6 @@ namespace wenku10.Pages.Settings.Advanced
         {
             try
             {
-
                 IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false );
                 wc.GET(
                     new Uri( X.Const<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )

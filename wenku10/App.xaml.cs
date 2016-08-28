@@ -93,6 +93,18 @@ namespace wenku10
             }
 #endif
 
+            if( e.PrelaunchActivated )
+            {
+                if ( wenku8.Resources.Shared.Storage == null )
+                {
+                    wenku8.Resources.Shared.Storage = new wenku8.Storage.GeneralStorage();
+                    Net.Astropenguin.IO.XRegistry.AStorage = wenku8.Resources.Shared.Storage;
+                }
+
+                wenku8.Resources.Shared.Storage.CacheFileStatus();
+                return;
+            }
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
