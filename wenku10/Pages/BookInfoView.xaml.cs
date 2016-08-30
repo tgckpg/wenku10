@@ -599,6 +599,7 @@ namespace wenku10.Pages
 
         private void SearchAuthor( object sender, RoutedEventArgs e )
         {
+            if ( ThisBook is BookInstruction || ThisBook.IsLocal ) return;
             Frame.Navigate( typeof( Search ), ThisBook.AuthorRaw );
         }
 

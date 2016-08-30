@@ -7,6 +7,7 @@
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:xi="using:wenku8.ThemeIcons"
     xmlns:s="using:wenku8.Converters"
     xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -246,13 +247,6 @@
                                                 FlowDirection="LeftToRight">
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
-                                                IsEnabled="{Binding OriginalUrl, Converter={StaticResource DataBoolConverter}}"
-                                                Height="50" Width="50"
-                                                Click="OpenInBrowser" >
-                                                <i:IconMSEdge AutoScale="True" />
-                                        </Button>
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
                                                 Height="50" Width="50"
                                                 Tapped="AddOrRemoveFav">
                                             <Grid>
@@ -262,6 +256,19 @@
                                                 <i:IconFav AutoScale="True"
                                                            Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"/>
                                             </Grid>
+                                        </Button>
+                                        <Button Style="{StaticResource PlainButton}"
+                                                Background="{StaticResource Shades40}"
+                                                IsEnabled="{Binding OriginalUrl, Converter={StaticResource DataBoolConverter}}"
+                                                Height="50" Width="50"
+                                                Click="OpenInBrowser" >
+                                                <i:IconMSEdge AutoScale="True" />
+                                        </Button>
+                                        <Button Style="{StaticResource PlainButton}"
+                                                Background="{StaticResource Shades40}"
+                                                Height="50" Width="50"
+                                                Click="SearchAuthor" >
+                                            <xi:IconAuthor AutoScale="True" />
                                         </Button>
                                         <Button Style="{StaticResource PlainButton}"
                                                 Background="{StaticResource Shades40}"
@@ -295,16 +302,6 @@
                                                 Height="50" Width="50"
                                                 Click="Vote" >
                                             <TextBlock x:Uid="/AppBar/Push" FontSize="30" Foreground="White" />
-                                        </Button>
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
-                                                Height="50" Width="50"
-                                                Click="SearchAuthor" >
-                                            <TextBlock Text="Seach Author"
-                                                       Foreground="White"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Center"
-                                                       HorizontalAlignment="Center"/>
                                         </Button>
                                         -->
                                     </StackPanel>
