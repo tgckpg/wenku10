@@ -33,6 +33,7 @@ using wenku8.Model.Book;
 using wenku8.Model.Comments;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
+using wenku8.Model.Loaders;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.Settings;
@@ -47,6 +48,7 @@ namespace wenku10.Pages.Sharers
     using CryptAES = wenku8.System.CryptAES;
     using CryptRSA = wenku8.System.CryptRSA;
     using SHTarget = SharersRequest.SHTarget;
+    using System.Threading.Tasks;
 
     sealed partial class ScriptDetails : Page
     {
@@ -80,44 +82,43 @@ namespace wenku10.Pages.Sharers
         private string[] HomeControls = new string[] { "OpenRequest", "Comment", "Download" };
         private string[] CommentControls = new string[] { "NewComment", "HideComment" };
 
-        public ScriptDetails( HubScriptItem Item )
+        private Frame ParentFrame;
+
+        public ScriptDetails( HubScriptItem Item, Frame ParentFrame = null )
             :this()
         {
             BindItem = Item;
+            this.ParentFrame = ParentFrame;
             SetTemplate();
         }
 
-        public ScriptDetails( BookItem b )
+        public ScriptDetails( BookItem b, Frame ParentFrame )
             :this()
         {
+            this.ParentFrame = ParentFrame;
             AccessToken = ( string ) new TokenManager().GetAuthById( b.Id )?.Value;
+            SuggestUpload( b );
+        }
 
-            RCache.POST(
-                Shared.ShRequest.Server
-                , Shared.ShRequest.Search( "uuid: " + b.Id, 0, 1, new string[] { AccessToken } )
-                , ( e, QId ) =>
-                {
-                    try
-                    {
-                        BindItem = new HubScriptItem(
-                            JsonStatus.Parse( e.ResponseString )
-                                .GetNamedArray( "data" )
-                                .First().GetObject()
-                        );
+        public async void SuggestUpload( BookItem b )
+        {
+            BindItem = await LoadFromSHHub( b.Id, AccessToken );
+            if ( BindItem != null )
+            {
+                await Dispatcher.RunIdleAsync( ( x ) => SetTemplate() );
+            }
+            else
+            {
+                await Dispatcher.RunIdleAsync( x => ParentFrame.Content = new ScriptUpload( b, UploadReturn ) );
+            }
+        }
 
-                        var j = Dispatcher.RunIdleAsync( ( x ) => SetTemplate() );
-                    }
-                    catch ( Exception )
-                    {
+        private async Task<HubScriptItem> LoadFromSHHub( string Id, string Token )
+        {
+            SHSearchLoader SHLoader = new SHSearchLoader( "uuid: " + Id, new string[] { Token } );
+            IEnumerable<HubScriptItem> HSIs = await SHLoader.NextPage( 1 );
 
-                    }
-                }
-                , ( CacheName, QId, ex ) =>
-                {
-                    // TODO: Not in ShHub
-                }
-                , false
-            );
+            return HSIs.FirstOrDefault();
         }
 
         public ScriptDetails()
@@ -191,6 +192,26 @@ namespace wenku10.Pages.Sharers
             HSComment.ActiveInstance = null;
         }
 
+        private async void UploadReturn( string Id, string Token )
+        {
+            AccessToken = Token;
+
+            HubScriptItem HSI = await LoadFromSHHub( Id, Token );
+
+            // We are in BookInfoView
+            if ( !( ParentFrame == null || HSI == null ) )
+            {
+                ParentFrame.Content = new ScriptDetails( HSI, ParentFrame );
+            }
+            // We are in LocalModeTextList
+            else if ( HSI != null )
+            {
+                // Since we cannot set the Content property here anymore
+                // We call for help
+                MessageBus.SendUI( GetType(), AppKeys.HS_DETAIL_VIEW, HSI );
+            }
+        }
+
         private void ControlClick( object sender, ItemClickEventArgs e )
         {
             ( ( PaneNavButton ) e.ClickedItem ).Action();
@@ -208,38 +229,7 @@ namespace wenku10.Pages.Sharers
         #region Priviledged Controls
         private void Update( object sender, RoutedEventArgs e )
         {
-            Content = new ScriptUpload( BindItem, Updated );
-        }
-
-        private void Updated( string Id, string Token )
-        {
-            AccessToken = Token;
-
-            RCache.POST(
-                Shared.ShRequest.Server
-                , Shared.ShRequest.Search( "uuid: " + Id, 0, 1, new string[] { Token } )
-                , ( e, QId ) =>
-                {
-                    try
-                    {
-                        BindItem.Update(
-                            JsonStatus.Parse( e.ResponseString )
-                                .GetNamedArray( "data" )
-                                .First().GetObject()
-                        );
-
-                        // Since we cannot set the Content property here anymore
-                        // We call for help
-                        MessageBus.SendUI( GetType(), AppKeys.HS_DETAIL_VIEW, BindItem );
-                    }
-                    catch ( Exception )
-                    {
-
-                    }
-                }
-                , wenku8.System.Utils.DoNothing
-                , false
-            );
+            Content = new ScriptUpload( BindItem, UploadReturn );
         }
 
         private async void Delete( object sender, RoutedEventArgs e )

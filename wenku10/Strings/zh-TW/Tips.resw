@@ -124,7 +124,7 @@
     <value>系統：書頁資訊的排版可以在設定中調整</value>
   </data>
   <data name="11" xml:space="preserve">
-    <value>系統：會員申請請到 wenku8 的主站上申請</value>
+    <value>正文：直書的時候「↑→↓←↔↕」會自動旋轉九十度</value>
   </data>
   <data name="12" xml:space="preserve">
     <value>系統：資訊頁全部停用的話可以直接跳到正文</value>

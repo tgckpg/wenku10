@@ -16,7 +16,7 @@
         <v:DataBoolConverter x:Key="DataBoolConverter" />
     </Page.Resources>
 
-    <Grid>
+    <Grid FlowDirection="LeftToRight">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

@@ -145,7 +145,7 @@ namespace wenku10.Pages
         {
             if ( b is BookInstruction )
             {
-                CommentFrame.Content = new Sharers.ScriptDetails( b );
+                CommentFrame.Content = new Sharers.ScriptDetails( b, CommentFrame );
             }
             else
             {

@@ -107,7 +107,7 @@ namespace wenku8.Model.Section
             } );
         }
 
-        public async void Load()
+        public async void OpenDirectory()
         {
             BookStorage BS = new BookStorage();
             string[] ids = BS.GetIdList();
