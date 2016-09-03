@@ -32,11 +32,11 @@ namespace wenku8.System
                 switch ( Properties.VERSION )
                 {
                     // Keep up to 5 migration versions
-                    case "1.7.4t":
-                    case "1.7.5t":
-                    case "1.7.6t":
-                    case "1.7.7t":
                     case "1.7.8t":
+                    case "1.7.9t":
+                    case "1.7.10t":
+                    case "1.7.11t":
+                    case "1.7.12t":
                         break;
 
                     case "1.2.7b":
@@ -44,7 +44,6 @@ namespace wenku8.System
                     case "1.2.9b":
                     case "1.2.10b":
                     case "1.3.0b":
-                        v131b();
                         break;
 
                     default:
@@ -60,17 +59,6 @@ namespace wenku8.System
             }
 
             Properties.VERSION = Bootstrap.Version;
-        }
-
-        private void v131b()
-        {
-            // Setting -> Settings
-            AppStorage Storage = new AppStorage();
-            IsolatedStorageFile ISFS = Storage.GetISOStorage();
-            if( ISFS.DirectoryExists( "Setting" ) )
-            {
-                ISFS.MoveDirectory( "Setting", "Settings" );
-            }
         }
     }
 }
