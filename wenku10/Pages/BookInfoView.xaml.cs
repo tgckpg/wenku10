@@ -145,7 +145,7 @@ namespace wenku10.Pages
         {
             if ( b is BookInstruction )
             {
-                CommentFrame.Content = new Sharers.ScriptDetails( b );
+                CommentFrame.Content = new Sharers.ScriptDetails( b, CommentFrame );
             }
             else
             {
@@ -238,6 +238,7 @@ namespace wenku10.Pages
             }
             else if ( parameter is BookItem )
             {
+                useCache = false;
                 ThisBook = ( BookItem ) parameter;
                 LoadBookInfo( ThisBook as BookItem );
             }
@@ -598,6 +599,7 @@ namespace wenku10.Pages
 
         private void SearchAuthor( object sender, RoutedEventArgs e )
         {
+            if ( ThisBook is BookInstruction || ThisBook.IsLocal ) return;
             Frame.Navigate( typeof( Search ), ThisBook.AuthorRaw );
         }
 

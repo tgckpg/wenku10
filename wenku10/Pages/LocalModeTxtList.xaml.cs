@@ -155,6 +155,15 @@ namespace wenku10.Pages
                 case AppKeys.HS_NO_VOLDATA:
                     ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).Id, StatusType.HS_NO_VOLDATA );
                     break;
+
+                case AppKeys.HS_MOVED:
+                    Tuple<string, SpiderBook> Payload = ( Tuple<string, SpiderBook> ) Mesg.Payload;
+                    LocalBook OBook = FileListContext.GetById( Payload.Item1 );
+
+                    OBook.RemoveSource();
+                    FileListContext.Add( Payload.Item2 );
+                    FileListContext.CleanUp();
+                    break;
             }
         }
 
@@ -240,7 +249,7 @@ namespace wenku10.Pages
 
         private void LoadFiles( object sender, RoutedEventArgs e )
         {
-            FileListContext.Load();
+            FileListContext.OpenDirectory();
         }
 
         private async void LoadUrl( object sender, RoutedEventArgs e )
@@ -329,8 +338,21 @@ namespace wenku10.Pages
 
         private void RemoveSource( object sender, RoutedEventArgs e )
         {
-            SelectedBook.RemoveSource();
+            try
+            {
+                SelectedBook.RemoveSource();
+            }
+            catch ( Exception ) { }
+
             FileListContext.CleanUp();
+        }
+
+        private async void CopySource( object sender, RoutedEventArgs e )
+        {
+            SpiderBook Book = SelectedBook as SpiderBook;
+            if ( Book == null ) return;
+
+            FileListContext.Add( await Book.Clone() );
         }
 
         private void ViewRaw( object sender, RoutedEventArgs e )
@@ -346,8 +368,9 @@ namespace wenku10.Pages
             EditItem( SelectedBook );
         }
 
-        private void Reanalyze( object sender, RoutedEventArgs e )
+        private async void Reanalyze( object sender, RoutedEventArgs e )
         {
+            await SelectedBook.Reload();
             ProcessItem( SelectedBook );
         }
         #endregion

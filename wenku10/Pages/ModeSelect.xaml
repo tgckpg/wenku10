@@ -5,6 +5,7 @@
     xmlns:local="using:wenku10.Pages"
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:c="using:wenku8.CompositeElement"
+    xmlns:e="using:wenku8.Effects"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -12,7 +13,10 @@
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource MajorBackgroundBrush}">
         <Border PointerPressed="XStage_PointerPressed" Background="Transparent" />
-        <Button Margin="10" Click="SinglePlayer"
+        <Button x:Name="StartButton"
+                e:TransitionDisplay.State="Active"
+                e:TransitionDisplay.Mode="A01_Y_0_N30"
+                Margin="10" Click="SinglePlayer"
                 VerticalAlignment="Center" HorizontalAlignment="Center"
                 Background="Transparent"
                 Style="{StaticResource PlainButton}">
@@ -22,7 +26,10 @@
                                       IsFixedTimeStep="False"
                                       CreateResources="Stage_CreateResources"
                                       IsHitTestVisible="False" />
-        <Border x:Name="ForeText" Margin="10" Visibility="Collapsed"
+        <Border x:Name="ForeText"
+                e:TransitionDisplay.State="Inactive"
+                e:TransitionDisplay.Mode="A01_Y_30_N30"
+                Margin="10" Visibility="Collapsed"
                 VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid Height="200" Width="150" Margin="10">
                 <TextBlock x:Name="SenseText" Text="Start"

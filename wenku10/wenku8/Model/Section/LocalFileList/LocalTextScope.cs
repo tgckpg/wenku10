@@ -107,7 +107,7 @@ namespace wenku8.Model.Section
             } );
         }
 
-        public async void Load()
+        public async void OpenDirectory()
         {
             BookStorage BS = new BookStorage();
             string[] ids = BS.GetIdList();
@@ -277,5 +277,15 @@ namespace wenku8.Model.Section
 
             NotifyChanged( "SearchSet" );
         }
+
+        public void Add( params LocalBook[] Book )
+        {
+            List<LocalBook> NData = new List<LocalBook>( Data.Cast<LocalBook>() );
+            NData.AddRange( Book );
+            Data = NData;
+
+            NotifyChanged( "SearchSet" );
+        }
+
     }
 }

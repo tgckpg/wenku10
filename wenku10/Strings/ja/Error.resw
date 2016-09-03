@@ -142,4 +142,13 @@
   <data name="Verification" xml:space="preserve">
     <value>バージョンを認証することはできません、オフラインモードになります</value>
   </data>
+  <data name="VL_NoBook" xml:space="preserve">
+    <value>本を選択してください</value>
+  </data>
+  <data name="VL_NoKey" xml:space="preserve">
+    <value>キーを選択してください</value>
+  </data>
+  <data name="VL_NoToken" xml:space="preserve">
+    <value>このスクリプトをアップロードするアクセストークンを必要としています。</value>
+  </data>
 </root>

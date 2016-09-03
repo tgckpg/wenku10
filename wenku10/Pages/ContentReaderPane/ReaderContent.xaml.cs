@@ -24,6 +24,7 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 
+using wenku8.Effects;
 using wenku8.Model.Book;
 using wenku8.Model.Pages.ContentReader;
 using wenku8.Model.Section;
@@ -214,6 +215,8 @@ namespace wenku10.Pages.ContentReaderPane
                     await Task.Delay( 2000 );
 
                     Shared.LoadMessage( "WaitingForUI" );
+
+                    ShowUndoButton();
                     var NOP = ContentGrid.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( Container.RenderComplete ) );
                     break;
             }
@@ -340,7 +343,17 @@ namespace wenku10.Pages.ContentReaderPane
             } );
         }
 
-        private void UndoAnchorJump( object sender, RoutedEventArgs e ) { UndoJump(); }
+        private void UndoAnchorJump( object sender, RoutedEventArgs e )
+        {
+            if ( TransitionDisplay.GetState( UndoButton ) == TransitionState.Active )
+            {
+                UndoJump();
+            }
+            else
+            {
+                ShowUndoButton();
+            }
+        }
 
         internal void UndoJump()
         {
@@ -353,18 +366,29 @@ namespace wenku10.Pages.ContentReaderPane
             GotoIndex( AnchorHistory.Pop() );
         }
 
+        private void ShowUndoButton( object sender, PointerRoutedEventArgs e )
+        {
+            if ( !MainStage.Instance.IsPhone )
+            {
+                ShowUndoButton();
+            }
+        }
+
         private async void ShowUndoButton()
         {
             HoldOneMore = true;
 
-            if( UndoButton.State == ControlState.Reovia ) return;
-            UndoButton.State = ControlState.Reovia;
+            if ( TransitionDisplay.GetState( UndoButton ) == TransitionState.Active )
+                return;
+
+            TransitionDisplay.SetState( UndoButton, TransitionState.Active );
             while( HoldOneMore )
             {
                 HoldOneMore = false;
                 await Task.Delay( 3000 );
             }
-            UndoButton.State = ControlState.Foreatii;
+
+            TransitionDisplay.SetState( UndoButton, TransitionState.Inactive );
         }
 
         private void RecordUndo( int Index )

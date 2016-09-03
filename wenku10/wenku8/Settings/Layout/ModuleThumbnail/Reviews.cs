@@ -7,7 +7,7 @@ namespace wenku8.Settings.Layout.ModuleThumbnail
     using Config;
     public class Reviews : ThumbnailBase
     {
-        override public bool DefaultValue { get { return false; } }
+        override public bool DefaultValue { get { return true; } }
 
         public Reviews()
             :base( "Reviews", "CommentSection" )

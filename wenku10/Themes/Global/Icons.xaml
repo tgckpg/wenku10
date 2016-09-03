@@ -512,4 +512,45 @@
         </Setter>
     </Style>
 
+    <Style TargetType="i:IconAuthor">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconAuthor">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Canvas>
+                            <Canvas.RenderTransform>
+                                <ScaleTransform ScaleX="0.3" ScaleY="0.3" CenterX="-103.6" CenterY="-164.1"/>
+                            </Canvas.RenderTransform>
+                            <Path Data="F0 M 0,0 C 29.19,0 52.88,23.69 52.88,52.88 52.88,82.06 29.19,105.75 0,105.75
+                                     -29.18,105.75 -52.87,82.06 -52.87,52.88 -52.87,23.69 -29.18,0 0,0 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="415.61" Y="456.61" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F0 M 0,0 C 0,-19.43 -7.72,-38.06 -21.46,-51.79 -35.19,-65.53 -53.83,-73.25 -73.25,-73.25
+                                         -73.25,-73.25 -73.25,-73.25 -73.26,-73.25 -111.02,-73.25 -141.63,-42.64 -141.63,-4.87 -141.63,36.44 -141.63,81.19 -141.63,81.19
+                                        L 0,81.19 C 0,81.19 0,39.89 0,0 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <TranslateTransform  X="486.43" Y="635.61" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F0 M 0,0 C 15.81,0 53.26,14.06 53.26,28.65 53.26,43.25 -26.14,70.63 -41.96,70.63
+                                         -57.77,70.63 -57.3,63.22 -55.08,48.63 -52.89,34.2 -15.81,0 0,0 z"
+                                  Fill="{TemplateBinding Foreground}">
+                                <Path.RenderTransform>
+                                    <TranslateTransform X="407.84" Y="438.86" />
+                                </Path.RenderTransform>
+                            </Path>
+                            <Path Data="F0 M 395.76,438.86 C 395.76,438.86 378.04,415.41 351.62,412.13 359.84,430.73 379.08,425.18 395.76,438.86 z"
+                                  Fill="{TemplateBinding Foreground}" />
+                        </Canvas>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

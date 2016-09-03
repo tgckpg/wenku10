@@ -141,4 +141,13 @@
   <data name="Verification" xml:space="preserve">
     <value>Cannot verify your version</value>
   </data>
+  <data name="VL_NoBook" xml:space="preserve">
+    <value>No book seleceted</value>
+  </data>
+  <data name="VL_NoKey" xml:space="preserve">
+    <value>Please select a key first</value>
+  </data>
+  <data name="VL_NoToken" xml:space="preserve">
+    <value>You need an access token to upload this script</value>
+  </data>
 </root>

@@ -17,12 +17,12 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Storage;
 
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.AdvDM;
+using wenku8.Model.Book;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.REST;
@@ -43,6 +43,7 @@ namespace wenku10.Pages.Sharers
         private Action<string,string> OnExit;
 
         private string ReservedId;
+        private bool LockedFile = false;
         private volatile bool Uploading = false;
 
         public ScriptUpload()
@@ -78,7 +79,7 @@ namespace wenku10.Pages.Sharers
                 = AccessTokens.IsEnabled
                 = false;
 
-            PredefineFile( HSI );
+            PredefineFile( HSI.Id );
 
             this.OnExit = OnExit;
         }
@@ -89,9 +90,38 @@ namespace wenku10.Pages.Sharers
             this.OnExit = OnExit;
         }
 
-        private async void PredefineFile( HubScriptItem HSI )
+        public ScriptUpload( BookItem Book, Action<string, string> OnExit )
+            : this()
         {
-            SelectedBook = await SpiderBook.CreateAsyncSpider( HSI.Id );
+            LockedFile = true;
+            Book.PropertyChanged += Book_PropertyChanged;
+            PredefineFile( Book.Id );
+            this.OnExit = OnExit;
+        }
+
+        private void Book_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+        {
+            BookItem B = ( BookItem ) sender;
+            switch( e.PropertyName )
+            {
+                case "Title":
+                    NameInput.PlaceholderText = B.Title;
+                    if ( string.IsNullOrEmpty( NameInput.Text ) ) NameInput.Text = B.Title;
+                    break;
+                case "Intro":
+                    DescInput.PlaceholderText = B.Intro;
+                    if ( string.IsNullOrEmpty( DescInput.Text ) ) DescInput.Text = B.Intro;
+                    break;
+                case "Press":
+                    ZoneInput.PlaceholderText = B.PressRaw;
+                    if ( string.IsNullOrEmpty( ZoneInput.Text ) ) ZoneInput.Text = B.PressRaw;
+                    break;
+            }
+        }
+
+        private async void PredefineFile( string Id )
+        {
+            SelectedBook = await SpiderBook.CreateAsyncSpider( Id );
             FileName.Text = SelectedBook.MetaLocation;
         }
 
@@ -155,22 +185,24 @@ namespace wenku10.Pages.Sharers
                 Message.Text = "";
 
                 if( SelectedBook == null )
-                    throw new ValidationError( "No book seleceted" );
+                    throw new ValidationError( "VL_NoBookSelected" );
 
                 if ( Encrypt.IsChecked == true )
                 {
                     Crypt = Keys.SelectedItem as CryptAES;
 
                     if ( Crypt == null )
-                        throw new ValidationError( "Please select a key first" );
+                        throw new ValidationError( "VL_NoKey" );
                 }
 
                 if( AccessTokens.SelectedItem == null )
-                    throw new ValidationError( "You need an access token to upload this script" );
+                    throw new ValidationError( "VL_NoToken" );
             }
             catch( ValidationError ex )
             {
-                Message.Text = ex.Message;
+                StringResources stx = new StringResources( "Error" );
+
+                Message.Text = stx.Str( ex.Message );
                 MarkNotUpload();
                 return;
             }
@@ -240,6 +272,8 @@ namespace wenku10.Pages.Sharers
 
         private async void PickFile( object sender, RoutedEventArgs e )
         {
+            if ( LockedFile ) return;
+
             Message.Text = "";
             IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
             if ( ISF == null ) return;

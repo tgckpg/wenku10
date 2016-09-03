@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 namespace wenku8.Model.Loaders
 {
@@ -14,6 +15,7 @@ namespace wenku8.Model.Loaders
     using Book.Spider;
     using Resources;
     using Text;
+    using Settings;
 
     sealed class VolumeLoader
     {
@@ -30,6 +32,9 @@ namespace wenku8.Model.Loaders
 
         public void Load( BookItem b )
         {
+            // b is null when back button is pressed before BookLoader load
+            if ( b == null ) return;
+
             Shared.LoadMessage( "LoadingVolume" );
             CurrentBook = b;
             if ( b.IsLocal || ( !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
@@ -70,6 +75,11 @@ namespace wenku8.Model.Loaders
                 Shared.LoadMessage( "SubProcessRun", Vol.VolumeTitle );
                 // This should finalize the chapter info
                 await Vol.SubProcRun( b );
+            }
+
+            if( Vols.Count() == 0 )
+            {
+                MessageBus.SendUI( GetType(), AppKeys.HS_NO_VOLDATA, b );
             }
 
             Shared.LoadMessage( "CompilingTOC", b.Title );

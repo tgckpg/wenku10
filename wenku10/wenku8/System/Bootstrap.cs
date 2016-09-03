@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Threading.Tasks;
+using System.Reflection;
 
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Logging.Handler;
@@ -32,7 +33,7 @@ namespace wenku8.System
 		public async void Start()
 		{
 #if ARM && DEBUG
-            Resources.Shared.ShRequest.Server = new global::System.Uri( "http://w10srv.astropenguin.net/" );
+            Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
 			// Must follow Order!
 			//// Fixed Orders
@@ -42,13 +43,17 @@ namespace wenku8.System
             // 2. Migrate
             Logger.Log( ID, "Migration", LogType.INFO );
             await new Migration().Migrate();
-            // 2. following the appstorage, prepare directories.
-            Resources.Shared.Storage = new GeneralStorage();
-            Net.Astropenguin.IO.XRegistry.AStorage = Resources.Shared.Storage;
-            Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
-            Logger.Log( ID, "AppGate Initilizated", LogType.INFO );
-            // Connection Mode
 
+            // Storage might already be initialized on Prelaunch
+            if ( Resources.Shared.Storage == null )
+            {
+                // 2. following the appstorage, prepare directories.
+                Resources.Shared.Storage = new GeneralStorage();
+                Net.Astropenguin.IO.XRegistry.AStorage = Resources.Shared.Storage;
+                Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
+            }
+
+            // Connection Mode
 			WHttpRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by Astropenguin", Version );
 
 			WCacheMode.Initialize();
@@ -106,5 +111,5 @@ namespace wenku8.System
 #endif
             Logger.Log( ID, string.Format( "Language is {0}", Lang ), LogType.INFO );
 		}
-	}
+    }
 }

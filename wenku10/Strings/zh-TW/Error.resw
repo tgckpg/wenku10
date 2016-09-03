@@ -141,4 +141,13 @@
   <data name="Verification" xml:space="preserve">
     <value>無法認證版本，將進入離線模式</value>
   </data>
+  <data name="VL_NoBook" xml:space="preserve">
+    <value>沒有腳本</value>
+  </data>
+  <data name="VL_NoKey" xml:space="preserve">
+    <value>請選擇密鑰</value>
+  </data>
+  <data name="VL_NoToken" xml:space="preserve">
+    <value>你往後需要權杖修改此腳本</value>
+  </data>
 </root>

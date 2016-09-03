@@ -209,12 +209,17 @@ namespace wenku10
             if ( e.PropertyName == "IsLoading" )
             {
                 TransitionDisplay.SetState( BgCover, FS.IsLoading ? TransitionState.Inactive : TransitionState.Active );
+                if( !FS.IsLoading )
+                {
+                    FavSectionView.DataContext = FS;
+                }
             }
         }
 
         private async Task ReSync()
         {
             FS.IsLoading = true;
+
             // OneDriveSync
             OneDriveSync.Instance = new OneDriveSync();
             await OneDriveSync.Instance.Authenticate();
@@ -233,7 +238,6 @@ namespace wenku10
             bool LoggedIn = await TryLogin();
 
             FS.Load();
-            FavSectionView.DataContext = FS;
         }
 
         private void ClosePaneButton( object sender, RoutedEventArgs e )
@@ -537,35 +541,17 @@ namespace wenku10
                 MarqueeStory = new Storyboard();
                 MarqueeStory.Completed += MarqueeComplete;
             }
-
         }
 
         private void ReloadCustomSection( object sender, RoutedEventArgs e )
         {
             Button b = sender as Button;
+            CustomSection.Width = CustomSection.ActualWidth;
 
             INavSelections NS = NavigationSection.DataContext as INavSelections;
             IPaneInfoSection PS = NS.CustomSection();
 
-            if ( PS.Data != null )
-            {
-                CustomSection.DataContext = PS;
-            }
-            else
-            {
-                PropertyChangedEventHandler PropChanged = null;
-                PropChanged = ( s, ex ) =>
-                {
-                    if ( ex.PropertyName == "Data" )
-                    {
-                        PS.PropertyChanged -= PropChanged;
-                        CustomSection.DataContext = PS;
-                    }
-                };
-
-                PS.PropertyChanged += PropChanged;
-            }
-
+            CustomSection.DataContext = PS;
         }
 
         private void FloatyButton_Loaded( object sender, RoutedEventArgs e )

@@ -7,6 +7,7 @@
     xmlns:i="using:Net.Astropenguin.UI.Icons"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -93,19 +94,21 @@
                 </DataTemplate>
             </ListView.Resources>
         </ListView>
-        <p:StateControl x:Name="UndoButton"
-                        Margin="10"
-                        VerticalAlignment="Top" HorizontalAlignment="Right">
-            <Button Click="UndoAnchorJump"
-                    Style="{StaticResource PlainButton}">
-                <Grid>
-                    <i:IconReload AutoScale="True"
-                                  Width="45" Height="45"/>
-                    <TextBlock x:Name="HCount" Text="{Binding Count}"
-                               Foreground="{StaticResource RelativeShadesBrush}"
-                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                </Grid>
-            </Button>
-        </p:StateControl>
+        <Button x:Name="UndoButton"
+                e:TransitionDisplay.Mode="A01"
+                e:TransitionDisplay.State="Inactive"
+                PointerEntered="ShowUndoButton"
+                Click="UndoAnchorJump"
+                Margin="10"
+                VerticalAlignment="Top" HorizontalAlignment="Right"
+                Style="{StaticResource PlainButton}">
+            <Grid>
+                <i:IconReload AutoScale="True"
+                              Width="45" Height="45"/>
+                <TextBlock x:Name="HCount" Text="{Binding Count}"
+                           Foreground="{StaticResource RelativeShadesBrush}"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+        </Button>
     </Grid>
 </Page>

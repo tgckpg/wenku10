@@ -106,13 +106,16 @@ namespace wenku10.Pages
             SetPField();
         }
 
-        private void StartMultiplayer()
+        private async void StartMultiplayer()
         {
-            ForeText.Visibility = Visibility.Visible;
+            TransitionDisplay.SetState( StartButton, TransitionState.Inactive );
+            TransitionDisplay.SetState( ForeText, TransitionState.Active );
 
             LayoutRoot.Children.Remove( ForeText );
 
             MainStage.Instance.ObjectLayer.Children.Add( ForeText );
+
+            await Task.Delay( 350 );
 
             CoverTheWholeScreen();
         }
@@ -205,6 +208,7 @@ namespace wenku10.Pages
             sb?.Stop();
         }
 
+        private object PFLock = new object();
         private PFSimulator PFSim = new PFSimulator();
         private TextureLoader Texture = new TextureLoader();
         private int Texture_Glitter = 1;
@@ -218,24 +222,8 @@ namespace wenku10.Pages
 
         private Vector4 LightFactor = Vector4.One;
 
-        private float[] Dots = new float[]{
-            6.2831f / 6,
-            6.2831f / 4,
-            6.2831f / 3,
-        };
-
-        private int dIndex = 0;
-
         enum GestureDir { UP, DOWN, LEFT, RIGHT };
-
-        private bool GPassed = true;
-        private GestureDir[][] PassGesture = new GestureDir[][]{
-            new GestureDir[]{ GestureDir.UP, GestureDir.LEFT }
-            , new GestureDir[]{ GestureDir.LEFT, GestureDir.DOWN, GestureDir.RIGHT  }
-            , new GestureDir[]{ GestureDir.DOWN, GestureDir.RIGHT }
-        };
-
-        private Queue<GestureDir> CurrentSet = new Queue<GestureDir>();
+        private int GesTimes = 0;
 
         private void SetPField()
         {
@@ -249,8 +237,6 @@ namespace wenku10.Pages
 
             if ( 50 < CItem.L ) LightFactor = new Vector4( 0.092f, 0.005f, 0.001f, 2 );
 
-            var j = CountDownDots();
-
             Stage.Draw += Stage_Draw;
             Stage.PointerMoved += Stage_PointerMoved;
             Stage.PointerReleased += Stage_PointerReleased;
@@ -260,7 +246,7 @@ namespace wenku10.Pages
 
         private void Stage_Unloaded( object sender, RoutedEventArgs e )
         {
-            lock ( PFSim )
+            lock( PFLock )
             {
                 Stage.Draw -= Stage_Draw;
                 Stage.PointerMoved -= Stage_PointerMoved;
@@ -271,46 +257,6 @@ namespace wenku10.Pages
                 PFSim.Fields.Clear();
                 PFSim.Spawners.Clear();
             }
-        }
-
-        private async Task CountDownDots()
-        {
-            if ( dIndex == 3 )
-            {
-                lock ( PFSim )
-                {
-                    Stage.SizeChanged -= Stage_SizeChanged;
-                    PFSim.Spawners.Clear();
-                }
-
-                if( GPassed ) StartMultiplayer();
-                return;
-            }
-
-            CurrentSet.Clear();
-
-            CountDown.Span = Dots[ dIndex ];
-            CountDown.Num = 6 - ( 2 * dIndex++ );
-            CountDown.R = 80 + 70 * NTimer.LFloat();
-            await Task.Delay( 3000 );
-
-            if ( GPassed )
-            {
-                GestureDir[] Dirs = PassGesture[ dIndex - 1 ];
-                foreach ( GestureDir Dir in Dirs )
-                {
-                    if ( CurrentSet.Count() == 0 || Dir != CurrentSet.Dequeue() )
-                    {
-                        GPassed = false;
-                        break;
-                    }
-                }
-            }
-#if DEBUG
-            Logger.Log( ID, GPassed ? "Passed" : "Failed" );
-#endif
-
-            var j = CountDownDots();
         }
 
         private void Stage_CreateResources( CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args )
@@ -326,7 +272,7 @@ namespace wenku10.Pages
 
         private void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
         {
-            lock ( PFSim )
+            lock( PFLock )
             {
                 Size s = e.NewSize;
                 PFSim.Reapers.Clear();
@@ -348,8 +294,18 @@ namespace wenku10.Pages
 
                 Vector2 Center = new Vector2( HSW, HSH );
                 PFSim.Fields.Clear();
+                PFSim.Fields.Add( new ExWind() { A = Center, B = Center, MaxDist = 200 } );
 
                 LoadingWind = new Wind() { A = Center, B = Center, Strength = 30 };
+            }
+        }
+
+        private class ExWind : Wind
+        {
+            override public void Apply( Particle P )
+            {
+                if ( NTimer.P( 120 ) )
+                    base.Apply( P );
             }
         }
 
@@ -383,19 +339,44 @@ namespace wenku10.Pages
             bool Horizontal = AbsDiff.Y < AbsDiff.X;
             bool PositiveDir = Horizontal ? ( 0 < PosDiff.X ) : ( 0 < PosDiff.Y );
 
+            GestureDir Dir;
             if ( Horizontal )
             {
-                CurrentSet.Enqueue( PositiveDir ? GestureDir.RIGHT : GestureDir.LEFT );
+                if ( AbsDiff.X < 30 ) return;
+
+                Dir = PositiveDir ? GestureDir.RIGHT : GestureDir.LEFT;
             }
             else
             {
-                CurrentSet.Enqueue( PositiveDir ? GestureDir.DOWN : GestureDir.UP );
+                if ( AbsDiff.Y < 30 ) return;
+
+                Dir = PositiveDir ? GestureDir.DOWN : GestureDir.UP;
             }
+
+            Pulsate();
+
+            if( Dir == GestureDir.UP )
+            {
+                if ( 3 < GesTimes++ )
+                {
+                    GesTimes = int.MinValue;
+                    PFSim.Spawners.Clear();
+                    PFSim.Fields.Add( LoadingWind );
+                    StartMultiplayer();
+                }
+            }
+        }
+
+        private async void Pulsate()
+        {
+            lock( PFLock ) PFSim.AddField( LoadingWind );
+            await Task.Delay( 100 );
+            lock( PFLock ) PFSim.Fields.Remove( LoadingWind );
         }
 
         private void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
         {
-            lock ( PFSim )
+            lock( PFLock )
             {
                 var Snapshot = PFSim.Snapshot();
                 using ( CanvasDrawingSession ds = args.DrawingSession )
@@ -436,10 +417,8 @@ namespace wenku10.Pages
         private class CyclicSp : ISpawner
         {
             public Vector2 Center;
-            public float R = 150;
-            public float Step = 0.005f;
+            public float R = 120;
             public int Num = 6;
-            public float Span = 1.0471f;
             private float MR = 2500;
 
             public int Texture;
@@ -451,24 +430,22 @@ namespace wenku10.Pages
                 return Num;
             }
 
-            private float i = 0;
-            private float r = 0;
-
             public void Prepare( IEnumerable<Particle> currParticles )
             {
             }
 
             public void Spawn( Particle p )
             {
-                p.Pos = Vector2.Transform( Center - new Vector2( 0, MR ), Matrix3x2.CreateRotation( r + i, Center ) );
+                p.Pos = Vector2.Transform(
+                    Center - new Vector2( 0, MR )
+                    , Matrix3x2.CreateRotation( NTimer.RFloat() * 6.2832f, Center )
+                );
+
                 p.Trait = PFTrait.TRAIL;
                 p.ttl = 2;
                 p.TextureId = Texture;
 
                 MR = 0.965f * MR + 0.035f * R;
-
-                r += Span;
-                i += Step;
             }
         }
 

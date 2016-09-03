@@ -124,7 +124,7 @@
     <value>System: The layout of the book info view can be adjusted in settings</value>
   </data>
   <data name="11" xml:space="preserve">
-    <value>TitbitsThe entire project consist of 70,000+lines of codes as of 1 Jan 2016</value>
+    <value>Content Reader: For vertical text, "↑→↓←↔↕" will be automatically rotated 90 degree</value>
   </data>
   <data name="12" xml:space="preserve">
     <value>Book Info View: If all modules are disabled, you can jump to Content Reader directly</value>
