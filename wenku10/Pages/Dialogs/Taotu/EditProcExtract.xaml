@@ -29,7 +29,7 @@
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
     </ContentDialog.Title>
 
-    <Grid x:Name="LayoutRoot" MinWidth="400">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <!-- Incomming & Url-->
             <RowDefinition Height="Auto" />
