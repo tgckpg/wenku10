@@ -153,6 +153,7 @@
     <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
       <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
     <Compile Include="wenku8\Converters\IsSpiderConverter.cs" />
     <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
@@ -562,6 +563,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\ListViewItems\CommentListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ListViewItems\LSBookItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

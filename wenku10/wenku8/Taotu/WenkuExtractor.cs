@@ -74,7 +74,7 @@ namespace wenku8.Taotu
             IStorageFile ISF = null;
             if ( Incoming )
             {
-                ProcManager.PanelMessage( this, "Checking Incoming Data", LogType.INFO );
+                ProcManager.PanelMessage( this, () => Res.RSTR( "IncomingCheck" ), LogType.INFO );
 
                 ProcConvoy UsableConvoy = ProcManager.TracePackage(
                     Convoy, ( P, C ) =>
@@ -109,7 +109,7 @@ namespace wenku8.Taotu
 
             if( ISF == null && string.IsNullOrEmpty( LoadUrl ) )
             {
-                ProcManager.PanelMessage( this, "No usable convoy found, Skipping", LogType.WARNING );
+                ProcManager.PanelMessage( this, () => Res.RSTR( "NoUsablePayload" ), LogType.WARNING );
                 return Convoy;
             }
 
@@ -148,7 +148,7 @@ namespace wenku8.Taotu
 
                 if( Extr.SubProc.HasProcedures )
                 {
-                    ProcManager.PanelMessage( this, "Running Sub procedures", LogType.INFO );
+                    ProcManager.PanelMessage( this, () => Res.RSTR( "SubProcRun" ), LogType.INFO );
                     ProcPassThru PPass = new ProcPassThru( new ProcConvoy( this, Inst ) );
                     await Extr.SubProc.CreateSpider().Crawl( new ProcConvoy( PPass, PropValue ) );
                 }
@@ -158,7 +158,7 @@ namespace wenku8.Taotu
                     // That website is stupid. Would not support.
                     if( !Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() ) )
                     {
-                        ProcManager.PanelMessage( this, "Invalid param: " + Extr.PType.ToString(), LogType.WARNING );
+                        ProcManager.PanelMessage( this, () => Res.RSTR( "InvalidParam", Extr.PType ), LogType.WARNING );
                     }
                 }
             }

@@ -129,6 +129,9 @@
   <data name="LoadingVolume" xml:space="preserve">
     <value>Loading volume</value>
   </data>
+  <data name="MergingContents" xml:space="preserve">
+    <value>Merging contents: {0}</value>
+  </data>
   <data name="PleaseWaitSecondsForUI" xml:space="preserve">
     <value>Content is ready. Please wait for {0} second(s) ensuring UI responsiveness</value>
   </data>

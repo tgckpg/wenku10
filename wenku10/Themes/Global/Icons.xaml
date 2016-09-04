@@ -553,4 +553,34 @@
         </Setter>
     </Style>
 
+    <Style TargetType="i:IconFav">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconFav">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Data="M 31.013,25.6302 L 35.3976,25.6302 35.3976,72.7387 31.013,72.7387 Z" Fill="{TemplateBinding Foreground}" />
+                        <Path Data="M 31.013,69.9852 L 68.9871,69.9852 68.9871,74.3698 31.013,74.3698 Z" Fill="{TemplateBinding Foreground}" />
+                        <Path Data="F 1 M 56.1706,15.8194 L 44.0019,56.1669 72.8961,64.8813 85.0648,24.5338 56.1706,15.8194 Z M 62.7006,34.9821 C 64.0418,35.3911 64.8189,38.4566 64.8189,38.4566 64.8189,38.4566 66.7994,36.2592 68.5632,36.8033 71.3498,37.6629 70.7803,41.996 67.5378,43.2873 63.7016,44.8151 62.4801,46.4886 62.4801,46.4886 62.4801,46.4886 62.2912,44.3414 60.0689,40.9755 57.9557,37.7749 60.1537,34.2053 62.7007,34.9821 Z" Fill="{TemplateBinding Foreground}" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="i:IconFaved">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="i:IconFaved">
+                    <Canvas x:Name="Stage" Width="100" Height="100">
+                        <Path Data="M 31.013,25.6302 L 35.3976,25.6302 35.3976,72.7387 31.013,72.7387 Z" Fill="{TemplateBinding Foreground}"/>
+                        <Path Data="M 31.013,69.9852 L 68.9871,69.9852 68.9871,74.3698 31.013,74.3698 Z" Fill="{TemplateBinding Foreground}"/>
+                        <Path Data="F 1 M 36.564,26.6026 L 36.564,68.7452 66.7437,68.7452 66.7437,26.6026 36.564,26.6026 Z M 48.3492,43.0635 C 49.7513,43.0678 51.3804,45.7783 51.3804,45.7783 51.3804,45.7783 52.6421,43.1026 54.4879,43.1143 57.404,43.1327 58.11,47.4457 55.3785,49.6182 52.1468,52.1886 51.4605,54.1436 51.4605,54.1436 51.4605,54.1436 50.6597,52.1424 47.5601,49.5616 44.6127,47.1075 45.6864,43.0552 48.3492,43.0635 Z" Fill="{TemplateBinding Foreground}"/>
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

@@ -129,6 +129,9 @@
   <data name="LoadingVolume" xml:space="preserve">
     <value>装载卷目</value>
   </data>
+  <data name="MergingContents" xml:space="preserve">
+    <value>合并内容：{0}</value>
+  </data>
   <data name="PleaseWaitSecondsForUI" xml:space="preserve">
     <value>准备完毕，请等待 {0} 秒以确保界面响应</value>
   </data>

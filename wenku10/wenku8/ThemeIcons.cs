@@ -10,6 +10,8 @@ namespace wenku8.ThemeIcons
     public class IconRawDocument : IconBase { public IconRawDocument() { DefaultStyleKey = typeof( IconRawDocument ); } }
     public class IconMasterKey : IconBase { public IconMasterKey() { DefaultStyleKey = typeof( IconMasterKey ); } }
     public class IconAuthor : IconBase { public IconAuthor() { DefaultStyleKey = typeof( IconAuthor ); } }
+    public class IconFav : IconBase { public IconFav() { DefaultStyleKey = typeof( IconFav ); } }
+    public class IconFaved : IconBase { public IconFaved() { DefaultStyleKey = typeof( IconFaved ); } }
 
     public class IconAlign : DirectionalIcon { public IconAlign() { DefaultStyleKey = typeof( IconAlign ); } }
 }

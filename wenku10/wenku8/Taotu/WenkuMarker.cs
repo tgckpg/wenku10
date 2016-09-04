@@ -230,7 +230,7 @@ namespace wenku8.Taotu
                     }
                     else
                     {
-                        ProcManager.PanelMessage( this, "Invalid Pattern format", LogType.WARNING );
+                        ProcManager.PanelMessage( this, () => Res.RSTR( "InvalidPattern" ), LogType.WARNING );
                         continue;
                     }
 
@@ -284,7 +284,7 @@ namespace wenku8.Taotu
                     }
                     else
                     {
-                        ProcManager.PanelMessage( this, "Invalid Pattern format", LogType.WARNING );
+                        ProcManager.PanelMessage( this, () => Res.RSTR( "InvalidPattern" ), LogType.WARNING );
                         continue;
                     }
 
