@@ -22,12 +22,25 @@ namespace wenku8.Model.Section
 
         public Observables<BookItem, BookItem> Data { get; private set; }
 
+        private bool _IsLoading = false;
+        public bool IsLoading
+        {
+            get { return _IsLoading; }
+            private set
+            {
+                _IsLoading = value;
+                NotifyChanged( "IsLoading" );
+            }
+        }
+
         public async void OpenFile()
         {
             try
             {
                 IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
                 if ( ISF == null ) return;
+
+                IsLoading = true;
 
                 XParameter Param = new XRegistry( await ISF.ReadString(), null, false ).Parameter( "Procedures" );
                 ProcManager PM = new ProcManager( Param );
@@ -36,13 +49,17 @@ namespace wenku8.Model.Section
                 Data = new Observables<BookItem, BookItem>( await ZSF.NextPage() );
                 Data.ConnectLoader( ZSF );
 
+                IsLoading = false;
+                Data.LoadStart += ( s, e ) => IsLoading = true;
+                Data.LoadEnd += ( s, e ) => IsLoading = false;
+
                 NotifyChanged( "Data" );
             }
             catch( Exception ex )
             {
+                IsLoading = false;
                 Logger.Log( ID, ex.Message, LogType.ERROR );
             }
         }
-
     }
 }

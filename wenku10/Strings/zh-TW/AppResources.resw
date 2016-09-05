@@ -366,4 +366,7 @@
   <data name="NewPassword.Text" xml:space="preserve">
     <value>新密碼</value>
   </data>
+  <data name="BookSpider.Text" xml:space="preserve">
+    <value>文章蜘蛛</value>
+  </data>
 </root>

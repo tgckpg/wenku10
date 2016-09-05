@@ -369,4 +369,7 @@
   <data name="NewPassword.Text" xml:space="preserve">
     <value>New Password</value>
   </data>
+  <data name="BookSpider.Text" xml:space="preserve">
+    <value>Book Spider</value>
+  </data>
 </root>

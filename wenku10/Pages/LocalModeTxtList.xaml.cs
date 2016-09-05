@@ -230,6 +230,11 @@ namespace wenku10.Pages
             ZS.OpenFile();
             ZoneContext.DataContext = ZS;
         }
+
+        private void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
+        {
+            BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
+        }
         #endregion
 
         #region Local Section

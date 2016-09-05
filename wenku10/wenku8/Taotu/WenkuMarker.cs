@@ -24,6 +24,7 @@ namespace wenku8.Taotu
 {
     using Model.Book.Spider;
     using Model.Interfaces;
+    using ThemeIcons;
     using Resources;
 
     enum WMarkerSub {
@@ -66,7 +67,7 @@ namespace wenku8.Taotu
         public bool HasEpProcs { get { return EpProcs.HasProcedures; } }
 
         protected override Color BgColor { get { return Colors.DarkGreen; } }
-        protected override IconBase Icon { get { return new IconCross(){ AutoScale = true }; } }
+        protected override IconBase Icon { get { return new IconExoticQuad(){ AutoScale = true }; } }
 
         private ProcManager VolProcs;
         private ProcManager EpProcs;

@@ -24,28 +24,33 @@ using wenku10.Pages.Dialogs.Taotu;
 namespace wenku8.Taotu
 {
     using Model.Book.Spider;
-    using Model.Interfaces;
-    using Resources;
+    using ThemeIcons;
+
+    enum WListSub {
+        Process = 1, Spider = 2
+    }
 
     class WenkuListLoader : Procedure, ISubProcedure
     {
         public static readonly string ID = typeof( WenkuListLoader ).Name;
 
-        public bool SubEdit { get; set; }
+        public WListSub? SubEdit { get; set; }
 
         public string ItemPattern { get; set; }
         public string ItemParam { get; set; }
 
         public bool HasSubProcs { get { return ItemProcs.HasProcedures; } }
+        public bool HasBookSpider { get { return BookSpider.HasProcedures; } }
 
         protected override Color BgColor { get { return Colors.Crimson; } }
-        protected override IconBase Icon { get { return new IconTOC() { AutoScale = true }; } }
+        protected override IconBase Icon { get { return new IconExoticUni() { AutoScale = true }; } }
 
         private ProcManager ItemProcs;
+        private ProcManager BookSpider;
 
         public ProcManager SubProcedures
         {
-            get { return ItemProcs; }
+            get { return SubEdit == WListSub.Process ? ItemProcs : BookSpider; }
             set { throw new InvalidOperationException(); }
         }
 
@@ -53,18 +58,19 @@ namespace wenku8.Taotu
             : base( ProcType.LIST )
         {
             ItemProcs = new ProcManager();
+            BookSpider = new ProcManager();
         }
 
         public override async Task Edit()
         {
             await Popups.ShowDialog( new EditProcListLoader( this ) );
-            if ( SubEdit )
+            if ( SubEdit != null )
             {
                 MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
             }
         }
 
-        public void SubEditComplete() { SubEdit = false; }
+        public void SubEditComplete() { SubEdit = null; }
 
         public void SetProp( string PropName, string Val )
         {
@@ -83,6 +89,7 @@ namespace wenku8.Taotu
             ItemParam = Param.GetValue( "ItemParam" );
 
             ItemProcs = new ProcManager( Param.Parameter( "ItemProcs" ) );
+            BookSpider = new ProcManager( Param.Parameter( "BookSpider" ) );
         }
 
         public override XParameter ToXParam()
@@ -98,7 +105,18 @@ namespace wenku8.Taotu
             EProc.Id = "ItemProcs";
             Param.SetParameter( EProc );
 
+            XParameter SProc = BookSpider.ToXParam();
+            SProc.Id = "BookSpider";
+            Param.SetParameter( SProc );
+
             return Param;
+        }
+
+        public void ImportSpider( XParameter SpiderDef )
+        {
+            ProcManager PM = new ProcManager( SpiderDef );
+            BookSpider = PM;
+            NotifyChanged( "HasBookSpider" );
         }
 
         public override async Task<ProcConvoy> Run( ProcConvoy Convoy )
@@ -190,11 +208,25 @@ namespace wenku8.Taotu
                     );
 
                     ProcConvoy ItemConvoy = await ItemProcs.CreateSpider().Crawl( new ProcConvoy( PPass, FParam ) );
+
+                    string Id = await GetId( ItemConvoy );
+                    if ( string.IsNullOrEmpty( Id ) )
+                    {
+                        ProcManager.PanelMessage( this, () =>
+                        {
+                            StringResources stx = new StringResources( "Error" );
+                            return stx.Str( "NoIdForBook" );
+                        }, LogType.WARNING );
+                        continue;
+                    }
+
                     ItemConvoy = ProcManager.TracePackage( ItemConvoy, ( P, C ) => C.Payload is BookInstruction );
 
                     if ( !( ItemConvoy == null || ItemConvoy == KnownBook ) )
                     {
-                        ItemList.Add( ( BookInstruction ) ItemConvoy.Payload );
+                        BookInstruction BInst = ( BookInstruction ) ItemConvoy.Payload;
+                        BInst.SetSubId( Id );
+                        ItemList.Add( BInst );
                     }
                     else
                     {
@@ -205,6 +237,39 @@ namespace wenku8.Taotu
                         }, LogType.WARNING );
                     }
                 }
+            }
+        }
+
+        private async Task<string> GetId( ProcConvoy Convoy )
+        {
+            Convoy = ProcManager.TracePackage(
+                Convoy, ( P, C ) =>
+                    C.Payload is IEnumerable<IStorageFile>
+                    || C.Payload is IEnumerable<string>
+                    || C.Payload is IStorageFile
+                    || C.Payload is string
+            );
+
+            if ( Convoy == null ) return null;
+
+            if ( Convoy.Payload is IEnumerable<IStorageFile> )
+            {
+                IEnumerable<IStorageFile> ISFs = ( IEnumerable<IStorageFile> ) Convoy.Payload;
+                return await ISFs.FirstOrDefault()?.ReadString();
+            }
+            else if ( Convoy.Payload is IEnumerable<string> )
+            {
+                IEnumerable<string> Contents = ( IEnumerable<string> ) Convoy.Payload;
+                return Contents.FirstOrDefault();
+            }
+            else if ( Convoy.Payload is IStorageFile )
+            {
+                IStorageFile ISF = ( IStorageFile ) Convoy.Payload;
+                return await ISF.ReadString();
+            }
+            else // string
+            {
+                return ( string ) Convoy.Payload;
             }
         }
 

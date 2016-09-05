@@ -92,7 +92,28 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void Subprocess( object sender, RoutedEventArgs e )
         {
-            EditTarget.SubEdit = true;
+            EditTarget.SubEdit = WListSub.Process;
+            Popups.CloseDialog();
+        }
+
+        private async void ImportBookSpider( object sender, RoutedEventArgs e )
+        {
+            IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
+            if ( ISF == null ) return;
+
+            try
+            {
+                EditTarget.ImportSpider( new XRegistry( await ISF.ReadString(), null, false ).Parameter( "Procedures" ) );
+            }
+            catch ( Exception ex )
+            {
+                ProcManager.PanelMessage( EditTarget, Res.SSTR( "InvalidXML", ex.Message ), LogType.ERROR );
+            }
+        }
+
+        private void SpiderProcess( object sender, RoutedEventArgs e )
+        {
+            EditTarget.SubEdit = WListSub.Spider;
             Popups.CloseDialog();
         }
 
@@ -105,15 +126,16 @@ namespace wenku10.Pages.Dialogs.Taotu
             {
                 TestRunning.IsActive = false;
 
-                if ( Convoy.Payload is IEnumerable<BookInstruction> )
-                {
-                    var j = ViewTestResult( ( IEnumerable<BookInstruction> ) Convoy.Payload );
-                }
-                else
+                Convoy = ProcManager.TracePackage( Convoy, ( P, C ) => Convoy.Payload is IEnumerable<BookInstruction> );
+
+                if ( Convoy == null )
                 {
                     throw new Exception( "Unable to find the generated book convoy" );
                 }
-
+                else
+                {
+                    var j = ViewTestResult( ( IEnumerable<BookInstruction> ) Convoy.Payload );
+                }
             }
         }
 

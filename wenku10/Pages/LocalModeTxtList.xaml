@@ -90,10 +90,7 @@
 
         <DataTemplate x:Key="ZoneItemTemplate">
             <Border Background="{StaticResource Shades90}"
-                    Margin="10"
-                    Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                    MaxWidth="300"
-                    MinHeight="120" >
+                    Margin="10" MinHeight="120" >
 
                 <StackPanel>
                     <!-- Name -->
@@ -250,7 +247,7 @@
             <HubSection x:Name="ZoneContext" Style="{StaticResource ContainerHead}"
                         Width="500" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
-                    <Grid Margin="10">
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -263,21 +260,30 @@
                         <Button p:Clip.ToBounds="True"
                                 Style="{StaticResource PlainThemeButton}"
                                 Click="OpenZoneSpider"
-                                HorizontalAlignment="Stretch" Height="100">
+                                HorizontalAlignment="Stretch" Height="50">
                                 <xi:IconExoticUni AutoScale="True"
                                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </Button>
 
-                        <StackPanel Grid.Column="1">
-                            <!-- Settings -->
-                            <Button Style="{StaticResource PlainButton}"
-                                    Click="GotoSettings"
-                                    Width="50" Height="50">
-                                <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
-                            </Button>
-                        </StackPanel>
+                        <!-- Settings -->
+                        <Button Grid.Row="0" Grid.Column="1"
+                                Style="{StaticResource PlainButton}"
+                                Click="GotoSettings"
+                                Width="50" Height="50">
+                            <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
+                        </Button>
 
-                        <ListView Grid.Row="1"
+                        <Border Grid.Row="1" Grid.Column="1"
+                                Width="50" Height="50">
+                            <ProgressRing VerticalAlignment="Center" HorizontalAlignment="Center"
+                                          e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+                                          Foreground="{StaticResource MinorBrush}"
+                                          IsActive="{Binding IsLoading}" />
+                        </Border>
+
+                        <ListView Grid.Row="1" Grid.Column="0"
+                                  IsItemClickEnabled="True"
+                                  ItemClick="ZoneSpider_ItemClick"
                                   ItemTemplate="{StaticResource ZoneItemTemplate}"
                                   ItemContainerStyle="{StaticResource BareListItem}"
                                   ItemsSource="{Binding Data}" />
