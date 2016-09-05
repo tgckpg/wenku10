@@ -200,9 +200,6 @@
 
         </Grid>
 
-        <Border x:Name="FrameContainer"
-                Grid.Row="2" Margin="5">
-            <Frame x:Name="Frame"/>
-        </Border>
+        <Frame x:Name="Frame" Grid.Row="2" Margin="5"/>
     </Grid>
 </ContentDialog>

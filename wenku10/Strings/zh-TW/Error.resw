@@ -150,4 +150,7 @@
   <data name="VL_NoToken" xml:space="preserve">
     <value>你往後需要權杖修改此腳本</value>
   </data>
+  <data name="NotABook" xml:space="preserve">
+    <value>子程序沒有返回一個有效的書籍項，是不是忘了添加「提取」步驟？</value>
+  </data>
 </root>

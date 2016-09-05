@@ -78,14 +78,14 @@
                                 </Border>
                                 <Border Grid.Row="1" Background="{StaticResource Shades30}" >
                                     <TextBlock Text="{Binding Author}"
-                                               FontSize="20" Margin="5"
+                                               FontSize="20" Margin="15,5"
                                                TextTrimming="WordEllipsis"
                                                Foreground="{StaticResource RelativeShadesBrush}"
                                                />
                                 </Border>
                                 <TextBlock Grid.Row="2"
                                            Text="{Binding Description}"
-                                           FontSize="18" Margin="5"
+                                           FontSize="18" Margin="15,5"
                                            Foreground="{StaticResource RelativeShadesBrush}"
                                            TextTrimming="WordEllipsis"
                                            TextWrapping="Wrap"/>

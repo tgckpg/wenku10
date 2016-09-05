@@ -93,8 +93,6 @@ namespace wenku10.Pages.Dialogs.Taotu
             string Url = UrlInput.Text.Trim();
             TestRunning.IsActive = true;
 
-            if ( PreviewFile == null ) PreviewFile = await AppStorage.MkTemp();
-
             if ( string.IsNullOrEmpty( Url ) )
             {
                 MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
@@ -103,8 +101,8 @@ namespace wenku10.Pages.Dialogs.Taotu
 
             try
             {
-                IStorageFile ISF = await ProceduralSpider.DownloadSource( Url );
-                string Content = await ISF.ReadString();
+                if ( PreviewFile == null )
+                    PreviewFile = await ProceduralSpider.DownloadSource( Url );
 
                 // The resulting convoy may not be the book instruction originally created
                 ProcConvoy Convoy = await new ProceduralSpider( new Procedure[] { EditTarget } )
@@ -113,14 +111,14 @@ namespace wenku10.Pages.Dialogs.Taotu
                 // So we trackback the Book Convoy
                 Convoy = ProcManager.TracePackage( Convoy, ( D, C ) => C.Payload is BookInstruction );
 
-                if( Convoy == null )
+                if ( Convoy == null )
                 {
                     throw new Exception( "Unable to find the generated book convoy" );
                 }
 
                 await ViewTestResult( ( BookInstruction ) Convoy.Payload );
             }
-            catch( Exception ex )
+            catch ( Exception ex )
             {
                 ProcManager.PanelMessage( ID, ex.Message, LogType.INFO );
             }

@@ -65,6 +65,7 @@ namespace wenku8.System
             ResTaotu.RenameDialog = typeof( global::wenku10.Pages.Dialogs.Rename );
             ResTaotu.SetExtractor( typeof( Taotu.WenkuExtractor ) );
             ResTaotu.SetMarker( typeof( Taotu.WenkuMarker ) );
+            ResTaotu.SetListLoader( typeof( Taotu.WenkuListLoader ) );
             ResTaotu.CreateRequest = x => new SHttpRequest( x );
 
             // Unlocking libraries
