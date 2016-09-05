@@ -160,9 +160,11 @@
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
     <Compile Include="wenku8\Converters\IsSpiderConverter.cs" />
     <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
+    <Compile Include="wenku8\Model\Loaders\ZSFeedbackLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
+    <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
     <Compile Include="wenku8\System\Migration.cs" />
     <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />

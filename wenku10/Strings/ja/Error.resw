@@ -154,4 +154,7 @@
   <data name="NotABook" xml:space="preserve">
     <value>サブプロセスは、有効な書籍アイテムを返しませんでした。「抽出」ステップを追加することを忘れていないですか？</value>
   </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -223,6 +223,15 @@ namespace wenku10.Pages
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
         }
 
+        #region Zone Spider
+        private void OpenZoneSpider( object sender, RoutedEventArgs e )
+        {
+            ZoneSpider ZS = new ZoneSpider();
+            ZS.OpenFile();
+            ZoneContext.DataContext = ZS;
+        }
+        #endregion
+
         #region Local Section
 
         #region Right Control Buttons

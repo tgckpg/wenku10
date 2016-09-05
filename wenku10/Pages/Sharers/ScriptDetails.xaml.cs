@@ -334,7 +334,7 @@ namespace wenku10.Pages.Sharers
 
             PlaceRequest RequestBox = new PlaceRequest(
                 Target, HSI
-                , stx.Text( ( Target ^ SHTarget.KEY ) == 0 ? "KeyRequest" : "TokenRequest" )
+                , stx.Text( ( Target & SHTarget.KEY ) != 0 ? "KeyRequest" : "TokenRequest" )
             );
 
             await Popups.ShowDialog( RequestBox );
@@ -416,7 +416,7 @@ namespace wenku10.Pages.Sharers
         private void ShowRequest( SHTarget Target )
         {
             // User have the thing. So he / she can grant requests for this script
-            if ( ( Target ^ SHTarget.KEY ) == 0 )
+            if ( ( Target & SHTarget.KEY ) != 0 )
             {
                 ControlsList.SelectedIndex = 0;
                 RequestList.Tag = BindItem.Encrypted && Crypt != null;

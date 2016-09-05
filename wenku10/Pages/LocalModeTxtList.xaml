@@ -43,12 +43,6 @@
                                     Foreground="{StaticResource MinorBackgroundBrush}"
                                     Width="120" Height="120" />
                     </Border>
-                    <!-- Uni Icon -->
-                    <Border p:Clip.ToBounds="True"
-                            VerticalAlignment="Top" HorizontalAlignment="Right"
-                            Width="90" Height="90">
-                        <xi:IconExoticUni Width="100" Height="90" Opacity="0.2" />
-                    </Border>
                     <StackPanel>
                         <!-- Name -->
                         <Border Background="{StaticResource Shades90}">
@@ -91,6 +85,31 @@
                                      Width="120" Height="120" />
                     </Border>
                 </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ZoneItemTemplate">
+            <Border Background="{StaticResource Shades90}"
+                    Margin="10"
+                    Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                    MaxWidth="300"
+                    MinHeight="120" >
+
+                <StackPanel>
+                    <!-- Name -->
+                    <Border Background="{StaticResource Shades90}">
+                        <TextBlock Text="{Binding Title}" MaxLines="2"
+                                   FontSize="20" Margin="10,5"
+                                   Foreground="{StaticResource RelativeShadesBrush}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                    <!-- Desc -->
+                    <TextBlock Margin="10, 5" Text="{Binding Intro}"
+                               FontSize="16"
+                               Foreground="{StaticResource RelativeShadesBrush}"
+                               TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
             </Border>
         </DataTemplate>
     </Page.Resources>
@@ -227,20 +246,28 @@
                 </DataTemplate>
             </HubSection>
 
-            <!-- Highlight -->
-            <HubSection Style="{StaticResource ContainerHead}" >
+            <!-- Zones -->
+            <HubSection x:Name="ZoneContext" Style="{StaticResource ContainerHead}"
+                        Width="500" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
                     <Grid Margin="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal">
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                        </StackPanel>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <Button p:Clip.ToBounds="True"
+                                Style="{StaticResource PlainThemeButton}"
+                                Click="OpenZoneSpider"
+                                HorizontalAlignment="Stretch" Height="100">
+                                <xi:IconExoticUni AutoScale="True"
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </Button>
+
                         <StackPanel Grid.Column="1">
                             <!-- Settings -->
                             <Button Style="{StaticResource PlainButton}"
@@ -249,6 +276,11 @@
                                 <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
                             </Button>
                         </StackPanel>
+
+                        <ListView Grid.Row="1"
+                                  ItemTemplate="{StaticResource ZoneItemTemplate}"
+                                  ItemContainerStyle="{StaticResource BareListItem}"
+                                  ItemsSource="{Binding Data}" />
                     </Grid>
                 </DataTemplate>
             </HubSection>
@@ -337,7 +369,7 @@
                         <!-- Activities -->
                         <Grid Grid.Row="1" Grid.ColumnSpan="3"
                               e:TransitionDisplay.State="{Binding Path=Tag, ElementName=ActivityButton, Converter={StaticResource TransStateConverter}}"
-                              MaxWidth="400" Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                              Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                               VerticalAlignment="Top" HorizontalAlignment="Right">
                             <Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
                                      Margin="0,0,5,0"

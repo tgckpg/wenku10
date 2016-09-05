@@ -24,7 +24,7 @@
     </ContentDialog.Resources>
 
     <ContentDialog.Title>
-        <TextBlock x:Uid="/libtaotu/Resources/Extractor" Text="Info extraction"
+        <TextBlock x:Uid="/libtaotu/Resources/ListBuilder" Text="List Builder"
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
     </ContentDialog.Title>
 

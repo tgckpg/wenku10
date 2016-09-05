@@ -9,7 +9,6 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
-using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
 namespace wenku8.Model.Section
@@ -18,6 +17,7 @@ namespace wenku8.Model.Section
     using Ext;
     using Comments;
     using ListItem;
+    using Loaders;
 
     sealed class ReviewsSection : ActiveData
     {
