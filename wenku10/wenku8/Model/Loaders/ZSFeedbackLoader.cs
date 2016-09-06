@@ -45,11 +45,11 @@ namespace wenku8.Model.Loaders
                 if ( FirstLoad )
                 {
                     FirstLoad = false;
-                    RunMode = new ProcPassThru( null );
+                    RunMode = new ProcPassThru();
                 }
                 else
                 {
-                    RunMode = new ProcPassThru( null, ProcType.FEED_RUN );
+                    RunMode = new ProcPassThru( ProcType.FEED_RUN );
                 }
 
                 ProcConvoy Convoy = await Spider.Crawl( new ProcConvoy( RunMode, FeedParam ) );

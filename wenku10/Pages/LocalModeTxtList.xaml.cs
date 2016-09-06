@@ -158,9 +158,10 @@ namespace wenku10.Pages
 
                 case AppKeys.HS_MOVED:
                     Tuple<string, SpiderBook> Payload = ( Tuple<string, SpiderBook> ) Mesg.Payload;
-                    LocalBook OBook = FileListContext.GetById( Payload.Item1 );
 
-                    OBook.RemoveSource();
+                    LocalBook OBook = FileListContext.GetById( Payload.Item1 );
+                    OBook?.RemoveSource();
+
                     FileListContext.Add( Payload.Item2 );
                     FileListContext.CleanUp();
                     break;

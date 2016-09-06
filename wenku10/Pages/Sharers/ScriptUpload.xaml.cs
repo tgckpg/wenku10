@@ -183,9 +183,14 @@ namespace wenku10.Pages.Sharers
             try
             {
                 Message.Text = "";
+                if ( !Shared.Storage.FileExists( SelectedBook.PSettings.Location ) )
+                {
+                    SelectedBook = null;
+                    FileName.Text = "---------";
+                }
 
-                if( SelectedBook == null )
-                    throw new ValidationError( "VL_NoBookSelected" );
+                if ( SelectedBook == null )
+                    throw new ValidationError( "VL_NoBook" );
 
                 if ( Encrypt.IsChecked == true )
                 {
@@ -195,10 +200,10 @@ namespace wenku10.Pages.Sharers
                         throw new ValidationError( "VL_NoKey" );
                 }
 
-                if( AccessTokens.SelectedItem == null )
+                if ( AccessTokens.SelectedItem == null )
                     throw new ValidationError( "VL_NoToken" );
             }
-            catch( ValidationError ex )
+            catch ( ValidationError ex )
             {
                 StringResources stx = new StringResources( "Error" );
 
