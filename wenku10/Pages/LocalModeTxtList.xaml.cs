@@ -231,9 +231,31 @@ namespace wenku10.Pages
             ZoneContext.DataContext = ZS;
         }
 
-        private void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
+        private async void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
         {
             BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
+            BInst.SetId( ( ( ZoneSpider ) ZoneContext.DataContext ).ZoneId );
+            SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
+            if ( Book.CanProcess )
+            {
+                await Book.Process();
+                OpenBookInfoView( Book );
+            }
+        }
+
+        private async void GotoSettings( object sender, RoutedEventArgs e )
+        {
+            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
+
+            bool Go = false;
+            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
+
+            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
+
+            await Popups.ShowDialog( Msg );
+
+            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
         }
         #endregion
 
@@ -305,30 +327,7 @@ namespace wenku10.Pages
 
         private void FileList_ItemClick( object sender, ItemClickEventArgs e )
         {
-            LocalBook Item = ( LocalBook ) e.ClickedItem;
-
-            // Prevent double processing on the already processed item
-            if ( !Item.ProcessSuccess && Item.CanProcess ) ProcessItem( Item );
-
-            if ( Item.ProcessSuccess )
-            {
-                if ( Item is SpiderBook )
-                {
-                    BackMask.HandleForward(
-                        Frame, () => Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() )
-                    );
-                }
-                else
-                {
-                    BackMask.HandleForward(
-                        Frame, () => Frame.Navigate( typeof( BookInfoView ), new LocalTextDocument( Item.aid ) )
-                    );
-                }
-            }
-            else if ( !Item.Processing && Item.File != null )
-            {
-                Frame.Navigate( typeof( DirectTextViewer ), Item.File );
-            }
+            OpenBookInfoView( ( LocalBook ) e.ClickedItem );
         }
 
         private void TextBox_TextChanging( TextBox sender, TextBoxTextChangingEventArgs args )
@@ -389,42 +388,12 @@ namespace wenku10.Pages
         }
         #endregion
 
-        private async void ProcessItem( LocalBook LB )
-        {
-            await LB.Process();
-            if( LB is SpiderBook )
-            {
-                BookInstruction BS = ( LB as SpiderBook ).GetBook();
-                if( BS.Packable )
-                {
-                    BS.PackVolumes();
-                }
-            }
-        }
-
         private void EditItem( LocalBook LB )
         {
             if( LB is SpiderBook )
             {
                 Frame.Navigate( typeof( ProceduresPanel ), ( ( SpiderBook ) LB ).MetaLocation );
             }
-        }
-        #endregion
-
-        #region Highlights Section
-        private async void GotoSettings( object sender, RoutedEventArgs e )
-        {
-            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
-
-            bool Go = false;
-            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
-
-            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
-            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
-
-            await Popups.ShowDialog( Msg );
-
-            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
         }
         #endregion
 
@@ -527,6 +496,45 @@ namespace wenku10.Pages
             }
         }
         #endregion
+
+        private void OpenBookInfoView( LocalBook Item )
+        {
+            // Prevent double processing on the already processed item
+            if ( !Item.ProcessSuccess && Item.CanProcess ) ProcessItem( Item );
+
+            if ( Item.ProcessSuccess )
+            {
+                if ( Item is SpiderBook )
+                {
+                    BackMask.HandleForward(
+                        Frame, () => Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() )
+                    );
+                }
+                else
+                {
+                    BackMask.HandleForward(
+                        Frame, () => Frame.Navigate( typeof( BookInfoView ), new LocalTextDocument( Item.aid ) )
+                    );
+                }
+            }
+            else if ( !Item.Processing && Item.File != null )
+            {
+                Frame.Navigate( typeof( DirectTextViewer ), Item.File );
+            }
+        }
+
+        private async void ProcessItem( LocalBook LB )
+        {
+            await LB.Process();
+            if( LB is SpiderBook )
+            {
+                BookInstruction BS = ( LB as SpiderBook ).GetBook();
+                if( BS.Packable )
+                {
+                    BS.PackVolumes();
+                }
+            }
+        }
 
         public class DownloadBookContext : INamable
         {

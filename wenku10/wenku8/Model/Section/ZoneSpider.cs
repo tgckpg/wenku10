@@ -15,12 +15,17 @@ namespace wenku8.Model.Section
 {
     using Book;
     using Loaders;
+    using Book.Spider;
 
     sealed class ZoneSpider : ActiveData
     {
         public static readonly string ID = typeof( ZoneSpider ).Name;
 
+        public string ZoneId { get { return PM.GUID; } }
+
         public Observables<BookItem, BookItem> Data { get; private set; }
+
+        private ProcManager PM;
 
         private bool _IsLoading = false;
         public bool IsLoading
@@ -43,7 +48,7 @@ namespace wenku8.Model.Section
                 IsLoading = true;
 
                 XParameter Param = new XRegistry( await ISF.ReadString(), null, false ).Parameter( "Procedures" );
-                ProcManager PM = new ProcManager( Param );
+                PM = new ProcManager( Param );
 
                 ZSFeedbackLoader<BookItem> ZSF = new ZSFeedbackLoader<BookItem>( PM.CreateSpider() );
                 Data = new Observables<BookItem, BookItem>( await ZSF.NextPage() );
@@ -61,5 +66,6 @@ namespace wenku8.Model.Section
                 Logger.Log( ID, ex.Message, LogType.ERROR );
             }
         }
+
     }
 }

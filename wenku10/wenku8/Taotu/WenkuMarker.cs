@@ -27,9 +27,7 @@ namespace wenku8.Taotu
     using ThemeIcons;
     using Resources;
 
-    enum WMarkerSub {
-        Volume = 1, Chapter = 2
-    }
+    enum WMarkerSub { Volume = 1, Chapter = 2 }
 
     class WenkuMarker : Procedure, ISubProcedure
     {

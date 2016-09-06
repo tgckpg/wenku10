@@ -95,6 +95,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
             if ( string.IsNullOrEmpty( Url ) )
             {
+                PreviewFile = await AppStorage.MkTemp();
                 MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
                 return;
             }

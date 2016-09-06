@@ -24,6 +24,7 @@ using wenku10.Pages.Dialogs.Taotu;
 namespace wenku8.Taotu
 {
     using Model.Book.Spider;
+    using Model.ListItem;
     using ThemeIcons;
 
     enum WListSub {
@@ -225,8 +226,9 @@ namespace wenku8.Taotu
                     if ( !( ItemConvoy == null || ItemConvoy == KnownBook ) )
                     {
                         BookInstruction BInst = ( BookInstruction ) ItemConvoy.Payload;
-                        BInst.SetSubId( Id );
                         ItemList.Add( BInst );
+
+                        if ( HasBookSpider ) BInst.PlaceDefs( Id, BookSpider );
                     }
                     else
                     {
