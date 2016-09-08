@@ -254,6 +254,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
@@ -273,15 +274,36 @@
                             <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
                         </Button>
 
-                        <Border Grid.Row="1" Grid.Column="1"
-                                Width="50" Height="50">
-                            <ProgressRing VerticalAlignment="Center" HorizontalAlignment="Center"
-                                          e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
-                                          Foreground="{StaticResource MinorBrush}"
-                                          IsActive="{Binding IsLoading}" />
-                        </Border>
+                        <!-- Step Action View -->
+                        <ItemsControl Grid.Row="1" Grid.ColumnSpan="2"
+                                      e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+                                      e:TransitionDisplay.Mode="A01_X_30_N30"
+                                      Margin="3"
+                                      HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                      ItemsSource="{Binding ProcList}">
 
-                        <ListView Grid.Row="1" Grid.Column="0"
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <c:ProcStateItem IsLoading="{Binding Running}" PSize="10"
+                                                     ProcColor="{Binding Background}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsStackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                        </ItemsControl>
+                        <TextBlock Grid.Row="1" TextTrimming="CharacterEllipsis"
+                                   e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+                                   e:TransitionDisplay.Mode="A01_Y_30_N30"
+                                   Margin="10,5" MaxLines="1"
+                                   Text="{Binding Message}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   VerticalAlignment="Center"/>
+
+                        <ListView Grid.Row="2" Grid.ColumnSpan="2"
                                   IsItemClickEnabled="True"
                                   ItemClick="ZoneSpider_ItemClick"
                                   ItemTemplate="{StaticResource ZoneItemTemplate}"

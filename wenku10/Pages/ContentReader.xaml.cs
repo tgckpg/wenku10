@@ -125,6 +125,7 @@ namespace wenku10.Pages
 
             RegKey = new List<Action>();
             // KeyBoard Navigations
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => BeginRead(), Windows.System.VirtualKey.Enter ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.NextPara(), Windows.System.VirtualKey.J ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.PrevPara(), Windows.System.VirtualKey.K ) );
 
@@ -560,7 +561,8 @@ namespace wenku10.Pages
             RenderMask.State = ControlState.Reovia;
         }
 
-        private void BeginRead( object sender, TappedRoutedEventArgs e )
+        private void BeginRead( object sender, TappedRoutedEventArgs e ) { BeginRead(); }
+        private void BeginRead()
         {
             TransitionDisplay.SetState( InfoMask, TransitionState.Inactive );
         }

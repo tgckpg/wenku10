@@ -156,6 +156,7 @@
     <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
       <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wenku8\CompositeElement\ProcStateItem.cs" />
     <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
     <Compile Include="wenku8\Converters\IsSpiderConverter.cs" />
@@ -573,6 +574,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\ListViewItems\CommentListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ListViewItems\ProcStateItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -1,0 +1,49 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:c="using:wenku8.CompositeElement" >
+
+    <Style TargetType="c:ProcStateItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:ProcStateItem">
+                    <Border>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="HoverStates">
+                                <VisualStateGroup.States>
+                                    <VisualState x:Name="Loading">
+                                        <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                                            <ColorAnimation Duration="0:0:0.5" To="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}"
+                                                            Storyboard.TargetProperty="Color"
+                                                            Storyboard.TargetName="LoadingRing" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Idle">
+                                        <Storyboard>
+                                            <ColorAnimation Duration="0" To="Transparent"
+                                                            Storyboard.TargetProperty="Color"
+                                                            Storyboard.TargetName="LoadingRing" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup.States>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <!-- This will act as Loading Flash -->
+                        <Border.Background>
+                            <SolidColorBrush x:Name="LoadingRing" Color="Transparent" />
+                        </Border.Background>
+
+                        <Rectangle Fill="{TemplateBinding ProcColor}"
+                                   Stroke="{StaticResource MajorBackgroundBrush}" StrokeThickness="1"
+                                   Margin="3"
+                                   Width="{TemplateBinding PSize}" Height="{TemplateBinding PSize}" />
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
