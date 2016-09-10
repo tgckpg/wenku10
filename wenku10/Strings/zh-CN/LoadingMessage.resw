@@ -120,6 +120,9 @@
   <data name="BookConstruct" xml:space="preserve">
     <value>建构文章信息</value>
   </data>
+  <data name="Calculating" xml:space="preserve">
+    <value>计算中...</value>
+  </data>
   <data name="CompilingTOC" xml:space="preserve">
     <value>编制目录「{0}」</value>
   </data>

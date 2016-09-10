@@ -374,4 +374,7 @@
   <data name="BookSpider.Text" xml:space="preserve">
     <value>文章蜘蛛</value>
   </data>
+  <data name="Banner.PlaceholderText" xml:space="preserve">
+    <value>旗幟</value>
+  </data>
 </root>

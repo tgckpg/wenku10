@@ -120,6 +120,9 @@
   <data name="BookConstruct" xml:space="preserve">
     <value>書籍情報の構築</value>
   </data>
+  <data name="Calculating" xml:space="preserve">
+    <value>計算中…</value>
+  </data>
   <data name="CompilingTOC" xml:space="preserve">
     <value>「{0}」の目次を構築します</value>
   </data>

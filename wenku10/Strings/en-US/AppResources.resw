@@ -372,4 +372,7 @@
   <data name="BookSpider.Text" xml:space="preserve">
     <value>Book Spider</value>
   </data>
+  <data name="Banner.PlaceholderText" xml:space="preserve">
+    <value>Banner</value>
+  </data>
 </root>

@@ -43,6 +43,21 @@ namespace wenku8.Taotu
         public bool HasSubProcs { get { return ItemProcs.HasProcedures; } }
         public bool HasBookSpider { get { return BookSpider.HasProcedures; } }
 
+        public Uri BannerSrc { get; set; }
+        public string BannerPath
+        {
+            get { return BannerSrc?.ToString(); }
+            set
+            {
+                try
+                {
+                    BannerSrc = new Uri( value );
+                    NotifyChanged( "BannerSrc" );
+                }
+                catch( Exception ) { }
+            }
+        }
+
         protected override Color BgColor { get { return Colors.Crimson; } }
         protected override IconBase Icon { get { return new IconExoticUni() { AutoScale = true }; } }
 
@@ -88,6 +103,7 @@ namespace wenku8.Taotu
 
             ItemPattern = Param.GetValue( "ItemPattern" );
             ItemParam = Param.GetValue( "ItemParam" );
+            BannerPath = Param.GetValue( "Banner" );
 
             ItemProcs = new ProcManager( Param.Parameter( "ItemProcs" ) );
             BookSpider = new ProcManager( Param.Parameter( "BookSpider" ) );
@@ -100,6 +116,7 @@ namespace wenku8.Taotu
             {
                 new XKey( "ItemPattern", ItemPattern )
                 , new XKey( "ItemParam", ItemParam )
+                , new XKey( "Banner", BannerPath )
             } );
 
             XParameter EProc = ItemProcs.ToXParam();

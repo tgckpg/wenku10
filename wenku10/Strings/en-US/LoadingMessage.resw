@@ -120,6 +120,9 @@
   <data name="BookConstruct" xml:space="preserve">
     <value>Constructing book information</value>
   </data>
+  <data name="Calculating" xml:space="preserve">
+    <value>Calculating ...</value>
+  </data>
   <data name="CompilingTOC" xml:space="preserve">
     <value>Compiling table of contents: "{0}"</value>
   </data>

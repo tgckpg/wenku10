@@ -104,6 +104,7 @@
                     <!-- Desc -->
                     <TextBlock Margin="10, 5" Text="{Binding Intro}"
                                FontSize="16"
+                               MaxLines="5"
                                Foreground="{StaticResource RelativeShadesBrush}"
                                TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
                 </StackPanel>
@@ -247,7 +248,7 @@
             <HubSection x:Name="ZoneContext" Style="{StaticResource ContainerHead}"
                         Width="500" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -258,7 +259,11 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
+                        <Image Source="{Binding Banner}"
+                               HorizontalAlignment="Left" Height="50"
+                               e:TransitionDisplay.State="{Binding Banner, Converter={StaticResource TransStateConverter}}" />
                         <Button p:Clip.ToBounds="True"
+                                e:TransitionDisplay.State="{Binding Banner, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
                                 Style="{StaticResource PlainThemeButton}"
                                 Click="OpenZoneSpider"
                                 HorizontalAlignment="Stretch" Height="50">

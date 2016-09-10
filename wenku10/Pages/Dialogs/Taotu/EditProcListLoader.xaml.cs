@@ -90,6 +90,12 @@ namespace wenku10.Pages.Dialogs.Taotu
             EditTarget.ItemParam = Input.Text;
         }
 
+        private void SetBanner( object sender, RoutedEventArgs e )
+        {
+            TextBox Input = sender as TextBox;
+            EditTarget.BannerPath = Input.Text;
+        }
+
         private void Subprocess( object sender, RoutedEventArgs e )
         {
             EditTarget.SubEdit = WListSub.Process;
