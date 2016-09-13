@@ -51,7 +51,7 @@ namespace wenku10.Pages
         public bool UseInertia = false;
 
         private Action ReloadReader;
-        private bool OpenLock = false;
+        private volatile bool OpenLock = false;
         private bool NeedRedraw = false;
         private bool Disposed = true;
         private bool EVLoopbackBlockade = false;

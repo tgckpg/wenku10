@@ -13,6 +13,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <v:VDisplayConverter x:Key="VDisplayConverter" />
+        <v:ContentStyleConverter x:Key="ContentStyleConverter" />
         <MenuFlyout x:Key="ParagraphFlyout" Placement="Bottom">
             <MenuFlyoutItem x:Uid="/ContextMenu/Copy" Text="Copy" Click="ContextCopyClicked" />
             <MenuFlyoutItem x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />

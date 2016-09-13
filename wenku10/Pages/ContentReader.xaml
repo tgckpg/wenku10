@@ -13,11 +13,10 @@
     mc:Ignorable="d">
 
     <Grid>
-        <c:PassiveSplitView
-            x:Name="MainSplitView"
-            Background="{Binding BackgroundBrush}"
-            EnablePaneSwipe="True"
-            DoubleTapped="MainGrid_DoubleTapped">
+        <c:PassiveSplitView x:Name="MainSplitView"
+                            Background="{Binding BackgroundBrush}"
+                            EnablePaneSwipe="True"
+                            DoubleTapped="MainGrid_DoubleTapped">
             <c:PassiveSplitView.Pane>
                 <Grid x:Name="PaneGrid">
                     <Grid.ColumnDefinitions>

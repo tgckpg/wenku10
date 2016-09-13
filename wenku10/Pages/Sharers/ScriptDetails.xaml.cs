@@ -423,6 +423,8 @@ namespace wenku10.Pages.Sharers
             }
             else
             {
+                // Default Targeted to TOKEN
+                Target = SHTarget.TOKEN;
                 ControlsList.SelectedIndex = Crypt != null ? 1 : 0;
                 RequestList.Tag = AccessToken;
             }

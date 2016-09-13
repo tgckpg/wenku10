@@ -38,6 +38,4 @@
     <QuarticEase EasingMode="EaseOut" x:Key="EaseOutQuartic" />
     <QuinticEase EasingMode="EaseOut" x:Key="EaseOutQuintic" />
     <ExponentialEase EasingMode="EaseOut" x:Key="EaseOutExponential" Exponent="10" />
-
-    <v:ContentStyleConverter x:Key="ContentStyleConverter" />
 </ResourceDictionary>
