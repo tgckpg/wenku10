@@ -84,6 +84,13 @@ namespace wenku8.Model.Loaders
             else
             {
                 await SBook.Process();
+
+                // Cannot download content, use cache if available
+                if ( !( B.Packed == true || B.Packable ) && Shared.Storage.FileExists( B.TOCPath ) )
+                {
+                    Logger.Log( ID, "Spider failed to produce instructions, using cache instead", LogType.WARNING );
+                    B.PackSavedVols( SBook.PSettings );
+                }
             }
 
             if ( B.Packed != true && B.Packable )
