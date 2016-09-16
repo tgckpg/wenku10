@@ -190,6 +190,12 @@ namespace wenku10.Pages
             if ( NeedRedraw || Orientation != App.ViewControl.Orientation )
             {
                 Orientation = App.ViewControl.Orientation;
+
+                MainSplitView.ManiMode =
+                    ( MainStage.Instance.IsPhone && Orientation == ApplicationViewOrientation.Landscape )
+                    ? ManipulationModes.TranslateY
+                    : ManipulationModes.TranslateX;
+
                 NeedRedraw = false;
                 Redraw();
             }
