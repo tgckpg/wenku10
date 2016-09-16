@@ -20,7 +20,9 @@ namespace wenku8.System
         public static FileSystemLog LogInstance;
 
         public static string Version = AppSettings.SimpVersion
-#if DEBUG || TESTING
+#if DEBUG
+            + "d";
+#elif TESTING 
             + "t";
 #elif BETA
             + "b";
