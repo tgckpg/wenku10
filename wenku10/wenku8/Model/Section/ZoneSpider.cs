@@ -17,11 +17,12 @@ using static libtaotu.Pages.ProceduresPanel;
 namespace wenku8.Model.Section
 {
     using Book;
+    using Interfaces;
     using Loaders;
     using Taotu;
     using Settings;
 
-    sealed class ZoneSpider : ActiveData
+    sealed class ZoneSpider : ActiveData, IMetaSpider
     {
         public static readonly string ID = typeof( ZoneSpider ).Name;
 
@@ -92,6 +93,17 @@ namespace wenku8.Model.Section
 
             DataReady = false;
             NotifyChanged( "Data", "DataReady" );
+        }
+
+        public void Reload()
+        {
+            try
+            {
+                Open( new XRegistry( "<zs />", MetaLocation ) );
+            }
+            catch ( Exception ex )
+            {
+            }
         }
 
         public async Task Init()

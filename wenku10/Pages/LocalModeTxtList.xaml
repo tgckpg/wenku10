@@ -359,9 +359,28 @@
                                   ItemClick="ZoneList_ItemClick"
                                   ItemContainerStyle="{StaticResource ListItemNoSelect}"
                                   ItemsSource="{Binding Zones}">
+                            <ListView.Resources>
+                                <MenuFlyout x:Key="ZoneAction">
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/ResetState"
+                                                    Click="ResetZoneState"
+                                                    Text="Reset State" />
+
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/Reanalyze"
+                                                    Click="ReloadZone"
+                                                    Text="Reload Zone" />
+
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/Edit"
+                                                    Click="EditZone"
+                                                    Text="Edit Source" />
+
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
+                                                    Click="RemoveZone"
+                                                    Text="Remove Source" />
+                                </MenuFlyout>
+                            </ListView.Resources>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid>
+                                    <Grid RightTapped="ShowZoneAction" FlyoutBase.AttachedFlyout="{StaticResource ZoneAction}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />

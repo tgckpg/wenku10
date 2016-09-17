@@ -201,4 +201,7 @@
   <data name="AssignKey.Text" xml:space="preserve">
     <value>キーを割り当て</value>
   </data>
+  <data name="ResetState.Text" xml:space="preserve">
+    <value>状態をリセット</value>
+  </data>
 </root>

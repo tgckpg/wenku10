@@ -31,6 +31,7 @@ using wenku8.CompositeElement;
 using wenku8.Ext;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
+using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.Section;
@@ -47,6 +48,8 @@ namespace wenku10.Pages
         private static readonly string ID = typeof( LocalModeTxtList ).Name;
 
         private ZoneList ZoneListContext;
+        private ZoneSpider SelectedZone;
+
         private LocalFileList FileListContext;
         private LocalBook SelectedBook;
 
@@ -78,7 +81,7 @@ namespace wenku10.Pages
 
             SHHub.Search( "" );
 
-            if( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
+            if ( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
             {
                 OneDriveSync.Instance = new OneDriveSync();
                 await OneDriveSync.Instance.Authenticate();
@@ -87,7 +90,7 @@ namespace wenku10.Pages
 
         private void OnBackRequested( object sender, XBackRequestedEventArgs e )
         {
-            if( !Frame.CanGoBack )
+            if ( !Frame.CanGoBack )
             {
                 e.Handled = true;
                 PopupFrame.Content = null;
@@ -150,7 +153,7 @@ namespace wenku10.Pages
                     break;
 
                 case AppKeys.SH_SCRIPT_REMOVE:
-                    if( await SHHub.Remove( ( HubScriptItem ) Mesg.Payload ) )
+                    if ( await SHHub.Remove( ( HubScriptItem ) Mesg.Payload ) )
                     {
                         PopupFrame.Content = null;
                     }
@@ -229,14 +232,16 @@ namespace wenku10.Pages
         }
 
         #region Zone Spider
-        private void ExitZone( object sender, RoutedEventArgs e )
-        {
-            ZoneListContext.ExitZone();
-        }
+        private void OpenZone( object sender, RoutedEventArgs e ) { ZoneListContext.OpenFile(); }
+        private void ExitZone( object sender, RoutedEventArgs e ) { ZoneListContext.ExitZone(); }
+        private void EditZone( object sender, RoutedEventArgs e ) { EditItem( SelectedZone ); }
+        private void ResetZoneState( object sender, RoutedEventArgs e ) { SelectedZone.Reset(); }
+        private void ReloadZone( object sender, RoutedEventArgs e ) { SelectedZone.Reload(); }
 
-        private void OpenZone( object sender, RoutedEventArgs e )
+        private void RemoveZone( object sender, RoutedEventArgs e )
         {
-            ZoneListContext.OpenFile();
+            ZoneListContext.RemoveZone( SelectedZone );
+            SelectedZone = null;
         }
 
         private void ZoneList_ItemClick( object sender, ItemClickEventArgs e )
@@ -244,16 +249,29 @@ namespace wenku10.Pages
             ZoneListContext.EnterZone( ( ZoneSpider ) e.ClickedItem );
         }
 
-        private async void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
+        private void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
         {
-            BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
-            BInst.SetId( ZoneListContext.CurrentZone.ZoneId );
-            SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
-            if ( Book.CanProcess )
-            {
-                await Book.Process();
-                OpenBookInfoView( Book );
-            }
+            BackMask.HandleForward(
+                Frame, async () =>
+                {
+                    BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
+                    BInst.SetId( ZoneListContext.CurrentZone.ZoneId );
+                    SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
+                    if ( Book.CanProcess )
+                    {
+                        await Book.Process();
+                        Frame.Navigate( typeof( BookInfoView ), Book.GetBook() );
+                    }
+                }
+            );
+        }
+
+        private void ShowZoneAction( object sender, RightTappedRoutedEventArgs e )
+        {
+            Grid G = ( Grid ) sender;
+            FlyoutBase.ShowAttachedFlyout( G );
+
+            SelectedZone = ( ZoneSpider ) G.DataContext;
         }
 
         private async void GotoSettings( object sender, RoutedEventArgs e )
@@ -391,7 +409,10 @@ namespace wenku10.Pages
 
         private void EditSource( object sender, RoutedEventArgs e )
         {
-            EditItem( SelectedBook );
+            if( SelectedBook is SpiderBook )
+            {
+                EditItem( ( SpiderBook ) SelectedBook );
+            }
         }
 
         private async void Reanalyze( object sender, RoutedEventArgs e )
@@ -401,12 +422,9 @@ namespace wenku10.Pages
         }
         #endregion
 
-        private void EditItem( LocalBook LB )
+        private void EditItem( IMetaSpider LB )
         {
-            if( LB is SpiderBook )
-            {
-                Frame.Navigate( typeof( ProceduresPanel ), ( ( SpiderBook ) LB ).MetaLocation );
-            }
+            Frame.Navigate( typeof( ProceduresPanel ), LB.MetaLocation );
         }
         #endregion
 

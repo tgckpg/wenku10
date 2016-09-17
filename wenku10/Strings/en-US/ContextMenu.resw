@@ -157,7 +157,7 @@
     <value>View Horizontally</value>
   </data>
   <data name="WSync.Text" xml:space="preserve">
-    <value>Sync to Website</value>
+    <value>Sync to website</value>
   </data>
   <data name="WUnsync.Text" xml:space="preserve">
     <value>Move to Local</value>
@@ -200,5 +200,8 @@
   </data>
   <data name="AssignKey.Text" xml:space="preserve">
     <value>Assign Key</value>
+  </data>
+  <data name="ResetState.Text" xml:space="preserve">
+    <value>Reset state</value>
   </data>
 </root>
