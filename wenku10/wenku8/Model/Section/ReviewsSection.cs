@@ -264,7 +264,7 @@ namespace wenku8.Model.Section
 
         public void ControlAction( PaneNavButton Control )
         {
-            Control.Action();
+            Control?.Action();
         }
 
         public void CC_WriteReview()
