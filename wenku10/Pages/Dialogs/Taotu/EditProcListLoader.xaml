@@ -65,10 +65,12 @@
                                   AutoScale="True" />
             </Border>
 
-            <TextBox Grid.Row="1" Grid.Column="0"
+            <TextBox Margin="3"
+                     Grid.Row="1" Grid.Column="0"
                      x:Uid="/AppResources/Banner"
                      LostFocus="SetBanner"
                      Text="{Binding BannerPath}"/>
+
             <!-- Test Button -->
             <Button Style="{StaticResource IconButton}"
                     Margin="3"

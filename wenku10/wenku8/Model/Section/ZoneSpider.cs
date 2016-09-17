@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
@@ -20,13 +19,16 @@ namespace wenku8.Model.Section
     using Book;
     using Loaders;
     using Taotu;
+    using Settings;
 
     sealed class ZoneSpider : ActiveData
     {
         public static readonly string ID = typeof( ZoneSpider ).Name;
 
         public string ZoneId { get { return PM.GUID; } }
+        public string MetaLocation { get { return FileLinks.ROOT_ZSPIDER + ZoneId + ".xml"; } }
 
+        public bool DataReady { get; private set; }
         public Observables<BookItem, BookItem> Data { get; private set; }
 
         public ObservableCollection<Procedure> ProcList { get { return PM?.ProcList; } }
@@ -36,13 +38,13 @@ namespace wenku8.Model.Section
 
         public string Message { get; private set; }
 
-        private bool _IsLoading = false;
+        private int loadLevel = 0;
         public bool IsLoading
         {
-            get { return _IsLoading; }
+            get { return 0 < loadLevel; }
             private set
             {
-                _IsLoading = value;
+                loadLevel += value ? 1 : -1;
                 NotifyChanged( "IsLoading" );
             }
         }
@@ -80,30 +82,54 @@ namespace wenku8.Model.Section
             NotifyChanged( "Banner" );
         }
 
-        public async void OpenFile()
+        public void Reset()
         {
+            if ( Data != null )
+            {
+                Data.DisconnectLoaders();
+                Data.Clear();
+            }
+
+            DataReady = false;
+            NotifyChanged( "Data", "DataReady" );
+        }
+
+        public async Task Init()
+        {
+            if ( DataReady ) return;
+
+            IsLoading = true;
             try
             {
-                IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
-                if ( ISF == null ) return;
+                ZSFeedbackLoader<BookItem> ZSF = new ZSFeedbackLoader<BookItem>( PM.CreateSpider() );
+                Data = new Observables<BookItem, BookItem>( await ZSF.NextPage() );
+                Data.ConnectLoader( ZSF );
 
-                IsLoading = true;
+                Data.LoadStart += ( s, e ) => IsLoading = true;
+                Data.LoadEnd += ( s, e ) => IsLoading = false;
 
-                XParameter Param = new XRegistry( await ISF.ReadString(), null, false ).Parameter( "Procedures" );
+                DataReady = true;
+                NotifyChanged( "Data", "DataReady" );
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        public bool Open( XRegistry ZDef )
+        {
+            IsLoading = true;
+
+            try
+            {
+                XParameter Param = ZDef.Parameter( "Procedures" );
                 PM = new ProcManager( Param );
                 NotifyChanged( "ProcList" );
 
                 SetBanner();
 
-                ZSFeedbackLoader<BookItem> ZSF = new ZSFeedbackLoader<BookItem>( PM.CreateSpider() );
-                Data = new Observables<BookItem, BookItem>( await ZSF.NextPage() );
-                Data.ConnectLoader( ZSF );
-
-                IsLoading = false;
-                Data.LoadStart += ( s, e ) => IsLoading = true;
-                Data.LoadEnd += ( s, e ) => IsLoading = false;
-
-                NotifyChanged( "Data" );
+                return true;
             }
             catch( InvalidFIleException )
             {
@@ -111,9 +137,14 @@ namespace wenku8.Model.Section
             }
             catch( Exception ex )
             {
-                IsLoading = false;
                 Logger.Log( ID, ex.Message, LogType.ERROR );
             }
+            finally
+            {
+                IsLoading = false;
+            }
+
+            return false;
         }
 
         private class InvalidFIleException : Exception { }

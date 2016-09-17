@@ -46,6 +46,7 @@ namespace wenku10.Pages
     {
         private static readonly string ID = typeof( LocalModeTxtList ).Name;
 
+        private ZoneList ZoneListContext;
         private LocalFileList FileListContext;
         private LocalBook SelectedBook;
 
@@ -65,6 +66,9 @@ namespace wenku10.Pages
 
             FileListContext = new LocalFileList();
             FileListView.DataContext = FileListContext;
+
+            ZoneListContext = new ZoneList();
+            ZoneListView.DataContext = ZoneListContext;
 
             SHHub = new SharersHub();
             SharersHub.DataContext = SHHub;
@@ -225,17 +229,25 @@ namespace wenku10.Pages
         }
 
         #region Zone Spider
-        private void OpenZoneSpider( object sender, RoutedEventArgs e )
+        private void ExitZone( object sender, RoutedEventArgs e )
         {
-            ZoneSpider ZS = new ZoneSpider();
-            ZS.OpenFile();
-            ZoneContext.DataContext = ZS;
+            ZoneListContext.ExitZone();
+        }
+
+        private void OpenZone( object sender, RoutedEventArgs e )
+        {
+            ZoneListContext.OpenFile();
+        }
+
+        private void ZoneList_ItemClick( object sender, ItemClickEventArgs e )
+        {
+            ZoneListContext.EnterZone( ( ZoneSpider ) e.ClickedItem );
         }
 
         private async void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
         {
             BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
-            BInst.SetId( ( ( ZoneSpider ) ZoneContext.DataContext ).ZoneId );
+            BInst.SetId( ZoneListContext.CurrentZone.ZoneId );
             SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
             if ( Book.CanProcess )
             {

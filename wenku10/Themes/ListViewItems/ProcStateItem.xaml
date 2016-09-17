@@ -16,30 +16,27 @@
                                 <VisualStateGroup.States>
                                     <VisualState x:Name="Loading">
                                         <Storyboard AutoReverse="True" RepeatBehavior="Forever">
-                                            <ColorAnimation Duration="0:0:0.5" To="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}"
-                                                            Storyboard.TargetProperty="Color"
-                                                            Storyboard.TargetName="LoadingRing" />
+                                            <DoubleAnimation Duration="0:0:0.5" To="0"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Storyboard.TargetName="FlashyBlock" />
                                         </Storyboard>
                                     </VisualState>
                                     <VisualState x:Name="Idle">
                                         <Storyboard>
-                                            <ColorAnimation Duration="0" To="Transparent"
-                                                            Storyboard.TargetProperty="Color"
-                                                            Storyboard.TargetName="LoadingRing" />
+                                            <DoubleAnimation Duration="0" To="1"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             Storyboard.TargetName="FlashyBlock" />
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup.States>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <!-- This will act as Loading Flash -->
-                        <Border.Background>
-                            <SolidColorBrush x:Name="LoadingRing" Color="Transparent" />
-                        </Border.Background>
 
-                        <Rectangle Fill="{TemplateBinding ProcColor}"
+                        <Rectangle x:Name="FlashyBlock" Margin="2"
+                                   Width="{TemplateBinding PSize}" Height="{TemplateBinding PSize}"
+                                   Fill="{TemplateBinding ProcColor}" Opacity="1"
                                    Stroke="{StaticResource MajorBackgroundBrush}" StrokeThickness="1"
-                                   Margin="3"
-                                   Width="{TemplateBinding PSize}" Height="{TemplateBinding PSize}" />
+                                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
 
                     </Border>
                 </ControlTemplate>

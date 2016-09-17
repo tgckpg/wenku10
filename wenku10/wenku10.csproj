@@ -165,6 +165,7 @@
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
+    <Compile Include="wenku8\Model\Section\ZoneList.cs" />
     <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
     <Compile Include="wenku8\System\Migration.cs" />
     <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
