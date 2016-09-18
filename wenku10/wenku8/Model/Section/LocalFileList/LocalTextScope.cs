@@ -280,7 +280,11 @@ namespace wenku8.Model.Section
 
         public void Add( params LocalBook[] Book )
         {
-            List<LocalBook> NData = new List<LocalBook>( Data.Cast<LocalBook>() );
+            List<LocalBook> NData = new List<LocalBook>();
+
+            if( Data != null )
+                NData.AddRange( Data.Cast<LocalBook>() );
+
             NData.AddRange( Book );
             Data = NData;
 

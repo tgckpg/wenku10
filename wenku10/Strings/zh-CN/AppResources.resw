@@ -377,4 +377,10 @@
   <data name="Banner.PlaceholderText" xml:space="preserve">
     <value>旗帜</value>
   </data>
+  <data name="HS_Scope.Text" xml:space="preserve">
+    <value>规模</value>
+  </data>
+  <data name="HS_Book.Text" xml:space="preserve">
+    <value>书</value>
+  </data>
 </root>

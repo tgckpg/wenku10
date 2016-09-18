@@ -153,4 +153,7 @@
   <data name="NotABook" xml:space="preserve">
     <value>子程序没有返回一个有效的书籍项，是不是忘了添加「提取」步骤？</value>
   </data>
+  <data name="VL_NoScope" xml:space="preserve">
+    <value>请定义此脚本的规模</value>
+  </data>
 </root>

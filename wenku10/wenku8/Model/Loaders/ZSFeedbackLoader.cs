@@ -27,7 +27,7 @@ namespace wenku8.Model.Loaders
 
         private ProceduralSpider Spider;
 
-        private string FeedParam = null;
+        private string[] FeedParams = null;
         private bool FirstLoad = true;
 
         public ZSFeedbackLoader( ProceduralSpider Spider )
@@ -52,8 +52,8 @@ namespace wenku8.Model.Loaders
                     RunMode = new ProcPassThru( ProcType.FEED_RUN );
                 }
 
-                ProcConvoy Convoy = await Spider.Crawl( new ProcConvoy( RunMode, FeedParam ) );
-                FeedParam = null;
+                ProcConvoy Convoy = await Spider.Crawl( new ProcConvoy( RunMode, FeedParams ) );
+                string FeedParam = "";
 
                 if ( Convoy.Payload is IEnumerable<IStorageFile> )
                 {
@@ -71,6 +71,8 @@ namespace wenku8.Model.Loaders
                 {
                     FeedParam = ( string ) Convoy.Payload;
                 }
+
+                FeedParams = FeedParam.Split( '\n' );
 
                 Convoy = ProcManager.TracePackage( Convoy, ( P, C ) => C.Payload is IEnumerable<T> );
 

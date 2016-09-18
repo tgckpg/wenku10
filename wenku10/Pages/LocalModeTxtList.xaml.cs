@@ -109,6 +109,14 @@ namespace wenku10.Pages
                 case AppKeys.SH_SCRIPT_DATA:
                     HubScriptItem HSI = ( HubScriptItem ) Mesg.Payload;
 
+                    if ( ( HSI.Scope & SpiderScope.ZONE ) != 0 )
+                    {
+                        MainHub.ScrollToSection( ZoneListView );
+                        PopupFrame.Content = null;
+                        await ZoneListContext.OpenFile( HSI.ScriptFile );
+                        break;
+                    }
+
                     if ( await FileListContext.OpenSpider( HSI.ScriptFile ) )
                     {
                         ConfirmScriptParse( HSI );

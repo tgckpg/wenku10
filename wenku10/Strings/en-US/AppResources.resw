@@ -375,4 +375,10 @@
   <data name="Banner.PlaceholderText" xml:space="preserve">
     <value>Banner</value>
   </data>
+  <data name="HS_Scope.Text" xml:space="preserve">
+    <value>Scope</value>
+  </data>
+  <data name="HS_Book.Text" xml:space="preserve">
+    <value>Book</value>
+  </data>
 </root>

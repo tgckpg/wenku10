@@ -80,16 +80,23 @@ namespace wenku8.Model.Section
         {
             IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
             if ( ISF == null ) return;
+            var j = OpenFile( ISF );
+        }
 
+        public async Task<bool> OpenFile( IStorageFile ISF )
+        {
             try
             {
                 ZoneSpider ZS = ReadZone( await ISF.ReadString() );
                 EnterZone( ZS );
+                return true;
             }
             catch ( Exception ex )
             {
                 Logger.Log( ID, ex.Message, LogType.WARNING );
             }
+
+            return false;
         }
 
         private ZoneSpider ReadZone( string ZData, bool Init = false )

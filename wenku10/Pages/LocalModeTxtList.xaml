@@ -116,11 +116,10 @@
         <c:ParallaxHub x:Name="MainHub">
             <!-- My Collections -->
             <HubSection Style="{StaticResource ContainerHead}"
-                        Margin="10,0,0,0"
                         Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                         MaxWidth="400">
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="10,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -249,7 +248,7 @@
             <HubSection x:Name="ZoneListView" Style="{StaticResource ContainerHead}"
                         Width="500" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
-                    <Grid Margin="5">
+                    <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -405,7 +404,7 @@
             <HubSection x:Name="SharersHub" Style="{StaticResource ContainerHead}"
                         Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
-                    <Grid Margin="5">
+                    <Grid Margin="10,5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
