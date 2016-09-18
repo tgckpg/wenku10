@@ -120,6 +120,9 @@
   <data name="BookConstruct" xml:space="preserve">
     <value>書籍情報の構築</value>
   </data>
+  <data name="Calculating" xml:space="preserve">
+    <value>計算中…</value>
+  </data>
   <data name="CompilingTOC" xml:space="preserve">
     <value>「{0}」の目次を構築します</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="LoadingVolume" xml:space="preserve">
     <value>ボリュームを読み込んでいます</value>
+  </data>
+  <data name="MergingContents" xml:space="preserve">
+    <value>内容を組み合わせます：{0}</value>
   </data>
   <data name="PleaseWaitSecondsForUI" xml:space="preserve">
     <value>準備完了、インタフェースの応答を確実にするために {0} 秒待ってください。</value>

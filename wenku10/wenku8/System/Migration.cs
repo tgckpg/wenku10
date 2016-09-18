@@ -39,11 +39,11 @@ namespace wenku8.System
                     case "1.7.12t":
                         break;
 
-                    case "1.2.7b":
                     case "1.2.8b":
                     case "1.2.9b":
                     case "1.2.10b":
                     case "1.3.0b":
+                    case "1.3.1b":
                         break;
 
                     default:

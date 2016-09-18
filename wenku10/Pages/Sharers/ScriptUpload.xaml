@@ -72,6 +72,13 @@
                                 PlaceholderText="Seperated by commas"
                                 Margin="0,2,0,10" />
 
+                <!-- Scope -->
+                <TextBlock Text="Scope" x:Uid="/AppResources/HS_Scope"
+                           Foreground="{StaticResource MajorBrush}" />
+                <ComboBox x:Name="ScopeLevel"
+                          DisplayMemberPath="Name" SelectedValuePath="Value"
+                          Loaded="PreSelectScope" />
+
                 <!-- Anonymous -->
                 <CheckBox x:Name="Anon">
                     <TextBlock x:Uid="/AppResources/Anonymous"

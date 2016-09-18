@@ -14,6 +14,7 @@
 
     <Page.Resources>
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <t:ContentStyleConverter x:Key="ContentStyleConverter" />
         <t:NumberSimplifier x:Key="NumberSimplifier" />
     </Page.Resources>
 

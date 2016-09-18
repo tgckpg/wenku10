@@ -84,6 +84,13 @@ namespace wenku8.Model.Loaders
             else
             {
                 await SBook.Process();
+
+                // Cannot download content, use cache if available
+                if ( !( B.Packed == true || B.Packable ) && Shared.Storage.FileExists( B.TOCPath ) )
+                {
+                    Logger.Log( ID, "Spider failed to produce instructions, using cache instead", LogType.WARNING );
+                    B.PackSavedVols( SBook.PSettings );
+                }
             }
 
             if ( B.Packed != true && B.Packable )
@@ -156,12 +163,10 @@ namespace wenku8.Model.Loaders
 
         private void ExtractBookInfo( string InfoData, string id )
         {
-            ////// App-specific approach
             CurrentBook.ParseXml( InfoData );
 
             if ( !Shared.Storage.FileExists( CurrentBook.CoverPath ) )
             {
-                ///// App-specific approach
                 X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
                     id, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", id )
                     , CoverDownloaded, Utils.DoNothing, false
@@ -173,7 +178,6 @@ namespace wenku8.Model.Loaders
                 // Cover cached immediately. Call once
                 OnComplete( CurrentBook );
             }
-            ////////// Active informations: Can not store in AppCache
         }
 
         private async Task CacheCover( BookItem B )

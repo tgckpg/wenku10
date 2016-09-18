@@ -21,7 +21,7 @@
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
     </ContentDialog.Title>
 
-    <Grid x:Name="LayoutRoot" MinWidth="400">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <!-- Control Buttons -->
             <RowDefinition Height="Auto" />
@@ -50,16 +50,45 @@
         </StackPanel>
         <StackPanel Grid.Row="1">
             <!-- Volume Mappings -->
-            <TextBlock Foreground="{StaticResource MinorBrush}"
-                       x:Uid="/Book/VolumeMapping"
-                       Text="Volume Mappings" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Foreground="{StaticResource MinorBrush}"
+                           x:Uid="/Book/VolumeMapping"
+                           Text="Volume Mappings" />
+                <Button Grid.Column="1"
+                        x:Uid="/libtaotu/Resources/SubProcs"
+                        Margin="3" Style="{StaticResource IconButton}"
+                        Click="SubVolume">
+                    <Grid Width="30" Height="30">
+                        <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                        <i:IconSteps e:TransitionDisplay.State="{Binding HasVolProcs, Converter={StaticResource TransStateConverter}}"
+                                     AutoScale="True" Foreground="{StaticResource MajorBrush}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Column="2"
+                        Margin="3" Style="{StaticResource IconButton}"
+                        Click="ToggleVAsync">
+                    <Grid Width="30" Height="30">
+                        <i:IconSerial x:Uid="/libtaotu/Resources/Sync"
+                                      ToolTipService.ToolTip="Synchronous"
+                                      e:TransitionDisplay.State="{Binding VolAsync, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                      AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                        <i:IconParallel x:Uid="/libtaotu/Resources/Async"
+                                        ToolTipService.ToolTip="Asynchronous"
+                                        e:TransitionDisplay.State="{Binding VolAsync, Converter={StaticResource TransStateConverter}}"
+                                        AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
+                    </Grid>
+                </Button>
+            </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0"
@@ -82,43 +111,49 @@
                          Text="{Binding VolParam}"
                          FontFamily="Lucida Console"
                          LostFocus="SetProp"/>
+            </Grid>
+            <!-- Chapter Mappings -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Foreground="{StaticResource MinorBrush}"
+                           x:Uid="/Book/ChapterMapping"
+                           Text="Chapter Mappings" />
 
-                <Button Grid.Column="3"
+                <Button Grid.Column="1"
                         x:Uid="/libtaotu/Resources/SubProcs"
                         Margin="3" Style="{StaticResource IconButton}"
-                        Click="SubVolume">
+                        Click="SubChapter">
                     <Grid Width="30" Height="30">
-                        <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
-                        <i:IconSteps e:TransitionDisplay.State="{Binding HasVolProcs, Converter={StaticResource TransStateConverter}}"
+                        <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
+                        <i:IconSteps e:TransitionDisplay.State="{Binding HasEpProcs, Converter={StaticResource TransStateConverter}}"
                                      AutoScale="True" Foreground="{StaticResource MajorBrush}" />
                     </Grid>
                 </Button>
-                <Button Grid.Column="4"
+                <Button Grid.Column="2"
                         Margin="3" Style="{StaticResource IconButton}"
-                        Click="ToggleVAsync">
+                        Click="ToggleEAsync">
                     <Grid Width="30" Height="30">
                         <i:IconSerial x:Uid="/libtaotu/Resources/Sync"
                                       ToolTipService.ToolTip="Synchronous"
-                                      e:TransitionDisplay.State="{Binding VolAsync, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                      e:TransitionDisplay.State="{Binding EpAsync, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                      e:TransitionDisplay.Mode="A01_X_N30_0"
                                       AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
-                        <i:IconParallel x:Uid="/libtaotu/Resources/Async"
+                        <i:IconParallel x:Uid="/libtaotu/Resources/ASync"
                                         ToolTipService.ToolTip="Asynchronous"
-                                        e:TransitionDisplay.State="{Binding VolAsync, Converter={StaticResource TransStateConverter}}"
+                                        e:TransitionDisplay.State="{Binding EpAsync, Converter={StaticResource TransStateConverter}}"
                                         AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
                     </Grid>
                 </Button>
             </Grid>
-            <!-- Chapter Mappings -->
-            <TextBlock Foreground="{StaticResource MinorBrush}"
-                       x:Uid="/Book/ChapterMapping"
-                       Text="Chapter Mappings" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <TextBox Grid.Column="0"
@@ -141,32 +176,6 @@
                          Text="{Binding EpParam}"
                          FontFamily="Lucida Console"
                          LostFocus="SetProp"/>
-
-                <Button Grid.Column="3"
-                        x:Uid="/libtaotu/Resources/SubProcs"
-                        Margin="3" Style="{StaticResource IconButton}"
-                        Click="SubChapter">
-                    <Grid Width="30" Height="30">
-                        <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
-                        <i:IconSteps e:TransitionDisplay.State="{Binding HasEpProcs, Converter={StaticResource TransStateConverter}}"
-                                     AutoScale="True" Foreground="{StaticResource MajorBrush}" />
-                    </Grid>
-                </Button>
-                <Button Grid.Column="4"
-                        Margin="3" Style="{StaticResource IconButton}"
-                        Click="ToggleEAsync">
-                    <Grid Width="30" Height="30">
-                        <i:IconSerial x:Uid="/libtaotu/Resources/Sync"
-                                      ToolTipService.ToolTip="Synchronous"
-                                      e:TransitionDisplay.State="{Binding EpAsync, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
-                                      e:TransitionDisplay.Mode="A01_X_N30_0"
-                                      AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
-                        <i:IconParallel x:Uid="/libtaotu/Resources/ASync"
-                                        ToolTipService.ToolTip="Asynchronous"
-                                        e:TransitionDisplay.State="{Binding EpAsync, Converter={StaticResource TransStateConverter}}"
-                                        AutoScale="True" Foreground="{StaticResource SubtleBrush}" />
-                    </Grid>
-                </Button>
             </Grid>
         </StackPanel>
         <!-- Preview Section -->

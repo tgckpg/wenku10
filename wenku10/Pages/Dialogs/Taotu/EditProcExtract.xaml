@@ -29,7 +29,7 @@
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
     </ContentDialog.Title>
 
-    <Grid x:Name="LayoutRoot" MinWidth="400">
+    <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <!-- Incomming & Url-->
             <RowDefinition Height="Auto" />
@@ -200,9 +200,6 @@
 
         </Grid>
 
-        <Border x:Name="FrameContainer"
-                Grid.Row="2" Margin="5">
-            <Frame x:Name="Frame"/>
-        </Border>
+        <Frame x:Name="Frame" Grid.Row="2" Margin="5"/>
     </Grid>
 </ContentDialog>

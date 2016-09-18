@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
-namespace wenku8.Model.Comments
+namespace wenku8.Model.Loaders
 {
+    using Comments;
     using Ext;
 
     sealed class CommentLoader : ILoader<Comment>

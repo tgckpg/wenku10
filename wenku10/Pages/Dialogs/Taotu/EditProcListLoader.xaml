@@ -1,0 +1,147 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.Taotu.EditProcListLoader"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs.Taotu"
+    xmlns:e="using:wenku8.Effects"
+    xmlns:n="using:wenku8.Converters"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{StaticResource MajorBackgroundBrush}"
+    Style="{StaticResource ScrollContentDialog}"
+    IsPrimaryButtonEnabled="True"
+    IsSecondaryButtonEnabled="False">
+    <ContentDialog.Resources>
+        <Style x:Key="StretchListItem" TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Padding" Value="0" />
+        </Style>
+
+        <n:TransStateConverter x:Key="TransStateConverter" />
+    </ContentDialog.Resources>
+
+    <ContentDialog.Title>
+        <TextBlock x:Uid="/libtaotu/Resources/ListBuilder" Text="List Builder"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+    </ContentDialog.Title>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <!-- Match Patterns -->
+            <RowDefinition Height="Auto" />
+            <!-- Preview Frame -->
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Logo -->
+            <Image Stretch="Uniform" Grid.ColumnSpan="3"
+                   Source="{Binding BannerSrc}" Height="50"
+                   e:TransitionDisplay.State="{Binding BannerSrc, Converter={StaticResource TransStateConverter}}"/>
+            <Border Grid.ColumnSpan="3"
+                    Height="50" HorizontalAlignment="Stretch"
+                    Background="{StaticResource MinorBrush}"
+                    e:TransitionDisplay.State="{Binding BannerSrc, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                    e:TransitionDisplay.Mode="A01_Y_30_N30">
+                <xi:IconExoticUni Foreground="{StaticResource RelativeMajorBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  AutoScale="True" />
+            </Border>
+
+            <TextBox Margin="3"
+                     Grid.Row="1" Grid.Column="0"
+                     x:Uid="/AppResources/Banner"
+                     LostFocus="SetBanner"
+                     Text="{Binding BannerPath}"/>
+
+            <!-- Test Button -->
+            <Button Style="{StaticResource IconButton}"
+                    Margin="3"
+                    HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                    Click="TestDef">
+                <Grid Height="30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ProgressRing x:Name="TestRunning" Width="30" Height="30" />
+                    <i:IconTestTube AutoScale="True" />
+                    <TextBlock Grid.Column="1" x:Uid="/libtaotu/Resources/Test"
+                               Margin="5" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Text="Test" />
+                </Grid>
+            </Button>
+
+            <TextBox Grid.Column="0" Grid.Row="2"
+                     x:Uid="/libtaotu/Resources/Pattern"
+                     PlaceholderText="Pattern" Margin="3"
+                     Text="{Binding ItemPattern}"
+                     FontFamily="Lucida Console"
+                     LostFocus="SetPattern"/>
+
+            <TextBox Grid.Column="1" Grid.Row="2"
+                     x:Uid="/libtaotu/Resources/Param"
+                     PlaceholderText="Param ->" Margin="3"
+                     Text="{Binding ItemParam}"
+                     FontFamily="Lucida Console"
+                     LostFocus="SetFormat"/>
+
+            <!-- Subprocess -->
+            <Button Grid.Column="2" Grid.Row="2"
+                    x:Uid="/libtaotu/Resources/SubProcs"
+                    Margin="3" Style="{StaticResource IconButton}"
+                    Click="Subprocess">
+                <Grid Width="30" Height="30">
+                    <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                    <i:IconSteps e:TransitionDisplay.State="{Binding HasSubProcs, Converter={StaticResource TransStateConverter}}"
+                                 AutoScale="True" Foreground="{StaticResource MajorBrush}" />
+                </Grid>
+            </Button>
+
+            <!-- Book Spider -->
+            <TextBlock Grid.Column="0" Grid.Row="3"
+                       Margin="3" VerticalAlignment="Center"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       x:Uid="/AppResources/BookSpider"
+                       Text="BookSpider" />
+            <Button Grid.Column="1" Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    Width="30" Height="30"
+                    Click="ImportBookSpider"
+                    Margin="3" Style="{StaticResource IconButton}" >
+                    <i:IconLogin AutoScale="True" Direction="Rotate270" Foreground="{StaticResource SubtleBrush}"/>
+            </Button>
+            <Button Grid.Column="2" Grid.Row="3"
+                    x:Uid="/libtaotu/Resources/SubProcs"
+                    Margin="3" Style="{StaticResource IconButton}"
+                    Click="SpiderProcess">
+                <Grid Width="30" Height="30">
+                    <i:IconSteps AutoScale="True" Foreground="{StaticResource SubtleBrush}"/>
+                    <i:IconSteps e:TransitionDisplay.State="{Binding HasBookSpider, Converter={StaticResource TransStateConverter}}"
+                                 AutoScale="True" Foreground="{StaticResource MajorBrush}" />
+                </Grid>
+            </Button>
+        </Grid>
+
+        <Frame Grid.Row="1" Margin="5" x:Name="Frame"/>
+    </Grid>
+</ContentDialog>

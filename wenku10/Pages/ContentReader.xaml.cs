@@ -51,7 +51,7 @@ namespace wenku10.Pages
         public bool UseInertia = false;
 
         private Action ReloadReader;
-        private bool OpenLock = false;
+        private volatile bool OpenLock = false;
         private bool NeedRedraw = false;
         private bool Disposed = true;
         private bool EVLoopbackBlockade = false;
@@ -125,6 +125,7 @@ namespace wenku10.Pages
 
             RegKey = new List<Action>();
             // KeyBoard Navigations
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => BeginRead(), Windows.System.VirtualKey.Enter ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.NextPara(), Windows.System.VirtualKey.J ) );
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.PrevPara(), Windows.System.VirtualKey.K ) );
 
@@ -189,6 +190,12 @@ namespace wenku10.Pages
             if ( NeedRedraw || Orientation != App.ViewControl.Orientation )
             {
                 Orientation = App.ViewControl.Orientation;
+
+                MainSplitView.ManiMode =
+                    ( MainStage.Instance.IsPhone && Orientation == ApplicationViewOrientation.Landscape )
+                    ? ManipulationModes.TranslateY
+                    : ManipulationModes.TranslateX;
+
                 NeedRedraw = false;
                 Redraw();
             }
@@ -560,7 +567,8 @@ namespace wenku10.Pages
             RenderMask.State = ControlState.Reovia;
         }
 
-        private void BeginRead( object sender, TappedRoutedEventArgs e )
+        private void BeginRead( object sender, TappedRoutedEventArgs e ) { BeginRead(); }
+        private void BeginRead()
         {
             TransitionDisplay.SetState( InfoMask, TransitionState.Inactive );
         }

@@ -250,10 +250,10 @@
                                                 Height="50" Width="50"
                                                 Tapped="AddOrRemoveFav">
                                             <Grid>
-                                                <i:IconFaved AutoScale="True"
+                                                <xi:IconFaved AutoScale="True"
                                                              Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
                                                              Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}}"/>
-                                                <i:IconFav AutoScale="True"
+                                                <xi:IconFav AutoScale="True"
                                                            Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"/>
                                             </Grid>
                                         </Button>

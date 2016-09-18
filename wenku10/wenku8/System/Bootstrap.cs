@@ -20,7 +20,9 @@ namespace wenku8.System
         public static FileSystemLog LogInstance;
 
         public static string Version = AppSettings.SimpVersion
-#if DEBUG || TESTING
+#if DEBUG
+            + "d";
+#elif TESTING 
             + "t";
 #elif BETA
             + "b";
@@ -32,7 +34,7 @@ namespace wenku8.System
 
 		public async void Start()
 		{
-#if ARM && DEBUG
+#if ARM && DEBUG || TESTING || BETA
             Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
 			// Must follow Order!
@@ -53,6 +55,11 @@ namespace wenku8.System
                 Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
             }
 
+            // SHRequest AppVersion param
+            Resources.Shared.ShRequest.Ver = Version;
+            // Set Version Compatibles
+            Resources.Shared.ShRequest.Compat = new string[] { "1.8.3t", "1.3.2b", "1.0.0p" };
+
             // Connection Mode
 			WHttpRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by Astropenguin", Version );
 
@@ -65,6 +72,7 @@ namespace wenku8.System
             ResTaotu.RenameDialog = typeof( global::wenku10.Pages.Dialogs.Rename );
             ResTaotu.SetExtractor( typeof( Taotu.WenkuExtractor ) );
             ResTaotu.SetMarker( typeof( Taotu.WenkuMarker ) );
+            ResTaotu.SetListLoader( typeof( Taotu.WenkuListLoader ) );
             ResTaotu.CreateRequest = x => new SHttpRequest( x );
 
             // Unlocking libraries

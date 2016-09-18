@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -29,11 +30,25 @@ namespace wenku10.Pages.Settings.Data
 
         private void SetTemplate()
         {
+            StringResources stx = new StringResources( "LoadingMessage" );
+            CoverSize.Text = stx.Str( "Calculating" );
+            CalculateCoverSize();
+            TextContentSize.Text = stx.Str( "Calculating" );
+            CalculateTextSize();
+        }
+
+        private async void CalculateCoverSize()
+        {
             StringResources stx = new StringResources( "Settings" );
             CoverSize.Text = stx.Text( "Data_CacheUsed" )
-                + ": " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CoverSize() );
+                + ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
+        }
+
+        private async void CalculateTextSize()
+        {
+            StringResources stx = new StringResources( "Settings" );
             TextContentSize.Text = stx.Text( "Data_CacheUsed" )
-                + ": " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() );
+                + ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() ) );
         }
 
         private void Button_Click_1( object sender, RoutedEventArgs e )

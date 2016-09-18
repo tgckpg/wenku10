@@ -70,69 +70,86 @@ namespace wenku8.Taotu
             await base.Run( Convoy );
 
             string LoadUrl = TargetUrl;
+            string Content = "";
+
+            ProcConvoy UsableConvoy = ProcManager.TracePackage(
+                Convoy, ( P, C ) =>
+                    C.Payload is IEnumerable<IStorageFile>
+                    || C.Payload is IEnumerable<string>
+                    || C.Payload is IStorageFile
+                    || C.Payload is string
+            );
 
             IStorageFile ISF = null;
-            if ( Incoming )
+
+            if ( UsableConvoy != null )
             {
-                ProcManager.PanelMessage( this, "Checking Incoming Data", LogType.INFO );
+                ProcManager.PanelMessage( this, () => Res.RSTR( "IncomingCheck" ), LogType.INFO );
 
-                ProcConvoy UsableConvoy = ProcManager.TracePackage(
-                    Convoy, ( P, C ) =>
-                    {
-                        return C.Payload is IEnumerable<string>
-                        || C.Payload is string
-                        || C.Payload is IEnumerable<IStorageFile>;
-                    }
-                );
-
-                if ( UsableConvoy != null )
+                if ( UsableConvoy.Payload is IEnumerable<IStorageFile> )
                 {
-                    if ( UsableConvoy.Payload is string )
-                    {
-                        LoadUrl = UsableConvoy.Payload as string;
-                    }
-                    else if ( UsableConvoy.Payload is IEnumerable<string> )
+                    ISF = ( UsableConvoy.Payload as IEnumerable<IStorageFile> ).FirstOrDefault();
+                }
+                else if ( UsableConvoy.Payload is IStorageFile )
+                {
+                    ISF = ( IStorageFile ) UsableConvoy.Payload;
+                }
+
+                if ( Incoming )
+                {
+                    if ( UsableConvoy.Payload is IEnumerable<string> )
                     {
                         LoadUrl = ( UsableConvoy.Payload as IEnumerable<string> ).FirstOrDefault();
                     }
-                    else // IEnumerable StorageFIle
+                    else if ( UsableConvoy.Payload is string )
                     {
-                        ISF = ( UsableConvoy.Payload as IEnumerable<IStorageFile> ).FirstOrDefault();
+                        LoadUrl = ( string ) UsableConvoy.Payload;
                     }
 
-                    if( !string.IsNullOrEmpty( LoadUrl ) )
+                    if ( ISF == null && string.IsNullOrEmpty( LoadUrl ) )
+                    {
+                        ProcManager.PanelMessage( this, () => Res.RSTR( "NoUsablePayload" ), LogType.WARNING );
+                        return Convoy;
+                    }
+
+                    if ( !string.IsNullOrEmpty( LoadUrl ) )
                     {
                         LoadUrl = WebUtility.HtmlDecode( LoadUrl );
                     }
                 }
+                else // Incomings are Content
+                {
+                    if ( UsableConvoy.Payload is IEnumerable<string> )
+                    {
+                        Content = string.Join( "\n", ( IEnumerable<string> ) UsableConvoy.Payload );
+                    }
+                    else if ( UsableConvoy.Payload is string )
+                    {
+                        Content = ( string ) UsableConvoy.Payload;
+                    }
+                }
             }
 
-            if( ISF == null && string.IsNullOrEmpty( LoadUrl ) )
-            {
-                ProcManager.PanelMessage( this, "No usable convoy found, Skipping", LogType.WARNING );
-                return Convoy;
-            }
-
-            ProcConvoy BookConvoy = ProcManager.TracePackage(
-                Convoy, ( D, C ) => C.Payload is BookItem
-            );
+            ProcConvoy BookConvoy = ProcManager.TracePackage( Convoy, ( D, C ) => C.Payload is BookItem );
 
             BookItem BookInst = ( BookConvoy == null )
                 ? new BookInstruction()
                 : ( BookConvoy.Payload as BookItem )
                 ;
 
-            if( !string.IsNullOrEmpty( LoadUrl ) )
+            if ( !string.IsNullOrEmpty( LoadUrl ) )
             {
                 BookInst.ReadParam( AppKeys.BINF_ORGURL, LoadUrl );
+
+                if ( string.IsNullOrEmpty( Content ) && ISF == null )
+                {
+                    ISF = await ProceduralSpider.DownloadSource( LoadUrl );
+                }
             }
 
-            if( ISF == null )
-            {
-                ISF = await ProceduralSpider.DownloadSource( LoadUrl );
-            }
+            if ( ISF != null ) Content = await ISF.ReadString();
 
-            await ExtractProps( BookInst, await ISF.ReadString() );
+            await ExtractProps( BookInst, Content );
 
             return new ProcConvoy( this, BookInst );
         }
@@ -148,18 +165,27 @@ namespace wenku8.Taotu
 
                 if( Extr.SubProc.HasProcedures )
                 {
-                    ProcManager.PanelMessage( this, "Running Sub procedures", LogType.INFO );
+                    ProcManager.PanelMessage( this, () => Res.RSTR( "SubProcRun" ), LogType.INFO );
                     ProcPassThru PPass = new ProcPassThru( new ProcConvoy( this, Inst ) );
-                    await Extr.SubProc.CreateSpider().Crawl( new ProcConvoy( PPass, PropValue ) );
+                    ProcConvoy SubConvoy = await Extr.SubProc.CreateSpider().Crawl( new ProcConvoy( PPass, PropValue ) );
+
+                    // Process ReceivedConvoy
+                    if ( SubConvoy.Payload is string )
+                        PropValue = ( string ) SubConvoy.Payload;
+                    else if ( SubConvoy.Payload is IEnumerable<string> )
+                        PropValue = string.Join( "\n", ( IEnumerable<string> ) SubConvoy.Payload );
+                    else if ( SubConvoy.Payload is IStorageFile )
+                        PropValue = await ( ( IStorageFile ) SubConvoy.Payload ).ReadString();
+                    else if ( SubConvoy.Payload is IEnumerable<IStorageFile> )
+                        PropValue = await ( ( IEnumerable<IStorageFile> ) SubConvoy.Payload ).First().ReadString();
+                    else continue;
                 }
-                else
+
+                // If the website split a single property into serveral pages
+                // That website is stupid. Would not support.
+                if( !Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() ) )
                 {
-                    // If the website split a single property into serveral pages
-                    // That website is stupid. Would not support.
-                    if( !Inst.ReadParam( Extr.PType.ToString(), PropValue.ToCTrad() ) )
-                    {
-                        ProcManager.PanelMessage( this, "Invalid param: " + Extr.PType.ToString(), LogType.WARNING );
-                    }
+                    ProcManager.PanelMessage( this, () => Res.RSTR( "InvalidParam", Extr.PType ), LogType.WARNING );
                 }
             }
         }

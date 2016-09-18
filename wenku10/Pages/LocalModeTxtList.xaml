@@ -43,12 +43,6 @@
                                     Foreground="{StaticResource MinorBackgroundBrush}"
                                     Width="120" Height="120" />
                     </Border>
-                    <!-- Uni Icon -->
-                    <Border p:Clip.ToBounds="True"
-                            VerticalAlignment="Top" HorizontalAlignment="Right"
-                            Width="90" Height="90">
-                        <xi:IconExoticUni Width="100" Height="90" Opacity="0.2" />
-                    </Border>
                     <StackPanel>
                         <!-- Name -->
                         <Border Background="{StaticResource Shades90}">
@@ -93,6 +87,29 @@
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <DataTemplate x:Key="ZoneItemTemplate">
+            <Border Background="{StaticResource Shades90}"
+                    Margin="10" MinHeight="120" >
+
+                <StackPanel>
+                    <!-- Name -->
+                    <Border Background="{StaticResource Shades90}">
+                        <TextBlock Text="{Binding Title}" MaxLines="2"
+                                   FontSize="20" Margin="10,5"
+                                   Foreground="{StaticResource RelativeShadesBrush}"
+                                   TextTrimming="CharacterEllipsis"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                    <!-- Desc -->
+                    <TextBlock Margin="10, 5" Text="{Binding Intro}"
+                               FontSize="16"
+                               MaxLines="5"
+                               Foreground="{StaticResource RelativeShadesBrush}"
+                               TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid x:Name="FileListView" Background="{StaticResource MajorBackgroundBrush}">
@@ -102,7 +119,7 @@
                         Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                         MaxWidth="400">
                 <DataTemplate>
-                    <Grid Margin="10">
+                    <Grid Margin="10,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -115,7 +132,7 @@
                         <TextBox PlaceholderText="Search Files"
                                  Text="{Binding SearchTerms}"
                                  TextChanging="TextBox_TextChanging"/>
-                        <ListView Grid.Row="1" Margin="5"
+                        <ListView Grid.Row="1"
                                   ItemsSource="{Binding SearchSet}"
                                   IsItemClickEnabled="True"
                                   ItemContainerStyle="{StaticResource BareListItem}"
@@ -227,28 +244,158 @@
                 </DataTemplate>
             </HubSection>
 
-            <!-- Highlight -->
-            <HubSection Style="{StaticResource ContainerHead}" >
+            <!-- Zones -->
+            <HubSection x:Name="ZoneListView" Style="{StaticResource ContainerHead}"
+                        Width="500" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
-                    <Grid Margin="10">
+                    <Grid Margin="10,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal">
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                            <Rectangle Width="150" Height="600" VerticalAlignment="Stretch" Margin="10" Fill="RoyalBlue"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <!-- Settings -->
-                            <Button Style="{StaticResource PlainButton}"
-                                    Click="GotoSettings"
-                                    Width="50" Height="50">
-                                <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
-                            </Button>
-                        </StackPanel>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Current Zone -->
+                        <ContentPresenter VerticalAlignment="Top"
+                                          e:TransitionDisplay.State="{Binding CurrentZone, Converter={StaticResource TransStateConverter}}">
+                            <Grid DataContext="{Binding CurrentZone}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Banner -->
+                                <Image Source="{Binding Banner}"
+                                       HorizontalAlignment="Left" Height="50"
+                                       e:TransitionDisplay.State="{Binding Banner, Converter={StaticResource TransStateConverter}}" />
+
+                                <!-- Step Action View -->
+                                <ItemsControl Margin="3"
+                                              e:TransitionDisplay.State="{Binding ProcList, Converter={StaticResource TransStateConverter}}"
+                                              e:TransitionDisplay.Mode="A01_Y_N30_30"
+                                              HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                              ItemsSource="{Binding ProcList}">
+
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <c:ProcStateItem IsLoading="{Binding Running}" PSize="15"
+                                                             ProcColor="{Binding Background}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <ItemsStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+
+                                </ItemsControl>
+
+                                <!-- Exit Zone -->
+                                <Button Grid.Column="1"
+                                        Style="{StaticResource PlainButton}"
+                                        Click="ExitZone"
+                                        Width="50" Height="50">
+                                    <i:IconLogout AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
+                                </Button>
+                            </Grid>
+                        </ContentPresenter>
+
+                        <!-- Open Zone -->
+                        <Button e:TransitionDisplay.State="{Binding CurrentZone, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                Style="{StaticResource PlainThemeButton}" Height="50"
+                                VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                Click="OpenZone">
+                                <xi:IconExoticUni AutoScale="True"
+                                                  VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </Button>
+
+                        <!-- Settings -->
+                        <Button Grid.Column="1"
+                                VerticalAlignment="Top"
+                                Style="{StaticResource PlainButton}"
+                                Click="GotoSettings"
+                                Width="50" Height="50">
+                            <i:IconSettings AutoScale="True" Foreground="{StaticResource RelativeShadesBrush}" />
+                        </Button>
+
+                        <Grid Grid.Row="1" Grid.ColumnSpan="2"
+                              e:TransitionDisplay.Mode="A01_Y_30_30"
+                              e:TransitionDisplay.State="{Binding CurrentZone, Converter={StaticResource TransStateConverter}}">
+                            <!-- Book Items -->
+                            <ListView Margin="10"
+                                      DataContext="{Binding CurrentZone}"
+                                      IsItemClickEnabled="True"
+                                      ItemClick="ZoneSpider_ItemClick"
+                                      ItemTemplate="{StaticResource ZoneItemTemplate}"
+                                      ItemContainerStyle="{StaticResource BareListItem}"
+                                      ItemsSource="{Binding Data}" />
+
+                            <!-- Loading Message -->
+                            <Border DataContext="{Binding CurrentZone}"
+                                    Background="{StaticResource MinorBrush}"
+                                    VerticalAlignment="Bottom"
+                                    e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+                                    e:TransitionDisplay.Mode="A01_X_30_0" >
+                                <TextBlock Margin="10,5" MaxLines="1" TextTrimming="CharacterEllipsis"
+                                           Text="{Binding Message}" Foreground="{StaticResource RelativeMajorBrush}" />
+                            </Border>
+                        </Grid>
+
+                        <!-- Zone Items -->
+                        <ListView Grid.Row="1" Grid.ColumnSpan="2" Margin="10"
+                                  e:TransitionDisplay.Mode="A01_Y_30_30"
+                                  e:TransitionDisplay.State="{Binding CurrentZone, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                  IsItemClickEnabled="True"
+                                  ItemClick="ZoneList_ItemClick"
+                                  ItemContainerStyle="{StaticResource ListItemNoSelect}"
+                                  ItemsSource="{Binding Zones}">
+                            <ListView.Resources>
+                                <MenuFlyout x:Key="ZoneAction">
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/ResetState"
+                                                    Click="ResetZoneState"
+                                                    Text="Reset State" />
+
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/Reanalyze"
+                                                    Click="ReloadZone"
+                                                    Text="Reload Zone" />
+
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/Edit"
+                                                    Click="EditZone"
+                                                    Text="Edit Source" />
+
+                                    <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
+                                                    Click="RemoveZone"
+                                                    Text="Remove Source" />
+                                </MenuFlyout>
+                            </ListView.Resources>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid RightTapped="ShowZoneAction" FlyoutBase.AttachedFlyout="{StaticResource ZoneAction}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Rectangle Grid.Column="0" Margin="0,0,5,0"
+                                                   Fill="{StaticResource MinorBrush}"
+                                                   Width="10" Height="10"
+                                                   VerticalAlignment="Top"
+                                                   Visibility="{Binding DataReady, Converter={StaticResource DataVisConverter}}" />
+                                        <Image Grid.Column="1" Source="{Binding Banner}"
+                                               HorizontalAlignment="Left" Height="80" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
                     </Grid>
                 </DataTemplate>
             </HubSection>
@@ -257,7 +404,7 @@
             <HubSection x:Name="SharersHub" Style="{StaticResource ContainerHead}"
                         Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
                 <DataTemplate>
-                    <Grid Margin="10">
+                    <Grid Margin="10,5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -337,7 +484,7 @@
                         <!-- Activities -->
                         <Grid Grid.Row="1" Grid.ColumnSpan="3"
                               e:TransitionDisplay.State="{Binding Path=Tag, ElementName=ActivityButton, Converter={StaticResource TransStateConverter}}"
-                              MaxWidth="400" Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                              Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                               VerticalAlignment="Top" HorizontalAlignment="Right">
                             <Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
                                      Margin="0,0,5,0"

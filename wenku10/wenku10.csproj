@@ -137,6 +137,9 @@
     <Compile Include="Pages\Dialogs\Sharers\PlaceRequest.xaml.cs">
       <DependentUpon>PlaceRequest.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Dialogs\Taotu\EditProcListLoader.xaml.cs">
+      <DependentUpon>EditProcListLoader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Sharers\ManageAuth.xaml.cs">
       <DependentUpon>ManageAuth.xaml</DependentUpon>
     </Compile>
@@ -153,13 +156,19 @@
     <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
       <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wenku8\CompositeElement\ProcStateItem.cs" />
+    <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
     <Compile Include="wenku8\Converters\IsSpiderConverter.cs" />
     <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
+    <Compile Include="wenku8\Model\Loaders\ZSFeedbackLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
+    <Compile Include="wenku8\Model\Section\ZoneList.cs" />
+    <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
     <Compile Include="wenku8\System\Migration.cs" />
+    <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>
@@ -416,6 +425,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Dialogs\Taotu\EditProcListLoader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Dialogs\Taotu\EditProcExtract.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -562,6 +575,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\ListViewItems\CommentListItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ListViewItems\ProcStateItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ListViewItems\LSBookItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

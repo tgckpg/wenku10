@@ -11,7 +11,7 @@ namespace wenku8.Model.Section
 {
     using ListItem;
 
-    class PopupList : ActiveData
+    sealed class PopupList : ActiveData
     {
         public Page FrameContent { get; private set; }
         public SubtleUpdateItem Item { get; set; }

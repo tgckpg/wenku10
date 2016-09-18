@@ -5,9 +5,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using wenku8.Model;
-using wenku8.Model.Comments;
-using wenku8.Settings;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -20,7 +17,10 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.IO;
 using Net.Astropenguin.DataModel;
+
 using wenku8.Ext;
+using wenku8.Model.Loaders;
+using wenku8.Model.Comments;
 
 namespace wenku10.Pages.BookInfoControls
 {

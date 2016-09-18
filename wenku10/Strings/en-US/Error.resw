@@ -150,4 +150,10 @@
   <data name="VL_NoToken" xml:space="preserve">
     <value>You need an access token to upload this script</value>
   </data>
+  <data name="NotABook" xml:space="preserve">
+    <value>Subprocess did not return a valid book item, did you forgot to add an Extrator step?</value>
+  </data>
+  <data name="VL_NoScope" xml:space="preserve">
+    <value>Please define the scope of this script</value>
+  </data>
 </root>

@@ -366,4 +366,16 @@
   <data name="NewPassword.Text" xml:space="preserve">
     <value>新密碼</value>
   </data>
+  <data name="BookSpider.Text" xml:space="preserve">
+    <value>文章蜘蛛</value>
+  </data>
+  <data name="Banner.PlaceholderText" xml:space="preserve">
+    <value>旗幟</value>
+  </data>
+  <data name="HS_Scope.Text" xml:space="preserve">
+    <value>規模</value>
+  </data>
+  <data name="HS_Book.Text" xml:space="preserve">
+    <value>書</value>
+  </data>
 </root>

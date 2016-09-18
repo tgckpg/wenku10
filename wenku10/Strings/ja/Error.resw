@@ -151,4 +151,10 @@
   <data name="VL_NoToken" xml:space="preserve">
     <value>このスクリプトをアップロードするアクセストークンを必要としています。</value>
   </data>
+  <data name="NotABook" xml:space="preserve">
+    <value>サブプロセスは、有効な書籍アイテムを返しませんでした。「抽出」ステップを追加することを忘れていないですか？</value>
+  </data>
+  <data name="VL_NoScope" xml:space="preserve">
+    <value>このスクリプトの規模を定義してください</value>
+  </data>
 </root>

@@ -41,6 +41,7 @@ namespace wenku10.Pages.Sharers
         private AESManager AESMgr;
         private TokenManager TokMgr;
         private Action<string,string> OnExit;
+        private NameValue<SpiderScope>[] Scopes;
 
         private string ReservedId;
         private bool LockedFile = false;
@@ -69,6 +70,8 @@ namespace wenku10.Pages.Sharers
             ZoneInput.Text = string.Join( ", ", HSI.Zone );
             TypesInput.Text = string.Join( ", ", HSI.Type );
             TagsInput.Text = string.Join( ", ", HSI.Tags );
+
+            ScopeLevel.SelectedValue = HSI.Scope;
 
             AddToken_Btn.IsEnabled
                 = AddKey_Btn.IsEnabled
@@ -137,6 +140,14 @@ namespace wenku10.Pages.Sharers
 
             StringResources stx = new StringResources();
             FileName.Text = stx.Text( "PickAFile" );
+
+            Scopes = new NameValue<SpiderScope>[]
+            {
+                new NameValue<SpiderScope>( stx.Text( "HS_Book" ), SpiderScope.BOOK )
+                , new NameValue<SpiderScope>( stx.Text( "HS_Zone" ), SpiderScope.ZONE )
+            };
+
+            ScopeLevel.ItemsSource = Scopes;
         }
 
         private void KeyMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
@@ -147,6 +158,12 @@ namespace wenku10.Pages.Sharers
         private void TokMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
             if( e.PropertyName == "SelectedItem" ) AccessTokens.SelectedItem = TokMgr.SelectedItem;
+        }
+
+        private void PreSelectScope( object sender, RoutedEventArgs e )
+        {
+            if ( string.IsNullOrEmpty( ( string ) ScopeLevel.SelectedValue ) )
+                ScopeLevel.SelectedValue = "book";
         }
 
         private void PreSelectKey( object sender, RoutedEventArgs e )
@@ -183,9 +200,8 @@ namespace wenku10.Pages.Sharers
             try
             {
                 Message.Text = "";
-
-                if( SelectedBook == null )
-                    throw new ValidationError( "VL_NoBookSelected" );
+                if ( SelectedBook == null )
+                    throw new ValidationError( "VL_NoBook" );
 
                 if ( Encrypt.IsChecked == true )
                 {
@@ -195,10 +211,13 @@ namespace wenku10.Pages.Sharers
                         throw new ValidationError( "VL_NoKey" );
                 }
 
-                if( AccessTokens.SelectedItem == null )
+                if ( AccessTokens.SelectedItem == null )
                     throw new ValidationError( "VL_NoToken" );
+
+                if ( ScopeLevel.SelectedItem == null )
+                    throw new ValidationError( "VL_NoScope" );
             }
-            catch( ValidationError ex )
+            catch ( ValidationError ex )
             {
                 StringResources stx = new StringResources( "Error" );
 
@@ -241,6 +260,7 @@ namespace wenku10.Pages.Sharers
                     Token.Value, Id
                     , Data, Name, Desc
                     , Zone, Types, Tags
+                    , ( ( NameValue<SpiderScope> ) ScopeLevel.SelectedItem ).Value
                     , Encrypt.IsChecked == true
                     , ForceCommentEnc.IsChecked == true
                     , Anon.IsChecked == true )

@@ -120,6 +120,9 @@
   <data name="BookConstruct" xml:space="preserve">
     <value>建构文章信息</value>
   </data>
+  <data name="Calculating" xml:space="preserve">
+    <value>计算中...</value>
+  </data>
   <data name="CompilingTOC" xml:space="preserve">
     <value>编制目录「{0}」</value>
   </data>
@@ -128,6 +131,9 @@
   </data>
   <data name="LoadingVolume" xml:space="preserve">
     <value>装载卷目</value>
+  </data>
+  <data name="MergingContents" xml:space="preserve">
+    <value>合并内容：{0}</value>
   </data>
   <data name="PleaseWaitSecondsForUI" xml:space="preserve">
     <value>准备完毕，请等待 {0} 秒以确保界面响应</value>

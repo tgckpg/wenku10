@@ -198,7 +198,7 @@ namespace wenku8.Model.Section
 
         public LocalBook GetById( string Id )
         {
-            return Data.Cast<LocalBook>().FirstOrDefault( x => x.aid == Id );
+            return Data?.Cast<LocalBook>().FirstOrDefault( x => x.aid == Id );
         }
 
         protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
@@ -280,7 +280,11 @@ namespace wenku8.Model.Section
 
         public void Add( params LocalBook[] Book )
         {
-            List<LocalBook> NData = new List<LocalBook>( Data.Cast<LocalBook>() );
+            List<LocalBook> NData = new List<LocalBook>();
+
+            if( Data != null )
+                NData.AddRange( Data.Cast<LocalBook>() );
+
             NData.AddRange( Book );
             Data = NData;
 

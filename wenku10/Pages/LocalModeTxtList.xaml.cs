@@ -31,6 +31,7 @@ using wenku8.CompositeElement;
 using wenku8.Ext;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
+using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.Section;
@@ -45,6 +46,9 @@ namespace wenku10.Pages
     public sealed partial class LocalModeTxtList : Page
     {
         private static readonly string ID = typeof( LocalModeTxtList ).Name;
+
+        private ZoneList ZoneListContext;
+        private ZoneSpider SelectedZone;
 
         private LocalFileList FileListContext;
         private LocalBook SelectedBook;
@@ -66,6 +70,9 @@ namespace wenku10.Pages
             FileListContext = new LocalFileList();
             FileListView.DataContext = FileListContext;
 
+            ZoneListContext = new ZoneList();
+            ZoneListView.DataContext = ZoneListContext;
+
             SHHub = new SharersHub();
             SharersHub.DataContext = SHHub;
             MessageBus.OnDelivery += MessageBus_OnDelivery;
@@ -74,7 +81,7 @@ namespace wenku10.Pages
 
             SHHub.Search( "" );
 
-            if( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
+            if ( Properties.ENABLE_ONEDRIVE && OneDriveSync.Instance == null )
             {
                 OneDriveSync.Instance = new OneDriveSync();
                 await OneDriveSync.Instance.Authenticate();
@@ -83,7 +90,7 @@ namespace wenku10.Pages
 
         private void OnBackRequested( object sender, XBackRequestedEventArgs e )
         {
-            if( !Frame.CanGoBack )
+            if ( !Frame.CanGoBack )
             {
                 e.Handled = true;
                 PopupFrame.Content = null;
@@ -101,6 +108,14 @@ namespace wenku10.Pages
             {
                 case AppKeys.SH_SCRIPT_DATA:
                     HubScriptItem HSI = ( HubScriptItem ) Mesg.Payload;
+
+                    if ( ( HSI.Scope & SpiderScope.ZONE ) != 0 )
+                    {
+                        MainHub.ScrollToSection( ZoneListView );
+                        PopupFrame.Content = null;
+                        await ZoneListContext.OpenFile( HSI.ScriptFile );
+                        break;
+                    }
 
                     if ( await FileListContext.OpenSpider( HSI.ScriptFile ) )
                     {
@@ -146,7 +161,7 @@ namespace wenku10.Pages
                     break;
 
                 case AppKeys.SH_SCRIPT_REMOVE:
-                    if( await SHHub.Remove( ( HubScriptItem ) Mesg.Payload ) )
+                    if ( await SHHub.Remove( ( HubScriptItem ) Mesg.Payload ) )
                     {
                         PopupFrame.Content = null;
                     }
@@ -158,9 +173,10 @@ namespace wenku10.Pages
 
                 case AppKeys.HS_MOVED:
                     Tuple<string, SpiderBook> Payload = ( Tuple<string, SpiderBook> ) Mesg.Payload;
-                    LocalBook OBook = FileListContext.GetById( Payload.Item1 );
 
-                    OBook.RemoveSource();
+                    LocalBook OBook = FileListContext.GetById( Payload.Item1 );
+                    OBook?.RemoveSource();
+
                     FileListContext.Add( Payload.Item2 );
                     FileListContext.CleanUp();
                     break;
@@ -222,6 +238,65 @@ namespace wenku10.Pages
             base.OnNavigatedTo( e );
             Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
         }
+
+        #region Zone Spider
+        private void OpenZone( object sender, RoutedEventArgs e ) { ZoneListContext.OpenFile(); }
+        private void ExitZone( object sender, RoutedEventArgs e ) { ZoneListContext.ExitZone(); }
+        private void EditZone( object sender, RoutedEventArgs e ) { EditItem( SelectedZone ); }
+        private void ResetZoneState( object sender, RoutedEventArgs e ) { SelectedZone.Reset(); }
+        private void ReloadZone( object sender, RoutedEventArgs e ) { SelectedZone.Reload(); }
+
+        private void RemoveZone( object sender, RoutedEventArgs e )
+        {
+            ZoneListContext.RemoveZone( SelectedZone );
+            SelectedZone = null;
+        }
+
+        private void ZoneList_ItemClick( object sender, ItemClickEventArgs e )
+        {
+            ZoneListContext.EnterZone( ( ZoneSpider ) e.ClickedItem );
+        }
+
+        private void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
+        {
+            BackMask.HandleForward(
+                Frame, async () =>
+                {
+                    BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
+                    BInst.SetId( ZoneListContext.CurrentZone.ZoneId );
+                    SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
+                    if ( Book.CanProcess )
+                    {
+                        await Book.Process();
+                        Frame.Navigate( typeof( BookInfoView ), Book.GetBook() );
+                    }
+                }
+            );
+        }
+
+        private void ShowZoneAction( object sender, RightTappedRoutedEventArgs e )
+        {
+            Grid G = ( Grid ) sender;
+            FlyoutBase.ShowAttachedFlyout( G );
+
+            SelectedZone = ( ZoneSpider ) G.DataContext;
+        }
+
+        private async void GotoSettings( object sender, RoutedEventArgs e )
+        {
+            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
+
+            bool Go = false;
+            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
+
+            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
+            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
+
+            await Popups.ShowDialog( Msg );
+
+            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
+        }
+        #endregion
 
         #region Local Section
 
@@ -291,30 +366,7 @@ namespace wenku10.Pages
 
         private void FileList_ItemClick( object sender, ItemClickEventArgs e )
         {
-            LocalBook Item = ( LocalBook ) e.ClickedItem;
-
-            // Prevent double processing on the already processed item
-            if ( !Item.ProcessSuccess && Item.CanProcess ) ProcessItem( Item );
-
-            if ( Item.ProcessSuccess )
-            {
-                if ( Item is SpiderBook )
-                {
-                    BackMask.HandleForward(
-                        Frame, () => Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() )
-                    );
-                }
-                else
-                {
-                    BackMask.HandleForward(
-                        Frame, () => Frame.Navigate( typeof( BookInfoView ), new LocalTextDocument( Item.aid ) )
-                    );
-                }
-            }
-            else if ( !Item.Processing && Item.File != null )
-            {
-                Frame.Navigate( typeof( DirectTextViewer ), Item.File );
-            }
+            OpenBookInfoView( ( LocalBook ) e.ClickedItem );
         }
 
         private void TextBox_TextChanging( TextBox sender, TextBoxTextChangingEventArgs args )
@@ -365,7 +417,10 @@ namespace wenku10.Pages
 
         private void EditSource( object sender, RoutedEventArgs e )
         {
-            EditItem( SelectedBook );
+            if( SelectedBook is SpiderBook )
+            {
+                EditItem( ( SpiderBook ) SelectedBook );
+            }
         }
 
         private async void Reanalyze( object sender, RoutedEventArgs e )
@@ -375,42 +430,9 @@ namespace wenku10.Pages
         }
         #endregion
 
-        private async void ProcessItem( LocalBook LB )
+        private void EditItem( IMetaSpider LB )
         {
-            await LB.Process();
-            if( LB is SpiderBook )
-            {
-                BookInstruction BS = ( LB as SpiderBook ).GetBook();
-                if( BS.Packable )
-                {
-                    BS.PackVolumes();
-                }
-            }
-        }
-
-        private void EditItem( LocalBook LB )
-        {
-            if( LB is SpiderBook )
-            {
-                Frame.Navigate( typeof( ProceduresPanel ), ( ( SpiderBook ) LB ).MetaLocation );
-            }
-        }
-        #endregion
-
-        #region Highlights Section
-        private async void GotoSettings( object sender, RoutedEventArgs e )
-        {
-            StringResources stx = new StringResources( "Message", "Settings", "AppBar" );
-
-            bool Go = false;
-            MessageDialog Msg = new MessageDialog( stx.Text( "Preface", "Settings" ), stx.Text( "Settings", "AppBar" ) );
-
-            Msg.Commands.Add( new UICommand( stx.Str( "Yes" ), x => Go = true ) );
-            Msg.Commands.Add( new UICommand( stx.Str( "No" ) ) );
-
-            await Popups.ShowDialog( Msg );
-
-            if ( Go ) Frame.Navigate( typeof( Settings.MainSettings ) );
+            Frame.Navigate( typeof( ProceduresPanel ), LB.MetaLocation );
         }
         #endregion
 
@@ -513,6 +535,45 @@ namespace wenku10.Pages
             }
         }
         #endregion
+
+        private void OpenBookInfoView( LocalBook Item )
+        {
+            // Prevent double processing on the already processed item
+            if ( !Item.ProcessSuccess && Item.CanProcess ) ProcessItem( Item );
+
+            if ( Item.ProcessSuccess )
+            {
+                if ( Item is SpiderBook )
+                {
+                    BackMask.HandleForward(
+                        Frame, () => Frame.Navigate( typeof( BookInfoView ), ( Item as SpiderBook ).GetBook() )
+                    );
+                }
+                else
+                {
+                    BackMask.HandleForward(
+                        Frame, () => Frame.Navigate( typeof( BookInfoView ), new LocalTextDocument( Item.aid ) )
+                    );
+                }
+            }
+            else if ( !Item.Processing && Item.File != null )
+            {
+                Frame.Navigate( typeof( DirectTextViewer ), Item.File );
+            }
+        }
+
+        private async void ProcessItem( LocalBook LB )
+        {
+            await LB.Process();
+            if( LB is SpiderBook )
+            {
+                BookInstruction BS = ( LB as SpiderBook ).GetBook();
+                if( BS.Packable )
+                {
+                    BS.PackVolumes();
+                }
+            }
+        }
 
         public class DownloadBookContext : INamable
         {

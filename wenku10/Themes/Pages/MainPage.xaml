@@ -67,7 +67,7 @@
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
-        <Setter Property="Padding" Value="0,10,12,0" />
+        <Setter Property="Padding" Value="0,10,0,0" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="UseSystemFocusVisuals" Value="True" />
         <Setter Property="Template">

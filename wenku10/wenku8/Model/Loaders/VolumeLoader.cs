@@ -43,7 +43,7 @@ namespace wenku8.Model.Loaders
             }
             else if ( b is BookInstruction )
             {
-                LoadInst( b as BookInstruction );
+                LoadInst( ( BookInstruction ) b );
             }
             else // wenku8 Protocol
             {
