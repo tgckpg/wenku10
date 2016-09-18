@@ -34,7 +34,7 @@ namespace wenku8.System
 
 		public async void Start()
 		{
-#if ARM && DEBUG
+#if ARM && DEBUG || TESTING || BETA
             Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
 			// Must follow Order!
