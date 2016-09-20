@@ -383,4 +383,7 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>本</value>
   </data>
+  <data name="PleaseClick.Text" xml:space="preserve">
+    <value>クリックしてください</value>
+  </data>
 </root>

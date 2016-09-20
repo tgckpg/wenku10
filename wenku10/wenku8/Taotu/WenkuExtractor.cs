@@ -161,9 +161,8 @@ namespace wenku8.Taotu
                 if ( !Extr.Enabled ) continue;
 
                 string PropValue = MatchSingle( Extr, Content );
-                if ( string.IsNullOrEmpty( PropValue ) ) continue;
 
-                if( Extr.SubProc.HasProcedures )
+                if ( Extr.SubProc.HasProcedures )
                 {
                     ProcManager.PanelMessage( this, () => Res.RSTR( "SubProcRun" ), LogType.INFO );
                     ProcPassThru PPass = new ProcPassThru( new ProcConvoy( this, Inst ) );

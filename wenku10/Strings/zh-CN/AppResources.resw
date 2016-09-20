@@ -383,4 +383,7 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>书</value>
   </data>
+  <data name="PleaseClick.Text" xml:space="preserve">
+    <value>请点击</value>
+  </data>
 </root>

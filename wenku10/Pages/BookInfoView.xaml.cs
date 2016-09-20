@@ -293,7 +293,7 @@ namespace wenku10.Pages
                     return;
                 }
 
-                // Commencing the Level2 initializations
+                // Commencing Level2 initializations
                 new wenku8.System.Bootstrap().Level2();
             }
 
