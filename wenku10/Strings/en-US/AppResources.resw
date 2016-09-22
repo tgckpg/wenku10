@@ -381,4 +381,7 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>Book</value>
   </data>
+  <data name="PleaseClick.Text" xml:space="preserve">
+    <value>Please Click</value>
+  </data>
 </root>

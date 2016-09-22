@@ -27,6 +27,7 @@ using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
 using wenku8.CompositeElement;
+using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Loaders;
@@ -48,7 +49,11 @@ namespace wenku10.Pages
         public ReaderContent ContentView { get; private set; }
         public TimeSpan TimpSpan { get; private set; }
 
-        public bool UseInertia = false;
+        public bool UseInertia
+        {
+            get { return Properties.CONTENTREADER_USEINERTIA; }
+            set { Properties.CONTENTREADER_USEINERTIA = value; }
+        }
 
         private Action ReloadReader;
         private volatile bool OpenLock = false;
@@ -415,7 +420,6 @@ namespace wenku10.Pages
         private PaneNavButton InertiaButton()
         {
             PaneNavButton InertiaButton = null;
-            UseInertia = Shared.LocaleDefaults.Get<bool>( "ContentReader.UseInertia" );
 
             Action ToggleFIcon = () =>
             {

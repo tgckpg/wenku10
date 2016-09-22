@@ -264,15 +264,18 @@ namespace wenku8.Section
             }
         }
 
-        public async Task<bool> Remove( HubScriptItem HSI )
+        public async Task<bool> Remove( HubScriptItem HSI, string AccessToken = null )
         {
             TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
             TokenManager TokMgr = new TokenManager();
             AESManager AESMgr = new AESManager();
 
+            if ( AccessToken == null )
+                AccessToken = ( string ) TokMgr.GetAuthById( HSI.Id )?.Value;
+
             RCache.POST(
                 Shared.ShRequest.Server
-                , Shared.ShRequest.ScriptRemove( ( string ) TokMgr.GetAuthById( HSI.Id )?.Value, HSI.Id )
+                , Shared.ShRequest.ScriptRemove( AccessToken, HSI.Id )
                 , ( e2, QId ) =>
                 {
                     try

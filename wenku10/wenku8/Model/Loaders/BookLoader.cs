@@ -46,7 +46,7 @@ namespace wenku8.Model.Loaders
 
             if ( b is BookInstruction )
             {
-                LoadInstruction( b as BookInstruction, useCache );
+                LoadInstruction( ( BookInstruction ) b, useCache );
                 return;
             }
 

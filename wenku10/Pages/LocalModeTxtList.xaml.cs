@@ -161,7 +161,8 @@ namespace wenku10.Pages
                     break;
 
                 case AppKeys.SH_SCRIPT_REMOVE:
-                    if ( await SHHub.Remove( ( HubScriptItem ) Mesg.Payload ) )
+                    Tuple<string, HubScriptItem> RemoveInst = ( Tuple<string, HubScriptItem> ) Mesg.Payload;
+                    if ( await SHHub.Remove( RemoveInst.Item2, RemoveInst.Item1 ) )
                     {
                         PopupFrame.Content = null;
                     }
