@@ -247,7 +247,7 @@ namespace wenku10.Pages.Sharers
             {
                 // Since we cannot close the Frame from here
                 // We call for help
-                MessageBus.SendUI( GetType(), AppKeys.SH_SCRIPT_REMOVE, BindItem );
+                MessageBus.SendUI( GetType(), AppKeys.SH_SCRIPT_REMOVE, new Tuple<string, HubScriptItem>( AccessToken, BindItem ) );
             }
         }
 
