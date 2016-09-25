@@ -88,7 +88,17 @@ namespace wenku10.Pages.Dialogs.Taotu
                 && Convoy.Dispatcher == EditTarget )
             {
                 BookInstruction TInst = Convoy.Payload as BookInstruction;
-                TInst.PackVolumes();
+
+                ProcConvoy ProcCon = ProcManager.TracePackage( Convoy, ( P, C ) => P is ProcParameter );
+                if ( ProcCon != null )
+                {
+                    ProcParameter PPClone = new ProcParameter();
+                    PPClone.ReadParam( ProcCon.Dispatcher.ToXParam() );
+                    ProcCon = new ProcConvoy( PPClone, null );
+                }
+
+                TInst.PackVolumes( ProcCon );
+
                 Preview.Navigate(
                     typeof( TableOfContents )
                     , new Tuple<Volume[], SelectionChangedEventHandler>( TInst.GetVolumes(), PreviewContent )

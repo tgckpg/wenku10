@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 
+using libtaotu.Models.Procedure;
+
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
@@ -95,7 +97,7 @@ namespace wenku8.Model.Loaders
 
             if ( B.Packed != true && B.Packable )
             {
-                B.PackVolumes();
+                B.PackVolumes( SBook.GetPPConvoy() );
             }
 
             await CacheCover( B );
