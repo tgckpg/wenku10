@@ -584,7 +584,7 @@ namespace wenku10.Pages.Sharers
 
             IEnumerable<HSComment> FirstPage = await CLoader.NextPage();
 
-            CommentsSource = new Observables<HSComment, HSComment>( FirstPage.Flattern( x => x.Replies ) );
+            CommentsSource = new Observables<HSComment, HSComment>( FirstPage.ToArray() );
 
             CommentsSource.LoadStart += ( x, y ) => MarkLoading();
             CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();
