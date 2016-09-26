@@ -22,7 +22,6 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
-using Net.Astropenguin.UI;
 
 using wenku8.Effects;
 using wenku8.Model.Book;

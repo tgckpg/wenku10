@@ -103,12 +103,25 @@ namespace wenku10.Pages
 
             if( MainStage.Instance.IsPhone )
             {
-                NewsButton.HorizontalAlignment = HorizontalAlignment.Left;
-                NewsButton.VerticalAlignment = VerticalAlignment.Bottom;
+                InfoButtons.HorizontalAlignment = HorizontalAlignment.Left;
+                InfoButtons.VerticalAlignment = VerticalAlignment.Bottom;
+            }
+            else
+            {
+                InfoButtons.FlowDirection = FlowDirection.RightToLeft;
             }
 
+            SetFeedbackButton();
             GetAnnouncements();
             SetPField();
+        }
+
+        private void SetFeedbackButton()
+        {
+            if ( StoreServicesFeedbackLauncher.IsSupported() )
+            {
+                feedbackButton.Visibility = Visibility.Visible;
+            }
         }
 
         private async void StartMultiplayer()
@@ -202,6 +215,11 @@ namespace wenku10.Pages
                 Storyboard sb = ( Storyboard ) NotiRect.Resources[ "Notify" ];
                 sb?.Begin();
             }
+        }
+
+        private void feedbackButton_Click( object sender, RoutedEventArgs e )
+        {
+            var j = StoreServicesFeedbackLauncher.GetDefault()?.LaunchAsync();
         }
 
         private void ShowNews( object sender, RoutedEventArgs e ) { ShowNews(); }
