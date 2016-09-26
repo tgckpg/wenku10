@@ -167,6 +167,7 @@
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
     <Compile Include="wenku8\Model\Section\ZoneList.cs" />
     <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
+    <Compile Include="wenku8\System\ActionEvent.cs" />
     <Compile Include="wenku8\System\Migration.cs" />
     <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />
@@ -697,6 +698,12 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
+      <Name>Microsoft Engagement Framework</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>

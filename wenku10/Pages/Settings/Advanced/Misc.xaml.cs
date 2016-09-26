@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using wenku8.Config;
+using wenku8.Model.Text;
 
 namespace wenku10.Pages.Settings.Advanced
 {
@@ -27,7 +28,7 @@ namespace wenku10.Pages.Settings.Advanced
 
         private void ToggleSynPatch( object sender, RoutedEventArgs e )
         {
-            wenku8.Model.Text.Manipulation.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
+            Manipulation.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
             Properties.MISC_TEXT_PATCH_SYNTAX = SyntaxPatchToggle.IsOn;
         }
     }

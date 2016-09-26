@@ -294,7 +294,7 @@ namespace wenku10.Pages
                 }
 
                 // Commencing Level2 initializations
-                new wenku8.System.Bootstrap().Level2();
+                new global::wenku8.System.Bootstrap().Level2();
             }
 
             BookItem BookEx = X.Instance<BookItem>( XProto.BookItemEx, id );

@@ -21,9 +21,10 @@ using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.REST;
 using wenku8.Resources;
 
+using RSAManager = wenku8.System.RSAManager;
+
 namespace wenku10.Pages.Dialogs.Sharers
 {
-    using RSAManager = wenku8.System.RSAManager;
     using SHTarget = SharersRequest.SHTarget;
 
     sealed partial class PlaceRequest : ContentDialog

@@ -26,14 +26,14 @@ using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Section;
 
+using CryptAES = wenku8.System.CryptAES;
+using RSAManager = wenku8.System.RSAManager;
+using AESManager = wenku8.System.AESManager;
+using TokenManager = wenku8.System.TokenManager;
+using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
+
 namespace wenku10.Pages.Sharers
 {
-    using CryptAES = wenku8.System.CryptAES;
-    using RSAManager = wenku8.System.RSAManager;
-    using AESManager = wenku8.System.AESManager;
-    using TokenManager = wenku8.System.TokenManager;
-    using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
-
     sealed partial class ManageAuth : Page
     {
         private SharersHub ShHub;
@@ -213,7 +213,7 @@ namespace wenku10.Pages.Sharers
             }
         }
 
-        private void ReloadAuths<T>( ListView LView, SHTarget Target, wenku8.System.AuthManager<T> Mgr )
+        private void ReloadAuths<T>( ListView LView, SHTarget Target, global::wenku8.System.AuthManager<T> Mgr )
         {
             LView.ItemsSource = Mgr.AuthList.Remap( x =>
             {
@@ -288,7 +288,7 @@ namespace wenku10.Pages.Sharers
             {
                 using ( Stream s = await ISF.OpenStreamForWriteAsync() )
                 {
-                    await wenku8.Resources.Shared.Storage.GetStream(
+                    await global::wenku8.Resources.Shared.Storage.GetStream(
                         Tag == "Keys"
                             ? AESMgr.SettingsFile
                             : TokMgr.SettingsFile

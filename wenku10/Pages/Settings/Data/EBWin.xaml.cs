@@ -20,9 +20,11 @@ using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Data
 {
+    using EBDictManager = global::wenku8.System.EBDictManager;
+
     sealed partial class EBWin : Page
     {
-        wenku8.System.EBDictManager DictMgr;
+        EBDictManager DictMgr;
         public EBWin()
         {
             this.InitializeComponent();
@@ -31,7 +33,7 @@ namespace wenku10.Pages.Settings.Data
 
         private void SetTemplate()
         {
-            DictMgr = new wenku8.System.EBDictManager();
+            DictMgr = new EBDictManager();
 
             LayoutRoot.DataContext = DictMgr;
         }

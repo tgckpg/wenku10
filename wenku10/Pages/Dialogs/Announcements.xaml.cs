@@ -32,7 +32,7 @@ namespace wenku10.Pages.Dialogs
             SecondaryButtonText = stx.Str( "OK" );
 
             FullVersion.Text = global::wenku8.Config.AppSettings.Version;
-            version.Text = wenku8.System.Bootstrap.Version;
+            version.Text = global::wenku8.System.Bootstrap.Version;
 
             SetTemplate();
         }

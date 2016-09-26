@@ -1,6 +1,7 @@
 ﻿using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using Microsoft.Services.Store.Engagement;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +38,7 @@ using wenku8.Effects.P2DFlow.Reapers;
 using wenku8.Effects.P2DFlow.ForceFields;
 using wenku8.Settings.Theme;
 using wenku8.System;
+using wenku8.ThemeIcons;
 
 namespace wenku10.Pages
 {
@@ -64,6 +66,9 @@ namespace wenku10.Pages
         private void SinglePlayer( object sender, RoutedEventArgs e )
         {
             if ( ModeSelected ) return;
+
+            StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.NORMAL_MODE );
+
             ModeSelected = true;
             PFSim.AddField( LoadingWind );
 
@@ -80,15 +85,15 @@ namespace wenku10.Pages
 
             Func<UIElement>[] RandIcon = new Func<UIElement>[]
             {
-                () => new wenku8.ThemeIcons.IconExoticHexa() {
+                () => new IconExoticHexa() {
                     Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
                     , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
-                , () => new wenku8.ThemeIcons.IconExoticQuad() {
+                , () => new IconExoticQuad() {
                     Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
                     , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
-                , () => new wenku8.ThemeIcons.IconExoticTri() {
+                , () => new IconExoticTri() {
                     Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
                     , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
@@ -108,6 +113,8 @@ namespace wenku10.Pages
 
         private async void StartMultiplayer()
         {
+            StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.SECRET_MODE );
+
             TransitionDisplay.SetState( StartButton, TransitionState.Inactive );
             TransitionDisplay.SetState( ForeText, TransitionState.Active );
 
