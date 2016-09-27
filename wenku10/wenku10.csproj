@@ -232,6 +232,9 @@
     <Compile Include="Pages\ContentReader.xaml.cs">
       <DependentUpon>ContentReader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ContentReader-VESwipe.xaml.cs">
+      <DependentUpon>ContentReader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
       <DependentUpon>BookmarkList.xaml</DependentUpon>
     </Compile>

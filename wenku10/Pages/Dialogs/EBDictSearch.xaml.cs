@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
+using wenku8.Effects;
 using wenku8.Model;
 using wenku8.Model.Text;
 
@@ -49,7 +50,7 @@ namespace wenku10.Pages.Dialogs
 
             Dict = await Manager.GetDictionary();
             LayoutRoot.DataContext = Dict;
-            Mask.State = Net.Astropenguin.UI.ControlState.Foreatii;
+            TransitionDisplay.SetState( Mask, TransitionState.Inactive );
             MaskLoading.IsActive = false;
         }
 

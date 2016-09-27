@@ -363,14 +363,14 @@ namespace wenku10.Pages
             }
 
             EpisodeStepper ES = new EpisodeStepper( new VolumesInfo( b ) );
-            ES.stepNext();
+            ES.StepNext();
 
             await OneDriveRsync();
             await Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal
                 , () => Frame.Navigate(
                     typeof( ContentReader )
-                    , new Chapter( ES.currentEpTitle, b.Id, ES.currentVid, ES.currentCid )
+                    , new Chapter( ES.EpTitle, b.Id, ES.Vid, ES.Cid )
                 )
             );
         }

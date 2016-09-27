@@ -133,7 +133,7 @@ namespace wenku10.Pages.ContentReaderPane
             bool NeedDownload = false;
 
             string Vid = ReaderPage.CurrentChapter.vid;
-            while ( ES.currentVid == Vid )
+            while ( ES.Vid == Vid )
             {
                 Chapter Ch = ES.Chapter;
                 Chs.Add( Ch );
@@ -143,7 +143,7 @@ namespace wenku10.Pages.ContentReaderPane
                 {
                     return new AsyncTryOut<Chapter>( true, Ch );
                 }
-                if ( !ES.stepNext() ) break;
+                if ( !ES.StepNext() ) break;
             }
 
             if ( !NeedDownload )
