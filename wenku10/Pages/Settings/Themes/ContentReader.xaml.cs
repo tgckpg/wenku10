@@ -22,6 +22,7 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.Config;
+using wenku8.Model.Section;
 using wenku8.Model.Text;
 using wenku8.Model.Pages.ContentReader;
 using wenku8.Settings.Theme;
@@ -35,6 +36,8 @@ namespace wenku10.Pages.Settings.Themes
         public bool NeedRedraw { get; private set; }
         Paragraph[] ExpContent;
 
+        private ReaderView ReaderContext;
+
         public ContentReader()
         {
             NeedRedraw = false;
@@ -44,7 +47,8 @@ namespace wenku10.Pages.Settings.Themes
 
         private void InitTemplate()
         {
-            ContextGrid.DataContext = new global::wenku8.Model.Section.ReaderView();
+            ReaderContext = new ReaderView();
+            ContextGrid.DataContext = ReaderContext;
 
             StringResources stx = new StringResources( "Settings" );
 
@@ -153,13 +157,35 @@ namespace wenku10.Pages.Settings.Themes
 
             FontWeightCB.SelectedItem = PIW.First( x => x.Weight.Weight == FWeight.Weight );
 
+            SetLayoutAware();
+
             UpdateExampleLs();
             UpdateExamplePs();
             UpdateExampleFc();
             UpdateExampleFs();
-            for( int i = 0; i < 3; i ++ )
+            for ( int i = 0; i < 3; i++ )
             {
                 var j = ContentGrid.Dispatcher.RunIdleAsync( ( x ) => UpdateExampleFs() );
+            }
+        }
+
+        private void SetLayoutAware()
+        {
+            if ( ReaderContext.Settings.IsHorizontal )
+            {
+                RClock.Margin = new Thickness( 0, 0, 22, 22 );
+                RClock.VerticalAlignment = VerticalAlignment.Bottom;
+
+                Grid.SetRowSpan( ContentGrid, 1 );
+                Grid.SetColumnSpan( ContentGrid, 2 );
+            }
+            else
+            {
+                RClock.Margin = new Thickness( 0, -22, 25, 50 );
+                RClock.VerticalAlignment = VerticalAlignment.Top;
+
+                Grid.SetRowSpan( ContentGrid, 2 );
+                Grid.SetColumnSpan( ContentGrid, 1 );
             }
         }
 
@@ -214,7 +240,7 @@ namespace wenku10.Pages.Settings.Themes
             SolidColorBrush C = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_FONTCOLOR );
             ExpContent.All( ( x ) => { x.FontColor = C; return true; } );
 
-            ContextGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
+            ContentGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
         }
 
 

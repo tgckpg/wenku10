@@ -28,172 +28,181 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Pivot Background="{StaticResource MajorBackgroundBrush}">
-        <PivotItem>
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Pivot Grid.Row="0" Margin="0,-15,0,0" >
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontColor" Text="Color" />
-                        </PivotItem.Header>
-                        <ListView x:Name="ColorList"
-                                  IsItemClickEnabled="True"
-                                  ItemTemplate="{StaticResource ColorTemplate}"
-                                  ItemClick="ColorList_ItemClick">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </PivotItem>
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize" Text="Size" />
-                        </PivotItem.Header>
-                        <StackPanel>
-                            <Slider x:Name="FontSizeSlider"
-                                    Minimum="6" Maximum="72" SmallChange="0.5"
-                                    PointerCaptureLost="FontSizeSlider_PointerCaptureLost_1"
-                                    Value="22.5">
-                                    <!--ValueChanged="FontSizeSlider_ValueChanged_1"-->
-                                <Slider.Header>
-                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize"
-                                               Foreground="{StaticResource MinorBrush}"
-                                               Text="FontSize" />
-                                </Slider.Header>
-                            </Slider>
-                            <Slider x:Name="LineSpacingSlider"
-                                    Minimum="0" Maximum="72" SmallChange="0.5"
-                                    ValueChanged="LineSpacingSlider_ValueChanged_1"
-                                    PointerCaptureLost="LineSpacingSlider_PointerCaptureLost_1"
-                                    Value="28">
-                                <Slider.Header>
-                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_LineSpacing"
-                                               Foreground="{StaticResource MinorBrush}"
-                                               Text="LineSpacing" />
-                                </Slider.Header>
-                            </Slider>
-                            <Slider x:Name="ParagraphSpacingSlider"
-                                    Minimum="0" Maximum="72" SmallChange="0.5"
-                                    ValueChanged="ParagraphSpacingSlider_ValueChanged_1"
-                                    PointerCaptureLost="ParagraphSpacingSlider_PointerCaptureLost_1"
-                                    Value="27.5">
-                                <Slider.Header>
-                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_ParagraphSpacing"
-                                               Foreground="{StaticResource MinorBrush}"
-                                               Text="ParagraphSpacing" />
-                                </Slider.Header>
-                            </Slider>
-                        </StackPanel>
-                    </PivotItem>
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="/Settings/Appearance_ContentReader_Clock" Text="Clock" />
-                        </PivotItem.Header>
-                        <ListView x:Name="ClockColorList"
-                                  IsItemClickEnabled="True"
-                                  ItemTemplate="{StaticResource ColorTemplate}"
-                                  ItemClick="ColorList_ItemClick">
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </PivotItem>
-                    <PivotItem>
-                        <PivotItem.Header>
-                            <TextBlock x:Uid="/Settings/Others" Text="Others" />
-                        </PivotItem.Header>
-                        <StackPanel>
-                            <ComboBox x:Name="FontWeightCB" SelectionChanged="FontWeightCB_SelectionChanged">
-                                <ComboBox.Header>
-                                    <TextBlock x:Uid="/Settings/ Appearance_ContentReader_FontWeight"
-                                               Foreground="{StaticResource MinorBrush}"
-                                               Text="Font Weight"/>
-                                </ComboBox.Header>
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" FontWeight="{Binding Weight}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                        </StackPanel>
-                    </PivotItem>
-                </Pivot>
-                <Grid x:Name="ContextGrid"
-                      Margin="10"
-                      p:Clip.ToBounds="True" 
-                      Grid.Row="1" >
-                    <Grid.Resources>
-                        <v:ContentStyleConverter x:Key="ContentStyleConverter" />
-                        <v:VDisplayConverter x:Key="VDisplayConverter" />
-                    </Grid.Resources>
-
-                    <c:QClock x:Name="RClock"
-                              ArcHandBrush="{Binding ARBrush}"
-                              HourHandBrush="{Binding HHBrush}"
-                              MinuteHandBrush="{Binding MHBrush}"
-                              ScalesBrush="{Binding SBrush}"
-                              RenderTransform="{Binding RenderTransform}"
-                              Width="100" Height="100"
-                              Margin="0,0,22,22"
-                              HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-
-                    <ListView x:Name="ContentGrid"
-                              ItemTemplateSelector="{Binding TemplateSelector}"
-                              Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
-                              FlowDirection="{Binding FlowDir}">
-
-                        <ListView.Resources>
-                            <DataTemplate x:Name="Horizontal">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="20"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="20"/>
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Background="{Binding AnchorColor}" />
-                                    <p:VerticalStack
-                                        Grid.Row="1"
-                                        Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
-                                        HorizontalAlignment="Center"
-                                        Foreground="{Binding FontColor}"
-                                        FontSize="{Binding FontSize}"
-                                        FontWeight="{Binding FontWeight}"
-                                        LineHeight="{Binding LineHeight}"
-                                        Padding="{Binding ParagraphSpacing}"
-                                    />
-                                </Grid>
-                            </DataTemplate>
-                            <DataTemplate x:Name="Vertical">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="20"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Background="{Binding AnchorColor}" />
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        Text="{Binding Text}"
-                                        TextWrapping="Wrap"
-                                        Foreground="{Binding FontColor}"
-                                        FontSize="{Binding FontSize}"
-                                        LineHeight="{Binding LineHeight}"
-                                        Padding="{Binding ParagraphSpacing}"
-                                    />
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.Resources>
+    <ScrollViewer Background="{StaticResource MajorBackgroundBrush}">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="7*" />
+            </Grid.RowDefinitions>
+            <Pivot Grid.Row="0" Margin="0,-15,0,0" >
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontColor" Text="Color" />
+                    </PivotItem.Header>
+                    <ListView x:Name="ColorList"
+                              IsItemClickEnabled="True"
+                              ItemTemplate="{StaticResource ColorTemplate}"
+                              ItemClick="ColorList_ItemClick">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                     </ListView>
-                </Grid> <!-- End ContentGrid -->
-            </Grid> <!-- End ContextGrid -->
-        </PivotItem>
-    </Pivot>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize" Text="Size" />
+                    </PivotItem.Header>
+                    <StackPanel>
+                        <Slider x:Name="FontSizeSlider"
+                                Minimum="6" Maximum="72" SmallChange="0.5"
+                                PointerCaptureLost="FontSizeSlider_PointerCaptureLost_1"
+                                Value="22.5">
+                                <!--ValueChanged="FontSizeSlider_ValueChanged_1"-->
+                            <Slider.Header>
+                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize"
+                                           Foreground="{StaticResource MinorBrush}"
+                                           Text="FontSize" />
+                            </Slider.Header>
+                        </Slider>
+                        <Slider x:Name="LineSpacingSlider"
+                                Minimum="0" Maximum="72" SmallChange="0.5"
+                                ValueChanged="LineSpacingSlider_ValueChanged_1"
+                                PointerCaptureLost="LineSpacingSlider_PointerCaptureLost_1"
+                                Value="28">
+                            <Slider.Header>
+                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_LineSpacing"
+                                           Foreground="{StaticResource MinorBrush}"
+                                           Text="LineSpacing" />
+                            </Slider.Header>
+                        </Slider>
+                        <Slider x:Name="ParagraphSpacingSlider"
+                                Minimum="0" Maximum="72" SmallChange="0.5"
+                                ValueChanged="ParagraphSpacingSlider_ValueChanged_1"
+                                PointerCaptureLost="ParagraphSpacingSlider_PointerCaptureLost_1"
+                                Value="27.5">
+                            <Slider.Header>
+                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_ParagraphSpacing"
+                                           Foreground="{StaticResource MinorBrush}"
+                                           Text="ParagraphSpacing" />
+                            </Slider.Header>
+                        </Slider>
+                    </StackPanel>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock x:Uid="/Settings/Appearance_ContentReader_Clock" Text="Clock" />
+                    </PivotItem.Header>
+                    <ListView x:Name="ClockColorList"
+                              IsItemClickEnabled="True"
+                              ItemTemplate="{StaticResource ColorTemplate}"
+                              ItemClick="ColorList_ItemClick">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock x:Uid="/Settings/Others" Text="Others" />
+                    </PivotItem.Header>
+                    <StackPanel>
+                        <ComboBox x:Name="FontWeightCB" SelectionChanged="FontWeightCB_SelectionChanged">
+                            <ComboBox.Header>
+                                <TextBlock x:Uid="/Settings/ Appearance_ContentReader_FontWeight"
+                                           Foreground="{StaticResource MinorBrush}"
+                                           Text="Font Weight"/>
+                            </ComboBox.Header>
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" FontWeight="{Binding Weight}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                </PivotItem>
+            </Pivot>
+            <Grid x:Name="ContextGrid"
+                  MaxHeight="500"
+                  Margin="10" Grid.Row="1"
+                  Background="Black">
+                <Grid.Resources>
+                    <v:ContentStyleConverter x:Key="ContentStyleConverter" />
+                    <v:VDisplayConverter x:Key="VDisplayConverter" />
+                </Grid.Resources>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="100" />
+                </Grid.RowDefinitions>
+
+                <c:QClock x:Name="RClock"
+                          Grid.RowSpan="2" Grid.ColumnSpan="2"
+                          HorizontalAlignment="Right"
+                          ArcHandBrush="{Binding ARBrush}"
+                          HourHandBrush="{Binding HHBrush}"
+                          MinuteHandBrush="{Binding MHBrush}"
+                          ScalesBrush="{Binding SBrush}"
+                          RenderTransform="{Binding RenderTransform}"
+                          Width="100" Height="100" />
+
+                <ListView x:Name="ContentGrid"
+                          Grid.RowSpan="2"
+                          ItemTemplateSelector="{Binding TemplateSelector}"
+                          Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
+                          FlowDirection="{Binding FlowDir}">
+
+                    <ListView.Resources>
+                        <DataTemplate x:Name="Horizontal">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="20"/>
+                                </Grid.RowDefinitions>
+                                <StackPanel Background="{Binding AnchorColor}" />
+                                <p:VerticalStack
+                                    Grid.Row="1"
+                                    Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{Binding FontColor}"
+                                    FontSize="{Binding FontSize}"
+                                    FontWeight="{Binding FontWeight}"
+                                    LineHeight="{Binding LineHeight}"
+                                    Padding="{Binding ParagraphSpacing}"
+                                />
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate x:Name="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Background="{Binding AnchorColor}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Text="{Binding Text}"
+                                    TextWrapping="Wrap"
+                                    Foreground="{Binding FontColor}"
+                                    FontSize="{Binding FontSize}"
+                                    LineHeight="{Binding LineHeight}"
+                                    Padding="{Binding ParagraphSpacing}"
+                                />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.Resources>
+                </ListView>
+            </Grid> <!-- End ContentGrid -->
+        </Grid> <!-- End ContextGrid -->
+    </ScrollViewer>
 </Page>
