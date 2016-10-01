@@ -274,6 +274,8 @@ namespace wenku8.Settings.Layout
         {
             XRegistry LayoutSettings;
 
+            private string Current;
+
             private ImageSource bg, bg2;
             public ImageSource Background
             {
@@ -424,7 +426,7 @@ namespace wenku8.Settings.Layout
 
                 if ( UseDefault )
                 {
-                    UpdateImage( await Image.NewBitmap( new Uri( value, UriKind.Absolute ) ) );
+                    SwapImage( await Image.NewBitmap( new Uri( value, UriKind.Absolute ) ) );
                 }
             }
 
@@ -489,7 +491,7 @@ namespace wenku8.Settings.Layout
                 ;
             }
 
-            private void UpdateImage( BitmapImage b )
+            private void SwapImage( BitmapImage b )
             {
                 Action<BitmapImage> Front = async x =>
                 {
@@ -497,7 +499,7 @@ namespace wenku8.Settings.Layout
                     {
                         Background = x;
                         BGState2 = false;
-                        await Task.Delay( 1000 );
+                        await Task.Delay( 2500 );
                         Image.Destroy( Background2 );
                     }
                 };
@@ -508,7 +510,7 @@ namespace wenku8.Settings.Layout
                     {
                         Background2 = x;
                         BGState = false;
-                        await Task.Delay( 1000 );
+                        await Task.Delay( 2500 );
                         Image.Destroy( Background );
                     }
                 };
@@ -549,7 +551,7 @@ namespace wenku8.Settings.Layout
             {
                 BitmapImage b = await Image.NewBitmap();
                 b.SetSourceFromUrl( Location );
-                UpdateImage( b );
+                SwapImage( b );
             }
         }
     }

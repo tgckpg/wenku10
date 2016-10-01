@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
@@ -425,7 +426,10 @@ namespace wenku10.Pages
             ) );
 
             Sections.Add( InertiaButton() );
-            Sections.Add( FullScreenButton() );
+
+            if ( !MainStage.Instance.IsPhone ) Sections.Add( FullScreenButton() );
+
+            Sections.Add( FlowDirButton() );
             Sections.Add( new PaneNavButton( new IconSettings() { AutoScale = true }, GotoSettings ) );
 
             ContentPane = new NavPaneSection( this, Sections );
@@ -483,6 +487,48 @@ namespace wenku10.Pages
                 : new PaneNavButton( new IconExpand() { AutoScale = true }, ToggleFIcon )
                 ;
             return FullScreenButton;
+        }
+
+        private PaneNavButton FlowDirButton()
+        {
+            PaneNavButton FlowDirButton = null;
+
+            Rectangle RectInd = new Rectangle()
+            {
+                Width = 20,
+                Height = 40
+                , Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
+            };
+
+            FlowDirection = Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT
+                ? FlowDirection.LeftToRight
+                : FlowDirection.RightToLeft;
+
+            RectInd.Margin = new Thickness( 10 );
+            RectInd.VerticalAlignment = VerticalAlignment.Center;
+            RectInd.HorizontalAlignment = ( FlowDirection == FlowDirection.LeftToRight )
+                ? HorizontalAlignment.Left
+                : HorizontalAlignment.Right;
+
+            Action ToggleFIcon = () =>
+            {
+                if ( MainSplitView.FlowDirection == FlowDirection.LeftToRight )
+                {
+                    Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT = false;
+                    RectInd.HorizontalAlignment = HorizontalAlignment.Right;
+                    MainSplitView.FlowDirection = FlowDirection.RightToLeft;
+                }
+                else
+                {
+                    Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT = true;
+                    RectInd.HorizontalAlignment = HorizontalAlignment.Left;
+                    MainSplitView.FlowDirection = FlowDirection.LeftToRight;
+                }
+            };
+
+            FlowDirButton = new PaneNavButton( RectInd, ToggleFIcon );
+
+            return FlowDirButton;
         }
 
         private void SectionClicked( object sender, ItemClickEventArgs e )

@@ -162,7 +162,9 @@
 
         <Grid p:Clip.ToBounds="True">
             <Grid.RenderTransform>
-                <CompositeTransform x:Name="CGTransform" TranslateX="0" TranslateY="0" ScaleX="1" ScaleY="1" />
+                <CompositeTransform x:Name="CGTransform"
+                                    TranslateX="0" TranslateY="0"
+                                    ScaleX="1" ScaleY="1" />
             </Grid.RenderTransform>
             <c:PassiveSplitView x:Name="MainSplitView"
                                 Background="{Binding BackgroundBrush}"
@@ -175,9 +177,11 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- ContextMenu Page -->
-                        <Frame Grid.Column="0" Content="{Binding Context}" />
+                        <Frame Grid.Column="0" Content="{Binding Context}"
+                               FlowDirection="LeftToRight" />
 
                         <ListView Grid.Column="1" ItemsSource="{Binding Nav}"
+                                  FlowDirection="LeftToRight"
                                   ItemContainerStyle="{StaticResource BareListItem}"
                                   IsItemClickEnabled="True"
                                   ItemClick="SectionClicked">
