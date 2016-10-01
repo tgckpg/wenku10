@@ -22,7 +22,7 @@ namespace wenku8.Settings.Layout
     using Resources;
     using SrcView = wenku10.Pages.BookInfoView;
 
-    class BookInfoView
+    sealed class BookInfoView
     {
         public static readonly string ID = typeof( BookInfoView ).Name;
 
@@ -313,15 +313,22 @@ namespace wenku8.Settings.Layout
                     NotifyChanged( "BGState2" );
                 }
             }
+
             public string Section { get; private set; }
+            public string BgType { get { return LayoutSettings.Parameter( Section )?.GetValue( "type" ); } }
 
             private bool SwState = false;
 
             public BgContext( XRegistry LayoutSettings, string Section )
             {
                 this.LayoutSettings = LayoutSettings;
-
                 this.Section = Section;
+            }
+
+            public void Reload()
+            {
+                LayoutSettings = new XRegistry( "<NaN />", LayoutSettings.Location );
+                ApplyBackgrounds();
             }
 
             public async void ApplyBackgrounds()
@@ -342,6 +349,9 @@ namespace wenku8.Settings.Layout
 
                 switch ( P.GetValue( "type" ) )
                 {
+                    case "None":
+                        ApplyImage( null );
+                        break;
                     case "Custom":
                         IStorageFolder isf = await AppStorage.FutureAccessList.GetFolderAsync( value );
                         if ( isf == null ) return;
@@ -449,6 +459,9 @@ namespace wenku8.Settings.Layout
                                 break;
                             case "COMMENTS":
                                 value = "ms-appx:///Assets/Samples/BgComments.jpg";
+                                break;
+                            case "CONTENT_READER":
+                                value = "ms-appx:///Assets/Samples/BgContentReader.jpg";
                                 break;
                         }
 

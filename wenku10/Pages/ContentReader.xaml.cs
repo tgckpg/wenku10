@@ -39,6 +39,8 @@ using wenku8.Model.ListItem;
 using wenku8.Model.Section;
 using wenku8.Resources;
 
+using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+
 namespace wenku10.Pages
 {
     using ContentReaderPane;
@@ -330,6 +332,13 @@ namespace wenku10.Pages
 
         private void SetLayoutAware()
         {
+            if ( ContentBg.DataContext == null )
+            {
+                ContentBg.DataContext = ContentView.Reader.Settings.GetBgContext();
+            }
+
+            ( ( BgContext ) ContentBg.DataContext ).Reload();
+
             BookTitle.Text = CurrentBook.Title;
             SetClock();
             SetManiState();
@@ -557,6 +566,7 @@ namespace wenku10.Pages
             if ( args == ControlState.Foreatii )
             {
                 OverlayFrame.Content = null;
+                ( ( BgContext ) ContentBg.DataContext )?.Reload();
             }
         }
 
@@ -596,7 +606,9 @@ namespace wenku10.Pages
             ClockTicker = new DispatcherTimer();
             ClockTicker.Interval = TimeSpan.FromSeconds( 5 );
 
-            RClock.DataContext = new ClockContext();
+            UpperBack.DataContext
+                = LowerBack.DataContext
+                = new ESContext();
 
             ClockTick();
             ClockTicker.Tick += ClockTicker_Tick;
@@ -611,8 +623,10 @@ namespace wenku10.Pages
             if ( ClockTicker == null ) return;
             ClockTicker.Stop();
 
-            ( RClock.DataContext as ClockContext ).Dispose();
-            RClock.DataContext = null;
+            ( RClock.DataContext as ESContext ).Dispose();
+            UpperBack.DataContext
+                = LowerBack.DataContext
+                = null;
 
             ClockTicker.Tick -= ClockTicker_Tick;
             ClockTicker = null;
@@ -623,10 +637,9 @@ namespace wenku10.Pages
 
         private void ClockTick()
         {
-            DateTime.Now.GetDateTimeFormats();
             RClock.Time = DateTime.Now;
             DayofWeek.Text = RClock.Time.ToString( "dddd" );
-            DayofMonth.Text = RClock.Time.ToString( "dd" );
+            DayofMonth.Text = RClock.Time.Day.ToString();
             Month.Text = RClock.Time.ToString( "MMMM" );
         }
 

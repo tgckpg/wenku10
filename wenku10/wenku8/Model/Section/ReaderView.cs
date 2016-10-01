@@ -32,7 +32,6 @@ namespace wenku8.Model.Section
 
         public Converters.TOCTemplateSelector TemplateSelector { get; set; }
 
-
         public Brush BackgroundBrush
         {
             get
@@ -135,7 +134,8 @@ namespace wenku8.Model.Section
         /// </summary>
         public ReaderView()
         {
-            this.Settings = new Settings.Layout.ContentReader();
+            Settings = new Settings.Layout.ContentReader();
+
             AppSettings.PropertyChanged += AppSettings_PropertyChanged;
             InitParams();
         }

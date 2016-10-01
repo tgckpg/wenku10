@@ -27,6 +27,8 @@ using wenku8.Model.Text;
 using wenku8.Model.Pages.ContentReader;
 using wenku8.Settings.Theme;
 
+using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+
 namespace wenku10.Pages.Settings.Themes
 {
     public sealed partial class ContentReader : Page
@@ -37,6 +39,7 @@ namespace wenku10.Pages.Settings.Themes
         Paragraph[] ExpContent;
 
         private ReaderView ReaderContext;
+        private BgContext RBgContext;
 
         public ContentReader()
         {
@@ -48,7 +51,13 @@ namespace wenku10.Pages.Settings.Themes
         private void InitTemplate()
         {
             ReaderContext = new ReaderView();
-            ContextGrid.DataContext = ReaderContext;
+            ContentGrid.DataContext = ReaderContext;
+            ContextGrid.DataContext = new ESContext();
+
+            RBgContext = ReaderContext.Settings.GetBgContext();
+            ContentBg.DataContext = RBgContext;
+
+            RBgContext.ApplyBackgrounds();
 
             StringResources stx = new StringResources( "Settings" );
 
@@ -59,6 +68,8 @@ namespace wenku10.Pages.Settings.Themes
                 , new Paragraph( stx.Text( "Appearance_ContentReader_Exp3") )
                 , new Paragraph( stx.Text( "Appearance_ContentReader_Exp4") )
             };
+
+            XTitleStepper.Text = YTitleStepper.Text = stx.Text( "Appearance_ContentReader_Exp2" );
 
             ColorList.ItemsSource = new ColorItem[]
             {
@@ -115,14 +126,29 @@ namespace wenku10.Pages.Settings.Themes
                     stx.Text( "Appearance_ContentReader_Clock_SColor" )
                     , Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR
                 ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR = c; } }
-            };
 
-            RClock.DataContext = new ClockContext();
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_EStepper_DColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR = c; } }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_EStepper_SColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR = c; } }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_Background" )
+                    , Properties.APPEARANCE_CONTENTREADER_ES_BG
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_BG = c; } }
+            };
 
             BatteryReport Report = Battery.AggregateBattery.GetReport();
             if ( Report.RemainingCapacityInMilliwattHours != null )
             {
-                RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
+                YClock.Progress
+                    = XClock.Progress
+                    = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
             }
 
             FontSizeSlider.Value = Properties.APPEARANCE_CONTENTREADER_FONTSIZE;
@@ -157,6 +183,11 @@ namespace wenku10.Pages.Settings.Themes
 
             FontWeightCB.SelectedItem = PIW.First( x => x.Weight.Weight == FWeight.Weight );
 
+            YClock.Time = XClock.Time = DateTime.Now;
+            XDayofWeek.Text = YDayofWeek.Text = YClock.Time.ToString( "dddd" );
+            XDayofMonth.Text = YDayofMonth.Text = YClock.Time.Day.ToString();
+            XMonth.Text = YMonth.Text = YClock.Time.ToString( "MMMM" );
+
             SetLayoutAware();
 
             UpdateExampleLs();
@@ -173,19 +204,19 @@ namespace wenku10.Pages.Settings.Themes
         {
             if ( ReaderContext.Settings.IsHorizontal )
             {
-                RClock.Margin = new Thickness( 0, 0, 22, 22 );
-                RClock.VerticalAlignment = VerticalAlignment.Bottom;
-
                 Grid.SetRowSpan( ContentGrid, 1 );
                 Grid.SetColumnSpan( ContentGrid, 2 );
+
+                XPanel.Visibility = Visibility.Collapsed;
+                YPanel.Visibility = Visibility.Visible;
             }
             else
             {
-                RClock.Margin = new Thickness( 0, -22, 25, 50 );
-                RClock.VerticalAlignment = VerticalAlignment.Top;
-
                 Grid.SetRowSpan( ContentGrid, 2 );
                 Grid.SetColumnSpan( ContentGrid, 1 );
+
+                XPanel.Visibility = Visibility.Visible;
+                YPanel.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -243,7 +274,6 @@ namespace wenku10.Pages.Settings.Themes
             ContentGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
         }
 
-
         private async void ColorList_ItemClick( object sender, ItemClickEventArgs e )
         {
             ColorItem C = e.ClickedItem as ColorItem;
@@ -274,8 +304,22 @@ namespace wenku10.Pages.Settings.Themes
                 this.Name = Name;
             }
 
-
             public string Name { get; private set; }
+        }
+
+        private void BgChoice_SelectionChanged( object sender, SelectionChangedEventArgs e )
+        {
+            if ( e.AddedItems.Count < 1 ) return;
+            RBgContext.SetBackground( ( ( ComboBoxItem ) e.AddedItems.First() ).Tag.ToString() );
+        }
+
+        private void BgChoice_Loaded( object sender, RoutedEventArgs e )
+        {
+            if ( ReaderContext == null ) return;
+
+            BgChoice.SelectedIndex = Array.IndexOf(
+                new string[] { "None", "Custom", "Preset", "System" }, RBgContext.BgType
+            );
         }
     }
 }

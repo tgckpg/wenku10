@@ -12,16 +12,19 @@ using Net.Astropenguin.DataModel;
 namespace wenku8.Model.Pages.ContentReader
 {
     using Config;
-    class ClockContext : ActiveData, IDisposable
+    class ESContext : ActiveData, IDisposable
     {
         public SolidColorBrush ARBrush { get; private set; }
         public SolidColorBrush HHBrush { get; private set; }
         public SolidColorBrush MHBrush { get; private set; }
         public SolidColorBrush SBrush { get; private set; }
+        public SolidColorBrush ESSBrush { get; private set; }
+        public SolidColorBrush ESDBrush { get; private set; }
+        public SolidColorBrush ESBGBrush { get; private set; }
 
         public ScaleTransform RenderTransform { get; private set; }
 
-        public ClockContext()
+        public ESContext()
         {
             AppSettings.PropertyChanged += AppSettings_PropertyChanged;
 
@@ -32,9 +35,12 @@ namespace wenku8.Model.Pages.ContentReader
             UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR );
             UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR );
             UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR );
+            UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_ES_SCOLOR );
+            UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_ES_DCOLOR );
+            UpdateBrush( Parameters.APPEARANCE_CONTENTREADER_ES_BG );
         }
 
-        ~ClockContext() { Dispose(); }
+        ~ESContext() { Dispose(); }
 
         public void Dispose()
         {
@@ -65,6 +71,18 @@ namespace wenku8.Model.Pages.ContentReader
                 case Parameters.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR:
                     SBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR );
                     NotifyChanged( "SBrush" );
+                    break;
+                case Parameters.APPEARANCE_CONTENTREADER_ES_SCOLOR:
+                    ESSBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR );
+                    NotifyChanged( "ESSBrush" );
+                    break;
+                case Parameters.APPEARANCE_CONTENTREADER_ES_DCOLOR:
+                    ESDBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR );
+                    NotifyChanged( "ESDBrush" );
+                    break;
+                case Parameters.APPEARANCE_CONTENTREADER_ES_BG:
+                    ESBGBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_ES_BG );
+                    NotifyChanged( "ESBGBrush" );
                     break;
             }
         }

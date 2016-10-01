@@ -567,4 +567,16 @@
   <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
     <value>確認安裝</value>
   </data>
+  <data name="Appearance_ContentReader_BgImage.Text" xml:space="preserve">
+    <value>背景圖片</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_DColor.Text" xml:space="preserve">
+    <value>日曆</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_SColor.Text" xml:space="preserve">
+    <value>巻 / 章節</value>
+  </data>
+  <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>字型粗幼</value>
+  </data>
 </root>

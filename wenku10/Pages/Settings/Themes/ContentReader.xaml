@@ -6,10 +6,12 @@
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
+        <v:TransStateConverter x:Key="TransStateConverter" />
         <DataTemplate x:Key="ColorTemplate">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
@@ -34,7 +36,8 @@
                 <RowDefinition Height="3*" />
                 <RowDefinition Height="7*" />
             </Grid.RowDefinitions>
-            <Pivot Grid.Row="0" Margin="0,-15,0,0" >
+            <Pivot Grid.Row="0" MaxHeight="300"
+                   Margin="0,-15,0,0" >
                 <PivotItem>
                     <PivotItem.Header>
                         <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontColor" Text="Color" />
@@ -107,12 +110,35 @@
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
+                        <TextBlock x:Uid="/Settings/Appearance_ContentReader_BgImage" Text="Background Image" />
+                    </PivotItem.Header>
+                    <StackPanel>
+                        <ComboBox x:Name="BgChoice"
+                                  Loaded="BgChoice_Loaded"
+                                  SelectionChanged="BgChoice_SelectionChanged">
+                            <ComboBoxItem Tag="None">
+                                <TextBlock x:Uid="/ContextMenu/NoBackground" Text="No Background" />
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="Custom">
+                                <TextBlock x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" />
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="Preset">
+                                <TextBlock x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" />
+                            </ComboBoxItem>
+                            <ComboBoxItem Tag="System">
+                                <TextBlock x:Uid="/ContextMenu/SystemBackground" Text="System Background" />
+                            </ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
                         <TextBlock x:Uid="/Settings/Others" Text="Others" />
                     </PivotItem.Header>
                     <StackPanel>
                         <ComboBox x:Name="FontWeightCB" SelectionChanged="FontWeightCB_SelectionChanged">
                             <ComboBox.Header>
-                                <TextBlock x:Uid="/Settings/ Appearance_ContentReader_FontWeight"
+                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontWeight"
                                            Foreground="{StaticResource MinorBrush}"
                                            Text="Font Weight"/>
                             </ComboBox.Header>
@@ -125,10 +151,24 @@
                     </StackPanel>
                 </PivotItem>
             </Pivot>
+
+            <!-- Background from data context -->
+            <Grid x:Name="ContentBg" Grid.Row="1"
+                  p:Clip.ToBounds="True"
+                  MaxHeight="400" Margin="10">
+                <!-- Swapping between 2 image to create fading effect -->
+                <Image Source="{Binding Background}" Stretch="UniformToFill"
+                       e:TransitionDisplay.Mode="A01"
+                       e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
+                <Image Source="{Binding Background2}" Stretch="UniformToFill"
+                       e:TransitionDisplay.Mode="A01"
+                       e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
+            </Grid>
+
             <Grid x:Name="ContextGrid"
-                  MaxHeight="500"
+                  p:Clip.ToBounds="True"
                   Margin="10" Grid.Row="1"
-                  Background="Black">
+                  MaxHeight="400">
                 <Grid.Resources>
                     <v:ContentStyleConverter x:Key="ContentStyleConverter" />
                     <v:VDisplayConverter x:Key="VDisplayConverter" />
@@ -144,18 +184,104 @@
                     <RowDefinition Height="100" />
                 </Grid.RowDefinitions>
 
-                <c:QClock x:Name="RClock"
-                          Grid.RowSpan="2" Grid.ColumnSpan="2"
-                          HorizontalAlignment="Right"
-                          ArcHandBrush="{Binding ARBrush}"
-                          HourHandBrush="{Binding HHBrush}"
-                          MinuteHandBrush="{Binding MHBrush}"
-                          ScalesBrush="{Binding SBrush}"
-                          RenderTransform="{Binding RenderTransform}"
-                          Width="100" Height="100" />
+                <Grid x:Name="XPanel"
+                      Visibility="Collapsed"
+                      Background="{Binding ESBGBrush}"
+                      Grid.RowSpan="2" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <c:QClock x:Name="XClock"
+                              Grid.RowSpan="4"
+                              ArcHandBrush="{Binding ARBrush}"
+                              HourHandBrush="{Binding HHBrush}"
+                              MinuteHandBrush="{Binding MHBrush}"
+                              ScalesBrush="{Binding SBrush}"
+                              RenderTransform="{Binding RenderTransform}"
+                              Width="100" Height="100"
+                              Margin="0,-22,50,50"
+                              HorizontalAlignment="Center" VerticalAlignment="Top" />
+
+                    <TextBlock x:Name="XMonth"
+                               Grid.Column="4" Grid.Row="1"
+                               HorizontalAlignment="Center"
+                               FontSize="23" Text="September"
+                               Foreground="{Binding ESDBrush}"/>
+
+                    <TextBlock x:Name="XDayofMonth"
+                               Grid.Column="4" Grid.Row="2"
+                               HorizontalAlignment="Center"
+                               FontSize="30" Text="28"
+                               Foreground="{Binding ESDBrush}"/>
+
+                    <TextBlock x:Name="XDayofWeek"
+                               Grid.Column="4" Grid.Row="3"
+                               HorizontalAlignment="Center"
+                               Text="Wednesday"
+                               Foreground="{Binding ESDBrush}"/>
+
+                    <p:VerticalStack x:Name="XTitleStepper"
+                                     Grid.Row="4"
+                                     Trim="True" MaxLines="1"
+                                     Foreground="{Binding ESSBrush}"
+                                     HorizontalAlignment="Center"
+                                     Margin="10" FontSize="20" />
+
+                </Grid>
+
+                <Grid x:Name="YPanel"
+                      Visibility="Collapsed"
+                      Background="{Binding ESBGBrush}"
+                      Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="100" />
+                    </Grid.ColumnDefinitions>
+
+                    <c:QClock x:Name="YClock"
+                              Grid.ColumnSpan="4"
+                              ArcHandBrush="{Binding ARBrush}"
+                              HourHandBrush="{Binding HHBrush}"
+                              MinuteHandBrush="{Binding MHBrush}"
+                              ScalesBrush="{Binding SBrush}"
+                              RenderTransform="{Binding RenderTransform}"
+                              Margin="0,0,22,22"
+                              HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                              Width="100" Height="100" />
+
+                    <TextBlock Grid.Column="1"
+                               Margin="10,10,5,0"
+                               VerticalAlignment="Center"
+                               x:Name="YDayofMonth" Text="28"
+                               FontSize="30"
+                               Foreground="{Binding ESDBrush}"/>
+
+                    <TextBlock x:Name="YTitleStepper"
+                               VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" MaxLines="1"
+                               Foreground="{Binding ESSBrush}"
+                               Margin="10" FontSize="20" />
+
+                    <StackPanel Margin="5,8,0,0" VerticalAlignment="Center"
+                                Grid.Column="2">
+                        <TextBlock x:Name="YMonth" Text="September"
+                                   FontSize="25"
+                                   Foreground="{Binding ESDBrush}"/>
+                        <TextBlock x:Name="YDayofWeek" Text="Wednesday"
+                                   Foreground="{Binding ESDBrush}"/>
+                    </StackPanel>
+
+                </Grid>
 
                 <ListView x:Name="ContentGrid"
-                          Grid.RowSpan="2"
+                          Grid.RowSpan="2" Grid.ColumnSpan="2"
                           ItemTemplateSelector="{Binding TemplateSelector}"
                           Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
                           FlowDirection="{Binding FlowDir}">
