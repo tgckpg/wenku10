@@ -274,8 +274,6 @@ namespace wenku8.Settings.Layout
         {
             XRegistry LayoutSettings;
 
-            private string Current;
-
             private ImageSource bg, bg2;
             public ImageSource Background
             {
@@ -320,6 +318,7 @@ namespace wenku8.Settings.Layout
             public string BgType { get { return LayoutSettings.Parameter( Section )?.GetValue( "type" ); } }
 
             private bool SwState = false;
+            private string CurrLocation;
 
             public BgContext( XRegistry LayoutSettings, string Section )
             {
@@ -355,33 +354,17 @@ namespace wenku8.Settings.Layout
                         ApplyImage( null );
                         break;
                     case "Custom":
-                        IStorageFolder isf = await AppStorage.FutureAccessList.GetFolderAsync( value );
-                        if ( isf == null ) return;
+                        IStorageFolder ISD = await AppStorage.FutureAccessList.GetFolderAsync( value );
+                        if ( ISD == null ) return;
 
                         // Randomly pick an image
                         string[] Acceptables = new string[] { ".JPG", ".PNG", ".GIF" };
-                        IEnumerable<IStorageFile> sfs = await isf.GetFilesAsync();
+                        IEnumerable<IStorageFile> ISFs = await ISD.GetFilesAsync();
 
-                        sfs = sfs.TakeWhile( x => Acceptables.Contains( x.FileType.ToUpper() ) );
-                        int l = NTimer.RandInt( sfs.Count() );
+                        IStorageFile[] ISImgs = ISFs.Where( x => Acceptables.Contains( x.FileType.ToUpper() ) && x.Path != CurrLocation ).ToArray();
+                        if ( ISImgs.Length == 0 ) return;
 
-                        int i = 0;
-
-                        IStorageFile Choice = null;
-                        foreach ( IStorageFile f in sfs )
-                        {
-                            Choice = f;
-                            if ( i++ == l ) break;
-                        }
-
-                        if ( Choice == null ) return;
-
-                        // Copy this file to temp storage
-                        await Choice.CopyAsync(
-                            await Shared.Storage.CreateDirFromISOStorage( FileLinks.ROOT_BANNER )
-                            , Section + ".image", NameCollisionOption.ReplaceExisting );
-
-                        ApplyImage( FileLinks.ROOT_BANNER + Section + ".image" );
+                        ApplyImage( NTimer.RandChoice( ISImgs ) );
                         break;
                     case "Preset":
                         BookItem B = SrcView.Instance.ThisBook;
@@ -426,7 +409,7 @@ namespace wenku8.Settings.Layout
 
                 if ( UseDefault )
                 {
-                    SwapImage( await Image.NewBitmap( new Uri( value, UriKind.Absolute ) ) );
+                    ApplyImage( value, true );
                 }
             }
 
@@ -499,7 +482,7 @@ namespace wenku8.Settings.Layout
                     {
                         Background = x;
                         BGState2 = false;
-                        await Task.Delay( 2500 );
+                        await Task.Delay( 1000 );
                         Image.Destroy( Background2 );
                     }
                 };
@@ -510,7 +493,7 @@ namespace wenku8.Settings.Layout
                     {
                         Background2 = x;
                         BGState = false;
-                        await Task.Delay( 2500 );
+                        await Task.Delay( 1000 );
                         Image.Destroy( Background );
                     }
                 };
@@ -547,10 +530,34 @@ namespace wenku8.Settings.Layout
                 }
             }
 
-            private async void ApplyImage( string Location )
+            private async void ApplyImage( IStorageFile ISF )
             {
+                string Location = ISF.Path;
+
+                if ( CurrLocation == Location ) return;
+                CurrLocation = Location;
+
                 BitmapImage b = await Image.NewBitmap();
-                b.SetSourceFromUrl( Location );
+                b.SetSourceFromISF( ISF );
+                SwapImage( b );
+            }
+
+            private async void ApplyImage( string Location, bool FromSystem = false )
+            {
+                if ( CurrLocation == Location ) return;
+                CurrLocation = Location;
+
+                BitmapImage b;
+                if ( FromSystem )
+                {
+                    b = await Image.NewBitmap( new Uri( Location, UriKind.Absolute ) );
+                }
+                else
+                {
+                    b = await Image.NewBitmap();
+                    b.SetSourceFromUrl( Location );
+                }
+
                 SwapImage( b );
             }
         }
