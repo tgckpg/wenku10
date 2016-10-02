@@ -579,4 +579,7 @@
   <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
     <value>Font weight</value>
   </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>Chunk single Volumes</value>
+  </data>
 </root>

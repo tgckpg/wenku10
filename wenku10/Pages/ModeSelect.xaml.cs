@@ -66,9 +66,9 @@ namespace wenku10.Pages
         private void SinglePlayer( object sender, RoutedEventArgs e )
         {
             if ( ModeSelected ) return;
-
+#if !DEBUG
             StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.NORMAL_MODE );
-
+#endif
             ModeSelected = true;
             PFSim.AddField( LoadingWind );
 
@@ -126,8 +126,9 @@ namespace wenku10.Pages
 
         private async void StartMultiplayer()
         {
+#if !DEBUG
             StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.SECRET_MODE );
-
+#endif
             TransitionDisplay.SetState( StartButton, TransitionState.Inactive );
             TransitionDisplay.SetState( ForeText, TransitionState.Active );
 

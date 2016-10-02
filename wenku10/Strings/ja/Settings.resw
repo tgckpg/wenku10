@@ -578,4 +578,7 @@
   <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
     <value>フォントの太さ</value>
   </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>単一ボリュームを分割する</value>
+  </data>
 </root>

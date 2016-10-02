@@ -579,4 +579,7 @@
   <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
     <value>字型粗幼</value>
   </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>單卷自動分卷</value>
+  </data>
 </root>
