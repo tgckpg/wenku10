@@ -146,6 +146,7 @@
                                                   VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
                                         <StackPanel Margin="0, 0, 0, 50">
                                             <TextBlock Text="{Binding Title}" FontSize="30"
+                                                       c:AttachedCopyAction.Source="{Binding Title}"
                                                        Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap" />
                                             <TextBlock Margin="5, 0"
                                                        TextWrapping="Wrap"
