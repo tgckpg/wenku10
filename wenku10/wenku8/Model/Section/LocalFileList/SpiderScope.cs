@@ -12,7 +12,7 @@ namespace wenku8.Model.Section
 {
     using ListItem;
 
-    sealed partial class LocalFileList 
+    sealed partial class LocalFileList
     {
         public static readonly string ID = typeof( LocalFileList ).Name;
 

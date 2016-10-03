@@ -264,7 +264,9 @@ namespace wenku10.Pages
                 Frame, async () =>
                 {
                     BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
-                    BInst.SetId( ZoneListContext.CurrentZone.ZoneId );
+
+                    // "Z" to let LocalFileList know this is a Zone directory
+                    BInst.SetId( LocalFileList.ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
                     SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
                     if ( Book.CanProcess )
                     {

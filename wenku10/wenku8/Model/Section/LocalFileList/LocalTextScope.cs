@@ -15,6 +15,7 @@ using wenku10.Pages;
 namespace wenku8.Model.Section
 {
     using AdvDM;
+    using Book.Spider;
     using ListItem;
     using Resources;
     using Settings;
@@ -22,10 +23,11 @@ namespace wenku8.Model.Section
 
     sealed partial class LocalFileList : SearchableContext
     {
-        private string _loading = null;
+        public const char ZONE_PFX = 'Z';
 
         public bool FavOnly { get; private set; }
 
+        private string _loading = null;
         public string Loading
         {
             get { return _loading; }
@@ -38,73 +40,7 @@ namespace wenku8.Model.Section
 
         public LocalFileList()
         {
-            StringResources stx = new StringResources( "LoadingMessage" );
-            string LoadText = stx.Str( "ProgressIndicator_Message" );
-
-            var j = Task.Run( async () =>
-            {
-                IEnumerable<string> BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_LOCAL_VOL );
-                string[] favs = new BookStorage().GetIdList();
-
-                List<LocalBook> Items = new List<LocalBook>();
-                foreach ( string Id in BookIds )
-                {
-                    Loading = LoadText + ": " + Id;
-                    LocalBook LB = await LocalBook.CreateAsync( Id );
-                    if ( LB.ProcessSuccess )
-                    {
-                        Items.Add( LB );
-                        LB.IsFav = favs.Contains( Id );
-                    }
-                }
-
-                BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
-                foreach ( string Id in BookIds )
-                {
-                    Loading = LoadText + ": " + Id;
-                    SpiderBook LB = await SpiderBook.CreateAsyncSpider( Id );
-
-                    if( LB.aid != Id )
-                    {
-                        try
-                        {
-                            Logger.Log( ID, "Fixing misplaced spider book" );
-                            Shared.Storage.MoveDir( FileLinks.ROOT_SPIDER_VOL + Id, LB.MetaLocation );
-                        }
-                        catch( Exception ex )
-                        {
-                            Logger.Log( ID
-                                , string.Format(
-                                    "Unable to move script: {0} => {1}, {2} "
-                                    , Id, LB.aid, ex.Message )
-                                    , LogType.WARNING );
-
-                            continue;
-                        }
-                    }
-
-                    if ( LB.ProcessSuccess || LB.CanProcess )
-                    {
-                        Items.Add( LB );
-                        LB.IsFav = favs.Contains( Id );
-                    }
-                    else
-                    {
-                        try
-                        {
-                            Logger.Log( ID, "Removing invalid script: " + Id, LogType.INFO );
-                            Shared.Storage.RemoveDir( LB.MetaRoot );
-                        }
-                        catch ( Exception ex )
-                        {
-                            Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
-                        }
-                    }
-                }
-
-                if ( 0 < Items.Count ) SearchSet = Items;
-                Loading = null;
-            } );
+            ProcessVols();
         }
 
         public async void OpenDirectory()
@@ -113,7 +49,7 @@ namespace wenku8.Model.Section
             string[] ids = BS.GetIdList();
             IEnumerable<LocalBook> Items = await Shared.Storage.GetLocalText( async ( x, i, l ) =>
             {
-                if( i % 20 == 0 )
+                if ( i % 20 == 0 )
                 {
                     Worker.UIInvoke( () => Loading = string.Format( "{0}/{1}", i, l ) );
                     await Task.Delay( 15 );
@@ -140,7 +76,8 @@ namespace wenku8.Model.Section
                 Loading = stx.Text( "Active" );
             } );
 
-            rCache.GET( Context.Url, ( e, url ) => {
+            rCache.GET( Context.Url, ( e, url ) =>
+            {
                 Loading = null;
                 SaveTemp( e, Context );
             }
@@ -282,7 +219,7 @@ namespace wenku8.Model.Section
         {
             List<LocalBook> NData = new List<LocalBook>();
 
-            if( Data != null )
+            if ( Data != null )
                 NData.AddRange( Data.Cast<LocalBook>() );
 
             NData.AddRange( Book );
@@ -291,5 +228,104 @@ namespace wenku8.Model.Section
             NotifyChanged( "SearchSet" );
         }
 
+        private async void ProcessVols()
+        {
+            StringResources stx = new StringResources( "LoadingMessage" );
+            string LoadText = stx.Str( "ProgressIndicator_Message" );
+
+            IEnumerable<string> BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_LOCAL_VOL );
+            string[] favs = new BookStorage().GetIdList();
+
+            List<LocalBook> Items = new List<LocalBook>();
+            foreach ( string Id in BookIds )
+            {
+                Loading = LoadText + ": " + Id;
+                LocalBook LB = await LocalBook.CreateAsync( Id );
+                if ( LB.ProcessSuccess )
+                {
+                    Items.Add( LB );
+                    LB.IsFav = favs.Contains( Id );
+                }
+            }
+
+            Action<string, SpiderBook> ProcessSpider = ( Id, LB ) =>
+             {
+                 Loading = LoadText + ": " + Id;
+                 if ( LB.aid != Id )
+                 {
+                     try
+                     {
+                         Logger.Log( ID, "Fixing misplaced spider book" );
+                         Shared.Storage.MoveDir( FileLinks.ROOT_SPIDER_VOL + Id, LB.MetaLocation );
+                     }
+                     catch ( Exception ex )
+                     {
+                         Logger.Log( ID
+                             , string.Format(
+                                 "Unable to move script: {0} => {1}, {2} "
+                                 , Id, LB.aid, ex.Message )
+                                 , LogType.WARNING );
+                     }
+                 }
+
+                 if ( LB.ProcessSuccess || LB.CanProcess )
+                 {
+                     Items.Add( LB );
+                     LB.IsFav = favs.Contains( Id );
+                 }
+                 else
+                 {
+                     try
+                     {
+                         Logger.Log( ID, "Removing invalid script: " + Id, LogType.INFO );
+                         Shared.Storage.RemoveDir( LB.MetaRoot );
+                     }
+                     catch ( Exception ex )
+                     {
+                         Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
+                     }
+                 }
+             };
+
+            BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
+            foreach ( string Id in BookIds )
+            {
+                if ( Id[ 0 ] == ZONE_PFX )
+                {
+                    IEnumerable<string> ZoneItems = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL + Id + "/" );
+                    foreach ( string SId in ZoneItems )
+                    {
+                        /**
+                         * This code is a mess. I'll explain a bit more in here
+                         *   First, the location of the Book.MetaLocation for ZoneItems
+                         *   can only be retrived from BookInstruction
+                         *   However ZoneId and Id are assinged by Spider on the fly,
+                         *   restoring this information is a bit tricky
+                         */
+
+                        // Create BookIntstruction just to retrieve the correct id pattern
+                        BookInstruction BInst = new BookInstruction( Id, SId );
+
+                        /**
+                         * After 2 hours of investigations...
+                         * Welp, just outsmarted by myself, The CreateAsyncSpide works because:
+                         *   Inside the TestProcessed method, the BookInstruction are created
+                         *   using BoockInstruction( Id, Setings ) overload
+                         *   the provided id is "this.aid" here BUT the full id is restored again
+                         *   in InitProcMan() method
+                         *   Fortunately, ssid will be set correctly inside the ReadInfo method
+                         */
+                        ProcessSpider( BInst.Id, await SpiderBook.CreateAsyncSpider( BInst.Id ) );
+                    }
+                }
+                else
+                {
+                    ProcessSpider( Id, await SpiderBook.CreateAsyncSpider( Id ) );
+                }
+            }
+
+            if ( 0 < Items.Count ) SearchSet = Items;
+            Loading = null;
+        }
     }
 }
