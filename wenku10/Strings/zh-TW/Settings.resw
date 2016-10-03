@@ -198,16 +198,16 @@
     <value>正文範本</value>
   </data>
   <data name="Appearance_ContentReader_Exp1.Text" xml:space="preserve">
-    <value>因為那些年裡，我以眾所周知的蠢材美少女身份紅遍全日品，非常好色。</value>
+    <value>要必切学公阪産応保名断増。刊界突情責読理告記得止集九。先用万方大争国鷲文企気出健申死住著刈禁。情墓容報一有広約活軍対新円問問利区無併。</value>
   </data>
   <data name="Appearance_ContentReader_Exp2.Text" xml:space="preserve">
-    <value>事情並沒有發展到我在國三那年的晴天。</value>
+    <value>転暮部第際載作湿地報日写郎集。</value>
   </data>
   <data name="Appearance_ContentReader_Exp3.Text" xml:space="preserve">
-    <value>那年我二百八十歲，但馬上就要迎接三千七百五十歲了，是個非常特別的小學生。沒有朋友，也沒有喜歡的男生，日子過得很沒趣。像是吃了樹一樣，我拿經常在寫的第九百三十七本小說投稿參加超人迪加的高 B 班比賽，沒想到竟然以最年老的賽車手身份落選。</value>
+    <value>在第加割両会理水避葉選回周社書追火手。化質著衝務投出与画択峰人招九走販地試表。元資題日被木熱京型客面海。康修増特遺部平択全週若奈著開笑素倍。総量作類治紙芸激入条及優地設試討回目。</value>
   </data>
   <data name="Appearance_ContentReader_Exp4.Text" xml:space="preserve">
-    <value>故事內容是位小女孩以第六人稱講述故事，加上我又用了雞頭爆裂這種不知所謂的筆名，結果雜誌社就以為——</value>
+    <value>人京西野権有求載室水展載毎帳予。岩以用浜職禁減品業爆無千必京更。育抽言公誕松速行古回位文。課中権回毎学記史際市海役戻数船。時将月祀覧権写益苦指中社。油者電図委郵急脳合相税使事座問景年載。取切有構宣幼回級携会比察田。表情投関索政載岡要容準就軍用際年内。気包期都代付内自問混住法閣数取更——</value>
   </data>
   <data name="Appearance_ContentReader_FontColor.Text" xml:space="preserve">
     <value>字體顏色</value>
@@ -566,5 +566,20 @@
   </data>
   <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
     <value>確認安裝</value>
+  </data>
+  <data name="Appearance_ContentReader_BgImage.Text" xml:space="preserve">
+    <value>背景圖片</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_DColor.Text" xml:space="preserve">
+    <value>日曆</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_SColor.Text" xml:space="preserve">
+    <value>巻 / 章節</value>
+  </data>
+  <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>字型粗幼</value>
+  </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>單卷自動分卷</value>
   </data>
 </root>

@@ -58,7 +58,7 @@ namespace wenku8.System
             // SHRequest AppVersion param
             Resources.Shared.ShRequest.Ver = Version;
             // Set Version Compatibles
-            Resources.Shared.ShRequest.Compat = new string[] { "1.8.3t", "1.3.2b", "1.0.0p" };
+            Resources.Shared.ShRequest.Compat = new string[] { "1.8.6t", "1.3.4b", "1.0.0p" };
 
             // Connection Mode
 			WHttpRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by Astropenguin", Version );

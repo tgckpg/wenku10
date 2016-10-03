@@ -73,9 +73,9 @@ namespace wenku8.Model.Loaders
             try
             {
                 bool NotCached = false;
-                for ( ES.Rewind(); ES.NextStepAvailable(); ES.stepNext() )
+                for ( ES.Rewind(); ES.NextStepAvailable(); ES.StepNext() )
                 {
-                    Chapter C = new Chapter( ES.currentEpTitle, ThisBook.Id, ES.currentVid, ES.currentCid );
+                    Chapter C = new Chapter( ES.EpTitle, ThisBook.Id, ES.Vid, ES.Cid );
                     if ( !C.IsCached )
                     {
                         if ( !NotCached ) CurrentCount++;
@@ -84,13 +84,13 @@ namespace wenku8.Model.Loaders
                         // Register backgrountd transfer
                         await Task.Delay( TimeSpan.FromMilliseconds( 80 ) );
 
-                        XKey[] Request = X.Call<XKey[]>( XProto.WRequest, "GetBookContent", ThisBook.Id, ES.currentCid );
+                        XKey[] Request = X.Call<XKey[]>( XProto.WRequest, "GetBookContent", ThisBook.Id, ES.Cid );
 
-                        DispLog( ES.CurrentVolTitle + "[" + ES.currentEpTitle + "]" );
+                        DispLog( ES.VolTitle + "[" + ES.EpTitle + "]" );
                         App.RuntimeTransfer.RegisterRuntimeThread(
                             Request
                             , C.ChapterPath, Guid.NewGuid()
-                            , Uri.EscapeDataString( ThisBook.Title ) + "&" + Uri.EscapeDataString( ES.CurrentVolTitle ) + "&" + Uri.EscapeDataString( ES.currentEpTitle )
+                            , Uri.EscapeDataString( ThisBook.Title ) + "&" + Uri.EscapeDataString( ES.VolTitle ) + "&" + Uri.EscapeDataString( ES.EpTitle )
                             , C.IllustrationPath
                         );
                     }

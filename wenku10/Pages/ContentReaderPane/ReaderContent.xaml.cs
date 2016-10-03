@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -22,11 +21,9 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
-using Net.Astropenguin.UI;
 
 using wenku8.Effects;
 using wenku8.Model.Book;
-using wenku8.Model.Pages.ContentReader;
 using wenku8.Model.Section;
 using wenku8.Model.Text;
 using wenku8.Resources;
@@ -65,8 +62,6 @@ namespace wenku10.Pages.ContentReaderPane
                 Reader.Dispose();
                 Reader = null;
 
-                ClockStop();
-
                 Worker.UIInvoke( () =>
                 {
                     MasterGrid.DataContext = null;
@@ -87,10 +82,10 @@ namespace wenku10.Pages.ContentReaderPane
             AnchorHistory = new AHQueue( 20 );
             HCount.DataContext = AnchorHistory;
 
+            ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ Reader.Settings.IsHorizontal ? "HPanel" : "VPanel" ];
+
             MasterGrid.DataContext = Reader;
             Reader.PropertyChanged += ScrollToParagraph;
-
-            ClockStart();
         }
 
         internal void Load( bool Reload = false )
@@ -201,7 +196,7 @@ namespace wenku10.Pages.ContentReaderPane
             }
         }
 
-        internal async void ScrollToParagraph( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
+        internal async void ScrollToParagraph( object sender, PropertyChangedEventArgs e )
         {
             switch ( e.PropertyName )
             {
@@ -298,51 +293,6 @@ namespace wenku10.Pages.ContentReaderPane
             Reader.SelectAndAnchor( SelectedParagraph = P );
         }
 
-        DispatcherTimer ClockTicker;
-        private void ClockStart()
-        {
-            if ( ClockTicker == null )
-            {
-                ClockTicker = new DispatcherTimer();
-                ClockTicker.Interval = TimeSpan.FromSeconds( 5 );
-            }
-
-            RClock.DataContext = new ClockContext();
-
-            ClockTicker.Tick += ClockTicker_Tick;
-            ClockTicker.Start();
-
-            AggregateBattery_ReportUpdated( Battery.AggregateBattery, null );
-            Battery.AggregateBattery.ReportUpdated += AggregateBattery_ReportUpdated;
-        }
-
-        private void ClockStop()
-        {
-            if ( ClockTicker == null ) return;
-            ClockTicker.Stop();
-            ( RClock.DataContext as ClockContext ).Dispose();
-
-            ClockTicker.Tick -= ClockTicker_Tick;
-            ClockTicker = null;
-            Battery.AggregateBattery.ReportUpdated -= AggregateBattery_ReportUpdated;
-        }
-
-        private void ClockTicker_Tick( object sender, object e )
-        {
-            RClock.Time = DateTime.Now;
-        }
-
-        private void AggregateBattery_ReportUpdated( Battery sender, object args )
-        {
-            BatteryReport Report = sender.GetReport();
-
-            if( Report.RemainingCapacityInMilliwattHours == null ) return;
-            Worker.UIInvoke( () =>
-            {
-                RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
-            } );
-        }
-
         private void UndoAnchorJump( object sender, RoutedEventArgs e )
         {
             if ( TransitionDisplay.GetState( UndoButton ) == TransitionState.Active )
@@ -382,7 +332,7 @@ namespace wenku10.Pages.ContentReaderPane
                 return;
 
             TransitionDisplay.SetState( UndoButton, TransitionState.Active );
-            while( HoldOneMore )
+            while ( HoldOneMore )
             {
                 HoldOneMore = false;
                 await Task.Delay( 3000 );
@@ -424,5 +374,57 @@ namespace wenku10.Pages.ContentReaderPane
                 return i;
             }
         }
+
+        private double ZoomTrigger = 0;
+
+        private void ManipulationDeltaX( object sender, ManipulationDeltaRoutedEventArgs e ) { TriggerZoom( e.Delta.Translation.X ); }
+        private void ManipulationDeltaY( object sender, ManipulationDeltaRoutedEventArgs e ) { TriggerZoom( e.Delta.Translation.Y ); }
+
+        private void TriggerZoom( double dv )
+        {
+            ZoomTrigger += dv;
+
+            if ( 100 < ZoomTrigger )
+            {
+                ZoomTrigger = 0;
+                CRSlide( ContentReader.ManiState.DOWN );
+            }
+            else if ( ZoomTrigger < -100 )
+            {
+                ZoomTrigger = 0;
+                CRSlide( ContentReader.ManiState.UP );
+            }
+            else if ( ZoomTrigger == 0 )
+            {
+                CRSlide( ContentReader.ManiState.NORMAL );
+            }
+        }
+
+        private void CRSlide( ContentReader.ManiState State )
+        {
+            if ( State == Container.CurrManiState ) return;
+
+            switch ( State )
+            {
+                case ContentReader.ManiState.NORMAL:
+                    Container.ReaderSlideBack();
+                    break;
+                case ContentReader.ManiState.UP:
+                    if ( Container.CurrManiState == ContentReader.ManiState.DOWN )
+                        goto case ContentReader.ManiState.NORMAL;
+
+                    Container.ReaderSlideUp();
+                    break;
+                case ContentReader.ManiState.DOWN:
+                    if ( Container.CurrManiState == ContentReader.ManiState.UP )
+                        goto case ContentReader.ManiState.NORMAL;
+
+                    Container.ReaderSlideDown();
+                    break;
+            }
+
+            Container.CurrManiState = State;
+        }
+
     }
 }

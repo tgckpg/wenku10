@@ -26,6 +26,9 @@ using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Helpers;
 
+using wenku8.Resources;
+using wenku8.Storage;
+
 namespace wenku10
 {
     /// <summary>
@@ -95,13 +98,13 @@ namespace wenku10
 
             if( e.PrelaunchActivated )
             {
-                if ( wenku8.Resources.Shared.Storage == null )
+                if ( Shared.Storage == null )
                 {
-                    wenku8.Resources.Shared.Storage = new wenku8.Storage.GeneralStorage();
-                    Net.Astropenguin.IO.XRegistry.AStorage = wenku8.Resources.Shared.Storage;
+                    Shared.Storage = new GeneralStorage();
+                    Net.Astropenguin.IO.XRegistry.AStorage = Shared.Storage;
                 }
 
-                wenku8.Resources.Shared.Storage.CacheFileStatus();
+                Shared.Storage.CacheFileStatus();
                 return;
             }
 

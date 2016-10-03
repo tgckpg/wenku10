@@ -294,7 +294,7 @@ namespace wenku10.Pages
                 }
 
                 // Commencing Level2 initializations
-                new wenku8.System.Bootstrap().Level2();
+                new global::wenku8.System.Bootstrap().Level2();
             }
 
             BookItem BookEx = X.Instance<BookItem>( XProto.BookItemEx, id );
@@ -363,14 +363,14 @@ namespace wenku10.Pages
             }
 
             EpisodeStepper ES = new EpisodeStepper( new VolumesInfo( b ) );
-            ES.stepNext();
+            ES.StepNext();
 
             await OneDriveRsync();
             await Dispatcher.RunAsync(
                 CoreDispatcherPriority.Normal
                 , () => Frame.Navigate(
                     typeof( ContentReader )
-                    , new Chapter( ES.currentEpTitle, b.Id, ES.currentVid, ES.currentCid )
+                    , new Chapter( ES.EpTitle, b.Id, ES.Vid, ES.Cid )
                 )
             );
         }

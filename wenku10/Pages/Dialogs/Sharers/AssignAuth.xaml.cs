@@ -19,7 +19,7 @@ using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {
-    using StringAuthManager = wenku8.System.AuthManager<INameValue>;
+    using StringAuthManager = global::wenku8.System.AuthManager<INameValue>;
 
     sealed partial class AssignAuth : ContentDialog
     {

@@ -22,9 +22,12 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.Config;
+using wenku8.Model.Section;
 using wenku8.Model.Text;
 using wenku8.Model.Pages.ContentReader;
 using wenku8.Settings.Theme;
+
+using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -35,6 +38,9 @@ namespace wenku10.Pages.Settings.Themes
         public bool NeedRedraw { get; private set; }
         Paragraph[] ExpContent;
 
+        private ReaderView ReaderContext;
+        private BgContext RBgContext;
+
         public ContentReader()
         {
             NeedRedraw = false;
@@ -44,7 +50,14 @@ namespace wenku10.Pages.Settings.Themes
 
         private void InitTemplate()
         {
-            ContextGrid.DataContext = new global::wenku8.Model.Section.ReaderView();
+            ReaderContext = new ReaderView();
+            ContentGrid.DataContext = ReaderContext;
+            ContextGrid.DataContext = new ESContext();
+
+            RBgContext = ReaderContext.Settings.GetBgContext();
+            ContentBg.DataContext = RBgContext;
+
+            RBgContext.ApplyBackgrounds();
 
             StringResources stx = new StringResources( "Settings" );
 
@@ -55,6 +68,8 @@ namespace wenku10.Pages.Settings.Themes
                 , new Paragraph( stx.Text( "Appearance_ContentReader_Exp3") )
                 , new Paragraph( stx.Text( "Appearance_ContentReader_Exp4") )
             };
+
+            XTitleStepper.Text = YTitleStepper.Text = stx.Text( "Appearance_ContentReader_Exp2" );
 
             ColorList.ItemsSource = new ColorItem[]
             {
@@ -111,14 +126,29 @@ namespace wenku10.Pages.Settings.Themes
                     stx.Text( "Appearance_ContentReader_Clock_SColor" )
                     , Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR
                 ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR = c; } }
-            };
 
-            RClock.DataContext = new ClockContext();
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_EStepper_DColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR = c; } }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_EStepper_SColor" )
+                    , Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR = c; } }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_Background" )
+                    , Properties.APPEARANCE_CONTENTREADER_ES_BG
+                ) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_BG = c; } }
+            };
 
             BatteryReport Report = Battery.AggregateBattery.GetReport();
             if ( Report.RemainingCapacityInMilliwattHours != null )
             {
-                RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
+                YClock.Progress
+                    = XClock.Progress
+                    = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
             }
 
             FontSizeSlider.Value = Properties.APPEARANCE_CONTENTREADER_FONTSIZE;
@@ -153,13 +183,40 @@ namespace wenku10.Pages.Settings.Themes
 
             FontWeightCB.SelectedItem = PIW.First( x => x.Weight.Weight == FWeight.Weight );
 
+            YClock.Time = XClock.Time = DateTime.Now;
+            XDayofWeek.Text = YDayofWeek.Text = YClock.Time.ToString( "dddd" );
+            XDayofMonth.Text = YDayofMonth.Text = YClock.Time.Day.ToString();
+            XMonth.Text = YMonth.Text = YClock.Time.ToString( "MMMM" );
+
+            SetLayoutAware();
+
             UpdateExampleLs();
             UpdateExamplePs();
             UpdateExampleFc();
             UpdateExampleFs();
-            for( int i = 0; i < 3; i ++ )
+            for ( int i = 0; i < 3; i++ )
             {
                 var j = ContentGrid.Dispatcher.RunIdleAsync( ( x ) => UpdateExampleFs() );
+            }
+        }
+
+        private void SetLayoutAware()
+        {
+            if ( ReaderContext.Settings.IsHorizontal )
+            {
+                Grid.SetRowSpan( ContentGrid, 1 );
+                Grid.SetColumnSpan( ContentGrid, 2 );
+
+                XPanel.Visibility = Visibility.Collapsed;
+                YPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Grid.SetRowSpan( ContentGrid, 2 );
+                Grid.SetColumnSpan( ContentGrid, 1 );
+
+                XPanel.Visibility = Visibility.Visible;
+                YPanel.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -214,9 +271,8 @@ namespace wenku10.Pages.Settings.Themes
             SolidColorBrush C = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_FONTCOLOR );
             ExpContent.All( ( x ) => { x.FontColor = C; return true; } );
 
-            ContextGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
+            ContentGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
         }
-
 
         private async void ColorList_ItemClick( object sender, ItemClickEventArgs e )
         {
@@ -248,8 +304,22 @@ namespace wenku10.Pages.Settings.Themes
                 this.Name = Name;
             }
 
-
             public string Name { get; private set; }
+        }
+
+        private void BgChoice_SelectionChanged( object sender, SelectionChangedEventArgs e )
+        {
+            if ( e.AddedItems.Count < 1 ) return;
+            RBgContext.SetBackground( ( ( ComboBoxItem ) e.AddedItems.First() ).Tag.ToString() );
+        }
+
+        private void BgChoice_Loaded( object sender, RoutedEventArgs e )
+        {
+            if ( ReaderContext == null ) return;
+
+            BgChoice.SelectedIndex = Array.IndexOf(
+                new string[] { "None", "Custom", "Preset", "System" }, RBgContext.BgType
+            );
         }
     }
 }

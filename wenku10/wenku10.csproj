@@ -106,6 +106,7 @@
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\glitter.dds" />
     <Content Include="Assets\Samples\BgComments.jpg" />
+    <Content Include="Assets\Samples\BgContentReader.jpg" />
     <Content Include="Assets\Samples\BgTOC.jpg" />
     <Content Include="Assets\Samples\BgInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />
@@ -167,6 +168,7 @@
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
     <Compile Include="wenku8\Model\Section\ZoneList.cs" />
     <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
+    <Compile Include="wenku8\System\ActionEvent.cs" />
     <Compile Include="wenku8\System\Migration.cs" />
     <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
     <Compile Include="wenku8\ThemeIcons.cs" />
@@ -206,7 +208,7 @@
     <Compile Include="wenku8\Model\Loaders\CommentLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\NewsLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\VolumeLoader.cs" />
-    <Compile Include="wenku8\Model\Pages\ContentReader\ClockContext.cs" />
+    <Compile Include="wenku8\Model\Pages\ContentReader\ESContext.cs" />
     <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
     <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
     <Compile Include="wenku8\Model\Section\LocalFileList\LocalTextScope.cs" />
@@ -229,6 +231,9 @@
       <DependentUpon>BookInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReader.xaml.cs">
+      <DependentUpon>ContentReader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReader-VESwipe.xaml.cs">
       <DependentUpon>ContentReader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
@@ -697,6 +702,12 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Microsoft.Services.Store.Engagement, Version=10.0">
+      <Name>Microsoft Engagement Framework</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>

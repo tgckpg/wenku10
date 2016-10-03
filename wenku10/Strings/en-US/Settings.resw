@@ -567,4 +567,19 @@
   <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
     <value>Confirm install</value>
   </data>
+  <data name="Appearance_ContentReader_BgImage.Text" xml:space="preserve">
+    <value>Background Image</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_DColor.Text" xml:space="preserve">
+    <value>Calendar</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_SColor.Text" xml:space="preserve">
+    <value>Volume / Episode</value>
+  </data>
+  <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>Font weight</value>
+  </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>Chunk single Volumes</value>
+  </data>
 </root>

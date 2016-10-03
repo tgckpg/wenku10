@@ -13,6 +13,7 @@ using Net.Astropenguin.UI.Icons;
 namespace wenku8.Model.Section
 {
     using Book;
+    using Config;
     using Storage;
     using Settings.Layout;
     using ThemeIcons;
@@ -46,6 +47,9 @@ namespace wenku8.Model.Section
 
             CurrentBook = b;
             Volumes = b.GetVolumes();
+
+            if ( Properties.MISC_CHUNK_SINGLE_VOL )
+                VirtualizeVolumes();
 
             ToggleDir = new Grid();
             ToggleDir.FlowDirection = FlowDirection.LeftToRight;
@@ -100,9 +104,17 @@ namespace wenku8.Model.Section
             ToggleDir.Children.Add( ArrowIcon );
         }
 
+        // This groups 30+ ChapterList to virtual volumes for easier navigation
+        private void VirtualizeVolumes()
+        {
+            int l = Volumes.Count();
+            if ( l == 0 || !( l == 1 && 30 < Volumes.First().ChapterList.Count() ) ) return;
+            Volumes = VirtualVolume.Create( Volumes.First() );
+        }
+
         public void ToggleDirection()
         {
-            switch( ++DirMode )
+            switch ( ++DirMode )
             {
                 case 0:
                     CRSettings.IsHorizontal = true;
@@ -145,7 +157,7 @@ namespace wenku8.Model.Section
             // Set the autoanchor
             string AnchorId = new AutoAnchor().GetBookmark( CurrentBook.Id );
 
-            foreach( Volume V in Volumes )
+            foreach ( Volume V in Volumes )
             {
                 foreach ( Chapter C in V.ChapterList )
                 {
@@ -166,7 +178,7 @@ namespace wenku8.Model.Section
             public Volume Vol { get; set; }
 
             public ChapterGroup( Volume V )
-                :base( V.ChapterList )
+                : base( V.ChapterList )
             {
                 Vol = V;
             }

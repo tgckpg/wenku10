@@ -22,7 +22,7 @@ namespace wenku8.Settings.Layout
     using Resources;
     using SrcView = wenku10.Pages.BookInfoView;
 
-    class BookInfoView
+    sealed class BookInfoView
     {
         public static readonly string ID = typeof( BookInfoView ).Name;
 
@@ -313,15 +313,23 @@ namespace wenku8.Settings.Layout
                     NotifyChanged( "BGState2" );
                 }
             }
+
             public string Section { get; private set; }
+            public string BgType { get { return LayoutSettings.Parameter( Section )?.GetValue( "type" ); } }
 
             private bool SwState = false;
+            private string CurrLocation;
 
             public BgContext( XRegistry LayoutSettings, string Section )
             {
                 this.LayoutSettings = LayoutSettings;
-
                 this.Section = Section;
+            }
+
+            public void Reload()
+            {
+                LayoutSettings = new XRegistry( "<NaN />", LayoutSettings.Location );
+                ApplyBackgrounds();
             }
 
             public async void ApplyBackgrounds()
@@ -342,34 +350,21 @@ namespace wenku8.Settings.Layout
 
                 switch ( P.GetValue( "type" ) )
                 {
+                    case "None":
+                        ApplyImage( null );
+                        break;
                     case "Custom":
-                        IStorageFolder isf = await AppStorage.FutureAccessList.GetFolderAsync( value );
-                        if ( isf == null ) return;
+                        IStorageFolder ISD = await AppStorage.FutureAccessList.GetFolderAsync( value );
+                        if ( ISD == null ) return;
 
                         // Randomly pick an image
                         string[] Acceptables = new string[] { ".JPG", ".PNG", ".GIF" };
-                        IEnumerable<IStorageFile> sfs = await isf.GetFilesAsync();
+                        IEnumerable<IStorageFile> ISFs = await ISD.GetFilesAsync();
 
-                        sfs = sfs.TakeWhile( x => Acceptables.Contains( x.FileType.ToUpper() ) );
-                        int l = NTimer.RandInt( sfs.Count() );
+                        IStorageFile[] ISImgs = ISFs.Where( x => Acceptables.Contains( x.FileType.ToUpper() ) && x.Path != CurrLocation ).ToArray();
+                        if ( ISImgs.Length == 0 ) return;
 
-                        int i = 0;
-
-                        IStorageFile Choice = null;
-                        foreach ( IStorageFile f in sfs )
-                        {
-                            Choice = f;
-                            if ( i++ == l ) break;
-                        }
-
-                        if ( Choice == null ) return;
-
-                        // Copy this file to temp storage
-                        await Choice.CopyAsync(
-                            await Shared.Storage.CreateDirFromISOStorage( FileLinks.ROOT_BANNER )
-                            , Section + ".image", NameCollisionOption.ReplaceExisting );
-
-                        ApplyImage( FileLinks.ROOT_BANNER + Section + ".image" );
+                        ApplyImage( NTimer.RandChoice( ISImgs ) );
                         break;
                     case "Preset":
                         BookItem B = SrcView.Instance.ThisBook;
@@ -414,7 +409,7 @@ namespace wenku8.Settings.Layout
 
                 if ( UseDefault )
                 {
-                    UpdateImage( await Image.NewBitmap( new Uri( value, UriKind.Absolute ) ) );
+                    ApplyImage( value, true );
                 }
             }
 
@@ -450,6 +445,9 @@ namespace wenku8.Settings.Layout
                             case "COMMENTS":
                                 value = "ms-appx:///Assets/Samples/BgComments.jpg";
                                 break;
+                            case "CONTENT_READER":
+                                value = "ms-appx:///Assets/Samples/BgContentReader.jpg";
+                                break;
                         }
 
                         break;
@@ -476,7 +474,7 @@ namespace wenku8.Settings.Layout
                 ;
             }
 
-            private void UpdateImage( BitmapImage b )
+            private void SwapImage( BitmapImage b )
             {
                 Action<BitmapImage> Front = async x =>
                 {
@@ -532,11 +530,35 @@ namespace wenku8.Settings.Layout
                 }
             }
 
-            private async void ApplyImage( string Location )
+            private async void ApplyImage( IStorageFile ISF )
             {
+                string Location = ISF.Path;
+
+                if ( CurrLocation == Location ) return;
+                CurrLocation = Location;
+
                 BitmapImage b = await Image.NewBitmap();
-                b.SetSourceFromUrl( Location );
-                UpdateImage( b );
+                b.SetSourceFromISF( ISF );
+                SwapImage( b );
+            }
+
+            private async void ApplyImage( string Location, bool FromSystem = false )
+            {
+                if ( CurrLocation == Location ) return;
+                CurrLocation = Location;
+
+                BitmapImage b;
+                if ( FromSystem )
+                {
+                    b = await Image.NewBitmap( new Uri( Location, UriKind.Absolute ) );
+                }
+                else
+                {
+                    b = await Image.NewBitmap();
+                    b.SetSourceFromUrl( Location );
+                }
+
+                SwapImage( b );
             }
         }
     }

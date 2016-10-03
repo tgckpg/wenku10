@@ -584,7 +584,7 @@ namespace wenku10
 
             Texture = new TextureLoader();
 
-            Windows.UI.Color C = wenku8.Config.Properties.APPEARENCE_THEME_HORIZONTAL_RIBBON_COLOR;
+            Windows.UI.Color C = global::wenku8.Config.Properties.APPEARENCE_THEME_HORIZONTAL_RIBBON_COLOR;
             ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
 
             Stage.GameLoopStarting += Stage_GameLoopStarting;

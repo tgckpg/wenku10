@@ -560,4 +560,19 @@
   <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
     <value>确认安装</value>
   </data>
+  <data name="Appearance_ContentReader_EStepper_DColor.Text" xml:space="preserve">
+    <value>日历</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_SColor.Text" xml:space="preserve">
+    <value>卷 / 章节</value>
+  </data>
+  <data name="Appearance_ContentReader_BgImage.Text" xml:space="preserve">
+    <value>背景图片</value>
+  </data>
+  <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>字体粗细</value>
+  </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>单卷自动分卷</value>
+  </data>
 </root>

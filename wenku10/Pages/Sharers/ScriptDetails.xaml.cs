@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -16,15 +17,14 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.UI.Icons;
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
-using Net.Astropenguin.DataModel;
-using Net.Astropenguin.UI;
+using Net.Astropenguin.UI.Icons;
 
 using wenku8.AdvDM;
 using wenku8.Effects;
@@ -37,18 +37,19 @@ using wenku8.Model.Loaders;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.Settings;
+using wenku8.Storage;
 using wenku8.ThemeIcons;
+
+using AESManager = wenku8.System.AESManager;
+using TokenManager = wenku8.System.TokenManager;
+using CryptAES = wenku8.System.CryptAES;
+using CryptRSA = wenku8.System.CryptRSA;
 
 namespace wenku10.Pages.Sharers
 {
     using Dialogs.Sharers;
 
-    using AESManager = wenku8.System.AESManager;
-    using TokenManager = wenku8.System.TokenManager;
-    using CryptAES = wenku8.System.CryptAES;
-    using CryptRSA = wenku8.System.CryptRSA;
     using SHTarget = SharersRequest.SHTarget;
-    using System.Threading.Tasks;
 
     sealed partial class ScriptDetails : Page
     {
@@ -60,7 +61,7 @@ namespace wenku10.Pages.Sharers
         private Observables<HSComment, HSComment> CommentsSource;
         private Observables<SHRequest, SHRequest> RequestsSource;
 
-        private XRegistry XGrant = new XRegistry( "<xg />", wenku8.Settings.FileLinks.ROOT_SETTING + "XGrant.tmp" );
+        private XRegistry XGrant = new XRegistry( "<xg />", FileLinks.ROOT_SETTING + "XGrant.tmp" );
         private Dictionary<string, PaneNavButton> AvailControls;
 
         private IMember Member;
@@ -145,7 +146,7 @@ namespace wenku10.Pages.Sharers
 
             BottomControls = new ObservableCollection<PaneNavButton>();
             AccessToken = ( string ) new TokenManager().GetAuthById( BindItem.Id )?.Value;
-            XGrant.SetParameter( BindItem.Id, wenku8.Storage.BookStorage.TimeKey );
+            XGrant.SetParameter( BindItem.Id, BookStorage.TimeKey );
 
             if ( !string.IsNullOrEmpty( AccessToken ) )
             {
@@ -583,7 +584,7 @@ namespace wenku10.Pages.Sharers
 
             IEnumerable<HSComment> FirstPage = await CLoader.NextPage();
 
-            CommentsSource = new Observables<HSComment, HSComment>( FirstPage.Flattern( x => x.Replies ) );
+            CommentsSource = new Observables<HSComment, HSComment>( FirstPage.ToArray() );
 
             CommentsSource.LoadStart += ( x, y ) => MarkLoading();
             CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();

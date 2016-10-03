@@ -15,8 +15,11 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
+using wenku8.Effects;
 using wenku8.Model;
 using wenku8.Model.Text;
+
+using EBDictManager = wenku8.System.EBDictManager;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -43,11 +46,11 @@ namespace wenku10.Pages.Dialogs
 
         private async void SetTemplate()
         {
-            wenku8.System.EBDictManager Manager = new wenku8.System.EBDictManager();
+            EBDictManager Manager = new EBDictManager();
 
             Dict = await Manager.GetDictionary();
             LayoutRoot.DataContext = Dict;
-            Mask.State = Net.Astropenguin.UI.ControlState.Foreatii;
+            TransitionDisplay.SetState( Mask, TransitionState.Inactive );
             MaskLoading.IsActive = false;
         }
 

@@ -204,4 +204,7 @@
   <data name="ResetState.Text" xml:space="preserve">
     <value>重置狀態</value>
   </data>
+  <data name="NoBackground.Text" xml:space="preserve">
+    <value>沒有背景</value>
+  </data>
 </root>

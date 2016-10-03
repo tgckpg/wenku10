@@ -566,4 +566,19 @@
   <data name="EBWin_Confirm_Intstall.Text" xml:space="preserve">
     <value>インストール確認</value>
   </data>
+  <data name="Appearance_ContentReader_BgImage.Text" xml:space="preserve">
+    <value>背景画像</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_DColor.Text" xml:space="preserve">
+    <value>暦</value>
+  </data>
+  <data name="Appearance_ContentReader_EStepper_SColor.Text" xml:space="preserve">
+    <value>巻 / 編</value>
+  </data>
+  <data name="Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
+    <value>フォントの太さ</value>
+  </data>
+  <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
+    <value>単一ボリュームを分割する</value>
+  </data>
 </root>

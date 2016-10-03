@@ -63,6 +63,7 @@
                     </Grid.ColumnDefinitions>
                     <Canvas p:Clip.ToBounds="True" Loaded="BookTitleLoaded" Grid.Row="0" Margin="5" >
                         <TextBlock x:Name="MarqueeText"
+                                   c:AttachedCopyAction.Source="{Binding Title}"
                                    Foreground="{StaticResource RelativeMajorBrush}"
                                    FontSize="30"
                                    LayoutUpdated="MarqueeComplete"

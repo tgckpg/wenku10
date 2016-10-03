@@ -264,7 +264,9 @@ namespace wenku10.Pages
                 Frame, async () =>
                 {
                     BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
-                    BInst.SetId( ZoneListContext.CurrentZone.ZoneId );
+
+                    // "Z" to let LocalFileList know this is a Zone directory
+                    BInst.SetId( LocalFileList.ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
                     SpiderBook Book = await SpiderBook.CreateFromZoneInst( BInst );
                     if ( Book.CanProcess )
                     {
@@ -418,7 +420,7 @@ namespace wenku10.Pages
 
         private void EditSource( object sender, RoutedEventArgs e )
         {
-            if( SelectedBook is SpiderBook )
+            if ( SelectedBook is SpiderBook )
             {
                 EditItem( ( SpiderBook ) SelectedBook );
             }
@@ -440,7 +442,7 @@ namespace wenku10.Pages
         #region Sharers Hub
         private void ToggleActivities( object sender, RoutedEventArgs e )
         {
-            if( !SHHub.LoggedIn )
+            if ( !SHHub.LoggedIn )
             {
                 LoginOrLogout();
                 return;
@@ -517,7 +519,7 @@ namespace wenku10.Pages
         private async void LoginOrLogout()
         {
             if ( SHHub.Member.WillLogin ) return;
-            if( SHHub.LoggedIn )
+            if ( SHHub.LoggedIn )
             {
                 SHHub.Member.Logout();
             }
@@ -530,7 +532,7 @@ namespace wenku10.Pages
 
         private void SHMem_OnStatusChanged( object sender, MemberStatus Status )
         {
-            if( Status == MemberStatus.RE_LOGIN_NEEDED )
+            if ( Status == MemberStatus.RE_LOGIN_NEEDED )
             {
                 LoginOrLogout();
             }
@@ -566,12 +568,13 @@ namespace wenku10.Pages
         private async void ProcessItem( LocalBook LB )
         {
             await LB.Process();
-            if( LB is SpiderBook )
+            if ( LB is SpiderBook )
             {
-                BookInstruction BS = ( LB as SpiderBook ).GetBook();
-                if( BS.Packable )
+                SpiderBook SB = ( SpiderBook ) LB;
+                BookInstruction BS = SB.GetBook();
+                if ( BS.Packable )
                 {
-                    BS.PackVolumes();
+                    BS.PackVolumes( SB.GetPPConvoy() );
                 }
             }
         }

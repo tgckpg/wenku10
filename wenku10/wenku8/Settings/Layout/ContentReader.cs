@@ -9,6 +9,7 @@ using Net.Astropenguin.IO;
 namespace wenku8.Settings.Layout
 {
     using Resources;
+
     public class ContentReader 
     {
         private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_CONTREADER;
@@ -47,6 +48,11 @@ namespace wenku8.Settings.Layout
         {
 			LayoutSettings = new XRegistry( AppKeys.TS_CXML, TFileName );
             InitParams();
+        }
+
+        internal BookInfoView.BgContext GetBgContext()
+        {
+            return new BookInfoView.BgContext( LayoutSettings, "CONTENT_READER" );
         }
 
         private void InitParams()

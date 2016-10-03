@@ -1,6 +1,7 @@
 ﻿using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
+using Microsoft.Services.Store.Engagement;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,6 +38,7 @@ using wenku8.Effects.P2DFlow.Reapers;
 using wenku8.Effects.P2DFlow.ForceFields;
 using wenku8.Settings.Theme;
 using wenku8.System;
+using wenku8.ThemeIcons;
 
 namespace wenku10.Pages
 {
@@ -64,6 +66,9 @@ namespace wenku10.Pages
         private void SinglePlayer( object sender, RoutedEventArgs e )
         {
             if ( ModeSelected ) return;
+#if !DEBUG
+            StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.NORMAL_MODE );
+#endif
             ModeSelected = true;
             PFSim.AddField( LoadingWind );
 
@@ -80,15 +85,15 @@ namespace wenku10.Pages
 
             Func<UIElement>[] RandIcon = new Func<UIElement>[]
             {
-                () => new wenku8.ThemeIcons.IconExoticHexa() {
+                () => new IconExoticHexa() {
                     Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
                     , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
-                , () => new wenku8.ThemeIcons.IconExoticQuad() {
+                , () => new IconExoticQuad() {
                     Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
                     , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
-                , () => new wenku8.ThemeIcons.IconExoticTri() {
+                , () => new IconExoticTri() {
                     Foreground = new SolidColorBrush( Properties.APPEARENCE_THEME_MINOR_COLOR )
                     , Background = new SolidColorBrush( Properties.APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR )
                 }
@@ -98,16 +103,32 @@ namespace wenku10.Pages
 
             if( MainStage.Instance.IsPhone )
             {
-                NewsButton.HorizontalAlignment = HorizontalAlignment.Left;
-                NewsButton.VerticalAlignment = VerticalAlignment.Bottom;
+                InfoButtons.HorizontalAlignment = HorizontalAlignment.Left;
+                InfoButtons.VerticalAlignment = VerticalAlignment.Bottom;
+            }
+            else
+            {
+                InfoButtons.FlowDirection = FlowDirection.RightToLeft;
             }
 
+            SetFeedbackButton();
             GetAnnouncements();
             SetPField();
         }
 
+        private void SetFeedbackButton()
+        {
+            if ( StoreServicesFeedbackLauncher.IsSupported() )
+            {
+                feedbackButton.Visibility = Visibility.Visible;
+            }
+        }
+
         private async void StartMultiplayer()
         {
+#if !DEBUG
+            StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.SECRET_MODE );
+#endif
             TransitionDisplay.SetState( StartButton, TransitionState.Inactive );
             TransitionDisplay.SetState( ForeText, TransitionState.Active );
 
@@ -195,6 +216,11 @@ namespace wenku10.Pages
                 Storyboard sb = ( Storyboard ) NotiRect.Resources[ "Notify" ];
                 sb?.Begin();
             }
+        }
+
+        private void feedbackButton_Click( object sender, RoutedEventArgs e )
+        {
+            var j = StoreServicesFeedbackLauncher.GetDefault()?.LaunchAsync();
         }
 
         private void ShowNews( object sender, RoutedEventArgs e ) { ShowNews(); }

@@ -20,21 +20,24 @@
             <MenuFlyoutItem x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
             <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
         </MenuFlyout>
+
+        <ItemsPanelTemplate x:Key="HPanel">
+            <ItemsStackPanel Orientation="Horizontal"
+                             ManipulationMode="TranslateY,System"
+                             ManipulationDelta="ManipulationDeltaY"/>
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="VPanel">
+            <ItemsStackPanel ManipulationMode="TranslateX,System"
+                             ManipulationDelta="ManipulationDeltaX"/>
+        </ItemsPanelTemplate>
     </Page.Resources>
 
     <Grid x:Name="MasterGrid"
           Tapped="MasterGrid_Tapped"
           FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}" 
           Background="{Binding BackgroundBrush}">
-        <c:QClock x:Name="RClock"
-                  ArcHandBrush="{Binding ARBrush}"
-                  HourHandBrush="{Binding HHBrush}"
-                  MinuteHandBrush="{Binding MHBrush}"
-                  ScalesBrush="{Binding SBrush}"
-                  RenderTransform="{Binding RenderTransform}"
-                  Width="100" Height="100"
-                  Margin="0,0,22,22"
-                  HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+
         <ListView x:Name="ContentGrid"
                   IsSwipeEnabled="False"
                   SelectionChanged="ContentGrid_SelectionChanged"
@@ -47,6 +50,10 @@
                   Loaded="SetBookAnchor"
                   Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
                   FlowDirection="{Binding FlowDir}">
+            <ListView.RenderTransform>
+                <CompositeTransform x:Name="CGTransform" TranslateX="0" TranslateY="0" ScaleX="1" ScaleY="1" />
+            </ListView.RenderTransform>
+
             <FlyoutBase.AttachedFlyout>
                 <Flyout x:Name="ContentFlyout" />
             </FlyoutBase.AttachedFlyout>
@@ -95,6 +102,7 @@
                 </DataTemplate>
             </ListView.Resources>
         </ListView>
+
         <Button x:Name="UndoButton"
                 e:TransitionDisplay.Mode="A01"
                 e:TransitionDisplay.State="Inactive"
