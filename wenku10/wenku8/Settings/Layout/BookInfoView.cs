@@ -511,7 +511,7 @@ namespace wenku8.Settings.Layout
 
                 Transfer.OnThreadComplete += ( DTheradCompleteArgs DArgs ) =>
                 {
-                    if( DArgs.Id.Equals( id ) )
+                    if ( DArgs.Id.Equals( id ) )
                     {
                         ApplyImage( DArgs.FileLocation );
                     }
@@ -532,13 +532,14 @@ namespace wenku8.Settings.Layout
 
             private async void ApplyImage( IStorageFile ISF )
             {
-                string Location = ISF.Path;
+                string Location = ISF?.Path;
 
                 if ( CurrLocation == Location ) return;
                 CurrLocation = Location;
 
                 BitmapImage b = await Image.NewBitmap();
                 b.SetSourceFromISF( ISF );
+
                 SwapImage( b );
             }
 
