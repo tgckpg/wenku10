@@ -75,7 +75,7 @@ namespace wenku10.Pages
             NavigationHandler.OnNavigatedBack -= DisableBack;
 
             var j = Dispatcher.RunIdleAsync( x => {
-                MainStage.Instance.ClearNavigate( typeof( LocalModeTxtList ), "" );
+                MainStage.Instance.ClearNavigate( typeof( SuperGiants ), "" );
             } );
         }
 

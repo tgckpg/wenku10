@@ -1,0 +1,156 @@
+﻿<Page
+    x:Class="wenku10.Pages.SuperGiants"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=500 -->
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Star1.Width" Value="192" />
+                        <Setter Target="Star1.Height" Value="192" />
+                        <Setter Target="StarBox1W.Width" Value="192" />
+                        <Setter Target="StarBox1H.Height" Value="192" />
+                        <Setter Target="Star2.Width" Value="192" />
+                        <Setter Target="Star2.Height" Value="192" />
+                        <Setter Target="StarBox2W.Width" Value="192" />
+                        <Setter Target="StarBox2H.Height" Value="192" />
+                        <Setter Target="Star3.Width" Value="192" />
+                        <Setter Target="Star3.Height" Value="192" />
+                        <Setter Target="StarBox3W.Width" Value="192" />
+                        <Setter Target="StarBox3H.Height" Value="192" />
+                        <Setter Target="Star4.Width" Value="192" />
+                        <Setter Target="Star4.Height" Value="192" />
+                        <Setter Target="StarBox4W.Width" Value="192" />
+                        <Setter Target="StarBox4H.Height" Value="192" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Star1.Width" Value="360" />
+                        <Setter Target="Star1.Height" Value="360" />
+                        <Setter Target="StarBox1W.Width" Value="360" />
+                        <Setter Target="StarBox1H.Height" Value="360" />
+                        <Setter Target="Star2.Width" Value="360" />
+                        <Setter Target="Star2.Height" Value="360" />
+                        <Setter Target="StarBox2W.Width" Value="360" />
+                        <Setter Target="StarBox2H.Height" Value="360" />
+                        <Setter Target="Star3.Width" Value="360" />
+                        <Setter Target="Star3.Height" Value="360" />
+                        <Setter Target="StarBox3W.Width" Value="360" />
+                        <Setter Target="StarBox3H.Height" Value="360" />
+                        <Setter Target="Star4.Width" Value="360" />
+                        <Setter Target="Star4.Height" Value="360" />
+                        <Setter Target="StarBox4W.Width" Value="360" />
+                        <Setter Target="StarBox4H.Height" Value="360" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <StackPanel>
+            <Grid x:Name="StarBox1H" Height="120" Background="#000022">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="StarBox1W" Width="120" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <c:FloatyButton
+                    x:Name="Star1"
+                    Title="Star 1"
+                    Width="120" Height="120"
+                    ImageSource="ms-appx:///Assets/Samples/bookcoversample.png"
+                    TextRotation="10"
+                    OuterRingBrush="{StaticResource MajorBrush}"
+                    TextBrush="White"
+                    Loaded="FloatyButton_Loaded"
+                />
+                <RichTextBlock Grid.Column="1" Margin="20"
+                               OverflowContentTarget="{Binding ElementName=SecondColumnText}"
+                               TextAlignment="Justify"
+                               TextWrapping="Wrap"
+                               Foreground="White">
+                    <Paragraph>
+                       A: huhhuhuhuhhhuhuh
+                    </Paragraph>
+                    <Paragraph>
+                       Lorem ipsum dolor sit amet, at sit quidam inermis, elit accommodare quo ex.
+                       Ne luptatum deserunt mediocrem mei. In quo virtute scaevola, ex usu ponderum urbanitas, pri veri perfecto ne.
+                       Falli viris ex usu, quo facer nostro tacimates ea, cum exerci iudicabit interesset te.
+                       Mei ex purto probo probatus, eirmod mandamus expetenda eam no.
+                       In nibh maiorum offendit ius, illum clita dictas nam id.
+                    </Paragraph>
+                </RichTextBlock>
+                <RichTextBlockOverflow Grid.Column="2" Margin="20" x:Name="SecondColumnText" />
+            </Grid>
+            <Grid x:Name="StarBox2H" Height="120" Background="#000015">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition x:Name="StarBox2W" Width="120" />
+                </Grid.ColumnDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage"
+                                              CreateResources="Stage_CreateResources"
+                                              Grid.ColumnSpan="2"/>
+                <c:FloatyButton
+                    x:Name="Star2"
+                    Grid.Column="1"
+                    Width="120" Height="120"
+                    Title="Star 2"
+                    ImageSource="ms-appx:///Assets/Samples/bookcoversample.png"
+                    TextRotation="30"
+                    OuterRingBrush="{StaticResource MajorBrush}"
+                    TextBrush="White"
+                    Loaded="FloatyButton_Loaded"
+                />
+            </Grid>
+            <Grid x:Name="StarBox3H" Height="120" Background="#000005">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="StarBox3W" Width="120" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <c:FloatyButton
+                    x:Name="Star3"
+                    Title="Star 3"
+                    Width="120" Height="120"
+                    ImageSource="ms-appx:///Assets/Samples/bookcoversample.png"
+                    TextRotation="10"
+                    OuterRingBrush="{StaticResource MajorBrush}"
+                    TextBrush="White"
+                    Loaded="FloatyButton_Loaded"
+                />
+            </Grid>
+            <Grid x:Name="StarBox4H" Height="120" Background="#000000">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition x:Name="StarBox4W" Width="120" />
+                </Grid.ColumnDefinitions>
+                <c:FloatyButton
+                    x:Name="Star4"
+                    Grid.Column="1"
+                    Width="120" Height="120"
+                    Title="Star 4"
+                    ImageSource="ms-appx:///Assets/Samples/bookcoversample.png"
+                    TextRotation="30"
+                    OuterRingBrush="{StaticResource MajorBrush}"
+                    TextBrush="White"
+                    Loaded="FloatyButton_Loaded"
+                />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
