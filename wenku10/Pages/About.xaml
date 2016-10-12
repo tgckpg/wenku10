@@ -11,12 +11,6 @@
     Background="Black"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <v:ParallaxConverter x:Key="ParallaxConverter" />
-    </Page.Resources>
-
-    <canvas:CanvasAnimatedControl x:Name="Stage"
-                                  CreateResources="Stage_CreateResources"
-                                  IsHitTestVisible="False" />
+    <canvas:CanvasAnimatedControl x:Name="Stage" IsHitTestVisible="False" />
 
 </Page>

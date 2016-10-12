@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ScrollViewer x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+    <ScrollViewer x:Name="LayoutRoot" Background="Black">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -70,6 +70,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage1" Grid.ColumnSpan="3"/>
                 <c:FloatyButton
                     x:Name="Star1"
                     Title="Star 1"
@@ -103,9 +104,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition x:Name="StarBox2W" Width="120" />
                 </Grid.ColumnDefinitions>
-                <canvas:CanvasAnimatedControl x:Name="Stage"
-                                              CreateResources="Stage_CreateResources"
-                                              Grid.ColumnSpan="2"/>
+                <canvas:CanvasAnimatedControl x:Name="Stage2" Grid.ColumnSpan="3"/>
                 <c:FloatyButton
                     x:Name="Star2"
                     Grid.Column="1"
@@ -123,6 +122,7 @@
                     <ColumnDefinition x:Name="StarBox3W" Width="120" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage3" Grid.ColumnSpan="3"/>
                 <c:FloatyButton
                     x:Name="Star3"
                     Title="Star 3"
@@ -139,6 +139,7 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition x:Name="StarBox4W" Width="120" />
                 </Grid.ColumnDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage4" Grid.ColumnSpan="3"/>
                 <c:FloatyButton
                     x:Name="Star4"
                     Grid.Column="1"

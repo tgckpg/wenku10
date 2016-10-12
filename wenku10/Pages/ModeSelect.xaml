@@ -12,7 +12,7 @@
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{ThemeResource MajorBackgroundBrush}">
-        <Border PointerPressed="XStage_PointerPressed" Background="Transparent" />
+        <Border x:Name="XStage" Background="Transparent" />
         <Button x:Name="StartButton"
                 e:TransitionDisplay.State="Active"
                 e:TransitionDisplay.Mode="A01_Y_0_N30"
@@ -24,7 +24,6 @@
         </Button>
         <canvas:CanvasAnimatedControl x:Name="Stage"
                                       IsFixedTimeStep="False"
-                                      CreateResources="Stage_CreateResources"
                                       IsHitTestVisible="False" />
         <Border x:Name="ForeText"
                 e:TransitionDisplay.State="Inactive"
