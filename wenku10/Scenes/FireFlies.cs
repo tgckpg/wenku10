@@ -19,26 +19,22 @@ using wenku8.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
-    sealed class FireFlies : BasicScene
+    sealed class FireFlies : PFScene, IScene
     {
         private Vector4 ThemeTint;
 
         private Wind ScrollWind = new Wind();
 
-        public FireFlies( CanvasAnimatedControl Stage ) : base( Stage )
+        public FireFlies()
         {
-            Color C = Colors.White;
-            ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
-        }
-
-        public void Start( Stack<Particle> PQueue )
-        {
-            PFSim.Create( PQueue );
-        }
-
-        override public void Start()
-        {
+            SetColor();
             PFSim.Create( MainStage.Instance.IsPhone ? 25 : 50 );
+        }
+
+        public FireFlies( Stack<Particle> PQueue )
+        {
+            SetColor();
+            PFSim.Create( PQueue );
         }
 
         public void WindBlow( float Strength )
@@ -46,11 +42,10 @@ namespace wenku10.Scenes
             ScrollWind.Strength = Vector2.Clamp( Vector2.One * Strength, -3 * Vector2.One, 3 * Vector2.One ).X;
         }
 
-        override protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
+        public void UpdateAssets( Size s )
         {
             lock ( PFSim )
             {
-                Size s = e.NewSize;
                 PFSim.Reapers.Clear();
                 PFSim.Reapers.Add( Age.Instance );
                 PFSim.Reapers.Add( new Boundary( new Rect( -0.1 * s.Width, -0.1 * s.Height, s.Width * 1.2, s.Height * 1.2 ) ) );
@@ -66,7 +61,7 @@ namespace wenku10.Scenes
                     Chaos = new Vector2( 1, 1 )
                     , otMin = 5
                     , otMax = 10
-                    , Texture = Texture_Circle
+                    , Texture = Texture.Circle
                     , SpawnEx = ( P ) =>
                     {
                         P.Tint.M11 = ThemeTint.X;
@@ -89,40 +84,43 @@ namespace wenku10.Scenes
             }
         }
 
-        override protected void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
+        public void Draw( CanvasDrawingSession ds, CanvasSpriteBatch SBatch, TextureLoader Textures )
         {
             lock ( PFSim )
             {
                 var Snapshot = PFSim.Snapshot();
-                using ( CanvasDrawingSession ds = args.DrawingSession )
-                using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+                while ( Snapshot.MoveNext() )
                 {
-                    while ( Snapshot.MoveNext() )
-                    {
-                        Particle P = Snapshot.Current;
+                    Particle P = Snapshot.Current;
 
-                        float A = -Vector2.Transform( new Vector2( 0, 1 ), Matrix3x2.CreateRotation( 3.1415f * P.ttl * 0.002f ) ).X;
+                    float A = -Vector2.Transform( new Vector2( 0, 1 ), Matrix3x2.CreateRotation( 3.1415f * P.ttl * 0.002f ) ).X;
 
-                        Vector4 Tint = new Vector4(
-                            P.Tint.M11 + P.Tint.M21 + P.Tint.M31 + P.Tint.M41 + P.Tint.M51,
-                            P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
-                            P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
-                            P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
-                        );
+                    Vector4 Tint = new Vector4(
+                        P.Tint.M11 + P.Tint.M21 + P.Tint.M31 + P.Tint.M41 + P.Tint.M51,
+                        P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
+                        P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
+                        P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
+                    );
 
-                        Tint.W *= A;
-                        ScrollWind.Strength *= 0.5f;
+                    Tint.W *= A;
+                    ScrollWind.Strength *= 0.5f;
 
-                        SBatch.Draw(
-                            Textures[ P.TextureId ]
-                            , P.Pos, Tint
-                            , Textures.Center[ P.TextureId ], 0, P.Scale
-                            , CanvasSpriteFlip.None );
-                    }
-
-                    DrawWireFrames( ds );
+                    SBatch.Draw(
+                        Textures[ P.TextureId ]
+                        , P.Pos, Tint
+                        , Textures.Center[ P.TextureId ], 0, P.Scale
+                        , CanvasSpriteFlip.None );
                 }
+
+                DrawWireFrames( ds );
             }
         }
+
+        private void SetColor()
+        {
+            Color C = Colors.White;
+            ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
+        }
+
     }
 }

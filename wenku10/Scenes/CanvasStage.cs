@@ -11,26 +11,21 @@ using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using wenku8.Effects;
-using wenku8.Effects.P2DFlow;
-using wenku8.Effects.P2DFlow.ForceFields;
 
 namespace wenku10.Scenes
 {
-    abstract class BasicScene : IDisposable
+    class CanvasStage : IDisposable
     {
-        protected PFSimulator PFSim = new PFSimulator();
-
-        protected bool ShowWireFrame = false;
-
-        protected CanvasAnimatedControl Stage;
+        protected CanvasAnimatedControl _stage;
         public TextureLoader Textures { get; protected set; }
 
-        protected const int Texture_Glitter = 1;
-        protected const int Texture_Circle = 2;
+        protected List<IScene> Scenes;
 
-        public BasicScene( CanvasAnimatedControl Stage )
+        public CanvasStage( CanvasAnimatedControl Stage )
         {
-            this.Stage = Stage;
+            _stage = Stage;
+
+            Scenes = new List<IScene>();
 
             Textures = new TextureLoader();
             Stage.CreateResources += Stage_CreateResources;
@@ -42,14 +37,19 @@ namespace wenku10.Scenes
             Stage.Unloaded += Stage_Unloaded;
         }
 
-        public BasicScene( CanvasAnimatedControl Stage, TextureLoader SharedTextures )
-            :this( Stage )
+        public CanvasStage( CanvasAnimatedControl Stage, TextureLoader SharedTextures )
+            : this( Stage )
         {
             Stage.CreateResources -= Stage_CreateResources;
             Textures = SharedTextures;
         }
 
-        ~BasicScene()
+        public void Add( IScene S )
+        {
+            lock ( S ) Scenes.Add( S );
+        }
+
+        ~CanvasStage()
         {
             Dispose();
         }
@@ -58,36 +58,30 @@ namespace wenku10.Scenes
         {
             try
             {
-                lock ( PFSim )
+                lock ( Scenes )
                 {
+                    Scenes.ForEach( x => x.Dispose() );
                     Textures.Dispose();
-                    PFSim.Reapers.Clear();
-                    PFSim.Fields.Clear();
-                    PFSim.Spawners.Clear();
                 }
 
-                PFSim = null;
             }
             catch ( Exception ) { };
         }
 
         private void Stage_GameLoopStopped( ICanvasAnimatedControl sender, object args )
         {
-            Stage.Draw -= Stage_Draw;
+            _stage.Draw -= Stage_Draw;
         }
 
         private void Stage_GameLoopStarting( ICanvasAnimatedControl sender, object args )
         {
-            Stage.Draw += Stage_Draw;
+            _stage.Draw += Stage_Draw;
         }
 
         virtual protected void Stage_Unloaded( object sender, RoutedEventArgs e )
         {
-            lock ( PFSim )
-            {
-                Stage.Draw -= Stage_Draw;
-                Stage.SizeChanged -= Stage_SizeChanged;
-            }
+            _stage.Draw -= Stage_Draw;
+            _stage.SizeChanged -= Stage_SizeChanged;
         }
 
         virtual protected void Stage_CreateResources( CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args )
@@ -97,29 +91,28 @@ namespace wenku10.Scenes
 
         virtual protected async Task LoadTextures( CanvasAnimatedControl CC )
         {
-            await Textures.Load( CC, Texture_Glitter, "Assets/glitter.dds" );
-            await Textures.Load( CC, Texture_Circle, "Assets/circle.dds" );
+            await Textures.Load( CC, Texture.Glitter, "Assets/glitter.dds" );
+            await Textures.Load( CC, Texture.Circle, "Assets/circle.dds" );
         }
 
-        abstract public void Start();
-        abstract protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e );
-        abstract protected void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args );
-
-        protected void DrawWireFrames( CanvasDrawingSession ds )
+        virtual protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
         {
-#if DEBUG
-            lock ( PFSim )
+            lock ( Scenes )
             {
-                if ( ShowWireFrame )
-                {
-                    foreach ( IForceField IFF in PFSim.Fields )
-                    {
-                        IFF.WireFrame( ds );
-                    }
-                }
-
+                Scenes.ForEach( x => x.UpdateAssets( e.NewSize ) );
             }
-#endif
+        }
+
+        virtual protected void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
+        {
+            using ( CanvasDrawingSession ds = args.DrawingSession )
+            using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+            {
+                lock ( Scenes )
+                {
+                    Scenes.ForEach( x => x.Draw( ds, SBatch, Textures ) );
+                }
+            }
         }
 
     }

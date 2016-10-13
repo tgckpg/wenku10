@@ -16,9 +16,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace wenku10.Pages
 {
+    using Scenes;
     public sealed partial class About : Page
     {
-        private Scenes.Fireworks Fireworks;
+        private CanvasStage CStage;
 
         public About()
         {
@@ -28,8 +29,8 @@ namespace wenku10.Pages
 
         private void SetTemplate()
         {
-            Fireworks = new Scenes.Fireworks( Stage );
-            Fireworks.Start();
+            CStage = new CanvasStage( Stage );
+            CStage.Add( new Fireworks() );
 
             Unloaded += About_Unloaded;
         }
@@ -39,8 +40,8 @@ namespace wenku10.Pages
             Stage.RemoveFromVisualTree();
             Stage = null;
 
-            Fireworks.Dispose();
-            Fireworks = null;
+            CStage.Dispose();
+            CStage = null;
         }
     }
 }

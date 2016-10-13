@@ -20,9 +20,13 @@ using wenku8.Effects.P2DFlow;
 
 namespace wenku10.Pages
 {
+    using Scenes;
+
     public sealed partial class SuperGiants : Page
     {
-        List<Scenes.FireFlies> FireFlies;
+        List<FireFlies> FireFliesScenes;
+        List<CanvasStage> Stages;
+        int NumStars = 4;
 
         public SuperGiants()
         {
@@ -41,12 +45,6 @@ namespace wenku10.Pages
         private void SetTemplate()
         {
             NTimer.Instance.Start();
-            FireFlies = new List<Scenes.FireFlies>() {
-                new Scenes.FireFlies( Stage1 )
-                , new Scenes.FireFlies( Stage2 )
-                , new Scenes.FireFlies( Stage3 )
-                , new Scenes.FireFlies( Stage4 )
-            };
 
             Stack<Particle> PStack = new Stack<Particle>();
 
@@ -55,11 +53,23 @@ namespace wenku10.Pages
             for ( int i = 0; i < l; i++ )
                 PStack.Push( new Particle() );
 
-            foreach ( Scenes.FireFlies FF in FireFlies )
-                FF.Start( PStack );
+            Stages = new List<CanvasStage>();
+            FireFliesScenes = new List<FireFlies>();
 
-            // Scenes.MagicTrails LoadingTrails = new Scenes.MagicTrails( Stage1, FireFlies.First().Textures );
-            // LoadingTrails.Start();
+            Stages.Add( new CanvasStage( Stage1 ) );
+            Stages.Add( new CanvasStage( Stage2 ) );
+            Stages.Add( new CanvasStage( Stage3 ) );
+            Stages.Add( new CanvasStage( Stage4 ) );
+
+            for ( int i = 0; i < NumStars; i++ )
+            {
+                FireFlies Scene = new FireFlies( PStack );
+                Stages[ i ].Add( Scene );
+                FireFliesScenes.Add( Scene );
+            }
+
+            MagicTrails LoadingTrails = new MagicTrails( PStack );
+            Stages.First().Add( LoadingTrails );
 
             LayoutRoot.ViewChanged += LayoutRoot_ViewChanged;
 
@@ -71,7 +81,7 @@ namespace wenku10.Pages
         private void LayoutRoot_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )
         {
             float CurrOffset = ( float ) LayoutRoot.VerticalOffset;
-            FireFlies?.ForEach( x => x.WindBlow( CurrOffset - PrevOffset ) );
+            FireFliesScenes?.ForEach( x => x.WindBlow( CurrOffset - PrevOffset ) );
             PrevOffset = CurrOffset;
         }
 
@@ -83,8 +93,8 @@ namespace wenku10.Pages
             Stage4.RemoveFromVisualTree();
             Stage1 = Stage2 = Stage3 = Stage4 = null;
 
-            FireFlies.ForEach( x => x.Dispose() );
-            FireFlies = null;
+            FireFliesScenes.ForEach( x => x.Dispose() );
+            FireFliesScenes = null;
         }
 
     }

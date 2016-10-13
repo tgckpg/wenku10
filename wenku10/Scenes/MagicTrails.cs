@@ -9,7 +9,6 @@ using Windows.UI;
 using Windows.UI.Xaml;
 
 using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using wenku8.Effects;
 using wenku8.Effects.P2DFlow;
@@ -19,23 +18,24 @@ using wenku8.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
-    sealed class MagicTrails : BasicScene
+    sealed class MagicTrails : PFScene, IScene
     {
-        private PointerSpawner PtrSpawn;
+        private LinearSpawner Spawner;
 
-        public MagicTrails( CanvasAnimatedControl Stage ) : base( Stage ) { }
-        public MagicTrails( CanvasAnimatedControl Stage, TextureLoader SharedTexture ) : base( Stage, SharedTexture ) { }
-
-        override public void Start()
+        public MagicTrails( Stack<Particle> ParticleQueue )
         {
-            PtrSpawn = new PointerSpawner() { SpawnTrait = PFTrait.TRAIL_O, Texture = Texture_Circle };
+            PFSim.Create( ParticleQueue );
+            Spawner = new LinearSpawner( Vector2.Zero, Vector2.Zero, new Vector2( 100, 100 ) )
+            {
+                SpawnTrait = PFTrait.TRAIL_O | PFTrait.IMMORTAL
+                , Texture = 0
+            };
         }
 
-        override protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
+        public void UpdateAssets( Size s )
         {
-            lock( PFSim )
+            lock ( PFSim )
             {
-                Size s = e.NewSize;
                 PFSim.Reapers.Clear();
                 PFSim.Reapers.Add( Age.Instance );
                 PFSim.Reapers.Add( new Boundary( new Rect( 0, 0, s.Width * 1.2, s.Height * 1.2 ) ) );
@@ -46,48 +46,45 @@ namespace wenku10.Scenes
                 float HSH = 0.5f * SH;
 
                 PFSim.Spawners.Clear();
-                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Glitter } );
-                PFSim.Spawners.Add( new Trail() { mf = 1f, Texture = Texture_Circle, Bind = PFTrait.TRAIL_O, Scale = new Vector2( 0.125f, 0.125f ) } );
+                PFSim.Spawners.Add( new Trail() { mf = 0f, Texture = Texture.Circle, Bind = PFTrait.TRAIL_O, Scale = new Vector2( 0.125f, 0.125f ) } );
 
-                PFSim.Spawners.Add( PtrSpawn );
+                PFSim.Spawners.Add( Spawner );
 
                 Vector2 Center = new Vector2( HSW, HSH );
                 PFSim.Fields.Clear();
                 PFSim.Fields.Add( GenericForce.EARTH_GRAVITY );
+                PFSim.Fields.Add( new Wind() { A = new Vector2( 0, SH ), B = new Vector2( SW, 1.5f * SH ) } );
             }
         }
 
-        override protected void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
+        public void Draw( CanvasDrawingSession ds, CanvasSpriteBatch SBatch, TextureLoader Textures )
         {
-            lock( PFSim )
+            lock ( PFSim )
             {
                 var Snapshot = PFSim.Snapshot();
-                using ( CanvasDrawingSession ds = args.DrawingSession )
-                using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+                while ( Snapshot.MoveNext() )
                 {
-                    while ( Snapshot.MoveNext() )
-                    {
-                        Particle P = Snapshot.Current;
+                    Particle P = Snapshot.Current;
+                    if ( P.TextureId == 0 ) continue;
 
-                        float A = ( P.Trait & PFTrait.IMMORTAL ) == 0 ? P.ttl * 0.033f : 1;
+                    float A = ( P.Trait & PFTrait.IMMORTAL ) == 0 ? P.ttl * 0.033f : 1;
 
-                        P.Tint.M12 = 4 * ( 1 - A );
-                        P.Tint.M21 = 3 * A;
+                    P.Tint.M12 = 4 * ( 1 - A );
+                    P.Tint.M21 = 3 * A;
 
-                        Vector4 Tint = new Vector4(
-                            P.Tint.M11 + P.Tint.M21 + P.Tint.M31 + P.Tint.M41 + P.Tint.M51,
-                            P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
-                            P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
-                            P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
-                        ) * 2;
+                    Vector4 Tint = new Vector4(
+                        P.Tint.M11 + P.Tint.M21 + P.Tint.M31 + P.Tint.M41 + P.Tint.M51,
+                        P.Tint.M12 + P.Tint.M22 + P.Tint.M32 + P.Tint.M42 + P.Tint.M52,
+                        P.Tint.M13 + P.Tint.M23 + P.Tint.M33 + P.Tint.M43 + P.Tint.M53,
+                        P.Tint.M14 + P.Tint.M24 + P.Tint.M34 + P.Tint.M44 + P.Tint.M54
+                    ) * 2;
 
-                        Tint.W = A * 0.125f;
+                    Tint.W = A * 0.125f;
 
-                        SBatch.Draw( Textures[ P.TextureId ], P.Pos, Tint, Textures.Center[ P.TextureId ], 0, 0.5f * P.Scale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
-                    }
-
-                    DrawWireFrames( ds );
+                    SBatch.Draw( Textures[ P.TextureId ], P.Pos, Tint, Textures.Center[ P.TextureId ], 0, 0.5f * P.Scale * ( 1 + A % 0.5f ), CanvasSpriteFlip.None );
                 }
+
+                DrawWireFrames( ds );
             }
         }
 

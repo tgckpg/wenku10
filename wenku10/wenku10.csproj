@@ -153,12 +153,14 @@
     <Compile Include="Pages\SuperGiants.xaml.cs">
       <DependentUpon>SuperGiants.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Scenes\BasicScene.cs" />
+    <Compile Include="Scenes\PFScene.cs" />
+    <Compile Include="Scenes\IScene.cs" />
+    <Compile Include="Scenes\CanvasStage.cs" />
     <Compile Include="Scenes\FireFlies.cs" />
     <Compile Include="Scenes\Fireworks.cs" />
     <Compile Include="Scenes\Glitter.cs" />
     <Compile Include="Scenes\MagicTrails.cs" />
-    <Compile Include="Scenes\StartScreen.cs" />
+    <Compile Include="Scenes\Texture.cs" />
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>

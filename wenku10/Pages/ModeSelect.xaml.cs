@@ -51,8 +51,6 @@ namespace wenku10.Pages
         private bool ModeSelected = false;
         Frame RootFrame;
 
-        private Scenes.StartScreen PFScene;
-
         public ModeSelect()
         {
             InitializeComponent();
@@ -72,7 +70,6 @@ namespace wenku10.Pages
             StoreServicesCustomEventLogger.GetDefault().Log( wenku8.System.ActionEvent.NORMAL_MODE );
 #endif
             ModeSelected = true;
-            PFScene.Fire();
 
             NavigationHandler.OnNavigatedBack -= DisableBack;
 
@@ -115,11 +112,6 @@ namespace wenku10.Pages
 
             SetFeedbackButton();
             GetAnnouncements();
-
-            PFScene = new Scenes.StartScreen( Stage );
-            PFScene.BindXStage( XStage );
-            PFScene.Unlock = StartMultiplayer;
-            PFScene.Start();
         }
 
         private void SetFeedbackButton()

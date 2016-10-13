@@ -34,6 +34,8 @@ using wenku8.Storage;
 
 namespace wenku10
 {
+    using Scenes;
+
     public sealed partial class MainPage : Page, IDisposable
     {
         public static readonly string ID = typeof( MainPage ).Name;
@@ -197,12 +199,16 @@ namespace wenku10
         }
 
         private float PrevOffset = 0;
-        private Scenes.Glitter Glitter;
+        private CanvasStage CStage;
+        private Glitter Glitter;
 
         private void SetBackground()
         {
-            Glitter = new Scenes.Glitter( Stage );
-            Glitter.Start();
+            CStage = new CanvasStage( Stage );
+
+            Glitter = new Glitter();
+
+            CStage.Add( Glitter );
 
             HomeHub.ViewChanged += HomeHub_ViewChanged;
         }
