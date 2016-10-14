@@ -40,6 +40,8 @@ namespace wenku10.Pages
             Floaty.BindTimer( NTimer.Instance );
 
             Floaty.TextSpeed = NTimer.RandDouble( -2, 2 );
+
+            Floaty.Visibility = Visibility.Collapsed;
         }
 
         private void SetTemplate()
@@ -61,12 +63,14 @@ namespace wenku10.Pages
             Stages.Add( new CanvasStage( Stage3 ) );
             Stages.Add( new CanvasStage( Stage4 ) );
 
+            /*
             for ( int i = 0; i < NumStars; i++ )
             {
                 FireFlies Scene = new FireFlies( PStack );
                 Stages[ i ].Add( Scene );
                 FireFliesScenes.Add( Scene );
             }
+            */
 
             MagicTrails LoadingTrails = new MagicTrails( PStack );
             Stages.First().Add( LoadingTrails );

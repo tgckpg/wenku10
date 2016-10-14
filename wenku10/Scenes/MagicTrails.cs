@@ -24,11 +24,13 @@ namespace wenku10.Scenes
 
         public MagicTrails( Stack<Particle> ParticleQueue )
         {
+            ShowWireFrame = true;
+
             PFSim.Create( ParticleQueue );
             Spawner = new LinearSpawner( Vector2.Zero, Vector2.Zero, new Vector2( 100, 100 ) )
             {
                 SpawnTrait = PFTrait.TRAIL_O | PFTrait.IMMORTAL
-                , Texture = 0
+                , Texture = 1
             };
         }
 
@@ -46,14 +48,16 @@ namespace wenku10.Scenes
                 float HSH = 0.5f * SH;
 
                 PFSim.Spawners.Clear();
-                PFSim.Spawners.Add( new Trail() { mf = 0f, Texture = Texture.Circle, Bind = PFTrait.TRAIL_O, Scale = new Vector2( 0.125f, 0.125f ) } );
+                // PFSim.Spawners.Add( new Trail() { mf = 0f, Texture = Texture.Circle, Bind = PFTrait.TRAIL_O, Scale = new Vector2( 0.125f, 0.125f ) } );
 
                 PFSim.Spawners.Add( Spawner );
 
                 Vector2 Center = new Vector2( HSW, HSH );
                 PFSim.Fields.Clear();
                 PFSim.Fields.Add( GenericForce.EARTH_GRAVITY );
-                PFSim.Fields.Add( new Wind() { A = new Vector2( 0, SH ), B = new Vector2( SW, 1.5f * SH ) } );
+                // PFSim.Fields.Add( new Wind() { A = new Vector2( 0, SH ), B = new Vector2( SW, 1.5f * SH ) } );
+
+                PFSim.Fields.Add( new Vortex( 100, 150 ) { Center = new Vector2( HSH, HSH ) } );
             }
         }
 
