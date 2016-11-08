@@ -1,0 +1,51 @@
+﻿<Page
+    x:Class="wenku10.Pages.WUserInfo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:TransStateConverter x:Name="TransStateConverter" />
+    </Page.Resources>
+
+    <Border Background="{StaticResource MajorBackgroundBrush}">
+        <StackPanel x:Name="UserInfo" Margin="15">
+            <ProgressRing x:Name="InfoBubble" IsActive="True" />
+            <StackPanel e:TransitionDisplay.State="{Binding IsActive, ElementName=InfoBubble, Converter={StaticResource TransStateConverter}, ConverterParameter=1}">
+                <TextBlock Foreground="{StaticResource MajorBrush}"
+                           Text="{Binding NickName}"
+                           FontSize="30" />
+
+                <TextBlock Foreground="{StaticResource MajorBrush}"
+                           Text="{Binding Rank}" />
+
+                <TextBlock Foreground="{StaticResource MajorBrush}">
+                    <Run x:Uid="/Settings/Account_AName" Text="Account AName" />
+                    <Run Text=": " />
+                    <Run Text="{Binding AccountName}" />
+                </TextBlock>
+                <TextBlock Foreground="{StaticResource MajorBrush}">
+                    <Run x:Uid="/Settings/Account_Score" Text="Account Score" />
+                    <Run Text=": " />
+                    <Run Text="{Binding Score}" />
+                </TextBlock>
+                <TextBlock Foreground="{StaticResource MajorBrush}">
+                    <Run x:Uid="/Settings/Account_Exp" Text="Experience" />
+                    <Run Text=": " />
+                    <Run Text="{Binding Exp}" />
+                </TextBlock>
+                <TextBlock Foreground="{StaticResource MajorBrush}">
+                    <Run x:Uid="/Settings/Account_Reviews_Post_Sign" Text="Signature"/>
+                    <Run Text=":" />
+                </TextBlock>
+                <TextBox x:Name="Sign" LostFocus="Sign_LostFocus" />
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Page>

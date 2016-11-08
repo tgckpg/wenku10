@@ -432,9 +432,6 @@
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>目录底色</value>
   </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>进入设置时会清除页面快取，所以在你设置完毕并返回的时候页面会重新载入，要进行设置吗？</value>
-  </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>木头等级</value>
   </data>

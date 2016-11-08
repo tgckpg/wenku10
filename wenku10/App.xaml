@@ -29,6 +29,7 @@
                 <ResourceDictionary Source="/Themes/ScrollContentDialog.xaml" />
                 <ResourceDictionary Source="/Themes/VerticalListView.xaml" />
                 <ResourceDictionary Source="/Themes/Pages/MainPage.xaml" />
+                <ResourceDictionary Source="/Themes/Pages/TOC.xaml" />
 
                 <ResourceDictionary Source="/libwenku8/Themes/PassiveSplitView.xaml" />
                 <ResourceDictionary Source="/libwenku8/Themes/TitleStepper.xaml" />

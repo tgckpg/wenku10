@@ -440,9 +440,6 @@
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>目錄底色</value>
   </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>進入設定時會清除頁面快取，所以在你設定完畢並返回的時候頁面會重新載入，要進行設定嗎？</value>
-  </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>木頭等級</value>
   </data>

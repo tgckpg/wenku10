@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using Windows.Foundation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
@@ -12,8 +14,7 @@ using wenku8.Ext;
 using wenku8.Resources;
 using wenku8.Settings;
 using wenku8.Model.REST;
-using Net.Astropenguin.Helpers;
-using System.Threading.Tasks;
+using wenku8.Model.Section.SharersHub;
 
 namespace wenku10.SHHub
 {
@@ -31,6 +32,8 @@ namespace wenku10.SHHub
 
         public MemberStatus Status { get; set; }
 
+        public Activities Activities { get; private set; }
+
         public string ServerMessage
         {
             get; private set;
@@ -43,6 +46,8 @@ namespace wenku10.SHHub
             WillLogin = false;
 
             AuthReg = new XRegistry( "<SHAuth />", FileLinks.ROOT_SETTING + FileLinks.SH_AUTH_REG );
+
+            this.Activities = new Activities();
 
             XParameter MemberAuth = AuthReg.Parameter( "member-auth" );
             if ( MemberAuth != null ) RestoreAuth( MemberAuth );

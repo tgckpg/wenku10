@@ -16,11 +16,10 @@
         <v:DataBoolConverter x:Key="DataBoolConverter" />
     </Page.Resources>
 
-    <Grid FlowDirection="LeftToRight">
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackPanel Margin="10">
@@ -144,17 +143,6 @@
                 </Grid>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel Grid.Row="2" Orientation="Horizontal"
-                    HorizontalAlignment="Right">
-            <ProgressRing x:Name="LoadingRing"
-                          Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                          Width="50" Height="50"/>
-            <Button Style="{StaticResource PlainButton}"
-                    x:Name="Upload_Btn"  Click="Upload"
-                    Width="50" Height="50">
-                <i:IconLogout AutoScale="True" Direction="Rotate270" />
-            </Button>
-        </StackPanel>
 
     </Grid>
 </Page>

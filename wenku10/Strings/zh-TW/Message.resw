@@ -183,4 +183,7 @@
   <data name="ConfirmScriptRemove" xml:space="preserve">
     <value>這個腳本會從服務器上刪除。繼續？</value>
   </data>
+  <data name="ConfirmLogout" xml:space="preserve">
+    <value>確認登出？</value>
+  </data>
 </root>

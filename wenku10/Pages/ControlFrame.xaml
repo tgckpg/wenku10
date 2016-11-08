@@ -1,0 +1,47 @@
+﻿<Page
+    x:Class="wenku10.Pages.ControlFrame"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:e="using:wenku8.Effects"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.TopAppBar>
+        <CommandBar x:Name="TopCmdBar"
+                    Background="{StaticResource MinorBackgroundBrush}"
+                    e:TransitionDisplay.UseVisibility="False"
+                    e:TransitionDisplay.Mode="A01"
+                    Loaded="CmdBar_Loaded">
+            <CommandBar.Transitions>
+                <TransitionCollection>
+                    <AddDeleteThemeTransition />
+                </TransitionCollection>
+            </CommandBar.Transitions>
+        </CommandBar>
+    </Page.TopAppBar>
+
+    <Grid x:Name="LayoutRoot">
+        <c:TipMask x:Name="LoadingScreen"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" />
+        <Frame x:Name="View" />
+        <Frame x:Name="SubView"
+               e:TransitionDisplay.Mode="A01_X_30_30"
+               e:TransitionDisplay.UseVisibility="True"
+               e:TransitionDisplay.State="Inactive" />
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar x:Name="BottomCmdBar"
+                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                    Background="{StaticResource MinorBackgroundBrush}"
+                    e:TransitionDisplay.UseVisibility="False"
+                    e:TransitionDisplay.Mode="A01"
+                    Loaded="CmdBar_Loaded" />
+    </Page.BottomAppBar>
+</Page>

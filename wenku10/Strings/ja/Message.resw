@@ -183,4 +183,7 @@
   <data name="ConfirmScriptRemove" xml:space="preserve">
     <value>このスクリプトは、サーバーから削除されます。 続行しますか？</value>
   </data>
+  <data name="ConfirmLogout" xml:space="preserve">
+    <value>ログアウトを確認しますか？</value>
+  </data>
 </root>

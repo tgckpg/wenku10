@@ -126,6 +126,12 @@
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BookInfoView.xaml.cs">
+      <DependentUpon>BookInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BookSpidersView.xaml.cs">
+      <DependentUpon>BookSpidersView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Dialogs\NameValueInput.xaml.cs">
       <DependentUpon>NameValueInput.xaml</DependentUpon>
     </Compile>
@@ -141,6 +147,46 @@
     <Compile Include="Pages\Dialogs\Taotu\EditProcListLoader.xaml.cs">
       <DependentUpon>EditProcListLoader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\LocalDocumentsView.xaml.cs">
+      <DependentUpon>LocalDocumentsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\OnlineScriptsView.xaml.cs">
+      <DependentUpon>OnlineScriptsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PageId.cs" />
+    <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
+      <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TOCPageBase.cs" />
+    <Compile Include="Pages\TOCViewHorz.xaml.cs">
+      <DependentUpon>TOCViewHorz.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\TOCViewVert.xaml.cs">
+      <DependentUpon>TOCViewVert.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WBookshelf.xaml.cs">
+      <DependentUpon>WBookshelf.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WNavSelections.xaml.cs">
+      <DependentUpon>WNavSelections.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ZoneSpidersView.xaml.cs">
+      <DependentUpon>ZoneSpidersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShHub\MesgListerner.cs" />
+    <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
+    <Compile Include="wenku8\Model\Section\DocumentList.cs" />
+    <Compile Include="wenku8\Model\Section\LocalListBase.cs" />
+    <Compile Include="wenku8\Model\Section\SharersHub\Activities.cs" />
+    <Compile Include="wenku8\Model\Section\SharersHub\MyInbox.cs" />
+    <Compile Include="wenku8\Model\Section\SharersHub\MyRequests.cs" />
+    <Compile Include="wenku8\System\MasterCommandManager.cs" />
+    <Compile Include="Pages\Sharers\HSCommentView.xaml.cs">
+      <DependentUpon>HSCommentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\HSRequestView.xaml.cs">
+      <DependentUpon>HSRequestView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Sharers\ManageAuth.xaml.cs">
       <DependentUpon>ManageAuth.xaml</DependentUpon>
     </Compile>
@@ -153,13 +199,14 @@
     <Compile Include="Pages\SuperGiants.xaml.cs">
       <DependentUpon>SuperGiants.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scenes\ISceneExitable.cs" />
     <Compile Include="Scenes\PFScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
     <Compile Include="Scenes\CanvasStage.cs" />
     <Compile Include="Scenes\FireFlies.cs" />
     <Compile Include="Scenes\Fireworks.cs" />
     <Compile Include="Scenes\Glitter.cs" />
-    <Compile Include="Scenes\MagicTrails.cs" />
+    <Compile Include="Scenes\TheOrb.cs" />
     <Compile Include="Scenes\Texture.cs" />
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
@@ -171,11 +218,11 @@
     <Compile Include="wenku8\CompositeElement\ProcStateItem.cs" />
     <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
     <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
-    <Compile Include="wenku8\Converters\IsSpiderConverter.cs" />
     <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
     <Compile Include="wenku8\Model\Loaders\ZSFeedbackLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
+    <Compile Include="wenku8\Model\Pages\ItemProcessor.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
     <Compile Include="wenku8\Model\Section\ZoneList.cs" />
     <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
@@ -201,11 +248,8 @@
     <Compile Include="Pages\DirectTextViewer.xaml.cs">
       <DependentUpon>DirectTextViewer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\LocalModeTxtList.xaml.cs">
-      <DependentUpon>LocalModeTxtList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ModeSelect.xaml.cs">
-      <DependentUpon>ModeSelect.xaml</DependentUpon>
+    <Compile Include="Pages\ControlFrame.xaml.cs">
+      <DependentUpon>ControlFrame.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\Advanced\Misc.xaml.cs">
       <DependentUpon>Misc.xaml</DependentUpon>
@@ -222,24 +266,18 @@
     <Compile Include="wenku8\Model\Pages\ContentReader\ESContext.cs" />
     <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
     <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
-    <Compile Include="wenku8\Model\Section\LocalFileList\LocalTextScope.cs" />
-    <Compile Include="wenku8\Model\Section\LocalFileList\SpiderScope.cs" />
+    <Compile Include="wenku8\Model\Section\BookSpiderList.cs" />
     <Compile Include="wenku8\Model\Section\SearchSections.cs" />
     <Compile Include="wenku8\Model\Section\LoginStatus.cs" />
     <Compile Include="wenku8\Model\Section\NavPaneSection.cs" />
-    <Compile Include="wenku8\Model\Section\PopupList.cs" />
     <Compile Include="wenku8\Model\Section\ReaderView.cs" />
-    <Compile Include="wenku8\Model\Section\ReviewsSection.cs" />
     <Compile Include="wenku8\Model\Section\TOCPane.cs" />
     <Compile Include="wenku8\Model\Section\TOCSection.cs" />
     <Compile Include="Pages\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Account.xaml.cs">
-      <DependentUpon>Account.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\BookInfoView.xaml.cs">
-      <DependentUpon>BookInfoView.xaml</DependentUpon>
+    <Compile Include="Pages\WUserInfo.xaml.cs">
+      <DependentUpon>WUserInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReader.xaml.cs">
       <DependentUpon>ContentReader.xaml</DependentUpon>
@@ -250,8 +288,8 @@
     <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
       <DependentUpon>BookmarkList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\CategorizedList.xaml.cs">
-      <DependentUpon>CategorizedList.xaml</DependentUpon>
+    <Compile Include="Pages\WCateList.xaml.cs">
+      <DependentUpon>WCateList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReaderPane\ImageList.xaml.cs">
       <DependentUpon>ImageList.xaml</DependentUpon>
@@ -289,14 +327,14 @@
     <Compile Include="Pages\BookInfoControls\ReplyList.xaml.cs">
       <DependentUpon>ReplyList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NavList.xaml.cs">
-      <DependentUpon>NavList.xaml</DependentUpon>
+    <Compile Include="Pages\WNavList.xaml.cs">
+      <DependentUpon>WNavList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ReviewsInput.xaml.cs">
       <DependentUpon>ReviewsInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Search.xaml.cs">
-      <DependentUpon>Search.xaml</DependentUpon>
+    <Compile Include="Pages\WSearch.xaml.cs">
+      <DependentUpon>WSearch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\Advanced\Debug.xaml.cs">
       <DependentUpon>Debug.xaml</DependentUpon>
@@ -331,18 +369,11 @@
     <Compile Include="Pages\Settings\Themes\ThemeColors.xaml.cs">
       <DependentUpon>ThemeColors.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="wenku8\Model\Topics\PressList.cs" />
     <Compile Include="wenku8\Settings\Layout\BookInfoView.cs" />
     <Compile Include="wenku8\Settings\Layout\ContentReader.cs" />
     <Compile Include="wenku8\Settings\Layout\MainPage.cs" />
-    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\InfoView.cs" />
-    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\Reviews.cs" />
-    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\ThumbnailBase.cs" />
-    <Compile Include="wenku8\Settings\Layout\ModuleThumbnail\TOCView.cs" />
     <Compile Include="wenku8\Settings\Layout\NavList.cs" />
     <Compile Include="wenku8\System\Bootstrap.cs" />
     <Compile Include="wenku8\System\UnitTest.cs" />
@@ -357,7 +388,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Account.xaml">
+    <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WNavSelections.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WUserInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -369,6 +408,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\BookSpidersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\ContentReader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -377,7 +420,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\CategorizedList.xaml">
+    <Page Include="Pages\WCateList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -469,15 +512,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\LocalModeTxtList.xaml">
+    <Page Include="Pages\LocalDocumentsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ModeSelect.xaml">
+    <Page Include="Pages\ControlFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NavList.xaml">
+    <Page Include="Pages\WNavList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\OnlineScriptsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -485,7 +532,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Search.xaml">
+    <Page Include="Pages\WSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -541,6 +588,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Sharers\HSCommentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Sharers\HSRequestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\Sharers\ManageAuth.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -560,6 +615,26 @@
     <Page Include="Pages\SuperGiants.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TOCViewHorz.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TOCViewVert.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WBookshelf.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ZoneSpidersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Pages\TOC.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Themes\Global\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -707,10 +782,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Sharers"
     xmlns:c="using:wenku8.CompositeElement"
+    xmlns:n="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
@@ -15,6 +17,7 @@
         <v:DataStateConverter x:Key="DataStateConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <v:DataBoolConverter x:Key="DataBoolConverter" />
+        <n:TransStateConverter x:Key="TransStateConverter" />
     </Page.Resources>
 
     <Grid>
@@ -33,18 +36,15 @@
                 <TextBlock x:Uid="/AppResources/ChangePassword" Text="Change Password" />
             </HyperlinkButton>
         </StackPanel>
-        <p:StateControl State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource DataStateConverter}}"
-                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
-            <Grid>
-                <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.8"/>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ProgressRing x:Name="LoadingRing"
-                                  IsActive="True"
-                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
-                    <TextBlock x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait"
-                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
-                </StackPanel>
-            </Grid>
-        </p:StateControl>
+        <Grid e:TransitionDisplay.State="{Binding Path=IsActive, ElementName=LoadingRing, Converter={StaticResource TransStateConverter}}">
+            <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.8"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressRing x:Name="LoadingRing"
+                              IsActive="True"
+                              Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                <TextBlock x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

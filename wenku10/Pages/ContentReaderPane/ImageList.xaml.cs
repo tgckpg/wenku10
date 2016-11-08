@@ -15,17 +15,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.AdvDM;
+using wenku8.CompositeElement;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Resources;
 using wenku8.Settings;
-using Net.Astropenguin.Controls;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -155,15 +156,12 @@ namespace wenku10.Pages.ContentReaderPane
             NeedDownload = false;
 
             StringResources stm = new StringResources( "Message" );
-            MessageDialog Msg = new MessageDialog( "Not enough information to see if there were any illustrations within this volume. Download this volume?" );
 
-            Msg.Commands.Add(
-                new UICommand( stm.Str( "Yes" ), ( x ) => NeedDownload = true )
-            );
-
-            Msg.Commands.Add( new UICommand( stm.Str( "No" ) ) );
-
-            await Popups.ShowDialog( Msg );
+            await Popups.ShowDialog( UIAliases.CreateDialog(
+                 "Not enough information to see if there were any illustrations within this volume. Download this volume?"
+                , () => NeedDownload = true
+                , stm.Str( "Yes" ), stm.Str( "No" )
+            ) );
 
             if ( !NeedDownload )
             {

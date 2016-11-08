@@ -180,4 +180,7 @@
   <data name="ConfirmScriptRemove" xml:space="preserve">
     <value>这个脚本会从服务器上删除。 继续？</value>
   </data>
+  <data name="ConfirmLogout" xml:space="preserve">
+    <value>确认注销？</value>
+  </data>
 </root>

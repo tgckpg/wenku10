@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Windows.Foundation;
 using Windows.UI.Xaml;
 
 using Microsoft.Graphics.Canvas;
@@ -18,6 +19,8 @@ namespace wenku10.Scenes
     {
         protected CanvasAnimatedControl _stage;
         public TextureLoader Textures { get; protected set; }
+
+        public Size StageSize { get; private set; }
 
         protected List<IScene> Scenes;
 
@@ -46,7 +49,27 @@ namespace wenku10.Scenes
 
         public void Add( IScene S )
         {
-            lock ( S ) Scenes.Add( S );
+            lock ( Scenes )
+            {
+                Scenes.Add( S );
+                if ( StageSize != null ) S.UpdateAssets( StageSize );
+            }
+        }
+        public async Task Remove( Type SceneType )
+        {
+            IScene[] RmScenes;
+            lock ( Scenes )
+            {
+                RmScenes = Scenes.Where( x => x.GetType().Equals( SceneType ) ).ToArray();
+            }
+
+            if ( RmScenes == null ) return;
+
+            foreach ( IScene S in RmScenes )
+            {
+                if ( S is ISceneExitable ) await ( S as ISceneExitable ).Exit();
+                lock ( Scenes ) Scenes.Remove( S );
+            }
         }
 
         ~CanvasStage()
@@ -61,6 +84,7 @@ namespace wenku10.Scenes
                 lock ( Scenes )
                 {
                     Scenes.ForEach( x => x.Dispose() );
+                    Scenes.Clear();
                     Textures.Dispose();
                 }
 
@@ -100,6 +124,7 @@ namespace wenku10.Scenes
             lock ( Scenes )
             {
                 Scenes.ForEach( x => x.UpdateAssets( e.NewSize ) );
+                StageSize = e.NewSize;
             }
         }
 

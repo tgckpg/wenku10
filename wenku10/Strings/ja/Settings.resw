@@ -440,9 +440,6 @@
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>メニューの背景</value>
   </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>設定ページに入ると、ページキャッシュがクリアされます。そのように設定が完了すると、ページをリロードする必要があります。それでも設定ページに行きますか？</value>
-  </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>ログレベル</value>
   </data>

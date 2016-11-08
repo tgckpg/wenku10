@@ -61,6 +61,7 @@ namespace wenku10.Scenes
                     Chaos = new Vector2( 1, 1 )
                     , otMin = 5
                     , otMax = 10
+                    , spf = 60
                     , Texture = Texture.Circle
                     , SpawnEx = ( P ) =>
                     {
@@ -118,7 +119,7 @@ namespace wenku10.Scenes
 
         private void SetColor()
         {
-            Color C = Colors.White;
+            Color C = wenku8.Resources.LayoutSettings.MajorColor;
             ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
         }
 

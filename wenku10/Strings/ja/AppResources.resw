@@ -386,4 +386,13 @@
   <data name="PleaseClick.Text" xml:space="preserve">
     <value>クリックしてください</value>
   </data>
+  <data name="ZoneSpider.Text" xml:space="preserve">
+    <value>区域蜘蛛</value>
+  </data>
+  <data name="Messages.Text" xml:space="preserve">
+    <value>メッセージ</value>
+  </data>
+  <data name="ProcessGrantsFailed.Text" xml:space="preserve">
+    <value>無効なキー</value>
+  </data>
 </root>

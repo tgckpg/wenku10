@@ -12,501 +12,191 @@
     xmlns:e="using:wenku8.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    NavigationCacheMode="Enabled">
+    mc:Ignorable="d">
     <Page.Resources>
-        <s:VDisplayConverter x:Key="VDisplayConverter" />
         <s:ParallaxConverter x:Key="ParallaxConverter" />
         <s:NumberSimplifier x:Key="NumberSimplifier" />
-        <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <s:TransStateConverter x:Key="TransStateConverter" />
-        <CollectionViewSource x:Name="VolumesViewSource" IsSourceGrouped="True" />
+
+        <MenuFlyout x:Key="ThemeFlyout">
+            <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
+        </MenuFlyout>
     </Page.Resources>
+
     <Grid x:Name="LayoutRoot">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <Grid.Resources>
-
-            <!-- Horizontal Chapter List ItemTemplate -->
-            <DataTemplate x:Key="ChListItemTemplate">
-                <Grid>
-                    <Border Width="30" e:TransitionDisplay.State="{Binding IsCached, Converter={StaticResource TransStateConverter}}"
-                            FlowDirection="LeftToRight" >
-                        <i:IconStar Width="60" Height="60" AutoScale="True"
-                            Margin="0,-30,-25,0"
-                            Opacity="0.3"
-                            Foreground="{StaticResource MajorBrush}"
-                            VerticalAlignment="Top" HorizontalAlignment="Right">
-                            <i:IconStar.RenderTransform>
-                                <CompositeTransform Rotation="-10" CenterX="30" CenterY="30" />
-                            </i:IconStar.RenderTransform>
-                        </i:IconStar>
-                    </Border>
-                    <p:VerticalStack
-                        Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
-                        HorizontalAlignment="Center"
-                        Foreground="{StaticResource RelativeShadesBrush}"
-                        FontSize="20"
-                        Margin="0"
-                    />
-                </Grid>
-            </DataTemplate>
-
-            <!-- Vertical ChapterList ItemTemplate -->
-            <DataTemplate x:Key="ChListVertical">
-                <Grid>
-                    <Border Width="30"
-                            e:TransitionDisplay.State="{Binding IsCached, Converter={StaticResource TransStateConverter}}"
-                            VerticalAlignment="Top" HorizontalAlignment="Left"
-                            FlowDirection="LeftToRight" >
-                        <i:IconStar Width="60" Height="60" AutoScale="True"
-                                    Margin="-30,0,-25,0"
-                                    Foreground="{StaticResource MajorBrush}"
-                                    Opacity="0.3" >
-                            <i:IconStar.RenderTransform>
-                                <CompositeTransform Rotation="-10" CenterX="30" CenterY="30" />
-                            </i:IconStar.RenderTransform>
-                        </i:IconStar>
-                    </Border>
-                    <TextBlock Margin="10"
-                               Foreground="{StaticResource RelativeShadesBrush}"
-                               FontSize="20" TextWrapping="Wrap"
-                               Text="{Binding ChapterTitle}" />
-                </Grid>
-            </DataTemplate>
-
-        </Grid.Resources>
 
         <!-- Background from data context -->
-        <Grid x:Name="TOCBg" Grid.RowSpan="2" Margin="-100, -100, -100, -100">
+        <Grid Margin="-100, -100, -100, -100" 
+              Loaded="InfoBgLoaded">
             <Grid.RenderTransform>
-                <TranslateTransform
-                    X="{
-                        Binding ElementName=ContentScroll
-                        , Path=HorizontalOffset
-                        , Converter={StaticResource ParallaxConverter}
-                        , ConverterParameter=-0.10
-                    }" />
+                <TranslateTransform Y="{
+                    Binding ElementName=ContentScroll
+                    , Path=HorizontalOffset
+                    , Converter={StaticResource ParallaxConverter}
+                    , ConverterParameter=-0.20
+                }" />
             </Grid.RenderTransform>
             <!-- Swapping between 2 image to create fading effect -->
             <Image Source="{Binding Background}" Stretch="UniformToFill"
-                   e:TransitionDisplay.Mode="A01"
-                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
+                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}"/>
             <Image Source="{Binding Background2}" Stretch="UniformToFill"
-                   e:TransitionDisplay.Mode="A01"
-                   e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
+                   e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}"/>
         </Grid>
 
-        <ScrollViewer x:Name="ContentScroll"
-                      Grid.Row="0" Grid.RowSpan="2"
-                      VerticalScrollMode="Disabled"
-                      VerticalScrollBarVisibility="Disabled"
-                      HorizontalScrollMode="Enabled"
-                      HorizontalScrollBarVisibility="Auto"
-                      ViewChanged="ContentScroll_ViewChanged" >
-            <StackPanel x:Name="MasterContainer" Orientation="Horizontal">
-                <!-- Section Book Info -->
-                <Border x:Name="BookInfoSection"
-                        e:TransitionDisplay.State="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TransStateConverter}}"
-                        Width="400" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
-                    <ContentControl HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                        <ContentControl.ContentTemplate>
-                            <DataTemplate>
-                                <Grid p:Clip.ToBounds="True">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="50"/>
-                                    </Grid.RowDefinitions>
-                                    <!-- Background from data context -->
-                                    <Grid Grid.RowSpan="2" Margin="-100, -100, -100, -100" 
-                                          Loaded="InfoBgLoaded">
-                                        <Grid.RenderTransform>
-                                            <TranslateTransform
-                                                X="{
-                                                    Binding ElementName=ContentScroll
-                                                    , Path=HorizontalOffset
-                                                    , Converter={StaticResource ParallaxConverter}
-                                                    , ConverterParameter=-0.20
-                                                }" />
-                                        </Grid.RenderTransform>
-                                        <!-- Swapping between 2 image to create fading effect -->
-                                        <Image Source="{Binding Background}" Stretch="UniformToFill"
-                                               e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}"/>
-                                        <Image Source="{Binding Background2}" Stretch="UniformToFill"
-                                               e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}"/>
-                                    </Grid>
-                                    <Rectangle Grid.RowSpan="2"
-                                               Fill="{StaticResource MinorBackgroundBrush}"/>
-                                    <ScrollViewer Grid.RowSpan="2" Margin="10" FlowDirection="LeftToRight"
-                                                  VerticalAlignment="Stretch" VerticalScrollBarVisibility="Hidden">
-                                        <StackPanel Margin="0, 0, 0, 50">
-                                            <TextBlock Text="{Binding Title}" FontSize="30"
-                                                       c:AttachedCopyAction.Source="{Binding Title}"
-                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap" />
-                                            <TextBlock Margin="5, 0"
-                                                       TextWrapping="Wrap"
-                                                       Text="{Binding LatestSection}"
-                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                            <TextBlock Margin="5, 0"
-                                                       TextWrapping="Wrap"
-                                                       Text="{Binding RecentUpdate}"
-                                                       Foreground="{StaticResource SubtleBrush}" />
-                                            <Grid Grid.Row="1" Grid.Column="1">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="*" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <Image Grid.RowSpan="2" Margin="5"
-                                                       MaxWidth="140" MaxHeight="180"
-                                                       Source="{Binding Cover}"
-                                                       e:TransitionDisplay.State="{Binding Cover, Converter={StaticResource TransStateConverter}}" />
-                                                <!-- Author / Press / StatusLong / Length -->
-                                                <StackPanel Grid.Column="1" Margin="5,10,5,5" Grid.Row="0">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Author}"
-                                                               Visibility="{Binding Author, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Press}"
-                                                               Visibility="{Binding Press, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}"
-                                                               Visibility="{Binding StatusLong, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <TextBlock TextWrapping="Wrap"
-                                                               ToolTipService.ToolTip="{Binding Length}"
-                                                               Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
-                                                               Visibility="{Binding Length, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                </StackPanel>
-                                                <!-- TotalCount / TodayCount / PushCount / FavCount -->
-                                                <StackPanel Grid.Column="1" Margin="5" Grid.Row="1">
-                                                    <TextBlock TextWrapping="Wrap"
-                                                               ToolTipService.ToolTip="{Binding TotalHitCount}"
-                                                               Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
-                                                               Visibility="{Binding TotalHitCount, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <TextBlock TextWrapping="Wrap"
-                                                               ToolTipService.ToolTip="{Binding TodayHitCount}"
-                                                               Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
-                                                               Visibility="{Binding TodayHitCount, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                    <Grid Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}"
-                                                          Loaded="PushCountGridLoaded" >
-                                                        <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
-                                                        <TextBlock Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
-                                                                   ToolTipService.ToolTip="{Binding PushCount}">
-                                                            <TextBlock.Foreground>
-                                                                <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}" />
-                                                            </TextBlock.Foreground>
-                                                        </TextBlock>
-                                                        <Grid.Resources>
-                                                            <Storyboard x:Name="DataUpdate">
-                                                                <DoubleAnimation Storyboard.TargetName="PushCountFlash"
-                                                                                 Storyboard.TargetProperty="Opacity"
-                                                                                 BeginTime="0:0:0.0"
-                                                                                 Duration="0:0:0.5"
-                                                                                 From="1" To="0">
-                                                                    <DoubleAnimation.EasingFunction>
-                                                                        <CubicEase EasingMode="EaseOut" />
-                                                                    </DoubleAnimation.EasingFunction>
-                                                                </DoubleAnimation>
-                                                                <ColorAnimation Storyboard.TargetName="PushCountBrush"
-                                                                                Storyboard.TargetProperty="Color"
-                                                                                BeginTime="0:0:0.0"
-                                                                                Duration="0:0:0.5"
-                                                                                From="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}"
-                                                                                To="Transparent">
-                                                                    <ColorAnimation.EasingFunction>
-                                                                        <CubicEase EasingMode="EaseOut" />
-                                                                    </ColorAnimation.EasingFunction>
-                                                                </ColorAnimation>
-                                                            </Storyboard>
-                                                        </Grid.Resources>
-                                                    </Grid>
-                                                    <TextBlock TextWrapping="Wrap"
-                                                               Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
-                                                               ToolTipService.ToolTip="{Binding FavCount}"
-                                                               Visibility="{Binding FavCount, Converter={StaticResource DataVisConverter}}"
-                                                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                                </StackPanel>
+        <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="8*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
 
-                                            </Grid>
-                                            <TextBlock Margin="5"
-                                                       TextWrapping="Wrap" Text="{Binding Intro}"
-                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                                        </StackPanel>
-                                    </ScrollViewer>
-                                    <StackPanel Grid.Row="1" Orientation="Horizontal"
-                                                FlowDirection="LeftToRight">
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
-                                                Height="50" Width="50"
-                                                Tapped="AddOrRemoveFav">
-                                            <Grid>
-                                                <xi:IconFaved AutoScale="True"
-                                                             Foreground="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                                             Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}}"/>
-                                                <xi:IconFav AutoScale="True"
-                                                           Visibility="{Binding IsFav, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"/>
-                                            </Grid>
-                                        </Button>
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
-                                                IsEnabled="{Binding OriginalUrl, Converter={StaticResource DataBoolConverter}}"
-                                                Height="50" Width="50"
-                                                Click="OpenInBrowser" >
-                                                <i:IconMSEdge AutoScale="True" />
-                                        </Button>
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
-                                                Height="50" Width="50"
-                                                Click="SearchAuthor" >
-                                            <xi:IconAuthor AutoScale="True" />
-                                        </Button>
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
-                                                Height="50" Width="50">
-                                            <Button.Flyout>
-                                                <MenuFlyout>
-                                                    <MenuFlyoutSubItem x:Uid="/AppBar/TOC" Text="Table of Contents">
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,TOC" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,TOC" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,TOC"  />
-                                                    </MenuFlyoutSubItem>
-                                                    <!--<MenuFlyoutSeparator />-->
-                                                    <MenuFlyoutSubItem x:Uid="/AppBar/BookInfoView" Text="Info Panel">
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
-                                                    </MenuFlyoutSubItem>
-                                                    <!--<MenuFlyoutSeparator />-->
-                                                    <MenuFlyoutSubItem x:Uid="/AppResources/Comments" Text="Comments">
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,COMMENTS" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,COMMENTS" />
-                                                        <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,COMMENTS"  />
-                                                    </MenuFlyoutSubItem>
-                                                </MenuFlyout>
-                                            </Button.Flyout>
-                                            <i:IconCanvasBrush AutoScale="True" />
-                                        </Button>
-                                        <!-- Obsolete buttons
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Background="{StaticResource Shades40}"
-                                                Height="50" Width="50"
-                                                Click="Vote" >
-                                            <TextBlock x:Uid="/AppBar/Push" FontSize="30" Foreground="White" />
-                                        </Button>
-                                        -->
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ContentControl.ContentTemplate>
-                    </ContentControl>
-                </Border>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-                <!-- Section Table of Contents -->
-                <Border x:Name="TOCSection" Grid.Column="2"
-                        e:TransitionDisplay.State="{Binding DataContext, RelativeSource={RelativeSource Self}, Converter={StaticResource TransStateConverter}}"
-                        Background="{StaticResource Shades90}">
-                    <ContentControl VerticalContentAlignment="Stretch">
-                        <ContentControl.ContentTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock
-                                        x:Uid="/AppBar/TOC"
-                                        VerticalAlignment="{Binding Converter={StaticResource PhoneVAlignConverter}, ConverterParameter=Top|Bottom}"
-                                        HorizontalAlignment="Center"
-                                        TextLineBounds="TrimToBaseline"
-                                        FontSize="35"
-                                        Foreground="{StaticResource Shades80}"
-                                        TextWrapping="Wrap" />
-                                    <StackPanel Grid.Column="0"
-                                                Background="{StaticResource Shades70}"
-                                                VerticalAlignment="{Binding Converter={StaticResource PhoneVAlignConverter}, ConverterParameter=Center|Stretch}">
-                                        <Button Style="{StaticResource PlainButton}"
-                                                Width="50" Height="50" Click="JumpToBookmark">
-                                            <i:IconBookmark AutoScale="True" />
-                                        </Button>
-                                        <Button Content="{Binding ToggleDir}" Style="{StaticResource PlainButton}"
-                                                Width="50" Height="50" Click="ToggleDirection" />
-                                        <c:OneDriveButton Loaded="SyncButtonLoaded"
-                                                FlowDirection="LeftToRight"
-                                                Width="50" Height="50"  />
-                                    </StackPanel>
+                <!-- Spacer for SplashRipple -->
+                <Rectangle Grid.ColumnSpan="5"
+                           Height="300" />
+                <ProgressRing Grid.ColumnSpan="5"
+                              Width="50" Height="50"
+                              IsActive="{Binding ElementName=SplashCover, Path=IsLoading}"
+                              VerticalAlignment="Center" HorizontalAlignment="Center" />
+                <c:SplashRipple x:Name="SplashCover"
+                                Grid.ColumnSpan="5" Grid.RowSpan="4"
+                                HorizontalAlignment="Center" VerticalAlignment="Top"
+                                Source="{Binding CoverStream}" />
 
-                                    <ContentControl Grid.Column="1" ContentTemplateSelector="{Binding TemplateSelector}"
-                                                    VerticalAlignment="Stretch"
-                                                    VerticalContentAlignment="Stretch">
-                                        <ContentControl.Resources>
-                                            <MenuFlyout x:Key="VolumeAction">
-                                                <MenuFlyoutItem x:Uid="/AppBar/VDownload" Click="DownloadVolume" />
-                                            </MenuFlyout>
+                <StackPanel x:Name="HeaderPanel"
+                            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+                            Margin="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Title}" FontSize="30"
+                                   c:AttachedCopyAction.Source="{Binding Title}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   TextWrapping="Wrap" />
+                        <Button x:Name="VoteButton"
+                                Grid.Column="1"
+                                Style="{StaticResource PlainButton}"
+                                Background="Transparent" Visibility="Collapsed"
+                                Height="50" Width="50"
+                                Click="VoteButton_Click" >
+                            <TextBlock x:Uid="/AppBar/Push"
+                                       Foreground="{StaticResource SubtleBrush}"
+                                       FontSize="30" />
+                        </Button>
+                    </Grid>
 
-                                            <DataTemplate x:Name="Vertical">
-                                                <SemanticZoom Width="400"
-                                                              FlowDirection="LeftToRight" >
-                                                    <SemanticZoom.ZoomedInView>
-                                                        <ListView ItemsSource="{Binding Source={StaticResource VolumesViewSource}}"
-                                                                  ItemTemplate="{StaticResource ChListVertical}"
-                                                                  Loaded="ChapterListLoaded"
-                                                                  IsItemClickEnabled="True"
-                                                                  ItemClick="ChapterSelected" >
-                                                            <ListView.GroupStyle>
-                                                                <GroupStyle>
-                                                                    <GroupStyle.HeaderTemplate>
-                                                                        <DataTemplate>
-                                                                            <TextBlock
-                                                                                Margin="10"
-                                                                                Foreground="{StaticResource RelativeShadesBrush}"
-                                                                                FontSize="20" TextWrapping="Wrap"
-                                                                                RightTapped="TOCShowVolumeAction"
-                                                                                FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                                                                                Text="{Binding Vol.VolumeTitle}"
-                                                                            />
-                                                                        </DataTemplate>
-                                                                    </GroupStyle.HeaderTemplate>
-                                                                </GroupStyle>
-                                                            </ListView.GroupStyle>
-                                                        </ListView>
-                                                    </SemanticZoom.ZoomedInView>
-                                                    <SemanticZoom.ZoomedOutView>
-                                                        <ListView ItemsSource="{Binding VolumeCollections}" 
-                                                                  Loaded="VolumeListLoaded"
-                                                                  SelectionChanged="VolumeChanged">
-                                                            <ListView.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <TextBlock
-                                                                        Margin="10"
-                                                                        Foreground="{StaticResource RelativeShadesBrush}"
-                                                                        FontSize="20" TextWrapping="Wrap"
-                                                                        Text="{Binding Group.Vol.VolumeTitle}"
-                                                                    />
-                                                                </DataTemplate>
-                                                            </ListView.ItemTemplate>
-                                                        </ListView>
-                                                    </SemanticZoom.ZoomedOutView>
-                                                </SemanticZoom>
-                                            </DataTemplate>
+                    <TextBlock Margin="5, 0"
+                               TextWrapping="Wrap"
+                               Text="{Binding LatestSection}"
+                               Visibility="{Binding LatestSection, Converter={StaticResource DataVisConverter}}"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    <TextBlock Margin="5, 0"
+                               TextWrapping="Wrap"
+                               Text="{Binding RecentUpdate}"
+                               Visibility="{Binding RecentUpdate, Converter={StaticResource DataVisConverter}}"
+                               Foreground="{StaticResource SubtleBrush}" />
+                </StackPanel>
 
-                                            <!-- Horizontal template -->
-                                            <DataTemplate x:Name="Horizontal">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="*" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <ListView Grid.Row="0"
-                                                              ItemsSource="{Binding Volumes}"
-                                                              Style="{StaticResource VerticalListView}"
-                                                              ItemContainerStyle="{StaticResource TOCListItem}"
-                                                              LayoutUpdated="ChFixedListLayoutUpdate"
-                                                              Loaded="VolumeListLoaded"
-                                                              SelectionChanged="VolumeChanged">
-                                                        <ListView.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <p:VerticalStack
-                                                                    Margin="10"
-                                                                    Grid.Row="0"
-                                                                    VerticalAlignment="Top"
-                                                                    HorizontalAlignment="Center"
-                                                                    Foreground="{StaticResource RelativeShadesBrush}"
-                                                                    FontSize="20"
-                                                                    RightTapped="TOCShowVolumeAction"
-                                                                    FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                                                                    Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
-                                                                />
-                                                            </DataTemplate>
-                                                        </ListView.ItemTemplate>
-                                                    </ListView>
+                <Grid x:Name="StatusPanel"
+                      Grid.Row="2" Grid.Column="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                                                    <Rectangle Grid.Row="1"
-                                                               VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                                               Fill="{StaticResource Shades90}" />
-                                                    <Rectangle Grid.Row="1"
-                                                               HorizontalAlignment="Left"
-                                                               Loaded="ChLeftBoundaryLoaded" />
-                                                    <Rectangle Grid.Row="1"
-                                                               HorizontalAlignment="Right"
-                                                               Loaded="ChRightBoundaryLoaded" />
-                                                    <ListView ItemsSource="{Binding Chapters}"
-                                                              Grid.Row="1" 
-                                                              Style="{StaticResource VerticalListView}"
-                                                              HorizontalAlignment="Left"
-                                                              ItemTemplate="{StaticResource ChListItemTemplate}"
-                                                              ItemContainerStyle="{StaticResource PlainListItem}"
-                                                              MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                                                              Loaded="ChapterListLoaded"
-                                                              IsItemClickEnabled="True"
-                                                              ItemClick="ChapterSelected" >
-                                                    </ListView>
-                                                </Grid>
-                                            </DataTemplate>
-
-                                        </ContentControl.Resources>
-                                    </ContentControl>
-                                </Grid>
-                            </DataTemplate>
-                        </ContentControl.ContentTemplate>
-                    </ContentControl>
-                </Border>
-
-                <!-- Section Comments -->
-                <Border x:Name="CommentSection" Grid.Column="1"
-                        e:TransitionDisplay.State="{Binding Path=Content, ElementName=CommentFrame, Converter={StaticResource TransStateConverter}}"
-                        Width="450" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" >
-                    <Grid p:Clip.ToBounds="True">
-                        <!-- Background from data context -->
-                        <Grid Margin="-200, -30, -200, -30" 
-                              Loaded="CommentsBgLoaded">
-                            <Grid.RenderTransform>
-                                <TranslateTransform
-                                    X="{
-                                        Binding ElementName=ContentScroll
-                                        , Path=HorizontalOffset
-                                        , Converter={StaticResource ParallaxConverter}
-                                        , ConverterParameter=-0.10
-                                    }" />
-                            </Grid.RenderTransform>
-                            <!-- Swapping between 2 image to create fading effect -->
-                            <Image Source="{Binding Background}" Stretch="UniformToFill"
-                                   e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}" />
-                            <Image Source="{Binding Background2}" Stretch="UniformToFill"
-                                   e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}" />
+                    <!-- Author / Press / StatusLong / Length -->
+                    <StackPanel Grid.Column="0" Margin="5">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Author}"
+                                   Visibility="{Binding Author, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Press}"
+                                   Visibility="{Binding Press, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                        <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}"
+                                   Visibility="{Binding StatusLong, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                        <TextBlock TextWrapping="Wrap"
+                                   ToolTipService.ToolTip="{Binding Length}"
+                                   Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                   Visibility="{Binding Length, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    </StackPanel>
+                    <!-- TotalCount / TodayCount / PushCount / FavCount -->
+                    <StackPanel Grid.Column="1" Margin="5">
+                        <TextBlock TextWrapping="Wrap"
+                                   ToolTipService.ToolTip="{Binding TotalHitCount}"
+                                   Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                   Visibility="{Binding TotalHitCount, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                        <TextBlock TextWrapping="Wrap"
+                                   ToolTipService.ToolTip="{Binding TodayHitCount}"
+                                   Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                   Visibility="{Binding TodayHitCount, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                        <Grid Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}"
+                                      Loaded="PushCountGridLoaded" >
+                            <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
+                            <TextBlock Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
+                                       ToolTipService.ToolTip="{Binding PushCount}">
+                                <TextBlock.Foreground>
+                                    <SolidColorBrush x:Name="PushCountBrush" Color="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}" />
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <Grid.Resources>
+                                <Storyboard x:Name="DataUpdate">
+                                    <DoubleAnimation Storyboard.TargetName="PushCountFlash"
+                                                     Storyboard.TargetProperty="Opacity"
+                                                     BeginTime="0:0:0.0"
+                                                     Duration="0:0:0.5"
+                                                     From="1" To="0">
+                                        <DoubleAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                    <ColorAnimation Storyboard.TargetName="PushCountBrush"
+                                                    Storyboard.TargetProperty="Color"
+                                                    BeginTime="0:0:0.0"
+                                                    Duration="0:0:0.5"
+                                                    From="{Binding LayoutSettings.MajorBackgroundColor, Source={StaticResource LayoutResources}}"
+                                                    To="{Binding LayoutSettings.RelativeMajorBackgroundColor, Source={StaticResource LayoutResources}}">
+                                        <ColorAnimation.EasingFunction>
+                                            <CubicEase EasingMode="EaseOut" />
+                                        </ColorAnimation.EasingFunction>
+                                    </ColorAnimation>
+                                </Storyboard>
+                            </Grid.Resources>
                         </Grid>
 
-                        <Border Background="{StaticResource MajorBackgroundBrush}" Opacity="0.8" />
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
+                                   ToolTipService.ToolTip="{Binding FavCount}"
+                                   Visibility="{Binding FavCount, Converter={StaticResource DataVisConverter}}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    </StackPanel>
+                </Grid>
 
-                        <Frame x:Name="CommentFrame" />
-                    </Grid>
-                </Border>
+                <TextBlock x:Name="IntroText"
+                           Grid.Row="3" Grid.Column="2"
+                           Margin="5"
+                           TextWrapping="Wrap" Text="{Binding Intro}"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
 
-            </StackPanel>
+            </Grid>
         </ScrollViewer>
-
-        <Border x:Name="TOCFloatSection" Grid.Row="1">
-            <ListView x:Name="ChFloatList" ItemsSource="{Binding Chapters}"
-                      Visibility="Collapsed"
-                      IsHitTestVisible="True"
-                      Style="{StaticResource VerticalListView}"
-                      ItemTemplate="{StaticResource ChListItemTemplate}"
-                      ItemContainerStyle="{StaticResource PlainListItem}"
-                      IsItemClickEnabled="True"
-                      ItemClick="ChapterSelected" >
-            </ListView>
-        </Border>
-
-        <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
     </Grid>
 </Page>

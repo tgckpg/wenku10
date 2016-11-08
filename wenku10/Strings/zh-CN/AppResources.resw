@@ -386,4 +386,13 @@
   <data name="PleaseClick.Text" xml:space="preserve">
     <value>请点击</value>
   </data>
+  <data name="ZoneSpider.Text" xml:space="preserve">
+    <value>区域蜘蛛</value>
+  </data>
+  <data name="Messages.Text" xml:space="preserve">
+    <value>消息</value>
+  </data>
+  <data name="ProcessGrantsFailed.Text" xml:space="preserve">
+    <value>无效的密钥</value>
+  </data>
 </root>

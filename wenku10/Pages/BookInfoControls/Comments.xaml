@@ -4,46 +4,17 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.BookInfoControls"
     xmlns:s="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
     xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <s:TransStateConverter x:Key="TransStateConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
     </Page.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <ListView Grid.Column="0" Background="{StaticResource Shades90}"
-                  ItemsSource="{Binding Controls}"
-                  IsItemClickEnabled="True"
-                  ItemClick="ControlClick"
-                  ItemContainerStyle="{StaticResource BareListItem}"
-                  FlowDirection="LeftToRight">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border Child="{Binding Icon}"
-                            Background="{StaticResource Shades90}"
-                            Width="50" Height="50" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <TextBlock
-            x:Uid="/AppResources/Comments"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Center"
-            TextLineBounds="TrimToBaseline"
-            FontSize="35"
-            Foreground="{StaticResource Shades90}"
-            TextWrapping="Wrap" />
-        <ListView ItemsSource="{Binding Comments}"
-                  Grid.Column="1" FlowDirection="LeftToRight"
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <ListView x:Name="CommentsList"
+                  Grid.Column="1"
                   IsItemClickEnabled="True"
                   ItemClick="OpenComment"
                   ItemContainerStyle="{StaticResource CommentListItem}">
@@ -70,16 +41,8 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <Frame Grid.Column="1" Content="{Binding SubListView}" FlowDirection="LeftToRight"
-               e:TransitionDisplay.State="{Binding SubListView, Converter={StaticResource TransStateConverter}}"/>
-        <Frame Grid.Column="1" Content="{Binding ReviewsInput}" FlowDirection="LeftToRight"
-               e:TransitionDisplay.State="{Binding ReviewsInput, Converter={StaticResource TransStateConverter}}"/>
+        <Frame Grid.Column="1" x:Name="SubListView" />
+        <Frame Grid.Column="1" x:Name="ReviewsFrame" />
 
-        <ProgressRing IsActive="{Binding IsLoading}"
-                      Width="45" Height="45"
-                      Margin="10"
-                      VerticalAlignment="Center" HorizontalAlignment="Center"
-                      Foreground="{StaticResource RelativeMajorBrush}"
-                      e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}" />
     </Grid>
 </Page>

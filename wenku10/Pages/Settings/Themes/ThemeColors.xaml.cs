@@ -19,17 +19,32 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.UI.Icons;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
+using wenku8.CompositeElement;
 using wenku8.Config;
+using wenku8.Model.Interfaces;
 using wenku8.Settings.Theme;
+using Net.Astropenguin.Controls;
 
 namespace wenku10.Pages.Settings.Themes
 {
-    public sealed partial class ThemeColors : Page
+    public sealed partial class ThemeColors : Page, INavPage, ICmdControls
     {
         public static readonly string ID = typeof( ThemeColors ).Name;
+
+        #pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+        #pragma warning restore 0067
+
+        public bool NoCommands { get; }
+        public bool MajorNav { get; }
+
+        public IList<ICommandBarElement> MajorControls { get; protected set; }
+        public IList<ICommandBarElement> Major2ndControls { get; protected set; }
+        public IList<ICommandBarElement> MinorControls { get; protected set; }
 
         private ObservableCollection<ThemeSet> PresetThemeColors;
         private ThemeSet SelectedTheme;
@@ -45,10 +60,16 @@ namespace wenku10.Pages.Settings.Themes
             }
         }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
+        public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( CloseThemesetFrame ); }
+        public void SoftClose() { NavigationHandler.OnNavigatedBack -= CloseThemesetFrame; }
+
+        private void CloseThemesetFrame( object sender, XBackRequestedEventArgs e )
         {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
+            if( ThemeSetFrame.Content != null )
+            {
+                e.Handled = true;
+                ThemeSetFrame.Content = null;
+            }
         }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )
@@ -75,15 +96,38 @@ namespace wenku10.Pages.Settings.Themes
         {
             if ( e.AddedItems.Count() < 1 ) return;
             SetThemeBlocks( e.AddedItems[ 0 ] as ThemeSet );
-
         }
 
         private void SetTemplates()
         {
             Manager = new global::wenku8.System.ThemeManager();
             ThemePresets();
-            OneDriveResync.SetComplete( ThemePresets );
-            OneDriveResync.SetSync( Manager.OneDriveSync );
+            InitAppBar();
+        }
+
+        private void InitAppBar()
+        {
+            StringResources stx = new StringResources( "AppBar" );
+
+            List<ICommandBarElement> Btns = new List<ICommandBarElement>();
+
+            if ( Properties.ENABLE_ONEDRIVE )
+            {
+                AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( new IconOneDrive(), stx.Text( "Sync" ) );
+
+                ButtonOperation Op = new ButtonOperation( OneDriveBtn );
+                Op.SetOp( Manager.OneDriveSync );
+                Op.SetComplete( ThemePresets );
+
+                Btns.Add( OneDriveBtn );
+            }
+
+            AppBarButton SaveBtn = UIAliases.CreateAppBarBtn( Symbol.Save, stx.Text( "Save" ) );
+            SaveBtn.Click += SaveBtn_Click;
+
+            Btns.Add( SaveBtn );
+
+            MajorControls = Btns.ToArray();
         }
 
         private void SetThemeBlocks( ThemeSet ColorSet )
@@ -211,7 +255,7 @@ namespace wenku10.Pages.Settings.Themes
             ViewShades( e.AddedItems[0] as ThemeTextBlock );
         }
 
-        private async void Button_Tapped( object sender, TappedRoutedEventArgs e )
+        private async void SaveBtn_Click( object sender, RoutedEventArgs e )
         {
             // Save the selected set since in time this will be unselected and cause problem
             ThemeSet ThisSet = Presets.SelectedItem as ThemeSet;
@@ -224,7 +268,7 @@ namespace wenku10.Pages.Settings.Themes
 
         private void ThemeEdit( object sender, RoutedEventArgs e )
         {
-            Frame.Navigate( typeof( EditColors ), SelectedTheme );
+            ThemeSetFrame.Content = new EditColors( SelectedTheme );
         }
 
         private void ThemeDelete( object sender, RoutedEventArgs e )

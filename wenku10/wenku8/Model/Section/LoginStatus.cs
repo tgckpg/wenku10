@@ -15,20 +15,6 @@ namespace wenku8.Model.Section
 
     class LoginStatus : ActiveData
     {
-        public Page _frameContent;
-        public Page FrameContent
-        {
-            get
-            {
-                return _frameContent;
-            }
-            private set
-            {
-                _frameContent = value;
-                NotifyChanged( "FrameContent" );
-            }
-        }
-
         private const string AvatarLocation = FileLinks.ROOT_IMAGE + "USER_AVATAR";
 
         public BitmapImage Avatar { get; private set; }
@@ -114,27 +100,6 @@ namespace wenku8.Model.Section
 
             Avatar.SetSourceFromUrl( AvatarLocation );
             NotifyChanged( "Avatar" );
-        }
-
-        public async void PopupLoginOrInfo()
-        {
-            if ( Member.IsLoggedIn )
-            {
-                FrameContent = new wenku10.Pages.Account( ClosePopup );
-            }
-            else
-            {
-                wenku10.Pages.Dialogs.Login Login = new wenku10.Pages.Dialogs.Login(
-                    X.Singleton<IMember>( XProto.Member )
-                );
-
-                await Popups.ShowDialog( Login );
-            }
-        }
-
-        private void ClosePopup()
-        {
-            FrameContent = null;
         }
 
     }

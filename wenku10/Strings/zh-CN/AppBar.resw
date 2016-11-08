@@ -189,4 +189,52 @@
   <data name="BookInfoView.Text" xml:space="preserve">
     <value>资讯页</value>
   </data>
+  <data name="OpenInBrowser" xml:space="preserve">
+    <value>在浏览器中打开</value>
+  </data>
+  <data name="Download.Text" xml:space="preserve">
+    <value>下载</value>
+  </data>
+  <data name="OnlineScriptDir.Text" xml:space="preserve">
+    <value>共享脚本目录</value>
+  </data>
+  <data name="LocalDocuments.Text" xml:space="preserve">
+    <value>本地文档</value>
+  </data>
+  <data name="OpenFolder.Text" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="OpenUrl.Text" xml:space="preserve">
+    <value>打开网址</value>
+  </data>
+  <data name="Pause.Text" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="ProcessAll.Text" xml:space="preserve">
+    <value>处理所有项目</value>
+  </data>
+  <data name="OpenZone.Text" xml:space="preserve">
+    <value>打开区域文件</value>
+  </data>
+  <data name="Add.Text" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="Export.Text" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="SyncBookmarks.Text" xml:space="preserve">
+    <value>同步书签</value>
+  </data>
+  <data name="JumpToAnchor.Text" xml:space="preserve">
+    <value>跳到最后一个章节锚点</value>
+  </data>
+  <data name="Reload.Text" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="ContentDirection" xml:space="preserve">
+    <value>正文方向</value>
+  </data>
+  <data name="Exit.Text" xml:space="preserve">
+    <value>退出</value>
+  </data>
 </root>

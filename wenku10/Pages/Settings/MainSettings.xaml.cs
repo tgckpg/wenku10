@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Controls;
@@ -22,21 +23,36 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 
+using wenku8.CompositeElement;
 using wenku8.Config;
+using wenku8.Effects;
+using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Settings
 {
-    public sealed partial class MainSettings : Page
+    public sealed partial class MainSettings : Page, ICmdControls, IAnimaPage
     {
         public static readonly string ID = typeof( MainSettings ).Name;
 
+        #pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+        #pragma warning restore 0067
+
+        public bool NoCommands { get; }
+        public bool MajorNav { get { return true; } }
+
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get ; private set; }
+
         public static MainSettings Instance;
+
         public MainSettings()
         {
             this.InitializeComponent();
             Instance = this;
-            DefineSettings();
+            SetTemplate();
         }
 
         ~MainSettings() { Dispose(); }
@@ -47,39 +63,10 @@ namespace wenku10.Pages.Settings
             Instance = null;
         }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-        }
-
-        protected override void OnNavigatedTo( NavigationEventArgs e )
-        {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
-            NavigationHandler.InsertHandlerOnNavigatedBack( ClosePopup );
-
-            // Reset Cache
-            Frame RootFrame = MainStage.Instance.RootFrame;
-            int OSize = RootFrame.CacheSize;
-            Logger.Log( ID, string.Format( "Resetting Page Cache({0})", OSize ), LogType.DEBUG );
-
-            RootFrame.CacheSize = 0;
-            RootFrame.CacheSize = OSize;
-        }
-
         private void ClosePopup( object sender, XBackRequestedEventArgs e )
         {
             // Restart Required
             if ( RestartMask.State == ControlState.Reovia ) return;
-
-            // Close the popup first
-            if ( PopupPage.State == ControlState.Reovia )
-            {
-                PopupPage.State = ControlState.Foreatii;
-                e.Handled = true;
-                return;
-            }
 
             // Go back
             LoadingMask.HandleBack( Frame, e );
@@ -88,8 +75,38 @@ namespace wenku10.Pages.Settings
 
         ActionItem OneDriveButton;
 
-        public void DefineSettings()
+        #region Anima
+        Storyboard AnimaStory = new Storyboard();
+
+        public async Task EnterAnima()
         {
+            AnimaStory.Stop();
+            AnimaStory.Children.Clear();
+
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
+
+            AnimaStory.Begin();
+            await Task.Delay( 350 );
+        }
+
+        public async Task ExitAnima()
+        {
+            AnimaStory.Stop();
+            AnimaStory.Children.Clear();
+
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+
+            AnimaStory.Begin();
+            await Task.Delay( 350 );
+        }
+        #endregion
+
+        public void SetTemplate()
+        {
+            LayoutRoot.RenderTransform = new TranslateTransform();
+
             StringResources stx = new StringResources( "Settings" );
 
             string CurrentLang = Properties.LANGUAGE;
@@ -204,7 +221,6 @@ namespace wenku10.Pages.Settings
             var j = Windows.System.Launcher.LaunchUriAsync( _url );
         }
 
-
         private async void ChangeLanguage( object Param )
         {
             string LangCode = Param.ToString();
@@ -218,33 +234,23 @@ namespace wenku10.Pages.Settings
 
         public async Task<bool> ConfirmRestart( string CaptionRes )
         {
-            StringResources stx = new StringResources( "Settings" );
-            StringResources stm = new StringResources( "Message" );
-
-            // Ask for confirmatiosn
-            MessageDialog Confirm = new MessageDialog( stm.Str( "NeedRestart" ), stx.Text( CaptionRes ) );
+            StringResources stx = new StringResources( "Message", "Settings" );
 
             bool Restart = false;
 
-            Confirm.Commands.Add(
-                new UICommand(
-                    stm.Str( "Yes" )
-                    , ( e ) => { Restart = true; }
-                )
-            );
+            await Popups.ShowDialog(
+                UIAliases.CreateDialog(
+                    stx.Str( "NeedRestart" ), stx.Text( CaptionRes, "Settings" )
+                    , () => Restart = true
+                    , stx.Str( "Yes" ), stx.Str( "No" )
+                ) );
 
-            Confirm.Commands.Add(
-                new UICommand( stm.Str( "No" ) )
-            );
-
-            await Popups.ShowDialog( Confirm );
-
-            if( Restart )
+            if ( Restart )
             {
-                Frame.BackStack.Clear();
+                await ControlFrame.Instance.CloseSubView();
+                ControlFrame.Instance.CollapseAppBar();
                 NavigationHandler.InsertHandlerOnNavigatedBack( Exit );
                 RestartMask.State = ControlState.Reovia;
-                PopupPage.State = ControlState.Foreatii;
             }
 
             return Restart;
@@ -279,12 +285,9 @@ namespace wenku10.Pages.Settings
 
                     if ( Properties.ENABLE_ONEDRIVE )
                     {
-                        if ( global::wenku8.Storage.OneDriveSync.Instance == null )
-                        {
-                            global::wenku8.Storage.OneDriveSync.Instance = new global::wenku8.Storage.OneDriveSync();
-                        }
                         await global::wenku8.Storage.OneDriveSync.Instance.Authenticate();
                     }
+
                     OneDriveButton.Desc = sts.Text( "Enabled" );
                 }
                 else
@@ -297,8 +300,7 @@ namespace wenku10.Pages.Settings
                 return;
             }
 
-            PopupFrame.Navigate( ( Type ) P );
-            PopupPage.State = ControlState.Reovia;
+            ControlFrame.Instance.SubNavigateTo( this, () => ( Page ) Activator.CreateInstance( ( Type ) P ) );
         }
 
         private class SettingsSection

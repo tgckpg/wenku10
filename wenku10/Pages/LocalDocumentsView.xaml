@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="wenku10.Pages.LocalDocumentsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:n="using:wenku8.Converters"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
+        <v:DataStateConverter x:Key="DataStateConverter" />
+        <n:TransStateConverter x:Key="TransStateConverter" />
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Search Bar -->
+        <TextBox PlaceholderText="Search Files"
+                 Text="{Binding SearchTerms}"
+                 TextChanging="TextBox_TextChanging"/>
+        <ListView Grid.Row="1"
+                  ItemsSource="{Binding SearchSet}"
+                  IsItemClickEnabled="True"
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  ItemClick="FileList_ItemClick">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border MinHeight="120">
+                        <Border.Resources>
+                            <MenuFlyout x:Key="BookAction">
+                                <MenuFlyoutItem IsEnabled="{Binding CanFav}"
+                                                Click="ToggleFav"
+                                                Text="{Binding FavContextMenu}" />
+
+                                <MenuFlyoutItem IsEnabled="{Binding CanReprocess}"
+                                                x:Uid="/ContextMenu/Reanalyze"
+                                                Click="Reanalyze"
+                                                Text="Reanalyze" />
+
+                                <MenuFlyoutItem x:Uid="/ContextMenu/DirectView"
+                                                IsEnabled="{Binding File, Converter={StaticResource DataBoolConverter}}"
+                                                Click="ViewRaw" />
+
+                                <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
+                                                Click="RemoveSource"
+                                                Text="Remove Source" />
+                            </MenuFlyout>
+                        </Border.Resources>
+                        <c:LSBookItem Title="{Binding Name}" Desc="{Binding Desc}"
+                                      FavState="{Binding IsFav, Converter={StaticResource TransStateConverter}}"
+                                      IsLoading="{Binding Processing}"
+                                      SpiderState="Foreatii"
+                                      CheckedState="{Binding ProcessSuccess, Converter={StaticResource DataStateConverter}}"
+                                      FailedState="{Binding ProcessFailed, Converter={StaticResource DataStateConverter}}"
+                                      RightTapped="ShowBookAction" FlyoutBase.AttachedFlyout="{StaticResource BookAction}" />
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

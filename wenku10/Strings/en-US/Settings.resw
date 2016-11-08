@@ -440,9 +440,6 @@
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>Menu background</value>
   </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>Page cache will be clear before entering the settings page. So there will be a re-initialization needed upon returning. Are you sure?</value>
-  </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>Log level</value>
   </data>

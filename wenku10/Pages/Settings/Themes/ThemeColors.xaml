@@ -112,19 +112,10 @@
             </StackPanel>
 
             <StackPanel Grid.Row="1">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0">
-                        <Run x:Uid="/Settings/Appearance_Theme_ColorSet" Text="Color Set" Foreground="{StaticResource MajorBrush}" FontSize="30" />
-                        <Run x:Uid="/Settings/Desc_Appearance_Theme_ColorSet" Text="Desc Color Set" Foreground="{StaticResource SubtleBrush}"/>
-                    </TextBlock>
-                    <c:OneDriveButton x:Name="OneDriveResync"
-                                      Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                                      Grid.Column="1" />
-                </Grid>
+                <TextBlock Grid.Row="0">
+                    <Run x:Uid="/Settings/Appearance_Theme_ColorSet" Text="Color Set" Foreground="{StaticResource MajorBrush}" FontSize="30" />
+                    <Run x:Uid="/Settings/Desc_Appearance_Theme_ColorSet" Text="Desc Color Set" Foreground="{StaticResource SubtleBrush}"/>
+                </TextBlock>
             </StackPanel>
             <ListView Name="Presets" SelectionChanged="Presets_SelectionChanged"
                       ItemContainerStyle="{StaticResource CommentListItem}"
@@ -173,13 +164,7 @@
             </ListView>
 
         </Grid>
-        <Button Grid.Row="1"
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Tapped="Button_Tapped">
-            <i:IconSave AutoScale="True"
-                        Foreground="{StaticResource MajorBrush}"
-                        Width="50" Height="50" />
-        </Button>
+        <Frame x:Name="ThemeSetFrame" />
     </Grid>
 
 </Page>

@@ -67,7 +67,6 @@ namespace wenku8.Model.Loaders
                 if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
                 {
                     ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
-                    return;
                 }
             }
 
@@ -110,9 +109,11 @@ namespace wenku8.Model.Loaders
             if ( b is BookInstruction ) return;
 
             CurrentBook = b;
-            // Description
+
             if ( Shared.Storage.FileExists( b.IntroPath ) )
             {
+                // This will trigger NotifyChanged for Intro
+                // getter will automatically retieved intro stored in IntroPath
                 CurrentBook.Intro = "OK";
             }
             else
@@ -159,7 +160,6 @@ namespace wenku8.Model.Loaders
 
 		private void PrelaodBookInfo( DRequestCompletedEventArgs e, string id )
 		{
-			// When download is successful
 			ExtractBookInfo( e.ResponseString, id );
 		}
 
@@ -167,28 +167,22 @@ namespace wenku8.Model.Loaders
         {
             CurrentBook.ParseXml( InfoData );
 
-            if ( !Shared.Storage.FileExists( CurrentBook.CoverPath ) )
+            if ( Shared.Storage.FileExists( CurrentBook.CoverPath ) )
+            {
+                OnComplete( CurrentBook );
+            }
+            else
             {
                 X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
                     id, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", id )
                     , CoverDownloaded, Utils.DoNothing, false
                 );
             }
-            else
-            {
-                SetCover( CurrentBook );
-                // Cover cached immediately. Call once
-                OnComplete( CurrentBook );
-            }
         }
 
         private async Task CacheCover( BookItem B )
         {
-            if( Shared.Storage.FileExists( CurrentBook.CoverPath ) )
-            {
-                SetCover( B );
-                return;
-            }
+            if( Shared.Storage.FileExists( CurrentBook.CoverPath ) ) return;
 
             if( !string.IsNullOrEmpty( B.CoverSrcUrl ) )
             {
@@ -220,30 +214,21 @@ namespace wenku8.Model.Loaders
 
         private void CoverDownloaded( DRequestCompletedEventArgs e, string id )
         {
-            // Write Cache
             Shared.Storage.WriteBytes( CurrentBook.CoverPath, e.ResponseBytes );
-            // Read Image
+
             SetCover( CurrentBook );
-            // Cover cached. Call once
             OnComplete( CurrentBook );
         }
 
         private void SetCover( BookItem B )
         {
-            Worker.UIInvoke( () =>
-            {
-                BitmapImage bmp = new BitmapImage();
-                bmp.SetSourceFromUrl( B.CoverPath );
-
-                B.Cover = bmp;
-            } );
+            B.CoverUpdate();
         }
 
-        // Loading itself is resources intensive
-        // But dispatching itself is not
         private void OnComplete( BookItem b )
         {
             Worker.UIInvoke( () => { CompleteHandler( b ); } );
         }
+
     }
 }

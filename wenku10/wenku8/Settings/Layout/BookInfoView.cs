@@ -18,7 +18,6 @@ namespace wenku8.Settings.Layout
     using AdvDM;
     using Effects;
     using Model.Book;
-    using ModuleThumbnail;
     using Resources;
     using SrcView = wenku10.Pages.BookInfoView;
 
@@ -58,22 +57,7 @@ namespace wenku8.Settings.Layout
             }
         }
 
-        private ListView Disp = null;
         private XRegistry LayoutSettings;
-
-        private XParameter[] Modules
-        {
-            get { return LayoutSettings.Parameters( "order" ); }
-        }
-
-        private Type[] LayoutDefs = new Type[]
-        {
-            typeof( ModuleThumbnail.InfoView )
-            , typeof( ModuleThumbnail.Reviews )
-            , typeof(  ModuleThumbnail.TOCView )
-        };
-
-        private Dictionary<string, ThumbnailBase> TBInstance;
 
         public BookInfoView()
         {
@@ -82,40 +66,9 @@ namespace wenku8.Settings.Layout
             InitParams();
         }
 
-        public BookInfoView( ListView DisplayList )
-            : this()
-        {
-            Disp = DisplayList;
-            DisplayList.DragItemsCompleted += OnReorder;
-        }
-
-        ~BookInfoView()
-        {
-            if ( Disp != null )
-            {
-                Net.Astropenguin.Helpers.Worker.UIInvoke(
-                    () => Disp.DragItemsCompleted -= OnReorder
-                );
-            }
-        }
-
         public void InitParams()
         {
-            TBInstance = new Dictionary<string, ThumbnailBase>();
-
-            int i = 0;
-
             bool Changed = false;
-
-            // Get the last available index
-            if ( Modules != null )
-            {
-                foreach ( XParameter P in Modules )
-                {
-                    int j = int.Parse( P.GetValue( "order" ) );
-                    if ( i < j ) i = j;
-                }
-            }
 
             if ( LayoutSettings.Parameter( RightToLeft ) == null )
             {
@@ -133,26 +86,6 @@ namespace wenku8.Settings.Layout
                 );
             }
 
-            // Create Index Item if not available
-            foreach ( Type P in LayoutDefs )
-            {
-                ThumbnailBase Tb = Activator.CreateInstance( P ) as ThumbnailBase;
-                TBInstance.Add( Tb.ModName, Tb );
-
-                XParameter LayoutKey = LayoutSettings.Parameter( Tb.ModName );
-                if ( LayoutKey == null )
-                {
-                    LayoutSettings.SetParameter(
-                        Tb.ModName, new XKey[] {
-                            new XKey( "order", ++i )
-                            , new XKey( "enable", Tb.DefaultValue )
-                        }
-                    );
-
-                    Changed = true;
-                }
-            }
-
             if ( Changed ) LayoutSettings.Save();
         }
 
@@ -164,108 +97,6 @@ namespace wenku8.Settings.Layout
 
             return SectionBgs[ Section ] = b; ;
         }
-
-        public void SetOrder()
-        {
-            List<ThumbnailBase> Thumbnails = new List<ThumbnailBase>();
-
-            IEnumerable<XParameter> Params = Modules.OrderBy(
-                ( x ) => x.GetSaveInt( "order" )
-            );
-
-            foreach ( XParameter Param in Params )
-            {
-                if ( !Param.GetBool( "enable" ) ) continue;
-
-                Disp.Items.Add( TBInstance[ Param.Id ] );
-            }
-        }
-
-        public List<string> GetViewOrders()
-        {
-            List<string> Names = new List<string>();
-            foreach (
-                XParameter P in Modules
-                    .Where( ( x ) => x.GetBool( "enable" ) )
-                    .OrderBy( ( x ) => x.GetSaveInt( "order" ) )
-            ) {
-                Names.Add( TBInstance[ P.Id ].ViewName );
-            }
-
-            return Names;
-        }
-
-        public void Remove( string Name )
-        {
-            Disp.Items.Remove(
-                Disp.Items.First( ( x ) => ( x as ThumbnailBase ).ModName == Name )
-            );
-
-            LayoutSettings.SetParameter( Name, new XKey( "enable", false ) );
-            LayoutSettings.Save();
-        }
-
-        public void Insert( string Name )
-        {
-            if ( LayoutSettings.Parameter( Name ).GetBool( "enable" ) ) return;
-
-            int Index = LayoutSettings.Parameter( Name ).GetSaveInt( "order" );
-            IEnumerable<XParameter> Params = Modules.OrderBy(
-                ( x ) => -x.GetSaveInt( "order" )
-            );
-
-            int InsertIdx = 0;
-            foreach ( XParameter Param in Params )
-            {
-                if ( !Param.GetBool( "enable" ) ) continue;
-                if ( Param.GetSaveInt( "order" ) <= Index )
-                {
-                    InsertIdx = Disp.Items.IndexOf(
-                        TBInstance[ Param.Id ]
-                    ) + 1;
-                    break;
-                }
-            }
-
-            Disp.Items.Insert( InsertIdx, TBInstance[ Name ] );
-
-            LayoutSettings.SetParameter( Name, new XKey( "enable", true ) );
-            LayoutSettings.Save();
-        }
-
-        public bool Toggle( string Name )
-        {
-            return LayoutSettings.Parameter( Name ).GetBool( "enable" );
-        }
-
-        private void OnReorder( ListViewBase sender, DragItemsCompletedEventArgs args )
-        {
-            int InsertIdx = 0;
-            // Give orders to the enabled first
-            foreach ( object Inst in Disp.Items )
-            {
-                ThumbnailBase Inste = ( ThumbnailBase ) Inst;
-                Logger.Log( ID, string.Format( "Order: {0} => {1}", InsertIdx, Inste.ModName ), LogType.DEBUG );
-
-                LayoutSettings.SetParameter(
-                    Inste.ModName, new XKey( "order", ++InsertIdx )
-                );
-            }
-
-            // Then the disables
-            IEnumerable<XParameter> Params = Modules.Where(
-                ( XParameter x ) => !x.GetBool( "enable" )
-            );
-
-            foreach ( XParameter Param in Params )
-            {
-                Param.SetValue( new XKey( "order", ++InsertIdx ) );
-                LayoutSettings.SetParameter( Param );
-            }
-
-            LayoutSettings.Save();
-        }
-
 
         /// <summary>
         /// Background Context Object, Controls section backgrounds
@@ -367,7 +198,9 @@ namespace wenku8.Settings.Layout
                         ApplyImage( NTimer.RandChoice( ISImgs ) );
                         break;
                     case "Preset":
-                        BookItem B = SrcView.Instance.ThisBook;
+                        throw new NotImplementedException();
+                        // TODO
+                        BookItem B = null; //;SrcView.Instance.ThisBook;
 
                         try
                         {

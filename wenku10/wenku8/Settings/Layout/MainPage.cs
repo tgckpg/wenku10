@@ -26,58 +26,51 @@ namespace wenku8.Settings.Layout
         private static readonly Dictionary<string, Tuple<Type, string>> SectionDefs = new Dictionary<string, Tuple<Type, string>>()
         {
             {
-                "History"
-                , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.History )
-                    , X.Const<string>( XProto.WProtocols, "COMMAND_LOCAL_HISTORY" )
-                )
-            },
-            {
                 "NewestEntries"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     , X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_NEW_ARRIVALS" )
                 )
             },
             {
                 "RecentUpdate"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     , X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_RECENT_UPDATE" )
                 )
             },
             {
                 "TopList_DDigest"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     ,  X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_DDigest" )
                 )
             },
             {
                 "TopList_HITs"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     , X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_HITs" )
                 )
             },
             {
                 "TopList_WDigest"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     , X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_WDigest" )
                 )
             },
             {
                 "TopList_Favourite"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     , X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_Favourite" )
                 )
             },
             {
                 "Finished"
                 , new Tuple<Type, string>(
-                    typeof( wenku10.Pages.NavList )
+                    typeof( wenku10.Pages.WNavList )
                     , X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_FIN" )
                 )
             },
@@ -111,21 +104,12 @@ namespace wenku8.Settings.Layout
             }
         }
 
-        public bool IsStaffPicksEnabled
-        {
-            get { return LayoutSettings.Parameter( EN_SPICKS ).GetBool( "enable" ); }
-            set
-            {
-                LayoutSettings.SetParameter( EN_SPICKS, new XKey( "enable", value ) );
-                LayoutSettings.Save();
-            }
-        }
-
         public ActiveItem SelectedSection
         {
             get
             {
-                return SectionList.First( ( x ) => x.Payload == WSSec.Id );
+                ActiveItem Item = SectionList.First( ( x ) => x.Payload == WSSec.Id );
+                return new SubtleUpdateItem( Item.Name, Item.Desc, "", Item.Payload );
             }
         }
 
@@ -217,6 +201,7 @@ namespace wenku8.Settings.Layout
             StringResources stx = new StringResources( "NavigationTitles" );
             foreach ( XParameter Param in Params )
             {
+                if ( !SectionDefs.ContainsKey( Param.Id ) ) continue;
                 Tuple<Type, string> Def = SectionDefs[ Param.Id ];
                 Secs.Add(
                     new SubtleUpdateItem(

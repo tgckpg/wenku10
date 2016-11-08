@@ -31,7 +31,9 @@ using Net.Astropenguin.UI.Icons;
 
 using wenku8.CompositeElement;
 using wenku8.Config;
+using wenku8.Effects;
 using wenku8.Ext;
+using wenku8.Model.Interfaces;
 using wenku8.Model.Loaders;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
@@ -46,9 +48,20 @@ namespace wenku10.Pages
 {
     using ContentReaderPane;
 
-    sealed partial class ContentReader : Page
+    sealed partial class ContentReader : Page, ICmdControls, IAnimaPage
     {
         public static readonly string ID = typeof( ContentReader ).Name;
+
+#pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+#pragma warning restore 0067
+
+        public bool NoCommands { get { return true; } }
+        public bool MajorNav { get; }
+
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get; private set; }
 
         public BookItem CurrentBook { get; private set; }
         public Chapter CurrentChapter { get; private set; }
@@ -84,25 +97,11 @@ namespace wenku10.Pages
             this.InitializeComponent();
         }
 
-        ~ContentReader() { Dispose(); }
-
-        protected override void OnNavigatedTo( NavigationEventArgs e )
+        public ContentReader( Chapter C )
+            : this()
         {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
-
-            if ( Disposed )
-            {
-                Disposed = false;
-                NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
-
-                // First Trigger don't redraw
-                TriggerOrientation();
-                SetTemplate();
-                Window.Current.SizeChanged += Current_SizeChanged;
-            }
-
-            OpenBook( e.Parameter as Chapter );
+            SetTemplate();
+            OpenBook( C );
         }
 
         void Dispose()
@@ -128,10 +127,52 @@ namespace wenku10.Pages
             ContentPane = null;
         }
 
+        public void SoftOpen() { }
+        public void SoftClose() { Dispose(); }
+
+        #region Anima
+        Storyboard AnimaStory = new Storyboard();
+
+        public async Task EnterAnima()
+        {
+            AnimaStory.Stop();
+            AnimaStory.Children.Clear();
+
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
+
+            AnimaStory.Begin();
+            await Task.Delay( 350 );
+        }
+
+        public async Task ExitAnima()
+        {
+            AnimaStory.Stop();
+            AnimaStory.Children.Clear();
+
+            LayoutRoot.RenderTransform = new TranslateTransform();
+
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
+            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+
+            AnimaStory.Begin();
+            await Task.Delay( 350 );
+        }
+        #endregion
+
         private void SetTemplate()
         {
+            LayoutRoot.RenderTransform = new TranslateTransform();
+
+            NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
+
+            // First Trigger don't redraw
+            TriggerOrientation();
+
             FocusHelper.DataContext = new AssistContext();
             App.ViewControl.PropertyChanged += VC_PropertyChanged;
+
+            InitAppBar();
 
             RegKey = new List<Action>();
             // KeyBoard Navigations
@@ -157,6 +198,13 @@ namespace wenku10.Pages
             RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), Windows.System.VirtualKey.Shift, ( Windows.System.VirtualKey ) 186 ) );
 
             SetSlideGesture();
+
+            Window.Current.SizeChanged += Current_SizeChanged;
+        }
+
+        private void InitAppBar()
+        {
+            MajorControls = new ICommandBarElement[ 0 ];
         }
 
         private void NextChapter( KeyCombinationEventArgs e )
@@ -261,7 +309,8 @@ namespace wenku10.Pages
 
                     if ( C is SChapter )
                     {
-                        CurrentBook = new BookInstruction( C as SChapter );
+                        wenku8.System.ActionEvent.Normal();
+                        CurrentBook = new BookInstruction( ( SChapter ) C );
                     }
                     else
                     {
@@ -600,11 +649,6 @@ namespace wenku10.Pages
                 MainSplitView.ClosePane();
                 return;
             }
-
-            StringResources stx = new StringResources( "LoadingMessage" );
-            RenderMask.Text = stx.Text( "ProgressIndicator_PleaseWait" );
-            RenderMask.HandleBack( Frame, e );
-            Dispose();
         }
 
         private void Overlay_OnStateChanged( object sender, ControlState args )

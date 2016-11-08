@@ -15,59 +15,31 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
-using Net.Astropenguin.Logging;
 
 using wenku8.Settings.Theme;
 
 namespace wenku10.Pages.Settings.Themes
 {
-    public sealed partial class EditColors : Page
+    sealed partial class EditColors : Page
     {
-        public static readonly string ID = typeof( EditColors ).Name;
-
         private ThemeSet CurrentSet;
 
-        public EditColors()
+        private EditColors()
         {
             this.InitializeComponent();
-            NavigationHandler.InsertHandlerOnNavigatedBack( InnerFrameGoBack );
         }
 
-        ~EditColors()
+        public EditColors( ThemeSet ThemeColors )
+            : this()
         {
-            NavigationHandler.OnNavigatedBack -= InnerFrameGoBack;
-        }
-
-        private void InnerFrameGoBack( object sender, XBackRequestedEventArgs e )
-        {
-            NavigationHandler.OnNavigatedBack -= InnerFrameGoBack;
-            if( Frame.CanGoBack )
-            {
-                Frame.GoBack();
-                e.Handled = true;
-            }
-        }
-
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-        }
-
-        protected override void OnNavigatedTo( NavigationEventArgs e )
-        {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
-
-            InitTemplate( CurrentSet = e.Parameter as ThemeSet );
+            InitTemplate( CurrentSet = ThemeColors );
         }
 
         private void InitTemplate( ThemeSet ColorSet )
         {
             List<ColorItem> Items = new List<ColorItem>();
-            foreach( KeyValuePair<string, string> s in ThemeSet.ParamMap )
+            foreach ( KeyValuePair<string, string> s in ThemeSet.ParamMap )
             {
                 Items.Add( new ColorItem( s.Value, ColorSet.ColorDefs[ s.Key ] ) );
             }

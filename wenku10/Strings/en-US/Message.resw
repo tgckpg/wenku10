@@ -180,4 +180,7 @@
   <data name="ConfirmScriptRemove" xml:space="preserve">
     <value>The script will be removed from server. Continue?</value>
   </data>
+  <data name="ConfirmLogout" xml:space="preserve">
+    <value>Confim logout?</value>
+  </data>
 </root>

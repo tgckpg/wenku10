@@ -9,37 +9,41 @@
     mc:Ignorable="d">
 
     <Grid x:Name="HistoryView" Background="{StaticResource MajorBackgroundBrush}">
-        <StackPanel Background="{StaticResource Shades70}" VerticalAlignment="Top">
-            <TextBox Margin="20" PlaceholderText="Search history" Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
-        </StackPanel>
-        <GridView Margin="20,100,20,20"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Rectangle Fill="{StaticResource Shades70}" />
+        <TextBox Margin="10" PlaceholderText="Search history" Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
+
+        <ListView Grid.Row="1" Margin="10"
                   ItemsSource="{Binding SearchSet}"
+                  ItemContainerStyle="{StaticResource BareListItem}"
                   IsItemClickEnabled="True"
                   ItemClick="History_ItemClick">
-            <GridView.ItemTemplate>
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Background="{StaticResource Shades90}" Width="300" MinHeight="120">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="33" />
-                        </Grid.RowDefinitions>
+                    <Grid Background="{StaticResource Shades90}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <Border Background="{StaticResource Shades90}">
-                            <TextBlock Text="{Binding Name}"
-                                       FontSize="20" Margin="5"
+                            <TextBlock Text="{Binding Desc}"
+                                       FontSize="18" Margin="10,5"
                                        Foreground="{StaticResource RelativeShadesBrush}"
-                                       TextTrimming="WordEllipsis"
-                                       TextWrapping="Wrap"/>
+                                       TextWrapping="Wrap" />
                         </Border>
-                        <TextBlock Text="{Binding Desc}"
-                                   Grid.Row="1" 
-                                   FontSize="18" Margin="5"
+                        <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                   FontSize="20" Margin="5"
                                    Foreground="{StaticResource RelativeShadesBrush}"
-                                   TextWrapping="Wrap" />
+                                   TextTrimming="WordEllipsis"
+                                   TextWrapping="Wrap"/>
                     </Grid>
                 </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
+            </ListView.ItemTemplate>
+        </ListView>
 
-        <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
     </Grid>
 </Page>

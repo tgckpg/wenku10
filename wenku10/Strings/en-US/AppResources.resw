@@ -384,4 +384,13 @@
   <data name="PleaseClick.Text" xml:space="preserve">
     <value>Please Click</value>
   </data>
+  <data name="ZoneSpider.Text" xml:space="preserve">
+    <value>Zone Spider</value>
+  </data>
+  <data name="Messages.Text" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="ProcessGrantsFailed.Text" xml:space="preserve">
+    <value>Invalid key</value>
+  </data>
 </root>
