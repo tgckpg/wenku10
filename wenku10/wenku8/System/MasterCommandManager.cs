@@ -173,7 +173,6 @@ namespace wenku8.System
             Unlocked = true;
 
             new Bootstrap().Level2();
-            ActionEvent.Secret();
 
             WMember = X.Singleton<IMember>( XProto.Member );
             WMember.OnStatusChanged += WMember_OnStatusChanged;
@@ -209,6 +208,7 @@ namespace wenku8.System
 
             if ( Index == 0 )
             {
+                ActionEvent.Normal();
                 Properties.SMODE = Index;
 
                 MasterCommands = SHCommands;
@@ -218,6 +218,7 @@ namespace wenku8.System
             }
             else
             {
+                ActionEvent.Secret();
                 Properties.SMODE = Index;
 
                 UnlockSecret();

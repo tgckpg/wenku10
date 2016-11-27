@@ -309,7 +309,6 @@ namespace wenku10.Pages
 
                     if ( C is SChapter )
                     {
-                        wenku8.System.ActionEvent.Normal();
                         CurrentBook = new BookInstruction( ( SChapter ) C );
                     }
                     else
