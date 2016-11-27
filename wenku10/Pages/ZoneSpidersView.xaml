@@ -16,13 +16,6 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
-        <StackPanel x:Name="Desc" Margin="20"
-                    e:TransitionDisplay.Mode="A01_Y_30_30">
-            <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                       Text="Zone Spider" FontSize="30" />
-            <TextBlock Foreground="{StaticResource SubtleBrush}"
-                       Text="Zone Spider is Lorem ipsum dolor sit amet." />
-        </StackPanel>
 
         <!-- Current Zone -->
         <ContentPresenter VerticalAlignment="Top"
@@ -159,6 +152,18 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Desc -->
+        <StackPanel x:Name="Desc" Margin="20"
+                    e:TransitionDisplay.Mode="A01_Y_30_30">
+            <TextBlock x:Uid="/AppResources/ZoneSpider"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       Text="Zone Spider" FontSize="30" />
+            <TextBlock x:Uid="/AppResources/Desc_ZoneSpider"
+                       Foreground="{StaticResource SubtleBrush}"
+                       TextWrapping="Wrap"
+                       Text="Zone Spider is Lorem ipsum dolor sit amet." />
+        </StackPanel>
 
     </Grid>
 </Page>

@@ -13,6 +13,7 @@
 
     <Page.TopAppBar>
         <CommandBar x:Name="TopCmdBar"
+                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                     Background="{StaticResource MinorBackgroundBrush}"
                     e:TransitionDisplay.UseVisibility="False"
                     e:TransitionDisplay.Mode="A01"

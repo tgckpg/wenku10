@@ -97,7 +97,7 @@ namespace wenku10.Pages
             StringResources stx = new StringResources( "AppBar", "ContextMenu", "AppResources" );
 
             // Major Controls
-            FavBtn = UIAliases.CreateAppBarBtn( Symbol.UnFavorite, "" );
+            FavBtn = UIAliases.CreateAppBarBtn( Symbol.Favorite, "" );
             FavBtn.Click += AddOrRemoveFav;
 
             AuthorBtn = UIAliases.CreateAppBarBtn( Symbol.ContactPresence, stx.Str( "Author" ) );
@@ -311,12 +311,12 @@ namespace wenku10.Pages
 
             if( ThisBook.IsFav )
             {
-                ( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
+                ( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.UnFavorite;
                 FavBtn.Label = stx.Str( "FavIn" );
             }
             else
             {
-                ( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.UnFavorite;
+                ( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
                 FavBtn.Label = stx.Str( "FavOut" );
             }
         }

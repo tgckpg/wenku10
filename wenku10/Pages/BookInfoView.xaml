@@ -48,12 +48,10 @@
         </Grid>
 
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid>
+            <Grid MaxWidth="1000" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="12*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
@@ -77,8 +75,8 @@
                                 Source="{Binding CoverStream}" />
 
                 <StackPanel x:Name="HeaderPanel"
-                            Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
-                            Margin="10">
+                            Grid.Row="1" Grid.Column="1"
+                            Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -100,12 +98,12 @@
                         </Button>
                     </Grid>
 
-                    <TextBlock Margin="5, 0"
+                    <TextBlock Margin="5,0"
                                TextWrapping="Wrap"
                                Text="{Binding LatestSection}"
                                Visibility="{Binding LatestSection, Converter={StaticResource DataVisConverter}}"
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                    <TextBlock Margin="5, 0"
+                    <TextBlock Margin="5,0"
                                TextWrapping="Wrap"
                                Text="{Binding RecentUpdate}"
                                Visibility="{Binding RecentUpdate, Converter={StaticResource DataVisConverter}}"
@@ -113,14 +111,14 @@
                 </StackPanel>
 
                 <Grid x:Name="StatusPanel"
-                      Grid.Row="2" Grid.Column="2">
+                      Grid.Row="2" Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <!-- Author / Press / StatusLong / Length -->
-                    <StackPanel Grid.Column="0" Margin="5">
+                    <StackPanel Grid.Column="0" Margin="20,5,5,5">
                         <TextBlock TextWrapping="Wrap" Text="{Binding Author}"
                                    Visibility="{Binding Author, Converter={StaticResource DataVisConverter}}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
@@ -137,7 +135,7 @@
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                     </StackPanel>
                     <!-- TotalCount / TodayCount / PushCount / FavCount -->
-                    <StackPanel Grid.Column="1" Margin="5">
+                    <StackPanel Grid.Column="1" Margin="5,5,20,5">
                         <TextBlock TextWrapping="Wrap"
                                    ToolTipService.ToolTip="{Binding TotalHitCount}"
                                    Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
@@ -191,8 +189,8 @@
                 </Grid>
 
                 <TextBlock x:Name="IntroText"
-                           Grid.Row="3" Grid.Column="2"
-                           Margin="5"
+                           Grid.Row="3" Grid.Column="1"
+                           Margin="0,5"
                            TextWrapping="Wrap" Text="{Binding Intro}"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
 

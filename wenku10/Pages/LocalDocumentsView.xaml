@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
+    xmlns:e="using:wenku8.Effects"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:n="using:wenku8.Converters"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
@@ -29,6 +30,7 @@
         <TextBox PlaceholderText="Search Files"
                  Text="{Binding SearchTerms}"
                  TextChanging="TextBox_TextChanging"/>
+
         <ListView Grid.Row="1"
                   ItemsSource="{Binding SearchSet}"
                   IsItemClickEnabled="True"
@@ -68,5 +70,22 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Desc -->
+        <StackPanel Grid.Row="1" Margin="20"
+                    e:TransitionDisplay.State="{Binding SearchSet, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                    e:TransitionDisplay.Mode="A01_Y_30_30">
+            <TextBlock x:Uid="/AppBar/LocalDocuments" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       Text="Local Documents" FontSize="30" />
+            <TextBlock Foreground="{StaticResource SubtleBrush}"
+                       TextWrapping="Wrap" >
+                <Run x:Uid="/AppResources/Desc_LocalDocuments"
+                     Text="Local Documents is Lorem ipsum dolor sit amet." />
+                <Hyperlink NavigateUri="https://github.com/tgckpg/wenku10-samples">
+                    https://github.com/tgckpg/wenku10-samples
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
     </Grid>
 </Page>
