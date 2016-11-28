@@ -19,7 +19,6 @@ namespace wenku8.Settings.Layout
     using Effects;
     using Model.Book;
     using Resources;
-    using SrcView = wenku10.Pages.BookInfoView;
 
     sealed class BookInfoView
     {
@@ -198,9 +197,7 @@ namespace wenku8.Settings.Layout
                         ApplyImage( NTimer.RandChoice( ISImgs ) );
                         break;
                     case "Preset":
-                        throw new NotImplementedException();
-                        // TODO
-                        BookItem B = null; //;SrcView.Instance.ThisBook;
+                        BookItem B = Shared.CurrentBook;
 
                         try
                         {

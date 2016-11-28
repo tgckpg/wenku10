@@ -383,15 +383,6 @@
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>情報ページ</value>
   </data>
-  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
-    <value>一部の人々は、これは不要だと思います...</value>
-  </data>
-  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
-    <value>これは、トラフィックを削減することが妥当です</value>
-  </data>
-  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
-    <value>ええ？ ！どのように読んでするつもりですか？</value>
-  </data>
   <data name="Layout_FlowDirection.Text" xml:space="preserve">
     <value>流れ方向</value>
   </data>

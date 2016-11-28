@@ -383,15 +383,6 @@
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>資訊頁</value>
   </data>
-  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
-    <value>有些人覺得這是多餘的…</value>
-  </data>
-  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
-    <value>減少一點流量也是合埋的</value>
-  </data>
-  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
-    <value>欸？！那你要怎麼看書啊？</value>
-  </data>
   <data name="Layout_FlowDirection.Text" xml:space="preserve">
     <value>流動方向</value>
   </data>

@@ -109,7 +109,7 @@ namespace wenku8.Settings.Layout
             get
             {
                 ActiveItem Item = SectionList.First( ( x ) => x.Payload == WSSec.Id );
-                return new SubtleUpdateItem( Item.Name, Item.Desc, "", Item.Payload );
+                return new SubtleUpdateItem( Item.Name, Item.Desc, "", PayloadCommand( Item.Payload ).Item2 );
             }
         }
 

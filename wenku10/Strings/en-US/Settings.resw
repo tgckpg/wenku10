@@ -383,15 +383,6 @@
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>Info page</value>
   </data>
-  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
-    <value>Some thinks these are redundant</value>
-  </data>
-  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
-    <value>It is reasonable to reduce the data usage</value>
-  </data>
-  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
-    <value>What?! How would you suppose to read?</value>
-  </data>
   <data name="Layout_FlowDirection.Text" xml:space="preserve">
     <value>Flow direction</value>
   </data>

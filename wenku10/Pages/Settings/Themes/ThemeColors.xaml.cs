@@ -42,9 +42,9 @@ namespace wenku10.Pages.Settings.Themes
         public bool NoCommands { get; }
         public bool MajorNav { get; }
 
-        public IList<ICommandBarElement> MajorControls { get; protected set; }
-        public IList<ICommandBarElement> Major2ndControls { get; protected set; }
-        public IList<ICommandBarElement> MinorControls { get; protected set; }
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get; private set; }
 
         private ObservableCollection<ThemeSet> PresetThemeColors;
         private ThemeSet SelectedTheme;

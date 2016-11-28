@@ -27,6 +27,8 @@ using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
+using wenku8.Model.Section;
+using wenku8.Resources;
 using wenku8.Storage;
 
 using TokenManager = wenku8.System.TokenManager;
@@ -36,12 +38,9 @@ namespace wenku10.Pages
 {
     using Sharers;
 
-    sealed partial class BookInfoView : Page, ICmdControls, IAnimaPage
+    sealed partial class BookInfoView : Page, ICmdControls, IAnimaPage, INavPage
     {
         private static readonly string ID = typeof( BookInfoView ).Name;
-
-        private Grid InfoBgGrid;
-        private Grid PushGrid;
 
         private AppBarButton FavBtn;
         private AppBarButton BrowserBtn;
@@ -65,7 +64,6 @@ namespace wenku10.Pages
         private BookInfoView()
         {
             this.InitializeComponent();
-            LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
             SetTemplate();
         }
 
@@ -83,8 +81,17 @@ namespace wenku10.Pages
             OpenBook( Book );
         }
 
+        public void SoftOpen()
+        {
+            LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
+        }
+
+        public void SoftClose() { }
+
         private void SetTemplate()
         {
+            LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+
             HeaderPanel.RenderTransform = new TranslateTransform();
             StatusPanel.RenderTransform = new TranslateTransform();
             IntroText.RenderTransform = new TranslateTransform();
@@ -125,9 +132,11 @@ namespace wenku10.Pages
         private void OpenBook( BookItem Book )
         {
             ThisBook = Book;
+            Shared.CurrentBook = Book;
+
             BookLoader BL = new BookLoader( ( NOP ) => { } );
-            BL.Load( Book, true );
-            BL.LoadIntro( Book, true );
+            BL.Load( Book, false );
+            BL.LoadIntro( Book, false );
             SetContext();
         }
 
@@ -170,16 +179,11 @@ namespace wenku10.Pages
                 CommentBtn.IsEnabled = !ThisBook.IsLocal;
                 BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.OriginalUrl );
                 LayoutRoot.DataContext = ThisBook;
+                InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
             }
 
             ToggleFav();
             ToggleButtons();
-        }
-
-        private void InfoBgLoaded( object sender, RoutedEventArgs e )
-        {
-            InfoBgGrid = ( Grid ) sender;
-            InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
         }
 
         private async void ChangeBackground( object sender, RoutedEventArgs e )
@@ -305,25 +309,45 @@ namespace wenku10.Pages
             if( ThisBook == null )
             {
                 FavBtn.IsEnabled = false;
-                FavBtn.Label = stx.Str( "FavOut" );
+                FavBtn.Label = stx.Str( "FavIn" );
                 return;
             }
 
             if( ThisBook.IsFav )
             {
                 ( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.UnFavorite;
-                FavBtn.Label = stx.Str( "FavIn" );
+                FavBtn.Label = stx.Str( "FavOut" );
             }
             else
             {
                 ( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
-                FavBtn.Label = stx.Str( "FavOut" );
+                FavBtn.Label = stx.Str( "FavIn" );
             }
         }
 
-        private void PushCountGridLoaded( object sender, RoutedEventArgs e )
+        private async void JumpButton_Click( object sender, RoutedEventArgs e )
         {
-            PushGrid = sender as Grid;
+            Button Btn = ( Button ) sender;
+            Btn.IsEnabled = false;
+
+            TaskCompletionSource<TOCSection> TCS = new TaskCompletionSource<TOCSection>();
+            new VolumeLoader( b =>
+            {
+                TCS.TrySetResult( new TOCSection( b ) );
+            } ).Load( ThisBook );
+
+            TOCSection TOCData = await TCS.Task;
+            if( TOCData.AnchorAvailable )
+            {
+                ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( TOCData.AutoAnchor ) );
+            }
+            else
+            {
+                StringResources stx = new StringResources( "Message" );
+                await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
+            }
+
+            Btn.IsEnabled = true;
         }
 
         private async void VoteButton_Click( object sender, RoutedEventArgs e )

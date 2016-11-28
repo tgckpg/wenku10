@@ -67,6 +67,7 @@ namespace wenku8.Model.Loaders
                 if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
                 {
                     ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
+                    return;
                 }
             }
 
@@ -110,7 +111,7 @@ namespace wenku8.Model.Loaders
 
             CurrentBook = b;
 
-            if ( Shared.Storage.FileExists( b.IntroPath ) )
+            if ( useCache && Shared.Storage.FileExists( b.IntroPath ) )
             {
                 // This will trigger NotifyChanged for Intro
                 // getter will automatically retieved intro stored in IntroPath
@@ -121,14 +122,17 @@ namespace wenku8.Model.Loaders
                 X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
                     b.Id
                     , X.Call<XKey[]>( XProto.WRequest, "GetBookIntro", b.Id )
-                    , SaveIntro, IntroFailed, useCache
+                    , SaveIntro, IntroFailed, false
                 );
             }
         }
 
         private void IntroFailed( string arg1, string arg2, Exception arg3 )
         {
-            CurrentBook.Intro = new ErrorMessage().DOWNLOAD;
+            if ( !Shared.Storage.FileExists( CurrentBook.IntroPath ) )
+            {
+                CurrentBook.Intro = new ErrorMessage().DOWNLOAD;
+            }
         }
 
         private void SaveIntro( DRequestCompletedEventArgs e, string id )

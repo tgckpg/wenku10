@@ -183,4 +183,7 @@
   <data name="ConfirmLogout" xml:space="preserve">
     <value>Confim logout?</value>
   </data>
+  <data name="AnchorNotSetYet" xml:space="preserve">
+    <value>Anchor not set yet</value>
+  </data>
 </root>

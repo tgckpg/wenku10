@@ -21,33 +21,38 @@
         <s:TransStateConverter x:Key="TransStateConverter" />
 
         <MenuFlyout x:Key="ThemeFlyout">
+            <MenuFlyoutItem x:Uid="/ContextMenu/NoBackground" Text="No Background" Click="ChangeBackground" Tag="None,INFO_VIEW"  />
             <MenuFlyoutItem x:Uid="/ContextMenu/CustomBackground" Text="Custom Background" Click="ChangeBackground" Tag="Custom,INFO_VIEW" />
             <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW"  />
+            <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW" />
         </MenuFlyout>
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
 
         <!-- Background from data context -->
-        <Grid Margin="-100, -100, -100, -100" 
-              Loaded="InfoBgLoaded">
+        <Grid x:Name="InfoBgGrid"
+              Margin="-100, -100, -100, -100">
             <Grid.RenderTransform>
                 <TranslateTransform Y="{
                     Binding ElementName=ContentScroll
-                    , Path=HorizontalOffset
+                    , Path=VerticalOffset
                     , Converter={StaticResource ParallaxConverter}
                     , ConverterParameter=-0.20
                 }" />
             </Grid.RenderTransform>
             <!-- Swapping between 2 image to create fading effect -->
             <Image Source="{Binding Background}" Stretch="UniformToFill"
+                   e:TransitionDisplay.Mode="A01"
                    e:TransitionDisplay.State="{Binding BGState, Converter={StaticResource TransStateConverter}}"/>
             <Image Source="{Binding Background2}" Stretch="UniformToFill"
+                   e:TransitionDisplay.Mode="A01"
                    e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}"/>
+            <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.8" />
         </Grid>
 
-        <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ScrollViewer x:Name="ContentScroll"
+                      HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid MaxWidth="1000" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
@@ -86,16 +91,23 @@
                                    c:AttachedCopyAction.Source="{Binding Title}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                    TextWrapping="Wrap" />
-                        <Button x:Name="VoteButton"
-                                Grid.Column="1"
-                                Style="{StaticResource PlainButton}"
-                                Background="Transparent" Visibility="Collapsed"
-                                Height="50" Width="50"
-                                Click="VoteButton_Click" >
-                            <TextBlock x:Uid="/AppBar/Push"
-                                       Foreground="{StaticResource SubtleBrush}"
-                                       FontSize="30" />
-                        </Button>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                            <Button x:Name="VoteButton"
+                                    Style="{StaticResource PlainButton}"
+                                    Background="Transparent" Visibility="Collapsed"
+                                    Height="50" Width="50"
+                                    Click="VoteButton_Click" >
+                                <TextBlock x:Uid="/AppBar/Push"
+                                           Foreground="{StaticResource SubtleBrush}"
+                                           FontSize="30" />
+                            </Button>
+                            <Button Style="{StaticResource PlainButton}"
+                                    Background="Transparent"
+                                    Height="50" Width="50"
+                                    Click="JumpButton_Click" >
+                                    <SymbolIcon Symbol="Tag" Foreground="{StaticResource SubtleBrush}" />
+                            </Button>
+                        </StackPanel>
                     </Grid>
 
                     <TextBlock Margin="5,0"
@@ -146,8 +158,8 @@
                                    Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
                                    Visibility="{Binding TodayHitCount, Converter={StaticResource DataVisConverter}}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
-                        <Grid Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}"
-                                      Loaded="PushCountGridLoaded" >
+                        <Grid x:Name="PushGrid"
+                              Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}">
                             <Rectangle x:Name="PushCountFlash" Fill="{StaticResource RelativeMajorBackgroundBrush}" Opacity="0"/>
                             <TextBlock Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
                                        ToolTipService.ToolTip="{Binding PushCount}">

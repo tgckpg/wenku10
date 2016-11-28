@@ -183,4 +183,7 @@
   <data name="ConfirmLogout" xml:space="preserve">
     <value>确认注销？</value>
   </data>
+  <data name="AnchorNotSetYet" xml:space="preserve">
+    <value>尚未設置锚点</value>
+  </data>
 </root>

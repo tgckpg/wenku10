@@ -153,5 +153,6 @@ namespace wenku10.Pages
             TOCData = new TOCSection( b );
             JumpMarkBtn.SetBinding( IsEnabledProperty, new Binding() { Source = TOCData, Path = new PropertyPath( "AnchorAvailable" ) } );
         }
+
     }
 }

@@ -17,29 +17,30 @@
         <Rectangle Fill="{StaticResource Shades70}" />
         <TextBox Margin="10" PlaceholderText="Search history" Text="{Binding SearchTerms}" TextChanging="TextBox_TextChanging"/>
 
-        <ListView Grid.Row="1" Margin="10"
+        <ListView Grid.Row="1"
                   ItemsSource="{Binding SearchSet}"
                   ItemContainerStyle="{StaticResource BareListItem}"
                   IsItemClickEnabled="True"
                   ItemClick="History_ItemClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Background="{StaticResource Shades90}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                    <Grid Margin="10" Background="{StaticResource Shades90}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                         <Border Background="{StaticResource Shades90}">
-                            <TextBlock Text="{Binding Desc}"
-                                       FontSize="18" Margin="10,5"
+                            <TextBlock Text="{Binding Name}"
+                                       FontSize="20" Margin="10,5"
                                        Foreground="{StaticResource RelativeShadesBrush}"
-                                       TextWrapping="Wrap" />
+                                       TextTrimming="WordEllipsis"
+                                       TextWrapping="Wrap"/>
                         </Border>
-                        <TextBlock Grid.Column="1" Text="{Binding Name}"
-                                   FontSize="20" Margin="5"
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding Desc}"
+                                   FontSize="14" Margin="10,5"
                                    Foreground="{StaticResource RelativeShadesBrush}"
-                                   TextTrimming="WordEllipsis"
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
