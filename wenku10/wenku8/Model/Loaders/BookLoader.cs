@@ -31,6 +31,8 @@ namespace wenku8.Model.Loaders
 
         private Action<BookItem> CompleteHandler;
 
+        public BookLoader() { }
+
         public BookLoader( Action<BookItem> Handler )
         {
             CompleteHandler = Handler;
@@ -66,6 +68,7 @@ namespace wenku8.Model.Loaders
                 string cacheName = X.Call<string>( XProto.WRuntimeCache, "GetCacheString", new object[] { ReqKeys } );
                 if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
                 {
+                    b.LastCache = Shared.Storage.FileTime( FileLinks.ROOT_CACHE + cacheName ).LocalDateTime;
                     ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
                     return;
                 }
@@ -78,6 +81,11 @@ namespace wenku8.Model.Loaders
         public async void LoadInstruction( BookInstruction B, bool useCache )
         {
             SpiderBook SBook = new SpiderBook( B );
+
+            if ( Shared.Storage.FileExists( SBook.MetaLocation ) )
+            {
+                B.LastCache = Shared.Storage.FileTime( SBook.MetaLocation ).LocalDateTime;
+            }
 
             if ( useCache && Shared.Storage.FileExists( B.TOCPath ) )
             {
@@ -149,8 +157,9 @@ namespace wenku8.Model.Loaders
 			cacheName = Uri.EscapeDataString( cacheName );
 			if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
 			{
-				// Should inform user would using previous cache as data.
-				ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ) , id );
+                CurrentBook.LastCache = Shared.Storage.FileTime( FileLinks.ROOT_CACHE + cacheName ).LocalDateTime;
+                // Should inform user would using previous cache as data.
+                ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
 				// MessageBox.Show( "Some information could not be downloaded, using previous cache." );
 			}
 			else
@@ -164,6 +173,7 @@ namespace wenku8.Model.Loaders
 
 		private void PrelaodBookInfo( DRequestCompletedEventArgs e, string id )
 		{
+            CurrentBook.LastCache = DateTime.Now;
 			ExtractBookInfo( e.ResponseString, id );
 		}
 
@@ -231,7 +241,10 @@ namespace wenku8.Model.Loaders
 
         private void OnComplete( BookItem b )
         {
-            Worker.UIInvoke( () => { CompleteHandler( b ); } );
+            if ( CompleteHandler != null )
+            {
+                Worker.UIInvoke( () => { CompleteHandler( b ); } );
+            }
         }
 
     }

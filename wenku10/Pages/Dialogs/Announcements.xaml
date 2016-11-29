@@ -10,7 +10,6 @@
     mc:Ignorable="d"
     Style="{StaticResource ScrollContentDialog}"
     Background="{StaticResource MajorBackgroundBrush}"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <ContentDialog.Title>
         <TextBlock x:Uid="/NavigationTitles/News"

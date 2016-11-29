@@ -18,6 +18,7 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.CompositeElement;
+using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Book;
@@ -42,12 +43,6 @@ namespace wenku10.Pages
     {
         private static readonly string ID = typeof( BookInfoView ).Name;
 
-        private AppBarButton FavBtn;
-        private AppBarButton BrowserBtn;
-        private AppBarButton TOCBtn;
-        private AppBarButton CommentBtn;
-        private AppBarButton AuthorBtn;
-
         #pragma warning disable 0067
         public event ControlChangedEvent ControlChanged;
         #pragma warning restore 0067
@@ -60,6 +55,14 @@ namespace wenku10.Pages
         public IList<ICommandBarElement> MinorControls { get ; private set; }
 
         private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
+
+        AppBarButton FavBtn;
+        AppBarButton BrowserBtn;
+        AppBarButton TOCBtn;
+        AppBarButton CommentBtn;
+        AppBarButton AuthorBtn;
+
+        Storyboard CacheStateStory;
 
         private BookInfoView()
         {
@@ -92,11 +95,18 @@ namespace wenku10.Pages
         {
             LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
 
+            CacheStateBtn.RenderTransform = new TranslateTransform();
             HeaderPanel.RenderTransform = new TranslateTransform();
             StatusPanel.RenderTransform = new TranslateTransform();
             IntroText.RenderTransform = new TranslateTransform();
 
             InitAppBar();
+
+            CacheStateStory = new Storyboard();
+            SimpleStory.DoubleAnimation( CacheStateStory, CacheStateRect, "Opacity", 1, 0, 350 );
+            CacheStateStory.RepeatBehavior = RepeatBehavior.Forever;
+            CacheStateStory.AutoReverse = true;
+            CacheStateStory.FillBehavior = FillBehavior.Stop;
         }
 
         private void InitAppBar()
@@ -114,19 +124,22 @@ namespace wenku10.Pages
             CommentBtn.Click += OpenComments;
 
             TOCBtn = UIAliases.CreateAppBarBtn( Symbol.OpenWith, stx.Text( "TOC" ) );
-            TOCBtn.Click += OpenTOC;
+            TOCBtn.Click += TOCBtn_Click;
 
             // Minor Controls
             AppBarButton ThemeBtn = UIAliases.CreateAppBarBtn( Symbol.Caption, stx.Text( "CustomBackground", "ContextMenu" ) );
             ThemeBtn.Click += ( s, e ) => { FlyoutBase.ShowAttachedFlyout( ThemeBtn ); };
 
+            AppBarButton ReloadBtn = UIAliases.CreateAppBarBtn( Symbol.Refresh, stx.Text( "Reload", "AppBar" ) );
+            ReloadBtn.Click += ReloadBtn_Click;
+
             FlyoutBase.SetAttachedFlyout( ThemeBtn, ( MenuFlyout ) Resources[ "ThemeFlyout" ] );
 
             BrowserBtn = UIAliases.CreateAppBarBtn( Symbol.Globe, stx.Str( "OpenInBrowser" ) );
-            BrowserBtn.Click += OpenInBrowser;
+            BrowserBtn.Click += BrowserBtn_Click;
 
             MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
-            MinorControls = new ICommandBarElement[] { ThemeBtn, BrowserBtn };
+            MinorControls = new ICommandBarElement[] { ThemeBtn, BrowserBtn, ReloadBtn };
         }
 
         private void OpenBook( BookItem Book )
@@ -134,9 +147,14 @@ namespace wenku10.Pages
             ThisBook = Book;
             Shared.CurrentBook = Book;
 
-            BookLoader BL = new BookLoader( ( NOP ) => { } );
-            BL.Load( Book, false );
-            BL.LoadIntro( Book, false );
+            CacheStateStory.Begin();
+            BookLoader BL = new BookLoader( b =>
+            {
+                CacheStateStory.Stop();
+            } );
+
+            BL.Load( Book, true );
+            BL.LoadIntro( Book, true );
             SetContext();
         }
 
@@ -210,14 +228,30 @@ namespace wenku10.Pages
             LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
         }
 
-        private void OpenInBrowser( object sender, RoutedEventArgs e )
+        private void CacheState_Click( object sender, RoutedEventArgs e )
+        {
+            FlyoutBase.ShowAttachedFlyout( ( FrameworkElement ) sender );
+        }
+
+        private void BrowserBtn_Click( object sender, RoutedEventArgs e )
         {
             var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
         }
 
-        private void OpenTOC( object sender, RoutedEventArgs e )
+        private void TOCBtn_Click( object sender, RoutedEventArgs e )
         {
             ControlFrame.Instance.SubNavigateTo( this, () => LayoutSettings.HorizontalTOC ? new TOCViewHorz( ThisBook ) : ( Page ) new TOCViewVert( ThisBook ) );
+        }
+
+        private void ReloadBtn_Click( object sender, RoutedEventArgs e )
+        {
+            CacheStateStory.Begin();
+            BookLoader BL = new BookLoader( b =>
+            {
+                CacheStateStory.Stop();
+            } );
+            BL.Load( ThisBook );
+            BL.LoadIntro( ThisBook );
         }
 
         private async void OpenComments( object sender, RoutedEventArgs e )
@@ -381,6 +415,9 @@ namespace wenku10.Pages
             SimpleStory.DoubleAnimation( AnimaStory, IntroText, "Opacity", 0, 1, 350, 300 );
             SimpleStory.DoubleAnimation( AnimaStory, IntroText.RenderTransform, "Y", 30, 0, 350, 300 );
 
+            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn, "Opacity", 0, 1, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn.RenderTransform, "X", 30, 0, 350, 400 );
+
             AnimaStory.Begin();
             await Task.Delay( 1000 );
         }
@@ -391,6 +428,9 @@ namespace wenku10.Pages
 
             AnimaStory.Stop();
             AnimaStory.Children.Clear();
+
+            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn, "Opacity", 1, 0, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn.RenderTransform, "X", 0, 30, 350, 400 );
 
             SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 300 );
             SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 300 );

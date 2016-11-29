@@ -10,6 +10,7 @@
     xmlns:xi="using:wenku8.ThemeIcons"
     xmlns:s="using:wenku8.Converters"
     xmlns:e="using:wenku8.Effects"
+    xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -19,6 +20,8 @@
         <v:DataBoolConverter x:Key="DataBoolConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <s:TransStateConverter x:Key="TransStateConverter" />
+        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+        <s:ColorAgeConverter x:Key="ColorAgeConverter" Fill="{StaticResource MajorBrush}" />
 
         <MenuFlyout x:Key="ThemeFlyout">
             <MenuFlyoutItem x:Uid="/ContextMenu/NoBackground" Text="No Background" Click="ChangeBackground" Tag="None,INFO_VIEW"  />
@@ -26,9 +29,32 @@
             <MenuFlyoutItem x:Uid="/ContextMenu/PresetBackground" Text="Preset Background" Click="ChangeBackground" Tag="Preset,INFO_VIEW" />
             <MenuFlyoutItem x:Uid="/ContextMenu/SystemBackground" Text="System Background" Click="ChangeBackground" Tag="System,INFO_VIEW" />
         </MenuFlyout>
+
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=500 -->
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ContentGrid.Margin" Value="10,0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ContentGrid.Margin" Value="50,0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
 
         <!-- Background from data context -->
         <Grid x:Name="InfoBgGrid"
@@ -48,17 +74,22 @@
             <Image Source="{Binding Background2}" Stretch="UniformToFill"
                    e:TransitionDisplay.Mode="A01"
                    e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}"/>
-            <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.8" />
         </Grid>
+
+        <!-- Background Mask -->
+        <Rectangle Fill="{StaticResource MajorBackgroundBrush}" Opacity="0.8" />
 
         <ScrollViewer x:Name="ContentScroll"
                       HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Grid MaxWidth="1000" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="12*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
+            <Grid x:Name="ContentGrid"
+                  MaxWidth="1000" Margin="10,0"
+                  HorizontalAlignment="Center">
+
+                <Grid.Resources>
+                    <Flyout x:Key="CacheStateFlyout">
+                        <TextBlock x:Name="CacheStateText" Text="{Binding LastCache, Converter={StaticResource RelativeTimeConverter}}" />
+                    </Flyout>
+                </Grid.Resources>
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -68,19 +99,28 @@
                 </Grid.RowDefinitions>
 
                 <!-- Spacer for SplashRipple -->
-                <Rectangle Grid.ColumnSpan="5"
-                           Height="300" />
-                <ProgressRing Grid.ColumnSpan="5"
-                              Width="50" Height="50"
+                <Rectangle Height="300" />
+                <ProgressRing Width="50" Height="50"
                               IsActive="{Binding ElementName=SplashCover, Path=IsLoading}"
                               VerticalAlignment="Center" HorizontalAlignment="Center" />
                 <c:SplashRipple x:Name="SplashCover"
-                                Grid.ColumnSpan="5" Grid.RowSpan="4"
+                                Grid.RowSpan="4"
                                 HorizontalAlignment="Center" VerticalAlignment="Top"
                                 Source="{Binding CoverStream}" />
 
+                <!-- Age Indicator -->
+                <Button x:Name="CacheStateBtn" Margin="10,20"
+                        Click="CacheState_Click"
+                        Style="{StaticResource PlainButton}"
+                        FlyoutBase.AttachedFlyout="{StaticResource CacheStateFlyout}"
+                        HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <Rectangle x:Name="CacheStateRect"
+                               Fill="{Binding LastCache, Converter={StaticResource ColorAgeConverter}}"
+                               Height="10" Width="20"/>
+                </Button>
+
                 <StackPanel x:Name="HeaderPanel"
-                            Grid.Row="1" Grid.Column="1"
+                            Grid.Row="1"
                             Margin="0,0,0,10">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -122,8 +162,7 @@
                                Foreground="{StaticResource SubtleBrush}" />
                 </StackPanel>
 
-                <Grid x:Name="StatusPanel"
-                      Grid.Row="2" Grid.Column="1">
+                <Grid x:Name="StatusPanel" Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -201,7 +240,7 @@
                 </Grid>
 
                 <TextBlock x:Name="IntroText"
-                           Grid.Row="3" Grid.Column="1"
+                           Grid.Row="3"
                            Margin="0,5"
                            TextWrapping="Wrap" Text="{Binding Intro}"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}" />

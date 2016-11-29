@@ -43,10 +43,6 @@ namespace wenku10.Pages.Dialogs
             args.Cancel = true;
         }
 
-        private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-        }
-
         private void SetTemplate()
         {
             AS = new global::wenku8.Model.Topics.Announcements();
@@ -55,17 +51,13 @@ namespace wenku10.Pages.Dialogs
 
         private void MainList_ItemClick( object sender, ItemClickEventArgs e )
         {
-            AS.MaskAsRead( e.ClickedItem as NewsItem );
-        }
-
-        private void TextBlock_Holding( object sender, HoldingRoutedEventArgs e )
-        {
-
+            AS.MaskAsRead( ( NewsItem ) e.ClickedItem );
         }
 
         private void ShowVersion( object sender, RoutedEventArgs e )
         {
-            FlyoutBase.ShowAttachedFlyout( sender as FrameworkElement );
+            FlyoutBase.ShowAttachedFlyout( ( FrameworkElement ) sender );
         }
+
     }
 }
