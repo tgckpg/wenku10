@@ -242,6 +242,12 @@ namespace wenku10.Pages
             ( View.Content as INavPage )?.SoftClose();
 
             NameValue<Page> P = BackStack.Back();
+
+            // Keep going back if previous page == current page
+            // This happens when pages in backstack got removed
+            while ( P.Value == View.Content )
+                P = BackStack.Back();
+
             View.Tag = P.Name;
             View.Content = P.Value;
 

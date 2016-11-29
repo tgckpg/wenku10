@@ -22,37 +22,16 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <StackPanel x:Name="SectionListContext">
-                        <ToggleSwitch x:Name="TogCSec" Toggled="Toggled_CSec">
-                            <ToggleSwitch.Header>
-                                <TextBlock Foreground="{StaticResource MinorBrush}"
-                                           x:Uid="/Settings/Layout_MainPage_CSec"
-                                           Text="Custom Section" />
-                            </ToggleSwitch.Header>
-                            <ToggleSwitch.OnContent>
-                                <TextBlock x:Uid="/Settings/Enabled"
-                                           Foreground="{StaticResource MajorBrush}"
-                                           Text="Enable" />
-                            </ToggleSwitch.OnContent>
-                            <ToggleSwitch.OffContent>
-                                <TextBlock x:Uid="/Settings/Layout_MainPage_CSec_D"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="Disabled" />
-                            </ToggleSwitch.OffContent>
-                        </ToggleSwitch>
-                        <ComboBox Grid.Row="0"
+                        <ComboBox x:Name="SectionChoices" Grid.Row="0"
                                   ItemsSource="{Binding SectionList}"
-                                  SelectedItem="{Binding SelectedSection}"
+                                  DisplayMemberPath="Name"
+                                  SelectedValuePath="Payload"
                                   SelectionChanged="SectionList_SelectionChanged">
                             <ComboBox.Header>
                                 <TextBlock x:Uid="/Settings/Layout_MainPage_CSec_Choice"
                                            Foreground="{StaticResource MinorBrush}"
                                            Text="Custom Section Choice" />
                             </ComboBox.Header>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
                 </Grid>

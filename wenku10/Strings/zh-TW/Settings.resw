@@ -374,12 +374,6 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>導航頁面</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>將會直接跳到正文</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>拖曳圖示以變更位置</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>資訊頁</value>
   </data>
@@ -391,21 +385,6 @@
   </data>
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>右至左</value>
-  </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>自定義導航</value>
-  </data>
-  <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
-    <value>選定自定義導航</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>進入主頁會變得快一點</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>文庫精選</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>其實我也覺得這個沒什麼用呢</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>橫堵</value>
@@ -569,5 +548,8 @@
   </data>
   <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
     <value>單卷自動分卷</value>
+  </data>
+  <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
+    <value>選定自定義導航</value>
   </data>
 </root>

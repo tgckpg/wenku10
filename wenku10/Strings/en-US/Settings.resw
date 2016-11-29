@@ -374,12 +374,6 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>Navigation pages</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>Will jump to Content Reader directly</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>Drag to reorder</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>Info page</value>
   </data>
@@ -392,20 +386,8 @@
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>Right to left</value>
   </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>Custom section</value>
-  </data>
   <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
     <value>Section choice</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>It will become faster to load the main page</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>Staff picks</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>me too</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>Horizontal</value>

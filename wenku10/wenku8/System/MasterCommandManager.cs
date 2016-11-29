@@ -186,19 +186,27 @@ namespace wenku8.System
             w82ndCommands = new ICommandBarElement[] { WLoginBtn, SearchBtn };
 
             // Master commands
+            AppBarToggleButton BookShelfBtn = UIAliases.CreateToggleBtn( Symbol.Library, stx.Text( "Shelf", "AppBar" ) );
+            BookShelfBtn.Click += CreateCmdHandler( PageId.W_BOOKSHELF, () => new WBookshelf() );
+
+            w8Commands = new ICommandBarElement[] { BookShelfBtn, null, null };
+
+            UpdateCustBtn();
+        }
+
+        public void UpdateCustBtn()
+        {
             INavSelections NavSeletions = X.Instance<INavSelections>( XProto.NavSelections );
             SubtleUpdateItem CustSections = NavSeletions.CustomSection();
-
-            AppBarToggleButton MoreNavs = UIAliases.CreateToggleBtn( Symbol.AllApps, stx.Text( "Appearance_Layout_NavPages", "Settings" ) );
-            MoreNavs.Click += CreateCmdHandler( PageId.W_NAV_SEL, () => new WNavSelections( NavSeletions ) );
 
             AppBarToggleButton CustBtn = UIAliases.CreateToggleBtn( SegoeMDL2.Asterisk, CustSections.Name );
             CustBtn.Click += CreateCmdHandler( PageId.W_NAV_LIST + CustSections.Name, () => new WNavList( CustSections ) );
 
-            AppBarToggleButton BookShelfBtn = UIAliases.CreateToggleBtn( Symbol.Library, stx.Text( "Shelf", "AppBar" ) );
-            BookShelfBtn.Click += CreateCmdHandler( PageId.W_BOOKSHELF, () => new WBookshelf() );
+            AppBarToggleButton MoreNavs = UIAliases.CreateToggleBtn( Symbol.AllApps, stx.Text( "Appearance_Layout_NavPages", "Settings" ) );
+            MoreNavs.Click += CreateCmdHandler( PageId.W_NAV_SEL, () => new WNavSelections( NavSeletions ) );
 
-            w8Commands = new ICommandBarElement[] { BookShelfBtn, CustBtn, MoreNavs };
+            w8Commands[ 1 ] = CustBtn;
+            w8Commands[ 2 ] = MoreNavs;
         }
 
         private void SwapCommands( int Index )

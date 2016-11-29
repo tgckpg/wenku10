@@ -366,12 +366,6 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>导航页面</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>将会直接跳到正文</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>拖曳图示以变更位置</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>资讯页</value>
   </data>
@@ -384,20 +378,8 @@
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>右至左</value>
   </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>自定义导航</value>
-  </data>
   <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
     <value>选定自定义导航</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>进入主页会变得快一点</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>文库精选</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>其实我也觉得这个没什么用呢</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>橫堵</value>

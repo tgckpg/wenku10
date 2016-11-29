@@ -374,12 +374,6 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>ナビゲーション・ページ</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>内容に直接ジャンプします</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>並べ替えるには、任意の項目をドラッグしてください。</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>情報ページ</value>
   </data>
@@ -392,20 +386,8 @@
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>右から左へ</value>
   </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>カスタムナビゲーション</value>
-  </data>
   <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
     <value>選択したカスタムナビゲーション</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>ホームページを入って時少し速くなります</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>文庫精選</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>私も、これは役に立たないと思います</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>水平</value>
