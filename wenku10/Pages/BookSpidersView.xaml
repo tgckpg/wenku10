@@ -40,6 +40,10 @@
                     <Border MinHeight="120">
                         <Border.Resources>
                             <MenuFlyout x:Key="BookAction">
+                                <MenuFlyoutItem x:Uid="/ContextMenu/PinToStart"
+                                                Click="PinItemToStart"
+                                                Text="Copy" />
+
                                 <MenuFlyoutItem IsEnabled="{Binding CanFav}"
                                                 Click="ToggleFav"
                                                 Text="{Binding FavContextMenu}" />

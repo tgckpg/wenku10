@@ -28,11 +28,11 @@ using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
+using wenku8.Resources;
 
 namespace wenku10.Pages
 {
     using Scenes;
-    using wenku8.Resources;
 
     sealed partial class SuperGiants : Page, IAnimaPage, ICmdControls
     {
@@ -191,7 +191,7 @@ namespace wenku10.Pages
             int i = Stars.IndexOf( Btn );
             Stages[ i ].Add( new TheOrb( PStack, i % 2 == 0 ) );
 
-            NameValue<Func<Page>> Handler = ItemProcessor.GetPageHandler( StarBoxes[ i ].DataContext );
+            NameValue<Func<Page>> Handler = PageProcessor.GetPageHandler( StarBoxes[ i ].DataContext );
             ControlFrame.Instance.NavigateTo( Handler.Name, Handler.Value );
         }
 

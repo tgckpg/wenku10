@@ -16,8 +16,11 @@ using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI;
 
 using wenku8.Effects;
+using wenku8.Model.Book;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
+using wenku8.Model.Pages;
+using wenku8.Settings;
 
 namespace wenku10.Pages
 {
@@ -33,9 +36,9 @@ namespace wenku10.Pages
         private bool InSubView { get { return TransitionDisplay.GetState( SubView ) == TransitionState.Active; } }
 
         public static ControlFrame Instance { get; private set; }
+        public static volatile string LaunchArgs;
 
         private volatile bool Navigating = false;
-
 
         public ControlFrame()
         {
@@ -48,8 +51,32 @@ namespace wenku10.Pages
         private void SetTemplate()
         {
             BackStack = new global::wenku8.System.BackStackManager();
+
+            MessageBus.OnDelivery += MessageBus_OnDelivery;
             NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
+
             ApplyControlSet();
+        }
+
+        private async void MessageBus_OnDelivery( Message Mesg )
+        {
+            // Handles secondary tile launch on App opened
+            if( Mesg.Content == AppKeys.SYS_2ND_TILE_LAUNCH )
+            {
+                if ( Navigating )
+                {
+                    ActionBlocked();
+                    return;
+                }
+
+                BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
+                if ( Book != null )
+                {
+                    BackStack.Remove( PageId.BOOK_INFO_VIEW );
+                    NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
+                }
+
+            }
         }
 
         private void NavigationHandler_OnNavigatedBack( object sender, XBackRequestedEventArgs e )
@@ -72,10 +99,20 @@ namespace wenku10.Pages
             }
         }
 
-        public async void SetHomePage( string PageId, Func<Page> FPage, Action<Page> PageAct = null )
+        public async void SetHomePage( string Id, Func<Page> FPage, Action<Page> PageAct = null )
         {
+            // Handles secondary tile launch when App closed
+            if( !string.IsNullOrEmpty( LaunchArgs ) )
+            {
+                Id = PageId.BOOK_INFO_VIEW;
+                BookItem Book = await ItemProcessor.GetBookFromTileCmd( LaunchArgs );
+                FPage = () => new BookInfoView( Book );
+
+                LaunchArgs = null;
+            }
+
             MajorCmdBar.IsOpen = false;
-            await NavigateToAsync( PageId, FPage, PageAct );
+            await NavigateToAsync( Id, FPage, PageAct );
             BackStack.Clear();
             SetBackButton( false );
         }

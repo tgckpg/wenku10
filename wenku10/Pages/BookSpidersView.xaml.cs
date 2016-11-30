@@ -13,16 +13,21 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.StartScreen;
+
+using Tasks;
 
 using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;
 using wenku8.Effects;
+using wenku8.Model.Book.Spider;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
-using wenku8.Model.Section;
 using wenku8.Model.Pages;
+using wenku8.Model.Section;
 using wenku8.Resources;
+using Net.Astropenguin.Helpers;
 
 namespace wenku10.Pages
 {
@@ -40,7 +45,7 @@ namespace wenku10.Pages
         public IList<ICommandBarElement> MinorControls { get; private set; }
 
         private BookSpiderList FileListContext;
-        private LocalBook SelectedBook;
+        private SpiderBook SelectedBook;
 
         public BookSpidersView()
         {
@@ -106,7 +111,7 @@ namespace wenku10.Pages
             LSBookItem G = ( LSBookItem ) sender;
             FlyoutBase.ShowAttachedFlyout( G );
 
-            SelectedBook = ( LocalBook ) G.DataContext;
+            SelectedBook = ( SpiderBook ) G.DataContext;
         }
 
         private void ToggleFav( object sender, RoutedEventArgs e )
@@ -127,18 +132,12 @@ namespace wenku10.Pages
 
         private async void CopySource( object sender, RoutedEventArgs e )
         {
-            SpiderBook Book = SelectedBook as SpiderBook;
-            if ( Book == null ) return;
-
-            FileListContext.Add( await Book.Clone() );
+            FileListContext.Add( await SelectedBook.Clone() );
         }
 
         private void EditSource( object sender, RoutedEventArgs e )
         {
-            if ( SelectedBook is SpiderBook )
-            {
-                EditItem( ( SpiderBook ) SelectedBook );
-            }
+            EditItem( SelectedBook );
         }
 
         private async void Reanalyze( object sender, RoutedEventArgs e )
@@ -161,6 +160,31 @@ namespace wenku10.Pages
             {
                 ControlFrame.Instance.BackStack.Remove( PageId.BOOK_INFO_VIEW );
                 ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Item.GetBook() ) );
+            }
+        }
+
+        private async void PinItemToStart( object sender, RoutedEventArgs e )
+        {
+            if( SelectedBook.ProcessSuccess )
+            {
+                BookInstruction Book = SelectedBook.GetBook();
+                string TileId = await PageProcessor.CreateSecondaryTile( Book );
+
+                if ( !( string.IsNullOrEmpty( TileId ) || SelectedBook.HasChakra ) )
+                {
+                    StringResources stx = new StringResources( "Message" );
+
+                    bool Yes = false;
+
+                    await Popups.ShowDialog( UIAliases.CreateDialog(
+                        stx.Str( "TileUpdateSupport" )
+                        , stx.Str( "ShellTile" )
+                        , () => Yes = true
+                        , stx.Str( "Yes" ), stx.Str( "No" )
+                    ) );
+
+                    if ( Yes ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+                }
             }
         }
 

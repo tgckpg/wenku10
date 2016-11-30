@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libeburc", "libs\libeburc\l
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wenku8-protocol", "libs\wenku8-protocol\wenku8-protocol.csproj", "{9542B1BB-F868-4627-AFAB-7A99ED0EC7CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tasks", "Tasks\Tasks.csproj", "{CDD6F7C9-C06B-489E-95FF-D226AABB635F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		libs\libpenguin\Global\Global.projitems*{5a6b4589-8c63-40d5-946f-759a9282a176}*SharedItemsImports = 4
@@ -264,6 +266,38 @@ Global
 		{9542B1BB-F868-4627-AFAB-7A99ED0EC7CA}.Testing|x64.Build.0 = Release|x64
 		{9542B1BB-F868-4627-AFAB-7A99ED0EC7CA}.Testing|x86.ActiveCfg = Release|x86
 		{9542B1BB-F868-4627-AFAB-7A99ED0EC7CA}.Testing|x86.Build.0 = Release|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|Any CPU.Build.0 = Release|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|ARM.ActiveCfg = Release|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|ARM.Build.0 = Release|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|x64.ActiveCfg = Release|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|x64.Build.0 = Release|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|x86.ActiveCfg = Release|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Beta|x86.Build.0 = Release|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|ARM.Build.0 = Debug|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|x64.ActiveCfg = Debug|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|x64.Build.0 = Debug|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|x86.ActiveCfg = Debug|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Debug|x86.Build.0 = Debug|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|ARM.ActiveCfg = Release|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|ARM.Build.0 = Release|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|x64.ActiveCfg = Release|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|x64.Build.0 = Release|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|x86.ActiveCfg = Release|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Release|x86.Build.0 = Release|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|Any CPU.Build.0 = Release|Any CPU
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|ARM.ActiveCfg = Release|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|ARM.Build.0 = Release|ARM
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|x64.ActiveCfg = Release|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|x64.Build.0 = Release|x64
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|x86.ActiveCfg = Release|x86
+		{CDD6F7C9-C06B-489E-95FF-D226AABB635F}.Testing|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

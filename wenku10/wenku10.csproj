@@ -110,6 +110,7 @@
     <Content Include="Assets\Samples\BgTOC.jpg" />
     <Content Include="Assets\Samples\BgInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />
+    <Content Include="Assets\Samples\Empty150.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
@@ -175,6 +176,7 @@
     </Compile>
     <Compile Include="ShHub\MesgListerner.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
+    <Compile Include="wenku8\Model\Pages\PageProcessor.cs" />
     <Compile Include="wenku8\Model\Section\DocumentList.cs" />
     <Compile Include="wenku8\Model\Section\LocalListBase.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub\Activities.cs" />
@@ -222,7 +224,6 @@
     <Compile Include="wenku8\Model\Loaders\ZSFeedbackLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
-    <Compile Include="wenku8\Model\Pages\ItemProcessor.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub.cs" />
     <Compile Include="wenku8\Model\Section\ZoneList.cs" />
     <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
@@ -814,6 +815,10 @@
     <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
       <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>
       <Name>wenku8-protocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tasks\Tasks.csproj">
+      <Project>{cdd6f7c9-c06b-489e-95ff-d226aabb635f}</Project>
+      <Name>Tasks</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

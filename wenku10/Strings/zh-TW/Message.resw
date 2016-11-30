@@ -189,4 +189,13 @@
   <data name="AnchorNotSetYet" xml:space="preserve">
     <value>尚未設定錨點</value>
   </data>
+  <data name="NewContent" xml:space="preserve">
+    <value>*有新内容</value>
+  </data>
+  <data name="TileUpdateSupport" xml:space="preserve">
+    <value>此項目似乎支援背景更新。需要定期獲取更新嗎？</value>
+  </data>
+  <data name="ShellTile" xml:space="preserve">
+    <value>動態磚</value>
+  </data>
 </root>

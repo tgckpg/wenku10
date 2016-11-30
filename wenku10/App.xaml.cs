@@ -24,10 +24,12 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 using Net.Astropenguin.Helpers;
 
 using wenku8.Resources;
 using wenku8.Storage;
+using wenku8.Settings;
 
 namespace wenku10
 {
@@ -133,12 +135,14 @@ namespace wenku10
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate( typeof( MainStage ), e.Arguments );
+                Pages.ControlFrame.LaunchArgs = e.Arguments;
+                rootFrame.Navigate( typeof( MainStage ) );
             }
             else if ( !string.IsNullOrEmpty( e.Arguments ) )
             {
-                MainStage.Instance.RootFrame.Navigate( typeof( Pages.BookInfoView ), e.Arguments );
+                MessageBus.SendUI( GetType(), AppKeys.SYS_2ND_TILE_LAUNCH, e.Arguments );
             }
+
             // Ensure the current window is active
             Window.Current.Activate();
         }

@@ -208,7 +208,7 @@ namespace wenku10.Pages.Sharers
         {
             await ControlFrame.Instance.CloseSubView();
             AccessToken = Token;
-            BindItem.Update( await ItemProcessor.GetScriptFromHub( Id, Token ) );
+            BindItem.Update( await PageProcessor.GetScriptFromHub( Id, Token ) );
             SetTemplate();
         }
 

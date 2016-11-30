@@ -21,8 +21,6 @@ namespace wenku8.Model.Section
     {
         public static readonly string ID = typeof( BookSpiderList ).Name;
 
-        public const char ZONE_PFX = 'Z';
-
         public BookSpiderList()
         {
             ProcessVols();
@@ -93,7 +91,7 @@ namespace wenku8.Model.Section
             BookIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
             foreach ( string Id in BookIds )
             {
-                if ( Id[ 0 ] == ZONE_PFX )
+                if ( Id[ 0 ] == AppKeys.SP_ZONE_PFX )
                 {
                     IEnumerable<string> ZoneItems = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL + Id + "/" );
                     foreach ( string SId in ZoneItems )

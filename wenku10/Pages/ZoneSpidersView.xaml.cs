@@ -27,6 +27,7 @@ using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.Pages;
 using wenku8.Model.Section;
 using wenku8.Resources;
+using wenku8.Settings;
 
 namespace wenku10.Pages
 {
@@ -156,7 +157,7 @@ namespace wenku10.Pages
             BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
 
             // "Z" to let LocalFileList know this is a Zone directory
-            BInst.SetId( BookSpiderList.ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
+            BInst.SetId( AppKeys.SP_ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
 
             SpiderBook Item = await SpiderBook.CreateFromZoneInst( BInst );
 

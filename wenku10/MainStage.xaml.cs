@@ -17,8 +17,6 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
 
-using wenku8.Effects;
-
 namespace wenku10
 {
     public sealed partial class MainStage : Page
@@ -42,7 +40,7 @@ namespace wenku10
                 return;
             }
 
-            RootFrame.Navigate( typeof( Pages.ControlFrame ), e.Parameter );
+            RootFrame.Navigate( typeof( Pages.ControlFrame ) );
         }
 
         public MainStage()
@@ -65,6 +63,9 @@ namespace wenku10
                 Logger.Log( ID, "No status bar... not a phone?" );
             }
 
+            // Acquire Background Priviledge
+            Tasks.BackgroundProcessor.AcquireBackgroundPriviledge();
+
             // Register Navigation Handler to BackRequested event
             SystemNavigationManager.GetForCurrentView().BackRequested += NavigationHandler.MasterNavigationHandler;
 
@@ -74,7 +75,7 @@ namespace wenku10
 
             // Full Screen Ctrl + F
             App.KeyboardControl.RegisterCombination(
-                ( x ) => { App.ViewControl.ToggleFullScreen(); }
+                ( x ) => App.ViewControl.ToggleFullScreen()
                 , Windows.System.VirtualKey.Control
                 , Windows.System.VirtualKey.F
             );
@@ -99,5 +100,6 @@ namespace wenku10
 
             NavigationHandler.MasterNavigationHandler( RootFrame, null );
         }
+
     }
 }

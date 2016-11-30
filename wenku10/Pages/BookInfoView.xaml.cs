@@ -147,6 +147,8 @@ namespace wenku10.Pages
             ThisBook = Book;
             Shared.CurrentBook = Book;
 
+            PageProcessor.ReadSecondaryTile( Book );
+
             CacheStateStory.Begin();
             BookLoader BL = new BookLoader( b =>
             {
@@ -265,7 +267,7 @@ namespace wenku10.Pages
             else if ( ThisBook is BookInstruction )
             {
                 string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
-                HubScriptItem HSI = await ItemProcessor.GetScriptFromHub( ThisBook.Id, Token );
+                HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );
 
                 if ( HSI == null )
                 {
@@ -292,7 +294,7 @@ namespace wenku10.Pages
         private async void OpenHSComment( string Id, string AccessToken )
         {
             await ControlFrame.Instance.CloseSubView();
-            HubScriptItem HSI = await ItemProcessor.GetScriptFromHub( Id, AccessToken );
+            HubScriptItem HSI = await PageProcessor.GetScriptFromHub( Id, AccessToken );
 
             if ( ThisBook.Id != Id )
             {
