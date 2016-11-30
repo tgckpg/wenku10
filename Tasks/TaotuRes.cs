@@ -10,32 +10,12 @@ using wenku8.Taotu;
 
 namespace Tasks
 {
-    sealed class TasksMarker : GrimoireMarker
-    {
-        public override Task Edit()
-        {
-            throw new NotImplementedException();
-        }
-    }
+    sealed class TasksMarker : GrimoireMarker { public override Task Edit() { throw new NotImplementedException(); } } 
+    sealed class TasksExtractor : GrimoireExtractor { public override Task Edit() { throw new NotImplementedException(); } }
+    sealed class TasksListLoader : GrimoireListLoader { public override Task Edit() { throw new NotImplementedException(); } }
 
-    sealed class TasksExtractor : GrimoireExtractor
+    sealed class THttpRequest : HttpRequest
     {
-        public override Task Edit()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    sealed class TasksListLoader : GrimoireListLoader
-    {
-        public override Task Edit()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-	sealed class THttpRequest : HttpRequest
-	{
         public static string UA { get; internal set; }
 
         public THttpRequest( Uri RequestUri )
@@ -44,10 +24,11 @@ namespace Tasks
             EN_UITHREAD = false;
         }
 
-		override protected void CreateRequest()
-		{
+        override protected void CreateRequest()
+        {
             base.CreateRequest();
             WCRequest.Headers[ HttpRequestHeader.UserAgent ] = UA;
-		}
-	}
+        }
+    }
+
 }
