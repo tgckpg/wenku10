@@ -173,7 +173,7 @@ namespace Tasks
                 foreach ( XParameter UpdateParam in Updates )
                 {
                     string TileId = UpdateParam.GetValue( "tileId" );
-                    if( !SecondaryTile.Exists( TileId ) )
+                    if ( !SecondaryTile.Exists( TileId ) )
                     {
                         XReg.RemoveParameter( UpdateParam.Id );
                         continue;
@@ -204,7 +204,7 @@ namespace Tasks
                 }
 
             }
-            catch( Exception ) { }
+            catch ( Exception ) { }
         }
 
         private void UpdateTile( BookItem Book, string TileId )

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,10 +24,12 @@ using wenku8.AdvDM;
 using wenku8.CompositeElement;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
+using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Resources;
 using wenku8.Settings;
+using Net.Astropenguin.DataModel;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -65,47 +68,23 @@ namespace wenku10.Pages.ContentReaderPane
 
             int l = ImagePaths.Length;
 
-            WBackgroundTransfer Transfer = new WBackgroundTransfer();
+            List<MViewUpdate> MViews = new List<MViewUpdate>();
 
-            List<ImageThumb> ImgThumbs = new List<ImageThumb>();
-
-            Transfer.OnThreadComplete += Transfer_OnThreadComplete;
             for ( int i = 0; i < l; i++ )
             {
                 // Retrive URL
                 string url = ImagePaths[ i ];
-
-                // Use filename as <id>.<format> since format maybe <id>.png or <id>.jpg
-                string fileName = url.Substring( url.LastIndexOf( '/' ) + 1 );
-                string imageLocation = FileLinks.ROOT_IMAGE + fileName;
-
-                ImageThumb Img = new ImageThumb( imageLocation, 200, null );
-                Img.Reference = url;
-                ImgThumbs.Add( Img );
+                MViewUpdate MView = new MViewUpdate() { SrcUrl = url };
+                ContentIllusLoader.Instance.RegisterImage( MView );
+                MViews.Add( MView );
             }
 
-            MainView.ItemsSource = ImgThumbs;
-
-            foreach( ImageThumb Thumb in ImgThumbs )
-            {
-                await Thumb.Set();
-                if( Thumb.IsDownloadNeeded )
-                {
-                    Guid G = await Transfer.RegisterImage( Thumb.Reference, Thumb.Location );
-                    Thumb.Id = G;
-                }
-            }
-        }
-
-        private void Transfer_OnThreadComplete( DTheradCompleteArgs DArgs )
-        {
-            ImageThumb Img = ( MainView.ItemsSource as List<ImageThumb> ).First( x => x.Id.Equals( DArgs.Id ) );
-            var j = Img.Set();
+            MainView.ItemsSource = MViews;
         }
 
         private void MainView_ItemClick( object sender, ItemClickEventArgs e )
         {
-            ImageThumb Img = e.ClickedItem as ImageThumb;
+            MViewUpdate Img = ( MViewUpdate ) e.ClickedItem;
             if ( Img.IsDownloadNeeded ) return;
 
             ReaderPage.ClosePane();
@@ -119,7 +98,7 @@ namespace wenku10.Pages.ContentReaderPane
 
             NavigationHandler.InsertHandlerOnNavigatedBack( ViewImage );
 
-            ReaderPage.OverNavigate( typeof( ImageView ), Img );
+            ReaderPage.OverNavigate( typeof( ImageView ), Img.ImgThumb );
         }
 
         private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()
@@ -212,5 +191,51 @@ namespace wenku10.Pages.ContentReaderPane
 
             return await TCSChapter.Task;
         }
+
+        private class MViewUpdate : ActiveData, IIllusUpdate
+        {
+            private ImageThumb _ImgThumb;
+            public ImageThumb ImgThumb
+            {
+                get { return _ImgThumb; }
+                set
+                {
+                    _ImgThumb = value;
+                    _ImgThumb.PropertyChanged += _ImgThumb_PropertyChanged;
+                }
+            }
+
+            public string SrcUrl { get; set; }
+
+            public bool IsDownloadNeeded
+            {
+                get
+                {
+                    if ( ImgThumb == null ) return true;
+                    return ImgThumb.IsDownloadNeeded;
+                }
+            }
+
+            public ImageSource ImgSrc
+            {
+                get
+                {
+                    if ( ImgThumb == null ) return null;
+                    return ImgThumb.ImgSrc;
+                }
+            }
+
+            private void _ImgThumb_PropertyChanged( object sender, PropertyChangedEventArgs e )
+            {
+                NotifyChanged( e.PropertyName );
+            }
+
+            public async void Update()
+            {
+                await ImgThumb.Set();
+                NotifyChanged( "IsDownloadNeeded", "ImgSrc" );
+            }
+        }
+
     }
 }

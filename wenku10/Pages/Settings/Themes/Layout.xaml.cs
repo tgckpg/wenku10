@@ -78,6 +78,7 @@ namespace wenku10.Pages.Settings.Themes
 
             TogPageClick.IsOn = !Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
             TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
+            TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
         }
 
         // NavList
@@ -128,6 +129,11 @@ namespace wenku10.Pages.Settings.Themes
         private void Toggled_CFlow( object sender, RoutedEventArgs e )
         {
             Conf_ContentReader.IsRightToLeft = TogContFlo.IsOn;
+        }
+
+        private void Toggled_EmbedIllus( object sender, RoutedEventArgs e )
+        {
+            Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS = TogEmbedIllus.IsOn;
         }
 
         private async void Toggled_PageClick( object sender, RoutedEventArgs e )

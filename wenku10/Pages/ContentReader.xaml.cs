@@ -48,7 +48,7 @@ namespace wenku10.Pages
 {
     using ContentReaderPane;
 
-    sealed partial class ContentReader : Page, ICmdControls, IAnimaPage
+    sealed partial class ContentReader : Page, ICmdControls, IAnimaPage, INavPage
     {
         public static readonly string ID = typeof( ContentReader ).Name;
 
@@ -78,7 +78,7 @@ namespace wenku10.Pages
         private Action ReloadReader;
         private volatile bool OpenLock = false;
         private bool NeedRedraw = false;
-        private bool Disposed = true;
+        private bool Disposed = false;
 
         private ApplicationViewOrientation? Orientation;
 
@@ -162,6 +162,8 @@ namespace wenku10.Pages
 
         private void SetTemplate()
         {
+            ContentIllusLoader.Initialize();
+
             LayoutRoot.RenderTransform = new TranslateTransform();
 
             NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );

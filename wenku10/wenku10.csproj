@@ -176,6 +176,8 @@
     </Compile>
     <Compile Include="ShHub\MesgListerner.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
+    <Compile Include="wenku8\Converters\ParaTemplateSelector.cs" />
+    <Compile Include="wenku8\Model\Loaders\ContentIllusLoader.cs" />
     <Compile Include="wenku8\Model\Pages\PageProcessor.cs" />
     <Compile Include="wenku8\Model\Section\DocumentList.cs" />
     <Compile Include="wenku8\Model\Section\LocalListBase.cs" />

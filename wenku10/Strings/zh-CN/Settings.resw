@@ -545,4 +545,7 @@
   <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
     <value>单卷自动分卷</value>
   </data>
+  <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
+    <value>嵌入插图</value>
+  </data>
 </root>

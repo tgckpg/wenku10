@@ -94,6 +94,7 @@ namespace wenku10.Pages
 
         protected void ChapterSelected( object sender, ItemClickEventArgs e )
         {
+            ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
             ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ( Chapter ) e.ClickedItem ) );
         }
 
@@ -115,6 +116,7 @@ namespace wenku10.Pages
         protected void JumpToBookmark( object sender, RoutedEventArgs e )
         {
             if ( TOCData == null ) return;
+            ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
             ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( TOCData.AutoAnchor ) );
         }
 

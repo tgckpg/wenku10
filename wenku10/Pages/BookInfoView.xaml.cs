@@ -375,6 +375,7 @@ namespace wenku10.Pages
             TOCSection TOCData = await TCS.Task;
             if( TOCData.AnchorAvailable )
             {
+                ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
                 ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( TOCData.AutoAnchor ) );
             }
             else

@@ -552,4 +552,7 @@
   <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
     <value>選定自定義導航</value>
   </data>
+  <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
+    <value>嵌入插圖</value>
+  </data>
 </root>

@@ -291,6 +291,16 @@ namespace wenku10.Pages.ContentReaderPane
 
             RecordUndo( ContentGrid.SelectedIndex );
             Reader.SelectAndAnchor( SelectedParagraph = P );
+
+            if( P is IllusPara )
+            {
+                IllusPara S = ( IllusPara ) P;
+
+                if ( !S.EmbedIllus )
+                {
+                    Container.OverNavigate( typeof( ImageView ), S );
+                }
+            }
         }
 
         private void UndoAnchorJump( object sender, RoutedEventArgs e )

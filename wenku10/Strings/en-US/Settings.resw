@@ -552,4 +552,7 @@
   <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
     <value>Chunk single Volumes</value>
   </data>
+  <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
+    <value>Embed illustrations</value>
+  </data>
 </root>
