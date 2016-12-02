@@ -38,6 +38,7 @@ using WComments = wenku10.Pages.BookInfoControls.Comments;
 namespace wenku10.Pages
 {
     using Sharers;
+    using wenku8.AdvDM;
 
     sealed partial class BookInfoView : Page, ICmdControls, IAnimaPage, INavPage
     {
@@ -95,7 +96,7 @@ namespace wenku10.Pages
         {
             LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
 
-            CacheStateBtn.RenderTransform = new TranslateTransform();
+            Indicators.RenderTransform = new TranslateTransform();
             HeaderPanel.RenderTransform = new TranslateTransform();
             StatusPanel.RenderTransform = new TranslateTransform();
             IntroText.RenderTransform = new TranslateTransform();
@@ -230,7 +231,7 @@ namespace wenku10.Pages
             LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
         }
 
-        private void CacheState_Click( object sender, RoutedEventArgs e )
+        private void FlyoutBase_Click( object sender, RoutedEventArgs e )
         {
             FlyoutBase.ShowAttachedFlyout( ( FrameworkElement ) sender );
         }
@@ -399,6 +400,17 @@ namespace wenku10.Pages
             }
         }
 
+        #region Bing Service
+        private void OpenBingResult( object sender, RoutedEventArgs e )
+        {
+            string QueryUri = new BingService( ThisBook ).GetSearchQuery();
+            if ( !string.IsNullOrEmpty( QueryUri ) )
+            {
+                var j = Windows.System.Launcher.LaunchUriAsync( new Uri( QueryUri ) );
+            }
+        }
+        #endregion
+
         #region Anima
         Storyboard AnimaStory = new Storyboard();
 
@@ -418,8 +430,8 @@ namespace wenku10.Pages
             SimpleStory.DoubleAnimation( AnimaStory, IntroText, "Opacity", 0, 1, 350, 300 );
             SimpleStory.DoubleAnimation( AnimaStory, IntroText.RenderTransform, "Y", 30, 0, 350, 300 );
 
-            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn, "Opacity", 0, 1, 350, 400 );
-            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn.RenderTransform, "X", 30, 0, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, Indicators, "Opacity", 0, 1, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, Indicators.RenderTransform, "Y", -30, 0, 350, 400 );
 
             AnimaStory.Begin();
             await Task.Delay( 1000 );
@@ -432,8 +444,8 @@ namespace wenku10.Pages
             AnimaStory.Stop();
             AnimaStory.Children.Clear();
 
-            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn, "Opacity", 1, 0, 350, 400 );
-            SimpleStory.DoubleAnimation( AnimaStory, CacheStateBtn.RenderTransform, "X", 0, 30, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, Indicators, "Opacity", 1, 0, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, Indicators.RenderTransform, "Y", 0, -30, 350, 400 );
 
             SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 300 );
             SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 300 );

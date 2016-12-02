@@ -108,16 +108,39 @@
                                 HorizontalAlignment="Center" VerticalAlignment="Top"
                                 Source="{Binding CoverStream}" />
 
-                <!-- Age Indicator -->
-                <Button x:Name="CacheStateBtn" Margin="10,20"
-                        Click="CacheState_Click"
-                        Style="{StaticResource PlainButton}"
-                        FlyoutBase.AttachedFlyout="{StaticResource CacheStateFlyout}"
-                        HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <Rectangle x:Name="CacheStateRect"
-                               Fill="{Binding LastCache, Converter={StaticResource ColorAgeConverter}}"
-                               Height="10" Width="20"/>
-                </Button>
+                <StackPanel x:Name="Indicators" Margin="0,15" Orientation="Horizontal"
+                            VerticalAlignment="Top" HorizontalAlignment="Left" >
+
+                    <StackPanel.Resources>
+                        <MenuFlyout x:Key="BingCoverFlyout">
+                            <MenuFlyoutItem Text="Bing Image Search" IsEnabled="False" />
+                            <MenuFlyoutItem Margin="10,0,0,0" Text="Next Candidate" />
+                            <MenuFlyoutItem Margin="10,0,0,0" Text="Change keyword" />
+                            <MenuFlyoutItem Margin="10,0,0,0" Text="Open result in Browser" Click="OpenBingResult" />
+                            <MenuFlyoutItem Margin="10,0,0,0" Text="Set subscription key" />
+                        </MenuFlyout>
+                    </StackPanel.Resources>
+                    <!-- Age Indicator -->
+                    <Button Margin="0,0,5,0"
+                            Click="FlyoutBase_Click"
+                            Style="{StaticResource PlainButton}"
+                            FlyoutBase.AttachedFlyout="{StaticResource CacheStateFlyout}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Rectangle x:Name="CacheStateRect"
+                                   Fill="{Binding LastCache, Converter={StaticResource ColorAgeConverter}}"
+                                   Height="20" Width="13"/>
+                    </Button>
+
+                    <!-- Indicate whether the Cover image is provided by Bing -->
+                    <Button Margin="5,0,0,0"
+                            Click="FlyoutBase_Click"
+                            Style="{StaticResource ThemeButton}"
+                            FlyoutBase.AttachedFlyout="{StaticResource BingCoverFlyout}"
+                            e:TransitionDisplay.Mode="A01_Y_N30_0"
+                            e:TransitionDisplay.State="{Binding IsBing, Converter={StaticResource TransStateConverter}}">
+                        <i:IconBing />
+                    </Button>
+                </StackPanel>
 
                 <StackPanel x:Name="HeaderPanel"
                             Grid.Row="1"
