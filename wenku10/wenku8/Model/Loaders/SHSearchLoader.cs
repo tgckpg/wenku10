@@ -13,11 +13,12 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Model.Loaders
 {
     using AdvDM;
+    using ListItem;
     using ListItem.Sharers;
     using Resources;
     using REST;
 
-    sealed class SHSearchLoader : ILoader<HubScriptItem>
+    class SHSearchLoader : ILoader<HubScriptItem>
     {
         public static readonly string ID = typeof( SHSearchLoader ).Name;
 
@@ -75,6 +76,30 @@ namespace wenku8.Model.Loaders
             );
 
             return await HSItems.Task;
+        }
+    }
+
+    sealed class SHSLActiveItem : SHSearchLoader, ILoader<ActiveItem>
+    {
+        public SHSLActiveItem( string Query, IEnumerable<string> AccessTokens )
+            : base( Query, AccessTokens ) { }
+
+        Action<IList<ActiveItem>> ILoader<ActiveItem>.Connector
+        {
+            get
+            {
+                return ( Action<IList<ActiveItem>> ) Connector;
+            }
+
+            set
+            {
+                base.Connector = ( x ) => ( x ).Cast<ActiveItem>();
+            }
+        }
+
+        async Task<IList<ActiveItem>> ILoader<ActiveItem>.NextPage( uint count )
+        {
+            return ( await base.NextPage( count ) ).Cast<ActiveItem>().ToList();
         }
     }
 

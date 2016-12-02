@@ -21,10 +21,13 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
+using wenku8.CompositeElement;
+using wenku8.Ext;
+using wenku8.Model.Interfaces;
 using wenku8.Model.Loaders;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
-using wenku8.Section;
+using wenku8.Model.Section.SharersHub;
 
 using CryptAES = wenku8.System.CryptAES;
 using RSAManager = wenku8.System.RSAManager;
@@ -34,57 +37,57 @@ using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
 
 namespace wenku10.Pages.Sharers
 {
-    sealed partial class ManageAuth : Page
+    sealed partial class ManageAuth : Page, ICmdControls
     {
-        private SharersHub ShHub;
+        #pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+        #pragma warning restore 0067
+
+        public bool NoCommands { get; }
+        public bool MajorNav { get; }
+
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get; private set; }
+
+        AppBarButton ExportAuthBtn;
+        AppBarButton ImportKeyBtn;
+        AppBarButton ImportTokBtn;
+
         private RSAManager RSAMgr;
         private AESManager AESMgr;
         private TokenManager TokMgr;
 
-        new Frame Frame { get; set; }
-
         private AuthItem SelectedItem;
 
-        public ManageAuth( SharersHub ShHub, Frame PopupFrame )
+        public ManageAuth()
         {
             this.InitializeComponent();
-            this.ShHub = ShHub;
-            ShHub.PropertyChanged += ShHub_PropertyChanged;
 
-            Frame = PopupFrame;
             SetTemplate();
-        }
-
-        private void ShHub_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
-        {
-            if ( e.PropertyName == "Loading" )
-            {
-                if ( !ShHub.Loading )
-                {
-                    RequestsList.ItemsSource = ShHub.Grants.Remap( x => new GrantProcess( x ) );
-                }
-            }
         }
 
         private async void SetTemplate()
         {
-            StringResources stx = new StringResources( "AppResources", "ContextMenu", "WMessage", "LoadingMessage" );
+            StringResources stx = new StringResources( "AppResources", "ContextMenu", "WMessage", "LoadingMessage", "AppBar" );
+
+            InitAppBar( stx );
+
             KeysSection.Header = stx.Text( "Secret" );
             TokensSection.Header = stx.Text( "AccessTokens", "ContextMenu" );
             RequestsSection.Header = stx.Text( "Requests" );
 
-            if ( !ShHub.Member.IsLoggedIn )
+            IMember Member = X.Singleton<IMember>( XProto.SHMember );
+
+            if ( !Member.IsLoggedIn )
             {
+                // Please login message
                 ReqPlaceholder.Text = stx.Str( "4", "WMessage" );
             }
             else
             {
                 ReqPlaceholder.Text = stx.Str( "ProgressIndicator_PleaseWait", "LoadingMessage" );
-                ShHub.GetMyRequests( () =>
-                {
-                    ReqPlaceholder.Visibility = Visibility.Collapsed;
-                    RequestsList.ItemsSource = ShHub.Grants.Remap( x => new GrantProcess( x ) );
-                } );
+                LoadRequests();
             }
 
             RSAMgr = await RSAManager.CreateAsync();
@@ -95,6 +98,50 @@ namespace wenku10.Pages.Sharers
             TokMgr = new TokenManager();
             ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
         }
+
+        private async void LoadRequests()
+        {
+            MyRequests Reqs = new MyRequests();
+            await Reqs.Get();
+
+            ReqPlaceholder.Visibility = Visibility.Collapsed;
+            RequestsList.ItemsSource = Reqs.Grants.Remap( x => new GrantProcess( x ) );
+        }
+
+        private void InitAppBar( StringResources stx )
+        {
+            ExportAuthBtn = UIAliases.CreateAppBarBtn( Symbol.SaveLocal, stx.Text( "Export", "AppBar" ) );
+            ExportAuthBtn.Click += ExportAuths;
+
+            ImportKeyBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Text( "Add", "AppBar" ) );
+            ImportKeyBtn.Click += ImportKey;
+
+            ImportTokBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Text( "Add", "AppBar" ) );
+            ImportTokBtn.Click += ImportToken;
+        }
+
+        private void MasterPivot_SelectionChanged( object sender, SelectionChangedEventArgs e )
+        {
+            ExportAuthBtn.Tag = null;
+            if ( MasterPivot.SelectedItem == KeysSection )
+            {
+                MajorControls = new ICommandBarElement[] { ExportAuthBtn, ImportKeyBtn };
+                ExportAuthBtn.Tag = "Keys";
+            }
+            else if ( MasterPivot.SelectedItem == TokensSection )
+            {
+                MajorControls = new ICommandBarElement[] { ExportAuthBtn, ImportTokBtn };
+                ExportAuthBtn.Tag = "Tokens";
+            }
+            else if ( MasterPivot.SelectedItem == RequestsSection )
+            {
+                MajorControls = new ICommandBarElement[] {};
+            }
+
+            ControlChanged?.Invoke( this );
+        }
+
+        public void GotoRequests() { MasterPivot.SelectedItem = RequestsSection; }
 
         private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
         {
@@ -156,8 +203,6 @@ namespace wenku10.Pages.Sharers
             }
         }
 
-        public void GotoRequests() { MasterPivot.SelectedItem = RequestsSection; }
-
         private void ParseGrant( object sender, RoutedEventArgs e )
         {
             ( ( GrantProcess ) ( ( Button ) sender ).DataContext ).Parse( RSAMgr.AuthList );
@@ -191,25 +236,11 @@ namespace wenku10.Pages.Sharers
 
             if ( HSI != null )
             {
-                NavigatedEventHandler Frame_Navigated = null;
-                Frame_Navigated = ( s, e2 ) =>
-                {
-                    Frame.Navigated -= Frame_Navigated;
-
-                    ScriptDetails SDetails = ( ScriptDetails ) Frame.Content;
-                    RoutedEventHandler SDetails_Loaded = null;
-
-                    SDetails_Loaded = ( s2, e3 ) =>
-                    {
-                        SDetails.Loaded -= SDetails_Loaded;
-                        SDetails.OpenRequest( GProc.Target );
-                    };
-
-                    SDetails.Loaded += SDetails_Loaded;
-                };
-
-                Frame.Navigated += Frame_Navigated;
-                Frame.Navigate( typeof( ScriptDetails ), HSI );
+                ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () => {
+                    ScriptDetails SDetails = new ScriptDetails( HSI );
+                    SDetails.OpenRequest( GProc.Target );
+                    return SDetails;
+                } );
             }
         }
 
@@ -222,6 +253,86 @@ namespace wenku10.Pages.Sharers
                 Item.Count = Mgr.ControlCount( NX.Value );
                 return Item;
             } );
+        }
+
+        private async void ImportKey( object sender, RoutedEventArgs e )
+        {
+            NameValue<string> NV = new NameValue<string>( "", "" );
+            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+            Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
+                NV, stx.Text( "New" ) + stx.Text( "Secret" )
+                , stx.Text( "Name" ), stx.Text( "Secret" )
+            );
+
+            await Popups.ShowDialog( NVInput );
+
+            if ( NVInput.Canceled ) return;
+
+            try
+            {
+                AESMgr.ImportAuth( NV.Name, NV.Value );
+                ReloadAuths( KeyList, SHTarget.KEY, AESMgr );
+            }
+            catch ( Exception )
+            { }
+        }
+
+        private async void ExportAuths( object sender, RoutedEventArgs e )
+        {
+            Button Btn = ( Button ) sender;
+            Btn.IsEnabled = false;
+
+            string Tag = ( string ) Btn.Tag;
+
+            IStorageFile ISF = await AppStorage.SaveFileAsync( "wenku10 Auth", new List<string>() { ".xml" }, Tag );
+            if ( ISF == null )
+            {
+                Btn.IsEnabled = true;
+                return;
+            }
+
+            try
+            {
+                using ( Stream s = await ISF.OpenStreamForWriteAsync() )
+                {
+                    await global::wenku8.Resources.Shared.Storage.GetStream(
+                        Tag == "Keys"
+                            ? AESMgr.SettingsFile
+                            : TokMgr.SettingsFile
+                    ).CopyToAsync( s );
+
+                    await s.FlushAsync();
+                }
+            }
+            catch( Exception )
+            {
+                // Failed to save file
+            }
+
+            Btn.IsEnabled = true;
+        }
+
+        private async void ImportToken( object sender, RoutedEventArgs e )
+        {
+            NameValue<string> NV = new NameValue<string>( "", "" );
+
+            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+            Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
+                NV, stx.Text( "New" ) + stx.Text( "AccessTokens", "ContextMenu" )
+                , stx.Text( "Name" ), stx.Text( "AccessTokens", "ContextMenu" )
+            );
+
+            await Popups.ShowDialog( NVInput );
+
+            if ( NVInput.Canceled ) return;
+
+            try
+            {
+                TokMgr.ImportAuth( NV.Name, NV.Value );
+                ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
+            }
+            catch( Exception )
+            { }
         }
 
         private class AuthItem : NameValue<NameValue<string>>
@@ -253,77 +364,6 @@ namespace wenku10.Pages.Sharers
             {
                 this.AuthType = AuthType;
             }
-        }
-
-        private async void ImportKey( object sender, RoutedEventArgs e )
-        {
-            NameValue<string> NV = new NameValue<string>( "", "" );
-            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
-            Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
-                NV, stx.Text( "New" ) + stx.Text( "Secret" )
-                , stx.Text( "Name" ), stx.Text( "Secret" )
-            );
-
-            await Popups.ShowDialog( NVInput );
-
-            if ( NVInput.Canceled ) return;
-
-            try
-            {
-                AESMgr.ImportAuth( NV.Name, NV.Value );
-                ReloadAuths( KeyList, SHTarget.KEY, AESMgr );
-            }
-            catch ( Exception )
-            { }
-        }
-
-        private async void ExportAuths( object sender, RoutedEventArgs e )
-        {
-            Button Btn = ( Button ) sender;
-            string Tag = ( string ) Btn.Tag;
-            IStorageFile ISF = await AppStorage.SaveFileAsync( "wenku10 Auth", new List<string>() { ".xml" }, Tag );
-            if ( ISF == null ) return;
-
-            try
-            {
-                using ( Stream s = await ISF.OpenStreamForWriteAsync() )
-                {
-                    await global::wenku8.Resources.Shared.Storage.GetStream(
-                        Tag == "Keys"
-                            ? AESMgr.SettingsFile
-                            : TokMgr.SettingsFile
-                    ).CopyToAsync( s );
-
-                    await s.FlushAsync();
-                }
-            }
-            catch( Exception )
-            {
-                // Failed to save file
-            }
-        }
-
-        private async void ImportToken( object sender, RoutedEventArgs e )
-        {
-            NameValue<string> NV = new NameValue<string>( "", "" );
-
-            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
-            Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
-                NV, stx.Text( "New" ) + stx.Text( "AccessTokens", "ContextMenu" )
-                , stx.Text( "Name" ), stx.Text( "AccessTokens", "ContextMenu" )
-            );
-
-            await Popups.ShowDialog( NVInput );
-
-            if ( NVInput.Canceled ) return;
-
-            try
-            {
-                TokMgr.ImportAuth( NV.Name, NV.Value );
-                ReloadAuths( TokenList, SHTarget.TOKEN, TokMgr );
-            }
-            catch( Exception )
-            { }
         }
     }
 }

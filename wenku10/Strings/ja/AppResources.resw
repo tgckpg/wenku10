@@ -386,4 +386,22 @@
   <data name="PleaseClick.Text" xml:space="preserve">
     <value>クリックしてください</value>
   </data>
+  <data name="ZoneSpider.Text" xml:space="preserve">
+    <value>区域蜘蛛</value>
+  </data>
+  <data name="Messages.Text" xml:space="preserve">
+    <value>メッセージ</value>
+  </data>
+  <data name="ProcessGrantsFailed.Text" xml:space="preserve">
+    <value>無効なキー</value>
+  </data>
+  <data name="Desc_BookSpider.Text" xml:space="preserve">
+    <value>文章蜘蛛は、クモエディタを使用して作成された指示ファイルです。オンライン スクリプト ディレクトリ の下にダウンロードできます。これらのファイルを作成するには、HTMLと基本的なRegEx（プログラミングは不要）の基本知識が必要です。使用方法は、[設定]&gt; [ヘルプ]&gt; wikiに移動してください。このリンクの下でもサンプルを入手できます。</value>
+  </data>
+  <data name="Desc_LocalDocuments.Text" xml:space="preserve">
+    <value>ローカルファイルは、特殊な書式を設定したプレーンテキストドキュメントです。これらのファイルは、コマンドバーの[フォルダを開く]または[URLを開く]を使用してインポートすることができます。フォーマットの仕様については、このリンクをご覧ください。</value>
+  </data>
+  <data name="Desc_ZoneSpider.Text" xml:space="preserve">
+    <value>区域蜘蛛は、クモエディタを使用して作成された文章蜘蛛の命令を生成する命令ファイルです。オンライン スクリプト ディレクトリ の下にダウンロードできます。一般に、これらの ファイル は ウェブサイト の ディレクトリ リスト を提供します。これらのファイルを作成するには、より高度な Html / RegEx と 基本プログラミング知識が必要です。</value>
+  </data>
 </root>

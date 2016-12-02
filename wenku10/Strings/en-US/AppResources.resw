@@ -384,4 +384,22 @@
   <data name="PleaseClick.Text" xml:space="preserve">
     <value>Please Click</value>
   </data>
+  <data name="ZoneSpider.Text" xml:space="preserve">
+    <value>Zone Spider</value>
+  </data>
+  <data name="Messages.Text" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="ProcessGrantsFailed.Text" xml:space="preserve">
+    <value>Invalid key</value>
+  </data>
+  <data name="Desc_BookSpider.Text" xml:space="preserve">
+    <value>Book Spiders are instruction files created using Spider Editor. You can download them under online script directory. Creating these files requires basic knowledge of Html and some RegEx ( programming is not required ). Usage please goto Settings -&gt; Help -&gt; wiki. Samples are also available under https://github.com/tgckpg/wenku10-samples</value>
+  </data>
+  <data name="Desc_LocalDocuments.Text" xml:space="preserve">
+    <value>Local Documents are plain text documents with special formatting. You can import these files using "Open Folder" or "Open Url" under "..." at the command bar. For format specifications, please head to https://github.com/tgckpg/wenku10-samples.</value>
+  </data>
+  <data name="Desc_ZoneSpider.Text" xml:space="preserve">
+    <value>Zone Spiders are instruction files that generates Book Spider instructions, which is created using Spider Editor. You can download them under online script directory. Generally these files provides directory listings for websites. Making these files requires higher degree of Html / RegEx and basic programming knowledge.</value>
+  </data>
 </root>

@@ -189,4 +189,52 @@
   <data name="BookInfoView.Text" xml:space="preserve">
     <value>情報セクション</value>
   </data>
+  <data name="OpenInBrowser" xml:space="preserve">
+    <value>ブラウザで開く</value>
+  </data>
+  <data name="Download.Text" xml:space="preserve">
+    <value>ダウンロード</value>
+  </data>
+  <data name="LocalDocuments.Text" xml:space="preserve">
+    <value>ローカルファイル</value>
+  </data>
+  <data name="OnlineScriptDir.Text" xml:space="preserve">
+    <value>共有スクリプト ディレクトリ</value>
+  </data>
+  <data name="OpenFolder.Text" xml:space="preserve">
+    <value>フォルダを開く</value>
+  </data>
+  <data name="OpenUrl.Text" xml:space="preserve">
+    <value>URLを開く</value>
+  </data>
+  <data name="Pause.Text" xml:space="preserve">
+    <value>一時停止</value>
+  </data>
+  <data name="ProcessAll.Text" xml:space="preserve">
+    <value>すべてを処理する</value>
+  </data>
+  <data name="OpenZone.Text" xml:space="preserve">
+    <value>ゾーンファイルを開く</value>
+  </data>
+  <data name="Add.Text" xml:space="preserve">
+    <value>追加</value>
+  </data>
+  <data name="Export.Text" xml:space="preserve">
+    <value>輸出</value>
+  </data>
+  <data name="SyncBookmarks.Text" xml:space="preserve">
+    <value>ブックマークを同期する</value>
+  </data>
+  <data name="JumpToAnchor.Text" xml:space="preserve">
+    <value>最後のアンカーに行く</value>
+  </data>
+  <data name="Reload.Text" xml:space="preserve">
+    <value>リロード</value>
+  </data>
+  <data name="ContentDirection" xml:space="preserve">
+    <value>コンテンツの方向</value>
+  </data>
+  <data name="Exit.Text" xml:space="preserve">
+    <value>終了</value>
+  </data>
 </root>

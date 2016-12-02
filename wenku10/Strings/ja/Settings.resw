@@ -374,23 +374,8 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>ナビゲーション・ページ</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>内容に直接ジャンプします</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>並べ替えるには、任意の項目をドラッグしてください。</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>情報ページ</value>
-  </data>
-  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
-    <value>一部の人々は、これは不要だと思います...</value>
-  </data>
-  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
-    <value>これは、トラフィックを削減することが妥当です</value>
-  </data>
-  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
-    <value>ええ？ ！どのように読んでするつもりですか？</value>
   </data>
   <data name="Layout_FlowDirection.Text" xml:space="preserve">
     <value>流れ方向</value>
@@ -401,20 +386,8 @@
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>右から左へ</value>
   </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>カスタムナビゲーション</value>
-  </data>
   <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
     <value>選択したカスタムナビゲーション</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>ホームページを入って時少し速くなります</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>文庫精選</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>私も、これは役に立たないと思います</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>水平</value>
@@ -439,9 +412,6 @@
   </data>
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>メニューの背景</value>
-  </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>設定ページに入ると、ページキャッシュがクリアされます。そのように設定が完了すると、ページをリロードする必要があります。それでも設定ページに行きますか？</value>
   </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>ログレベル</value>
@@ -580,5 +550,8 @@
   </data>
   <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
     <value>単一ボリュームを分割する</value>
+  </data>
+  <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
+    <value>イラストを埋め込む</value>
   </data>
 </root>

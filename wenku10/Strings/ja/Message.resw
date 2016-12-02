@@ -183,4 +183,19 @@
   <data name="ConfirmScriptRemove" xml:space="preserve">
     <value>このスクリプトは、サーバーから削除されます。 続行しますか？</value>
   </data>
+  <data name="ConfirmLogout" xml:space="preserve">
+    <value>ログアウトを確認しますか？</value>
+  </data>
+  <data name="String" xml:space="preserve">
+    <value>アンカーがまだ設定されていません</value>
+  </data>
+  <data name="NewContent" xml:space="preserve">
+    <value>＊新しいコンテンツが追加されました</value>
+  </data>
+  <data name="TileUpdateSupport" xml:space="preserve">
+    <value>このアイテムはバックグラウンド更新をサポートするようです。定期的に更新を取得しますか？</value>
+  </data>
+  <data name="ShellTile" xml:space="preserve">
+    <value>タイル</value>
+  </data>
 </root>

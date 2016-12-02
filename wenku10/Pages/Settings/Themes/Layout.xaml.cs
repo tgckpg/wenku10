@@ -19,11 +19,24 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.Config;
+using wenku8.Model.Interfaces;
+using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Themes
 {
-    public sealed partial class Layout : Page
+    public sealed partial class Layout : Page, ICmdControls
     {
+#pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+#pragma warning restore 0067
+
+        public bool NoCommands { get; }
+        public bool MajorNav { get { return true; } }
+
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get; private set; }
+
         private global::wenku8.Settings.Layout.BookInfoView Conf_BookInfoView;
         private global::wenku8.Settings.Layout.MainPage Conf_MainPage;
         private global::wenku8.Settings.Layout.NavList Conf_NavList;
@@ -49,8 +62,7 @@ namespace wenku10.Pages.Settings.Themes
             Conf_ContentReader = new global::wenku8.Settings.Layout.ContentReader();
 
             // BookInfoView
-            Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView( PageThumbnail );
-            Conf_BookInfoView.SetOrder();
+            Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView();
             LayoutToggles();
 
             TemplateSet = true;
@@ -58,20 +70,15 @@ namespace wenku10.Pages.Settings.Themes
 
         private void LayoutToggles()
         {
-            TogTOC.IsOn = Conf_BookInfoView.Toggle( TogTOC.Tag.ToString() );
-            TogRev.IsOn = Conf_BookInfoView.Toggle( TogRev.Tag.ToString() );
-            TogInf.IsOn = Conf_BookInfoView.Toggle( TogInf.Tag.ToString() );
             TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
             TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
-            TogSPicks.IsOn = Conf_MainPage.IsStaffPicksEnabled;
-            TogCSec.IsOn = Conf_MainPage.IsCustomSectionEnabled;
             TogNAlign.IsOn = Conf_NavList.IsHorizontal;
             TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
             TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
 
-
             TogPageClick.IsOn = !Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
             TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
+            TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
         }
 
         // NavList
@@ -85,63 +92,31 @@ namespace wenku10.Pages.Settings.Themes
         {
             Conf_MainPage = new global::wenku8.Settings.Layout.MainPage();
             SectionListContext.DataContext = Conf_MainPage;
-        }
-
-        private void Toggled_CSec( object sender, RoutedEventArgs e )
-        {
-            Conf_MainPage.IsCustomSectionEnabled = TogCSec.IsOn;
-        }
-
-        private void Toggled_SPicks( object sender, RoutedEventArgs e )
-        {
-            Conf_MainPage.IsStaffPicksEnabled = TogSPicks.IsOn;
+            SectionChoices.SelectedValue = Conf_MainPage.SelectedSection.Desc2;
         }
 
         private void SectionList_SelectionChanged( object sender, SelectionChangedEventArgs e )
         {
-            if ( e.AddedItems.Count() < 0 ) return;
-            Conf_MainPage.SectionSelected( e.AddedItems[ 0 ] as global::wenku8.Model.ListItem.ActiveItem );
+            if ( e.AddedItems.Count() == 0 ) return;
+
+            if ( Conf_MainPage.ChangeCustSection( ( ActiveItem ) e.AddedItems[ 0 ] ) )
+            {
+                ControlFrame.Instance.BackStack.Remove( PageId.W_NAV_SEL );
+                ControlFrame.Instance.CommandMgr.UpdateCustBtn();
+                ControlChanged?.Invoke( this );
+            }
         }
         #endregion
 
         #region BookInfoView
         private void Toggled_BFlow( object sender, RoutedEventArgs e )
         {
-            if( ( ( ToggleSwitch ) sender ).IsOn )
-            {
-                PageThumbnail.FlowDirection = FlowDirection.RightToLeft;
-                Conf_BookInfoView.IsRightToLeft = true;
-            }
-            else
-            {
-                PageThumbnail.FlowDirection = FlowDirection.LeftToRight;
-                Conf_BookInfoView.IsRightToLeft = false;
-            }
+            Conf_BookInfoView.IsRightToLeft = ( ( ToggleSwitch ) sender ).IsOn;
         }
 
         private void Toggled_TOCAlign( object sender, RoutedEventArgs e )
         {
             Conf_BookInfoView.HorizontalTOC = TogTOCAlign.IsOn;
-        }
-
-        private void Toggled_BSecs( object sender, RoutedEventArgs e )
-        {
-            ToggleSwitch SW = sender as ToggleSwitch;
-
-            if ( SW.IsOn )
-            {
-                Conf_BookInfoView.Insert( SW.Tag.ToString() );
-            }
-            else
-            {
-                Conf_BookInfoView.Remove( SW.Tag.ToString() );
-            }
-
-            EverythingDisabled.Visibility = (
-                TogTOC.IsOn == TogRev.IsOn
-                && TogRev.IsOn == TogInf.IsOn
-                && TogInf.IsOn == false
-            ) ? Visibility.Visible : Visibility.Collapsed;
         }
         #endregion
 
@@ -156,11 +131,16 @@ namespace wenku10.Pages.Settings.Themes
             Conf_ContentReader.IsRightToLeft = TogContFlo.IsOn;
         }
 
+        private void Toggled_EmbedIllus( object sender, RoutedEventArgs e )
+        {
+            Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS = TogEmbedIllus.IsOn;
+        }
+
         private async void Toggled_PageClick( object sender, RoutedEventArgs e )
         {
             if ( !TemplateSet ) return;
 
-            if( TogPageClick.IsOn && Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR )
+            if ( TogPageClick.IsOn && Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR )
             {
                 StringResources stx = new StringResources( "Settings" );
                 MessageDialog Msg = new MessageDialog( stx.Text( "Layout_ContentReader_UsePageClick_Warning" ), stx.Text( "Layout_ContentReader_UsePageClick" ) );
@@ -177,7 +157,7 @@ namespace wenku10.Pages.Settings.Themes
 
             Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = !TogPageClick.IsOn;
 
-            if( TogPageClick.IsOn )
+            if ( TogPageClick.IsOn )
             {
                 Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn = false;
             }
@@ -189,7 +169,7 @@ namespace wenku10.Pages.Settings.Themes
 
             Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn;
 
-            if( TogDoubleTap.IsOn )
+            if ( TogDoubleTap.IsOn )
             {
                 Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = true;
                 TogPageClick.IsOn = false;

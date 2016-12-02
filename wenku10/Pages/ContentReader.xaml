@@ -18,7 +18,7 @@
         <v:ParallaxConverter x:Key="ParallaxConverter" />
     </Page.Resources>
 
-    <Grid>
+    <Grid x:Name="LayoutRoot">
         <Grid x:Name="ContentBg" p:Clip.ToBounds="True" Margin="-200,-200,-200,-200">
             <Grid.RenderTransform>
                 <TranslateTransform
@@ -249,7 +249,10 @@
             </Grid>
         </Grid>
 
-        <c:TipMask x:Name="RenderMask" State="Reovia" />
+        <c:TipMask x:Name="RenderMask"
+                   Foreground="{StaticResource RelativeShadesBrush}"
+                   Background="{StaticResource Shades90}"
+                   State="Reovia" />
 
         <Grid.Resources>
             <Storyboard x:Name="ContentRestore">

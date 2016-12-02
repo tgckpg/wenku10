@@ -7,8 +7,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.Logging;
-
 using wenku8.Effects;
 
 namespace wenku10.Pages

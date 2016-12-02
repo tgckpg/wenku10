@@ -106,7 +106,6 @@ namespace wenku10.Pages.Settings
         {
             if( Properties.ENABLE_ONEDRIVE = OneDriveToggle.IsOn )
             {
-                OneDriveSync.Instance = new OneDriveSync();
                 await OneDriveSync.Instance.Authenticate();
             }
             else

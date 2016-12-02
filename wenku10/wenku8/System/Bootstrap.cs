@@ -61,7 +61,7 @@ namespace wenku8.System
             Resources.Shared.ShRequest.Compat = new string[] { "1.8.6t", "1.3.4b", "1.0.0p" };
 
             // Connection Mode
-			WHttpRequest.UA = string.Format( "Grimoire Reaper/{0} ( wenku8 engine; taotu engine; UAP ) wenku10 by Astropenguin", Version );
+            WHttpRequest.UA = string.Format( Settings.AppKeys.UA, Version );
 
 			WCacheMode.Initialize();
             Logger.Log( ID, "WCacheMode Initilizated", LogType.INFO );
@@ -73,7 +73,7 @@ namespace wenku8.System
             ResTaotu.SetExtractor( typeof( Taotu.WenkuExtractor ) );
             ResTaotu.SetMarker( typeof( Taotu.WenkuMarker ) );
             ResTaotu.SetListLoader( typeof( Taotu.WenkuListLoader ) );
-            ResTaotu.CreateRequest = x => new SHttpRequest( x );
+            ResTaotu.CreateRequest = x => new SHttpRequest( x ) { EN_UITHREAD = false };
 
             // Unlocking libraries
             Net.Astropenguin.UI.VerticalStack.LOCKED = false;

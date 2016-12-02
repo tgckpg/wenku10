@@ -381,4 +381,22 @@
   <data name="PleaseClick.Text" xml:space="preserve">
     <value>請按一下</value>
   </data>
+  <data name="ZoneSpider.Text" xml:space="preserve">
+    <value>區域蜘蛛</value>
+  </data>
+  <data name="Messages.Text" xml:space="preserve">
+    <value>訊息</value>
+  </data>
+  <data name="ProcessGrantsFailed.Text" xml:space="preserve">
+    <value>無效的密鑰</value>
+  </data>
+  <data name="Desc_BookSpider.Text" xml:space="preserve">
+    <value>文章蜘蛛是用「蜘蛛編輯器」製作的腳本，這些腳本可以從「共享腳本目錄」上下載，製作這些文件通常需要基本的 Html / RegEx 的知識 ( 不需要懂得編程 ) 。説明請到 設定 -&gt; 説明 -&gt; wiki 上取得。樣本也可以到</value>
+  </data>
+  <data name="Desc_LocalDocuments.Text" xml:space="preserve">
+    <value>本地文件是擁有特定格式的純文字文件，您可以點 更多 -&gt; 開啟網址 / 開啟目錄 中滙入這些文件。文件格式定義請到</value>
+  </data>
+  <data name="Desc_ZoneSpider.Text" xml:space="preserve">
+    <value>區域蜘蛛可以自動製作網站的「文章蜘蛛」，同樣也是從「蜘蛛編輯器」中製作。這些腳本也可以在「共享腳本目錄」中取得。製作這些文件需要更全面的 Html / RegEx 以及 基本的編程知識。</value>
+  </data>
 </root>

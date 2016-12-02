@@ -30,7 +30,7 @@ namespace wenku8.Model.Section
 
         public Settings.Layout.ContentReader Settings { get; set; }
 
-        public Converters.TOCTemplateSelector TemplateSelector { get; set; }
+        public Converters.ParaTemplateSelector TemplateSelector { get; set; }
 
         public Brush BackgroundBrush
         {
@@ -144,7 +144,7 @@ namespace wenku8.Model.Section
 
         private void InitParams()
         {
-            TemplateSelector = new Converters.TOCTemplateSelector();
+            TemplateSelector = new Converters.ParaTemplateSelector();
             TemplateSelector.IsHorizontal = Settings.IsHorizontal;
 
             Paragraph.SetHorizontal( Settings.IsHorizontal );

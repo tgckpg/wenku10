@@ -180,4 +180,19 @@
   <data name="ConfirmScriptRemove" xml:space="preserve">
     <value>The script will be removed from server. Continue?</value>
   </data>
+  <data name="ConfirmLogout" xml:space="preserve">
+    <value>Confim logout?</value>
+  </data>
+  <data name="AnchorNotSetYet" xml:space="preserve">
+    <value>Anchor not set yet</value>
+  </data>
+  <data name="NewContent" xml:space="preserve">
+    <value>*New Content</value>
+  </data>
+  <data name="TileUpdateSupport" xml:space="preserve">
+    <value>This item seems to support background update. Do you wish to fetch update periodically?</value>
+  </data>
+  <data name="ShellTile" xml:space="preserve">
+    <value>LiveTile</value>
+  </data>
 </root>

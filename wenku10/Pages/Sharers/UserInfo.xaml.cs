@@ -15,15 +15,29 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Loaders;
 
 using wenku8.AdvDM;
+using wenku8.CompositeElement;
+using wenku8.Model.Interfaces;
 using wenku8.Model.REST;
 using wenku8.Resources;
 
 namespace wenku10.Pages.Sharers
 {
-    sealed partial class UserInfo : Page
+    sealed partial class UserInfo : Page, ICmdControls
     {
+        #pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+        #pragma warning restore 0067
+
+        public bool NoCommands { get; }
+        public bool MajorNav { get; }
+
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get ; private set; }
+
         private RuntimeCache RCache;
 
         private string CurrentDispName;
@@ -36,6 +50,8 @@ namespace wenku10.Pages.Sharers
 
         private void SetTemplate()
         {
+            InitAppBar();
+
             RCache = new RuntimeCache();
 
             RCache.POST(
@@ -62,6 +78,34 @@ namespace wenku10.Pages.Sharers
                 }
                 , false
             );
+        }
+
+        private void InitAppBar()
+        {
+            StringResources stx = new StringResources( "Settings", "Message", "ContextMenu" );
+            AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout" ) );
+            LogoutBtn.Click += async ( s, e ) =>
+            {
+                bool Yes = false;
+                await Popups.ShowDialog( UIAliases.CreateDialog(
+                    stx.Str( "ConfirmLogout", "Message" )
+                    , () => Yes = true
+                    , stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
+                ) );
+
+                if ( Yes )
+                {
+                    ControlFrame.Instance.CommandMgr.SHLogout();
+                    ControlFrame.Instance.GoBack();
+                    ControlFrame.Instance.BackStack.Remove( PageId.SH_USER_INFO );
+                }
+            };
+
+            SecondaryIconButton ManageAuth = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
+            ManageAuth.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new ManageAuth() );
+
+            MajorControls = new ICommandBarElement[] { LogoutBtn };
+            Major2ndControls = new ICommandBarElement[] { ManageAuth };
         }
 
         private void SetProfileData( JsonObject JData )

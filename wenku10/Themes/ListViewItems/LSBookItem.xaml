@@ -59,8 +59,6 @@
                                     e:TransitionDisplay.Mode="A01_X_N30_N30"
                                     VerticalAlignment="Top" HorizontalAlignment="Right"
                                     Width="180" Height="180">
-                                <xi:IconFav AutoScale="True" Opacity="0.5"
-                                           Foreground="#DD1450" />
                             </Border>
                         </Border>
 

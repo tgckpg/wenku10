@@ -7,10 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <ScrollViewer Background="Black"
-                  HorizontalScrollMode="Auto"
-                  VerticalScrollMode="Auto"
-                  ZoomMode="Enabled">
-        <Image x:Name="MainImage" />
-    </ScrollViewer>
+    <Grid>
+        <ProgressRing x:Name="LoadingRing"
+                      Width="40" Height="40"
+                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                      IsActive="True" />
+        <ScrollViewer Background="Black"
+                      HorizontalScrollMode="Auto"
+                      VerticalScrollMode="Auto"
+                      ZoomMode="Enabled">
+            <Image x:Name="MainImage" />
+        </ScrollViewer>
+    </Grid>
 </Page>

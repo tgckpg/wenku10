@@ -1,0 +1,116 @@
+﻿<Page
+    x:Class="wenku10.Pages.WNavList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:t="using:wenku8.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    NavigationCacheMode="Enabled">
+
+    <Page.Resources>
+        <v:DataStateConverter x:Key="DataStateConverter" />
+        <t:ContentStyleConverter x:Key="ContentStyleConverter" />
+        <t:NumberSimplifier x:Key="NumberSimplifier" />
+    </Page.Resources>
+
+    <c:PassiveSplitView x:Name="MainSplitView"
+                        Background="{StaticResource MajorBackgroundBrush}"
+                        PanelBackground="{StaticResource MinorBrush}"
+                        Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
+                        State="Opened" PanelWidth="60" >
+        <c:PassiveSplitView.Pane>
+            <p:VerticalStack Margin="10,0" FontSize="40"
+                             Height="{Binding AvailableHeight}"
+                             Foreground="{StaticResource RelativeMajorBrush}"
+                             VerticalAlignment="{Binding VAlignment}" HorizontalAlignment="{Binding HAlignment}"
+                             Text="{Binding ListName}" />
+        </c:PassiveSplitView.Pane>
+        <c:PassiveSplitView.Content>
+            <Grid>
+                <c:VariableGridView x:Name="MainGrid"
+                                    ItemsSource="{Binding Data}"
+                                    Loaded="GridView_Loaded"
+                                    IsItemClickEnabled="True"
+                                    ItemClick="VariableGridView_ItemClick"
+                                    ScrollViewer.HorizontalScrollMode="{Binding HScroll}"
+                                    ScrollViewer.HorizontalScrollBarVisibility="{Binding HVis}"
+                                    ScrollViewer.VerticalScrollMode="{Binding VScroll}"
+                                    ScrollViewer.VerticalScrollBarVisibility="{Binding VVis}" >
+                    <GridView.Header>
+                        <Rectangle Width="{Binding HPadding}" Height="{Binding VPadding}"/>
+                    </GridView.Header>
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="400" Margin="10" Background="{StaticResource MinorBackgroundBrush}"
+                                  MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Image VerticalAlignment="Top" Source="{Binding Cover}" />
+                                <StackPanel Grid.Column="1">
+                                    <Border Background="{StaticResource MajorBrush}">
+                                        <TextBlock FontSize="20"
+                                                   Margin="5"
+                                                   Text="{Binding Title}"
+                                                   Foreground="{StaticResource RelativeMajorBrush}"
+                                                   TextTrimming="WordEllipsis"/>
+                                    </Border>
+                                    <Grid Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Margin="0,0,3,0">
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Author}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding Press}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding StatusLong}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding Length, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="0,3,0,0">
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Text="{Binding FavCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="{Binding Ori}" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </c:VariableGridView>
+                <p:StateControl State="{Binding IsLoading, Converter={StaticResource DataStateConverter}}"
+                                Margin="10"
+                                Width="40" Height="40" 
+                                HorizontalAlignment="Right" VerticalAlignment="Top"
+                                Background="{StaticResource MinorBrush}" >
+                    <ProgressRing Foreground="{StaticResource RelativeMajorBrush}"
+                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                  Width="30" Height="30"
+                                  IsActive="{Binding IsLoading}" />
+                </p:StateControl>
+                <c:TipMask x:Name="BackMask" x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait" Grid.RowSpan="2" />
+            </Grid>
+        </c:PassiveSplitView.Content>
+    </c:PassiveSplitView>
+</Page>

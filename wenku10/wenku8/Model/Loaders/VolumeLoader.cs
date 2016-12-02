@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.Helpers;
@@ -84,6 +85,7 @@ namespace wenku8.Model.Loaders
 
             Shared.LoadMessage( "CompilingTOC", b.Title );
             await b.SaveTOC( Vols );
+            Shared.Storage.WriteString( b.TOCDatePath, System.Utils.Md5( Shared.Storage.GetBytes( b.TOCPath ).AsBuffer() ) );
             OnComplete( b );
         }
 

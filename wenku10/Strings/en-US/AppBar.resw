@@ -189,4 +189,52 @@
   <data name="BookInfoView.Text" xml:space="preserve">
     <value>Info Section</value>
   </data>
+  <data name="OpenInBrowser" xml:space="preserve">
+    <value>Open in browser</value>
+  </data>
+  <data name="Download.Text" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="LocalDocuments.Text" xml:space="preserve">
+    <value>Local Documents</value>
+  </data>
+  <data name="OnlineScriptDir.Text" xml:space="preserve">
+    <value>Online Script Directory</value>
+  </data>
+  <data name="OpenFolder.Text" xml:space="preserve">
+    <value>Open Folder</value>
+  </data>
+  <data name="OpenUrl.Text" xml:space="preserve">
+    <value>Open Url</value>
+  </data>
+  <data name="Pause.Text" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="ProcessAll.Text" xml:space="preserve">
+    <value>Process All</value>
+  </data>
+  <data name="OpenZone.Text" xml:space="preserve">
+    <value>Open Zone File</value>
+  </data>
+  <data name="Add.Text" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Export.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="JumpToAnchor.Text" xml:space="preserve">
+    <value>Jump to Last Anchor</value>
+  </data>
+  <data name="SyncBookmarks.Text" xml:space="preserve">
+    <value>Sync Bookmarks</value>
+  </data>
+  <data name="Reload.Text" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="ContentDirection" xml:space="preserve">
+    <value>Content Direction</value>
+  </data>
+  <data name="Exit.Text" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>

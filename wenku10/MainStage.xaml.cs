@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -25,16 +25,9 @@ namespace wenku10
         public static MainStage Instance;
 
         public Frame RootFrame { get { return MainView; } }
-        public Canvas Canvas { get { return TransitionLayer; } }
-        public Grid ObjectLayer { get { return TransitionObjectLayer; } }
         public bool IsPhone { get; private set; }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-
-        }
+        public Grid BadgeBlock { get { return PleaseWait; } }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )
         {
@@ -47,13 +40,7 @@ namespace wenku10
                 return;
             }
 
-            // if( Mode == null )
-            {
-                RootFrame.Navigate( typeof( Pages.ModeSelect ), e.Parameter );
-                return;
-            }
-
-            // RootFrame.Navigate( typeof( MainPage ), e.Parameter );
+            RootFrame.Navigate( typeof( Pages.ControlFrame ) );
         }
 
         public MainStage()
@@ -76,10 +63,11 @@ namespace wenku10
                 Logger.Log( ID, "No status bar... not a phone?" );
             }
 
-            // Register a handler for BackRequested events and set the
-            // visibility of the Back button
+            // Acquire Background Priviledge
+            Tasks.BackgroundProcessor.AcquireBackgroundPriviledge();
+
+            // Register Navigation Handler to BackRequested event
             SystemNavigationManager.GetForCurrentView().BackRequested += NavigationHandler.MasterNavigationHandler;
-            NavigationHandler.OnNavigatedBack += OnBackRequested;
 
             // Initialize the Controls
             App.ViewControl = new global::wenku8.System.ViewControl();
@@ -87,7 +75,7 @@ namespace wenku10
 
             // Full Screen Ctrl + F
             App.KeyboardControl.RegisterCombination(
-                ( x ) => { App.ViewControl.ToggleFullScreen(); }
+                ( x ) => App.ViewControl.ToggleFullScreen()
                 , Windows.System.VirtualKey.Control
                 , Windows.System.VirtualKey.F
             );
@@ -95,16 +83,13 @@ namespace wenku10
             // Escape / Backspace = Back
             App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Escape );
             App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Back );
-
-            SetGoBackButton();
-
-            RootFrame.Navigated += OnNavigated;
         }
 
         private static readonly Type[] SpecialElement = new Type[]
         {
             typeof( TextBox ), typeof( RichEditBox ), typeof( PasswordBox )
         };
+
         private void Escape( KeyCombinationEventArgs e )
         {
             object o = FocusManager.GetFocusedElement();
@@ -116,35 +101,5 @@ namespace wenku10
             NavigationHandler.MasterNavigationHandler( RootFrame, null );
         }
 
-        private void OnBackRequested( object sender, XBackRequestedEventArgs e )
-        {
-            if ( RootFrame.CanGoBack )
-            {
-                e.Handled = true;
-                RootFrame.GoBack();
-            }
-        }
-
-        private void OnNavigated( object sender, NavigationEventArgs e )
-        {
-            SetGoBackButton();
-        }
-
-        public void ClearNavigate( Type type, object Parameter = null )
-        {
-            RootFrame.Navigate( type, Parameter );
-            RootFrame.BackStack.Clear();
-            SetGoBackButton();
-        }
-
-        private void SetGoBackButton()
-        {
-            // Each time a navigation event occurs, update the Back button's visibility
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility
-                = RootFrame.CanGoBack
-                ? AppViewBackButtonVisibility.Visible
-                : AppViewBackButtonVisibility.Collapsed
-                ;
-        }
     }
 }

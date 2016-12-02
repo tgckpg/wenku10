@@ -11,7 +11,7 @@
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
 
-    <Grid Background="{StaticResource MajorBackgroundBrush}">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
         <Pivot x:Name="MainView" Background="{StaticResource MajorBackgroundBrush}">
             <Pivot.HeaderTemplate>
                 <DataTemplate>
@@ -44,13 +44,7 @@
                 </DataTemplate>
             </Pivot.ItemTemplate>
         </Pivot>
-        <p:StateControl x:Name="PopupPage">
-            <Border Background="{StaticResource Shades90}">
-                <Frame x:Name="PopupFrame"
-                       Width="500"
-                       MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}" Content="{Binding FrameContent}"/>
-            </Border>
-        </p:StateControl>
+
         <c:TipMask x:Name="LoadingMask" x:Uid="/LoadingMessage/ProgressIndicator_AppInit" />
         <p:StateControl x:Name="RestartMask">
             <Grid Background="{StaticResource Shades90}">

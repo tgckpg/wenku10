@@ -22,7 +22,9 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.AdvDM;
+using wenku8.CompositeElement;
 using wenku8.Model.Book;
+using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.REST;
@@ -33,15 +35,33 @@ using TokenManager = wenku8.System.TokenManager;
 
 namespace wenku10.Pages.Sharers
 {
-    sealed partial class ScriptUpload : Page
+    sealed partial class ScriptUpload : Page, ICmdControls, INavPage
     {
         public static readonly string ID = typeof( ScriptUpload ).Name;
 
+        #pragma warning disable 0067
+        public event ControlChangedEvent ControlChanged;
+        #pragma warning restore 0067
+
+        public bool NoCommands { get; }
+        public bool MajorNav { get; }
+
+        public IList<ICommandBarElement> MajorControls { get; private set; }
+        public IList<ICommandBarElement> Major2ndControls { get; private set; }
+        public IList<ICommandBarElement> MinorControls { get; private set; }
+
         private SpiderBook SelectedBook;
+        private BookItem BindBook;
+
         private AESManager AESMgr;
         private TokenManager TokMgr;
+
         private Action<string,string> OnExit;
+        public Action Canceled;
+
         private NameValue<SpiderScope>[] Scopes;
+
+        private AppBarButtonEx UploadBtn;
 
         private string ReservedId;
         private bool LockedFile = false;
@@ -97,10 +117,14 @@ namespace wenku10.Pages.Sharers
             : this()
         {
             LockedFile = true;
-            Book.PropertyChanged += Book_PropertyChanged;
+            BindBook = Book;
+
             PredefineFile( Book.Id );
             this.OnExit = OnExit;
         }
+
+        public void SoftOpen() { if( BindBook != null ) BindBook.PropertyChanged += Book_PropertyChanged; }
+        public void SoftClose() { if ( BindBook != null ) BindBook.PropertyChanged -= Book_PropertyChanged; }
 
         private void Book_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
@@ -130,6 +154,8 @@ namespace wenku10.Pages.Sharers
 
         private void SetTemplate()
         {
+            InitAppBar();
+
             AESMgr = new AESManager();
             AESMgr.PropertyChanged += KeyMgr_PropertyChanged;
             TokMgr = new TokenManager();
@@ -148,6 +174,15 @@ namespace wenku10.Pages.Sharers
             };
 
             ScopeLevel.ItemsSource = Scopes;
+        }
+
+        private void InitAppBar()
+        {
+            StringResources stx = new StringResources();
+            UploadBtn = UIAliases.CreateAppBarBtnEx( Symbol.Send, stx.Text( "SubmitScript" ) );
+            UploadBtn.Click += Upload;
+
+            MajorControls = new ICommandBarElement[] { UploadBtn };
         }
 
         private void KeyMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
@@ -246,8 +281,8 @@ namespace wenku10.Pages.Sharers
             }
 
             string Zone = ZoneInput.Text;
-            string[] Types = TypesInput.Text.Split( ',' );
-            string[] Tags = TagsInput.Text.Split( ',' );
+            string[] Types = TypesInput.Text.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
+            string[] Tags = TagsInput.Text.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
 
             SelectedBook.AssignId( Id );
             string Data = SelectedBook.PSettings.ToString();
@@ -298,7 +333,7 @@ namespace wenku10.Pages.Sharers
             IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
             if ( ISF == null ) return;
 
-            LoadingRing.IsActive = true;
+            UploadBtn.IsLoading = true;
 
             try
             {
@@ -318,7 +353,7 @@ namespace wenku10.Pages.Sharers
                 Message.Text = ex.Message;
             }
 
-            LoadingRing.IsActive = false;
+            UploadBtn.IsLoading = false;
         }
 
         public async Task<string> ReserveId( string AccessToken )
@@ -369,8 +404,7 @@ namespace wenku10.Pages.Sharers
 
             var j = Dispatcher.RunIdleAsync( ( x ) =>
             {
-                LoadingRing.IsActive = true;
-                Upload_Btn.IsEnabled = false;
+                UploadBtn.IsLoading = true;
             } );
 
             return false;
@@ -381,8 +415,7 @@ namespace wenku10.Pages.Sharers
             Uploading = false;
             var j = Dispatcher.RunIdleAsync( ( x ) =>
             {
-                LoadingRing.IsActive = false;
-                Upload_Btn.IsEnabled = true;
+                UploadBtn.IsLoading = false;
             } );
         }
 

@@ -30,10 +30,10 @@ namespace wenku10.Pages
             this.InitializeComponent();
         }
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
+        public DirectTextViewer( StorageFile ISF )
+            :this()
         {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
+            ViewFile( ISF );
         }
 
         protected override void OnNavigatedTo( NavigationEventArgs e )

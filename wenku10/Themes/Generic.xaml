@@ -5,7 +5,7 @@
     xmlns:v="using:wenku8.Converters"
     xmlns:Converters="using:wenku8.Converters">
 
-    <local:LayouResources x:Key="LayoutResources"/>
+    <local:LayoutResources x:Key="LayoutResources"/>
     <SolidColorBrush x:Key="MajorBrush" Color="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}" />
     <SolidColorBrush x:Key="MinorBrush" Color="{Binding LayoutSettings.MinorColor, Source={StaticResource LayoutResources}}" />
     <SolidColorBrush x:Key="RelativeMajorBrush" Color="{Binding LayoutSettings.RelativeMajorColor, Source={StaticResource LayoutResources}}" />

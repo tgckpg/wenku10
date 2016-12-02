@@ -374,23 +374,8 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>導航頁面</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>將會直接跳到正文</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>拖曳圖示以變更位置</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>資訊頁</value>
-  </data>
-  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
-    <value>有些人覺得這是多餘的…</value>
-  </data>
-  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
-    <value>減少一點流量也是合埋的</value>
-  </data>
-  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
-    <value>欸？！那你要怎麼看書啊？</value>
   </data>
   <data name="Layout_FlowDirection.Text" xml:space="preserve">
     <value>流動方向</value>
@@ -400,21 +385,6 @@
   </data>
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>右至左</value>
-  </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>自定義導航</value>
-  </data>
-  <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
-    <value>選定自定義導航</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>進入主頁會變得快一點</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>文庫精選</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>其實我也覺得這個沒什麼用呢</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>橫堵</value>
@@ -439,9 +409,6 @@
   </data>
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>目錄底色</value>
-  </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>進入設定時會清除頁面快取，所以在你設定完畢並返回的時候頁面會重新載入，要進行設定嗎？</value>
   </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>木頭等級</value>
@@ -581,5 +548,11 @@
   </data>
   <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
     <value>單卷自動分卷</value>
+  </data>
+  <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
+    <value>選定自定義導航</value>
+  </data>
+  <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
+    <value>嵌入插圖</value>
   </data>
 </root>

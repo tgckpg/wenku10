@@ -8,15 +8,10 @@
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Background="Black"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <v:ParallaxConverter x:Key="ParallaxConverter" />
-    </Page.Resources>
-
-    <canvas:CanvasAnimatedControl x:Name="Stage"
-                                  CreateResources="Stage_CreateResources"
-                                  IsHitTestVisible="False" />
+    <Grid Background="Black">
+        <canvas:CanvasAnimatedControl x:Name="Stage" IsHitTestVisible="False" />
+    </Grid>
 
 </Page>

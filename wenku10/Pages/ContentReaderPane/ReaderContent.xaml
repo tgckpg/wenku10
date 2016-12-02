@@ -100,6 +100,33 @@
                         />
                     </Grid>
                 </DataTemplate>
+                <DataTemplate x:Name="IllusEmbed">
+                    <Image Source="{Binding Illus}" />
+                </DataTemplate>
+                <DataTemplate x:Name="IllusIconH">
+                    <TextBlock
+                        Margin="0,10,0,20"
+                        FontFamily="Segoe MDL2 Assets"
+                        Text="{Binding Text}"
+                        Foreground="{Binding FontColor}"
+                        FontSize="{Binding FontSize}"
+                        FontWeight="{Binding FontWeight}"
+                        LineHeight="{Binding LineHeight}"
+                        Padding="{Binding ParagraphSpacing}"
+                    />
+                </DataTemplate>
+                <DataTemplate x:Name="IllusIconV">
+                    <TextBlock
+                        Margin="10,0,20,0"
+                        FontFamily="Segoe MDL2 Assets"
+                        Text="{Binding Text}"
+                        Foreground="{Binding FontColor}"
+                        FontSize="{Binding FontSize}"
+                        FontWeight="{Binding FontWeight}"
+                        LineHeight="{Binding LineHeight}"
+                        Padding="{Binding ParagraphSpacing}"
+                    />
+                </DataTemplate>
             </ListView.Resources>
         </ListView>
 

@@ -374,23 +374,8 @@
   <data name="Appearance_Layout_NavPages.Text" xml:space="preserve">
     <value>Navigation pages</value>
   </data>
-  <data name="Layout_BookInfoView_Disabled.Text" xml:space="preserve">
-    <value>Will jump to Content Reader directly</value>
-  </data>
-  <data name="Layout_BookInfoView_DragDrop.Text" xml:space="preserve">
-    <value>Drag to reorder</value>
-  </data>
   <data name="Layout_BookInfoView_InfoView.Text" xml:space="preserve">
     <value>Info page</value>
-  </data>
-  <data name="Layout_BookInfoView_InfoView_D.Text" xml:space="preserve">
-    <value>Some thinks these are redundant</value>
-  </data>
-  <data name="Layout_BookInfoView_Reviews_D.Text" xml:space="preserve">
-    <value>It is reasonable to reduce the data usage</value>
-  </data>
-  <data name="Layout_BookInfoView_TOC_D.Text" xml:space="preserve">
-    <value>What?! How would you suppose to read?</value>
   </data>
   <data name="Layout_FlowDirection.Text" xml:space="preserve">
     <value>Flow direction</value>
@@ -401,20 +386,8 @@
   <data name="Layout_FlowRight.Text" xml:space="preserve">
     <value>Right to left</value>
   </data>
-  <data name="Layout_MainPage_CSec.Text" xml:space="preserve">
-    <value>Custom section</value>
-  </data>
   <data name="Layout_MainPage_CSec_Choice.Text" xml:space="preserve">
     <value>Section choice</value>
-  </data>
-  <data name="Layout_MainPage_CSec_D.Text" xml:space="preserve">
-    <value>It will become faster to load the main page</value>
-  </data>
-  <data name="Layout_MainPage_SPicks.Text" xml:space="preserve">
-    <value>Staff picks</value>
-  </data>
-  <data name="Layout_MainPage_SPicks_D.Text" xml:space="preserve">
-    <value>me too</value>
   </data>
   <data name="Layout_Aligment_Horizontal.Text" xml:space="preserve">
     <value>Horizontal</value>
@@ -439,9 +412,6 @@
   </data>
   <data name="Appearance_ContentReader_NavBg.Text" xml:space="preserve">
     <value>Menu background</value>
-  </data>
-  <data name="Preface.Text" xml:space="preserve">
-    <value>Page cache will be clear before entering the settings page. So there will be a re-initialization needed upon returning. Are you sure?</value>
   </data>
   <data name="Advanced_Debug_LogLevel.Text" xml:space="preserve">
     <value>Log level</value>
@@ -581,5 +551,8 @@
   </data>
   <data name="Advanced_Misc_ChunkVols.Text" xml:space="preserve">
     <value>Chunk single Volumes</value>
+  </data>
+  <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
+    <value>Embed illustrations</value>
   </data>
 </root>

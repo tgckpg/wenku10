@@ -27,7 +27,6 @@
                                     MinHeight="{TemplateBinding MinHeight}" >
                                 <Grid x:Name="DialogSpace" VerticalAlignment="Stretch">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>

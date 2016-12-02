@@ -10,7 +10,6 @@
     mc:Ignorable="d"
     Style="{StaticResource ScrollContentDialog}"
     Background="{StaticResource MajorBackgroundBrush}"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <ContentDialog.Title>
         <TextBlock x:Uid="/NavigationTitles/News"
@@ -56,6 +55,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
                         <HyperlinkButton Grid.Row="0" NavigateUri="{Binding Link}">
                             <TextBlock TextWrapping="Wrap">
@@ -71,11 +71,15 @@
                                    Margin="0,0,10,0" VerticalAlignment="Center"
                                    Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"
                                    Foreground="{StaticResource SubtleBrush}" />
-                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2"
+                        <Image Grid.Row="1" Source="{Binding Banner}"
+                               Margin="10,0"
+                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <TextBlock Grid.Row="2" Grid.ColumnSpan="2"
                                    Foreground="{StaticResource SubtleBrush}" Text="{Binding Desc}" TextWrapping="Wrap" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
+
 </ContentDialog>
