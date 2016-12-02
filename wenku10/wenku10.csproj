@@ -814,10 +814,6 @@
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
       <Name>libwenku8</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
-      <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>
-      <Name>wenku8-protocol</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tasks\Tasks.csproj">
       <Project>{cdd6f7c9-c06b-489e-95ff-d226aabb635f}</Project>
       <Name>Tasks</Name>
