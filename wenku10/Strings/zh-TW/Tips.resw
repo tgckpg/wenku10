@@ -162,4 +162,10 @@
   <data name="DidYouKnow.Text" xml:space="preserve">
     <value>你知道嗎？</value>
   </data>
+  <data name="HelpKeyword.Text" xml:space="preserve">
+    <value>關件字用於圖片搜尋</value>
+  </data>
+  <data name="HowToGetSubs.Text" xml:space="preserve">
+    <value>如何取得 API 密鑰？</value>
+  </data>
 </root>

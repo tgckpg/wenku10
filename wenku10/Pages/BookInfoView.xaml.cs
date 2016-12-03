@@ -30,6 +30,7 @@ using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
 using wenku8.Model.Section;
 using wenku8.Resources;
+using wenku8.Settings;
 using wenku8.Storage;
 
 using TokenManager = wenku8.System.TokenManager;
@@ -37,6 +38,7 @@ using WComments = wenku10.Pages.BookInfoControls.Comments;
 
 namespace wenku10.Pages
 {
+    using Dialogs;
     using Sharers;
     using wenku8.AdvDM;
 
@@ -136,7 +138,7 @@ namespace wenku10.Pages
 
             FlyoutBase.SetAttachedFlyout( ThemeBtn, ( MenuFlyout ) Resources[ "ThemeFlyout" ] );
 
-            BrowserBtn = UIAliases.CreateAppBarBtn( Symbol.Globe, stx.Str( "OpenInBrowser" ) );
+            BrowserBtn = UIAliases.CreateAppBarBtn( Symbol.Globe, stx.Text( "OpenInBrowser" ) );
             BrowserBtn.Click += BrowserBtn_Click;
 
             MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
@@ -151,14 +153,39 @@ namespace wenku10.Pages
             PageProcessor.ReadSecondaryTile( Book );
 
             CacheStateStory.Begin();
-            BookLoader BL = new BookLoader( b =>
-            {
-                CacheStateStory.Stop();
-            } );
+            BookLoader BL = new BookLoader( BookLoadComplete );
 
             BL.Load( Book, true );
             BL.LoadIntro( Book, true );
             SetContext();
+        }
+
+        private void BookLoadComplete( BookItem Book )
+        {
+            var j = Dispatcher.RunIdleAsync( x =>
+            {
+                bool CanBing = false;
+
+                if ( Book is BookInstruction )
+                {
+                    bool BingExists = new BingService( Book ).Exists();
+
+                    BingBrowserBtn.IsEnabled
+                        = BingCoverBtn.IsEnabled
+                        = BingExists;
+
+                    CanBing = BingExists || ( Book.CoverSrcUrl == null );
+
+                    UsingBing.Foreground = new SolidColorBrush(
+                        BingExists 
+                        ? Properties.APPEARENCE_THEME_MINOR_COLOR
+                        : Properties.APPEARENCE_THEME_SUBTLE_TEXT_COLOR );
+                }
+
+                UsingBing.IsEnabled = CanBing;
+
+                CacheStateStory.Stop();
+            } );
         }
 
         private async void OpenSpider( HubScriptItem HSI )
@@ -249,10 +276,7 @@ namespace wenku10.Pages
         private void ReloadBtn_Click( object sender, RoutedEventArgs e )
         {
             CacheStateStory.Begin();
-            BookLoader BL = new BookLoader( b =>
-            {
-                CacheStateStory.Stop();
-            } );
+            BookLoader BL = new BookLoader( BookLoadComplete );
             BL.Load( ThisBook );
             BL.LoadIntro( ThisBook );
         }
@@ -403,11 +427,84 @@ namespace wenku10.Pages
         #region Bing Service
         private void OpenBingResult( object sender, RoutedEventArgs e )
         {
-            string QueryUri = new BingService( ThisBook ).GetSearchQuery();
-            if ( !string.IsNullOrEmpty( QueryUri ) )
+            string Url = new BingService( ThisBook ).GetSearchQuery();
+            if ( !string.IsNullOrEmpty( Url ) )
             {
-                var j = Windows.System.Launcher.LaunchUriAsync( new Uri( QueryUri ) );
+                var j = Windows.System.Launcher.LaunchUriAsync( new Uri( Url ) );
             }
+        }
+
+        private async void ChangeKeyword( object sender, RoutedEventArgs e )
+        {
+            BingService BingSrv = new BingService( ThisBook );
+            string Keyword = BingSrv.GetKeyword();
+
+            StringResources stx = new StringResources( "ContextMenu", "AppResources", "Settings", "Tips" );
+            ValueHelpInput NVInput = new ValueHelpInput(
+                BingSrv.DefaultKeyword, stx.Text( "ChangeKeyword" )
+                , stx.Text( "Desc_InputKey", "AppResources" )
+                , stx.Text( "Help", "Settings" )
+            );
+
+            NVInput.Value = Keyword;
+
+            Flyout HelpText = new Flyout();
+            HelpText.Content = new TextBlock() { Text = stx.Text( "HelpKeyword", "Tips" ) };
+
+            NVInput.HelpBtnClick = ( s, NOP ) =>
+            {
+                FlyoutBase.SetAttachedFlyout( s, HelpText );
+                FlyoutBase.ShowAttachedFlyout( s );
+            };
+
+            await Popups.ShowDialog( NVInput );
+
+            if ( NVInput.Canceled ) return;
+
+            Keyword = NVInput.Value;
+            BingSrv.SetKeyword( Keyword );
+
+            BingReloadCover();
+        }
+
+        private void ChangeCover( object sender, RoutedEventArgs e )
+        {
+            int Offset = int.Parse( ( ( FrameworkElement ) sender ).Tag.ToString() );
+            new BingService( ThisBook ).SetOffset( Offset );
+
+            BingReloadCover();
+        }
+
+        private void BingReloadCover()
+        {
+            BookLoader BL = new BookLoader( BookLoadComplete );
+            ThisBook.CoverSrcUrl = null;
+            BL.LoadCover( ThisBook, false );
+        }
+
+        private async void SetSubsKey( object sender, RoutedEventArgs e )
+        {
+            StringResources stx = new StringResources( "ContextMenu", "AppResources", "Tips" );
+            ValueHelpInput NVInput = new ValueHelpInput(
+                stx.Text( "UseDefault", "AppResources" )
+                , stx.Text( "SetSubsKey" )
+                , null, stx.Text( "HowToGetSubs", "Tips" )
+            );
+
+            NVInput.Value = Properties.MISC_COGNITIVE_API_KEY;
+            NVInput.AllowEmpty = true;
+
+            NVInput.HelpBtnClick = ( s, NOP ) =>
+            {
+                var j = Windows.System.Launcher.LaunchUriAsync( new Uri( AppLinks.HELP_API_KEY ) );
+            };
+
+            await Popups.ShowDialog( NVInput );
+
+            if ( NVInput.Canceled ) return;
+
+            Properties.MISC_COGNITIVE_API_KEY = NVInput.Value;
+            BingService.SetApiKey( NVInput.Value );
         }
         #endregion
 

@@ -15,7 +15,6 @@ namespace wenku8.Model.Loaders
     using Book;
     using Book.Spider;
     using ListItem;
-    using REST;
     using Resources;
     using Settings;
     using System;
@@ -108,7 +107,7 @@ namespace wenku8.Model.Loaders
                 await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
             }
 
-            await CacheCover( B );
+            await CacheCover( B, true );
 
             OnComplete( B );
         }
@@ -194,17 +193,23 @@ namespace wenku8.Model.Loaders
             }
         }
 
-        private async Task CacheCover( BookItem B )
+        public async void LoadCover( BookItem Book, bool Cache )
         {
-            if ( Shared.Storage.FileExists( CurrentBook.CoverPath ) ) return;
+            CurrentBook = Book;
+            await CacheCover( Book, Cache );
+            OnComplete( Book );
+        }
 
-            if( string.IsNullOrEmpty( B.CoverSrcUrl ) )
+        private async Task CacheCover( BookItem B, bool Cache )
+        {
+            if ( Cache && Shared.Storage.FileExists( B.CoverPath ) ) return;
+
+            if ( string.IsNullOrEmpty( B.CoverSrcUrl ) )
             {
                 // Use bing service
                 string ThumbUrl = await new BingService( B ).GetImage();
                 if ( string.IsNullOrEmpty( ThumbUrl ) ) return;
 
-                B.IsBing = true;
                 B.CoverSrcUrl = ThumbUrl;
             }
 
@@ -225,7 +230,8 @@ namespace wenku8.Model.Loaders
                 Awaitable.TrySetResult( 0 );
             }
             // Failed handler
-            , ( a, b, c ) => {
+            , ( a, b, c ) =>
+            {
                 Awaitable.TrySetResult( 0 );
             }, false );
 

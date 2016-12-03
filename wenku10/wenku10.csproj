@@ -148,6 +148,9 @@
     <Compile Include="Pages\Dialogs\Taotu\EditProcListLoader.xaml.cs">
       <DependentUpon>EditProcListLoader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Dialogs\ValueHelpInput.xaml.cs">
+      <DependentUpon>ValueHelpInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\LocalDocumentsView.xaml.cs">
       <DependentUpon>LocalDocumentsView.xaml</DependentUpon>
     </Compile>
@@ -388,6 +391,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\ValueHelpInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

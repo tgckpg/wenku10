@@ -230,7 +230,7 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <ContentPresenter Background="{TemplateBinding Background}"
-                                          Foreground="{StaticResource MinorBrush}"
+                                          Foreground="{TemplateBinding Foreground}"
                                           x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           ContentTransitions="{TemplateBinding ContentTransitions}"

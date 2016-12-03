@@ -207,4 +207,19 @@
   <data name="NoBackground.Text" xml:space="preserve">
     <value>背景なし</value>
   </data>
+  <data name="ChangeKeyword.Text" xml:space="preserve">
+    <value>キーワードを変更</value>
+  </data>
+  <data name="FirstImage.Text" xml:space="preserve">
+    <value>最初の</value>
+  </data>
+  <data name="NextImage.Text" xml:space="preserve">
+    <value>次の</value>
+  </data>
+  <data name="PrevImage.Text" xml:space="preserve">
+    <value>前の</value>
+  </data>
+  <data name="SetSubsKey.Text" xml:space="preserve">
+    <value>API キーを設定</value>
+  </data>
 </root>

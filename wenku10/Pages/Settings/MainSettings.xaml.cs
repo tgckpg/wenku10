@@ -28,6 +28,7 @@ using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
+using wenku8.Settings;
 
 namespace wenku10.Pages.Settings
 {
@@ -205,9 +206,9 @@ namespace wenku10.Pages.Settings
                     Title = stx.Text( "Help" )
                     , Data = new ActiveItem[]
                     {
-                        new ActionItem( stx.Text( "Help_Wiki"), stx.Text( "Desc_Help_Wiki" ), "https://github.com/tgckpg/wenku10/wiki" )
-                        , new ActionItem( stx.Text( "Help_Slack"), stx.Text( "Desc_Help_Slack" ), "https://blog.astropenguin.net/article/view/wenku10-%E7%9A%84%E8%A8%8E%E8%AB%96%E7%B5%84/" )
-                        , new ActionItem( stx.Text( "Help_BugFeature"), stx.Text( "Desc_Help_BugFeature" ), "https://bugzilla.astropenguin.net/" )
+                        new ActionItem( stx.Text( "Help_Wiki"), stx.Text( "Desc_Help_Wiki" ), AppLinks.WIKI )
+                        , new ActionItem( stx.Text( "Help_Slack"), stx.Text( "Desc_Help_Slack" ), AppLinks.SLACK )
+                        , new ActionItem( stx.Text( "Help_BugFeature"), stx.Text( "Desc_Help_BugFeature" ), AppLinks.BUG_REPORT )
                     }
                     , ItemAction = HelpAction
                     , IsEnabled = true

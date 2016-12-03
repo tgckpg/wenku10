@@ -110,16 +110,21 @@
 
                 <StackPanel x:Name="Indicators" Margin="0,15" Orientation="Horizontal"
                             VerticalAlignment="Top" HorizontalAlignment="Left" >
-
                     <StackPanel.Resources>
+                        <!-- Bing Context Menu -->
                         <MenuFlyout x:Key="BingCoverFlyout">
-                            <MenuFlyoutItem Text="Bing Image Search" IsEnabled="False" />
-                            <MenuFlyoutItem Margin="10,0,0,0" Text="Next Candidate" />
-                            <MenuFlyoutItem Margin="10,0,0,0" Text="Change keyword" />
-                            <MenuFlyoutItem Margin="10,0,0,0" Text="Open result in Browser" Click="OpenBingResult" />
-                            <MenuFlyoutItem Margin="10,0,0,0" Text="Set subscription key" />
+                            <MenuFlyoutItem x:Uid="/AppResources/MSCognitiveSrv" Text="MS Cognitive Service" IsEnabled="False" />
+                            <MenuFlyoutSubItem x:Name="BingCoverBtn" x:Uid="/Book/Cover" Margin="10,0,0,0" Text="Covers" >
+                                <MenuFlyoutItem x:Uid="/ContextMenu/NextImage" Click="ChangeCover" Tag="1" />
+                                <MenuFlyoutItem x:Uid="/ContextMenu/PrevImage" Click="ChangeCover" Tag="-1" />
+                                <MenuFlyoutItem x:Uid="/ContextMenu/FirstImage" Click="ChangeCover" Tag="0" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutItem Margin="10,0,0,0" x:Uid="/ContextMenu/ChangeKeyword" Click="ChangeKeyword" />
+                            <MenuFlyoutItem x:Name="BingBrowserBtn" Margin="10,0,0,0" x:Uid="/AppBar/OpenInBrowser" Click="OpenBingResult" />
+                            <MenuFlyoutItem Margin="10,0,0,0" x:Uid="/ContextMenu/SetSubsKey" Click="SetSubsKey" />
                         </MenuFlyout>
                     </StackPanel.Resources>
+
                     <!-- Age Indicator -->
                     <Button Margin="0,0,5,0"
                             Click="FlyoutBase_Click"
@@ -132,12 +137,13 @@
                     </Button>
 
                     <!-- Indicate whether the Cover image is provided by Bing -->
-                    <Button Margin="5,0,0,0"
+                    <Button x:Name="UsingBing" Margin="5,0,0,0"
                             Click="FlyoutBase_Click"
+                            IsEnabled="False"
                             Style="{StaticResource ThemeButton}"
                             FlyoutBase.AttachedFlyout="{StaticResource BingCoverFlyout}"
                             e:TransitionDisplay.Mode="A01_Y_N30_0"
-                            e:TransitionDisplay.State="{Binding IsBing, Converter={StaticResource TransStateConverter}}">
+                            e:TransitionDisplay.State="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource TransStateConverter}}">
                         <i:IconBing />
                     </Button>
                 </StackPanel>

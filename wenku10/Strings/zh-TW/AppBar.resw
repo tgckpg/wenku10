@@ -189,7 +189,7 @@
   <data name="BookInfoView.Text" xml:space="preserve">
     <value>資訊頁</value>
   </data>
-  <data name="OpenInBrowser" xml:space="preserve">
+  <data name="OpenInBrowser.Text" xml:space="preserve">
     <value>在瀏覽器中打開</value>
   </data>
   <data name="Download.Text" xml:space="preserve">
