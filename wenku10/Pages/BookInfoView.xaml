@@ -106,7 +106,7 @@
                 <c:SplashRipple x:Name="SplashCover"
                                 Grid.RowSpan="4"
                                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                                Source="{Binding CoverStream}" />
+                                Source="{Binding CoverExistsPath}" />
 
                 <StackPanel x:Name="Indicators" Margin="0,15" Orientation="Horizontal"
                             VerticalAlignment="Top" HorizontalAlignment="Left" >
