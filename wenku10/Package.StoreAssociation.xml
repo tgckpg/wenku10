@@ -364,8 +364,9 @@
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames>
+    <MainPackageIdentityName>60674Astropenguin.GrimoireReaper</MainPackageIdentityName>
     <MainPackageIdentityName>60674Astropenguin.term-notify</MainPackageIdentityName>
     <MainPackageIdentityName>60674Astropenguin.wenku8appbeta</MainPackageIdentityName>
   </AccountPackageIdentityNames>
-  <PackageInfoList LandingUrl="https://dev.windows.com/dashboard/Application?appId=9NBLGGH68VTF" />
+  <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NBLGGH68VTF" />
 </StoreAssociation>

@@ -89,14 +89,14 @@ namespace wenku10.SHHub
             this.Status = Status;
             if ( OnStatusChanged != null )
             {
-                Net.Astropenguin.Helpers.Worker.UIInvoke( () => OnStatusChanged( this, Status ) );
+                Worker.UIInvoke( () => OnStatusChanged( this, Status ) );
             }
         }
 
         private void LoginResponse( DRequestCompletedEventArgs e, string id )
         {
             WillLogin = false;
-            if ( e.ResponseHeaders[ "Set-Cookie" ] != null )
+            if ( e.ResponseHeaders.Contains( "Set-Cookie" ) )
             {
                 SaveAuth( e.Cookies );
                 return;

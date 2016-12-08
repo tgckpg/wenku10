@@ -20,14 +20,16 @@ namespace wenku8.System
         {
             if ( Secreted ) return;
             Secreted = true;
-            StoreServicesCustomEventLogger.GetDefault().Log( SECRET_MODE );
+            try { StoreServicesCustomEventLogger.GetDefault().Log( SECRET_MODE ); }
+            catch ( Exception ) { }
         }
 
         public static void Normal()
         {
             if ( Normaled ) return;
             Normaled = true;
-            StoreServicesCustomEventLogger.GetDefault().Log( NORMAL_MODE );
+            try { StoreServicesCustomEventLogger.GetDefault().Log( NORMAL_MODE ); }
+            catch ( Exception ) { }
         }
 #else
         public static void Secret() { } 
