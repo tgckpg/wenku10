@@ -402,4 +402,7 @@
   <data name="Desc_ZoneSpider.Text" xml:space="preserve">
     <value>Zone Spiders are instruction files that generates Book Spider instructions, which is created using Spider Editor. You can download them under online script directory. Generally these files provides directory listings for websites. Making these files requires higher degree of Html / RegEx and basic programming knowledge.</value>
   </data>
+  <data name="MSCognitiveSrv.Text" xml:space="preserve">
+    <value>MS Cognitive Service</value>
+  </data>
 </root>

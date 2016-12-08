@@ -37,6 +37,7 @@ namespace wenku8.System
 #if ARM && DEBUG || TESTING || BETA
             Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
+            X.Init();
 			// Must follow Order!
 			//// Fixed Orders
 			// 1. Setting is the first to initialize
@@ -87,7 +88,9 @@ namespace wenku8.System
         {
             if ( L2 ) return;
             L2 = true;
-            X.Init();
+
+            X.Instance<object>( XProto.LibStart );
+
             Logger.Log( ID, "Memeber Initilizated", LogType.INFO );
             // 1. Runtime Queue
             global::wenku10.App.RuntimeTransfer = new WRuntimeTransfer();

@@ -189,7 +189,7 @@
   <data name="BookInfoView.Text" xml:space="preserve">
     <value>Info Section</value>
   </data>
-  <data name="OpenInBrowser" xml:space="preserve">
+  <data name="OpenInBrowser.Text" xml:space="preserve">
     <value>Open in browser</value>
   </data>
   <data name="Download.Text" xml:space="preserve">

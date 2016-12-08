@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.UI;
 
 using wenku8.CompositeElement;
 using wenku8.Effects;
@@ -148,6 +149,7 @@ namespace wenku10.Pages
         }
 
         private volatile bool Hold = false;
+        private Dictionary<string, SpiderBook> ProcessedItems = new Dictionary<string, SpiderBook>();
 
         private async void ZoneSpider_ItemClick( object sender, ItemClickEventArgs e )
         {
@@ -155,15 +157,26 @@ namespace wenku10.Pages
             Hold = true;
 
             BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
-
-            // "Z" to let LocalFileList know this is a Zone directory
-            BInst.SetId( AppKeys.SP_ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
-
-            SpiderBook Item = await SpiderBook.CreateFromZoneInst( BInst );
-
-            if ( !Item.ProcessSuccess && Item.CanProcess )
+            SpiderBook Item;
+            if ( ProcessedItems.ContainsKey( BInst.Id ) )
             {
-                await ItemProcessor.ProcessLocal( Item );
+                Item = ProcessedItems[ BInst.Id ];
+            }
+            else
+            {
+                ClickedInner.DataContext = BInst;
+
+                // "Z" to let LocalFileList know this is a Zone directory
+                BInst.SetId( AppKeys.SP_ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
+
+                Item = await SpiderBook.CreateFromZoneInst( BInst );
+                ClickedSpider.DataContext = Item;
+
+                if ( !Item.ProcessSuccess && Item.CanProcess )
+                {
+                    await ItemProcessor.ProcessLocal( Item );
+                    ProcessedItems[ BInst.Id ] = Item;
+                }
             }
 
             if ( Item.ProcessSuccess )

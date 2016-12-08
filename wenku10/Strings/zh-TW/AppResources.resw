@@ -399,4 +399,7 @@
   <data name="Desc_ZoneSpider.Text" xml:space="preserve">
     <value>區域蜘蛛可以自動製作網站的「文章蜘蛛」，同樣也是從「蜘蛛編輯器」中製作。這些腳本也可以在「共享腳本目錄」中取得。製作這些文件需要更全面的 Html / RegEx 以及 基本的編程知識。</value>
   </data>
+  <data name="MSCognitiveSrv.Text" xml:space="preserve">
+    <value>MS Cognitive Service</value>
+  </data>
 </root>

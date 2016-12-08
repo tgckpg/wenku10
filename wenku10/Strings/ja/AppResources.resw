@@ -404,4 +404,7 @@
   <data name="Desc_ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛は、クモエディタを使用して作成された文章蜘蛛の命令を生成する命令ファイルです。オンライン スクリプト ディレクトリ の下にダウンロードできます。一般に、これらの ファイル は ウェブサイト の ディレクトリ リスト を提供します。これらのファイルを作成するには、より高度な Html / RegEx と 基本プログラミング知識が必要です。</value>
   </data>
+  <data name="MSCognitiveSrv.Text" xml:space="preserve">
+    <value>MS Cognitive Service</value>
+  </data>
 </root>

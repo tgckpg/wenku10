@@ -129,7 +129,7 @@ namespace wenku8.System
             OnlineScriptDir.Click += CreateCmdHandler( PageId.ONLINE_SCRIPTS_VIEW, () => new OnlineScriptsView() );
 
             SecondaryIconButton SpiderEditor = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Edit, stx.Text( "SpiderEdit", "ContextMenu" ) );
-            SpiderEditor.Click += CreateCmdHandler( PageId.PROC_PANEL, () => new ProcPanelWrapper() );
+            SpiderEditor.Click += CreateCmdHandler( PageId.PROC_PANEL, () => new ProcPanelWrapper( null ) );
 
             SHCommands = new ICommandBarElement[] { LocalTextDocs, ZoneSpiders, BookSpiders, OnlineScriptDir };
             SH2ndCommands = new ICommandBarElement[] { SHLoginBtn, SpiderEditor };

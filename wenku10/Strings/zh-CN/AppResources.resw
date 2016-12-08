@@ -404,4 +404,7 @@
   <data name="Desc_ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛可以自动制作网站的「文章蜘蛛」，同样也是从「蜘蛛编辑器」中制作。这些脚本也可以在「共享脚本目录」中取得。制作这些文件需要更全面的 Html / RegEx 以及 基本的编辑知识。</value>
   </data>
+  <data name="MSCognitiveSrv.Text" xml:space="preserve">
+    <value>微软认知服务</value>
+  </data>
 </root>

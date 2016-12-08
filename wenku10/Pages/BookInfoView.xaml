@@ -106,18 +106,47 @@
                 <c:SplashRipple x:Name="SplashCover"
                                 Grid.RowSpan="4"
                                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                                Source="{Binding CoverStream}" />
+                                Source="{Binding CoverExistsPath}" />
 
-                <!-- Age Indicator -->
-                <Button x:Name="CacheStateBtn" Margin="10,20"
-                        Click="CacheState_Click"
-                        Style="{StaticResource PlainButton}"
-                        FlyoutBase.AttachedFlyout="{StaticResource CacheStateFlyout}"
-                        HorizontalAlignment="Right" VerticalAlignment="Top">
-                    <Rectangle x:Name="CacheStateRect"
-                               Fill="{Binding LastCache, Converter={StaticResource ColorAgeConverter}}"
-                               Height="10" Width="20"/>
-                </Button>
+                <StackPanel x:Name="Indicators" Margin="0,15" Orientation="Horizontal"
+                            VerticalAlignment="Top" HorizontalAlignment="Left" >
+                    <StackPanel.Resources>
+                        <!-- Bing Context Menu -->
+                        <MenuFlyout x:Key="BingCoverFlyout">
+                            <MenuFlyoutItem x:Uid="/AppResources/MSCognitiveSrv" Text="MS Cognitive Service" IsEnabled="False" />
+                            <MenuFlyoutSubItem x:Name="BingCoverBtn" x:Uid="/Book/Cover" Margin="10,0,0,0" Text="Covers" >
+                                <MenuFlyoutItem x:Uid="/ContextMenu/NextImage" Click="ChangeCover" Tag="1" />
+                                <MenuFlyoutItem x:Uid="/ContextMenu/PrevImage" Click="ChangeCover" Tag="-1" />
+                                <MenuFlyoutItem x:Uid="/ContextMenu/FirstImage" Click="ChangeCover" Tag="0" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutItem Margin="10,0,0,0" x:Uid="/ContextMenu/ChangeKeyword" Click="ChangeKeyword" />
+                            <MenuFlyoutItem x:Name="BingBrowserBtn" Margin="10,0,0,0" x:Uid="/AppBar/OpenInBrowser" Click="OpenBingResult" />
+                            <MenuFlyoutItem Margin="10,0,0,0" x:Uid="/ContextMenu/SetSubsKey" Click="SetSubsKey" />
+                        </MenuFlyout>
+                    </StackPanel.Resources>
+
+                    <!-- Age Indicator -->
+                    <Button Margin="0,0,5,0"
+                            Click="FlyoutBase_Click"
+                            Style="{StaticResource PlainButton}"
+                            FlyoutBase.AttachedFlyout="{StaticResource CacheStateFlyout}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top">
+                        <Rectangle x:Name="CacheStateRect"
+                                   Fill="{Binding LastCache, Converter={StaticResource ColorAgeConverter}}"
+                                   Height="20" Width="13"/>
+                    </Button>
+
+                    <!-- Indicate whether the Cover image is provided by Bing -->
+                    <Button x:Name="UsingBing" Margin="5,0,0,0"
+                            Click="FlyoutBase_Click"
+                            IsEnabled="False"
+                            Style="{StaticResource ThemeButton}"
+                            FlyoutBase.AttachedFlyout="{StaticResource BingCoverFlyout}"
+                            e:TransitionDisplay.Mode="A01_Y_N30_0"
+                            e:TransitionDisplay.State="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource TransStateConverter}}">
+                        <i:IconBing />
+                    </Button>
+                </StackPanel>
 
                 <StackPanel x:Name="HeaderPanel"
                             Grid.Row="1"

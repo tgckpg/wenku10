@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Media.Imaging;
-
-using libtaotu.Models.Procedure;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
@@ -106,9 +104,10 @@ namespace wenku8.Model.Loaders
             if ( B.Packed != true && B.Packable )
             {
                 B.PackVolumes( SBook.GetPPConvoy() );
+                await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
             }
 
-            await CacheCover( B );
+            await CacheCover( B, true );
 
             OnComplete( B );
         }
@@ -194,36 +193,49 @@ namespace wenku8.Model.Loaders
             }
         }
 
-        private async Task CacheCover( BookItem B )
+        public async void LoadCover( BookItem Book, bool Cache )
         {
-            if( Shared.Storage.FileExists( CurrentBook.CoverPath ) ) return;
+            CurrentBook = Book;
+            await CacheCover( Book, Cache );
+            OnComplete( Book );
+        }
 
-            if( !string.IsNullOrEmpty( B.CoverSrcUrl ) )
+        private async Task CacheCover( BookItem B, bool Cache )
+        {
+            if ( Cache && Shared.Storage.FileExists( B.CoverPath ) ) return;
+
+            if ( string.IsNullOrEmpty( B.CoverSrcUrl ) )
             {
-                TaskCompletionSource<int> Awaitable = new TaskCompletionSource<int>();
+                // Use bing service
+                string ThumbUrl = await new BingService( B ).GetImage();
+                if ( string.IsNullOrEmpty( ThumbUrl ) ) return;
 
-                // Set the referer, as it is required by some site such as fanfiction.net
-                new RuntimeCache( a => {
-                    HttpRequest R = new WHttpRequest( a );
-                    R.EN_UITHREAD = true;
-
-                    if ( !string.IsNullOrEmpty( B.OriginalUrl ) )
-                    {
-                        R.RequestHeaders[ HttpRequestHeader.Referer ] = B.OriginalUrl;
-                    }
-
-                    return R;
-                } ).GET( new Uri( B.CoverSrcUrl ), ( a, b ) => {
-                    CoverDownloaded( a, b );
-                    Awaitable.TrySetResult( 0 );
-                }
-                // Failed handler
-                , ( a, b, c ) => {
-                    Awaitable.TrySetResult( 0 );
-                }, false );
-
-                await Awaitable.Task;
+                B.CoverSrcUrl = ThumbUrl;
             }
+
+            TaskCompletionSource<int> Awaitable = new TaskCompletionSource<int>();
+
+            // Set the referer, as it is required by some site such as fanfiction.net
+            new RuntimeCache( a => {
+                HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
+
+                if ( !string.IsNullOrEmpty( B.OriginalUrl ) )
+                {
+                    R.RequestHeaders[ HttpRequestHeader.Referer ] = B.OriginalUrl;
+                }
+
+                return R;
+            } ).GET( new Uri( B.CoverSrcUrl ), ( a, b ) => {
+                CoverDownloaded( a, b );
+                Awaitable.TrySetResult( 0 );
+            }
+            // Failed handler
+            , ( a, b, c ) =>
+            {
+                Awaitable.TrySetResult( 0 );
+            }, false );
+
+            await Awaitable.Task;
         }
 
         private void CoverDownloaded( DRequestCompletedEventArgs e, string id )

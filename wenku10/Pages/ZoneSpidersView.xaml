@@ -72,26 +72,23 @@
                       ItemsSource="{Binding Data}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{StaticResource Shades90}"
-                                Margin="10" MinHeight="120" >
-
-                            <StackPanel>
-                                <!-- Name -->
-                                <Border Background="{StaticResource Shades90}">
-                                    <TextBlock Text="{Binding Title}" MaxLines="2"
-                                               FontSize="20" Margin="10,5"
-                                               Foreground="{StaticResource RelativeShadesBrush}"
-                                               TextTrimming="CharacterEllipsis"
-                                               TextWrapping="Wrap"/>
-                                </Border>
-                                <!-- Desc -->
-                                <TextBlock Margin="10, 5" Text="{Binding Intro}"
-                                           FontSize="16"
-                                           MaxLines="5"
+                        <StackPanel Background="{StaticResource Shades90}"
+                                    Margin="10" MinHeight="120" >
+                            <!-- Name -->
+                            <Border Background="{StaticResource Shades90}">
+                                <TextBlock Text="{Binding Title}" MaxLines="2"
+                                           FontSize="20" Margin="10,5"
                                            Foreground="{StaticResource RelativeShadesBrush}"
-                                           TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
-                            </StackPanel>
-                        </Border>
+                                           TextTrimming="CharacterEllipsis"
+                                           TextWrapping="Wrap"/>
+                            </Border>
+                            <!-- Desc -->
+                            <TextBlock Margin="10, 5" Text="{Binding Intro}"
+                                       FontSize="16"
+                                       MaxLines="5"
+                                       Foreground="{StaticResource RelativeShadesBrush}"
+                                       TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -152,6 +149,27 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <Grid x:Name="ClickedSpider"
+                Grid.Row="1" Grid.ColumnSpan="2"
+                Visibility="Collapsed"
+                e:TransitionDisplay.Mode="A01"
+                e:TransitionDisplay.State="{Binding Processing, Converter={StaticResource TransStateConverter}}" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Rectangle Grid.RowSpan="2"
+                       Fill="{StaticResource MajorBackgroundBrush}" />
+            <TextBlock Margin="10" TextTrimming="CharacterEllipsis"
+                       MaxLines="1"
+                       Text="{Binding Desc}" />
+            <ScrollViewer x:Name="ClickedInner" Grid.Row="1">
+                <TextBlock Margin="10, 5" Text="{Binding Intro}"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           TextWrapping="Wrap" TextTrimming="CharacterEllipsis" />
+            </ScrollViewer>
+        </Grid>
 
         <!-- Desc -->
         <StackPanel x:Name="Desc" Margin="20"

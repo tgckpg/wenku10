@@ -207,4 +207,19 @@
   <data name="NoBackground.Text" xml:space="preserve">
     <value>沒有背景</value>
   </data>
+  <data name="ChangeKeyword.Text" xml:space="preserve">
+    <value>變更關件字</value>
+  </data>
+  <data name="FirstImage.Text" xml:space="preserve">
+    <value>第一張</value>
+  </data>
+  <data name="NextImage.Text" xml:space="preserve">
+    <value>下一張</value>
+  </data>
+  <data name="PrevImage.Text" xml:space="preserve">
+    <value>上一張</value>
+  </data>
+  <data name="SetSubsKey.Text" xml:space="preserve">
+    <value>設定 API 密鑰</value>
+  </data>
 </root>

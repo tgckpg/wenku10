@@ -162,4 +162,10 @@
   <data name="DidYouKnow.Text" xml:space="preserve">
     <value>Did You Know?</value>
   </data>
+  <data name="HelpKeyword.Text" xml:space="preserve">
+    <value>Keywords are used for image search</value>
+  </data>
+  <data name="HowToGetSubs.Text" xml:space="preserve">
+    <value>How to get an API key?</value>
+  </data>
 </root>

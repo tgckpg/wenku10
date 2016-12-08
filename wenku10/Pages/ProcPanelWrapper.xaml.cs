@@ -21,7 +21,7 @@ namespace wenku10.Pages
 {
     public sealed partial class ProcPanelWrapper : Page, INavPage
     {
-        public ProcPanelWrapper()
+        private ProcPanelWrapper()
         {
             this.InitializeComponent();
         }
