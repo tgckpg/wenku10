@@ -67,7 +67,6 @@ namespace wenku10.Pages
         private void Seacrh_ItemClick( object sender, ItemClickEventArgs e )
         {
             RestoreStatus();
-            ControlFrame.Instance.BackStack.Remove( PageId.BOOK_INFO_VIEW );
             ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( ( BookItem ) e.ClickedItem ) );
         }
 

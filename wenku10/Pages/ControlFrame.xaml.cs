@@ -61,7 +61,7 @@ namespace wenku10.Pages
         private async void MessageBus_OnDelivery( Message Mesg )
         {
             // Handles secondary tile launch on App opened
-            if( Mesg.Content == AppKeys.SYS_2ND_TILE_LAUNCH )
+            if ( Mesg.Content == AppKeys.SYS_2ND_TILE_LAUNCH )
             {
                 if ( Navigating )
                 {
@@ -72,7 +72,6 @@ namespace wenku10.Pages
                 BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
                 if ( Book != null )
                 {
-                    BackStack.Remove( PageId.BOOK_INFO_VIEW );
                     NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
                 }
 
@@ -102,7 +101,7 @@ namespace wenku10.Pages
         public async void SetHomePage( string Id, Func<Page> FPage, Action<Page> PageAct = null )
         {
             // Handles secondary tile launch when App closed
-            if( !string.IsNullOrEmpty( LaunchArgs ) )
+            if ( !string.IsNullOrEmpty( LaunchArgs ) )
             {
                 Id = PageId.BOOK_INFO_VIEW;
                 BookItem Book = await ItemProcessor.GetBookFromTileCmd( LaunchArgs );
@@ -177,11 +176,22 @@ namespace wenku10.Pages
 
                 UnsubEvents( ( Page ) View.Content );
                 ( View.Content as INavPage )?.SoftClose();
-                BackStack.Add( ( string ) View.Tag, ( Page ) View.Content );
+
+                if ( !PageId.NonStackables.Contains( View.Tag ) )
+                    BackStack.Add( ( string ) View.Tag, ( Page ) View.Content );
             }
 
             Page P = BackStack.Get( Name );
 
+            // We'll be navigating to a new instance
+            // Remove old instances in the backstack
+            if ( PageId.MonoStack.Contains( Name ) && P != null )
+            {
+                P = null;
+                BackStack.Remove( Name );
+            }
+
+            // Let Page render silently
             View.Opacity = 0;
 
             LoadingScreen.State = ControlState.Reovia;
