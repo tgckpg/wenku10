@@ -186,7 +186,7 @@
   <data name="ConfirmLogout" xml:space="preserve">
     <value>ログアウトを確認しますか？</value>
   </data>
-  <data name="String" xml:space="preserve">
+  <data name="AnchorNotSetYet" xml:space="preserve">
     <value>アンカーがまだ設定されていません</value>
   </data>
   <data name="NewContent" xml:space="preserve">
