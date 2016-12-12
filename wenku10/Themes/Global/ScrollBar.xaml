@@ -7,7 +7,7 @@
       <Setter Property="MinWidth" Value="12" />
       <Setter Property="MinHeight" Value="12" />
       <Setter Property="Background" Value="Transparent" />
-      <Setter Property="Foreground" Value="Transparent" />
+      <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundChromeHighBrush}" />
       <Setter Property="BorderBrush" Value="Transparent" />
       <Setter Property="IsTabStop" Value="False" />
       <Setter Property="Template">
@@ -419,7 +419,7 @@
               <Grid x:Name="HorizontalPanningRoot" MinWidth="24">
                 <Border x:Name="HorizontalPanningThumb"
                         HorizontalAlignment="Left"
-                        Background="{ThemeResource SystemControlForegroundChromeHighBrush}"
+                        Background="{TemplateBinding Foreground}"
                         BorderThickness="0"
                         Height="4"
                         MinWidth="12" />
@@ -482,7 +482,7 @@
               <Grid x:Name="VerticalPanningRoot" MinHeight="24">
                 <Border x:Name="VerticalPanningThumb"
                         VerticalAlignment="Top"
-                        Background="{ThemeResource SystemControlForegroundChromeHighBrush}"
+                        Background="{TemplateBinding Foreground}"
                         BorderThickness="0"
                         Width="4"
                         MinHeight="12" />

@@ -282,6 +282,7 @@
 
                 <ListView x:Name="ContentGrid"
                           Grid.RowSpan="2" Grid.ColumnSpan="2"
+                          Loaded="ContentGrid_Loaded"
                           ItemTemplateSelector="{Binding TemplateSelector}"
                           Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
                           FlowDirection="{Binding FlowDir}">

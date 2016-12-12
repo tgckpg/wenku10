@@ -555,4 +555,7 @@
   <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
     <value>嵌入插圖</value>
   </data>
+  <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
+    <value>捲軸</value>
+  </data>
 </root>

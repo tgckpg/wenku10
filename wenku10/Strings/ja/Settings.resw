@@ -554,4 +554,7 @@
   <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
     <value>イラストを埋め込む</value>
   </data>
+  <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
+    <value>スクロール・バー</value>
+  </data>
 </root>

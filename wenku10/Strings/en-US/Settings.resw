@@ -555,4 +555,7 @@
   <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
     <value>Embed illustrations</value>
   </data>
+  <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
+    <value>Scroll Bar</value>
+  </data>
 </root>
