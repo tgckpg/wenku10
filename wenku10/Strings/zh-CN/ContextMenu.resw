@@ -222,4 +222,13 @@
   <data name="SetSubsKey.Text" xml:space="preserve">
     <value>设置 API 码</value>
   </data>
+  <data name="GotoBottom.Text" xml:space="preserve">
+    <value>跳到最下面</value>
+  </data>
+  <data name="GotoTop.Text" xml:space="preserve">
+    <value>跳到最顶端</value>
+  </data>
+  <data name="Locate.Text" xml:space="preserve">
+    <value>定位</value>
+  </data>
 </root>

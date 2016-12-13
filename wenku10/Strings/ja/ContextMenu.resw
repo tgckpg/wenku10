@@ -222,4 +222,13 @@
   <data name="SetSubsKey.Text" xml:space="preserve">
     <value>API キーを設定</value>
   </data>
+  <data name="GotoBottom.Text" xml:space="preserve">
+    <value>ページ底へ</value>
+  </data>
+  <data name="GotoTop.Text" xml:space="preserve">
+    <value>ページトップへ</value>
+  </data>
+  <data name="Locate.Text" xml:space="preserve">
+    <value>見つける</value>
+  </data>
 </root>

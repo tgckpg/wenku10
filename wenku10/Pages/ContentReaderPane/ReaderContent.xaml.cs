@@ -169,6 +169,10 @@ namespace wenku10.Pages.ContentReaderPane
             Reader.SelectIndex( Reader.SelectedIndex + 1 );
         }
 
+
+        private void GoTop( object sender, RoutedEventArgs e ) { GoTop(); }
+        private void GoBottom( object sender, RoutedEventArgs e ) { GoBottom(); }
+
         internal void GoTop() { GotoIndex( 0 ); }
         internal void GoBottom() { GotoIndex( ContentGrid.Items.Count - 1 ); }
 

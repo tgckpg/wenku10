@@ -19,6 +19,10 @@
             <MenuFlyoutItem x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />
             <MenuFlyoutItem x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
             <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
+            <MenuFlyoutSubItem x:Uid="/ContextMenu/Locate" Text="Position">
+                <MenuFlyoutItem x:Uid="/ContextMenu/GotoTop" Text="Goto Top" Click="GoTop" />
+                <MenuFlyoutItem x:Uid="/ContextMenu/GotoBottom" Text="Goto Bottom" Click="GoBottom" />
+            </MenuFlyoutSubItem>
         </MenuFlyout>
 
         <ItemsPanelTemplate x:Key="HPanel">

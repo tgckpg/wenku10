@@ -9,6 +9,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
 using Windows.UI.Core;
 using Windows.UI.Input;
 using Windows.UI.ViewManagement;
@@ -91,6 +92,8 @@ namespace wenku10.Pages
         private TextBlock VolTitle { get { return IsHorz ? YVolTitle : XVolTitle; } }
         private TitleStepper VolTitleStepper { get { return IsHorz ? YVolTitleStepper : XVolTitleStepper; } }
         private TitleStepper EpTitleStepper { get { return IsHorz ? YEpTitleStepper : XEpTitleStepper; } }
+
+        Rectangle OriIndicator;
 
         public ContentReader()
         {
@@ -257,6 +260,24 @@ namespace wenku10.Pages
 
                 NeedRedraw = false;
                 Redraw();
+            }
+
+            UpdateOriIndicator();
+        }
+
+        private void UpdateOriIndicator()
+        {
+            if ( OriIndicator == null ) return;
+
+            if ( Orientation == ApplicationViewOrientation.Portrait )
+            {
+                OriIndicator.Width = 35;
+                OriIndicator.Height = 45;
+            }
+            else
+            {
+                OriIndicator.Width = 45;
+                OriIndicator.Height = 35;
             }
         }
 
@@ -466,18 +487,17 @@ namespace wenku10.Pages
             Sections.Add( new PaneNavButton( new IconImage() { AutoScale = true }, typeof( ImageList ) ) );
 
             Sections.Add( new PaneNavButton( new IconReload() { AutoScale = true }, Reload ) );
-            Sections.Add( new PaneNavButton(
-                new IconFastForword() { AutoScale = true }
-                , () => ContentView.GoTop()
-            ) );
-            Sections.Add( new PaneNavButton(
-                new IconFastForword() { AutoScale = true, Direction = Direction.MirrorVertical }
-                , () => ContentView.GoBottom()
-            ) );
 
             Sections.Add( InertiaButton() );
 
-            if ( !MainStage.Instance.IsPhone ) Sections.Add( FullScreenButton() );
+            if ( MainStage.Instance.IsPhone )
+            {
+                Sections.Add( RotationButton() );
+            }
+            else
+            {
+                Sections.Add( FullScreenButton() );
+            }
 
             Sections.Add( FlowDirButton() );
             Sections.Add( new PaneNavButton( new IconSettings() { AutoScale = true }, GotoSettings ) );
@@ -539,14 +559,69 @@ namespace wenku10.Pages
             return FullScreenButton;
         }
 
+        private PaneNavButton RotationButton()
+        {
+            PaneNavButton RotationButton = null;
+
+            Grid RGrid = new Grid();
+            OriIndicator = new Rectangle
+            {
+                Width = 35, Height = 35
+                , Stroke = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
+                , StrokeThickness = 2
+            };
+
+            UpdateOriIndicator();
+
+            RGrid.Children.Add( OriIndicator );
+
+            FontIcon LockIcon = new FontIcon() { Glyph = SegoeMDL2.Unlock };
+            LockIcon.Foreground = OriIndicator.Stroke;
+
+            LockIcon.VerticalAlignment
+                = OriIndicator.VerticalAlignment
+                = VerticalAlignment.Center;
+
+            LockIcon.HorizontalAlignment
+                = OriIndicator.HorizontalAlignment
+                = HorizontalAlignment.Center;
+
+            RGrid.Children.Add( LockIcon );
+
+            bool Locked = false;
+
+            Action ToggleFIcon = () =>
+            {
+                if ( Locked )
+                {
+                    Locked = false;
+                    DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
+                    LockIcon.Glyph = SegoeMDL2.Unlock;
+                }
+                else
+                {
+                    Locked = true;
+                    DisplayInformation.AutoRotationPreferences = ( Orientation == ApplicationViewOrientation.Portrait )
+                        ? ( DisplayOrientations.Portrait | DisplayOrientations.PortraitFlipped )
+                        : ( DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped )
+                    ;
+
+                    LockIcon.Glyph = SegoeMDL2.Lock;
+                }
+            };
+
+            RotationButton = new PaneNavButton( RGrid, ToggleFIcon );
+
+            return RotationButton;
+        }
+
         private PaneNavButton FlowDirButton()
         {
             PaneNavButton FlowDirButton = null;
 
             Rectangle RectInd = new Rectangle()
             {
-                Width = 20,
-                Height = 40
+                Width = 20, Height = 40
                 , Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
             };
 
