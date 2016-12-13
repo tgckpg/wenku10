@@ -271,10 +271,12 @@ namespace wenku10.Pages.Sharers
                 CommentsSource.LoadStart += ( x, y ) => MarkLoading();
                 CommentsSource.LoadEnd += ( x, y ) => MarkNotLoading();
 
-
                 // Remove the LoadMore thing
                 CommentsSource.RemoveAt( i );
                 CommentsSource.InsertLoader( i, CLoader );
+
+                // Load it or else will only be triggered when pgae reads bottom
+                var j = CommentsSource.LoadMoreItemsAsync( 20 );
             }
 
             HSC.MarkSelect();

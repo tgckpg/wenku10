@@ -80,12 +80,10 @@ namespace wenku10.ShHub
 
                 case AppKeys.HS_OPEN_COMMENT:
                     InboxMessage BoxMessage = ( InboxMessage ) Mesg.Payload;
-                    ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () =>
-                    {
-                        ScriptDetails SDetails = new ScriptDetails( BoxMessage.HubScript );
-                        SDetails.OpenCommentStack( BoxMessage.CommId );
-                        return SDetails;
-                    } );
+                    ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS
+                        , () => new ScriptDetails( BoxMessage.HubScript )
+                        , P => ( ( ScriptDetails ) P ).OpenCommentStack( BoxMessage.CommId )
+                    );
                     break;
 
                 case AppKeys.HS_NO_VOLDATA:
