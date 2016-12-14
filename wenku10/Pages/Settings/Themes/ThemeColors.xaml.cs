@@ -18,16 +18,16 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
-using Net.Astropenguin.UI.Icons;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using wenku8.CompositeElement;
 using wenku8.Config;
 using wenku8.Model.Interfaces;
+using wenku8.Resources;
 using wenku8.Settings.Theme;
-using Net.Astropenguin.Controls;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -113,7 +113,7 @@ namespace wenku10.Pages.Settings.Themes
 
             if ( Properties.ENABLE_ONEDRIVE )
             {
-                AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( new IconOneDrive(), stx.Text( "Sync" ) );
+                AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "Sync" ) );
 
                 ButtonOperation Op = new ButtonOperation( OneDriveBtn );
                 Op.SetOp( Manager.OneDriveSync );

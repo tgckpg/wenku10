@@ -66,7 +66,7 @@ namespace wenku8.Model.Section
         public void SetAutoAnchor()
         {
             // Set the autoanchor
-            string AnchorId = new AutoAnchor().GetBookmark( CurrentBook.Id );
+            string AnchorId = new AutoAnchor( CurrentBook ).GetAutoVolAnc();
 
             foreach ( Volume V in Volumes )
             {

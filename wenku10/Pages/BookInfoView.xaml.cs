@@ -90,6 +90,7 @@ namespace wenku10.Pages
         public void SoftOpen()
         {
             LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
+            SyncAnchors();
         }
 
         public void SoftClose() { }
@@ -157,7 +158,18 @@ namespace wenku10.Pages
 
             BL.Load( Book, true );
             BL.LoadIntro( Book, true );
+
+            SyncAnchors();
             SetContext();
+        }
+
+        private async void SyncAnchors()
+        {
+            if ( ThisBook == null || OneDriveRing.IsActive ) return;
+
+            OneDriveRing.IsActive = true;
+            await new AutoAnchor( ThisBook ).SyncSettings();
+            OneDriveRing.IsActive = false;
         }
 
         private void BookLoadComplete( BookItem Book )

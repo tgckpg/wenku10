@@ -20,6 +20,7 @@ using wenku8.Model.Interfaces;
 using wenku8.Model.Loaders;
 using wenku8.Model.Section;
 using wenku8.Storage;
+using wenku8.Resources;
 
 namespace wenku10.Pages
 {
@@ -66,7 +67,7 @@ namespace wenku10.Pages
 
             if ( Properties.ENABLE_ONEDRIVE )
             {
-                AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( new IconOneDrive(), stx.Text( "SyncBookmarks" ) );
+                AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "SyncBookmarks" ) );
                 ButtonOperation SyncOp = new ButtonOperation( OneDriveBtn );
 
                 SyncOp.SetOp( OneDriveRsync );
@@ -102,15 +103,8 @@ namespace wenku10.Pages
         {
             if ( ThisBook == null ) return;
 
-            await OneDriveSync.Instance.Authenticate();
-
-            if ( OneDriveSync.Instance.Authenticated )
-            {
-                CustomAnchor ANC = new CustomAnchor( ThisBook );
-                await ANC.SyncSettings();
-                await new AutoAnchor().SyncSettings();
-                TOCData?.SetAutoAnchor();
-            }
+            await new AutoAnchor( ThisBook ).SyncSettings();
+            TOCData?.SetAutoAnchor();
         }
 
         protected void JumpToBookmark( object sender, RoutedEventArgs e )

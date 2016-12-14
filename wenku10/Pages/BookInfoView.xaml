@@ -170,12 +170,28 @@
                                            Foreground="{StaticResource SubtleBrush}"
                                            FontSize="30" />
                             </Button>
-                            <Button Style="{StaticResource PlainButton}"
-                                    Background="Transparent"
-                                    Height="50" Width="50"
-                                    Click="JumpButton_Click" >
-                                    <SymbolIcon Symbol="Tag" Foreground="{StaticResource SubtleBrush}" />
-                            </Button>
+                            <Grid Height="50" Width="50" >
+                                <ProgressRing x:Name="OneDriveRing"
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Width="35" Height="35"
+                                              Foreground="{StaticResource SubtleBrush}"
+                                              IsActive="False" />
+                                <Button Style="{StaticResource PlainButton}"
+                                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                        Background="Transparent"
+                                        Click="JumpButton_Click" >
+                                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <FontIcon Glyph="&#xE753;"
+                                                  e:TransitionDisplay.Mode="A01_Y_30_N30"
+                                                  e:TransitionDisplay.State="{Binding ElementName=OneDriveRing, Path=IsActive, Converter={StaticResource TransStateConverter}}"
+                                                  Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                                        <SymbolIcon Symbol="Tag"
+                                                    e:TransitionDisplay.Mode="A01_Y_30_N30"
+                                                    e:TransitionDisplay.State="{Binding ElementName=OneDriveRing, Path=IsActive, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                                                    Foreground="{StaticResource SubtleBrush}" />
+                                    </Grid>
+                                </Button>
+                            </Grid>
                         </StackPanel>
                     </Grid>
 
