@@ -101,7 +101,7 @@ namespace wenku10.Pages.ContentReaderPane
 
         internal void Load( bool Reload = false )
         {
-            Reader.Load( !Reload || CurrentBook.IsLocal );
+            Reader.Load( !Reload || CurrentBook.IsLocal() );
         }
 
         internal void ContentGrid_SelectionChanged( object sender, SelectionChangedEventArgs e )

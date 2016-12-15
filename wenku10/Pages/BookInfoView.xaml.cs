@@ -17,12 +17,12 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
+using wenku8.AdvDM;
 using wenku8.CompositeElement;
 using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.ListItem;
@@ -40,7 +40,6 @@ namespace wenku10.Pages
 {
     using Dialogs;
     using Sharers;
-    using wenku8.AdvDM;
 
     sealed partial class BookInfoView : Page, ICmdControls, IAnimaPage, INavPage
     {
@@ -178,7 +177,7 @@ namespace wenku10.Pages
             {
                 bool CanBing = false;
 
-                if ( Book is BookInstruction )
+                if ( Book.IsSpider() )
                 {
                     bool BingExists = new BingService( Book ).Exists();
 
@@ -236,7 +235,7 @@ namespace wenku10.Pages
             }
             else
             {
-                CommentBtn.IsEnabled = !ThisBook.IsLocal;
+                CommentBtn.IsEnabled = !ThisBook.IsLocal();
                 BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.OriginalUrl );
                 LayoutRoot.DataContext = ThisBook;
                 InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
@@ -301,7 +300,7 @@ namespace wenku10.Pages
             {
                 ControlFrame.Instance.SubNavigateTo( this, () => new WComments( ThisBook ) );
             }
-            else if ( ThisBook is BookInstruction )
+            else if ( ThisBook.IsSpider() )
             {
                 string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
                 HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );

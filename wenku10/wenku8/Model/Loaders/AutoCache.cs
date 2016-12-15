@@ -146,7 +146,7 @@ namespace wenku8.Model.Loaders
 
         internal static void DownloadVolume( BookItem ThisBook, Volume Vol )
         {
-            if ( ThisBook is BookInstruction )
+            if ( ThisBook.IsSpider() )
             {
                 Chapter[] Chs = Vol.ChapterList;
 

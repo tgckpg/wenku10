@@ -14,7 +14,6 @@ using Tasks;
 namespace wenku8.Model.Pages
 {
     using Book;
-    using Book.Spider;
     using Ext;
     using ListItem;
     using ListItem.Sharers;
@@ -72,7 +71,7 @@ namespace wenku8.Model.Pages
 
         public static void ReadSecondaryTile( BookItem Book )
         {
-            if( Book is BookInstruction )
+            if( Book.IsSpider() )
             {
                 BackgroundProcessor.Instance.ClearTileStatus( Book.Id );
             }

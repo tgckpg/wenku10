@@ -40,13 +40,13 @@ namespace wenku8.Model.Loaders
         {
             CurrentBook = b;
 
-            if( b.IsLocal )
+            if( b.IsLocal() )
             {
                 OnComplete( b );
                 return;
             }
 
-            if ( b is BookInstruction )
+            if ( b.IsSpider() )
             {
                 LoadInstruction( ( BookInstruction ) b, useCache );
                 return;
@@ -114,7 +114,7 @@ namespace wenku8.Model.Loaders
 
         public void LoadIntro( BookItem b, bool useCache = true )
         {
-            if ( b is BookInstruction ) return;
+            if ( b.IsSpider() ) return;
 
             CurrentBook = b;
 

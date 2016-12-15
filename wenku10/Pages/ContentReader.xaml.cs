@@ -334,9 +334,13 @@ namespace wenku10.Pages
                     {
                         CurrentBook = new BookInstruction( ( SChapter ) C );
                     }
+                    else if ( C is LocalChapter )
+                    {
+                        CurrentBook = new LocalTextDocument( ( LocalChapter ) C );
+                    }
                     else
                     {
-                        CurrentBook = X.Instance<BookItem>( XProto.BookItemEx, C );
+                        CurrentBook = X.Instance<BookItem>( XProto.BookItemEx, C.aid );
                     }
                 }
 
@@ -387,7 +391,7 @@ namespace wenku10.Pages
                     } );
 
                     // if book is local, use the cache
-                    CL.Load( CurrentChapter, CurrentBook.IsLocal );
+                    CL.Load( CurrentChapter, CurrentBook.IsLocal() );
                 }
                 else
                 {
