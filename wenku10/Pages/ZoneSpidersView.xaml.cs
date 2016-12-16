@@ -181,7 +181,6 @@ namespace wenku10.Pages
 
             if ( Item.ProcessSuccess )
             {
-                ControlFrame.Instance.BackStack.Remove( PageId.BOOK_INFO_VIEW );
                 ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Item.GetBook() ) );
             }
 

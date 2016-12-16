@@ -110,13 +110,12 @@ namespace wenku10.Pages
                 return;
             }
 
-            if ( Book.IsLocal )
+            if ( Book.IsLocal() )
             {
                 ControlFrame.Instance.SubNavigateTo( this, () => new BInfConfig().HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
             }
             else
             {
-                ControlFrame.Instance.BackStack.Remove( PageId.BOOK_INFO_VIEW );
                 ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
             }
 

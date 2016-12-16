@@ -40,13 +40,13 @@ namespace wenku8.Model.Loaders
         {
             CurrentBook = b;
 
-            if( b.IsLocal )
+            if( b.IsLocal() )
             {
                 OnComplete( b );
                 return;
             }
 
-            if ( b is BookInstruction )
+            if ( b.IsSpider() )
             {
                 LoadInstruction( ( BookInstruction ) b, useCache );
                 return;
@@ -114,7 +114,7 @@ namespace wenku8.Model.Loaders
 
         public void LoadIntro( BookItem b, bool useCache = true )
         {
-            if ( b is BookInstruction ) return;
+            if ( b.IsSpider() ) return;
 
             CurrentBook = b;
 
@@ -217,11 +217,11 @@ namespace wenku8.Model.Loaders
 
             // Set the referer, as it is required by some site such as fanfiction.net
             new RuntimeCache( a => {
-                HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
+            HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
 
                 if ( !string.IsNullOrEmpty( B.OriginalUrl ) )
                 {
-                    R.RequestHeaders[ HttpRequestHeader.Referer ] = B.OriginalUrl;
+                    R.RequestHeaders.Referrer = new Uri( B.OriginalUrl );
                 }
 
                 return R;

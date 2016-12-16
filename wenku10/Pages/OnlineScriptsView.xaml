@@ -13,6 +13,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <n:TransStateConverter x:Key="TransStateConverter" />
+        <n:ColorAgeConverter x:Key="ColorAgeConverter" Fill="Red" />
         <v:DataCountConverter x:Key="DataCountConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
         <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
@@ -45,9 +46,12 @@
                             MaxWidth="300"
                             MinHeight="120" >
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                            <!-- Error Indicator -->
+                            <Rectangle e:TransitionDisplay.State="{Binding Error, Converter={StaticResource TransStateConverter}}"
+                                       Width="20" Height="20"
+                                       Margin="10"
+                                       Fill="{Binding ErrorDateTime, Converter={StaticResource ColorAgeConverter}}"
+                                       VerticalAlignment="Top" HorizontalAlignment="Right" />
 
                             <!-- Tick Icon -->
                             <Border e:TransitionDisplay.State="{Binding InCollection, Converter={StaticResource TransStateConverter}}"
@@ -90,14 +94,6 @@
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
                             </StackPanel>
-                            <!-- Error Indicator -->
-                            <Border e:TransitionDisplay.State="{Binding Error, Converter={StaticResource TransStateConverter}}"
-                                    Width="90" Height="90"
-                                    VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                                <i:IconCross AutoScale="True"
-                                             Foreground="OrangeRed"
-                                             Width="120" Height="120" />
-                            </Border>
                         </Grid>
                     </Border>
                 </DataTemplate>

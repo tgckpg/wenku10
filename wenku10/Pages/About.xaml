@@ -10,8 +10,85 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Black">
-        <canvas:CanvasAnimatedControl x:Name="Stage" IsHitTestVisible="False" />
-    </Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                  VerticalScrollMode="Disabled"
+                  HorizontalScrollBarVisibility="Auto"
+                  HorizontalScrollMode="Enabled">
+        <StackPanel Orientation="Horizontal">
+            <Border Width="600" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Foreground="{StaticResource MajorBrush}"
+                               x:Uid="/AppBar/About"
+                               Text="About" FontSize="25" />
+                    <StackPanel Grid.Row="1" Padding="10"
+                                BorderThickness="1" BorderBrush="#CCC">
+                        <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap">
+                            <Run Text="Staffs" FontSize="20" />
+                            <LineBreak />
+                            <Run Text="Design: 斟酌 鵬兄" />
+                            <LineBreak />
+                            <Run Text="Programming: tgckpg" />
+                            <LineBreak />
+                            <Run Text="Online Script Directory: Penguin" />
+                            <LineBreak />
+                            <Run Text="Actually it's just me all the way arond!" />
+                            <LineBreak />
+                            <LineBreak />
+                            <Run Text="Testers ( alphabetic order )" FontSize="20" />
+                            <LineBreak />
+                            <Run Text="atthis, ershiwo, rockywyc992, sora" />
+                            <LineBreak />
+                            <LineBreak />
+                            <Run Text="Special Thanks" FontSize="20" />
+                            <LineBreak />
+                            <Run Text="wenku8, people from Slack &amp; QQ, commenters on my blog, reporters on bugzilla" />
+                            <Run FontWeight="Bold" Text="and You" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Width="600" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Foreground="{StaticResource MajorBrush}"
+                               Text="(⌐■_■)" FontSize="25" />
+                    <Border Grid.Row="1"
+                            Background="Black"
+                            BorderThickness="1" BorderBrush="#CCC">
+                        <canvas:CanvasAnimatedControl x:Name="Stage" Grid.Row="1"  IsHitTestVisible="False" />
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Width="600" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Foreground="{StaticResource MajorBrush}"
+                               Text="term-notify" FontSize="25" />
+                    <StackPanel Grid.Row="1" Padding="10"
+                                BorderThickness="1" BorderBrush="#CCC">
+                        <Image Source="https://blog.astropenguin.net/image/s600/edc7d590895412f03f62b8920ba32a55.jpg" />
+                        <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap">
+                            <Run Text="This is an app I've made for sending &amp; receiving push notifications." />
+                            <LineBreak />
+                            <Run Text="If you manage to have a linux server running on your machine. I believe you'll love it because I've provided a very simple API for you to wget / curl your way through." />
+                            <LineBreak />
+                            <Run Text="No need to register account, anonymous, simple and easy to use." />
+                        </TextBlock>
+                        <HyperlinkButton NavigateUri="https://www.microsoft.com/store/apps/9nblggh5l0gj" Content="Download from Store" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
 
 </Page>

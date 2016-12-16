@@ -266,14 +266,8 @@ namespace wenku8.Settings.Layout
                     case "System":
                         switch ( Section )
                         {
-                            case "TOC":
-                                value = "ms-appx:///Assets/Samples/BgTOC.jpg";
-                                break;
                             case "INFO_VIEW":
                                 value = "ms-appx:///Assets/Samples/BgInfoView.jpg";
-                                break;
-                            case "COMMENTS":
-                                value = "ms-appx:///Assets/Samples/BgComments.jpg";
                                 break;
                             case "CONTENT_READER":
                                 value = "ms-appx:///Assets/Samples/BgContentReader.jpg";

@@ -27,7 +27,7 @@ namespace Tasks
         override protected void CreateRequest()
         {
             base.CreateRequest();
-            WCRequest.Headers[ HttpRequestHeader.UserAgent ] = UA;
+            UserAgent = UA;
         }
     }
 

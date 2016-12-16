@@ -52,13 +52,6 @@ namespace wenku8.Model.Section.SharersHub
         {
             try
             {
-#if DEBUG
-                Member.Activities.AddUI( new Activity( "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod", () => { } )
-                {
-                    TimeStamp = DateTime.Now
-                } );
-#endif
-
                 JsonObject JDef = JsonStatus.Parse( e.ResponseString );
                 JsonArray JData = JDef.GetNamedArray( "data" );
                 foreach( JsonValue JItem in JData )

@@ -34,5 +34,12 @@ namespace wenku10.Pages
 
             , NULL = "Null"
         ;
+
+        // Cannot be stored in backstacks
+        public static readonly string[] NonStackables = new string[] { CONTENT_READER };
+
+        // Can only have single instance in stack
+        public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW };
+
     }
 }

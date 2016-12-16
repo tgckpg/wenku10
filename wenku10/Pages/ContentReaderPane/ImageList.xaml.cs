@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Controls;
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
@@ -28,8 +29,6 @@ using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Resources;
-using wenku8.Settings;
-using Net.Astropenguin.DataModel;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -172,7 +171,7 @@ namespace wenku10.Pages.ContentReaderPane
                 TCSChapter.TrySetResult( new AsyncTryOut<Chapter>( true, C ) );
             };
 
-            if ( ReaderPage.CurrentBook is BookInstruction )
+            if ( ReaderPage.CurrentBook.IsSpider() )
             {
                 foreach( SChapter C in V.ChapterList.Cast<SChapter>() )
                 {

@@ -41,14 +41,17 @@ namespace wenku10.Pages.Settings.Themes
         private ReaderView ReaderContext;
         private BgContext RBgContext;
 
+        ScrollBar HScrollBar;
+        ScrollBar VScrollBar;
+
         public ContentReader()
         {
             NeedRedraw = false;
             this.InitializeComponent();
-            InitTemplate();
+            SetTemplate();
         }
 
-        private void InitTemplate()
+        private void SetTemplate()
         {
             ReaderContext = new ReaderView();
             ContentGrid.DataContext = ReaderContext;
@@ -81,6 +84,17 @@ namespace wenku10.Pages.Settings.Themes
                     BindAction = ( c ) => {
                         Properties.APPEARANCE_CONTENTREADER_BACKGROUND = c;
                         UpdateExampleFc();
+                    }
+                }
+
+                , new ColorItem(
+                    stx.Text( "Appearance_ContentReader_ScrollBar" )
+                    , Properties.APPEARANCE_CONTENTREADER_SCROLLBAR
+                )
+                {
+                    BindAction = ( c ) => {
+                        Properties.APPEARANCE_CONTENTREADER_SCROLLBAR = c;
+                        UpdateScrollBar();
                     }
                 }
 
@@ -251,6 +265,13 @@ namespace wenku10.Pages.Settings.Themes
             ContentGrid.ItemsSource = null;
             ContentGrid.ItemsSource = ExpContent;
         }
+        private void UpdateScrollBar()
+        {
+            if ( HScrollBar == null ) return;
+            HScrollBar.Foreground
+                = VScrollBar.Foreground
+                = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_SCROLLBAR );
+        }
         private void UpdateExampleLs()
         {
             if ( ExpContent == null ) return;
@@ -321,5 +342,13 @@ namespace wenku10.Pages.Settings.Themes
                 new string[] { "None", "Custom", "Preset", "System" }, RBgContext.BgType
             );
         }
+
+        private void ContentGrid_Loaded( object sender, RoutedEventArgs e )
+        {
+            VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 1 );
+            HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+            UpdateScrollBar();
+        }
+
     }
 }

@@ -402,7 +402,7 @@
     <value>Signature</value>
   </data>
   <data name="Account_Reviews_Post_Sign_Default.Text" xml:space="preserve">
-    <value>- from uwp</value>
+    <value>- Sent from Grimoire Reaper ( wenku10 )</value>
   </data>
   <data name=" Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
     <value>Font weight</value>
@@ -554,5 +554,8 @@
   </data>
   <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
     <value>Embed illustrations</value>
+  </data>
+  <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
+    <value>Scroll Bar</value>
   </data>
 </root>

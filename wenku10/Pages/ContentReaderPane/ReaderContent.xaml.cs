@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Logging;
 
+using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Model.Book;
 using wenku8.Model.Section;
@@ -47,6 +48,9 @@ namespace wenku10.Pages.ContentReaderPane
 
         private AHQueue AnchorHistory;
 
+        ScrollBar VScrollBar;
+        ScrollBar HScrollBar;
+
         public ReaderContent( ContentReader Container, int Anchor )
         {
             this.InitializeComponent();
@@ -58,6 +62,7 @@ namespace wenku10.Pages.ContentReaderPane
         {
             try
             {
+                AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
                 Reader.PropertyChanged -= ScrollToParagraph;
                 Reader.Dispose();
                 Reader = null;
@@ -86,11 +91,17 @@ namespace wenku10.Pages.ContentReaderPane
 
             MasterGrid.DataContext = Reader;
             Reader.PropertyChanged += ScrollToParagraph;
+            AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+        }
+
+        private void AppSettings_PropertyChanged( object sender, PropertyChangedEventArgs e )
+        {
+            if( e.PropertyName == Parameters.APPEARANCE_CONTENTREADER_SCROLLBAR ) UpdateScrollBar();
         }
 
         internal void Load( bool Reload = false )
         {
-            Reader.Load( !Reload || CurrentBook.IsLocal );
+            Reader.Load( !Reload || CurrentBook.IsLocal() );
         }
 
         internal void ContentGrid_SelectionChanged( object sender, SelectionChangedEventArgs e )
@@ -158,6 +169,10 @@ namespace wenku10.Pages.ContentReaderPane
             Reader.SelectIndex( Reader.SelectedIndex + 1 );
         }
 
+
+        private void GoTop( object sender, RoutedEventArgs e ) { GoTop(); }
+        private void GoBottom( object sender, RoutedEventArgs e ) { GoBottom(); }
+
         internal void GoTop() { GotoIndex( 0 ); }
         internal void GoBottom() { GotoIndex( ContentGrid.Items.Count - 1 ); }
 
@@ -174,8 +189,9 @@ namespace wenku10.Pages.ContentReaderPane
         }
 
         // This calls onLoaded
-        internal void SetBookAnchor( object sender, RoutedEventArgs e )
+        private void SetBookAnchor( object sender, RoutedEventArgs e )
         {
+            SetScrollBar();
             ToggleInertia();
 
             ContentGrid.IsSynchronizedWithCurrentItem = false;
@@ -183,6 +199,21 @@ namespace wenku10.Pages.ContentReaderPane
             // Reader may not be available as ContentGrid.OnLoad is faster then SetTemplate
             if ( !( Reader == null || Reader.SelectedData == null ) )
                 ContentGrid.ScrollIntoView( Reader.SelectedData, ScrollIntoViewAlignment.Leading );
+        }
+
+        private void SetScrollBar()
+        {
+            VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 1 );
+            HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+
+            UpdateScrollBar();
+        }
+
+        private void UpdateScrollBar()
+        {
+            VScrollBar.Foreground
+               = HScrollBar.Foreground
+               = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_SCROLLBAR );
         }
 
         internal void ToggleInertia()

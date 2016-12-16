@@ -169,7 +169,7 @@ namespace wenku10.Pages
             ActivyBtn.Click += ToggleActivities;
 
             SecondaryIconButton UploadBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Upload, stx.Text( "SubmitScript" ) );
-            UploadBtn.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new Sharers.ScriptUpload( UploadExit ) );
+            UploadBtn.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new ScriptUpload( UploadExit ) );
 
             SecondaryIconButton MAuthBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
             MAuthBtn.Click += ManageAuths;

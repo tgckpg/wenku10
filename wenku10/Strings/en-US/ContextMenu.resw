@@ -222,4 +222,13 @@
   <data name="SetSubsKey.Text" xml:space="preserve">
     <value>Set API Key</value>
   </data>
+  <data name="GotoBottom.Text" xml:space="preserve">
+    <value>Goto Bottom</value>
+  </data>
+  <data name="GotoTop.Text" xml:space="preserve">
+    <value>Goto Top</value>
+  </data>
+  <data name="Locate.Text" xml:space="preserve">
+    <value>Locate</value>
+  </data>
 </root>

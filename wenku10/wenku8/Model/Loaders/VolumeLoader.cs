@@ -38,11 +38,11 @@ namespace wenku8.Model.Loaders
 
             Shared.LoadMessage( "LoadingVolume" );
             CurrentBook = b;
-            if ( b.IsLocal || ( !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
+            if ( b.IsLocal() || ( !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
             {
                 OnComplete( b );
             }
-            else if ( b is BookInstruction )
+            else if ( b.IsSpider() )
             {
                 LoadInst( ( BookInstruction ) b );
             }

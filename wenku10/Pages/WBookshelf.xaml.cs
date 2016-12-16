@@ -18,7 +18,6 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
-using Net.Astropenguin.UI.Icons;
 
 using wenku8.CompositeElement;
 using wenku8.Config;
@@ -27,8 +26,9 @@ using wenku8.Effects;
 using wenku8.Model.Book;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
-using wenku8.Storage;
 using wenku8.Model.Pages;
+using wenku8.Resources;
+using wenku8.Storage;
 
 namespace wenku10.Pages
 {
@@ -123,7 +123,7 @@ namespace wenku10.Pages
 
             if ( Properties.ENABLE_ONEDRIVE )
             {
-                AppBarButtonEx OneDriveButton = UIAliases.CreateAppBarBtnEx( new IconOneDrive(), stx.Text( "SyncBookmarks" ) );
+                AppBarButtonEx OneDriveButton = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "SyncBookmarks" ) );
                 ButtonOperation SyncOp = new ButtonOperation( OneDriveButton );
 
                 SyncOp.SetOp( OneDriveRsync );

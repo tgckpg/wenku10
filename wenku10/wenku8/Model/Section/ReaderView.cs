@@ -100,19 +100,18 @@ namespace wenku8.Model.Section
         public Action OnComplete { get; private set; }
 
         private BookStorage BS = new BookStorage();
-        private AutoAnchor AAnc = new AutoAnchor();
+        private AutoAnchor Anchors;
         private ChapterLoader CL;
         private Chapter BindChapter;
         private Paragraph Selected;
 
-        private CustomAnchor Anchors;
         private int AutoAnchorOvd = -1;
 
         public ReaderView( BookItem B, Chapter C )
             :this()
         {
             BindChapter = C;
-            Anchors = new CustomAnchor( B );
+            Anchors = new AutoAnchor( B );
             CL = new ChapterLoader( B, SetContent );
         }
 
@@ -175,7 +174,7 @@ namespace wenku8.Model.Section
                 Items.Add( new BookmarkListItem( Vol ) );
                 foreach( Chapter C in Vol.ChapterList )
                 {
-                    IEnumerable<XParameter> Params = Anchors.GetAnchors( C.cid );
+                    IEnumerable<XParameter> Params = Anchors.GetCustomAncs( C.cid );
                     if ( Params == null ) continue;
                     foreach( XParameter Param in Params )
                     {
@@ -190,7 +189,7 @@ namespace wenku8.Model.Section
         internal void RemoveAnchor( BookmarkListItem flyoutTargetItem )
         {
             int index = flyoutTargetItem.AnchorIndex;
-            Anchors.RemoveAnchor( flyoutTargetItem.GetChapter().cid, index );
+            Anchors.RemoveCustomAnc( flyoutTargetItem.GetChapter().cid, index );
             if( index < Data.Count() )
             {
                 Data[ index ].AnchorColor = null;
@@ -208,7 +207,7 @@ namespace wenku8.Model.Section
                 int index = -1;
                 if ( AutoAnchor )
                 {
-                    index = AAnc.GetReadAnchor( BindChapter.cid );
+                    index = Anchors.GetAutoChAnc( BindChapter.cid );
                 }
 
                 if( AutoAnchorOvd != -1 )
@@ -236,7 +235,7 @@ namespace wenku8.Model.Section
             SelectedData = P;
             if( AutoAnchor )
             {
-                AAnc.SaveAnchor( BindChapter.cid, Data.IndexOf( P ) );
+                Anchors.SaveAutoChAnc( BindChapter.cid, Data.IndexOf( P ) );
             }
         }
 
@@ -254,13 +253,13 @@ namespace wenku8.Model.Section
 
             if( AutoBookmark )
             {
-                AAnc.SaveBookmark( BindChapter.aid, BindChapter.cid );
+                Anchors.SaveAutoVolAnc( BindChapter.cid );
             }
         }
 
         public void SetCustomAnchor( string Name, Paragraph P )
         {
-            Anchors.SetAnchor(
+            Anchors.SetCustomAnc(
                 BindChapter.cid
                 , Name
                 , Data.IndexOf( P )
@@ -272,7 +271,7 @@ namespace wenku8.Model.Section
 
         private void ApplyCustomAnchors( string cid, IList<Paragraph> data )
         {
-            IEnumerable<XParameter> ThisAnchors = Anchors.GetAnchors( cid );
+            IEnumerable<XParameter> ThisAnchors = Anchors.GetCustomAncs( cid );
             if ( ThisAnchors == null ) return;
             int l = data.Count();
             foreach( XParameter Anchors in ThisAnchors )
