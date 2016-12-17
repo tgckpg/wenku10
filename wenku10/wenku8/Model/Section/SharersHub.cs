@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Windows.Data.Json;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
@@ -17,12 +16,10 @@ using Net.Astropenguin.Messaging;
 namespace wenku8.Section
 {
     using AdvDM;
-    using Ext;
     using Model.ListItem;
     using Model.ListItem.Sharers;
     using Model.Loaders;
     using Model.REST;
-    using Model.Section.SharersHub;
     using Settings;
     using System;
 
@@ -82,6 +79,7 @@ namespace wenku8.Section
             Searching = true;
             SHSearchLoader SHLoader = new SHSearchLoader( Query, AccessTokens );
 
+            SearchSet.Clear();
             SearchSet.ConnectLoader( SHLoader );
             await SearchSet.LoadMoreItemsAsync( 0 );
 

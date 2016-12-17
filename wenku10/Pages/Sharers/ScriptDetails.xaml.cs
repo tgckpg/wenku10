@@ -24,11 +24,13 @@ using Net.Astropenguin.Messaging;
 
 using wenku8.AdvDM;
 using wenku8.Effects;
+using wenku8.Ext;
 using wenku8.CompositeElement;
 using wenku8.Model.Comments;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
+using wenku8.Model.Pages;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.Settings;
@@ -40,7 +42,7 @@ using CryptAES = wenku8.System.CryptAES;
 namespace wenku10.Pages.Sharers
 {
     using Dialogs.Sharers;
-    using wenku8.Model.Pages;
+    using SHHub;
     using SHTarget = SharersRequest.SHTarget;
 
     sealed partial class ScriptDetails : Page, ICmdControls, IAnimaPage
@@ -67,6 +69,8 @@ namespace wenku10.Pages.Sharers
         AppBarButton DownloadBtn;
         AppBarButton KeyReqBtn;
 
+        SHMember Member;
+
         public ScriptDetails()
         {
             this.InitializeComponent();
@@ -89,6 +93,8 @@ namespace wenku10.Pages.Sharers
             StatPanel.RenderTransform = new TranslateTransform();
             AccessControls.RenderTransform = new TranslateTransform();
 
+            Member = X.Singleton<SHMember>( XProto.SHMember );
+
             if ( BindItem.Encrypted )
             {
                 Crypt = ( CryptAES ) new AESManager().GetAuthById( BindItem.Id );
@@ -96,7 +102,7 @@ namespace wenku10.Pages.Sharers
 
             AccessToken = ( string ) new TokenManager().GetAuthById( BindItem.Id )?.Value;
 
-            if ( !string.IsNullOrEmpty( AccessToken ) )
+            if ( !string.IsNullOrEmpty( AccessToken ) || ( Member.IsLoggedIn && Member.Id == BindItem.AuthorId ) )
             {
                 TransitionDisplay.SetState( AccessControls, TransitionState.Active );
             }

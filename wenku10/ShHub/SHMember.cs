@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Windows.Data.Json;
 using Windows.Foundation;
 
 using Net.Astropenguin.Helpers;
@@ -29,6 +30,7 @@ namespace wenku10.SHHub
         public bool CanRegister { get { return true; } }
         public bool IsLoggedIn { get; private set; }
         public bool WillLogin { get; private set; }
+        public string Id { get; private set; }
 
         public MemberStatus Status { get; set; }
 
@@ -137,7 +139,9 @@ namespace wenku10.SHHub
         {
             try
             {
-                JsonStatus.Parse( e.ResponseString );
+                JsonObject JObj = JsonStatus.Parse( e.ResponseString );
+                Id = JObj.GetNamedString( "data" );
+
                 IsLoggedIn = true;
                 UpdateStatus( MemberStatus.LOGGED_IN );
             }
