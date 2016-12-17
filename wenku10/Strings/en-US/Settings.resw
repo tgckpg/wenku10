@@ -558,4 +558,7 @@
   <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
     <value>Scroll Bar</value>
   </data>
+  <data name="Desc_EBWin_Help.Text" xml:space="preserve">
+    <value>Can't install your dictionaries?</value>
+  </data>
 </root>

@@ -36,6 +36,7 @@ using CryptRSA = wenku8.System.CryptRSA;
 namespace wenku10.Pages.Sharers
 {
     using Dialogs.Sharers;
+    using wenku8.CompositeElement;
     using SHTarget = SharersRequest.SHTarget;
 
     sealed partial class HSRequestView : Page, ICmdControls
@@ -95,12 +96,7 @@ namespace wenku10.Pages.Sharers
         {
             StringResources stx = new StringResources( "ContextMenu" );
 
-            PlaceBtn = new AppBarButton()
-            {
-                Icon = new SymbolIcon( Symbol.Add )
-                , Label = stx.Text( "PlaceRequest" )
-            };
-
+            PlaceBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Text( "PlaceRequest" ) );
             PlaceBtn.Click += ( sender, e ) => PlaceRequest();
 
             MajorControls = new AppBarButton[] { PlaceBtn };

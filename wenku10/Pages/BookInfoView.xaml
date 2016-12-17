@@ -285,6 +285,7 @@
                 </Grid>
 
                 <TextBlock x:Name="IntroText"
+                           c:AttachedDictAction.Source="{Binding Intro}"
                            Grid.Row="3"
                            Margin="0,5"
                            TextWrapping="Wrap" Text="{Binding Intro}"

@@ -20,9 +20,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Margin="10" Grid.Row="0">
-            <TextBlock Margin="5" Text="EBWin Dictionaries"
-                       x:Uid="/Settings/Desc_EBWin_Long"
-                       TextWrapping="Wrap" Foreground="{StaticResource SubtleBrush}" />
+            <TextBlock Margin="5"
+                       TextWrapping="Wrap" Foreground="{StaticResource SubtleBrush}">
+                <Run x:Uid="/Settings/Desc_EBWin_Long"
+                     Text="EBWin Dictionaries" />
+                <Hyperlink NavigateUri="https://github.com/tgckpg/wenku10/wiki/en-ebwin#cant-install-dictionaries--dictionary-does-not-work">
+                    <Run x:Uid="/Settings/Desc_EBWin_Help" />
+                </Hyperlink>
+            </TextBlock>
             <Button Margin="5"
                     Click="OpenNewDict"
                     HorizontalAlignment="Right">

@@ -120,6 +120,7 @@ namespace wenku8.System
 #if DEBUG
             Logger.Log( ID, typeof( global::wenku10.App ).GetTypeInfo().Assembly.FullName, LogType.INFO );
 #endif
+            Logger.Log( ID, string.Format( "Device Info: {0} / {1}", AppSettings.DeviceName, AppSettings.DeviceId ), LogType.INFO );
             Logger.Log( ID, string.Format( "Language is {0}", Lang ), LogType.INFO );
 		}
     }

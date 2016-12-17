@@ -57,7 +57,10 @@ namespace wenku10.SHHub
         {
             Pages.Dialogs.Sharers.Register RegisterDialog = new Pages.Dialogs.Sharers.Register();
             await Popups.ShowDialog( RegisterDialog );
-            return !RegisterDialog.Canceled;
+            if ( RegisterDialog.Canceled ) return false;
+
+            var j = Popups.ShowDialog( new Pages.Dialogs.Login( this ) );
+            return true;
         }
 
         public void Login( string Account, string Password )

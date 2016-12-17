@@ -402,4 +402,13 @@
   <data name="MSCognitiveSrv.Text" xml:space="preserve">
     <value>MS Cognitive Service</value>
   </data>
+  <data name="RequestDevice.Text" xml:space="preserve">
+    <value>請求裝置</value>
+  </data>
+  <data name="DeviceNotMatch.Text" xml:space="preserve">
+    <value>這個請求不是由當前裝置發出的 ( 或者應用曾經重新安裝過 )。由於私鑰不會在裝置之間共享，所以此裝置可能無法取得授權。</value>
+  </data>
+  <data name="NoDictionary.Text" xml:space="preserve">
+    <value>沒有字典。</value>
+  </data>
 </root>

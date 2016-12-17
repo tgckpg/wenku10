@@ -59,6 +59,7 @@ namespace wenku10.Pages
         public void SoftOpen()
         {
             MessageBus.OnDelivery += MessageBus_OnDelivery;
+            Member.OnStatusChanged += Member_OnStatusChanged;
 
             lock ( PendingRemove )
             {
@@ -70,7 +71,11 @@ namespace wenku10.Pages
             }
         }
 
-        public void SoftClose() { MessageBus.OnDelivery -= MessageBus_OnDelivery; }
+        public void SoftClose()
+        {
+            MessageBus.OnDelivery -= MessageBus_OnDelivery;
+            Member.OnStatusChanged -= Member_OnStatusChanged;
+        }
 
         #region Anima
         Storyboard AnimaStory = new Storyboard();
@@ -107,6 +112,7 @@ namespace wenku10.Pages
             InitAppBar();
 
             Member = X.Singleton<SHMember>( XProto.SHMember );
+
             ActivyList.DataContext = Member;
             ActivyBtn.SetBinding( AppBarButtonEx.CountProperty, new Binding() { Source = Member.Activities, Path = new PropertyPath( "Count" ) } );
 
@@ -115,6 +121,8 @@ namespace wenku10.Pages
 
             SHHub = new SharersHub();
             SHHub.PropertyChanged += SHHub_PropertyChanged;
+
+            UpdateActivities();
 
             LayoutRoot.DataContext = SHHub;
             SHHub.Search( "" );
@@ -142,6 +150,19 @@ namespace wenku10.Pages
                         return MAuth;
                     } );
                     break;
+            }
+        }
+
+        private void Member_OnStatusChanged( object sender, MemberStatus args ) { UpdateActivities(); }
+
+        private async void UpdateActivities()
+        {
+            if ( Member.IsLoggedIn )
+            {
+                ActivyBtn.IsLoading = true;
+                await new MyRequests().Get();
+                await new MyInbox().Get();
+                ActivyBtn.IsLoading = false;
             }
         }
 
@@ -184,10 +205,7 @@ namespace wenku10.Pages
 
             if ( Member.Activities.Count == 0 )
             {
-                ActivyBtn.IsLoading = true;
-                await new MyRequests().Get();
-                await new MyInbox().Get();
-                ActivyBtn.IsLoading = false;
+                UpdateActivities();
             }
             else
             {

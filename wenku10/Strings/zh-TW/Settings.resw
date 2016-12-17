@@ -558,4 +558,7 @@
   <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
     <value>捲軸</value>
   </data>
+  <data name="Desc_EBWin_Help.Text" xml:space="preserve">
+    <value>無法安裝字典？</value>
+  </data>
 </root>

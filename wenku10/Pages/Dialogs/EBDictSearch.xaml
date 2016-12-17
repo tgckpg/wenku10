@@ -19,6 +19,7 @@
 
     <ContentDialog.Resources>
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <v:DataVisConverter x:Key="DataVisConverter" />
         <Style x:Key="TextBoxStyle1" TargetType="TextBox">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <Setter Property="Background" Value="Transparent" />
@@ -96,7 +97,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel>
+        <StackPanel Visibility="{Binding ElementName=ParaText, Path=Text, Converter={StaticResource DataVisConverter}}">
             <TextBlock x:Uid="/AppResources/EBWin_HighlightToSearch"
                        Foreground="{StaticResource MinorBrush}"
                        Text="Please highlight a word to search" />
@@ -116,7 +117,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox x:Name="CurrentWord" Grid.Column="0"
-                     TextChanging="ManualSearchTerm"/>
+                     TextChanging="ManualSearchTerm" />
             <TextBlock Grid.Column="1"
                        Foreground="{StaticResource MinorBrush}"
                        HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -145,6 +146,19 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Grid x:Name="InstallDict" Grid.RowSpan="3"
+              Visibility="{Binding HasDict, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+              Background="{StaticResource MajorBackgroundBrush}">
+            <TextBlock >
+                <Run x:Uid="/AppResources/NoDictionary"
+                     Text="No dicitonary." />
+                <Hyperlink Click="GoInstallDictionary">
+                    <Run x:Uid="/Settings/Desc_EBWin_Install"
+                         Text="Install new dicts"/>
+                </Hyperlink>?
+            </TextBlock>
+
+        </Grid>
         <Grid x:Name="Mask" Grid.RowSpan="3"
               e:TransitionDisplay.Mode="A01"
               e:TransitionDisplay.State="Active"

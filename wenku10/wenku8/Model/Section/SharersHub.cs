@@ -22,7 +22,7 @@ namespace wenku8.Section
     using Model.ListItem.Sharers;
     using Model.Loaders;
     using Model.REST;
-    using Resources;
+    using Model.Section.SharersHub;
     using Settings;
     using System;
 
@@ -31,8 +31,6 @@ namespace wenku8.Section
         private readonly string ID = typeof( SharersHub ).Name;
 
         RuntimeCache RCache;
-
-        private IMember Member;
 
         public Observables<HubScriptItem, HubScriptItem> SearchSet { get; private set; }
 
@@ -64,8 +62,6 @@ namespace wenku8.Section
             SearchSet = new Observables<HubScriptItem, HubScriptItem>();
 
             RCache = new RuntimeCache();
-            Member = X.Singleton<IMember>( XProto.SHMember );
-            Member.OnStatusChanged += Member_OnStatusChanged;
 
             MessageBus.OnDelivery += MessageBus_OnDelivery;
 
@@ -75,17 +71,7 @@ namespace wenku8.Section
 
         ~SharersHub()
         {
-            Member.OnStatusChanged -= Member_OnStatusChanged;
             MessageBus.OnDelivery -= MessageBus_OnDelivery;
-        }
-
-        private void Member_OnStatusChanged( object sender, MemberStatus args )
-        {
-            if( Member.IsLoggedIn )
-            {
-                // GetMyRequests();
-                // GetMyInbox();
-            }
         }
 
         public async void Search( string Query, IEnumerable<string> AccessTokens = null )
@@ -97,7 +83,7 @@ namespace wenku8.Section
             SHSearchLoader SHLoader = new SHSearchLoader( Query, AccessTokens );
 
             SearchSet.ConnectLoader( SHLoader );
-            SearchSet.UpdateSource( await SHLoader.NextPage() );
+            await SearchSet.LoadMoreItemsAsync( 0 );
 
             Searching = false;
         }
