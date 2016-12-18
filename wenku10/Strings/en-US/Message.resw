@@ -195,4 +195,7 @@
   <data name="ShellTile" xml:space="preserve">
     <value>LiveTile</value>
   </data>
+  <data name="ConfirmDeathblow" xml:space="preserve">
+    <value>This book seems to be forbidden. Use deathblow? ( All anchors / bookmarks for this book will be lost )</value>
+  </data>
 </root>

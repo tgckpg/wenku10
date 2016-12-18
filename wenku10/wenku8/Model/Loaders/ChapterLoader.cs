@@ -80,20 +80,19 @@ namespace wenku8.Model.Loaders
                 wCache.InitDownload(
                     C.ChapterPath
                     , X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.Id, C.cid )
-
                     , async ( DRequestCompletedEventArgs e, string path ) =>
                     {
                         await new ContentParser().OrganizeBookContent( e.ResponseString, C );
                         OnComplete( C );
-                    }
 
+                        X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook ).Check( e.ResponseBytes );
+                    }
                     , ( string Request, string path, Exception ex ) =>
                     {
                         Logger.Log( ID, ex.Message, LogType.ERROR );
-                        System.Utils.ShowError( () => { return new ErrorMessage().DOWNLOAD; } );
-                        // OnComplete( C );
-                    }
-
+                        System.Utils.ShowError( () => new ErrorMessage().DOWNLOAD );
+                            // OnComplete( C );
+                        }
                     , false
                 );
             }

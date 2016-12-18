@@ -169,6 +169,9 @@
     <Compile Include="Pages\WBookshelf.xaml.cs">
       <DependentUpon>WBookshelf.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\WDeathblow.xaml.cs">
+      <DependentUpon>WDeathblow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WNavSelections.xaml.cs">
       <DependentUpon>WNavSelections.xaml</DependentUpon>
     </Compile>
@@ -398,6 +401,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WDeathblow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

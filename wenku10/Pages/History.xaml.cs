@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 using wenku8.CompositeElement;
 using wenku8.Effects;
@@ -28,7 +29,7 @@ using BInfConfig = wenku8.Settings.Layout.BookInfoView;
 
 namespace wenku10.Pages
 {
-    public sealed partial class History : Page, ICmdControls, IAnimaPage
+    public sealed partial class History : Page, ICmdControls, IAnimaPage, INavPage
     {
         public static readonly string ID = typeof( History ).Name;
 
@@ -44,6 +45,8 @@ namespace wenku10.Pages
         public IList<ICommandBarElement> MinorControls { get; private set; }
 
         private HistorySection HistoryContext;
+
+        private string ActiveId = "-1";
 
         private volatile bool Locked = false;
 
@@ -81,6 +84,17 @@ namespace wenku10.Pages
         }
         #endregion
 
+        public void SoftOpen() {}
+        public void SoftClose() { MessageBus.OnDelivery -= MessageBus_OnDelivery; }
+
+        private void MessageBus_OnDelivery( Message Mesg )
+        {
+            if( ActiveId.Equals( Mesg.Payload ) )
+            {
+                LoadingMessage.Text = Mesg.Content;
+            }
+        }
+
         private void SetTemplate()
         {
             HistoryView.RenderTransform = new TranslateTransform();
@@ -96,7 +110,9 @@ namespace wenku10.Pages
             Locked = true;
 
             ActiveItem Item = ( ActiveItem ) e.ClickedItem;
+            ActiveId = Item.Payload;
 
+            MessageBus.OnDelivery += MessageBus_OnDelivery;
             BookItem Book = await ItemProcessor.GetBookFromId( Item.Payload );
 
             if ( Book == null )
@@ -119,6 +135,8 @@ namespace wenku10.Pages
                 ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
             }
 
+            MessageBus.OnDelivery -= MessageBus_OnDelivery;
+            LoadingMessage.Text = "";
             Locked = false;
         }
 

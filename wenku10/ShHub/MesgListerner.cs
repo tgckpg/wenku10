@@ -12,6 +12,9 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
 using wenku8.AdvDM;
+using wenku8.Ext;
+using wenku8.CompositeElement;
+using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
@@ -65,17 +68,21 @@ namespace wenku10.ShHub
 
                 case AppKeys.HS_DECRYPT_FAIL:
                     StringResources stx = new StringResources( "Message", "ContextMenu" );
-                    MessageDialog MsgBox = new MessageDialog( stx.Str( "Desc_DecryptionFailed" ), stx.Str( "DecryptionFailed" ) );
 
-                    HSI = ( HubScriptItem ) Mesg.Payload;
                     bool Place = false;
 
-                    MsgBox.Commands.Add( new UICommand( stx.Text( "PlaceRequest", "ContextMenu" ), ( x ) => { Place = true; } ) );
-                    MsgBox.Commands.Add( new UICommand( stx.Str( "OK" ) ) );
+                    await Popups.ShowDialog( UIAliases.CreateDialog(
+                        stx.Str( "Desc_DecryptionFailed" ), stx.Str( "DecryptionFailed" )
+                        , () => Place = true
+                        , stx.Text( "PlaceRequest", "ContextMenu" ), stx.Str( "OK" )
+                    ) );
 
-                    await Popups.ShowDialog( MsgBox );
+                    if ( Place )
+                    {
+                        HSI = ( HubScriptItem ) Mesg.Payload;
+                        TransferRequest( SHTarget.KEY, HSI );
+                    }
 
-                    if ( Place ) TransferRequest( SHTarget.KEY, HSI );
                     break;
 
                 case AppKeys.HS_OPEN_COMMENT:
@@ -88,6 +95,25 @@ namespace wenku10.ShHub
 
                 case AppKeys.HS_NO_VOLDATA:
                     ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).Id, StatusType.HS_NO_VOLDATA );
+                    break;
+
+                case AppKeys.EX_DEATHBLOW:
+                    stx = new StringResources( "Message", "ContextMenu" );
+
+                    bool UseDeathblow = false;
+
+                    await Popups.ShowDialog( UIAliases.CreateDialog(
+                        stx.Str( "ConfirmDeathblow" )
+                        , () => UseDeathblow = true
+                        , stx.Str( "Yes" ), stx.Str( "No")
+                    ) );
+
+                    if( UseDeathblow )
+                    {
+                        IDeathblow Deathblow = ( IDeathblow ) Mesg.Payload;
+                        ControlFrame.Instance.NavigateTo( PageId.W_DEATHBLOW, () => new WDeathblow( Deathblow ) );
+                    }
+
                     break;
             }
         }

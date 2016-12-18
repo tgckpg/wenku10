@@ -126,6 +126,11 @@ namespace wenku10.Pages
 
             LayoutRoot.DataContext = SHHub;
             SHHub.Search( "" );
+
+            if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+            {
+                var j = ControlFrame.Instance.CommandMgr.Authenticate();
+            }
         }
 
         private static HashSet<HubScriptItem> PendingRemove = new HashSet<HubScriptItem>();

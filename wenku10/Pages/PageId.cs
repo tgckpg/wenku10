@@ -28,6 +28,7 @@ namespace wenku10.Pages
             , W_USER_INFO = "WUserInfo"
             , W_NAV_SEL = "WNavSelections"
             , W_NAV_LIST = "WNavList-"
+            , W_DEATHBLOW = "WDeathblow"
 
             , SG_W = "SuperGiants-W"
             , SG_SH = "SuperGiants-SH"
@@ -36,7 +37,7 @@ namespace wenku10.Pages
         ;
 
         // Cannot be stored in backstacks
-        public static readonly string[] NonStackables = new string[] { CONTENT_READER };
+        public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW };
 
         // Can only have single instance in stack
         public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW };
