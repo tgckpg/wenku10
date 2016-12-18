@@ -66,6 +66,8 @@ namespace wenku10.Pages
 
         Storyboard CacheStateStory;
 
+        private volatile bool Loading = false;
+
         private BookInfoView()
         {
             this.InitializeComponent();
@@ -106,10 +108,9 @@ namespace wenku10.Pages
             InitAppBar();
 
             CacheStateStory = new Storyboard();
-            SimpleStory.DoubleAnimation( CacheStateStory, CacheStateRect, "Opacity", 1, 0, 350 );
+            ReloadIcon.RenderTransform = new RotateTransform() { CenterX = 7.5, CenterY = 7.5 };
+            SimpleStory.DoubleAnimation( CacheStateStory, ReloadIcon.RenderTransform, "Angle", 0, 360, 2000, 0, new SineEase() );
             CacheStateStory.RepeatBehavior = RepeatBehavior.Forever;
-            CacheStateStory.AutoReverse = true;
-            CacheStateStory.FillBehavior = FillBehavior.Stop;
         }
 
         private void InitAppBar()
@@ -133,16 +134,13 @@ namespace wenku10.Pages
             AppBarButton ThemeBtn = UIAliases.CreateAppBarBtn( Symbol.Caption, stx.Text( "CustomBackground", "ContextMenu" ) );
             ThemeBtn.Click += ( s, e ) => { FlyoutBase.ShowAttachedFlyout( ThemeBtn ); };
 
-            AppBarButton ReloadBtn = UIAliases.CreateAppBarBtn( Symbol.Refresh, stx.Text( "Reload", "AppBar" ) );
-            ReloadBtn.Click += ReloadBtn_Click;
-
             FlyoutBase.SetAttachedFlyout( ThemeBtn, ( MenuFlyout ) Resources[ "ThemeFlyout" ] );
 
             BrowserBtn = UIAliases.CreateAppBarBtn( Symbol.Globe, stx.Text( "OpenInBrowser" ) );
             BrowserBtn.Click += BrowserBtn_Click;
 
             MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
-            MinorControls = new ICommandBarElement[] { ThemeBtn, BrowserBtn, ReloadBtn };
+            MinorControls = new ICommandBarElement[] { ThemeBtn, BrowserBtn };
         }
 
         private void OpenBook( BookItem Book )
@@ -153,6 +151,8 @@ namespace wenku10.Pages
             PageProcessor.ReadSecondaryTile( Book );
 
             CacheStateStory.Begin();
+
+            Loading = true;
             BookLoader BL = new BookLoader( BookLoadComplete );
 
             BL.Load( Book, true );
@@ -173,6 +173,8 @@ namespace wenku10.Pages
 
         private void BookLoadComplete( BookItem Book )
         {
+            Loading = false;
+
             var j = Dispatcher.RunIdleAsync( x =>
             {
                 bool CanBing = false;
@@ -286,6 +288,9 @@ namespace wenku10.Pages
 
         private void ReloadBtn_Click( object sender, RoutedEventArgs e )
         {
+            if ( Loading ) return;
+            Loading = true;
+
             CacheStateStory.Begin();
             BookLoader BL = new BookLoader( BookLoadComplete );
             BL.Load( ThisBook );
@@ -524,6 +529,7 @@ namespace wenku10.Pages
 
         public async Task EnterAnima()
         {
+            SplashCover.Opacity = 1;
             SplashCover.SplashIn();
 
             AnimaStory.Stop();
@@ -547,10 +553,15 @@ namespace wenku10.Pages
 
         public async Task ExitAnima()
         {
-            SplashCover.SplashOut();
-
             AnimaStory.Stop();
             AnimaStory.Children.Clear();
+
+            if( SplashCover.Filling )
+            {
+                SimpleStory.DoubleAnimation( AnimaStory, SplashCover, "Opacity", 1, 0, 350 );
+            }
+
+            SplashCover.SplashOut();
 
             SimpleStory.DoubleAnimation( AnimaStory, Indicators, "Opacity", 1, 0, 350, 400 );
             SimpleStory.DoubleAnimation( AnimaStory, Indicators.RenderTransform, "Y", 0, -30, 350, 400 );

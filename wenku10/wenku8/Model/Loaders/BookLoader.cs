@@ -107,6 +107,9 @@ namespace wenku8.Model.Loaders
                 await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
             }
 
+            if ( SBook.Processed && SBook.ProcessSuccess )
+                B.LastCache = DateTime.Now;
+
             await CacheCover( B, true );
 
             OnComplete( B );
