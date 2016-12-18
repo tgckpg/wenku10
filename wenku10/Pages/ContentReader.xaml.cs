@@ -205,6 +205,8 @@ namespace wenku10.Pages
             SetSlideGesture();
 
             Window.Current.SizeChanged += Current_SizeChanged;
+
+            if( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
         }
 
         private void InitAppBar()
@@ -234,6 +236,16 @@ namespace wenku10.Pages
             TriggerOrientation();
         }
 
+        private void ContentReader_SizeChanged( object sender, SizeChangedEventArgs e )
+        {
+            if ( e.PreviousSize != new Size( 0, 0 ) )
+            {
+                TriggerHorzLayoutAware( e.PreviousSize, e.NewSize );
+            }
+
+            LastAwareOri = Orientation;
+        }
+
         private void ScrollTop( KeyCombinationEventArgs obj )
         {
             ContentView.GoTop();
@@ -242,6 +254,32 @@ namespace wenku10.Pages
         private void ScrollBottom( KeyCombinationEventArgs obj )
         {
             ContentView.GoBottom();
+        }
+
+        private ApplicationViewOrientation? LastAwareOri;
+        private void TriggerHorzLayoutAware( Size Old, Size New )
+        {
+            bool UpdatePane = false;
+            bool LocalRedraw = false;
+
+            if ( LastAwareOri == Orientation )
+            {
+                UpdatePane = ( Old.Height != New.Height );
+                LocalRedraw = ( IsHorz && UpdatePane );
+            }
+
+            if ( UpdatePane )
+            {
+                // This handles CommandBar goes hidden
+                MainSplitView.OpenPane();
+                MainSplitView.ClosePane();
+            }
+
+            if ( LocalRedraw )
+            {
+                ReaderSlideBack();
+                Redraw();
+            }
         }
 
         private void TriggerOrientation()

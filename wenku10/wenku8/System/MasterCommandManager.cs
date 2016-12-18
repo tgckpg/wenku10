@@ -241,7 +241,6 @@ namespace wenku8.System
                 M2ndCommands = w82ndCommands;
 
                 ControlFrame.Instance.SetHomePage( PageId.SG_W, () => new SuperGiants( X.Instance<ILoader<ActiveItem>>( XProto.StaffPicks ) ) );
-                // SetHomePage( PageId.BOOK_SPIDER_VIEW, () => new BookSpidersView() );
             }
         }
 
