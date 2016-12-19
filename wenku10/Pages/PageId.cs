@@ -40,7 +40,7 @@ namespace wenku10.Pages
         public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW };
 
         // Can only have single instance in stack
-        public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW };
+        public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW, SCRIPT_DETAILS };
 
     }
 }

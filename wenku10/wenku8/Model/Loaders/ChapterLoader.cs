@@ -60,10 +60,7 @@ namespace wenku8.Model.Loaders
 
                 if ( SC.TempFile != null )
                 {
-                    await new ContentParser().OrganizeBookContent(
-                        await SC.TempFile.ReadString()
-                        , SC
-                    );
+                    await new ContentParser().OrganizeBookContent( await SC.TempFile.ReadString() , SC );
                 }
 
                 OnComplete( C );
@@ -91,8 +88,8 @@ namespace wenku8.Model.Loaders
                     {
                         Logger.Log( ID, ex.Message, LogType.ERROR );
                         System.Utils.ShowError( () => new ErrorMessage().DOWNLOAD );
-                            // OnComplete( C );
-                        }
+                        // OnComplete( C );
+                    }
                     , false
                 );
             }
