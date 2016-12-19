@@ -27,14 +27,14 @@ namespace wenku8.System
 #elif BETA
             + "b";
 #else
-            + "+";
+            + "p";
 #endif
 
         public Bootstrap() { }
 
 		public async void Start()
 		{
-#if ARM && DEBUG || TESTING || BETA
+#if ARM && DEBUG || TESTING || BETA || RELEASE
             Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
             X.Init();
