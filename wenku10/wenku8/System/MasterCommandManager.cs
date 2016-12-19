@@ -228,7 +228,7 @@ namespace wenku8.System
                 MasterCommands = SHCommands;
                 M2ndCommands = SH2ndCommands;
 
-                ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "", null ) ) );
+                ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "featured: 1", null ) ) );
             }
             else
             {

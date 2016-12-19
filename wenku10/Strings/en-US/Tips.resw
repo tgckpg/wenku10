@@ -121,7 +121,7 @@
     <value>OneDrive: Press cloud button to sync again</value>
   </data>
   <data name="10" xml:space="preserve">
-    <value>System: The layout of the book info view can be adjusted in settings</value>
+    <value>Content Reader: Embedded illustrations can be adjusted in settings</value>
   </data>
   <data name="11" xml:space="preserve">
     <value>Content Reader: For vertical text, "↑→↓←↔↕" will be automatically rotated 90 degree</value>

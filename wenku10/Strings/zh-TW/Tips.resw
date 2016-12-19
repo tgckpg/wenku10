@@ -121,7 +121,7 @@
     <value>OneDrive：按一下「雲」可以再次同步</value>
   </data>
   <data name="10" xml:space="preserve">
-    <value>系統：書頁資訊的排版可以在設定中調整</value>
+    <value>正文：嵌入插圖的方式可於設定中調整</value>
   </data>
   <data name="11" xml:space="preserve">
     <value>正文：直書的時候「↑→↓←↔↕」會自動旋轉九十度</value>
