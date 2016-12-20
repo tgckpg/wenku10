@@ -9,6 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -17,9 +18,9 @@ using Net.Astropenguin.Loaders;
 
 using wenku8.Effects;
 using wenku8.Model;
-using wenku8.Model.Text;
 
 using EBDictManager = wenku8.System.EBDictManager;
+using WParagraph = wenku8.Model.Text.Paragraph;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -36,7 +37,7 @@ namespace wenku10.Pages.Dialogs
             PrimaryButtonText = stx.Str( "OK" );
         }
 
-        public EBDictSearch( Paragraph P )
+        public EBDictSearch( WParagraph P )
             : this()
         {
             ParaText.Text = P.Text;
@@ -50,8 +51,15 @@ namespace wenku10.Pages.Dialogs
 
             Dict = await Manager.GetDictionary();
             LayoutRoot.DataContext = Dict;
-            TransitionDisplay.SetState( Mask, TransitionState.Inactive );
+
             MaskLoading.IsActive = false;
+            TransitionDisplay.SetState( Mask, TransitionState.Inactive );
+
+            if ( string.IsNullOrEmpty( ParaText.Text ) )
+            {
+                StringResources stx = new StringResources();
+                CurrentWord.PlaceholderText = stx.Text( "Desc_InputKey" );
+            }
         }
 
         private void TextSelected( object sender, RoutedEventArgs e )
@@ -84,5 +92,18 @@ namespace wenku10.Pages.Dialogs
 
             Dict.SearchTerm = CurrentWord.Text;
         }
+
+        private void GoInstallDictionary( Hyperlink sender, HyperlinkClickEventArgs args )
+        {
+            this.Hide();
+            ControlFrame.Instance.NavigateTo(
+                PageId.MAIN_SETTINGS
+                , () => new Settings.MainSettings()
+                , P => {
+                    ( ( Settings.MainSettings ) P ).PopupSettings( typeof( Settings.Data.EBWin ) );
+                }
+            );
+        }
+
     }
 }

@@ -405,4 +405,13 @@
   <data name="MSCognitiveSrv.Text" xml:space="preserve">
     <value>MS Cognitive Service</value>
   </data>
+  <data name="RequestDevice.Text" xml:space="preserve">
+    <value>Request device</value>
+  </data>
+  <data name="DeviceNotMatch.Text" xml:space="preserve">
+    <value>This requests is not issued by the current device ( or app has re-installed before ). Since private keys are not shared between devices, this device may not able to receive this grant.</value>
+  </data>
+  <data name="NoDictionary.Text" xml:space="preserve">
+    <value>No dictionary.</value>
+  </data>
 </root>

@@ -107,6 +107,9 @@ namespace wenku8.Model.Loaders
                 await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
             }
 
+            if ( SBook.Processed && SBook.ProcessSuccess )
+                B.LastCache = DateTime.Now;
+
             await CacheCover( B, true );
 
             OnComplete( B );
@@ -217,7 +220,7 @@ namespace wenku8.Model.Loaders
 
             // Set the referer, as it is required by some site such as fanfiction.net
             new RuntimeCache( a => {
-            HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
+                HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
 
                 if ( !string.IsNullOrEmpty( B.OriginalUrl ) )
                 {

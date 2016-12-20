@@ -59,6 +59,7 @@ namespace wenku10.Pages.Sharers
         private TokenManager TokMgr;
 
         private AuthItem SelectedItem;
+        private GrantProcess SelectedRequest;
 
         public ManageAuth()
         {
@@ -151,6 +152,14 @@ namespace wenku10.Pages.Sharers
             FlyoutBase.ShowAttachedFlyout( B );
         }
 
+        private void ShowRequestContext( object sender, RightTappedRoutedEventArgs e )
+        {
+            StackPanel B = ( StackPanel ) sender;
+            SelectedRequest = ( GrantProcess ) B.DataContext;
+
+            FlyoutBase.ShowAttachedFlyout( B );
+        }
+
         private async void Rename( object sender, RoutedEventArgs e )
         {
             string OName = SelectedItem.Name;
@@ -210,11 +219,10 @@ namespace wenku10.Pages.Sharers
 
         private async void WithdrawRequest( object sender, RoutedEventArgs e )
         {
-            GrantProcess GP = ( GrantProcess ) ( ( Button ) sender ).DataContext;
-            if ( await GP.Withdraw() )
+            if ( await SelectedRequest.Withdraw() )
             {
                 RequestsList.ItemsSource = ( ( IEnumerable<GrantProcess> ) RequestsList.ItemsSource )
-                    .Where( x => x != GP );
+                    .Where( x => x != SelectedRequest );
             }
         }
 
@@ -365,5 +373,6 @@ namespace wenku10.Pages.Sharers
                 this.AuthType = AuthType;
             }
         }
+
     }
 }

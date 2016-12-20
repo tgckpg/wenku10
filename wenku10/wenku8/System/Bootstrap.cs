@@ -27,14 +27,14 @@ namespace wenku8.System
 #elif BETA
             + "b";
 #else
-            + "+";
+            + "p";
 #endif
 
         public Bootstrap() { }
 
 		public async void Start()
 		{
-#if ARM && DEBUG || TESTING || BETA
+#if ARM && DEBUG || TESTING || BETA || RELEASE
             Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
 #endif
             X.Init();
@@ -120,6 +120,7 @@ namespace wenku8.System
 #if DEBUG
             Logger.Log( ID, typeof( global::wenku10.App ).GetTypeInfo().Assembly.FullName, LogType.INFO );
 #endif
+            Logger.Log( ID, string.Format( "Device Info: {0} / {1}", AppSettings.DeviceName, AppSettings.DeviceId ), LogType.INFO );
             Logger.Log( ID, string.Format( "Language is {0}", Lang ), LogType.INFO );
 		}
     }

@@ -195,4 +195,7 @@
   <data name="ShellTile" xml:space="preserve">
     <value>磁贴</value>
   </data>
+  <data name="ConfirmDeathblow" xml:space="preserve">
+    <value>本书似乎是禁书。 要使用必杀技吗？（ 此书的所有 锚点 / 书签 都将丢失 ）</value>
+  </data>
 </root>

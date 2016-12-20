@@ -407,4 +407,13 @@
   <data name="MSCognitiveSrv.Text" xml:space="preserve">
     <value>MS Cognitive Service</value>
   </data>
+  <data name="RequestDevice.Text" xml:space="preserve">
+    <value>要求デバイス</value>
+  </data>
+  <data name="DeviceNotMatch.Text" xml:space="preserve">
+    <value>このリクエストは現在のデバイスから発行されていません（ またはアプリは以前に再インストールされています ）。 秘密鍵はデバイス間で共有されないため、このデバイスはこの許可を受け取ることができません。</value>
+  </data>
+  <data name="NoDictionary.Text" xml:space="preserve">
+    <value>辞書はありません。</value>
+  </data>
 </root>

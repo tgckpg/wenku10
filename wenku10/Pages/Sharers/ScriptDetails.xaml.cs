@@ -24,13 +24,13 @@ using Net.Astropenguin.Messaging;
 
 using wenku8.AdvDM;
 using wenku8.Effects;
+using wenku8.Ext;
 using wenku8.CompositeElement;
-using wenku8.Model.Book;
 using wenku8.Model.Comments;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.Loaders;
+using wenku8.Model.Pages;
 using wenku8.Model.REST;
 using wenku8.Resources;
 using wenku8.Settings;
@@ -42,10 +42,10 @@ using CryptAES = wenku8.System.CryptAES;
 namespace wenku10.Pages.Sharers
 {
     using Dialogs.Sharers;
-    using wenku8.Model.Pages;
+    using SHHub;
     using SHTarget = SharersRequest.SHTarget;
 
-    sealed partial class ScriptDetails : Page, ICmdControls
+    sealed partial class ScriptDetails : Page, ICmdControls, IAnimaPage
     {
         public static readonly string ID = typeof( ScriptDetails ).Name;
 
@@ -69,6 +69,8 @@ namespace wenku10.Pages.Sharers
         AppBarButton DownloadBtn;
         AppBarButton KeyReqBtn;
 
+        SHMember Member;
+
         public ScriptDetails()
         {
             this.InitializeComponent();
@@ -83,6 +85,16 @@ namespace wenku10.Pages.Sharers
 
         private void SetTemplate()
         {
+            HeaderPanel.RenderTransform = new TranslateTransform();
+            HistoryHeader.RenderTransform = new TranslateTransform();
+            HistoryGrid.RenderTransform = new TranslateTransform();
+            ScriptDesc.RenderTransform = new TranslateTransform();
+            InfoPanel.RenderTransform = new TranslateTransform();
+            StatPanel.RenderTransform = new TranslateTransform();
+            AccessControls.RenderTransform = new TranslateTransform();
+
+            Member = X.Singleton<SHMember>( XProto.SHMember );
+
             if ( BindItem.Encrypted )
             {
                 Crypt = ( CryptAES ) new AESManager().GetAuthById( BindItem.Id );
@@ -90,7 +102,7 @@ namespace wenku10.Pages.Sharers
 
             AccessToken = ( string ) new TokenManager().GetAuthById( BindItem.Id )?.Value;
 
-            if ( !string.IsNullOrEmpty( AccessToken ) )
+            if ( !string.IsNullOrEmpty( AccessToken ) || ( Member.IsLoggedIn && Member.Id == BindItem.AuthorId ) )
             {
                 TransitionDisplay.SetState( AccessControls, TransitionState.Active );
             }
@@ -331,6 +343,71 @@ namespace wenku10.Pages.Sharers
                 LoadingRing.IsActive = false;
             } );
         }
+
+
+        #region Anima
+        Storyboard AnimaStory = new Storyboard();
+
+        public async Task EnterAnima()
+        {
+            AnimaStory.Stop();
+            AnimaStory.Children.Clear();
+
+            SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 0, 1, 350, 100 );
+            SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 30, 0, 350, 100 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc, "Opacity", 0, 1, 350, 200 );
+            SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc.RenderTransform, "Y", 31, 0, 350, 200 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader, "Opacity", 0, 1, 350, 200 );
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader.RenderTransform, "Y", 30, 0, 350, 200 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid, "Opacity", 0, 1, 350, 200 );
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid.RenderTransform, "Y", 30, 0, 350, 200 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, InfoPanel, "Opacity", 0, 1, 350, 300 );
+            SimpleStory.DoubleAnimation( AnimaStory, InfoPanel.RenderTransform, "Y", 30, 0, 350, 300 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, StatPanel, "Opacity", 0, 1, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, StatPanel.RenderTransform, "Y", 30, 0, 350, 400 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, AccessControls, "Opacity", 0, 1, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, AccessControls.RenderTransform, "Y", 30, 0, 350, 400 );
+
+            AnimaStory.Begin();
+            await Task.Delay( 1000 );
+        }
+
+        public async Task ExitAnima()
+        {
+            AnimaStory.Stop();
+            AnimaStory.Children.Clear();
+
+            SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 400 );
+            SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 400 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc, "Opacity", 1, 0, 350, 300 );
+            SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc.RenderTransform, "Y", 0, 30, 350, 300 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader, "Opacity", 1, 0, 350, 300 );
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader.RenderTransform, "Y", 0, 30, 350, 300 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid, "Opacity", 1, 0, 350, 300 );
+            SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid.RenderTransform, "Y", 0, 30, 350, 300 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, InfoPanel, "Opacity", 1, 0, 350, 200 );
+            SimpleStory.DoubleAnimation( AnimaStory, InfoPanel.RenderTransform, "Y", 0, 30, 350, 200 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, StatPanel, "Opacity", 1, 0, 350, 100 );
+            SimpleStory.DoubleAnimation( AnimaStory, StatPanel.RenderTransform, "Y", 0, 30, 350, 100 );
+
+            SimpleStory.DoubleAnimation( AnimaStory, AccessControls, "Opacity", 1, 0, 350, 100 );
+            SimpleStory.DoubleAnimation( AnimaStory, AccessControls.RenderTransform, "Y", 0, 30, 350, 100 );
+
+            AnimaStory.Begin();
+            await Task.Delay( 1000 );
+        }
+        #endregion
 
     }
 }

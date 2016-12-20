@@ -169,6 +169,9 @@
     <Compile Include="Pages\WBookshelf.xaml.cs">
       <DependentUpon>WBookshelf.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\WDeathblow.xaml.cs">
+      <DependentUpon>WDeathblow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WNavSelections.xaml.cs">
       <DependentUpon>WNavSelections.xaml</DependentUpon>
     </Compile>
@@ -176,6 +179,7 @@
       <DependentUpon>ZoneSpidersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShHub\MesgListerner.cs" />
+    <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
     <Compile Include="wenku8\Converters\ParaTemplateSelector.cs" />
     <Compile Include="wenku8\Model\Loaders\ContentIllusLoader.cs" />
@@ -397,6 +401,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WDeathblow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

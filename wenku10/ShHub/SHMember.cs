@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Windows.Data.Json;
 using Windows.Foundation;
 
 using Net.Astropenguin.Helpers;
@@ -29,6 +30,7 @@ namespace wenku10.SHHub
         public bool CanRegister { get { return true; } }
         public bool IsLoggedIn { get; private set; }
         public bool WillLogin { get; private set; }
+        public string Id { get; private set; }
 
         public MemberStatus Status { get; set; }
 
@@ -57,7 +59,10 @@ namespace wenku10.SHHub
         {
             Pages.Dialogs.Sharers.Register RegisterDialog = new Pages.Dialogs.Sharers.Register();
             await Popups.ShowDialog( RegisterDialog );
-            return !RegisterDialog.Canceled;
+            if ( RegisterDialog.Canceled ) return false;
+
+            var j = Popups.ShowDialog( new Pages.Dialogs.Login( this ) );
+            return true;
         }
 
         public void Login( string Account, string Password )
@@ -134,7 +139,9 @@ namespace wenku10.SHHub
         {
             try
             {
-                JsonStatus.Parse( e.ResponseString );
+                JsonObject JObj = JsonStatus.Parse( e.ResponseString );
+                Id = JObj.GetNamedString( "data" );
+
                 IsLoggedIn = true;
                 UpdateStatus( MemberStatus.LOGGED_IN );
             }

@@ -75,7 +75,7 @@
                 <TextBlock Text="Scope" x:Uid="/AppResources/HS_Scope"
                            Foreground="{StaticResource MajorBrush}" />
                 <ComboBox x:Name="ScopeLevel"
-                          DisplayMemberPath="Name" SelectedValuePath="Value"
+                          DisplayMemberPath="Key" SelectedValuePath="Value"
                           Loaded="PreSelectScope" />
 
                 <!-- Anonymous -->

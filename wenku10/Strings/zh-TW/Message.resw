@@ -198,4 +198,7 @@
   <data name="ShellTile" xml:space="preserve">
     <value>動態磚</value>
   </data>
+  <data name="ConfirmDeathblow" xml:space="preserve">
+    <value>本書似乎是禁書。要使用必殺技嗎？（ 此書的所有 錨點 / 書籤 都將丟失 ）</value>
+  </data>
 </root>

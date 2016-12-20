@@ -407,4 +407,13 @@
   <data name="MSCognitiveSrv.Text" xml:space="preserve">
     <value>微软认知服务</value>
   </data>
+  <data name="RequestDevice.Text" xml:space="preserve">
+    <value>请求设备</value>
+  </data>
+  <data name="DeviceNotMatch.Text" xml:space="preserve">
+    <value>此请求不是由当前设备发出的（或者应用曾经重新安装过）。由于私钥不会在设备之间共享，所以此设备可能无法取得授权。</value>
+  </data>
+  <data name="NoDictionary.Text" xml:space="preserve">
+    <value>没有字典。</value>
+  </data>
 </root>

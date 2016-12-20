@@ -198,4 +198,7 @@
   <data name="ShellTile" xml:space="preserve">
     <value>タイル</value>
   </data>
+  <data name="ConfirmDeathblow" xml:space="preserve">
+    <value>この本は禁じられているようだ。 必殺技を使用しますか？（ この本の アンカー / ブックマーク はすべて失われます ）</value>
+  </data>
 </root>

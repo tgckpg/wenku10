@@ -265,7 +265,7 @@ namespace wenku10.Pages.Settings
             SettingsContext.ItemAction( Item.Param );
         }
 
-        private async void PopupSettings( object P )
+        public async void PopupSettings( object P )
         {
             if( P.GetType() == typeof( bool ) )
             {

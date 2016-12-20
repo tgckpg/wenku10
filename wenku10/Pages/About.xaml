@@ -22,6 +22,22 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <TextBlock Margin="5" Foreground="{StaticResource MajorBrush}"
+                               Text="後記 ( 二 )" FontSize="25" />
+                    <StackPanel Grid.Row="1" Padding="10"
+                                BorderThickness="1" BorderBrush="#CCC">
+                        <TextBlock c:AttachedCopyAction.Source="{Binding RelativeSource={RelativeSource Self}, Path=Text}"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" TextWrapping="Wrap"
+                                   Text="這裏是放置雜物的地方。後記在公告裏面哦？被其它公告埋沒了的話直接點進去找找吧！網站掛掉的話可以用 Google 的頁面庫存～" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Border Width="600" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="5" Foreground="{StaticResource MajorBrush}"
                                x:Uid="/AppBar/About"
                                Text="About" FontSize="25" />
                     <StackPanel Grid.Row="1" Padding="10"

@@ -75,7 +75,13 @@ namespace wenku8.System
             SecondaryIconButton HistoryBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.History, stx.Text( "History", "NavigationTitles" ) );
             HistoryBtn.Click += CreateCmdHandler( PageId.HISTORY, () => new wenku10.Pages.History() );
 
-            CommonCommands = new ICommandBarElement[] { HistoryBtn };
+            SecondaryIconButton EBWinBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Dictionary, "EBWin" );
+            EBWinBtn.Click += CreateCmdHandler( async ( s, e ) =>
+            {
+                await Popups.ShowDialog( new EBDictSearch( new Model.Text.Paragraph( "" ) ) );
+            } );
+
+            CommonCommands = new ICommandBarElement[] { HistoryBtn, EBWinBtn };
         }
 
         private void CreateSystemCommands()
@@ -222,7 +228,7 @@ namespace wenku8.System
                 MasterCommands = SHCommands;
                 M2ndCommands = SH2ndCommands;
 
-                ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "", null ) ) );
+                ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "featured: 1", null ) ) );
             }
             else
             {
@@ -235,7 +241,6 @@ namespace wenku8.System
                 M2ndCommands = w82ndCommands;
 
                 ControlFrame.Instance.SetHomePage( PageId.SG_W, () => new SuperGiants( X.Instance<ILoader<ActiveItem>>( XProto.StaffPicks ) ) );
-                // SetHomePage( PageId.BOOK_SPIDER_VIEW, () => new BookSpidersView() );
             }
         }
 

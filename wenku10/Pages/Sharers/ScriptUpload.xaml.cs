@@ -56,10 +56,10 @@ namespace wenku10.Pages.Sharers
         private AESManager AESMgr;
         private TokenManager TokMgr;
 
-        private Action<string,string> OnExit;
+        private Action<string, string> OnExit;
         public Action Canceled;
 
-        private NameValue<SpiderScope>[] Scopes;
+        private KeyValuePair<string, SpiderScope>[] Scopes;
 
         private AppBarButtonEx UploadBtn;
 
@@ -74,7 +74,7 @@ namespace wenku10.Pages.Sharers
         }
 
         public ScriptUpload( HubScriptItem HSI, Action<string, string> OnExit )
-            :this()
+            : this()
         {
             // Set Update template
             ReservedId = HSI.Id;
@@ -91,7 +91,7 @@ namespace wenku10.Pages.Sharers
             TypesInput.Text = string.Join( ", ", HSI.Type );
             TagsInput.Text = string.Join( ", ", HSI.Tags );
 
-            ScopeLevel.SelectedValue = HSI.Scope;
+            ScopeLevel.SelectedIndex = Array.IndexOf( Scopes, Scopes.First( x => x.Value == HSI.Scope ) );
 
             AddToken_Btn.IsEnabled
                 = AddKey_Btn.IsEnabled
@@ -107,8 +107,8 @@ namespace wenku10.Pages.Sharers
             this.OnExit = OnExit;
         }
 
-        public ScriptUpload( Action<string,string> OnExit )
-            :this()
+        public ScriptUpload( Action<string, string> OnExit )
+            : this()
         {
             this.OnExit = OnExit;
         }
@@ -123,13 +123,13 @@ namespace wenku10.Pages.Sharers
             this.OnExit = OnExit;
         }
 
-        public void SoftOpen() { if( BindBook != null ) BindBook.PropertyChanged += Book_PropertyChanged; }
+        public void SoftOpen() { if ( BindBook != null ) BindBook.PropertyChanged += Book_PropertyChanged; }
         public void SoftClose() { if ( BindBook != null ) BindBook.PropertyChanged -= Book_PropertyChanged; }
 
         private void Book_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
             BookItem B = ( BookItem ) sender;
-            switch( e.PropertyName )
+            switch ( e.PropertyName )
             {
                 case "Title":
                     NameInput.PlaceholderText = B.Title;
@@ -167,10 +167,10 @@ namespace wenku10.Pages.Sharers
             StringResources stx = new StringResources();
             FileName.Text = stx.Text( "PickAFile" );
 
-            Scopes = new NameValue<SpiderScope>[]
+            Scopes = new KeyValuePair<string, SpiderScope>[]
             {
-                new NameValue<SpiderScope>( stx.Text( "HS_Book" ), SpiderScope.BOOK )
-                , new NameValue<SpiderScope>( stx.Text( "HS_Zone" ), SpiderScope.ZONE )
+                new KeyValuePair<string, SpiderScope>( stx.Text( "HS_Book" ), SpiderScope.BOOK )
+                , new KeyValuePair<string, SpiderScope>( stx.Text( "HS_Zone" ), SpiderScope.ZONE )
             };
 
             ScopeLevel.ItemsSource = Scopes;
@@ -187,23 +187,23 @@ namespace wenku10.Pages.Sharers
 
         private void KeyMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
-            if( e.PropertyName == "SelectedItem" ) Keys.SelectedItem = AESMgr.SelectedItem;
+            if ( e.PropertyName == "SelectedItem" ) Keys.SelectedItem = AESMgr.SelectedItem;
         }
 
         private void TokMgr_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
         {
-            if( e.PropertyName == "SelectedItem" ) AccessTokens.SelectedItem = TokMgr.SelectedItem;
+            if ( e.PropertyName == "SelectedItem" ) AccessTokens.SelectedItem = TokMgr.SelectedItem;
         }
 
         private void PreSelectScope( object sender, RoutedEventArgs e )
         {
-            if ( string.IsNullOrEmpty( ( string ) ScopeLevel.SelectedValue ) )
-                ScopeLevel.SelectedValue = "book";
+            if ( ScopeLevel.SelectedValue == null )
+                ScopeLevel.SelectedIndex = 0;
         }
 
         private void PreSelectKey( object sender, RoutedEventArgs e )
         {
-            if( string.IsNullOrEmpty( ReservedId ) )
+            if ( string.IsNullOrEmpty( ReservedId ) )
             {
                 Keys.SelectedItem = AESMgr.SelectedItem;
             }
@@ -246,7 +246,7 @@ namespace wenku10.Pages.Sharers
                         throw new ValidationError( "VL_NoKey" );
                 }
 
-                if ( AccessTokens.SelectedItem == null )
+                if ( string.IsNullOrEmpty( ReservedId ) && AccessTokens.SelectedItem == null )
                     throw new ValidationError( "VL_NoToken" );
 
                 if ( ScopeLevel.SelectedItem == null )
@@ -292,10 +292,10 @@ namespace wenku10.Pages.Sharers
             new RuntimeCache().POST(
                 Shared.ShRequest.Server
                 , Shared.ShRequest.ScriptUpload(
-                    Token.Value, Id
+                    Token?.Value, Id
                     , Data, Name, Desc
                     , Zone, Types, Tags
-                    , ( ( NameValue<SpiderScope> ) ScopeLevel.SelectedItem ).Value
+                    , ( SpiderScope ) ScopeLevel.SelectedValue
                     , Encrypt.IsChecked == true
                     , ForceCommentEnc.IsChecked == true
                     , Anon.IsChecked == true )
@@ -304,10 +304,10 @@ namespace wenku10.Pages.Sharers
                     try
                     {
                         JsonStatus.Parse( Res.ResponseString );
-                        TokMgr.AssignId( Token.Name, Id );
+                        if ( Token != null ) TokMgr.AssignId( Token.Name, Id );
                         if ( Crypt != null ) AESMgr.AssignId( Crypt.Name, Id );
 
-                        var j = Dispatcher.RunIdleAsync( ( x ) => { OnExit( Id, Token.Value ); } );
+                        var j = Dispatcher.RunIdleAsync( ( x ) => { OnExit( Id, Token?.Value ); } );
                     }
                     catch ( Exception ex )
                     {
@@ -372,7 +372,7 @@ namespace wenku10.Pages.Sharers
                         string Id = JDef.GetNamedString( "data" );
                         TCS.SetResult( Id );
                     }
-                    catch( Exception ex )
+                    catch ( Exception ex )
                     {
                         Logger.Log( ID, ex.Message, LogType.WARNING );
                         TCS.TrySetResult( null );

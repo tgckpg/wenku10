@@ -118,9 +118,6 @@ namespace Tasks
                 case BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity:
                 #pragma warning restore 0618
 
-                    // Windows: Background activity and updates for this app are disabled by the user.
-                    // Windows Phone: The maximum number of background apps allowed across the system has been reached or
-                    // background activity and updates for this app are disabled by the user.
                     Instance.CanBackground = true;
                     Instance.CreateUpdateTaskTrigger();
                     return;
@@ -167,6 +164,9 @@ namespace Tasks
         {
             try
             {
+                XReg.SetParameter( "task-start", BookStorage.TimeKey );
+                XReg.Save();
+
                 XParameter[] Updates = XReg.Parameters( "spider" );
                 List<string> Exists = new List<string>();
 
@@ -201,10 +201,25 @@ namespace Tasks
                             UpdateTile( Book, TileId );
                         }
                     }
+
+                    UpdateParam.SetValue( BookStorage.TimeKey );
+
+                    XReg.SetParameter( UpdateParam );
+                    XReg.Save();
                 }
 
+                XReg.SetParameter( "task-end", BookStorage.TimeKey );
+                XReg.Save();
             }
-            catch ( Exception ) { }
+            catch ( Exception ex )
+            {
+                try
+                {
+                    XReg.SetParameter( AppKeys.SYS_EXCEPTION, new XKey( AppKeys.SYS_MESSAGE, ex.Message ) );
+                    XReg.Save();
+                }
+                catch ( Exception ) { }
+            }
         }
 
         private void UpdateTile( BookItem Book, string TileId )

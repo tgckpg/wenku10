@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
     xmlns:e="using:wenku8.Effects"
     xmlns:xi="using:wenku8.ThemeIcons"
@@ -39,7 +40,7 @@
         <ScrollViewer>
             <!-- Description -->
             <StackPanel Margin="10,5" >
-                <Grid Margin="0,0,40,0" >
+                <Grid x:Name="HeaderPanel" Margin="0,0,40,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
@@ -48,8 +49,6 @@
                     <Button Width="40" Height="40"
                             Background="Transparent"
                             VerticalAlignment="Center" HorizontalAlignment="Center"
-                            e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                            e:TransitionDisplay.Mode="A01_Y_N30_30"
                             Style="{StaticResource PlainButton}">
                         <Button.Flyout>
                             <MenuFlyout>
@@ -71,8 +70,6 @@
                     </Button>
                     <TextBlock Grid.Column="1" FontSize="20"
                                VerticalAlignment="Center"
-                               e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                               e:TransitionDisplay.Mode="A01_Y_N30_30"
                                TextWrapping="Wrap"
                                Text="{Binding Name}"
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
@@ -81,14 +78,10 @@
                            Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
                 <!-- Status History -->
-                <TextBlock Margin="10, 5"
+                <TextBlock x:Name="HistoryHeader" Margin="10, 5"
                            x:Uid="/AppResources/HS_StatusHistory" Text="Status History"
-                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                           e:TransitionDisplay.Mode="A01_Y_N30_30"
                            Foreground="{StaticResource SubtleBrush}" />
-                <GridView Margin="10, 0"
-                          e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                          e:TransitionDisplay.Mode="A01_Y_N30_30"
+                <GridView x:Name="HistoryGrid" Margin="10, 0"
                           ItemsSource="{Binding Histories}"
                           ItemContainerStyle="{StaticResource PlainGridItem}">
                     <GridView.ItemTemplate>
@@ -116,17 +109,14 @@
                            Foreground="{StaticResource MinorBrush}"
                            TextWrapping="Wrap" />
 
-                <TextBlock Margin="10,5"
-                           FontSize="15"
-                           e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                           e:TransitionDisplay.Mode="A01_Y_30_N30"
+                <TextBlock x:Name="ScriptDesc"
+                           c:AttachedDictAction.Source="{Binding Desc}"
+                           Margin="10,5" FontSize="15"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                            TextWrapping="Wrap"
                            Text="{Binding Desc}"/>
 
-                <Grid Margin="10, 5"
-                      e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                      e:TransitionDisplay.Mode="A01_Y_30_0">
+                <Grid x:Name="InfoPanel" Margin="10, 5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -176,9 +166,7 @@
                                   ItemsPanel="{StaticResource WrapPanelTemplate}"
                                   ItemsSource="{Binding Tags}" />
                 </Grid>
-                <Grid Margin="10, 5"
-                      e:TransitionDisplay.State="{Binding Path=DataContext, ElementName=LayoutRoot, Converter={StaticResource TransStateConverter}}"
-                      e:TransitionDisplay.Mode="A01_X_N30_0">
+                <Grid x:Name="StatPanel" Margin="10, 5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
