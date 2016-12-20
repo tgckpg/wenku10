@@ -116,6 +116,14 @@
 
         <!-- Comments -->
         <Grid x:Name="CommentSection">
+
+            <TextBlock e:TransitionDisplay.State="{Binding ElementName=CommentList, Path=ItemsSource, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                       e:TransitionDisplay.Mode="A01_X_30_N30"
+                       x:Uid="/AppResources/NoComments"
+                       Foreground="{StaticResource SubtleBrush}"
+                       Margin="10" TextWrapping="Wrap"
+                       Text="No comments here. Post some comments!" />
+
             <ListView x:Name="CommentList"
                       IsItemClickEnabled="True" ItemClick="CommentList_ItemClick"
                       ItemContainerStyle="{StaticResource BareListItem}"
