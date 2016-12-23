@@ -23,7 +23,7 @@ namespace wenku8.Model.Loaders
 #else
         , BULLETIN_CH = "production channel"
 #endif
-        , BULLETIN_ALL = "all channelhhh"
+        , BULLETIN_ALL = "all channel"
             ;
 
         public static readonly string ID = typeof( Announcements ).Name;

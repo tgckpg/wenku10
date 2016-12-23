@@ -66,7 +66,7 @@ namespace wenku10.Pages
 
         Storyboard CacheStateStory;
 
-        private volatile bool Loading = false;
+        private volatile bool BookLoading = false;
 
         private BookInfoView()
         {
@@ -152,7 +152,7 @@ namespace wenku10.Pages
 
             CacheStateStory.Begin();
 
-            Loading = true;
+            BookLoading = true;
             BookLoader BL = new BookLoader( BookLoadComplete );
 
             BL.Load( Book, true );
@@ -173,7 +173,7 @@ namespace wenku10.Pages
 
         private void BookLoadComplete( BookItem Book )
         {
-            Loading = false;
+            BookLoading = false;
 
             var j = Dispatcher.RunIdleAsync( x =>
             {
@@ -288,8 +288,8 @@ namespace wenku10.Pages
 
         private void ReloadBtn_Click( object sender, RoutedEventArgs e )
         {
-            if ( Loading ) return;
-            Loading = true;
+            if ( BookLoading ) return;
+            BookLoading = true;
 
             CacheStateStory.Begin();
             BookLoader BL = new BookLoader( BookLoadComplete );
