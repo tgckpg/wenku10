@@ -199,8 +199,7 @@
     <value>條件</value>
   </data>
   <data name="NoComments.Text" xml:space="preserve">
-    <value>ありません</value>
-    <comment>NaN</comment>
+    <value>誰もここにコメントしていません。コメントをしてみませんか？</value>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
     <value>検索結果</value>

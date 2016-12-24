@@ -199,7 +199,7 @@
     <value>By</value>
   </data>
   <data name="NoComments.Text" xml:space="preserve">
-    <value>Nope</value>
+    <value>No one has commented before. Perhaps you could help make a comment?</value>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
     <value>Total</value>

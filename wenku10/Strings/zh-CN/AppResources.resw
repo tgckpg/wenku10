@@ -199,7 +199,7 @@
     <value>条件</value>
   </data>
   <data name="NoComments.Text" xml:space="preserve">
-    <value>沒有哦</value>
+    <value>这里还没有人发表过评论，来发表一下吧！</value>
     <comment>NaN</comment>
   </data>
   <data name="Search_ResultStamp_A.Text" xml:space="preserve">
