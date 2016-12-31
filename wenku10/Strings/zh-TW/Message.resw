@@ -134,7 +134,6 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>否</value>
-    <comment>#</comment>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>離線模式</value>
@@ -147,11 +146,9 @@
   </data>
   <data name="Update_Confirm" xml:space="preserve">
     <value>正在檢查更新，要跳過這個步驟嗎？</value>
-    <comment>#</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>是</value>
-    <comment>#</comment>
   </data>
   <data name="Cencorship" xml:space="preserve">
     <value>檢測到不當言詞，請返回修改。</value>
@@ -200,5 +197,14 @@
   </data>
   <data name="ConfirmDeathblow" xml:space="preserve">
     <value>本書似乎是禁書。要使用必殺技嗎？（ 此書的所有 錨點 / 書籤 都將丟失 ）</value>
+  </data>
+  <data name="ConfirmTwitter" xml:space="preserve">
+    <value>將會使用 twitter 作為評論頻導，請留意在 tweet 的時候預設的 hashtag 會是 #wenku10 。</value>
+  </data>
+  <data name="Desc_OSTweet" xml:space="preserve">
+    <value>您的推文不包含「{0}」與「{1}」。 請注意，此應用的其他用戶將無法看到您的推文，因為其默認搜索條件依賴於上述兩個關鍵字。要繼續嗎？</value>
+  </data>
+  <data name="OSTweet" xml:space="preserve">
+    <value>超範圍的推文</value>
   </data>
 </root>

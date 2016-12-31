@@ -27,6 +27,7 @@ namespace wenku8.Settings.Layout
         private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_BOOKINFOVIEW;
         private const string RightToLeft = "RightToLeft";
         private const string HrTOCName = "HorizontalTOC";
+        private const string TwConfirm = "TwitterConfirmed";
 
         private Dictionary<string, BgContext> SectionBgs;
 
@@ -52,6 +53,19 @@ namespace wenku8.Settings.Layout
             set
             {
                 LayoutSettings.SetParameter( HrTOCName, new XKey( "enable", value ) );
+                LayoutSettings.Save();
+            }
+        }
+
+        public bool TwitterConfirmed
+        {
+            get
+            {
+                return LayoutSettings.Parameter( TwConfirm ).GetBool( "val" );
+            }
+            set
+            {
+                LayoutSettings.SetParameter( TwConfirm, new XKey( "val", value ) );
                 LayoutSettings.Save();
             }
         }
@@ -83,6 +97,11 @@ namespace wenku8.Settings.Layout
                     HrTOCName
                     , new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.HorizontalTOC" ) )
                 );
+            }
+
+            if ( LayoutSettings.Parameter( TwConfirm ) == null )
+            {
+                LayoutSettings.SetParameter( TwConfirm, new XKey( "val", false ) );
             }
 
             if ( Changed ) LayoutSettings.Save();

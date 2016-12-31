@@ -11,6 +11,9 @@ using Net.Astropenguin.Logging;
 
 namespace wenku8.Model.Loaders
 {
+    using ListItem;
+    using Net.Astropenguin.Linq;
+
     sealed class TwitterLoader : ILoader<Tweet>
     {
         public static readonly string ID = typeof( TwitterLoader ).Name;
@@ -21,7 +24,8 @@ namespace wenku8.Model.Loaders
 
         public bool Valid { get; private set; }
 
-        public string[] Tags { get; set; }
+        public List<NameValue<bool>> Tags { get; set; }
+        public string Keyword = "";
 
         public async Task Authenticate()
         {
@@ -40,16 +44,17 @@ namespace wenku8.Model.Loaders
             }
         }
 
+        private bool _PageEnded = false;
         public bool PageEnded
         {
             get
             {
                 if ( !Valid ) return true;
-                return false;
+                return _PageEnded;
             }
         }
 
-        private string SinceId;
+        private string MaxId;
 
         public async Task<IList<Tweet>> NextPage( uint count )
         {
@@ -59,29 +64,34 @@ namespace wenku8.Model.Loaders
                 TDC.QueryType = TwitterQueryType.Search;
                 TDC.Query = NextQuery();
 
-                List<Tweet> Tweets = await TwitterService.Instance.RequestAsync( TDC );
+                List<Tweet> Tweets = await TwitterService.Instance.RequestAsync( TDC, ( int ) count );
 
-                if( Tweets.Any() )
+                int l = Tweets.Count();
+                _PageEnded = l < count;
+
+                if ( 0 < l )
                 {
-                    SinceId = "since_id: " + Tweets.Last().Id;
+                    ulong tId = ulong.Parse( Tweets.Last().Id ) - 1;
+                    MaxId = "max_id:" + tId.ToString();
                 }
 
                 return Tweets.ToList();
             }
-            catch( Exception ex )
+            catch ( Exception ex )
             {
                 Logger.Log( ID, ex.Message, LogType.WARNING );
             }
 
+            Valid = false;
             return new Tweet[ 0 ];
         }
 
         private string NextQuery()
         {
-            string TagsQ = "#" + string.Join( " #", Tags );
-            string PageQ = SinceId + " ";
+            string TagsQ = Tags.Any( x => x.Value ) ? "#" + string.Join( " #", Tags.Where( x => x.Value ).Remap( x => x.Name ) ) : "";
+            string PageQ = MaxId + " ";
 
-            return TagsQ + " " + PageQ;
+            return ( Keyword + " " + TagsQ + " " + PageQ ).Trim() + " -filter:retweets";
         }
 
     }

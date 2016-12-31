@@ -166,6 +166,9 @@
     <Compile Include="Pages\TOCViewVert.xaml.cs">
       <DependentUpon>TOCViewVert.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TwitterCommentView.xaml.cs">
+      <DependentUpon>TwitterCommentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WBookshelf.xaml.cs">
       <DependentUpon>WBookshelf.xaml</DependentUpon>
     </Compile>
@@ -402,6 +405,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TwitterCommentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

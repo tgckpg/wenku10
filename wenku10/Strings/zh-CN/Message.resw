@@ -198,4 +198,13 @@
   <data name="ConfirmDeathblow" xml:space="preserve">
     <value>本书似乎是禁书。 要使用必杀技吗？（ 此书的所有 锚点 / 书签 都将丢失 ）</value>
   </data>
+  <data name="ConfirmTwitter" xml:space="preserve">
+    <value>将会使用 twitter 作为评论频导，请留意在 tweet 的时候预设的 hashtag 会是 #wenku10 。（致内地的用户：此服务被墙掉了，没办法用的话…请节哀）</value>
+  </data>
+  <data name="Desc_OSTweet" xml:space="preserve">
+    <value>您的推文不包含“{0}”与“{1}”。 请注意，此应用的其他用户将无法看到您的推文，因为其默认搜索条件依赖于上述两个关键字。要继续吗？</value>
+  </data>
+  <data name="OSTweet" xml:space="preserve">
+    <value>超范围的推文</value>
+  </data>
 </root>
