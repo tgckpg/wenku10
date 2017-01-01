@@ -198,4 +198,19 @@
   <data name="ConfirmDeathblow" xml:space="preserve">
     <value>This book seems to be forbidden. Use deathblow? ( All anchors / bookmarks for this book will be lost )</value>
   </data>
+  <data name="ConfirmTwitter" xml:space="preserve">
+    <value>We'll use twitter as our primary reviews channel. Please note that #wenku10 will be the default  hashtag when posting tweets.</value>
+  </data>
+  <data name="Desc_OSTweet" xml:space="preserve">
+    <value>You tweet does not contain {0} nor {1}. Please note that other users of this app will not be able to see your tweet as their default search criteria relies on both keywords above. Continue?</value>
+  </data>
+  <data name="OSTweet" xml:space="preserve">
+    <value>Out-of-scope tweet</value>
+  </data>
+  <data name="ConfirmDiscard" xml:space="preserve">
+    <value>Discard this message?</value>
+  </data>
+  <data name="ConfirmSubmit" xml:space="preserve">
+    <value>Submit?</value>
+  </data>
 </root>

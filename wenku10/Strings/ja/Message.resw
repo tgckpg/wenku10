@@ -134,7 +134,6 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>いいえ</value>
-    <comment>#</comment>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>オフラインモード</value>
@@ -147,11 +146,9 @@
   </data>
   <data name="Update_Confirm" xml:space="preserve">
     <value>アップデートを確認中…このステップをスキップ？</value>
-    <comment>#</comment>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>はい</value>
-    <comment>#</comment>
   </data>
   <data name="Cencorship" xml:space="preserve">
     <value>不適切な単語を検出し、修正を返却してください。</value>
@@ -200,5 +197,20 @@
   </data>
   <data name="ConfirmDeathblow" xml:space="preserve">
     <value>この本は禁じられているようだ。 必殺技を使用しますか？（ この本の アンカー / ブックマーク はすべて失われます ）</value>
+  </data>
+  <data name="ConfirmTwitter" xml:space="preserve">
+    <value>レビューチャンネル として Twitter を使用します。 ツイート を投稿するときは、#wenku10 がデフォルト の ハッシュタグ になります。</value>
+  </data>
+  <data name="Desc_OSTweet" xml:space="preserve">
+    <value>あなたはツイートに「{0}」も「{1}」も含まれていません。 このアプリの他のユーザーは、デフォルトの検索条件が上記の両方のキーワードに依存しているため、あなたのツイートを表示することはできません。 持続する？</value>
+  </data>
+  <data name="OSTweet" xml:space="preserve">
+    <value>範囲外のツイート</value>
+  </data>
+  <data name="ConfirmDiscard" xml:space="preserve">
+    <value>このメッセージを破棄しますか？</value>
+  </data>
+  <data name="ConfirmSubmit" xml:space="preserve">
+    <value>送信しますか？</value>
   </data>
 </root>

@@ -411,4 +411,7 @@
   <data name="NoDictionary.Text" xml:space="preserve">
     <value>沒有字典。</value>
   </data>
+  <data name="TweetNeedsPropagate.Text" xml:space="preserve">
+    <value>您的推文將需要1〜2分鐘在搜索隊列中傳播。 如果您沒有看到您的推文，請稍後再試！</value>
+  </data>
 </root>
