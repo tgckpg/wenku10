@@ -207,4 +207,7 @@
   <data name="OSTweet" xml:space="preserve">
     <value>範囲外のツイート</value>
   </data>
+  <data name="ConfirmDiscard" xml:space="preserve">
+    <value>このメッセージを破棄しますか？</value>
+  </data>
 </root>

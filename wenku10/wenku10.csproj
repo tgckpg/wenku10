@@ -193,6 +193,8 @@
     <Compile Include="wenku8\Model\Section\SharersHub\Activities.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub\MyInbox.cs" />
     <Compile Include="wenku8\Model\Section\SharersHub\MyRequests.cs" />
+    <Compile Include="wenku8\Model\Twitter\AuthData.cs" />
+    <Compile Include="wenku8\Model\Twitter\TSExtended.cs" />
     <Compile Include="wenku8\System\MasterCommandManager.cs" />
     <Compile Include="Pages\Sharers\HSCommentView.xaml.cs">
       <DependentUpon>HSCommentView.xaml</DependentUpon>

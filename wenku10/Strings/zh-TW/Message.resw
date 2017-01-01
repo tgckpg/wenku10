@@ -207,4 +207,7 @@
   <data name="OSTweet" xml:space="preserve">
     <value>超範圍的推文</value>
   </data>
+  <data name="ConfirmDiscard" xml:space="preserve">
+    <value>要廢棄這則訊息嗎？</value>
+  </data>
 </root>

@@ -207,4 +207,7 @@
   <data name="OSTweet" xml:space="preserve">
     <value>Out-of-scope tweet</value>
   </data>
+  <data name="ConfirmDiscard" xml:space="preserve">
+    <value>Discard this message?</value>
+  </data>
 </root>

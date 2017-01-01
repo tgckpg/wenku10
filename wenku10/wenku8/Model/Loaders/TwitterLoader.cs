@@ -6,21 +6,18 @@ using System.Threading.Tasks;
 
 using Microsoft.Toolkit.Uwp.Services.Twitter;
 
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 namespace wenku8.Model.Loaders
 {
     using ListItem;
-    using Net.Astropenguin.Linq;
+    using Twitter;
 
     sealed class TwitterLoader : ILoader<Tweet>
     {
         public static readonly string ID = typeof( TwitterLoader ).Name;
-
-        public static string KEY { get; set; }
-        public static string SECRET { get; set; }
-        public static string CALLBACK_URI { get; set; }
 
         public bool Valid { get; private set; }
 
@@ -29,7 +26,7 @@ namespace wenku8.Model.Loaders
 
         public async Task Authenticate()
         {
-            TwitterService.Instance.Initialize( KEY, SECRET, CALLBACK_URI );
+            TwitterService.Instance.Initialize( AuthData.Token );
             Valid = await TwitterService.Instance.LoginAsync();
         }
 

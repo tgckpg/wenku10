@@ -20,6 +20,7 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp.Services.Twitter;
 
 using Net.Astropenguin.DataModel;
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
@@ -30,12 +31,13 @@ using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Text;
+using wenku8.Model.Twitter;
 using wenku8.Resources;
-using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Controls;
 
 namespace wenku10.Pages
 {
-    sealed partial class TwitterCommentView : Page, ICmdControls
+    sealed partial class TwitterCommentView : Page, INavPage, ICmdControls
     {
 #pragma warning disable 0067
         public event ControlChangedEvent ControlChanged;
@@ -62,6 +64,7 @@ namespace wenku10.Pages
         BookItem ThisBook;
 
         TwitterUser CurrentUser;
+        Tweet InReplyTo;
 
         private TwitterCommentView()
         {
@@ -75,6 +78,9 @@ namespace wenku10.Pages
             ThisBook = Book;
             SetContext();
         }
+
+        public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( ShouldCloseInputBox ); }
+        public void SoftClose() { NavigationHandler.OnNavigatedBack -= ShouldCloseInputBox; }
 
         private void InitAppBar()
         {
@@ -94,24 +100,48 @@ namespace wenku10.Pages
 
             MajorControls = CommentControls;
 
-            AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout", "Settings" ) );
+            SecondaryIconButton LogoutBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout", "Settings" ) + "( twitter )" );
             LogoutBtn.Click += LogoutBtn_Click;
 
             Major2ndControls = new ICommandBarElement[] { LogoutBtn };
+        }
+
+        private void ReplyBtn_Click( object sender, RoutedEventArgs e )
+        {
+            InReplyTo = ( Tweet ) ( ( Button ) sender ).DataContext;
+            OpenInputBox( sender, e );
+        }
+
+        private void OpenTweetBtn_Click( object sender, RoutedEventArgs e )
+        {
+            Tweet Tw = ( Tweet ) ( ( Button ) sender ).DataContext;
+            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( $"https://twitter.com/{Tw.User.Name}/status/{Tw.Id}" ) );
         }
 
         private void OpenInputBox( object sender, RoutedEventArgs e )
         {
             TransitionDisplay.SetState( TweetBox, TransitionState.Active );
 
-            TweetInput.Text = Keywords.Text + " #wenku10";
-            TweetInput.SelectionStart = Keywords.Text.Length;
+            if ( InReplyTo != null )
+                ReplyToName.Text = InReplyTo.User.ScreenName;
+
+            TweetInput.Text = " " + Keywords.Text + " #wenku10";
+            TweetInput.SelectionStart = 0;
             TweetInput.Focus( FocusState.Keyboard );
 
             UpdateCharLeft();
 
             MajorControls = InputControls;
             ControlChanged?.Invoke( this );
+        }
+
+        private void ShouldCloseInputBox( object sender, XBackRequestedEventArgs e )
+        {
+            if( TransitionDisplay.GetState( TweetBox ) == TransitionState.Active )
+            {
+                e.Handled = true;
+                CloseInputBox();
+            }
         }
 
         private void CloseInputBox( object sender, RoutedEventArgs e )
@@ -135,6 +165,8 @@ namespace wenku10.Pages
                 if ( !Discard ) return;
             }
 
+            InReplyTo = null;
+
             TransitionDisplay.SetState( TweetBox, TransitionState.Inactive );
 
             MajorControls = CommentControls;
@@ -156,10 +188,8 @@ namespace wenku10.Pages
         {
             TwitterLoader Loader = new TwitterLoader();
             await Loader.Authenticate();
-            CurrentUser = await TwitterService.Instance.GetUserAsync();
 
-            Loader.Keyword = ThisBook.Title.TrimForSearch();
-            Loader.Tags = TagsAvailable;
+            CurrentUser = await TwitterService.Instance.GetUserAsync();
 
             TagsAvailable.Add( new NameValue<bool>( "wenku10", true ) );
 
@@ -172,13 +202,10 @@ namespace wenku10.Pages
             if ( !string.IsNullOrEmpty( ThisBook.AuthorRaw ) )
                 TagsAvailable.AddRange( ThisBook.AuthorRaw.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
-            Keywords.Text = Loader.Keyword;
+            Keywords.Text = ThisBook.Title.TrimForSearch();
             HashTags.ItemsSource = TagsAvailable;
 
-            Observables<Tweet, Tweet> Tweets = new Observables<Tweet, Tweet>( await Loader.NextPage( 20 ) );
-            Tweets.ConnectLoader( Loader );
-
-            TweetsView.ItemsSource = Tweets;
+            ReloadTweets();
         }
 
         private async void SubmitBtn_Click( object sender, RoutedEventArgs e )
@@ -192,7 +219,8 @@ namespace wenku10.Pages
                 bool Continue = false;
                 StringResources stx = new StringResources( "Message" );
                 await Popups.ShowDialog( UIAliases.CreateDialog(
-                    stx.Str( "Desc_OSTweet" ), stx.Str( "OSTweet" )
+                    string.Format( stx.Str( "Desc_OSTweet" ), Keywords.Text, "#wenku10" )
+                    , stx.Str( "OSTweet" )
                     , () => Continue = true
                     , stx.Str( "Yes" ), stx.Str( "No" )
                 ) );
@@ -204,9 +232,8 @@ namespace wenku10.Pages
                     if ( !TweetContent.Contains( Keywords.Text ) ) ScopeText += Keywords.Text + " ";
                     if ( !TweetContent.Contains( "#wenku10" ) ) ScopeText += "#wenku10 ";
 
-                    TweetInput.Text = ScopeText + TweetInput.Text;
-
-                    TweetInput.SelectionStart = 0;
+                    TweetInput.Text = TweetContent + " " + ScopeText;
+                    TweetInput.SelectionStart = TweetContent.Length;
                     TweetInput.SelectionLength = ScopeText.Length;
 
                     TweetInput.Focus( FocusState.Keyboard );
@@ -218,19 +245,24 @@ namespace wenku10.Pages
 
             try
             {
-                await TwitterService.Instance.TweetStatusAsync( TweetContent );
+                if ( InReplyTo == null )
+                {
+                    await TwitterService.Instance.TweetStatusAsync( TweetContent );
+                }
+                else
+                {
+                    await TSExtended.Instance.ReplyStatusAsync( TweetContent, InReplyTo.Id );
+                }
 
                 InsertFakeTweet( TweetContent );
 
                 TweetInput.Text = "";
                 CloseInputBox();
-
             }
             catch( TwitterException ex )
             {
                 var j = Popups.ShowDialog( UIAliases.CreateDialog( ex.Message ) );
             }
-
         }
 
         private void ToggleTag( object sender, TappedRoutedEventArgs e )
@@ -249,8 +281,15 @@ namespace wenku10.Pages
             Loader.Keyword = ThisBook.Title.TrimForSearch();
             Loader.Tags = TagsAvailable;
 
+            LoadingRing.IsActive = true;
+
             Observables<Tweet, Tweet> Tweets = new Observables<Tweet, Tweet>( await Loader.NextPage( 20 ) );
             Tweets.ConnectLoader( Loader );
+
+            Tweets.LoadStart += ( s, e ) => { LoadingRing.IsActive = true; };
+            Tweets.LoadEnd += ( s, e ) => { LoadingRing.IsActive = false; };
+
+            LoadingRing.IsActive = false;
 
             TweetsView.ItemsSource = Tweets;
         }
