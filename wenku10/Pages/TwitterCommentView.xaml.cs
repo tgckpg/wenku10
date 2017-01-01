@@ -65,6 +65,7 @@ namespace wenku10.Pages
 
         TwitterUser CurrentUser;
         Tweet InReplyTo;
+        Action RmCtrlEnterListener;
 
         private TwitterCommentView()
         {
@@ -79,8 +80,17 @@ namespace wenku10.Pages
             SetContext();
         }
 
-        public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( ShouldCloseInputBox ); }
-        public void SoftClose() { NavigationHandler.OnNavigatedBack -= ShouldCloseInputBox; }
+        public void SoftOpen()
+        {
+            NavigationHandler.InsertHandlerOnNavigatedBack( ShouldCloseInputBox );
+            RmCtrlEnterListener = App.KeyboardControl.RegisterCombination( e => CtrlSubmit(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Enter );
+        }
+
+        public void SoftClose()
+        {
+            NavigationHandler.OnNavigatedBack -= ShouldCloseInputBox;
+            RmCtrlEnterListener?.Invoke();
+        }
 
         private void InitAppBar()
         {
@@ -100,7 +110,7 @@ namespace wenku10.Pages
 
             MajorControls = CommentControls;
 
-            SecondaryIconButton LogoutBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout", "Settings" ) + "( twitter )" );
+            SecondaryIconButton LogoutBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout", "Settings" ) + " ( twitter )" );
             LogoutBtn.Click += LogoutBtn_Click;
 
             Major2ndControls = new ICommandBarElement[] { LogoutBtn };
@@ -115,7 +125,7 @@ namespace wenku10.Pages
         private void OpenTweetBtn_Click( object sender, RoutedEventArgs e )
         {
             Tweet Tw = ( Tweet ) ( ( Button ) sender ).DataContext;
-            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( $"https://twitter.com/{Tw.User.Name}/status/{Tw.Id}" ) );
+            var j = Windows.System.Launcher.LaunchUriAsync( new Uri( $"https://twitter.com/{Tw.User.ScreenName}/status/{Tw.Id}" ) );
         }
 
         private void OpenInputBox( object sender, RoutedEventArgs e )
@@ -144,14 +154,11 @@ namespace wenku10.Pages
             }
         }
 
-        private void CloseInputBox( object sender, RoutedEventArgs e )
-        {
-            CloseInputBox();
-        }
+        private void CloseInputBox( object sender, RoutedEventArgs e ) { CloseInputBox(); }
 
         private async void CloseInputBox()
         {
-            if ( !( string.IsNullOrEmpty( TweetInput.Text ) || TweetInput.Text == ( Keywords.Text + " #wenku10" ) ) )
+            if ( !( string.IsNullOrEmpty( TweetInput.Text ) || TweetInput.Text == ( " " + Keywords.Text + " #wenku10" ) ) )
             {
                 bool Discard = false;
 
@@ -166,6 +173,7 @@ namespace wenku10.Pages
             }
 
             InReplyTo = null;
+            ReplyToName.Text = "";
 
             TransitionDisplay.SetState( TweetBox, TransitionState.Inactive );
 
@@ -208,11 +216,31 @@ namespace wenku10.Pages
             ReloadTweets();
         }
 
-        private async void SubmitBtn_Click( object sender, RoutedEventArgs e )
+        private async void CtrlSubmit()
         {
-            string TweetContent = TweetInput.Text.Trim();
+            if ( TweetInput.FocusState == FocusState.Keyboard )
+            {
+                bool Continue = false;
+                StringResources stx = new StringResources( "Message" );
+                await Popups.ShowDialog( UIAliases.CreateDialog(
+                    stx.Str( "ConfirmSubmit" )
+                    , () => Continue = true
+                    , stx.Str( "Yes" ), stx.Str( "No" )
+                ) );
+
+                if ( Continue ) Submit();
+            }
+        }
+
+        private void SubmitBtn_Click( object sender, RoutedEventArgs e ) { Submit(); } 
+        private async void Submit()
+        {
+            string TweetContent = TweetInput.Text.Replace( "\r\n", "\n" ).Trim();
 
             if( TweetLimit < TweetContent.Length ) return;
+
+            if ( !SubmitBtn.IsEnabled ) return;
+            SubmitBtn.IsEnabled = false;
 
             if ( !( TweetContent.Contains( "#wenku10" ) && TweetContent.Contains( Keywords.Text ) ) )
             {
@@ -239,6 +267,8 @@ namespace wenku10.Pages
                     TweetInput.Focus( FocusState.Keyboard );
 
                     UpdateCharLeft();
+
+                    SubmitBtn.IsEnabled = true;
                     return;
                 }
             }
@@ -257,6 +287,8 @@ namespace wenku10.Pages
                 InsertFakeTweet( TweetContent );
 
                 TweetInput.Text = "";
+                SubmitBtn.IsEnabled = true;
+
                 CloseInputBox();
             }
             catch( TwitterException ex )
@@ -300,7 +332,6 @@ namespace wenku10.Pages
             Tweets.Insert( 0, new Tweet()
             {
                 Text = FTweet
-                , Id = "-1"
                 , User = CurrentUser
                 , CreatedAt = DateTime.Now.ToString( "ddd MMM dd HH:mm:ss zzzz yyyy", CultureInfo.InvariantCulture )
             } );
@@ -310,7 +341,7 @@ namespace wenku10.Pages
 
         private void UpdateCharLeft()
         {
-            int Overflow = TweetLimit - TweetInput.Text.Length;
+            int Overflow = TweetLimit - TweetInput.Text.Replace( "\r\n", "\n" ).Length;
             CharLimit.Text = Overflow.ToString();
 
             if( Overflow < 0 )
@@ -322,6 +353,5 @@ namespace wenku10.Pages
                 InputBorder.BorderBrush = null;
             }
         }
-
     }
 }

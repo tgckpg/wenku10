@@ -225,8 +225,8 @@
   <data name="VersionUpdateCurrent.Text" xml:space="preserve">
     <value>Current version</value>
   </data>
-  <data name="But_There_Is_Nothing.Text" xml:space="preserve">
-    <value>Please wail wile downloading necessary info. You will be directed to Content Page automatically.</value>
+  <data name="TweetNeedsPropagate.Text" xml:space="preserve">
+    <value>Your tweet will need 1~2 minutes to propagate in the search queue. If you don't see your tweet, trying comming back later!</value>
   </data>
   <data name="Button_Back.Text" xml:space="preserve">
     <value>Back</value>

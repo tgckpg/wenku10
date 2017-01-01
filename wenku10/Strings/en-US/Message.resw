@@ -210,4 +210,7 @@
   <data name="ConfirmDiscard" xml:space="preserve">
     <value>Discard this message?</value>
   </data>
+  <data name="ConfirmSubmit" xml:space="preserve">
+    <value>Submit?</value>
+  </data>
 </root>

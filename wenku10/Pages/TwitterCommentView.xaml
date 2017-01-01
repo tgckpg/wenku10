@@ -50,11 +50,24 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <ProgressRing x:Name="LoadingRing" IsActive="True"
-                      Grid.RowSpan="3"
-                      VerticalAlignment="Center" HorizontalAlignment="Center"
-                      Width="50" Height="50"
-                      Foreground="{StaticResource MajorBrush}"/>
+        <StackPanel Grid.RowSpan="3"
+                    e:TransitionDisplay.State="{Binding ElementName=LoadingRing, Path=IsActive, Converter={StaticResource TransStateConverter}}"
+                    e:TransitionDisplay.Mode="A01_Y_N30_0"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+            <ProgressRing x:Name="LoadingRing" IsActive="True"
+                          Width="50" Height="50"
+                          Foreground="{StaticResource MajorBrush}"/>
+            <TextBlock x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait"
+                       Margin="5" Foreground="{StaticResource MinorBrush}"/>
+        </StackPanel>
+
+        <TextBlock e:TransitionDisplay.State="{Binding ElementName=TweetsView, Path=ItemsSource, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                   e:TransitionDisplay.Mode="A01_Y_30_N30"
+                   e:TransitionDisplay.UseVisibility="False"
+                   Visibility="{Binding ElementName=HashTags, Path=ItemsSource, Converter={StaticResource DataVisConverter}}"
+                   x:Uid="/AppResources/NoComments"
+                   Foreground="{StaticResource SubtleBrush}"
+                   Grid.Row="3" Margin="10" TextWrapping="Wrap" />
 
         <ListView x:Name="TweetsView" Grid.Row="2"
                   ItemContainerStyle="{StaticResource BareListItem}">
@@ -87,11 +100,12 @@
                                    Foreground="{StaticResource SubtleBrush}"/>
 
                         <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
+                                    Visibility="{Binding Id, Converter={StaticResource DataVisConverter}}"
                                     HorizontalAlignment="Right" Orientation="Horizontal">
                             <Button Foreground="{StaticResource SubtleBrush}" Background="Transparent"
                                     Click="ReplyBtn_Click"
                                     Style="{StaticResource PlainButton}">
-                                <Grid Margin="10,5">
+                                <Grid Margin="10,5,10,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
@@ -106,7 +120,7 @@
                             <Button Foreground="{StaticResource SubtleBrush}" Background="Transparent"
                                     Click="OpenTweetBtn_Click"
                                     Style="{StaticResource PlainButton}">
-                                <Grid Margin="10,5">
+                                <Grid Margin="10,5,10,0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
@@ -119,6 +133,22 @@
                                 </Grid>
                             </Button>
                         </StackPanel>
+                        <Grid Grid.Row="2" Grid.ColumnSpan="2"
+                              Visibility="{Binding Id, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                              Margin="10,5,10,0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon Glyph="&#xEC05;"
+                                      Foreground="{StaticResource MinorBrush}"
+                                      Margin="5" VerticalAlignment="Center"/>
+                            <TextBlock x:Uid="/AppResources/TweetNeedsPropagate"
+                                       TextWrapping="Wrap"
+                                       Grid.Column="1" Text="TWEET_NEEDS_TO_PROPAGATE"
+                                       Foreground="{StaticResource MinorBrush}"
+                                       Margin="5" VerticalAlignment="Center" />
+                        </Grid>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -147,6 +177,9 @@
                              TextWrapping="Wrap" TextChanged="CalcLimit"
                              AcceptsReturn="True" />
                 </Border>
+                <TextBlock Grid.Row="2" Margin="10,5"
+                           Text="Ctrl + Alt + Enter"
+                           Foreground="{StaticResource SubtleBrush}" />
                 <TextBlock x:Name="CharLimit" Margin="10,5,10,10"
                            Grid.Row="2"
                            Foreground="{StaticResource MajorBrush}"
