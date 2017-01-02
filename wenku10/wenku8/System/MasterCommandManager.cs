@@ -100,6 +100,7 @@ namespace wenku8.System
 
             AboutBtn.PendingClick += CreateCmdHandler( PageId.ABOUT, () => new About() );
             AboutBtn.OnIndexUpdate += ( s, i ) => SwapCommands( i );
+            AboutBtn.CanSwipe = X.Exists;
 
             Btns.Add( SettingsBtn );
             Btns.Add( AboutBtn );

@@ -104,6 +104,7 @@
                             </ListView.ItemTemplate>
                         </ListView>
                         <Button Style="{StaticResource ThemeButton}"
+                                Foreground="{StaticResource SubtleBrush}"
                                 Click="AddTweet_Click" Grid.Row="1"
                                 HorizontalAlignment="Stretch" Height="35">
                             <SymbolIcon Symbol="Add" />
@@ -171,11 +172,24 @@
                     </Grid.RowDefinitions>
                     <TextBlock Margin="5" Foreground="{StaticResource MajorBrush}"
                                Text="(⌐■_■)" FontSize="25" />
-                    <Border Grid.Row="1"
-                            Background="Black"
-                            BorderThickness="1" BorderBrush="#CCC">
-                        <canvas:CanvasAnimatedControl x:Name="Stage" Grid.Row="1"  IsHitTestVisible="False" />
-                    </Border>
+
+                    <Grid Grid.Row="1"
+                          Background="Black"
+                          BorderThickness="1" BorderBrush="#CCC">
+                        <canvas:CanvasAnimatedControl x:Name="Stage" Grid.Row="1" IsHitTestVisible="False" />
+                        <Button x:Name="EffectsBtn"
+                                Grid.RowSpan="2" Style="{StaticResource PlainButton}"
+                                e:TransitionDisplay.Mode="A01_X_N30_30"
+                                e:TransitionDisplay.State="Active"
+                                Click="OpenEffects_Click"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                Background="Transparent" >
+                            <TextBlock Foreground="White"
+                                       Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="50"
+                                       VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Button>
+                    </Grid>
+
                 </Grid>
             </Border>
             <Border Width="600" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">

@@ -60,6 +60,7 @@ namespace wenku10.Pages
 
             CStage = new CanvasStage( Stage );
             CStage.Add( new Fireworks() );
+            Stage.Paused = true;
 
             Unloaded += About_Unloaded;
         }
@@ -76,7 +77,7 @@ namespace wenku10.Pages
 
             TweetStart:
 
-            ValueHelpInput TweetInput = new ValueHelpInput( "", "♥ wenku10?", stx.Text( "Tweetwenku10", "AppResources" ) );
+            ValueHelpInput TweetInput = new ValueHelpInput( "", "wenku10 ♥", stx.Text( "Tweetwenku10", "AppResources" ) );
             TweetInput.Value = TweetText;
 
             await Popups.ShowDialog( TweetInput );
@@ -120,6 +121,16 @@ namespace wenku10.Pages
             {
                 TransitionDisplay.SetState( TwitterBtn, TransitionState.Inactive );
                 SetTwitter();
+            }
+        }
+
+        private void OpenEffects_Click( object sender, RoutedEventArgs e )
+        {
+            if ( TransitionDisplay.GetState( EffectsBtn ) == TransitionState.Active )
+            {
+                TransitionDisplay.SetState( EffectsBtn, TransitionState.Inactive );
+
+                Stage.Paused = false;
             }
         }
 
