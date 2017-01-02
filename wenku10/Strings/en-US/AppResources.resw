@@ -414,4 +414,7 @@
   <data name="NoDictionary.Text" xml:space="preserve">
     <value>No dictionary.</value>
   </data>
+  <data name="Tweetwenku10.Text" xml:space="preserve">
+    <value>131 characters ( #wenku10 )</value>
+  </data>
 </root>

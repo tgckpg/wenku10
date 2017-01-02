@@ -43,9 +43,14 @@ namespace wenku10.Scenes
                     foreach ( IForceField IFF in PFSim.Fields )
                     {
                         IFF.WireFrame( ds );
+                        IFF.FreeWireFrame();
                     }
                 }
-
+                else
+                {
+                    foreach ( IForceField IFF in PFSim.Fields )
+                        IFF.FreeWireFrame();
+                }
             }
 #endif
         }

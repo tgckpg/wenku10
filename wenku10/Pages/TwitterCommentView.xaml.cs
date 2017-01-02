@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Microsoft.Toolkit.Uwp.Services.Twitter;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
@@ -33,7 +34,6 @@ using wenku8.Model.Loaders;
 using wenku8.Model.Text;
 using wenku8.Model.Twitter;
 using wenku8.Resources;
-using Net.Astropenguin.Controls;
 
 namespace wenku10.Pages
 {
@@ -194,8 +194,7 @@ namespace wenku10.Pages
 
         private async void SetContext()
         {
-            TwitterLoader Loader = new TwitterLoader();
-            await Loader.Authenticate();
+            await AuthData.Authenticate();
 
             CurrentUser = await TwitterService.Instance.GetUserAsync();
 
@@ -275,6 +274,7 @@ namespace wenku10.Pages
 
             try
             {
+                TweetInput.IsEnabled = false;
                 if ( InReplyTo == null )
                 {
                     await TwitterService.Instance.TweetStatusAsync( TweetContent );
@@ -295,6 +295,8 @@ namespace wenku10.Pages
             {
                 var j = Popups.ShowDialog( UIAliases.CreateDialog( ex.Message ) );
             }
+
+            TweetInput.IsEnabled = true;
         }
 
         private void ToggleTag( object sender, TappedRoutedEventArgs e )
@@ -307,8 +309,9 @@ namespace wenku10.Pages
 
         private async void ReloadTweets()
         {
+            await AuthData.Authenticate();
+
             TwitterLoader Loader = new TwitterLoader();
-            await Loader.Authenticate();
 
             Loader.Keyword = ThisBook.Title.TrimForSearch();
             Loader.Tags = TagsAvailable;
@@ -328,6 +331,8 @@ namespace wenku10.Pages
 
         private void InsertFakeTweet( string FTweet )
         {
+            TransitionDisplay.SetState( NCPlaceholder, TransitionState.Inactive );
+
             Observables<Tweet, Tweet> Tweets = ( Observables<Tweet, Tweet> ) TweetsView.ItemsSource;
             Tweets.Insert( 0, new Tweet()
             {

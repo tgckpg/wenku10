@@ -156,4 +156,10 @@
   <data name="VL_NoScope" xml:space="preserve">
     <value>Please define the scope of this script</value>
   </data>
+  <data name="TweetTooLong" xml:space="preserve">
+    <value>Your tweet is too long</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>Error on submitting request</value>
+  </data>
 </root>

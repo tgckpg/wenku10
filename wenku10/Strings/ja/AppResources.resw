@@ -415,4 +415,7 @@
   <data name="TweetNeedsPropagate.Text" xml:space="preserve">
     <value>あなたのツイートは、検索キューに伝播するのに1〜2分必要です。 あなたのツイートが見えない場合は、後でやってみよう！</value>
   </data>
+  <data name="Tweetwenku10.Text" xml:space="preserve">
+    <value>131 文字 ( #wenku10 )</value>
+  </data>
 </root>

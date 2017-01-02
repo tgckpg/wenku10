@@ -109,6 +109,7 @@
     <Content Include="Assets\Samples\BgInfoView.jpg" />
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Assets\Samples\Empty150.png" />
+    <Content Include="Assets\twitter.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
     <PRIResource Include="Strings\en-US\Resources.resw" />

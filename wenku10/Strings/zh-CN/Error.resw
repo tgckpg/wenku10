@@ -156,4 +156,10 @@
   <data name="VL_NoScope" xml:space="preserve">
     <value>请定义此脚本的规模</value>
   </data>
+  <data name="TweetTooLong" xml:space="preserve">
+    <value>您的 tweet 太长了</value>
+  </data>
+  <data name="SubmitError" xml:space="preserve">
+    <value>提交请求时出错</value>
+  </data>
 </root>

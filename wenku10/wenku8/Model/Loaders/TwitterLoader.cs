@@ -13,43 +13,20 @@ using Net.Astropenguin.Logging;
 namespace wenku8.Model.Loaders
 {
     using ListItem;
-    using Twitter;
 
     sealed class TwitterLoader : ILoader<Tweet>
     {
         public static readonly string ID = typeof( TwitterLoader ).Name;
 
-        public bool Valid { get; private set; }
-
         public List<NameValue<bool>> Tags { get; set; }
         public string Keyword = "";
 
-        public async Task Authenticate()
-        {
-            TwitterService.Instance.Initialize( AuthData.Token );
-            Valid = await TwitterService.Instance.LoginAsync();
-        }
-
         public Action<IList<Tweet>> Connector { get; set; }
 
-        public int CurrentPage
-        {
-            get
-            {
-                if ( !Valid ) return 0;
-                return 0;
-            }
-        }
+        public int CurrentPage { get { return 0; } }
 
         private bool _PageEnded = false;
-        public bool PageEnded
-        {
-            get
-            {
-                if ( !Valid ) return true;
-                return _PageEnded;
-            }
-        }
+        public bool PageEnded { get { return _PageEnded; } }
 
         private string MaxId;
 
@@ -79,7 +56,7 @@ namespace wenku8.Model.Loaders
                 Logger.Log( ID, ex.Message, LogType.WARNING );
             }
 
-            Valid = false;
+            _PageEnded = true;
             return new Tweet[ 0 ];
         }
 

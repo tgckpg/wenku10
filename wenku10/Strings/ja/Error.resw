@@ -157,4 +157,7 @@
   <data name="VL_NoScope" xml:space="preserve">
     <value>このスクリプトの規模を定義してください</value>
   </data>
+  <data name="TweetTooLong" xml:space="preserve">
+    <value>あなたのツイートは長すぎます</value>
+  </data>
 </root>

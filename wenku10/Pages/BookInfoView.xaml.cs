@@ -309,10 +309,7 @@ namespace wenku10.Pages
                 await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
             }
 
-            TwitterLoader TwLoader = new TwitterLoader();
-            await TwLoader.Authenticate();
-
-            if ( !TwLoader.Valid ) return;
+            if ( !await wenku8.Model.Twitter.AuthData.Authenticate() ) return;
 
             ControlFrame.Instance.SubNavigateTo( this, () => new TwitterCommentView( ThisBook ) );
 

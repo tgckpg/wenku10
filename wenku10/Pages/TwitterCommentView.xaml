@@ -61,7 +61,8 @@
                        Margin="5" Foreground="{StaticResource MinorBrush}"/>
         </StackPanel>
 
-        <TextBlock e:TransitionDisplay.State="{Binding ElementName=TweetsView, Path=ItemsSource, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+        <TextBlock x:Name="NCPlaceholder"
+                   e:TransitionDisplay.State="{Binding ElementName=TweetsView, Path=ItemsSource, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
                    e:TransitionDisplay.Mode="A01_Y_30_N30"
                    e:TransitionDisplay.UseVisibility="False"
                    Visibility="{Binding ElementName=HashTags, Path=ItemsSource, Converter={StaticResource DataVisConverter}}"
@@ -72,7 +73,7 @@
         <ListView x:Name="TweetsView" Grid.Row="2"
                   ItemContainerStyle="{StaticResource BareListItem}">
             <ListView.ItemTemplate>
-                <DataTemplate x:Name="CommentNormal">
+                <DataTemplate>
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

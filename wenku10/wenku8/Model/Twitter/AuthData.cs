@@ -35,5 +35,11 @@ namespace wenku8.Model.Twitter
             }
         }
 
+        public static async Task<bool> Authenticate()
+        {
+            TwitterService.Instance.Initialize( Token );
+            return await TwitterService.Instance.LoginAsync();
+        }
+
     }
 }

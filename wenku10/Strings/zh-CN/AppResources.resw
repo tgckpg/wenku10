@@ -416,4 +416,7 @@
   <data name="TweetNeedsPropagate.Text" xml:space="preserve">
     <value>您的推文将需要1〜2分钟在搜索队列中传播。 如果您没有看到您的推文，请稍后再试！</value>
   </data>
+  <data name="Tweetwenku10.Text" xml:space="preserve">
+    <value>131 字 ( #wenku10 )</value>
+  </data>
 </root>
