@@ -38,7 +38,7 @@ namespace wenku10.Pages.Dialogs
         public ValueHelpInput(
             string DefaultValue
             , string Title
-            , string ValueLabel, string HelpText
+            , string ValueLabel, string HelpText = null
             , string BtnLeft = "OK", string BtnRight = "Cancel" )
         {
             this.InitializeComponent();

@@ -45,6 +45,12 @@ namespace wenku10.Pages.Dialogs
             {
                 RegisterBtn.Visibility = Visibility.Visible;
             }
+
+            if( !string.IsNullOrEmpty( Member.CurrentAccount ) )
+            {
+                Account.Text = Member.CurrentAccount;
+                Password.Loaded += Password_Focus;
+            }
         }
 
         void Member_StatusUpdate( object sender, MemberStatus st )
@@ -140,10 +146,16 @@ namespace wenku10.Pages.Dialogs
             ServerMessage.Visibility = Visibility.Visible;
         }
 
+        private void Password_Focus( object sender, RoutedEventArgs e )
+        {
+            Password.Focus( FocusState.Keyboard );
+        }
+
         private void RegisterBtn_Click( object sender, RoutedEventArgs e )
         {
             this.Hide();
             Member.Register();
         }
+
     }
 }

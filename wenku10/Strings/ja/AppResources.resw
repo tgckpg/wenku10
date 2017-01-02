@@ -223,9 +223,6 @@
   <data name="Test.Text" xml:space="preserve">
     <value>字</value>
   </data>
-  <data name="But_There_Is_Nothing.Text" xml:space="preserve">
-    <value>必要な情報をダウンロードし、しばらくお待ちください...完了すると、ページの本文に直接スキップします</value>
-  </data>
   <data name="Button_Back.Text" xml:space="preserve">
     <value>戻る</value>
   </data>
@@ -414,5 +411,11 @@
   </data>
   <data name="NoDictionary.Text" xml:space="preserve">
     <value>辞書はありません。</value>
+  </data>
+  <data name="TweetNeedsPropagate.Text" xml:space="preserve">
+    <value>あなたのツイートは、検索キューに伝播するのに1〜2分必要です。 あなたのツイートが見えない場合は、後でやってみよう！</value>
+  </data>
+  <data name="Tweetwenku10.Text" xml:space="preserve">
+    <value>131 文字 ( #wenku10 )</value>
   </data>
 </root>

@@ -159,6 +159,9 @@
   <data name="SubProcessRun" xml:space="preserve">
     <value>蜘蛛正在运行子进程…「{0}」</value>
   </data>
+  <data name="TweetTooLong" xml:space="preserve">
+    <value>您的tweet太长</value>
+  </data>
   <data name="WaitingForUI" xml:space="preserve">
     <value>正在等待界面响应</value>
   </data>

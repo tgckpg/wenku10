@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
@@ -30,6 +31,7 @@ using wenku8.Settings;
 
 namespace wenku10.Pages
 {
+    using Dialogs;
     using Sharers;
     using SHHub;
 
@@ -201,7 +203,31 @@ namespace wenku10.Pages
             MAuthBtn.Click += ManageAuths;
 
             MajorControls = new ICommandBarElement[] { ActivyBtn };
+
+#if DEBUG
+            StringResources sts = new StringResources( "Settings" );
+            SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
+            ChangeServer.Click += async ( s, e ) =>
+            {
+                ValueHelpInput VH =  new ValueHelpInput(
+                    Shared.ShRequest.Server.ToString()
+                    , sts.Text( "Advanced_Server" ), "Address"
+                ) ;
+
+                await Popups.ShowDialog( VH );
+                if ( VH.Canceled ) return;
+
+                try
+                {
+                    Shared.ShRequest.Server = new Uri( VH.Value );
+                }
+                catch ( Exception ) { }
+            };
+
+            Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn, ChangeServer };
+#else
             Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn };
+#endif
         }
 
         private async void ToggleActivities( object sender, RoutedEventArgs e )

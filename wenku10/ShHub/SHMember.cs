@@ -34,6 +34,8 @@ namespace wenku10.SHHub
 
         public MemberStatus Status { get; set; }
 
+        public string CurrentAccount { get; set; }
+
         public Activities Activities { get; private set; }
 
         public string ServerMessage
@@ -68,6 +70,7 @@ namespace wenku10.SHHub
         public void Login( string Account, string Password )
         {
             WillLogin = true;
+            CurrentAccount = Account;
             RCache.POST(
                 Shared.ShRequest.Server
                 , Shared.ShRequest.Login( Account, Password )
@@ -164,6 +167,8 @@ namespace wenku10.SHHub
                 );
                 MCookie.Value = MAuth.GetValue( "value" );
                 WHttpRequest.Cookies.Add( Shared.ShRequest.Server, MCookie );
+
+                CurrentAccount = MAuth.GetValue( "account" );
             }
             catch ( Exception ex )
             {
@@ -187,6 +192,7 @@ namespace wenku10.SHHub
                         , new XKey( "domain" , cookie.Domain )
                         , new XKey( "path", cookie.Path )
                         , new XKey( "value" , cookie.Value )
+                        , new XKey( "account", CurrentAccount )
                     } );
 
                     AuthReg.SetParameter( MAuth );

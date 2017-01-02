@@ -61,6 +61,7 @@ namespace wenku10.Pages
         AppBarButton FavBtn;
         AppBarButton BrowserBtn;
         AppBarButton TOCBtn;
+        AppBarButton HSBtn;
         AppBarButton CommentBtn;
         AppBarButton AuthorBtn;
 
@@ -121,14 +122,11 @@ namespace wenku10.Pages
             FavBtn = UIAliases.CreateAppBarBtn( Symbol.Favorite, "" );
             FavBtn.Click += AddOrRemoveFav;
 
-            AuthorBtn = UIAliases.CreateAppBarBtn( Symbol.ContactPresence, stx.Str( "Author" ) );
-            AuthorBtn.Click += SearchAuthor;
-
-            CommentBtn = UIAliases.CreateAppBarBtn( Symbol.Comment, stx.Text( "Comments", "AppResources" ) );
-            CommentBtn.Click += OpenComments;
-
             TOCBtn = UIAliases.CreateAppBarBtn( Symbol.OpenWith, stx.Text( "TOC" ) );
             TOCBtn.Click += TOCBtn_Click;
+
+            // Comment Button
+            CommentBtn = UIAliases.CreateAppBarBtn( Symbol.Comment, stx.Text( "Comments", "AppResources" ) );
 
             // Minor Controls
             AppBarButton ThemeBtn = UIAliases.CreateAppBarBtn( Symbol.Caption, stx.Text( "CustomBackground", "ContextMenu" ) );
@@ -139,7 +137,7 @@ namespace wenku10.Pages
             BrowserBtn = UIAliases.CreateAppBarBtn( Symbol.Globe, stx.Text( "OpenInBrowser" ) );
             BrowserBtn.Click += BrowserBtn_Click;
 
-            MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
+            MajorControls = new ICommandBarElement[] { FavBtn, TOCBtn };
             MinorControls = new ICommandBarElement[] { ThemeBtn, BrowserBtn };
         }
 
@@ -177,8 +175,6 @@ namespace wenku10.Pages
 
             var j = Dispatcher.RunIdleAsync( x =>
             {
-                bool CanBing = false;
-
                 if ( Book.IsSpider() )
                 {
                     bool BingExists = new BingService( Book ).Exists();
@@ -187,15 +183,15 @@ namespace wenku10.Pages
                         = BingCoverBtn.IsEnabled
                         = BingExists;
 
-                    CanBing = BingExists || ( Book.CoverSrcUrl == null );
+                    bool CanBing = BingExists || string.IsNullOrEmpty( Book.CoverSrcUrl );
 
                     UsingBing.Foreground = new SolidColorBrush(
-                        BingExists 
+                        BingExists
                         ? Properties.APPEARENCE_THEME_MINOR_COLOR
                         : Properties.APPEARENCE_THEME_SUBTLE_TEXT_COLOR );
-                }
 
-                UsingBing.IsEnabled = CanBing;
+                    UsingBing.IsEnabled = CanBing;
+                }
 
                 CacheStateStory.Stop();
             } );
@@ -227,6 +223,9 @@ namespace wenku10.Pages
 #if DEBUG
             if ( ThisBook == null ) ThisBook = BookItem.DummyBook();
 #endif
+            ToggleFav();
+            ToggleAppBar();
+
             if( ThisBook == null )
             {
                 // Set Book Unavailable View
@@ -242,9 +241,6 @@ namespace wenku10.Pages
                 LayoutRoot.DataContext = ThisBook;
                 InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
             }
-
-            ToggleFav();
-            ToggleButtons();
         }
 
         private async void ChangeBackground( object sender, RoutedEventArgs e )
@@ -297,31 +293,47 @@ namespace wenku10.Pages
             BL.LoadIntro( ThisBook );
         }
 
-        private async void OpenComments( object sender, RoutedEventArgs e )
+        private void OpenExComments( object sender, RoutedEventArgs e )
+        {
+            ControlFrame.Instance.SubNavigateTo( this, () => new WComments( ThisBook ) );
+        }
+
+        private async void OpenTwitter( object sender, RoutedEventArgs e )
         {
             CommentBtn.IsEnabled = false;
 
-            if ( ThisBook.XTest( XProto.BookItemEx ) )
+            if ( !LayoutSettings.TwitterConfirmed )
             {
-                ControlFrame.Instance.SubNavigateTo( this, () => new WComments( ThisBook ) );
+                LayoutSettings.TwitterConfirmed = true;
+                StringResources stx = new StringResources( "Message" );
+                await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
             }
-            else if ( ThisBook.IsSpider() )
-            {
-                string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
-                HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );
 
-                if ( HSI == null )
-                {
-                    // Suggest Upload
-                    ControlFrame.Instance.SubNavigateTo( this, () => new ScriptUpload( ThisBook, OpenHSComment ) );
-                }
-                else
-                {
-                    OpenHSComment( HSI );
-                }
-            }
+            if ( !await wenku8.Model.Twitter.AuthData.Authenticate() ) return;
+
+            ControlFrame.Instance.SubNavigateTo( this, () => new TwitterCommentView( ThisBook ) );
 
             CommentBtn.IsEnabled = true;
+        }
+
+        private async void OpenHSComments( object sender, RoutedEventArgs e )
+        {
+            HSBtn.IsEnabled = false;
+
+            string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
+            HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );
+
+            if ( HSI == null )
+            {
+                // Suggest Upload
+                ControlFrame.Instance.SubNavigateTo( this, () => new ScriptUpload( ThisBook, SHUploadComplete ) );
+            }
+            else
+            {
+                OpenHSComment( HSI );
+            }
+
+            HSBtn.IsEnabled = true;
         }
 
         private void OpenHSComment( HubScriptItem HSI )
@@ -332,7 +344,7 @@ namespace wenku10.Pages
                 , View => ( ( ScriptDetails ) View ).OpenComment() );
         }
 
-        private async void OpenHSComment( string Id, string AccessToken )
+        private async void SHUploadComplete( string Id, string AccessToken )
         {
             await ControlFrame.Instance.CloseSubView();
             HubScriptItem HSI = await PageProcessor.GetScriptFromHub( Id, AccessToken );
@@ -367,17 +379,38 @@ namespace wenku10.Pages
             ToggleFav();
         }
 
-        private void ToggleButtons()
+        private void ToggleAppBar()
         {
+            StringResources stx = new StringResources( "AppBar", "AppResources" );
+
             if ( ThisBook.XTest( XProto.BookItemEx ) )
             {
-                AuthorBtn.IsEnabled = true;
                 VoteButton.Visibility = Visibility.Visible;
+
+                AuthorBtn = UIAliases.CreateAppBarBtn( Symbol.ContactPresence, stx.Str( "Author" ) );
+                AuthorBtn.Click += SearchAuthor;
+
+                CommentBtn.Click += OpenExComments;
+
+                MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
+            }
+            else if( ThisBook.IsSpider() )
+            {
+                HSBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.HomeGroup, stx.Text( "ScriptDetails" ) );
+                HSBtn.Click += OpenHSComments;
+
+                CommentBtn.Click += OpenTwitter;
+
+                MajorControls = new ICommandBarElement[] { FavBtn, HSBtn, CommentBtn, TOCBtn };
             }
             else
             {
-                AuthorBtn.IsEnabled = false;
+                CommentBtn.Click += OpenTwitter;
+
+                MajorControls = new ICommandBarElement[] { FavBtn, CommentBtn, TOCBtn };
             }
+
+            ControlChanged?.Invoke( this );
         }
 
         private void ToggleFav()
