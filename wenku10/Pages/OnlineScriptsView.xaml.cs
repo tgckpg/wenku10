@@ -204,7 +204,7 @@ namespace wenku10.Pages
 
             MajorControls = new ICommandBarElement[] { ActivyBtn };
 
-#if DEBUG
+#if DEBUG || TESTING
             StringResources sts = new StringResources( "Settings" );
             SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
             ChangeServer.Click += async ( s, e ) =>
@@ -219,7 +219,9 @@ namespace wenku10.Pages
 
                 try
                 {
-                    Shared.ShRequest.Server = new Uri( VH.Value );
+                    new Uri( VH.Value );
+                    wenku8.Config.Properties.SERVER_OSD_URI = VH.Value;
+                    Shared.ShRequest.UpdateServer();
                 }
                 catch ( Exception ) { }
             };

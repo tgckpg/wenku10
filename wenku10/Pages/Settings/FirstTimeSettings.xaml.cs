@@ -114,11 +114,6 @@ namespace wenku10.Pages.Settings
             }
         }
 
-        private void ToggleSS( object sender, RoutedEventArgs e )
-        {
-            Properties.ENABLE_SERVER_SEL = EnableSS.IsOn;
-        }
-
         private void SetTheme()
         {
             global::wenku8.Settings.Theme.ThemeSet T;

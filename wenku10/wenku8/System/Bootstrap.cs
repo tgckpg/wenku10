@@ -9,6 +9,7 @@ namespace wenku8.System
     using AdvDM;
     using Config;
     using Ext;
+    using Model.REST;
     using Storage;
 
     using ResTaotu = libtaotu.Resources.Shared;
@@ -30,13 +31,8 @@ namespace wenku8.System
             + "p";
 #endif
 
-        public Bootstrap() { }
-
 		public async void Start()
 		{
-#if ARM && DEBUG || TESTING || BETA || RELEASE
-            Resources.Shared.ShRequest.Server = new global::System.Uri( "https://w10srv.astropenguin.net/" );
-#endif
             X.Init();
 			// Must follow Order!
 			//// Fixed Orders
@@ -56,10 +52,8 @@ namespace wenku8.System
                 Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
             }
 
-            // SHRequest AppVersion param
-            Resources.Shared.ShRequest.Ver = Version;
-            // Set Version Compatibles
-            Resources.Shared.ShRequest.Compat = new string[] { "1.8.6t", "1.3.4b", "1.0.0p" };
+            // SHRequest Init
+            Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "1.8.6t", "1.3.4b", "1.0.0p" } );
 
             // Connection Mode
             WHttpRequest.UA = string.Format( Settings.AppKeys.UA, Version );
@@ -91,7 +85,6 @@ namespace wenku8.System
 
             X.Instance<object>( XProto.LibStart );
 
-            Logger.Log( ID, "Memeber Initilizated", LogType.INFO );
             // 1. Runtime Queue
             global::wenku10.App.RuntimeTransfer = new WRuntimeTransfer();
             Logger.Log( ID, "WRuntimeTransfer Initilizated", LogType.INFO );
