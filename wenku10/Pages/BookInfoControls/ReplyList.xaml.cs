@@ -28,6 +28,8 @@ namespace wenku10.Pages.BookInfoControls
     {
         private Observables<Comment, Comment> Replies;
 
+        private int CurrIndex = 1;
+
         public ReplyList()
         {
             this.InitializeComponent();
@@ -68,6 +70,7 @@ namespace wenku10.Pages.BookInfoControls
                 Comments[ i ] = new Comment()
                 {
                     Username = xu.Value
+                    , Index = CurrIndex++
                     , Title = xe.Descendants( "content" ).ElementAt( 0 ).Value
                     , UserId = xu.Attribute( "uid" ).Value
                     , PostTime = xe.Attribute( "timestamp" ).Value

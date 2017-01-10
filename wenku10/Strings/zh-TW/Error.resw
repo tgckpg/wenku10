@@ -160,9 +160,6 @@
     <value>您的 tweet 太長了</value>
   </data>
   <data name="SubmitError" xml:space="preserve">
-    <value>リクエストの送信中にエラーが発生しました。</value>
-  </data>
-  <data name="SubmitError1" xml:space="preserve">
     <value>提交請求時出錯</value>
   </data>
 </root>
