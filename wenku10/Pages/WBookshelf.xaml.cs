@@ -48,6 +48,7 @@ namespace wenku10.Pages
         private IFavSection FS;
 
         AppBarButtonEx ReloadBtn;
+        AppBarButtonEx PinAll;
 
         private volatile bool Locked = false;
 
@@ -119,7 +120,15 @@ namespace wenku10.Pages
                     FS.Reload( true );
             };
 
-            MajorControls = new ICommandBarElement[] { ReloadBtn };
+            PinAll = UIAliases.CreateAppBarBtnEx( Symbol.Pin, stx.Text( "PinAllBooksToStart" ) );
+            PinAll.Click += ( s, e ) =>
+            {
+                FS.C_PinAll();
+
+            };
+
+
+            MajorControls = new ICommandBarElement[] { PinAll, ReloadBtn };
 
             if ( Properties.ENABLE_ONEDRIVE )
             {
