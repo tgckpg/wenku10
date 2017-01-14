@@ -237,4 +237,7 @@
   <data name="Exit.Text" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="PinAll.Text" xml:space="preserve">
+    <value>Pin all items to Start</value>
+  </data>
 </root>

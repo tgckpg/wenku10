@@ -561,4 +561,7 @@
   <data name="Desc_EBWin_Help.Text" xml:space="preserve">
     <value>Can't install your dictionaries?</value>
   </data>
+  <data name="Appearance_ContentReader_BlockHeight.Text" xml:space="preserve">
+    <value>( Vertical ) The lower the better. Please ensure text filled correctly.</value>
+  </data>
 </root>

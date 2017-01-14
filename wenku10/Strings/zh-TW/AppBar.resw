@@ -237,4 +237,7 @@
   <data name="Exit.Text" xml:space="preserve">
     <value>結束</value>
   </data>
+  <data name="PinAll.Text" xml:space="preserve">
+    <value>將所有項目固定到開始頁</value>
+  </data>
 </root>

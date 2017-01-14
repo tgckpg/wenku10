@@ -213,4 +213,7 @@
   <data name="ConfirmSubmit" xml:space="preserve">
     <value>提交？</value>
   </data>
+  <data name="ConfirmMassPin" xml:space="preserve">
+    <value>请确认将 {0} 个项目钉到开始页。得感谢 Windows 政策。您还必须反覆按确认 {0} 次。</value>
+  </data>
 </root>

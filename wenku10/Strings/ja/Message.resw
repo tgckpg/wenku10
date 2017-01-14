@@ -213,4 +213,7 @@
   <data name="ConfirmSubmit" xml:space="preserve">
     <value>送信しますか？</value>
   </data>
+  <data name="ConfirmMassPin" xml:space="preserve">
+    <value>{0} 個のアイテムをピンで確認してください。  Windows ポリシー のおかげで。 あなたは {0} 回確認を押す必要があります。</value>
+  </data>
 </root>

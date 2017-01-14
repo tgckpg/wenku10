@@ -20,6 +20,7 @@ using Windows.UI.Text;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.UI;
 
 using wenku8.Config;
 using wenku8.Model.Section;
@@ -40,6 +41,9 @@ namespace wenku10.Pages.Settings.Themes
 
         private ReaderView ReaderContext;
         private BgContext RBgContext;
+
+        private Dictionary<string, float> ValidValues = new Dictionary<string, float>();
+        private Dictionary<string, Slider> SSliders = new Dictionary<string, Slider>();
 
         ScrollBar HScrollBar;
         ScrollBar VScrollBar;
@@ -165,9 +169,23 @@ namespace wenku10.Pages.Settings.Themes
                     = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
             }
 
+            SSliders[ FontSizeInput.Name ] = FontSizeSlider;
+            SSliders[ BlockHeightInput.Name ] = BlockHeightSlider;
+            SSliders[ LineSpacingInput.Name ] = LineSpacingSlider;
+            SSliders[ ParaSpacingInput.Name ] = ParaSpacingSlider;
+
             FontSizeSlider.Value = Properties.APPEARANCE_CONTENTREADER_FONTSIZE;
             LineSpacingSlider.Value = Properties.APPEARANCE_CONTENTREADER_LINEHEIGHT;
-            ParagraphSpacingSlider.Value = 2 * Properties.APPEARANCE_CONTENTREADER_PARAGRAPHSPACING;
+            ParaSpacingSlider.Value = 2 * Properties.APPEARANCE_CONTENTREADER_PARAGRAPHSPACING;
+
+            FontSizeInput.Text = FontSizeSlider.Value.ToString();
+            LineSpacingInput.Text = LineSpacingSlider.Value.ToString();
+            ParaSpacingInput.Text = ParaSpacingSlider.Value.ToString();
+
+            if ( 0 < Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+            {
+                BlockHeightSlider.Value = Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT;
+            }
 
             FontWeight FWeight = Properties.APPEARANCE_CONTENTREADER_FONTWEIGHT;
             // Set font weights
@@ -208,9 +226,15 @@ namespace wenku10.Pages.Settings.Themes
             UpdateExamplePs();
             UpdateExampleFc();
             UpdateExampleFs();
+            UpdateExampleBh();
+
             for ( int i = 0; i < 3; i++ )
             {
-                var j = ContentGrid.Dispatcher.RunIdleAsync( ( x ) => UpdateExampleFs() );
+                var j = ContentGrid.Dispatcher.RunIdleAsync( ( x ) =>
+                {
+                    UpdateExampleFs();
+                    UpdateExampleBh();
+                } );
             }
         }
 
@@ -231,26 +255,53 @@ namespace wenku10.Pages.Settings.Themes
 
                 XPanel.Visibility = Visibility.Visible;
                 YPanel.Visibility = Visibility.Collapsed;
+
+                BlockHeightSlider.IsEnabled = BlockHeightInput.IsEnabled = false;
             }
         }
 
         // private void FontSizeSlider_ValueChanged_1( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExampleFs(); }
-        private void FontSizeSlider_PointerCaptureLost_1( object sender, PointerRoutedEventArgs e )
+        private void FontSizeSlider_PointerCaptureLost( object sender, PointerRoutedEventArgs e = null )
         {
             NeedRedraw = true;
             UpdateExampleFs();
+            UpdateExampleBh();
+
             Properties.APPEARANCE_CONTENTREADER_FONTSIZE = FontSizeSlider.Value;
+            Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT = 0;
+            FontSizeInput.Text = FontSizeSlider.Value.ToString();
         }
-        private void LineSpacingSlider_ValueChanged_1( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExampleLs(); }
-        private void LineSpacingSlider_PointerCaptureLost_1( object sender, PointerRoutedEventArgs e )
+
+        private void BlockHeightSlider_PointerCaptureLost( object sender, PointerRoutedEventArgs e = null )
+        {
+            NeedRedraw = true;
+
+            VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( FontSizeSlider.Value );
+            LogaTable.Override( BlockHeightSlider.Value );
+
+            if ( BlockHeightSlider.Value != Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+            {
+                VerticalLogaManager.Destroy( Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT );
+
+                Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT = BlockHeightSlider.Value;
+                BlockHeightInput.Text = BlockHeightSlider.Value.ToString();
+
+                UpdateExampleFs();
+            }
+        }
+
+        private void LineSpacingSlider_ValueChanged( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExampleLs(); }
+        private void LineSpacingSlider_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
         {
             Properties.APPEARANCE_CONTENTREADER_LINEHEIGHT = LineSpacingSlider.Value;
+            LineSpacingInput.Text = LineSpacingSlider.Value.ToString();
         }
-        private void ParagraphSpacingSlider_ValueChanged_1( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExamplePs(); }
-        private void ParagraphSpacingSlider_PointerCaptureLost_1( object sender, PointerRoutedEventArgs e )
+        private void ParaSpacingSlider_ValueChanged( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExamplePs(); }
+        private void ParaSpacingSlider_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
         {
             // Setting it will auto scale down half
-            Properties.APPEARANCE_CONTENTREADER_PARAGRAPHSPACING = ParagraphSpacingSlider.Value ;
+            Properties.APPEARANCE_CONTENTREADER_PARAGRAPHSPACING = ParaSpacingSlider.Value;
+            ParaSpacingInput.Text = ParaSpacingSlider.Value.ToString();
         }
 
         // Status Update
@@ -265,6 +316,35 @@ namespace wenku10.Pages.Settings.Themes
             ContentGrid.ItemsSource = null;
             ContentGrid.ItemsSource = ExpContent;
         }
+
+        private void UpdateExampleBh()
+        {
+            VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( FontSizeSlider.Value );
+
+            if ( LogaTable.CertaintyLevel == 0 )
+            {
+                var j = Dispatcher.RunIdleAsync( ( x ) => { UpdateExampleBh(); } );
+                return;
+            }
+
+            BlockHeightSlider.Value = LogaTable.BlockHeight;
+            BlockHeightInput.Text = LogaTable.BlockHeight.ToString();
+
+            double qd = Math.Round( 0.25 * FontSizeSlider.Value, 2 );
+            double Low = LogaTable.Low;
+            double High = LogaTable.High;
+
+            if ( ( High - Low ) < qd )
+            {
+                Low = LogaTable.BlockHeight - qd;
+                High = LogaTable.BlockHeight + qd;
+            }
+
+            BlockHeightSlider.Minimum = Low;
+            BlockHeightSlider.Maximum = High;
+            BlockHeightSlider.StepFrequency = 0.01 * ( High - Low );
+        }
+
         private void UpdateScrollBar()
         {
             if ( HScrollBar == null ) return;
@@ -282,7 +362,7 @@ namespace wenku10.Pages.Settings.Themes
         {
             if ( ExpContent == null ) return;
 
-            double d = Math.Round( ParagraphSpacingSlider.Value, 2 );
+            double d = Math.Round( ParaSpacingSlider.Value, 2 );
             ExpContent.All( x => { x.SetParagraphSpacing( d ); return true; } );
         }
         private void UpdateExampleFc()
@@ -348,6 +428,47 @@ namespace wenku10.Pages.Settings.Themes
             VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 1 );
             HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
             UpdateScrollBar();
+        }
+
+        private void ForceSliderRange( object sender, TextChangedEventArgs e = null )
+        {
+            TextBox Input = ( TextBox ) sender;
+
+            string Key = Input.Name;
+            Slider SourceSlider = SSliders[ Key ];
+
+            float Value;
+            float Min = ( float ) SourceSlider.Minimum;
+            float Max = ( float ) SourceSlider.Maximum;
+
+            if ( float.TryParse( Input.Text.Trim(), out Value ) )
+            {
+                SourceSlider.Value = Value;
+                ValidValues[ Key ] = ( float ) SourceSlider.Value;
+                return;
+            }
+            else if ( ValidValues.ContainsKey( Input.Name ) )
+            {
+                Input.Text = ValidValues[ Key ].ToString();
+            }
+            else
+            {
+                Input.Text = SourceSlider.Value.ToString();
+            }
+
+            Input.SelectionStart = Input.Text.Length;
+        }
+
+        private void BlockHeightInput_LostFocus( object sender, RoutedEventArgs e )
+        {
+            ForceSliderRange( sender );
+            BlockHeightSlider_PointerCaptureLost( sender, null );
+        }
+
+        private void FontSizeInput_LostFocus( object sender, RoutedEventArgs e )
+        {
+            ForceSliderRange( sender );
+            FontSizeSlider_PointerCaptureLost( sender, null );
         }
 
     }

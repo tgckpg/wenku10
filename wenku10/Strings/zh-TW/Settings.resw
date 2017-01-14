@@ -561,4 +561,7 @@
   <data name="Desc_EBWin_Help.Text" xml:space="preserve">
     <value>無法安裝字典？</value>
   </data>
+  <data name="Appearance_ContentReader_BlockHeight.Text" xml:space="preserve">
+    <value>( 直書專用 ) 數值越低越好，調整同時請確保文字剛好填滿空間。</value>
+  </data>
 </root>

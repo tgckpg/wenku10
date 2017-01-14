@@ -17,7 +17,7 @@
               ItemContainerStyle="{StaticResource CommentListItem}">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <Grid>
+                <Grid Margin="0,0,10,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15" />
                         <ColumnDefinition Width="*" />

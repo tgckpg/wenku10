@@ -120,15 +120,10 @@ namespace wenku10.Pages
                     FS.Reload( true );
             };
 
-            PinAll = UIAliases.CreateAppBarBtnEx( Symbol.Pin, stx.Text( "PinAllBooksToStart" ) );
-            PinAll.Click += ( s, e ) =>
-            {
-                FS.C_PinAll();
+            PinAll = UIAliases.CreateAppBarBtnEx( Symbol.Pin, stx.Text( "PinAll" ) );
+            PinAll.Click += ( s, e ) => { FS.C_PinAll(); };
 
-            };
-
-
-            MajorControls = new ICommandBarElement[] { PinAll, ReloadBtn };
+            MajorControls = new ICommandBarElement[] { ReloadBtn };
 
             if ( Properties.ENABLE_ONEDRIVE )
             {
@@ -136,7 +131,11 @@ namespace wenku10.Pages
                 ButtonOperation SyncOp = new ButtonOperation( OneDriveButton );
 
                 SyncOp.SetOp( OneDriveRsync );
-                MinorControls = new ICommandBarElement[] { OneDriveButton };
+                MinorControls = new ICommandBarElement[] { PinAll, OneDriveButton };
+            }
+            else
+            {
+                MinorControls = new ICommandBarElement[] { PinAll };
             }
         }
 

@@ -237,4 +237,7 @@
   <data name="Exit.Text" xml:space="preserve">
     <value>終了</value>
   </data>
+  <data name="PinAll.Text" xml:space="preserve">
+    <value>すべてのアイテムを開始に固定する</value>
+  </data>
 </root>

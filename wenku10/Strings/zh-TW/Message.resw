@@ -199,7 +199,7 @@
     <value>本書似乎是禁書。要使用必殺技嗎？（ 此書的所有 錨點 / 書籤 都將丟失 ）</value>
   </data>
   <data name="ConfirmTwitter" xml:space="preserve">
-    <value>將會使用 twitter 作為評論頻導，請留意在 tweet 的時候預設的 hashtag 會是 #wenku10 。</value>
+    <value>將會使用 twitter 作為評論頻道，請留意在 tweet 的時候預設的 hashtag 會是 #wenku10 。</value>
   </data>
   <data name="Desc_OSTweet" xml:space="preserve">
     <value>您的推文不包含「{0}」與「{1}」。 請注意，此應用的其他用戶將無法看到您的推文，因為其默認搜索條件依賴於上述兩個關鍵字。要繼續嗎？</value>
@@ -212,5 +212,8 @@
   </data>
   <data name="ConfirmSubmit" xml:space="preserve">
     <value>提交？</value>
+  </data>
+  <data name="ConfirmMassPin" xml:space="preserve">
+    <value>請確認將 {0} 個項目釘到開始頁。  得感謝 Windows 政策。 您還必須反覆按確認 {0} 次。</value>
   </data>
 </root>
