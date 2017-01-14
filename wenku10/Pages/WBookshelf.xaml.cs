@@ -121,7 +121,7 @@ namespace wenku10.Pages
             };
 
             PinAll = UIAliases.CreateAppBarBtnEx( Symbol.Pin, stx.Text( "PinAll" ) );
-            PinAll.Click += ( s, e ) => { FS.C_PinAll(); };
+            PinAll.Click += ( s, e ) => FS.C_PinAll();
 
             MajorControls = new ICommandBarElement[] { ReloadBtn };
 
@@ -168,9 +168,7 @@ namespace wenku10.Pages
                         FS.C_RSync();
                     break;
                 case "AutoCache": FS.C_AutoCache(); break;
-                case "Delete":
-                    FS.C_Delete();
-                    break;
+                case "Delete": FS.C_Delete(); break;
             }
         }
 

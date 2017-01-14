@@ -216,4 +216,7 @@
   <data name="ConfirmMassPin" xml:space="preserve">
     <value>請確認將 {0} 個項目釘到開始頁。  得感謝 Windows 政策。 您還必須反覆按確認 {0} 次。</value>
   </data>
+  <data name="ConfirmMassUpdate" xml:space="preserve">
+    <value>請確認更新 {0} 個項目。</value>
+  </data>
 </root>

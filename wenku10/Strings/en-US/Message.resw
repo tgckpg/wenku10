@@ -216,4 +216,7 @@
   <data name="ConfirmMassPin" xml:space="preserve">
     <value>Please confirm to pin {0} items. All thanks to Windows Policy. You will have to press confirm {0} times.</value>
   </data>
+  <data name="ConfirmMassUpdate" xml:space="preserve">
+    <value>Please confirm to update {0} items.</value>
+  </data>
 </root>
