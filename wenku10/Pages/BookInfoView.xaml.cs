@@ -359,7 +359,9 @@ namespace wenku10.Pages
 
         private void SearchAuthor( object sender, RoutedEventArgs e )
         {
-            ControlFrame.Instance.NavigateTo( PageId.W_SEARCH, () => new WSearch( ThisBook.AuthorRaw ) );
+            ControlFrame.Instance.NavigateTo(
+                PageId.W_SEARCH, () => new WSearch()
+                , P => ( ( WSearch ) P ).SearchAuthor( ThisBook.AuthorRaw ) );
         }
 
         private void AddOrRemoveFav( object sender, RoutedEventArgs e )

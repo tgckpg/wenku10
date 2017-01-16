@@ -54,8 +54,7 @@ namespace wenku10.Pages
             SetTemplate();
         }
 
-        public WSearch( string Author )
-            : this()
+        public void SearchAuthor( string Author )
         {
             SearchKey = Author;
             SearchTerm.Text = SearchKey;
