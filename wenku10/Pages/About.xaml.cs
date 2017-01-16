@@ -130,7 +130,8 @@ namespace wenku10.Pages
             {
                 TransitionDisplay.SetState( EffectsBtn, TransitionState.Inactive );
 
-                Stage.Paused = false;
+                if ( Stage != null )
+                    Stage.Paused = false;
             }
         }
 
@@ -170,11 +171,14 @@ namespace wenku10.Pages
 
         private void About_Unloaded( object sender, RoutedEventArgs e )
         {
-            Stage.RemoveFromVisualTree();
-            Stage = null;
+            if ( Stage != null )
+            {
+                Stage.RemoveFromVisualTree();
+                Stage = null;
 
-            CStage.Dispose();
-            CStage = null;
+                CStage.Dispose();
+                CStage = null;
+            }
         }
 
     }

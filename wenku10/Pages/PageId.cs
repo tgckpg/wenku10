@@ -33,11 +33,13 @@ namespace wenku10.Pages
             , SG_W = "SuperGiants-W"
             , SG_SH = "SuperGiants-SH"
 
+            , MONO_REDIRECTOR = "MonoRedirector"
+
             , NULL = "Null"
         ;
 
         // Cannot be stored in backstacks
-        public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW };
+        public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW, MONO_REDIRECTOR };
 
         // Can only have single instance in stack
         public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW, SCRIPT_DETAILS };

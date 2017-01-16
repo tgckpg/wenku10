@@ -126,6 +126,7 @@
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\MonoRedirector.cs" />
     <Compile Include="Pages\BookInfoView.xaml.cs">
       <DependentUpon>BookInfoView.xaml</DependentUpon>
     </Compile>
