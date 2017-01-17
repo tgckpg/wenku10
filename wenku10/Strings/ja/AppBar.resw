@@ -240,4 +240,7 @@
   <data name="PinAll.Text" xml:space="preserve">
     <value>すべてのアイテムを開始に固定する</value>
   </data>
+  <data name="Sync.Text" xml:space="preserve">
+    <value>同期する</value>
+  </data>
 </root>

@@ -196,4 +196,7 @@
     <value>New arrivals</value>
     <comment>postdate</comment>
   </data>
+  <data name="ManagePins.Text" xml:space="preserve">
+    <value>Manage Pinned Tiles</value>
+  </data>
 </root>

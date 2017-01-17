@@ -240,4 +240,7 @@
   <data name="PinAll.Text" xml:space="preserve">
     <value>将所有项目固定到开始</value>
   </data>
+  <data name="Sync.Text" xml:space="preserve">
+    <value>同步</value>
+  </data>
 </root>

@@ -11,7 +11,6 @@ using Windows.UI.Xaml.Controls.Primitives;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
-using Net.Astropenguin.UI.Icons;
 
 using wenku8.Config;
 using wenku8.CompositeElement;

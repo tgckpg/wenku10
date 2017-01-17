@@ -240,4 +240,7 @@
   <data name="PinAll.Text" xml:space="preserve">
     <value>Pin all items to Start</value>
   </data>
+  <data name="Sync.Text" xml:space="preserve">
+    <value>Sync.Text</value>
+  </data>
 </root>

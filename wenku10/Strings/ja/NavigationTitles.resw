@@ -176,7 +176,7 @@
     <comment>weekvote</comment>
   </data>
   <data name="RecentUpdate.Text" xml:space="preserve">
-    <value>最近更新</value>
+    <value>最近の更新</value>
     <comment>lastupdate</comment>
   </data>
   <data name="Desc_Finished.Text" xml:space="preserve">
@@ -192,5 +192,8 @@
   <data name="NewestEntries.Text" xml:space="preserve">
     <value>新刊</value>
     <comment>postdate</comment>
+  </data>
+  <data name="ManagePins.Text" xml:space="preserve">
+    <value>タイルを管理</value>
   </data>
 </root>

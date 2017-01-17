@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.StartScreen;
+using Windows.UI.Xaml.Controls;
 
 using wenku10.Pages;
 using wenku10.Pages.Sharers;
@@ -67,6 +67,23 @@ namespace wenku8.Model.Pages
             if ( await S.RequestCreateAsync() ) return TileId;
 
             return null;
+        }
+
+        public static async Task PinToStart( BookItem Book )
+        {
+            if ( Book.IsSpider() )
+            {
+                await CreateSecondaryTile( Book );
+            }
+            else if ( Book.IsLocal() )
+            {
+                // TODO
+            }
+            else if ( X.Exists )
+            {
+                Task<bool> PinTask = ( Task<bool> ) X.Method( XProto.ItemProcessorEx, "CreateTile" ).Invoke( null, new BookItem[] { Book } );
+                await PinTask;
+            }
         }
 
         public static void ReadSecondaryTile( BookItem Book )

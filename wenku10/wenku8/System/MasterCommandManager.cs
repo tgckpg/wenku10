@@ -75,13 +75,16 @@ namespace wenku8.System
             SecondaryIconButton HistoryBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.History, stx.Text( "History", "NavigationTitles" ) );
             HistoryBtn.Click += CreateCmdHandler( PageId.HISTORY, () => new wenku10.Pages.History() );
 
+            SecondaryIconButton ManagePinsBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Pinned, stx.Text( "ManagePins", "NavigationTitles" ) );
+            ManagePinsBtn.Click += CreateCmdHandler( PageId.MANAGE_PINS, () => new ManagePins() );
+
             SecondaryIconButton EBWinBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Dictionary, "EBWin" );
             EBWinBtn.Click += CreateCmdHandler( async ( s, e ) =>
             {
                 await Popups.ShowDialog( new EBDictSearch( new Model.Text.Paragraph( "" ) ) );
             } );
 
-            CommonCommands = new ICommandBarElement[] { HistoryBtn, EBWinBtn };
+            CommonCommands = new ICommandBarElement[] { HistoryBtn, EBWinBtn, ManagePinsBtn };
         }
 
         private void CreateSystemCommands()

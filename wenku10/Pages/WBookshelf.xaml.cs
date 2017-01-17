@@ -141,13 +141,8 @@ namespace wenku10.Pages
 
         private async Task OneDriveRsync()
         {
-            await OneDriveSync.Instance.Authenticate();
-
-            if( OneDriveSync.Instance.Authenticated )
-            {
-                await new BookStorage().SyncSettings();
-                FS.Reload();
-            }
+            await new BookStorage().SyncSettings();
+            FS.Reload();
         }
 
         private void ShowFavContext( object sender, RightTappedRoutedEventArgs e )

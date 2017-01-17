@@ -15,6 +15,7 @@ namespace wenku10.Pages
             , LOCAL_DOCS_VIEW = "LocalDocsView"
             , ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
             , HISTORY = "History"
+            , MANAGE_PINS = "ManagePins"
             , PROC_PANEL = "ProceduresPanel"
             , CONTENT_READER = "ContentReader"
             , SCRIPT_DETAILS = "ScriptDetails"

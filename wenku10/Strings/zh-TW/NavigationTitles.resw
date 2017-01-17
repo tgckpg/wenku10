@@ -196,4 +196,7 @@
     <value>新書一覽</value>
     <comment>postdate</comment>
   </data>
+  <data name="ManagePins.Text" xml:space="preserve">
+    <value>管理磚塊</value>
+  </data>
 </root>

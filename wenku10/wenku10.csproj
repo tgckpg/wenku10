@@ -158,6 +158,9 @@
       <DependentUpon>OnlineScriptsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PageId.cs" />
+    <Compile Include="Pages\ManagePins.xaml.cs">
+      <DependentUpon>ManagePins.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,7 @@
     <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
     <Compile Include="wenku8\Converters\ParaTemplateSelector.cs" />
+    <Compile Include="wenku8\Converters\PinTemplateSelector.cs" />
     <Compile Include="wenku8\Model\Loaders\ContentIllusLoader.cs" />
     <Compile Include="wenku8\Model\Loaders\TwitterLoader.cs" />
     <Compile Include="wenku8\Model\Pages\PageProcessor.cs" />
@@ -206,6 +210,9 @@
     </Compile>
     <Compile Include="Pages\Sharers\ManageAuth.xaml.cs">
       <DependentUpon>ManageAuth.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
+      <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Sharers\ScriptUpload.xaml.cs">
       <DependentUpon>ScriptUpload.xaml</DependentUpon>
@@ -228,9 +235,6 @@
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Sharers\ScriptDetails.xaml.cs">
-      <DependentUpon>ScriptDetails.xaml</DependentUpon>
     </Compile>
     <Compile Include="wenku8\CompositeElement\ProcStateItem.cs" />
     <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
@@ -405,6 +409,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Dialogs\ValueHelpInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ManagePins.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

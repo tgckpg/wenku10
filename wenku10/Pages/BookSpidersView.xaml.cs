@@ -152,7 +152,7 @@ namespace wenku10.Pages
             // Prevent double processing on the already processed item
             if ( !Item.ProcessSuccess && Item.CanProcess )
             {
-                // Skip awaiting because ProcessSusscce will skip
+                // Skip awaiting because ProcessSuccess will handle if skip
                 var j = ItemProcessor.ProcessLocal( Item );
             }
 
