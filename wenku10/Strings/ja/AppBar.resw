@@ -243,4 +243,16 @@
   <data name="Sync.Text" xml:space="preserve">
     <value>同期する</value>
   </data>
+  <data name="PinPolicy_PinMissing.Text" xml:space="preserve">
+    <value>自動的に固定する</value>
+  </data>
+  <data name="PinPolicy_Ask.Text" xml:space="preserve">
+    <value>何をすべきか尋ねる</value>
+  </data>
+  <data name="PinPolicy_DoNothing.Text" xml:space="preserve">
+    <value>何もしない</value>
+  </data>
+  <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
+    <value>記録を削除する</value>
+  </data>
 </root>

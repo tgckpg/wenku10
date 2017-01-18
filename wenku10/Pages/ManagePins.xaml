@@ -22,8 +22,19 @@
                         Click="RemovePin" />
         </MenuFlyout>
 
+        <MenuFlyout x:Key="DevRecordContext">
+            <MenuFlyoutItem x:Uid="/ContextMenu/PinToStart"
+                        Text="Pin to Desktop"
+                        Click="PinDevToStart" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
+                        Text="Delete" 
+                        Click="RemoveDev" />
+        </MenuFlyout>
+
         <DataTemplate x:Key="DevRecordTemplate">
-            <Grid Margin="10,5">
+            <Grid Margin="10,5"
+                  RightTapped="ShowContextMenu"
+                  FlyoutBase.AttachedFlyout="{StaticResource DevRecordContext}">
                 <TextBlock Text="{Binding ItemTitle}"
                            FontSize="20"
                            Foreground="{StaticResource RelativeMajorBackgroundBrush}"
@@ -32,7 +43,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="PinRecordTemplate">
-            <Grid Margin="20,5"
+            <Grid Margin="25,5"
                   RightTapped="ShowContextMenu"
                   FlyoutBase.AttachedFlyout="{StaticResource PinRecordContext}">
                 <Grid.RowDefinitions>

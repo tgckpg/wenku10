@@ -219,4 +219,10 @@
   <data name="ConfirmMassUpdate" xml:space="preserve">
     <value>Please confirm to update {0} items.</value>
   </data>
+  <data name="PinMgr_NoRemoteAction" xml:space="preserve">
+    <value>Changing remote tiles are not supported. Please change them in the remote machine.</value>
+  </data>
+  <data name="MissingPins" xml:space="preserve">
+    <value>Found {0} missing tile(s).</value>
+  </data>
 </root>

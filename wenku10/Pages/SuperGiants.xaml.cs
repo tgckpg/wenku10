@@ -19,16 +19,19 @@ using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.Services.Store.Engagement;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;
 using wenku8.Effects;
 using wenku8.Effects.P2DFlow;
+using wenku8.Model.Book;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
 using wenku8.Resources;
+using wenku8.Storage;
 
 namespace wenku10.Pages
 {
@@ -144,6 +147,8 @@ namespace wenku10.Pages
             NewsStory.RepeatBehavior = RepeatBehavior.Forever;
 
             MajorControls = new ICommandBarElement[] { NewsBtn };
+
+            PinManagerActions();
             GetAnnouncements();
         }
 
@@ -155,6 +160,56 @@ namespace wenku10.Pages
                 await Task.Delay( 2000 );
                 ( ( FloatyButton ) sender ).Visibility = Visibility.Visible;
             }
+        }
+
+        private async void PinManagerActions()
+        {
+            PinManager PM = new PinManager();
+            await PM.SyncSettings();
+            if ( PM.Policy == PinPolicy.DO_NOTHING ) return;
+
+            ActiveItem[] MissingPins = PM.GetLocalPins().Where(
+                x => !Windows.UI.StartScreen.SecondaryTile.Exists( x.Payload )
+            ).ToArray();
+
+            if ( 0 < MissingPins.Length )
+            {
+                switch ( PM.Policy )
+                {
+                    case PinPolicy.ASK:
+                        bool RemoveRecord = true;
+                        StringResources stx = new StringResources( "Message", "AppBar", "ContextMenu" );
+                        await Popups.ShowDialog( UIAliases.CreateDialog(
+                            string.Format( stx.Str( "MissingPins" ), MissingPins.Length )
+                            , () => RemoveRecord = false
+                            , stx.Text( "PinToStart", "ContextMenu" ), stx.Text( "PinPolicy_RemoveMissing", "AppBar" )
+                        ) );
+
+                        if ( RemoveRecord ) goto case PinPolicy.REMOVE_MISSING;
+                        goto case PinPolicy.PIN_MISSING;
+
+                    case PinPolicy.PIN_MISSING:
+                        foreach ( ActiveItem Item in MissingPins )
+                        {
+                            BookItem Book = await ItemProcessor.GetBookFromId( Item.Desc );
+                            if ( Book != null )
+                            {
+                                BookLoader Loader = new BookLoader( b =>
+                                {
+                                    if ( b == null ) return;
+                                    var j = PageProcessor.PinToStart( b );
+                                } );
+                                Loader.Load( Book, true );
+                            }
+                        }
+                        break;
+
+                    case PinPolicy.REMOVE_MISSING:
+                        PM.RemovePin( MissingPins.Remap( x => x.Desc ) );
+                        break;
+                }
+            }
+
         }
 
         private float PrevOffset = 0;

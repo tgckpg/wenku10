@@ -28,6 +28,7 @@ using wenku8.Model.Pages;
 using wenku8.Model.Section;
 using wenku8.Resources;
 using Net.Astropenguin.Helpers;
+using wenku8.Storage;
 
 namespace wenku10.Pages
 {
@@ -167,23 +168,30 @@ namespace wenku10.Pages
             if( SelectedBook.ProcessSuccess )
             {
                 BookInstruction Book = SelectedBook.GetBook();
-                string TileId = await PageProcessor.CreateSecondaryTile( Book );
+                string TileId = await PageProcessor.PinToStart( Book );
 
-                if ( !( string.IsNullOrEmpty( TileId ) || SelectedBook.HasChakra ) )
+                if ( !string.IsNullOrEmpty( TileId ) )
                 {
-                    StringResources stx = new StringResources( "Message" );
+                    PinManager PM = new PinManager();
+                    PM.RegPin( Book, TileId, true );
 
-                    bool Yes = false;
+                    if ( !SelectedBook.HasChakra )
+                    {
+                        StringResources stx = new StringResources( "Message" );
 
-                    await Popups.ShowDialog( UIAliases.CreateDialog(
-                        stx.Str( "TileUpdateSupport" )
-                        , stx.Str( "ShellTile" )
-                        , () => Yes = true
-                        , stx.Str( "Yes" ), stx.Str( "No" )
-                    ) );
+                        bool Yes = false;
 
-                    if ( Yes ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+                        await Popups.ShowDialog( UIAliases.CreateDialog(
+                            stx.Str( "TileUpdateSupport" )
+                            , stx.Str( "ShellTile" )
+                            , () => Yes = true
+                            , stx.Str( "Yes" ), stx.Str( "No" )
+                        ) );
+
+                        if ( Yes ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+                    }
                 }
+
             }
         }
 

@@ -219,4 +219,10 @@
   <data name="ConfirmMassUpdate" xml:space="preserve">
     <value>{0} 個のアイテムを更新することを確認してください。</value>
   </data>
+  <data name="PinMgr_NoRemoteAction" xml:space="preserve">
+    <value>リモートタイルの変更はサポートされていません。 リモートマシンで変更してください。</value>
+  </data>
+  <data name="MissingPins" xml:space="preserve">
+    <value>{0} 行方不明のタイルを見つけました。</value>
+  </data>
 </root>

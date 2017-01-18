@@ -243,4 +243,16 @@
   <data name="Sync.Text" xml:space="preserve">
     <value>同步</value>
   </data>
+  <data name="PinPolicy_PinMissing.Text" xml:space="preserve">
+    <value>自动钉到开始页</value>
+  </data>
+  <data name="PinPolicy_Ask.Text" xml:space="preserve">
+    <value>询问该怎么做</value>
+  </data>
+  <data name="PinPolicy_DoNothing.Text" xml:space="preserve">
+    <value>没有动作</value>
+  </data>
+  <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
+    <value>移除记录</value>
+  </data>
 </root>

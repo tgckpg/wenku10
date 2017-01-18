@@ -219,4 +219,10 @@
   <data name="ConfirmMassUpdate" xml:space="preserve">
     <value>請確認更新 {0} 個項目。</value>
   </data>
+  <data name="PinMgr_NoRemoteAction" xml:space="preserve">
+    <value>不支援遠端磚塊，請在該裝置上更改。</value>
+  </data>
+  <data name="MissingPins" xml:space="preserve">
+    <value>找到 {0} 個不見了的磚磈。</value>
+  </data>
 </root>

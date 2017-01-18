@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;
@@ -26,6 +27,7 @@ using wenku8.Model.ListItem;
 using wenku8.Model.Pages;
 using wenku8.Resources;
 using wenku8.Storage;
+using wenku8.Model.Loaders;
 
 namespace wenku10.Pages
 {
@@ -42,10 +44,13 @@ namespace wenku10.Pages
         public IList<ICommandBarElement> Major2ndControls { get; private set; }
         public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-        PinManager PM;
-        PinRecord SelectedRecord;
+        private PinManager PM;
+        private IEnumerable<PinRecord> CurrRecords;
+        private PinRecord SelectedRecord;
 
-        volatile bool ActionBlocked = false;
+        private volatile bool ActionBlocked = false;
+
+        AppBarButton PinPolicyBtn;
 
         public ManagePins()
         {
@@ -86,7 +91,7 @@ namespace wenku10.Pages
             LayoutRoot.RenderTransform = new TranslateTransform();
 
             PM = new PinManager();
-            PinList.ItemsSource = PM.GetPinRecords();
+            UpdatePinData();
 
             InitAppBar();
         }
@@ -95,24 +100,80 @@ namespace wenku10.Pages
         {
             StringResources stx = new StringResources( "AppBar" );
 
+            // Do nothing ( default ) / Ask / Pin Missing / Remove Missing
+            PinPolicyBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Pin, "Pin Policy" );
+            PinPolicyBtn.Click += RotatePolicy;
+            UpdatePinPolicy( stx );
+
             if ( Properties.ENABLE_ONEDRIVE )
             {
                 AppBarButtonEx OneDriveButton = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "Sync" ) );
                 ButtonOperation SyncOp = new ButtonOperation( OneDriveButton );
 
-                SyncOp.SetOp( OneDriveRsync );
-                MajorControls = new ICommandBarElement[] { OneDriveButton };
+                SyncOp.SetOp( OneDriveRsync, false );
+                MajorControls = new ICommandBarElement[] { PinPolicyBtn, OneDriveButton };
             }
             else
             {
-                MajorControls = new ICommandBarElement[] { };
+                MajorControls = new ICommandBarElement[] { PinPolicyBtn };
             }
+        }
+
+        private void UpdatePinPolicy( StringResources stx )
+        {
+            switch ( PM.Policy )
+            {
+                case PinPolicy.DO_NOTHING:
+                    ( ( FontIcon ) PinPolicyBtn.Icon ).Glyph = SegoeMDL2.BlockedLegacy;
+                    PinPolicyBtn.Label = stx.Text( "PinPolicy_DoNothing" );
+                    break;
+                case PinPolicy.ASK:
+                    ( ( FontIcon ) PinPolicyBtn.Icon ).Glyph = SegoeMDL2.Permissions;
+                    PinPolicyBtn.Label = stx.Text( "PinPolicy_Ask" );
+                    break;
+                case PinPolicy.REMOVE_MISSING:
+                    ( ( FontIcon ) PinPolicyBtn.Icon ).Glyph = SegoeMDL2.Delete;
+                    PinPolicyBtn.Label = stx.Text( "PinPolicy_RemoveMissing" );
+                    break;
+                case PinPolicy.PIN_MISSING:
+                    ( ( FontIcon ) PinPolicyBtn.Icon ).Glyph = SegoeMDL2.Pin;
+                    PinPolicyBtn.Label = stx.Text( "PinPolicy_PinMissing" );
+                    break;
+            }
+        }
+
+        private void RotatePolicy( object sender, RoutedEventArgs e )
+        {
+            switch ( PM.Policy )
+            {
+                case PinPolicy.DO_NOTHING:
+                    PM.Policy = PinPolicy.ASK;
+                    break;
+                case PinPolicy.ASK:
+                    PM.Policy = PinPolicy.PIN_MISSING;
+                    break;
+                case PinPolicy.PIN_MISSING:
+                    PM.Policy = PinPolicy.REMOVE_MISSING;
+                    break;
+                case PinPolicy.REMOVE_MISSING:
+                    PM.Policy = PinPolicy.DO_NOTHING;
+                    break;
+            }
+
+            UpdatePinPolicy( new StringResources( "AppBar" ) );
         }
 
         private async Task OneDriveRsync()
         {
             await PM.SyncSettings();
-            PinList.ItemsSource = PM.GetPinRecords();
+            UpdatePinData();
+        }
+
+        private void UpdatePinData()
+        {
+            SelectedRecord = null;
+            CurrRecords = PM.GetPinRecords();
+            PinList.ItemsSource = CurrRecords;
         }
 
         private async void PinToStart( object sender, RoutedEventArgs e )
@@ -120,14 +181,68 @@ namespace wenku10.Pages
             if ( ActionBlocked ) return;
             ActionBlocked = true;
 
-            BookItem Book = await ItemProcessor.GetBookFromId( SelectedRecord.Id );
-            await PageProcessor.PinToStart( Book );
+            await PinRecord( SelectedRecord );
+            PM.Save();
 
+            UpdatePinData();
             ActionBlocked = false;
         }
 
-        private void RemovePin( object sender, RoutedEventArgs e )
+        private async void PinDevToStart( object sender, RoutedEventArgs e )
         {
+            if ( ActionBlocked ) return;
+            ActionBlocked = true;
+
+            PinManager PM = new PinManager();
+            PinRecord[] Records = CurrRecords.Where( x => x.DevId == SelectedRecord.DevId && 0 < x.TreeLevel ).ToArray();
+
+            if ( 5 < Records.Length )
+            {
+                bool Canceled = true;
+                StringResources stx = new StringResources( "Message" );
+                await Popups.ShowDialog( UIAliases.CreateDialog(
+                    string.Format( stx.Str( "ConfirmMassPin" ), Records.Length )
+                    , () => Canceled = false
+                    , stx.Str( "Yes" ), stx.Str( "No" )
+                ) );
+
+                if ( Canceled )
+                {
+                    ActionBlocked = false;
+                    return;
+                }
+            }
+
+            foreach ( PinRecord Record in Records )
+            {
+                await PinRecord( Record );
+            }
+
+            PM.Save();
+            UpdatePinData();
+            ActionBlocked = false;
+        }
+
+        private void RemoveDev( object sender, RoutedEventArgs e )
+        {
+            PM.RemoveDev( SelectedRecord.DevId );
+            UpdatePinData();
+        }
+
+        private async void RemovePin( object sender, RoutedEventArgs e )
+        {
+            if ( AppSettings.DeviceId == SelectedRecord.DevId )
+            {
+                PM.RemovePin( SelectedRecord.Id );
+                UpdatePinData();
+            }
+            else
+            {
+                StringResources stx = new StringResources( "Message" );
+                await Popups.ShowDialog( UIAliases.CreateDialog(
+                    stx.Str( "PinMgr_NoRemoteAction" )
+                ) );
+            }
         }
 
         private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
@@ -137,5 +252,30 @@ namespace wenku10.Pages
 
             SelectedRecord = ( PinRecord ) Elem.DataContext;
         }
+
+        private async Task PinRecord( PinRecord Record )
+        {
+            BookItem Book = await ItemProcessor.GetBookFromId( Record.Id );
+            if ( Book == null ) return;
+
+            TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
+            BookLoader BL = new BookLoader( async ( b ) =>
+            {
+                if ( b != null )
+                {
+                    string TileId = await PageProcessor.PinToStart( Book );
+                    if ( !string.IsNullOrEmpty( TileId ) )
+                    {
+                        PM.RegPin( b, TileId, false );
+                    }
+                }
+
+                TCS.SetResult( true );
+            } );
+
+            BL.Load( Book );
+            await TCS.Task;
+        }
+
     }
 }

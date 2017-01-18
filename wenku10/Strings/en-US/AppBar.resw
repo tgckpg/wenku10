@@ -243,4 +243,16 @@
   <data name="Sync.Text" xml:space="preserve">
     <value>Sync.Text</value>
   </data>
+  <data name="PinPolicy_PinMissing.Text" xml:space="preserve">
+    <value>Pin missing tiles</value>
+  </data>
+  <data name="PinPolicy_Ask.Text" xml:space="preserve">
+    <value>Ask what to do</value>
+  </data>
+  <data name="PinPolicy_DoNothing.Text" xml:space="preserve">
+    <value>No action</value>
+  </data>
+  <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
+    <value>Remove missing tiles</value>
+  </data>
 </root>

@@ -49,7 +49,34 @@ namespace wenku8.Model.Pages
             return new NameValue<Func<Page>>( PageId.NULL, () => null );
         }
 
-        public static async Task<string> CreateSecondaryTile( BookItem Book )
+        public static Task<string> PinToStart( BookItem Book )
+        {
+            if ( Book.IsSpider() )
+            {
+                return CreateSecondaryTile( Book );
+            }
+            else if ( Book.IsLocal() )
+            {
+                // TODO
+            }
+            else if ( X.Exists )
+            {
+                Task<string> PinTask = ( Task<string> ) X.Method( XProto.ItemProcessorEx, "CreateTile" ).Invoke( null, new BookItem[] { Book } );
+                return PinTask;
+            }
+
+            return null;
+        }
+
+        public static void ReadSecondaryTile( BookItem Book )
+        {
+            if( Book.IsSpider() )
+            {
+                BackgroundProcessor.Instance.ClearTileStatus( Book.Id );
+            }
+        }
+
+        private static async Task<string> CreateSecondaryTile( BookItem Book )
         {
             string TilePath = await Resources.Image.CreateTileImage( Book );
             string TileId = "ShellTile.grimoire." + System.Utils.Md5( Book.Id );
@@ -67,31 +94,6 @@ namespace wenku8.Model.Pages
             if ( await S.RequestCreateAsync() ) return TileId;
 
             return null;
-        }
-
-        public static async Task PinToStart( BookItem Book )
-        {
-            if ( Book.IsSpider() )
-            {
-                await CreateSecondaryTile( Book );
-            }
-            else if ( Book.IsLocal() )
-            {
-                // TODO
-            }
-            else if ( X.Exists )
-            {
-                Task<bool> PinTask = ( Task<bool> ) X.Method( XProto.ItemProcessorEx, "CreateTile" ).Invoke( null, new BookItem[] { Book } );
-                await PinTask;
-            }
-        }
-
-        public static void ReadSecondaryTile( BookItem Book )
-        {
-            if( Book.IsSpider() )
-            {
-                BackgroundProcessor.Instance.ClearTileStatus( Book.Id );
-            }
         }
 
     }

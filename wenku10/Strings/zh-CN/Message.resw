@@ -219,4 +219,10 @@
   <data name="ConfirmMassUpdate" xml:space="preserve">
     <value>请确认更新 {0} 个项目。</value>
   </data>
+  <data name="PinMgr_NoRemoteAction" xml:space="preserve">
+    <value>不支持更改远程磁贴，请在远程计算机中更改它们。</value>
+  </data>
+  <data name="MissingPins" xml:space="preserve">
+    <value>找到 {0} 个丢失的磁贴。</value>
+  </data>
 </root>
