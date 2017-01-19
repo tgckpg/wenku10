@@ -9,7 +9,8 @@ using Net.Astropenguin.IO;
 namespace wenku8.Settings.Layout
 {
     using Ext;
-    class NavList : INavList
+
+    sealed class NavList : INavList
     {
         private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_NAVPAGE;
         private const string Horizontal = "IsHorizontal";
@@ -39,7 +40,7 @@ namespace wenku8.Settings.Layout
         {
             if( LayoutSettings.Parameter( Horizontal ) == null )
             {
-                IsHorizontal = true;
+                IsHorizontal = !wenku10.MainStage.Instance.IsPhone;
             }
         }
     }

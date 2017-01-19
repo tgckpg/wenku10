@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
 
-using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
@@ -18,7 +18,10 @@ using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.ListItem.Sharers;
+using wenku8.Model.Loaders;
+using wenku8.Model.Pages;
 using wenku8.Model.REST;
+using wenku8.Storage;
 using wenku8.Resources;
 using wenku8.Settings;
 
@@ -32,6 +35,8 @@ namespace wenku10.ShHub
 
     sealed class MesgListerner
     {
+        private bool PinErrored = false;
+
         public MesgListerner()
         {
             MessageBus.OnDelivery += MessageBus_OnDelivery;
@@ -115,6 +120,77 @@ namespace wenku10.ShHub
                     }
 
                     break;
+
+                case AppKeys.PM_CHECK_TILES:
+                    CheckTiles();
+                    break;
+            }
+        }
+
+        private async void CheckTiles()
+        {
+            PinErrored = false;
+            PinManager PM = new PinManager();
+
+            await PM.SyncSettings();
+            if ( PM.Policy == PinPolicy.DO_NOTHING ) return;
+
+            ActiveItem[] MissingPins = PM.GetLocalPins().Where(
+                x => !Windows.UI.StartScreen.SecondaryTile.Exists( x.Payload )
+            ).ToArray();
+
+            if ( 0 < MissingPins.Length )
+            {
+                switch ( PM.Policy )
+                {
+                    case PinPolicy.ASK:
+                        bool RemoveRecord = true;
+                        StringResources stx = new StringResources( "Message", "AppBar", "ContextMenu" );
+                        await Popups.ShowDialog( UIAliases.CreateDialog(
+                            string.Format( stx.Str( "MissingPins" ), MissingPins.Length )
+                            , () => RemoveRecord = false
+                            , stx.Text( "PinToStart", "ContextMenu" ), stx.Text( "PinPolicy_RemoveMissing", "AppBar" )
+                        ) );
+
+                        if ( RemoveRecord ) goto case PinPolicy.REMOVE_MISSING;
+                        goto case PinPolicy.PIN_MISSING;
+
+                    case PinPolicy.PIN_MISSING:
+                        foreach ( ActiveItem Item in MissingPins )
+                        {
+                            BookItem Book = await ItemProcessor.GetBookFromId( Item.Desc );
+                            if ( Book == null )
+                            {
+                                PinError();
+                            }
+                            else
+                            {
+                                TaskCompletionSource<string> TileId = new TaskCompletionSource<string>();
+
+                                BookLoader Loader = new BookLoader( async ( b ) =>
+                                {
+                                    TileId.SetResult( b == null ? null : await PageProcessor.PinToStart( b ) );
+                                } );
+
+                                Loader.Load( Book, true );
+                                await TileId.Task;
+                            }
+                        }
+                        break;
+
+                    case PinPolicy.REMOVE_MISSING:
+                        PM.RemovePin( MissingPins.Remap( x => x.Desc ) );
+                        break;
+                }
+            }
+        }
+
+        private void PinError()
+        {
+            if ( !PinErrored )
+            {
+                PinErrored = true;
+                wenku8.System.ActionCenter.Instance.ShowError( "PM_SourceMissing" );
             }
         }
 

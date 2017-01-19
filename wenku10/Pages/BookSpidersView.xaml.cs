@@ -17,6 +17,7 @@ using Windows.UI.StartScreen;
 
 using Tasks;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;
@@ -27,7 +28,6 @@ using wenku8.Model.ListItem;
 using wenku8.Model.Pages;
 using wenku8.Model.Section;
 using wenku8.Resources;
-using Net.Astropenguin.Helpers;
 using wenku8.Storage;
 
 namespace wenku10.Pages

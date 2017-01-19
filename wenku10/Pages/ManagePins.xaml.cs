@@ -24,10 +24,10 @@ using wenku8.Effects;
 using wenku8.Model.Book;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
+using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
 using wenku8.Resources;
 using wenku8.Storage;
-using wenku8.Model.Loaders;
 
 namespace wenku10.Pages
 {
@@ -128,7 +128,7 @@ namespace wenku10.Pages
                     PinPolicyBtn.Label = stx.Text( "PinPolicy_DoNothing" );
                     break;
                 case PinPolicy.ASK:
-                    ( ( FontIcon ) PinPolicyBtn.Icon ).Glyph = SegoeMDL2.Permissions;
+                    ( ( FontIcon ) PinPolicyBtn.Icon ).Glyph = SegoeMDL2.Comment;
                     PinPolicyBtn.Label = stx.Text( "PinPolicy_Ask" );
                     break;
                 case PinPolicy.REMOVE_MISSING:
@@ -229,6 +229,25 @@ namespace wenku10.Pages
             UpdatePinData();
         }
 
+        private async void TakeOverDev( object sender, RoutedEventArgs e )
+        {
+            if ( SelectedRecord.DevId == AppSettings.DeviceId ) return;
+
+            bool Canceled = true;
+
+            StringResources stx = new StringResources( "Message" );
+            await Popups.ShowDialog( UIAliases.CreateDialog(
+                stx.Str( "ConfirmTakeOver" )
+                , () => Canceled = false
+                , stx.Str( "Yes" ), stx.Str( "No" )
+            ) );
+
+            if ( Canceled ) return;
+
+            PM.TakeOver( SelectedRecord.DevId );
+            UpdatePinData();
+        }
+
         private async void RemovePin( object sender, RoutedEventArgs e )
         {
             if ( AppSettings.DeviceId == SelectedRecord.DevId )
@@ -278,4 +297,5 @@ namespace wenku10.Pages
         }
 
     }
+
 }

@@ -199,4 +199,10 @@
   <data name="ManagePins.Text" xml:space="preserve">
     <value>管理磁贴</value>
   </data>
+  <data name="Desc_ManagePins.Text" xml:space="preserve">
+    <value>可以查看曾经钉过在开始页的磁贴，利用功能列的「磁贴政策」( 预设为「没有动作」 )，可以决定遗失磁贴的动作。亦可以利用 OneDrive 同步查看其它装置的磁贴记录。
+- 移除记录：自动移除遗失磁贴的记录
+- 自动钉到开始页：自动将遗失的磁贴钉回开始页
+- 询问该怎么做：询问用户该怎么做</value>
+  </data>
 </root>

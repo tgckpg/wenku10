@@ -64,7 +64,6 @@ namespace Tasks
 
             Init();
             await UpdateSpiders();
-            XReg.Save();
 
             Deferral.Complete();
         }
@@ -143,6 +142,7 @@ namespace Tasks
             {
                 IntParam = new XParameter( "Interval" );
                 IntParam.SetValue( new XKey( "val", intvl ) );
+                XReg.SetParameter( IntParam );
                 XReg.Save();
             }
             else
@@ -173,9 +173,14 @@ namespace Tasks
                 foreach ( XParameter UpdateParam in Updates )
                 {
                     string TileId = UpdateParam.GetValue( "tileId" );
+
                     if ( !SecondaryTile.Exists( TileId ) )
                     {
-                        XReg.RemoveParameter( UpdateParam.Id );
+                        UpdateParam.SetValue( new XKey[] {
+                            new XKey( AppKeys.SYS_EXCEPTION, "App Tile is missing" )
+                            , BookStorage.TimeKey
+                        } );
+                        XReg.SetParameter( UpdateParam );
                         continue;
                     }
 
@@ -202,7 +207,10 @@ namespace Tasks
                         }
                     }
 
-                    UpdateParam.SetValue( BookStorage.TimeKey );
+                    UpdateParam.SetValue( new XKey[] {
+                        new XKey( AppKeys.SYS_EXCEPTION, false )
+                        , BookStorage.TimeKey
+                    } );
 
                     XReg.SetParameter( UpdateParam );
                     XReg.Save();

@@ -160,4 +160,7 @@
   <data name="TweetTooLong" xml:space="preserve">
     <value>あなたのツイートは長すぎます</value>
   </data>
+  <data name="PM_SourceMissing" xml:space="preserve">
+    <value>ソースを見つかりませんでした。くつかの項目を固定することができません。</value>
+  </data>
 </root>

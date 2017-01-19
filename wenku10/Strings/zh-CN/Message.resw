@@ -225,4 +225,7 @@
   <data name="MissingPins" xml:space="preserve">
     <value>找到 {0} 个丢失的磁贴。</value>
   </data>
+  <data name="ConfirmTakeOver" xml:space="preserve">
+    <value>确认接管此项目？</value>
+  </data>
 </root>

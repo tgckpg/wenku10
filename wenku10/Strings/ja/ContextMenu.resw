@@ -231,4 +231,7 @@
   <data name="Locate.Text" xml:space="preserve">
     <value>見つける</value>
   </data>
+  <data name="TakeOver.Text" xml:space="preserve">
+    <value>引き継ぐ</value>
+  </data>
 </root>

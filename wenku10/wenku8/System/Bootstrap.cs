@@ -43,6 +43,9 @@ namespace wenku8.System
             Logger.Log( ID, "Migration", LogType.INFO );
             await new Migration().Migrate();
 
+            ActionCenter.Init();
+            Logger.Log( ID, "ActionCenter Init", LogType.INFO );
+
             // Storage might already be initialized on Prelaunch
             if ( Resources.Shared.Storage == null )
             {

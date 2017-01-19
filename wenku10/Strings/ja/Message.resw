@@ -225,4 +225,7 @@
   <data name="MissingPins" xml:space="preserve">
     <value>{0} 行方不明のタイルを見つけました。</value>
   </data>
+  <data name="ConfirmTakeOver" xml:space="preserve">
+    <value>このアイテムを引き継ぐことを確認しますか？</value>
+  </data>
 </root>

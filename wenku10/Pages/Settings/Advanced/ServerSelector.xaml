@@ -69,7 +69,6 @@
             </Grid.RowDefinitions>
             <Slider x:Name="MaxPing"
                     Minimum="1" Maximum="5000" SmallChange="100"
-                    ValueChanged="MaxPing_ValueChanged"
                     PointerCaptureLost="MaxPing_PointerCaptureLost"
                     Value="500">
                 <Slider.Header>

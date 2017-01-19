@@ -18,7 +18,6 @@ namespace wenku8.Model.Loaders
     using Resources;
     using Settings;
     using System;
-    using System.Messages;
     using Text;
 
     sealed class BookLoader : IBookLoader
@@ -141,7 +140,8 @@ namespace wenku8.Model.Loaders
         {
             if ( !Shared.Storage.FileExists( CurrentBook.IntroPath ) )
             {
-                CurrentBook.Intro = new ErrorMessage().DOWNLOAD;
+                StringResources stx = new StringResources( "Error" );
+                CurrentBook.Intro = stx.Str( "Download" );
             }
         }
 

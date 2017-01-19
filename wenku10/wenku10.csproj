@@ -189,6 +189,7 @@
     <Compile Include="ShHub\MesgListerner.cs" />
     <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
+    <Compile Include="wenku8\Converters\CurrDevConverter.cs" />
     <Compile Include="wenku8\Converters\ParaTemplateSelector.cs" />
     <Compile Include="wenku8\Converters\PinTemplateSelector.cs" />
     <Compile Include="wenku8\Model\Loaders\ContentIllusLoader.cs" />

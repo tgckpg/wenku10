@@ -56,11 +56,6 @@ namespace wenku10.Pages.Settings.Advanced
             RefreshServers();
         }
 
-        private void MaxPing_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
-        {
-            Properties.SERVER_MAX_PING = ( int ) MaxPing.Value;
-        }
-
         private void MaxPing_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
         {
             Properties.SERVER_MAX_PING = ( int ) MaxPing.Value;
