@@ -564,4 +564,7 @@
   <data name="Appearance_ContentReader_BlockHeight.Text" xml:space="preserve">
     <value>( Vertical ) The lower the better. Please ensure text filled correctly.</value>
   </data>
+  <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
+    <value>Live Tile update interval</value>
+  </data>
 </root>

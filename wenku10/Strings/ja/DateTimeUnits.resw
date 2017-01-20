@@ -253,4 +253,13 @@
     <value>{0}週間前</value>
     <comment>Default text for "{0} weeks ago" as used by the RelativeTimeConverter, where {0} is 2, 3 or 4.</comment>
   </data>
+  <data name="FT_Day" xml:space="preserve">
+    <value>{0} 日</value>
+  </data>
+  <data name="FT_Hour" xml:space="preserve">
+    <value>{0} 時間</value>
+  </data>
+  <data name="FT_Minute" xml:space="preserve">
+    <value>{0} 分</value>
+  </data>
 </root>
