@@ -32,7 +32,7 @@ using wenku8.Storage;
 
 namespace wenku10.Pages
 {
-    sealed partial class BookSpidersView : Page, ICmdControls, IAnimaPage
+    sealed partial class BookSpidersView : Page, ICmdControls, IAnimaPage, INavPage
     {
         #pragma warning disable 0067
         public event ControlChangedEvent ControlChanged;
@@ -88,13 +88,25 @@ namespace wenku10.Pages
         }
         #endregion
 
+        public void SoftOpen()
+        {
+            if ( FileListContext == null )
+            {
+                FileListContext = new BookSpiderList();
+                LayoutRoot.DataContext = FileListContext;
+            }
+            else
+            {
+                FileListContext.Reload();
+            }
+        }
+
+        public void SoftClose() { }
+
         private void SetTemplate()
         {
             InitAppBar();
-            FileListContext = new BookSpiderList();
-
             LayoutRoot.RenderTransform = new TranslateTransform();
-            LayoutRoot.DataContext = FileListContext;
         }
 
         private void InitAppBar()
@@ -175,21 +187,7 @@ namespace wenku10.Pages
                     PinManager PM = new PinManager();
                     PM.RegPin( Book, TileId, true );
 
-                    if ( !SelectedBook.HasChakra )
-                    {
-                        StringResources stx = new StringResources( "Message" );
-
-                        bool Yes = false;
-
-                        await Popups.ShowDialog( UIAliases.CreateDialog(
-                            stx.Str( "TileUpdateSupport" )
-                            , stx.Str( "ShellTile" )
-                            , () => Yes = true
-                            , stx.Str( "Yes" ), stx.Str( "No" )
-                        ) );
-
-                        if ( Yes ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
-                    }
+                    await PageProcessor.RegLiveSpider( SelectedBook, Book, TileId );
                 }
 
             }

@@ -23,6 +23,7 @@ using wenku8.Config;
 using wenku8.Effects;
 using wenku8.Ext;
 using wenku8.Model.Book;
+using wenku8.Model.Book.Spider;
 using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem.Sharers;
 using wenku8.Model.ListItem;
@@ -383,7 +384,7 @@ namespace wenku10.Pages
 
         private void ToggleAppBar()
         {
-            StringResources stx = new StringResources( "AppBar", "AppResources" );
+            StringResources stx = new StringResources( "AppBar", "AppResources", "ContextMenu" );
 
             if ( ThisBook.XTest( XProto.BookItemEx ) )
             {
@@ -398,8 +399,11 @@ namespace wenku10.Pages
             }
             else if( ThisBook.IsSpider() )
             {
-                HSBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.HomeGroup, stx.Text( "ScriptDetails" ) );
+                HSBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.HomeGroup, stx.Text( "ScriptDetails", "AppResources" ) );
                 HSBtn.Click += OpenHSComments;
+
+                FavBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Pin, stx.Text( "PinToStart", "ContextMenu" ) );
+                FavBtn.Click += PinSpider;
 
                 CommentBtn.Click += OpenTwitter;
 
@@ -413,6 +417,20 @@ namespace wenku10.Pages
             }
 
             ControlChanged?.Invoke( this );
+        }
+
+        private async void PinSpider( object sender, RoutedEventArgs e )
+        {
+            string TileId = await PageProcessor.PinToStart( ThisBook );
+
+            if ( !string.IsNullOrEmpty( TileId ) )
+            {
+                PinManager PM = new PinManager();
+                PM.RegPin( ThisBook, TileId, true );
+
+                SpiderBook SpDef = await SpiderBook.CreateAsyncSpider( ThisBook.Id );
+                await PageProcessor.RegLiveSpider( SpDef, ( BookInstruction ) ThisBook, TileId );
+            }
         }
 
         private void ToggleFav()

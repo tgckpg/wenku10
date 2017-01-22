@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Windows.UI.StartScreen;
 using Windows.UI.Xaml.Controls;
 
+using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Loaders;
+
 using wenku10.Pages;
 using wenku10.Pages.Sharers;
 
@@ -14,6 +17,8 @@ using Tasks;
 namespace wenku8.Model.Pages
 {
     using Book;
+    using Book.Spider;
+    using CompositeElement;
     using Ext;
     using ListItem;
     using ListItem.Sharers;
@@ -94,6 +99,24 @@ namespace wenku8.Model.Pages
             if ( await S.RequestCreateAsync() ) return TileId;
 
             return null;
+        }
+
+        public static async Task RegLiveSpider( SpiderBook SBook, BookInstruction Book, string TileId )
+        {
+            if ( !SBook.HasChakra )
+            {
+                StringResources stx = new StringResources( "Message" );
+
+                bool Confirmed = false;
+
+                await Popups.ShowDialog( UIAliases.CreateDialog(
+                    stx.Str( "TileUpdateSupport" ), stx.Str( "ShellTile" )
+                    , () => Confirmed = true
+                    , stx.Str( "Yes" ), stx.Str( "No" )
+                ) );
+
+                if ( Confirmed ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+            }
         }
 
     }

@@ -166,7 +166,7 @@ namespace Tasks
                 if ( BTask.Value.Name == TASK_NAME ) return;
             }
 
-            UpdateTaskInterval( 720 );
+            UpdateTaskInterval( 420 );
         }
 
         private async Task UpdateSpiders()

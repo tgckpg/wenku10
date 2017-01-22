@@ -13,6 +13,7 @@ namespace wenku8.Model.Section
 {
     using Book.Spider;
     using ListItem;
+    using Net.Astropenguin.Linq;
     using Resources;
     using Settings;
     using Storage;
@@ -25,6 +26,8 @@ namespace wenku8.Model.Section
         {
             ProcessVols();
         }
+
+        public void Reload() { ProcessVols(); }
 
         public void Add( params LocalBook[] Book )
         {
@@ -49,8 +52,17 @@ namespace wenku8.Model.Section
 
             List<LocalBook> Items = new List<LocalBook>();
 
+            IEnumerable<string> Existings = new string[ 0 ];
+            if ( Data != null )
+            {
+                Items.AddRange( Data.Cast<LocalBook>() );
+                Existings = Data.Remap( x => ( ( SpiderBook ) x ).aid );
+            }
+
             Action<string, SpiderBook> ProcessSpider = ( Id, LB ) =>
             {
+                if ( Existings.Contains( Id ) ) return;
+
                 Loading = LoadText + ": " + Id;
                 if ( LB.aid != Id )
                 {
