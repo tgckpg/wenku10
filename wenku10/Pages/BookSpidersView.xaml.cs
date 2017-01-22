@@ -15,9 +15,6 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.StartScreen;
 
-using Tasks;
-
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;

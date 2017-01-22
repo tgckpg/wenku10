@@ -31,14 +31,14 @@ namespace wenku8.Model.Loaders
             this.CompleteHandler = CompleteHandler;
         }
 
-        public void Load( BookItem b )
+        public void Load( BookItem b, bool useCache = true )
         {
             // b is null when back button is pressed before BookLoader load
             if ( b == null ) return;
 
             Shared.LoadMessage( "LoadingVolume" );
             CurrentBook = b;
-            if ( b.IsLocal() || ( !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
+            if ( b.IsLocal() || ( useCache && !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
             {
                 OnComplete( b );
             }
