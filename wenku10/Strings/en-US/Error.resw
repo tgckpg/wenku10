@@ -162,4 +162,7 @@
   <data name="SubmitError" xml:space="preserve">
     <value>Error on submitting request</value>
   </data>
+  <data name="PM_SourceMissing" xml:space="preserve">
+    <value>Unable to pin some item as the sources are missing</value>
+  </data>
 </root>

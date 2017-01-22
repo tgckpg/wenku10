@@ -51,30 +51,6 @@
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Foreground="White" Text="ServerSelector" />
-                    </PivotItem.Header>
-                    <ToggleSwitch x:Name="EnableSS" VerticalAlignment="Top" Toggled="ToggleSS">
-                        <ToggleSwitch.Header>
-                            <TextBlock x:Uid="/InitQuestions/EnableServerSelector"
-                                       FontSize="23"
-                                       TextWrapping="Wrap"
-                                       Foreground="White"
-                                       Text="EnableServerSelector?" />
-                        </ToggleSwitch.Header>
-                        <ToggleSwitch.OnContent>
-                            <TextBlock x:Uid="/Settings/Enabled"
-                                       Foreground="White"
-                                       Text="Enabled" />
-                        </ToggleSwitch.OnContent>
-                        <ToggleSwitch.OffContent>
-                            <TextBlock x:Uid="/Settings/Disabled"
-                                       Foreground="White"
-                                       Text="Disabled" />
-                        </ToggleSwitch.OffContent>
-                    </ToggleSwitch>
-                </PivotItem>
-                <PivotItem>
-                    <PivotItem.Header>
                         <TextBlock Foreground="White" Text="Theme" />
                     </PivotItem.Header>
                     <ToggleSwitch x:Name="ThemeToggle" VerticalAlignment="Top">

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.StartScreen;
+using Windows.UI.Xaml.Controls;
+
+using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Loaders;
 
 using wenku10.Pages;
 using wenku10.Pages.Sharers;
@@ -14,6 +17,8 @@ using Tasks;
 namespace wenku8.Model.Pages
 {
     using Book;
+    using Book.Spider;
+    using CompositeElement;
     using Ext;
     using ListItem;
     using ListItem.Sharers;
@@ -49,7 +54,34 @@ namespace wenku8.Model.Pages
             return new NameValue<Func<Page>>( PageId.NULL, () => null );
         }
 
-        public static async Task<string> CreateSecondaryTile( BookItem Book )
+        public static Task<string> PinToStart( BookItem Book )
+        {
+            if ( Book.IsSpider() )
+            {
+                return CreateSecondaryTile( Book );
+            }
+            else if ( Book.IsLocal() )
+            {
+                // TODO
+            }
+            else if ( X.Exists )
+            {
+                Task<string> PinTask = ( Task<string> ) X.Method( XProto.ItemProcessorEx, "CreateTile" ).Invoke( null, new BookItem[] { Book } );
+                return PinTask;
+            }
+
+            return null;
+        }
+
+        public static void ReadSecondaryTile( BookItem Book )
+        {
+            if( Book.IsSpider() )
+            {
+                BackgroundProcessor.Instance.ClearTileStatus( Book.Id );
+            }
+        }
+
+        private static async Task<string> CreateSecondaryTile( BookItem Book )
         {
             string TilePath = await Resources.Image.CreateTileImage( Book );
             string TileId = "ShellTile.grimoire." + System.Utils.Md5( Book.Id );
@@ -69,11 +101,21 @@ namespace wenku8.Model.Pages
             return null;
         }
 
-        public static void ReadSecondaryTile( BookItem Book )
+        public static async Task RegLiveSpider( SpiderBook SBook, BookInstruction Book, string TileId )
         {
-            if( Book.IsSpider() )
+            if ( !SBook.HasChakra )
             {
-                BackgroundProcessor.Instance.ClearTileStatus( Book.Id );
+                StringResources stx = new StringResources( "Message" );
+
+                bool Confirmed = false;
+
+                await Popups.ShowDialog( UIAliases.CreateDialog(
+                    stx.Str( "TileUpdateSupport" ), stx.Str( "ShellTile" )
+                    , () => Confirmed = true
+                    , stx.Str( "Yes" ), stx.Str( "No" )
+                ) );
+
+                if ( Confirmed ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
             }
         }
 

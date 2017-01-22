@@ -68,6 +68,9 @@
                 <TextBox x:Name="RemoteAddress" Grid.Column="0" LostFocus="RemoteAddress_LostFocus" />
                 <TextBlock Grid.Column="1" Margin="5" Foreground="{StaticResource RelativeMajorBrush}" Text="UDP 9730"/>
             </Grid>
+            <Button Margin="0,10" Click="ViewBgTaskConf">
+                <TextBlock Text="View Background Task Config" />
+            </Button>
         </StackPanel>
     </ScrollViewer>
 </Page>

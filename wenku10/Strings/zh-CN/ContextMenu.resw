@@ -231,4 +231,7 @@
   <data name="Locate.Text" xml:space="preserve">
     <value>定位</value>
   </data>
+  <data name="TakeOver.Text" xml:space="preserve">
+    <value>接管</value>
+  </data>
 </root>

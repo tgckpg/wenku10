@@ -560,4 +560,10 @@
   <data name="Desc_EBWin_Help.Text" xml:space="preserve">
     <value>辞書をインストールできませんか？</value>
   </data>
+  <data name="Appearance_ContentReader_BlockHeight.Text" xml:space="preserve">
+    <value>（ 縦書きのみ ） 値が低いほど良いです。文字を正確的に空間を埋めることは確認してください。</value>
+  </data>
+  <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
+    <value>ライブタイルの更新間隔</value>
+  </data>
 </root>

@@ -213,4 +213,19 @@
   <data name="ConfirmSubmit" xml:space="preserve">
     <value>Submit?</value>
   </data>
+  <data name="ConfirmMassPin" xml:space="preserve">
+    <value>Please confirm to pin {0} items. All thanks to Windows Policy. You will have to press confirm {0} times.</value>
+  </data>
+  <data name="ConfirmMassUpdate" xml:space="preserve">
+    <value>Please confirm to update {0} items.</value>
+  </data>
+  <data name="PinMgr_NoRemoteAction" xml:space="preserve">
+    <value>Changing remote tiles are not supported. Please change them in the remote machine.</value>
+  </data>
+  <data name="MissingPins" xml:space="preserve">
+    <value>Found {0} missing tile(s).</value>
+  </data>
+  <data name="ConfirmTakeOver" xml:space="preserve">
+    <value>Confirm to take over this item?</value>
+  </data>
 </root>

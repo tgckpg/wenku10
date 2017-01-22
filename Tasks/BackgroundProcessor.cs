@@ -30,6 +30,11 @@ namespace Tasks
     {
         public static BackgroundProcessor Instance { get; private set; }
 
+        public int TaskInterval { get { return XReg.Parameter( "Interval" ).GetSaveInt( "val" ); } }
+
+        private const string TASK_NAME = "UpdateTaskTrigger";
+        private const string ENTRY_POINT = "Tasks.BackgroundProcessor";
+
         private bool CanBackground = false;
 
         private BackgroundTaskDeferral Deferral;
@@ -64,7 +69,6 @@ namespace Tasks
 
             Init();
             await UpdateSpiders();
-            XReg.Save();
 
             Deferral.Complete();
         }
@@ -125,39 +129,44 @@ namespace Tasks
 
         }
 
+        public void UpdateTaskInterval( uint Minutes )
+        {
+            foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
+            {
+                if ( BTask.Value.Name == TASK_NAME )
+                {
+                    BTask.Value.Unregister( false );
+                    break;
+                }
+            }
+
+#if DEBUG
+            Minutes = Math.Max( 15, Minutes );
+#else
+            Minutes = Math.Max( 180, Minutes );
+#endif
+            XParameter IntParam = XReg.Parameter( "Interval" );
+            XReg.SetParameter( "Interval", new XKey( "val", Minutes ) );
+            XReg.Save();
+
+            TimeTrigger MinuteTrigger = new TimeTrigger( Minutes, false );
+            BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
+
+            Builder.Name = TASK_NAME;
+            Builder.TaskEntryPoint = ENTRY_POINT;
+            Builder.SetTrigger( MinuteTrigger );
+
+            BackgroundTaskRegistration task = Builder.Register();
+        }
+
         private void CreateUpdateTaskTrigger()
         {
             foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
             {
-                if ( BTask.Value.Name == "UpdateTaskTrigger" ) return;
+                if ( BTask.Value.Name == TASK_NAME ) return;
             }
 
-#if DEBUG
-            uint intvl = 15;
-#else
-            uint intvl = 180;
-#endif
-
-            XParameter IntParam = XReg.Parameter( "Interval" );
-            if ( IntParam == null )
-            {
-                IntParam = new XParameter( "Interval" );
-                IntParam.SetValue( new XKey( "val", intvl ) );
-                XReg.Save();
-            }
-            else
-            {
-                intvl = ( uint ) IntParam.GetSaveInt( "val" );
-            }
-
-            TimeTrigger MinuteTrigger = new TimeTrigger( intvl, false );
-            BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
-
-            Builder.Name = "UpdateTaskTrigger";
-            Builder.TaskEntryPoint = "Tasks.BackgroundProcessor";
-            Builder.SetTrigger( MinuteTrigger );
-
-            BackgroundTaskRegistration task = Builder.Register();
+            UpdateTaskInterval( 420 );
         }
 
         private async Task UpdateSpiders()
@@ -173,9 +182,14 @@ namespace Tasks
                 foreach ( XParameter UpdateParam in Updates )
                 {
                     string TileId = UpdateParam.GetValue( "tileId" );
+
                     if ( !SecondaryTile.Exists( TileId ) )
                     {
-                        XReg.RemoveParameter( UpdateParam.Id );
+                        UpdateParam.SetValue( new XKey[] {
+                            new XKey( AppKeys.SYS_EXCEPTION, "App Tile is missing" )
+                            , BookStorage.TimeKey
+                        } );
+                        XReg.SetParameter( UpdateParam );
                         continue;
                     }
 
@@ -202,7 +216,10 @@ namespace Tasks
                         }
                     }
 
-                    UpdateParam.SetValue( BookStorage.TimeKey );
+                    UpdateParam.SetValue( new XKey[] {
+                        new XKey( AppKeys.SYS_EXCEPTION, false )
+                        , BookStorage.TimeKey
+                    } );
 
                     XReg.SetParameter( UpdateParam );
                     XReg.Save();

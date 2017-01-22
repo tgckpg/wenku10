@@ -409,6 +409,14 @@ namespace wenku10.Pages
                     ContentFrame.Content = null;
                     Shared.LoadMessage( "RedrawingContent" );
                     ContentView?.Dispose();
+
+                    // Set Predefined BlockHeight if available
+                    if( 0 < Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+                    {
+                        VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( Properties.APPEARANCE_CONTENTREADER_FONTSIZE );
+                        LogaTable.Override( Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT );
+                    }
+
                     ContentView = new ReaderContent( this, Anchor );
 
                     SetLayoutAware();

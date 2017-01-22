@@ -3,9 +3,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Settings.Advanced"
+    xmlns:c="using:wenku8.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <c:FuzzyTimeInterval x:Key="FuzzyTimeInterval" />
+    </Page.Resources>
 
     <ScrollViewer Background="{StaticResource MajorBrush}"
                   VerticalScrollBarVisibility="Auto">
@@ -46,6 +50,26 @@
                                Text="Disabled" />
                 </ToggleSwitch.OffContent>
             </ToggleSwitch>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Slider x:Name="BgTaskInterval" SmallChange="1" Margin="0,0,10,0"
+                        ThumbToolTipValueConverter="{StaticResource FuzzyTimeInterval}"
+                        PointerCaptureLost="BgTaskInterval_PointerCaptureLost" >
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/Advanced_BgTask_Interval"
+                                   Foreground="{StaticResource RelativeMajorBrush}"
+                                   Text="Live Tile update interval" />
+                    </Slider.Header>
+                </Slider>
+                <TextBox x:Name="BgTaskIntvlInput" Grid.Column="1"
+                         Width="64" TextAlignment="Center"
+                         LostFocus="BgTaskIntvlInput_LostFocus"
+                         InputScope="Number" TextChanged="UpdateBgTaskSlider"
+                         VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
         </StackPanel>
     </ScrollViewer>
 </Page>

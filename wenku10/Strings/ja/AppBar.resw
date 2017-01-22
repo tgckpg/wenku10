@@ -237,4 +237,22 @@
   <data name="Exit.Text" xml:space="preserve">
     <value>終了</value>
   </data>
+  <data name="PinAll.Text" xml:space="preserve">
+    <value>すべてのアイテムを開始に固定する</value>
+  </data>
+  <data name="Sync.Text" xml:space="preserve">
+    <value>同期する</value>
+  </data>
+  <data name="PinPolicy_PinMissing.Text" xml:space="preserve">
+    <value>自動的に固定する</value>
+  </data>
+  <data name="PinPolicy_Ask.Text" xml:space="preserve">
+    <value>何をすべきか</value>
+  </data>
+  <data name="PinPolicy_DoNothing.Text" xml:space="preserve">
+    <value>何もしない</value>
+  </data>
+  <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
+    <value>記録を削除する</value>
+  </data>
 </root>

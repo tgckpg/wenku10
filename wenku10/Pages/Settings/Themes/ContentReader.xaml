@@ -58,39 +58,90 @@
                         <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize" Text="Size" />
                     </PivotItem.Header>
                     <StackPanel>
-                        <Slider x:Name="FontSizeSlider"
-                                Minimum="6" Maximum="72" SmallChange="0.5"
-                                PointerCaptureLost="FontSizeSlider_PointerCaptureLost_1"
-                                Value="22.5">
-                                <!--ValueChanged="FontSizeSlider_ValueChanged_1"-->
-                            <Slider.Header>
-                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="FontSize" />
-                            </Slider.Header>
-                        </Slider>
-                        <Slider x:Name="LineSpacingSlider"
-                                Minimum="0" Maximum="72" SmallChange="0.5"
-                                ValueChanged="LineSpacingSlider_ValueChanged_1"
-                                PointerCaptureLost="LineSpacingSlider_PointerCaptureLost_1"
-                                Value="28">
-                            <Slider.Header>
-                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_LineSpacing"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="LineSpacing" />
-                            </Slider.Header>
-                        </Slider>
-                        <Slider x:Name="ParagraphSpacingSlider"
-                                Minimum="0" Maximum="72" SmallChange="0.5"
-                                ValueChanged="ParagraphSpacingSlider_ValueChanged_1"
-                                PointerCaptureLost="ParagraphSpacingSlider_PointerCaptureLost_1"
-                                Value="27.5">
-                            <Slider.Header>
-                                <TextBlock x:Uid="/Settings/Appearance_ContentReader_ParagraphSpacing"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="ParagraphSpacing" />
-                            </Slider.Header>
-                        </Slider>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="FontSizeSlider" Margin="0,0,10,0"
+                                    Minimum="6" Maximum="72" SmallChange="0.5"
+                                    PointerCaptureLost="FontSizeSlider_PointerCaptureLost"
+                                    Value="22.5">
+                                    <!--ValueChanged="FontSizeSlider_ValueChanged_1"-->
+                                <Slider.Header>
+                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_FontSize"
+                                               Foreground="{StaticResource MinorBrush}"
+                                               Text="FontSize" />
+                                </Slider.Header>
+                            </Slider>
+                            <TextBox x:Name="FontSizeInput" Grid.Column="1"
+                                     Width="64" TextAlignment="Center"
+                                     LostFocus="FontSizeInput_LostFocus"
+                                     InputScope="Number" TextChanged="ForceSliderRange"
+                                     VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="BlockHeightSlider" Margin="0,0,10,0"
+                                    SmallChange="0.5" Value="27.5"
+                                    PointerCaptureLost="BlockHeightSlider_PointerCaptureLost">
+                                <Slider.Header>
+                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_BlockHeight"
+                                               Foreground="{StaticResource MinorBrush}"
+                                               Text="Block Height" />
+                                </Slider.Header>
+                            </Slider>
+                            <TextBox x:Name="BlockHeightInput" Grid.Column="1"
+                                     Width="64" TextAlignment="Center"
+                                     LostFocus="BlockHeightInput_LostFocus"
+                                     InputScope="Number" TextChanged="ForceSliderRange"
+                                     VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="LineSpacingSlider" Margin="0,0,10,0"
+                                    Minimum="0" Maximum="72" SmallChange="0.5"
+                                    ValueChanged="LineSpacingSlider_ValueChanged"
+                                    PointerCaptureLost="LineSpacingSlider_PointerCaptureLost"
+                                    Value="28">
+                                <Slider.Header>
+                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_LineSpacing"
+                                               Foreground="{StaticResource MinorBrush}"
+                                               Text="LineSpacing" />
+                                </Slider.Header>
+                            </Slider>
+                            <TextBox x:Name="LineSpacingInput" Grid.Column="1"
+                                     Width="64" TextAlignment="Center"
+                                     InputScope="Number" TextChanged="ForceSliderRange"
+                                     VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Slider x:Name="ParaSpacingSlider" Margin="0,0,10,0"
+                                    Minimum="0" Maximum="72" SmallChange="0.5"
+                                    ValueChanged="ParaSpacingSlider_ValueChanged"
+                                    PointerCaptureLost="ParaSpacingSlider_PointerCaptureLost"
+                                    Value="27.5">
+                                <Slider.Header>
+                                    <TextBlock x:Uid="/Settings/Appearance_ContentReader_ParagraphSpacing"
+                                               Foreground="{StaticResource MinorBrush}"
+                                               Text="ParagraphSpacing" />
+                                </Slider.Header>
+                            </Slider>
+                            <TextBox x:Name="ParaSpacingInput" Grid.Column="1"
+                                     Width="64" TextAlignment="Center"
+                                     InputScope="Number" TextChanged="ForceSliderRange"
+                                     VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </Grid>
                     </StackPanel>
                 </PivotItem>
                 <PivotItem>

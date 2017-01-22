@@ -17,17 +17,28 @@
               ItemContainerStyle="{StaticResource CommentListItem}">
         <ListView.ItemTemplate>
             <DataTemplate>
-                <Grid>
+                <Grid Margin="0,0,10,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="15" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Rectangle Margin="5,8,0,8" Fill="#888" Width="3"/>
                     <StackPanel Grid.Column="1" Margin="5, 10">
-                        <StackPanel Orientation="Horizontal" Grid.Row="0">
-                            <TextBlock Margin="0,0,10,0" Foreground="{StaticResource MinorBrush}" Text="{Binding Username}" TextWrapping="Wrap" />
-                            <TextBlock Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" Foreground="{StaticResource MajorBrush}" />
-                        </StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0"
+                                       Foreground="{StaticResource MinorBrush}" Text="{Binding Username}" TextWrapping="Wrap" />
+                            <TextBlock Grid.Column="1" Margin="5,0"
+                                       Foreground="{StaticResource MajorBrush}" Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}"/>
+                            <TextBlock Grid.Column="2"
+                                       Foreground="#777">
+                                #<Run Text="{Binding Index}" />
+                            </TextBlock>
+                        </Grid>
                         <!--TextBlock Foreground="#999" Margin="5,0" FontSize="20" Text="abcd"/-->
                         <TextBlock c:AttachedDictAction.Source="{Binding Title}"
                                    Margin="5,0,5,0" Foreground="#888"

@@ -14,7 +14,6 @@ namespace wenku8.Model.Loaders
     using Book;
     using Book.Spider;
     using Resources;
-    using System.Messages;
 
     sealed class ChapterLoader
     {
@@ -87,7 +86,7 @@ namespace wenku8.Model.Loaders
                     , ( string Request, string path, Exception ex ) =>
                     {
                         Logger.Log( ID, ex.Message, LogType.ERROR );
-                        System.Utils.ShowError( () => new ErrorMessage().DOWNLOAD );
+                        System.ActionCenter.Instance.ShowError( "Download" );
                         // OnComplete( C );
                     }
                     , false

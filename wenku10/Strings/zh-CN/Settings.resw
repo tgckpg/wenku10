@@ -554,4 +554,10 @@
   <data name="Desc_EBWin_Help.Text" xml:space="preserve">
     <value>无法安装字典？</value>
   </data>
+  <data name="Appearance_ContentReader_BlockHeight.Text" xml:space="preserve">
+    <value>( 直书专用 ) 数值越低越好，调整同时请确保文字刚好填满空间。</value>
+  </data>
+  <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
+    <value>活动磁贴更新间隔</value>
+  </data>
 </root>

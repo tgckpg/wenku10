@@ -213,4 +213,19 @@
   <data name="ConfirmSubmit" xml:space="preserve">
     <value>提交？</value>
   </data>
+  <data name="ConfirmMassPin" xml:space="preserve">
+    <value>请确认将 {0} 个项目钉到开始页。得感谢 Windows 政策。您还必须反覆按确认 {0} 次。</value>
+  </data>
+  <data name="ConfirmMassUpdate" xml:space="preserve">
+    <value>请确认更新 {0} 个项目。</value>
+  </data>
+  <data name="PinMgr_NoRemoteAction" xml:space="preserve">
+    <value>不支持更改远程磁贴，请在远程计算机中更改它们。</value>
+  </data>
+  <data name="MissingPins" xml:space="preserve">
+    <value>找到 {0} 个丢失的磁贴。</value>
+  </data>
+  <data name="ConfirmTakeOver" xml:space="preserve">
+    <value>确认接管此项目？</value>
+  </data>
 </root>

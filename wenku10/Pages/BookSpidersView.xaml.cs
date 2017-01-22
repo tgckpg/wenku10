@@ -17,6 +17,7 @@ using Windows.UI.StartScreen;
 
 using Tasks;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;
@@ -27,11 +28,11 @@ using wenku8.Model.ListItem;
 using wenku8.Model.Pages;
 using wenku8.Model.Section;
 using wenku8.Resources;
-using Net.Astropenguin.Helpers;
+using wenku8.Storage;
 
 namespace wenku10.Pages
 {
-    sealed partial class BookSpidersView : Page, ICmdControls, IAnimaPage
+    sealed partial class BookSpidersView : Page, ICmdControls, IAnimaPage, INavPage
     {
         #pragma warning disable 0067
         public event ControlChangedEvent ControlChanged;
@@ -87,13 +88,25 @@ namespace wenku10.Pages
         }
         #endregion
 
+        public void SoftOpen()
+        {
+            if ( FileListContext == null )
+            {
+                FileListContext = new BookSpiderList();
+                LayoutRoot.DataContext = FileListContext;
+            }
+            else
+            {
+                FileListContext.Reload();
+            }
+        }
+
+        public void SoftClose() { }
+
         private void SetTemplate()
         {
             InitAppBar();
-            FileListContext = new BookSpiderList();
-
             LayoutRoot.RenderTransform = new TranslateTransform();
-            LayoutRoot.DataContext = FileListContext;
         }
 
         private void InitAppBar()
@@ -152,7 +165,7 @@ namespace wenku10.Pages
             // Prevent double processing on the already processed item
             if ( !Item.ProcessSuccess && Item.CanProcess )
             {
-                // Skip awaiting because ProcessSusscce will skip
+                // Skip awaiting because ProcessSuccess will handle if skip
                 var j = ItemProcessor.ProcessLocal( Item );
             }
 
@@ -167,23 +180,16 @@ namespace wenku10.Pages
             if( SelectedBook.ProcessSuccess )
             {
                 BookInstruction Book = SelectedBook.GetBook();
-                string TileId = await PageProcessor.CreateSecondaryTile( Book );
+                string TileId = await PageProcessor.PinToStart( Book );
 
-                if ( !( string.IsNullOrEmpty( TileId ) || SelectedBook.HasChakra ) )
+                if ( !string.IsNullOrEmpty( TileId ) )
                 {
-                    StringResources stx = new StringResources( "Message" );
+                    PinManager PM = new PinManager();
+                    PM.RegPin( Book, TileId, true );
 
-                    bool Yes = false;
-
-                    await Popups.ShowDialog( UIAliases.CreateDialog(
-                        stx.Str( "TileUpdateSupport" )
-                        , stx.Str( "ShellTile" )
-                        , () => Yes = true
-                        , stx.Str( "Yes" ), stx.Str( "No" )
-                    ) );
-
-                    if ( Yes ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+                    await PageProcessor.RegLiveSpider( SelectedBook, Book, TileId );
                 }
+
             }
         }
 

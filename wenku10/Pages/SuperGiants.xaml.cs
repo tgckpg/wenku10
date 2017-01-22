@@ -20,6 +20,7 @@ using Microsoft.Services.Store.Engagement;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 using wenku8.CompositeElement;
 using wenku8.Effects;
@@ -29,6 +30,8 @@ using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
 using wenku8.Resources;
+using wenku8.Settings;
+using wenku8.Storage;
 
 namespace wenku10.Pages
 {
@@ -46,6 +49,11 @@ namespace wenku10.Pages
         public IList<ICommandBarElement> MajorControls { get; private set; }
         public IList<ICommandBarElement> Major2ndControls { get; private set; }
         public IList<ICommandBarElement> MinorControls { get; private set; }
+
+        private bool PinErrored = false;
+
+        // Fireflies scroll effect
+        private float PrevOffset = 0;
 
         List<Grid> StarBoxes;
         List<FireFlies> FireFliesScenes;
@@ -144,7 +152,10 @@ namespace wenku10.Pages
             NewsStory.RepeatBehavior = RepeatBehavior.Forever;
 
             MajorControls = new ICommandBarElement[] { NewsBtn };
+
             GetAnnouncements();
+
+            MessageBus.SendUI( typeof( wenku8.System.ActionCenter ), AppKeys.PM_CHECK_TILES );
         }
 
         private async void SuperGiants_StateComplete( object sender, FloatyState State )
@@ -156,8 +167,6 @@ namespace wenku10.Pages
                 ( ( FloatyButton ) sender ).Visibility = Visibility.Visible;
             }
         }
-
-        private float PrevOffset = 0;
 
         private void LayoutRoot_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )
         {

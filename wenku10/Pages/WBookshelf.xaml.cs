@@ -48,6 +48,7 @@ namespace wenku10.Pages
         private IFavSection FS;
 
         AppBarButtonEx ReloadBtn;
+        AppBarButtonEx PinAll;
 
         private volatile bool Locked = false;
 
@@ -119,6 +120,9 @@ namespace wenku10.Pages
                     FS.Reload( true );
             };
 
+            PinAll = UIAliases.CreateAppBarBtnEx( Symbol.Pin, stx.Text( "PinAll" ) );
+            PinAll.Click += ( s, e ) => FS.C_PinAll();
+
             MajorControls = new ICommandBarElement[] { ReloadBtn };
 
             if ( Properties.ENABLE_ONEDRIVE )
@@ -127,19 +131,18 @@ namespace wenku10.Pages
                 ButtonOperation SyncOp = new ButtonOperation( OneDriveButton );
 
                 SyncOp.SetOp( OneDriveRsync );
-                MinorControls = new ICommandBarElement[] { OneDriveButton };
+                MinorControls = new ICommandBarElement[] { PinAll, OneDriveButton };
+            }
+            else
+            {
+                MinorControls = new ICommandBarElement[] { PinAll };
             }
         }
 
         private async Task OneDriveRsync()
         {
-            await OneDriveSync.Instance.Authenticate();
-
-            if( OneDriveSync.Instance.Authenticated )
-            {
-                await new BookStorage().SyncSettings();
-                FS.Reload();
-            }
+            await new BookStorage().SyncSettings();
+            FS.Reload();
         }
 
         private void ShowFavContext( object sender, RightTappedRoutedEventArgs e )
@@ -160,9 +163,7 @@ namespace wenku10.Pages
                         FS.C_RSync();
                     break;
                 case "AutoCache": FS.C_AutoCache(); break;
-                case "Delete":
-                    FS.C_Delete();
-                    break;
+                case "Delete": FS.C_Delete(); break;
             }
         }
 

@@ -72,7 +72,7 @@ namespace wenku10.Pages
                 BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
                 if ( Book != null )
                 {
-                    NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
+                    NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
                 }
 
             }
@@ -157,7 +157,6 @@ namespace wenku10.Pages
                 return;
             }
 
-            MessageBus.Send( GetType(), Name );
             Logger.Log( ID, "NavigateTo: " + Name, LogType.INFO );
 
             Navigating = true;
@@ -211,7 +210,9 @@ namespace wenku10.Pages
 
             SetControls( View.Content, true );
 
-            LoadingScreen.State = ControlState.Foreatii;
+            // Do not close the loading screen if redirecting
+            if ( !( P is MonoRedirector ) )
+                LoadingScreen.State = ControlState.Foreatii;
 
             Navigating = false;
             StartReacting();

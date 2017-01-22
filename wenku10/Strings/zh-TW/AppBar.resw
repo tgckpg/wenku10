@@ -237,4 +237,22 @@
   <data name="Exit.Text" xml:space="preserve">
     <value>結束</value>
   </data>
+  <data name="PinAll.Text" xml:space="preserve">
+    <value>將所有項目固定到開始頁</value>
+  </data>
+  <data name="Sync.Text" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="PinPolicy_PinMissing.Text" xml:space="preserve">
+    <value>自動釘到開始頁</value>
+  </data>
+  <data name="PinPolicy_Ask.Text" xml:space="preserve">
+    <value>詢問該怎麼做</value>
+  </data>
+  <data name="PinPolicy_DoNothing.Text" xml:space="preserve">
+    <value>沒有動作</value>
+  </data>
+  <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
+    <value>移除記錄</value>
+  </data>
 </root>

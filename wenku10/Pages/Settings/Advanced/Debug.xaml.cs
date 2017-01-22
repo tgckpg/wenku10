@@ -6,6 +6,7 @@ using System.Net;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -16,14 +17,18 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.IO;
 
 using wenku8.Config;
+using wenku8.Settings;
 using wenku8.System;
 
 namespace wenku10.Pages.Settings.Advanced
 {
     public sealed partial class Debug : Page
     {
+        bool ActionBlocked = false;
+
         public Debug()
         {
             this.InitializeComponent();
@@ -70,6 +75,18 @@ namespace wenku10.Pages.Settings.Advanced
             TextBlock T = LogLevelCB.SelectedItem as TextBlock;
             Properties.LOG_LEVEL = T.Text;
             LogControl.SetFilter( T.Text );
+        }
+
+        private async void ViewBgTaskConf( object sender, RoutedEventArgs e )
+        {
+            if ( ActionBlocked ) return;
+            ActionBlocked = true;
+
+            StorageFile ISF = await AppStorage.MkTemp();
+            await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
+
+            await ControlFrame.Instance.CloseSubView();
+            ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
         }
     }
 }

@@ -1,0 +1,97 @@
+﻿<Page
+    x:Class="wenku10.Pages.ManagePins"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:v="using:wenku8.Converters"
+    xmlns:e="using:wenku8.Effects"
+    xmlns:ms="using:Microsoft.Phone.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <v:TransStateConverter x:Key="TransStateConverter" />
+        <v:CurrDevConverter x:Key="CurrDevConverter" />
+        <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+
+        <MenuFlyout x:Key="PinRecordContext">
+            <MenuFlyoutItem x:Uid="/ContextMenu/PinToStart"
+                        Text="Pin to Desktop"
+                        Click="PinToStart" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
+                        Text="Delete" 
+                        Click="RemovePin" />
+        </MenuFlyout>
+
+        <MenuFlyout x:Key="DevRecordContext">
+            <MenuFlyoutItem x:Uid="/ContextMenu/TakeOver"
+                        Text="Pin to Desktop"
+                        Click="TakeOverDev" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/PinToStart"
+                        Text="Pin to Desktop"
+                        Click="PinDevToStart" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Delete"
+                        Text="Delete" 
+                        Click="RemoveDev" />
+        </MenuFlyout>
+
+        <DataTemplate x:Key="DevRecordTemplate">
+            <Grid Margin="10,5"
+                  Opacity="{Binding DevId, Converter={StaticResource CurrDevConverter}}"
+                  RightTapped="ShowContextMenu"
+                  FlyoutBase.AttachedFlyout="{StaticResource DevRecordContext}">
+                <TextBlock Text="{Binding ItemTitle}"
+                           FontSize="20"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           TextTrimming="WordEllipsis"
+                           TextWrapping="Wrap"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="PinRecordTemplate">
+            <Grid Margin="25,5"
+                  Opacity="{Binding DevId, Converter={StaticResource CurrDevConverter}}"
+                  RightTapped="ShowContextMenu"
+                  FlyoutBase.AttachedFlyout="{StaticResource PinRecordContext}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding ItemTitle}"
+                           FontSize="14"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           TextTrimming="WordEllipsis"
+                           TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="1"
+                           Text="{Binding Date, Converter={StaticResource RelativeTimeConverter}}"
+                           FontSize="14"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           TextWrapping="Wrap" />
+            </Grid>
+        </DataTemplate>
+
+        <v:PinTemplateSelector x:Key="PinTemplateSelector"
+                               DevRecord="{StaticResource DevRecordTemplate}"
+                               PinRecord="{StaticResource PinRecordTemplate}" />
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+
+        <ListView x:Name="PinList"
+                  ItemTemplateSelector="{StaticResource PinTemplateSelector}"
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  IsItemClickEnabled="True" />
+
+        <!-- Desc -->
+        <StackPanel Grid.Row="1" Margin="20"
+                    e:TransitionDisplay.State="{Binding ElementName=PinList, Path=ItemsSource, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                    e:TransitionDisplay.Mode="A01_Y_30_30">
+            <TextBlock x:Uid="/NavigationTitles/ManagePins" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                       Text="Book Spider" FontSize="30" />
+            <TextBlock x:Uid="/NavigationTitles/Desc_ManagePins" TextWrapping="Wrap"
+                       Foreground="{StaticResource SubtleBrush}" />
+        </StackPanel>
+
+    </Grid>
+
+</Page>

@@ -196,4 +196,13 @@
     <value>新書一覽</value>
     <comment>postdate</comment>
   </data>
+  <data name="ManagePins.Text" xml:space="preserve">
+    <value>管理磚</value>
+  </data>
+  <data name="Desc_ManagePins.Text" xml:space="preserve">
+    <value>可以查看曾經釘過在開始頁的磚，利用功能列的「磚政策」( 預設為「沒有動作」 )，可以決定遺失磚的動作。亦可以利用 OneDrive 同步查看其它裝置的磚記錄。
+- 移除記錄：自動移除遺失磚的記錄
+- 自動釘到開始頁：自動將遺失的磚釘回開始頁
+- 詢問該怎麼做：詢問用戶該怎麼做</value>
+  </data>
 </root>
