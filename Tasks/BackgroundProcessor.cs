@@ -39,6 +39,7 @@ namespace Tasks
 
         private BackgroundTaskDeferral Deferral;
         private XRegistry XReg;
+        private IDisposable CanvasDevice;
 
         public BackgroundProcessor()
         {
@@ -68,7 +69,10 @@ namespace Tasks
             taskInstance.Canceled += new BackgroundTaskCanceledEventHandler( OnCanceled );
 
             Init();
-            await UpdateSpiders();
+            using ( CanvasDevice = Image.CreateCanvasDevice() )
+            {
+                await UpdateSpiders();
+            }
 
             Deferral.Complete();
         }
@@ -212,7 +216,7 @@ namespace Tasks
                         if ( OHash != NHash )
                         {
                             Shared.Storage.WriteString( Book.TOCDatePath, NHash );
-                            UpdateTile( Book, TileId );
+                            await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
                         }
                     }
 
@@ -237,19 +241,6 @@ namespace Tasks
                 }
                 catch ( Exception ) { }
             }
-        }
-
-        private void UpdateTile( BookItem Book, string TileId )
-        {
-            TileUpdater Updater = TileUpdateManager.CreateTileUpdaterForSecondaryTile( TileId );
-            Updater.EnableNotificationQueue( true );
-            Updater.Clear();
-
-            StringResBg stx = new StringResBg( "Message" );
-
-            var TemplateXml = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare150x150Text01 );
-            TemplateXml.GetElementsByTagName( "text" ).First().AppendChild( TemplateXml.CreateTextNode( stx.Str( "NewContent" ) ) );
-            Updater.Update( new TileNotification( TemplateXml ) );
         }
 
         private void OnCanceled( IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason )
