@@ -10,11 +10,9 @@ using Windows.UI.StartScreen;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Loaders;
 
 using wenku8.CompositeElement;
 using wenku8.Config;
-using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.Pages;
