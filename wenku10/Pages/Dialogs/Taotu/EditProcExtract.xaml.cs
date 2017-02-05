@@ -134,8 +134,8 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void SetPattern( object sender, RoutedEventArgs e )
         {
-            TextBox Input = sender as TextBox;
-            ProcFind.RegItem Item = Input.DataContext as ProcFind.RegItem;
+            TextBox Input = ( TextBox ) sender;
+            ProcFind.RegItem Item = ( ProcFind.RegItem ) Input.DataContext;
             Item.Pattern = Input.Text;
 
             Item.Validate( FindMode.MATCH );
@@ -143,8 +143,8 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void SetFormat( object sender, RoutedEventArgs e )
         {
-            TextBox Input = sender as TextBox;
-            ProcFind.RegItem Item = Input.DataContext as ProcFind.RegItem;
+            TextBox Input = ( TextBox ) sender;
+            ProcFind.RegItem Item = ( ProcFind.RegItem ) Input.DataContext;
             Item.Format = Input.Text;
 
             Item.Validate( FindMode.MATCH );
@@ -152,14 +152,14 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void SetUrl( object sender, RoutedEventArgs e )
         {
-            TextBox Input = sender as TextBox;
+            TextBox Input = ( TextBox ) sender;
             EditTarget.TargetUrl = Input.Text;
         }
 
         private void RemovePropDef( object sender, RoutedEventArgs e )
         {
-            Button B = sender as Button;
-            EditTarget.PropDefs.Remove( B.DataContext as WenkuExtractor.PropExt );
+            Button B = ( Button ) sender;
+            EditTarget.PropDefs.Remove( ( GrimoireExtractor.PropExt ) B.DataContext );
         }
 
         private void SetIncoming( object sender, RoutedEventArgs e )
@@ -169,7 +169,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void Subprocess( object sender, RoutedEventArgs e )
         {
-            WenkuExtractor.PropExt PropDef = ( sender as Button ).DataContext as WenkuExtractor.PropExt;
+            GrimoireExtractor.PropExt PropDef = ( GrimoireExtractor.PropExt ) ( ( Button ) sender ).DataContext;
             EditTarget.SubEdit = PropDef;
             Popups.CloseDialog();
         }
@@ -181,7 +181,7 @@ namespace wenku10.Pages.Dialogs.Taotu
             ComboBox Cb = sender as ComboBox;
             GenericData<BookInfo> NType = e.AddedItems[ 0 ] as GenericData<BookInfo>;
 
-            WenkuExtractor.PropExt Ext = Cb.DataContext as WenkuExtractor.PropExt;
+            GrimoireExtractor.PropExt Ext = ( GrimoireExtractor.PropExt ) Cb.DataContext;
             Ext.PType = NType.Data;
         }
 
