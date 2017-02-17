@@ -10,6 +10,8 @@ using Windows.UI.StartScreen;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Logging;
+using Net.Astropenguin.Logging.Handler;
 
 using wenku8.CompositeElement;
 using wenku8.Config;
@@ -26,6 +28,8 @@ namespace Tasks
 
     public sealed class BackgroundProcessor : IBackgroundTask
     {
+        private static readonly string ID = typeof( BackgroundProcessor ).Name;
+
         public static BackgroundProcessor Instance { get; private set; }
 
         public int TaskInterval { get { return XReg.Parameter( "Interval" ).GetSaveInt( "val" ); } }
@@ -52,11 +56,19 @@ namespace Tasks
 
         private void Init()
         {
+            Worker.BackgroundOnly = true;
+
             THttpRequest.UA = string.Format( AppKeys.UA, AppSettings.SimpVersion );
             ResTaotu.SetExtractor( typeof( TasksExtractor ) );
             ResTaotu.SetMarker( typeof( TasksMarker ) );
             ResTaotu.SetListLoader( typeof( TasksListLoader ) );
             ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
+
+            if ( Properties.ENABLE_SYSTEM_LOG )
+            {
+                new FileSystemLog( "debug.log" );
+                Logger.Log( ID, "BockgroundTask init", LogType.INFO );
+            }
         }
 
         public async void Run( IBackgroundTaskInstance taskInstance )
@@ -119,10 +131,10 @@ namespace Tasks
                 case BackgroundAccessStatus.AlwaysAllowed:
                 case BackgroundAccessStatus.AllowedSubjectToSystemPolicy:
 
-                #pragma warning disable 0618
+#pragma warning disable 0618
                 case BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity:
                 case BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity:
-                #pragma warning restore 0618
+#pragma warning restore 0618
 
                     Instance.CanBackground = true;
                     Instance.CreateUpdateTaskTrigger();

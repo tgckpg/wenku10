@@ -7,7 +7,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -19,7 +18,9 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 
+using wenku8.CompositeElement;
 using wenku8.Config;
+using wenku8.Resources;
 using wenku8.Settings;
 using wenku8.System;
 
@@ -58,11 +59,10 @@ namespace wenku10.Pages.Settings.Advanced
             string IP = RemoteAddress.Text.Trim();
 
             IPAddress NotUsed;
-            if( !IPAddress.TryParse( IP, out NotUsed ) )
+            if ( !IPAddress.TryParse( IP, out NotUsed ) )
             {
-                MessageDialog Msg = new MessageDialog( "This IP Address is invalid" );
+                await Popups.ShowDialog( UIAliases.CreateDialog( "This IP Address is invalid" ) );
                 RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
-                await Popups.ShowDialog( Msg );
             }
             else
             {
@@ -88,5 +88,45 @@ namespace wenku10.Pages.Settings.Advanced
             await ControlFrame.Instance.CloseSubView();
             ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
         }
+
+        private async void ViewDebugLog( object sender, RoutedEventArgs e )
+        {
+            if ( ActionBlocked ) return;
+            ActionBlocked = true;
+
+            StorageFile ISF = await AppStorage.MkTemp();
+
+            if ( Shared.Storage.FileExists( "debug.log" ) )
+            {
+                Bootstrap.LogInstance.Stop();
+
+                using ( Stream s = Bootstrap.LogInstance.GetStream() )
+                using ( Stream ts = await ISF.OpenStreamForWriteAsync() )
+                {
+                    await s.CopyToAsync( ts );
+                }
+
+                Bootstrap.LogInstance.Start();
+            }
+
+            await ControlFrame.Instance.CloseSubView();
+            ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
+        }
+
+        private async void ClearDebugLog( object sender, RoutedEventArgs e )
+        {
+            if ( ActionBlocked ) return;
+            ActionBlocked = true;
+
+            StorageFile ISF = await AppStorage.MkTemp();
+
+            if ( Shared.Storage.FileExists( "debug.log" ) )
+            {
+                Bootstrap.LogInstance.Stop();
+                Shared.Storage.DeleteFile( "debug.log" );
+                Bootstrap.LogInstance.Start();
+            }
+        }
+
     }
 }
