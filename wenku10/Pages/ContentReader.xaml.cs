@@ -87,7 +87,7 @@ namespace wenku10.Pages
         private EpisodeStepper ES;
 
         private NavPaneSection ContentPane;
-        private List<Action> RegKey;
+        private wenku8.System.KeyboardController KbControls;
 
         private TextBlock BookTitle { get { return IsHorz ? YBookTitle : XBookTitle; } }
         private TextBlock VolTitle { get { return IsHorz ? YVolTitle : XVolTitle; } }
@@ -113,7 +113,7 @@ namespace wenku10.Pages
             if ( Disposed ) return;
             Disposed = true;
 
-            foreach ( Action p in RegKey ) p();
+            KbControls.Dispose();
 
             ClockStop();
 
@@ -131,7 +131,7 @@ namespace wenku10.Pages
             ContentPane = null;
         }
 
-        public void SoftOpen() { }
+        public void SoftOpen() { KbControls.ShowHelp(); }
         public void SoftClose() { Dispose(); }
 
         #region Anima
@@ -180,36 +180,36 @@ namespace wenku10.Pages
 
             InitAppBar();
 
-            RegKey = new List<Action>();
+            KbControls = new wenku8.System.KeyboardController( "ContentReader" );
             // KeyBoard Navigations
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.NextPara(), VirtualKey.J ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.PrevPara(), VirtualKey.K ) );
+            KbControls.AddCombo( "NextPara", e => ContentView.NextPara(), VirtualKey.J );
+            KbControls.AddCombo( "PrevPara", e => ContentView.PrevPara(), VirtualKey.K );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.Up ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.Down ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.J ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.K ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( ScrollBottom, VirtualKey.Shift, VirtualKey.G ) );
-            RegKey.Add( App.KeyboardControl.RegisterSequence( ScrollTop, VirtualKey.G, VirtualKey.G ) );
+            KbControls.AddCombo( "ScrollLess", e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.Up );
+            KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.Down );
+            KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.J );
+            KbControls.AddCombo( "ScrollLess", e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.K );
+            KbControls.AddCombo( "ScrollBottom", ScrollBottom, VirtualKey.Shift, VirtualKey.G );
+            KbControls.AddSeq( "ScrollTop", ScrollTop, VirtualKey.G, VirtualKey.G );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, VirtualKey.Shift, VirtualKey.Left ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, VirtualKey.Shift, VirtualKey.Right ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, VirtualKey.H ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, VirtualKey.L ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), VirtualKey.U ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), VirtualKey.Control, VirtualKey.Z ) );
+            KbControls.AddCombo( "PrevChapter", PrevChapter, VirtualKey.Shift, VirtualKey.Left );
+            KbControls.AddCombo( "NextChapter", NextChapter, VirtualKey.Shift, VirtualKey.Right );
+            KbControls.AddCombo( "PrevChapter", PrevChapter, VirtualKey.H );
+            KbControls.AddCombo( "NextChapter", NextChapter, VirtualKey.L );
+            KbControls.AddCombo( "UndoJump", e => ContentView.UndoJump(), VirtualKey.U );
+            KbControls.AddCombo( "UndoJump", e => ContentView.UndoJump(), VirtualKey.Control, VirtualKey.Z );
 
             // `:
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), ( VirtualKey ) 192 ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), VirtualKey.Shift, ( VirtualKey ) 186 ) );
+            KbControls.AddCombo( "ShowMenu", e => RollOutLeftPane(), ( VirtualKey ) 192 );
+            KbControls.AddCombo( "ShowMenu", e => RollOutLeftPane(), VirtualKey.Shift, ( VirtualKey ) 186 );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.SearchWords( ContentView.Reader.SelectedData ), VirtualKey.Shift, VirtualKey.S ) );
+            KbControls.AddCombo( "SearchWords", e => ContentView.SearchWords( ContentView.Reader.SelectedData ), VirtualKey.Shift, VirtualKey.S );
 
             SetSlideGesture();
 
             Window.Current.SizeChanged += Current_SizeChanged;
 
-            if( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
+            if ( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
         }
 
         private void InitAppBar()

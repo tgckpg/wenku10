@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 
 namespace wenku8.System
@@ -32,12 +31,12 @@ namespace wenku8.System
                 switch ( Properties.VERSION )
                 {
                     // Keep up to 5 migration versions
-                    case "2.0.3t":
-                    case "2.0.4t":
-                    case "2.0.5t":
-                    case "2.0.6t":
-                    case "2.0.7t":
-                        // break;
+                    case "2.0.8t":
+                    case "2.0.9t":
+                    case "2.0.10t":
+                    case "2.0.11t":
+                    case "2.0.12t":
+                        break;
 
                     case "1.4.1b":
                     case "1.4.2b":
