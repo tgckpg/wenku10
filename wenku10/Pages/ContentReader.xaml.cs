@@ -48,6 +48,7 @@ using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
 namespace wenku10.Pages
 {
     using ContentReaderPane;
+    using Windows.System;
 
     sealed partial class ContentReader : Page, ICmdControls, IAnimaPage, INavPage
     {
@@ -181,26 +182,28 @@ namespace wenku10.Pages
 
             RegKey = new List<Action>();
             // KeyBoard Navigations
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.NextPara(), Windows.System.VirtualKey.J ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.PrevPara(), Windows.System.VirtualKey.K ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.NextPara(), VirtualKey.J ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.PrevPara(), VirtualKey.K ) );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Up ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Down ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.J ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.K ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( ScrollBottom, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.G ) );
-            RegKey.Add( App.KeyboardControl.RegisterSequence( ScrollTop, Windows.System.VirtualKey.G, Windows.System.VirtualKey.G ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.Up ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.Down ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.J ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.K ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( ScrollBottom, VirtualKey.Shift, VirtualKey.G ) );
+            RegKey.Add( App.KeyboardControl.RegisterSequence( ScrollTop, VirtualKey.G, VirtualKey.G ) );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Left ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Right ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.H ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.L ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.U ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Z ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, VirtualKey.Shift, VirtualKey.Left ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, VirtualKey.Shift, VirtualKey.Right ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, VirtualKey.H ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, VirtualKey.L ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), VirtualKey.U ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), VirtualKey.Control, VirtualKey.Z ) );
 
             // `:
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), ( Windows.System.VirtualKey ) 192 ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), Windows.System.VirtualKey.Shift, ( Windows.System.VirtualKey ) 186 ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), ( VirtualKey ) 192 ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), VirtualKey.Shift, ( VirtualKey ) 186 ) );
+
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.SearchWords( ContentView.Reader.SelectedData ), VirtualKey.Shift, VirtualKey.S ) );
 
             SetSlideGesture();
 

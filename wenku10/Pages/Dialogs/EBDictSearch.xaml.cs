@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,8 +27,13 @@ namespace wenku10.Pages.Dialogs
 {
     sealed partial class EBDictSearch : ContentDialog
     {
-        EBDictionary Dict;
-        DispatcherTimer Longed;
+        private EBDictionary Dict;
+        private DispatcherTimer Longed;
+
+        private List<Action> RegKey;
+
+        private int VI = 0;
+        private int VJ = 0;
 
         private EBDictSearch()
         {
@@ -59,6 +65,44 @@ namespace wenku10.Pages.Dialogs
             {
                 StringResources stx = new StringResources();
                 CurrentWord.PlaceholderText = stx.Text( "Desc_InputKey" );
+            }
+
+            RegKey = new List<Action>();
+            // KeyBoard Navigations
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VJ++; UpdateVisual(); }, VirtualKey.L ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VJ--; UpdateVisual(); }, VirtualKey.H ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VI++; UpdateVisual(); }, VirtualKey.Shift, VirtualKey.L ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VI--; UpdateVisual(); }, VirtualKey.Shift, VirtualKey.H ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VJ++; UpdateVisual(); }, VirtualKey.Right ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VJ--; UpdateVisual(); }, VirtualKey.Left ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VI++; UpdateVisual(); }, VirtualKey.Shift, VirtualKey.Right ) );
+            RegKey.Add( App.KeyboardControl.RegisterCombination( e => { e.Handled = true; VI--; UpdateVisual(); }, VirtualKey.Shift, VirtualKey.Left ) );
+
+            Closed += EBDictSearch_Closed;
+        }
+
+        private void EBDictSearch_Closed( ContentDialog sender, ContentDialogClosedEventArgs args )
+        {
+            foreach ( Action p in RegKey ) p();
+        }
+
+        private void UpdateVisual()
+        {
+            int l = ParaText.Text.Length;
+            if ( VI < 0 ) VI = 0;
+            if ( VJ < 0 ) VJ = 0;
+            if ( l < VI ) VI = l;
+            if ( l < VJ ) VJ = l;
+
+            if ( VI < VJ )
+            {
+                ParaText.SelectionStart = VI;
+                ParaText.SelectionLength = VJ - VI;
+            }
+            else
+            {
+                ParaText.SelectionStart = VJ;
+                ParaText.SelectionLength = VI - VJ;
             }
         }
 
