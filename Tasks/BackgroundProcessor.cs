@@ -34,10 +34,13 @@ namespace Tasks
 
         public int TaskInterval { get { return XReg.Parameter( "Interval" ).GetSaveInt( "val" ); } }
 
-        private const string TASK_NAME = "UpdateTaskTrigger";
+        private const string TASK_MAIN = "UpdateTaskTrigger";
+        private const string TASK_RETRY = "RetryTaskTrigger";
         private const string ENTRY_POINT = "Tasks.BackgroundProcessor";
 
         private bool CanBackground = false;
+        private bool Retrying = false;
+        private int MaxRetry = 3;
 
         private BackgroundTaskDeferral Deferral;
         private XRegistry XReg;
@@ -74,6 +77,12 @@ namespace Tasks
         public async void Run( IBackgroundTaskInstance taskInstance )
         {
             Deferral = taskInstance.GetDeferral();
+
+            if( taskInstance.Task.Name == TASK_RETRY )
+            {
+                Retrying = true;
+                taskInstance.Task.Unregister( false );
+            }
 
             // Associate a cancellation handler with the background task.
             taskInstance.Canceled += new BackgroundTaskCanceledEventHandler( OnCanceled );
@@ -147,7 +156,7 @@ namespace Tasks
         {
             foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
             {
-                if ( BTask.Value.Name == TASK_NAME )
+                if ( BTask.Value.Name == TASK_MAIN )
                 {
                     BTask.Value.Unregister( false );
                     break;
@@ -166,7 +175,7 @@ namespace Tasks
             TimeTrigger MinuteTrigger = new TimeTrigger( Minutes, false );
             BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
 
-            Builder.Name = TASK_NAME;
+            Builder.Name = TASK_MAIN;
             Builder.TaskEntryPoint = ENTRY_POINT;
             Builder.SetTrigger( MinuteTrigger );
 
@@ -177,10 +186,28 @@ namespace Tasks
         {
             foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
             {
-                if ( BTask.Value.Name == TASK_NAME ) return;
+                if ( BTask.Value.Name == TASK_MAIN ) return;
             }
 
             UpdateTaskInterval( 420 );
+        }
+
+        private void CreateRetryTimer()
+        {
+            foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
+            {
+                if ( BTask.Value.Name == TASK_RETRY ) return;
+            }
+
+            // Use the shortest interval as this is a retry, one shot
+            TimeTrigger MinuteTrigger = new TimeTrigger( 15, true );
+            BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
+
+            Builder.Name = TASK_RETRY;
+            Builder.TaskEntryPoint = ENTRY_POINT;
+            Builder.SetTrigger( MinuteTrigger );
+
+            BackgroundTaskRegistration task = Builder.Register();
         }
 
         private async Task UpdateSpiders()
@@ -190,8 +217,21 @@ namespace Tasks
                 XReg.SetParameter( "task-start", BookStorage.TimeKey );
                 XReg.Save();
 
-                XParameter[] Updates = XReg.Parameters( "spider" );
+                IEnumerable<XParameter> Updates;
                 List<string> Exists = new List<string>();
+
+                if ( Retrying )
+                {
+                    Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x =>
+                    {
+                        int r = x.GetSaveInt( AppKeys.BTASK_RETRY );
+                        return 0 < r && r < MaxRetry;
+                    });
+                }
+                else
+                {
+                    Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x => x.GetSaveInt( AppKeys.BTASK_RETRY ) == 0 );
+                }
 
                 foreach ( XParameter UpdateParam in Updates )
                 {
@@ -215,25 +255,42 @@ namespace Tasks
                     }
 
                     await ItemProcessor.ProcessLocal( SBook );
-                    BookInstruction Book = SBook.GetBook();
-
-                    if ( Book.Packed == true )
+                    if ( SBook.ProcessSuccess )
                     {
-                        string OHash = Shared.Storage.GetString( Book.TOCDatePath );
-                        await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
-                        string NHash = wenku8.System.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
 
-                        if ( OHash != NHash )
+                        BookInstruction Book = SBook.GetBook();
+
+                        if ( Book.Packed == true )
                         {
-                            Shared.Storage.WriteString( Book.TOCDatePath, NHash );
-                            await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
-                        }
-                    }
+                            string OHash = Shared.Storage.GetString( Book.TOCDatePath );
+                            await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
+                            string NHash = wenku8.System.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
 
-                    UpdateParam.SetValue( new XKey[] {
-                        new XKey( AppKeys.SYS_EXCEPTION, false )
-                        , BookStorage.TimeKey
-                    } );
+                            if ( OHash != NHash )
+                            {
+                                Shared.Storage.WriteString( Book.TOCDatePath, NHash );
+                                await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
+                            }
+                        }
+
+                        UpdateParam.SetValue( new XKey[] {
+                            new XKey( AppKeys.SYS_EXCEPTION, false )
+                            , new XKey( AppKeys.BTASK_RETRY, 0 )
+                            , BookStorage.TimeKey
+                        } );
+                    }
+                    else
+                    {
+                        CreateRetryTimer();
+
+                        int NRetries = UpdateParam.GetSaveInt( AppKeys.BTASK_RETRY );
+                        UpdateParam.SetValue( new XKey[]
+                        {
+                            new XKey( AppKeys.SYS_EXCEPTION, true )
+                            , new XKey( AppKeys.BTASK_RETRY, NRetries + 1 )
+                            , BookStorage.TimeKey
+                        } );
+                    }
 
                     XReg.SetParameter( UpdateParam );
                     XReg.Save();
