@@ -120,6 +120,9 @@
   <data name="AppName" xml:space="preserve">
     <value>輕小説文庫</value>
   </data>
+  <data name="Kb_EPStepper" xml:space="preserve">
+    <value>步进集</value>
+  </data>
   <data name="Kb_For_ContentReader" xml:space="preserve">
     <value>阅读器</value>
   </data>
@@ -142,13 +145,13 @@
     <value>（ 选择 ）将第二个结束移动到右侧</value>
   </data>
   <data name="Kb_NextChapter" xml:space="preserve">
-    <value>下一章</value>
+    <value>下一章（  步进集 ）</value>
   </data>
   <data name="Kb_NextPara" xml:space="preserve">
     <value>选择下一段</value>
   </data>
   <data name="Kb_PrevChapter" xml:space="preserve">
-    <value>上一章</value>
+    <value>上一章（  步进集 ）</value>
   </data>
   <data name="Kb_PrevPara" xml:space="preserve">
     <value>选择上一个段落</value>

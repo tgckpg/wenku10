@@ -120,6 +120,9 @@
   <data name="AppName" xml:space="preserve">
     <value>グリモアリーパー</value>
   </data>
+  <data name="Kb_EPStepper" xml:space="preserve">
+    <value>エピソードステッパー</value>
+  </data>
   <data name="Kb_For_ContentReader" xml:space="preserve">
     <value>リーダー</value>
   </data>
@@ -142,13 +145,13 @@
     <value>（ 選択 ）2 番目の端を右に移動</value>
   </data>
   <data name="Kb_NextChapter" xml:space="preserve">
-    <value>次の章</value>
+    <value>次の章（ エピソードステッパー ）</value>
   </data>
   <data name="Kb_NextPara" xml:space="preserve">
     <value>次の段落を選択</value>
   </data>
   <data name="Kb_PrevChapter" xml:space="preserve">
-    <value>前の章</value>
+    <value>前の章（ エピソードステッパー ）</value>
   </data>
   <data name="Kb_PrevPara" xml:space="preserve">
     <value>前の段落を選択</value>

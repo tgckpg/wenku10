@@ -120,6 +120,9 @@
   <data name="AppName" xml:space="preserve">
     <value>Grimoire Reaper</value>
   </data>
+  <data name="Kb_EPStepper" xml:space="preserve">
+    <value>Episode Stepper</value>
+  </data>
   <data name="Kb_For_ContentReader" xml:space="preserve">
     <value>Content Reader</value>
   </data>
@@ -142,13 +145,13 @@
     <value>( Selection ) Move 2nd End to Right</value>
   </data>
   <data name="Kb_NextChapter" xml:space="preserve">
-    <value>Next Chapter</value>
+    <value>Next Chapter ( Episode Stepper )</value>
   </data>
   <data name="Kb_NextPara" xml:space="preserve">
     <value>Select Next Paragraph</value>
   </data>
   <data name="Kb_PrevChapter" xml:space="preserve">
-    <value>Previous Chapter</value>
+    <value>Previous Chapter  ( Episode Stepper )</value>
   </data>
   <data name="Kb_PrevPara" xml:space="preserve">
     <value>Select Previous Paragraph</value>

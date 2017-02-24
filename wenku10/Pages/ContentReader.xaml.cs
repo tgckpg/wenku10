@@ -192,10 +192,12 @@ namespace wenku10.Pages
             KbControls.AddCombo( "ScrollBottom", ScrollBottom, VirtualKey.Shift, VirtualKey.G );
             KbControls.AddSeq( "ScrollTop", ScrollTop, VirtualKey.G, VirtualKey.G );
 
-            KbControls.AddCombo( "PrevChapter", PrevChapter, VirtualKey.Shift, VirtualKey.Left );
-            KbControls.AddCombo( "NextChapter", NextChapter, VirtualKey.Shift, VirtualKey.Right );
-            KbControls.AddCombo( "PrevChapter", PrevChapter, VirtualKey.H );
-            KbControls.AddCombo( "NextChapter", NextChapter, VirtualKey.L );
+            KbControls.AddCombo( "EPStepper", KeyboardSlideEp, VirtualKey.B );
+
+            KbControls.AddCombo( "PrevChapter", e => ChangeChapter( e, false ), VirtualKey.Left );
+            KbControls.AddCombo( "NextChapter", e => ChangeChapter( e, true ), VirtualKey.Right );
+            KbControls.AddCombo( "PrevChapter", e => ChangeChapter( e, false ), VirtualKey.H );
+            KbControls.AddCombo( "NextChapter", e => ChangeChapter( e, true ), VirtualKey.L );
             KbControls.AddCombo( "UndoJump", e => ContentView.UndoJump(), VirtualKey.U );
             KbControls.AddCombo( "UndoJump", e => ContentView.UndoJump(), VirtualKey.Control, VirtualKey.Z );
 
@@ -217,16 +219,29 @@ namespace wenku10.Pages
             MajorControls = new ICommandBarElement[ 0 ];
         }
 
-        private void NextChapter( KeyCombinationEventArgs e )
+        private void ChangeChapter( KeyCombinationEventArgs e, bool Next )
         {
-            ES.StepNext();
-            OpenBook( ES.Chapter );
+            if ( AnyStoryActive ) return;
+            if ( CurrManiState == ManiState.UP )
+            {
+                ContentBeginAway( Next );
+            }
+            else
+            {
+                KeyboardSlideEp( e );
+            }
         }
 
-        private void PrevChapter( KeyCombinationEventArgs e )
+        private void KeyboardSlideEp( KeyCombinationEventArgs e )
         {
-            ES.StepPrev();
-            OpenBook( ES.Chapter );
+            if ( CurrManiState == ManiState.NORMAL )
+            {
+                ReaderSlideUp();
+            }
+            else
+            {
+                ReaderSlideBack();
+            }
         }
 
         private void VC_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
@@ -262,6 +277,10 @@ namespace wenku10.Pages
         private ApplicationViewOrientation? LastAwareOri;
         private void TriggerHorzLayoutAware( Size Old, Size New )
         {
+            // if ContentView is not present
+            // then there is no need to redraw as ContentView is not drawn yet
+            if ( ContentView == null ) return;
+
             bool UpdatePane = false;
             bool LocalRedraw = false;
 
