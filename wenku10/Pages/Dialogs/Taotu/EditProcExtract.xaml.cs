@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -29,7 +30,6 @@ using libtaotu.Pages;
 using wenku8.Taotu;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
-using System.Threading.Tasks;
 
 namespace wenku10.Pages.Dialogs.Taotu
 {
@@ -59,7 +59,11 @@ namespace wenku10.Pages.Dialogs.Taotu
             MessageBus.OnDelivery -= MessageBus_OnDelivery;
             if ( PreviewFile != null )
             {
-                var j = PreviewFile.DeleteAsync();
+                try
+                {
+                    var j = PreviewFile.DeleteAsync();
+                }
+                catch( Exception ) { }
             }
         }
 
@@ -95,7 +99,6 @@ namespace wenku10.Pages.Dialogs.Taotu
 
             if ( string.IsNullOrEmpty( Url ) )
             {
-                PreviewFile = await AppStorage.MkTemp();
                 MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
                 return;
             }
@@ -204,6 +207,9 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private async Task ViewTestResult( BookInstruction Payload )
         {
+            if ( PreviewFile == null )
+                PreviewFile = await AppStorage.MkTemp();
+
             await PreviewFile.WriteString( Payload.PlainTextInfo );
 
             var j = Dispatcher.RunIdleAsync(

@@ -10,6 +10,7 @@ using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Input;
 using Windows.UI.ViewManagement;
@@ -48,7 +49,6 @@ using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
 namespace wenku10.Pages
 {
     using ContentReaderPane;
-    using Windows.System;
 
     sealed partial class ContentReader : Page, ICmdControls, IAnimaPage, INavPage
     {
@@ -647,7 +647,12 @@ namespace wenku10.Pages
 
             RGrid.Children.Add( OriIndicator );
 
-            FontIcon LockIcon = new FontIcon() { Glyph = SegoeMDL2.Unlock };
+            bool Locked = (
+                DisplayInformation.AutoRotationPreferences == ( DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped )
+                || DisplayInformation.AutoRotationPreferences == ( DisplayOrientations.PortraitFlipped | DisplayOrientations.Portrait )
+            );
+
+            FontIcon LockIcon = new FontIcon() { Glyph = Locked ? SegoeMDL2.Lock : SegoeMDL2.Unlock };
             LockIcon.Foreground = OriIndicator.Stroke;
 
             LockIcon.VerticalAlignment
@@ -659,8 +664,6 @@ namespace wenku10.Pages
                 = HorizontalAlignment.Center;
 
             RGrid.Children.Add( LockIcon );
-
-            bool Locked = false;
 
             Action ToggleFIcon = () =>
             {
