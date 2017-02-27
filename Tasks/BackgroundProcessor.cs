@@ -230,7 +230,10 @@ namespace Tasks
                 }
                 else
                 {
-                    Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x => x.GetSaveInt( AppKeys.BTASK_RETRY ) == 0 );
+                    Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x => {
+                        int r = x.GetSaveInt( AppKeys.BTASK_RETRY );
+                        return r == 0 || MaxRetry <= r;
+                    } );
                 }
 
                 foreach ( XParameter UpdateParam in Updates )
@@ -257,7 +260,6 @@ namespace Tasks
                     await ItemProcessor.ProcessLocal( SBook );
                     if ( SBook.ProcessSuccess )
                     {
-
                         BookInstruction Book = SBook.GetBook();
 
                         if ( Book.Packed == true )
