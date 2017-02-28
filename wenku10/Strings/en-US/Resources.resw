@@ -120,4 +120,64 @@
   <data name="AppName" xml:space="preserve">
     <value>Grimoire Reaper</value>
   </data>
+  <data name="Kb_EPStepper" xml:space="preserve">
+    <value>Episode Stepper</value>
+  </data>
+  <data name="Kb_For_ContentReader" xml:space="preserve">
+    <value>Content Reader</value>
+  </data>
+  <data name="Kb_For_SearchWords" xml:space="preserve">
+    <value>Soarch Words</value>
+  </data>
+  <data name="Kb_Help" xml:space="preserve">
+    <value>Show this help</value>
+  </data>
+  <data name="Kb_Move1stEndToLeft" xml:space="preserve">
+    <value>( Selection ) Move 1st End to Left</value>
+  </data>
+  <data name="Kb_Move1stEndToRight" xml:space="preserve">
+    <value>( Selection ) Move 1st End to Right</value>
+  </data>
+  <data name="Kb_Move2ndEndToLeft" xml:space="preserve">
+    <value>( Selection ) Move 2nd End to Left</value>
+  </data>
+  <data name="Kb_Move2ndEndToRight" xml:space="preserve">
+    <value>( Selection ) Move 2nd End to Right</value>
+  </data>
+  <data name="Kb_NextChapter" xml:space="preserve">
+    <value>Next Chapter ( Episode Stepper )</value>
+  </data>
+  <data name="Kb_NextPara" xml:space="preserve">
+    <value>Select Next Paragraph</value>
+  </data>
+  <data name="Kb_PrevChapter" xml:space="preserve">
+    <value>Previous Chapter  ( Episode Stepper )</value>
+  </data>
+  <data name="Kb_PrevPara" xml:space="preserve">
+    <value>Select Previous Paragraph</value>
+  </data>
+  <data name="Kb_ScrollBottom" xml:space="preserve">
+    <value>Scroll to Bottom</value>
+  </data>
+  <data name="Kb_ScrollLess" xml:space="preserve">
+    <value>Scroll Up</value>
+  </data>
+  <data name="Kb_ScrollMore" xml:space="preserve">
+    <value>Scroll Down</value>
+  </data>
+  <data name="Kb_ScrollTop" xml:space="preserve">
+    <value>Scroll to Top</value>
+  </data>
+  <data name="Kb_SearchWords" xml:space="preserve">
+    <value>Search Words</value>
+  </data>
+  <data name="Kb_ShowMenu" xml:space="preserve">
+    <value>Show Menu</value>
+  </data>
+  <data name="Kb_UndoJump" xml:space="preserve">
+    <value>Undo Select</value>
+  </data>
+  <data name="KeyboardControls" xml:space="preserve">
+    <value>Keyboard Controls</value>
+  </data>
 </root>

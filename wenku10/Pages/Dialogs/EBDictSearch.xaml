@@ -128,7 +128,7 @@
                           Margin="5"
                           Width="25" Height="25"/>
         </Grid>
-        <ListView Grid.Row="2" ItemsSource="{Binding SearchSet}">
+        <ListView x:Name="Results" Grid.Row="2" ItemsSource="{Binding SearchSet}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

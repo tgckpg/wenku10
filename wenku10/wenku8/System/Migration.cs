@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 
 namespace wenku8.System
@@ -31,25 +30,24 @@ namespace wenku8.System
             {
                 switch ( Properties.VERSION )
                 {
-                    // Keep up to 5 migration versions
-                    case "1.7.8t":
-                    case "1.7.9t":
-                    case "1.7.10t":
-                    case "1.7.11t":
-                    case "1.7.12t":
+                    case "2.0.10t":
+                    case "2.0.11t":
+                    case "2.0.12t":
+                    case "2.0.13t":
+                    case "2.0.14t":
                         break;
 
-                    case "1.2.8b":
-                    case "1.2.9b":
-                    case "1.2.10b":
-                    case "1.3.0b":
-                    case "1.3.1b":
-                        break;
-
-                    default:
-                        Logger.Log( ID, "Unknown Version: Will try to migrate", LogType.ERROR );
-                        // Just to ensure the migration should be run asynchronously
+                    case "1.4.1b":
+                    case "1.4.2b":
+                    case "1.0.0p":
+                    case "1.0.1p":
+                    case "1.0.2p":
+                    case "1.0.3p":
                         await Task.Delay( 1 );
+                        Migrate208t_104p();
+                        break;
+
+                    case "1.0.4p":
                         break;
                 }
             }
@@ -60,5 +58,12 @@ namespace wenku8.System
 
             Properties.VERSION = Bootstrap.Version;
         }
+
+        private void Migrate208t_104p()
+        {
+            // Fix task settings
+            new Tasks.BackgroundProcessor().UpdateTaskInterval( 420 );
+        }
+
     }
 }

@@ -56,7 +56,7 @@ namespace wenku8.System
             }
 
             // SHRequest Init
-            Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "1.8.6t", "1.3.4b", "1.0.0p" } );
+            Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.0.9t", "1.5.0b", "1.0.4p" } );
 
             // Connection Mode
             WHttpRequest.UA = string.Format( Settings.AppKeys.UA, Version );

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
@@ -26,6 +27,16 @@ namespace wenku10.Pages
 
         private Grid UpperBack { get { return IsHorz ? YUpperBack : XUpperBack; } }
         private Grid LowerBack { get { return IsHorz ? YLowerBack : XLowerBack; } }
+
+        private bool AnyStoryActive
+        {
+            get
+            {
+                return new Storyboard[] {
+                    ContentSlideBack, ContentSlideUp, ContentAway
+                }.Any( x => x?.GetCurrentState() == ClockState.Active );
+            }
+        }
 
         private void SetSlideGesture()
         {
@@ -65,22 +76,10 @@ namespace wenku10.Pages
             ContentAway?.Stop();
             if ( VT < dv )
             {
-                ContentAway = new Storyboard();
-                SimpleStory.DoubleAnimation(
-                    ContentAway, CGTransform, "TranslateX"
-                    , CGTransform.TranslateX
-                    , MainSplitView.ActualWidth );
-
                 ContentBeginAwayX( false );
             }
             else if ( dv < -VT )
             {
-                ContentAway = new Storyboard();
-                SimpleStory.DoubleAnimation(
-                    ContentAway, CGTransform, "TranslateX"
-                    , CGTransform.TranslateX
-                    , -MainSplitView.ActualWidth );
-
                 ContentBeginAwayX( true );
             }
             else
@@ -95,22 +94,10 @@ namespace wenku10.Pages
             ContentAway?.Stop();
             if ( VT < dv )
             {
-                ContentAway = new Storyboard();
-                SimpleStory.DoubleAnimation(
-                    ContentAway, CGTransform, "TranslateY"
-                    , CGTransform.TranslateY
-                    , MainSplitView.ActualHeight );
-
                 ContentBeginAwayY( false );
             }
             else if ( dv < -VT )
             {
-                ContentAway = new Storyboard();
-                SimpleStory.DoubleAnimation(
-                    ContentAway, CGTransform, "TranslateY"
-                    , CGTransform.TranslateY
-                    , -MainSplitView.ActualHeight );
-
                 ContentBeginAwayY( true );
             }
             else
@@ -121,7 +108,26 @@ namespace wenku10.Pages
 
         private void ContentBeginAwayX( bool Next )
         {
-            if ( Next ) StepNextTitle(); else StepPrevTitle();
+            ContentAway = new Storyboard();
+
+            if ( Next )
+            {
+                SimpleStory.DoubleAnimation(
+                    ContentAway, CGTransform, "TranslateX"
+                    , CGTransform.TranslateX
+                    , -MainSplitView.ActualWidth );
+
+                StepNextTitle();
+            }
+            else
+            {
+                SimpleStory.DoubleAnimation(
+                    ContentAway, CGTransform, "TranslateX"
+                    , CGTransform.TranslateX
+                    , MainSplitView.ActualWidth );
+
+                StepPrevTitle();
+            }
 
             ContentAway.Completed += ( s, e ) =>
             {
@@ -135,7 +141,26 @@ namespace wenku10.Pages
 
         private void ContentBeginAwayY( bool Next )
         {
-            if ( Next ) StepNextTitle(); else StepPrevTitle();
+            ContentAway = new Storyboard();
+
+            if ( Next )
+            {
+                SimpleStory.DoubleAnimation(
+                    ContentAway, CGTransform, "TranslateY"
+                    , CGTransform.TranslateY
+                    , -MainSplitView.ActualHeight );
+
+                StepNextTitle();
+            }
+            else
+            {
+                SimpleStory.DoubleAnimation(
+                    ContentAway, CGTransform, "TranslateY"
+                    , CGTransform.TranslateY
+                    , MainSplitView.ActualHeight );
+
+                StepPrevTitle();
+            }
 
             ContentAway.Completed += ( s, e ) =>
             {
@@ -147,28 +172,24 @@ namespace wenku10.Pages
             ContentAway.Begin();
         }
 
+        private void ContentBeginAway( bool Next )
+        {
+            if ( CurrManiState == ManiState.NORMAL ) return;
+
+            if ( IsHorz ) ContentBeginAwayX( Next );
+            else ContentBeginAwayY( Next );
+        }
+
         private void StepPrevTitle()
         {
-            if ( CurrManiState == ManiState.UP )
-            {
-                EpTitleStepper.Prev();
-            }
-            else
-            {
-                VolTitleStepper.Prev();
-            }
+            if ( CurrManiState == ManiState.UP ) EpTitleStepper.Prev();
+            else VolTitleStepper.Prev();
         }
 
         private void StepNextTitle()
         {
-            if ( CurrManiState == ManiState.UP )
-            {
-                EpTitleStepper.Next();
-            }
-            else
-            {
-                VolTitleStepper.Next();
-            }
+            if ( CurrManiState == ManiState.UP ) EpTitleStepper.Next();
+            else VolTitleStepper.Next();
         }
 
         private void VEManiStart( object sender, ManipulationStartedRoutedEventArgs e )
@@ -230,8 +251,6 @@ namespace wenku10.Pages
 
         private void StartZoom( bool Up )
         {
-            bool IsHorz = ContentView.Reader.Settings.IsHorizontal;
-
             ZoomTrigger = 0;
             VESwipe.IsHitTestVisible = true;
 

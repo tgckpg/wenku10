@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -29,7 +30,6 @@ using libtaotu.Pages;
 using wenku8.Taotu;
 using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
-using System.Threading.Tasks;
 
 namespace wenku10.Pages.Dialogs.Taotu
 {
@@ -59,7 +59,11 @@ namespace wenku10.Pages.Dialogs.Taotu
             MessageBus.OnDelivery -= MessageBus_OnDelivery;
             if ( PreviewFile != null )
             {
-                var j = PreviewFile.DeleteAsync();
+                try
+                {
+                    var j = PreviewFile.DeleteAsync();
+                }
+                catch( Exception ) { }
             }
         }
 
@@ -95,7 +99,6 @@ namespace wenku10.Pages.Dialogs.Taotu
 
             if ( string.IsNullOrEmpty( Url ) )
             {
-                PreviewFile = await AppStorage.MkTemp();
                 MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
                 return;
             }
@@ -134,8 +137,8 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void SetPattern( object sender, RoutedEventArgs e )
         {
-            TextBox Input = sender as TextBox;
-            ProcFind.RegItem Item = Input.DataContext as ProcFind.RegItem;
+            TextBox Input = ( TextBox ) sender;
+            ProcFind.RegItem Item = ( ProcFind.RegItem ) Input.DataContext;
             Item.Pattern = Input.Text;
 
             Item.Validate( FindMode.MATCH );
@@ -143,8 +146,8 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void SetFormat( object sender, RoutedEventArgs e )
         {
-            TextBox Input = sender as TextBox;
-            ProcFind.RegItem Item = Input.DataContext as ProcFind.RegItem;
+            TextBox Input = ( TextBox ) sender;
+            ProcFind.RegItem Item = ( ProcFind.RegItem ) Input.DataContext;
             Item.Format = Input.Text;
 
             Item.Validate( FindMode.MATCH );
@@ -152,14 +155,14 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void SetUrl( object sender, RoutedEventArgs e )
         {
-            TextBox Input = sender as TextBox;
+            TextBox Input = ( TextBox ) sender;
             EditTarget.TargetUrl = Input.Text;
         }
 
         private void RemovePropDef( object sender, RoutedEventArgs e )
         {
-            Button B = sender as Button;
-            EditTarget.PropDefs.Remove( B.DataContext as WenkuExtractor.PropExt );
+            Button B = ( Button ) sender;
+            EditTarget.PropDefs.Remove( ( GrimoireExtractor.PropExt ) B.DataContext );
         }
 
         private void SetIncoming( object sender, RoutedEventArgs e )
@@ -169,7 +172,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private void Subprocess( object sender, RoutedEventArgs e )
         {
-            WenkuExtractor.PropExt PropDef = ( sender as Button ).DataContext as WenkuExtractor.PropExt;
+            GrimoireExtractor.PropExt PropDef = ( GrimoireExtractor.PropExt ) ( ( Button ) sender ).DataContext;
             EditTarget.SubEdit = PropDef;
             Popups.CloseDialog();
         }
@@ -181,7 +184,7 @@ namespace wenku10.Pages.Dialogs.Taotu
             ComboBox Cb = sender as ComboBox;
             GenericData<BookInfo> NType = e.AddedItems[ 0 ] as GenericData<BookInfo>;
 
-            WenkuExtractor.PropExt Ext = Cb.DataContext as WenkuExtractor.PropExt;
+            GrimoireExtractor.PropExt Ext = ( GrimoireExtractor.PropExt ) Cb.DataContext;
             Ext.PType = NType.Data;
         }
 
@@ -204,6 +207,9 @@ namespace wenku10.Pages.Dialogs.Taotu
 
         private async Task ViewTestResult( BookInstruction Payload )
         {
+            if ( PreviewFile == null )
+                PreviewFile = await AppStorage.MkTemp();
+
             await PreviewFile.WriteString( Payload.PlainTextInfo );
 
             var j = Dispatcher.RunIdleAsync(

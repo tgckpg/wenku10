@@ -10,11 +10,11 @@ using Windows.UI.StartScreen;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Logging;
+using Net.Astropenguin.Logging.Handler;
 
 using wenku8.CompositeElement;
 using wenku8.Config;
-using wenku8.Model.Book;
 using wenku8.Model.Book.Spider;
 using wenku8.Model.ListItem;
 using wenku8.Model.Pages;
@@ -28,17 +28,23 @@ namespace Tasks
 
     public sealed class BackgroundProcessor : IBackgroundTask
     {
+        private static readonly string ID = typeof( BackgroundProcessor ).Name;
+
         public static BackgroundProcessor Instance { get; private set; }
 
         public int TaskInterval { get { return XReg.Parameter( "Interval" ).GetSaveInt( "val" ); } }
 
-        private const string TASK_NAME = "UpdateTaskTrigger";
+        private const string TASK_MAIN = "UpdateTaskTrigger";
+        private const string TASK_RETRY = "RetryTaskTrigger";
         private const string ENTRY_POINT = "Tasks.BackgroundProcessor";
 
         private bool CanBackground = false;
+        private bool Retrying = false;
+        private int MaxRetry = 3;
 
         private BackgroundTaskDeferral Deferral;
         private XRegistry XReg;
+        private IDisposable CanvasDevice;
 
         public BackgroundProcessor()
         {
@@ -53,22 +59,39 @@ namespace Tasks
 
         private void Init()
         {
+            Worker.BackgroundOnly = true;
+
             THttpRequest.UA = string.Format( AppKeys.UA, AppSettings.SimpVersion );
             ResTaotu.SetExtractor( typeof( TasksExtractor ) );
             ResTaotu.SetMarker( typeof( TasksMarker ) );
             ResTaotu.SetListLoader( typeof( TasksListLoader ) );
             ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
+
+            if ( Properties.ENABLE_SYSTEM_LOG )
+            {
+                new FileSystemLog( "debug.log" );
+                Logger.Log( ID, "BockgroundTask init", LogType.INFO );
+            }
         }
 
         public async void Run( IBackgroundTaskInstance taskInstance )
         {
             Deferral = taskInstance.GetDeferral();
 
+            if( taskInstance.Task.Name == TASK_RETRY )
+            {
+                Retrying = true;
+                taskInstance.Task.Unregister( false );
+            }
+
             // Associate a cancellation handler with the background task.
             taskInstance.Canceled += new BackgroundTaskCanceledEventHandler( OnCanceled );
 
             Init();
-            await UpdateSpiders();
+            using ( CanvasDevice = Image.CreateCanvasDevice() )
+            {
+                await UpdateSpiders();
+            }
 
             Deferral.Complete();
         }
@@ -117,10 +140,10 @@ namespace Tasks
                 case BackgroundAccessStatus.AlwaysAllowed:
                 case BackgroundAccessStatus.AllowedSubjectToSystemPolicy:
 
-                #pragma warning disable 0618
+#pragma warning disable 0618
                 case BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity:
                 case BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity:
-                #pragma warning restore 0618
+#pragma warning restore 0618
 
                     Instance.CanBackground = true;
                     Instance.CreateUpdateTaskTrigger();
@@ -133,7 +156,7 @@ namespace Tasks
         {
             foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
             {
-                if ( BTask.Value.Name == TASK_NAME )
+                if ( BTask.Value.Name == TASK_MAIN )
                 {
                     BTask.Value.Unregister( false );
                     break;
@@ -152,7 +175,7 @@ namespace Tasks
             TimeTrigger MinuteTrigger = new TimeTrigger( Minutes, false );
             BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
 
-            Builder.Name = TASK_NAME;
+            Builder.Name = TASK_MAIN;
             Builder.TaskEntryPoint = ENTRY_POINT;
             Builder.SetTrigger( MinuteTrigger );
 
@@ -163,10 +186,28 @@ namespace Tasks
         {
             foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
             {
-                if ( BTask.Value.Name == TASK_NAME ) return;
+                if ( BTask.Value.Name == TASK_MAIN ) return;
             }
 
             UpdateTaskInterval( 420 );
+        }
+
+        private void CreateRetryTimer()
+        {
+            foreach ( KeyValuePair<Guid, IBackgroundTaskRegistration> BTask in BackgroundTaskRegistration.AllTasks )
+            {
+                if ( BTask.Value.Name == TASK_RETRY ) return;
+            }
+
+            // Use the shortest interval as this is a retry, one shot
+            TimeTrigger MinuteTrigger = new TimeTrigger( 15, true );
+            BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
+
+            Builder.Name = TASK_RETRY;
+            Builder.TaskEntryPoint = ENTRY_POINT;
+            Builder.SetTrigger( MinuteTrigger );
+
+            BackgroundTaskRegistration task = Builder.Register();
         }
 
         private async Task UpdateSpiders()
@@ -176,8 +217,33 @@ namespace Tasks
                 XReg.SetParameter( "task-start", BookStorage.TimeKey );
                 XReg.Save();
 
-                XParameter[] Updates = XReg.Parameters( "spider" );
+                IEnumerable<XParameter> Updates;
                 List<string> Exists = new List<string>();
+
+                if ( Retrying )
+                {
+                    Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x =>
+                    {
+                        int r = x.GetSaveInt( AppKeys.BTASK_RETRY );
+                        return 0 < r && r < MaxRetry;
+                    });
+                }
+                else
+                {
+                    Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x => {
+                        int r = x.GetSaveInt( AppKeys.BTASK_RETRY );
+                        if ( r == 0 || MaxRetry <= r )
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            // Consider Retry Timer dead if LastUpdate is 20 < minutes
+                            DateTime LastRun = DateTime.FromFileTimeUtc( x.GetSaveLong( AppKeys.LBS_TIME ) );
+                            return 30 < DateTime.Now.Subtract( LastRun ).TotalMinutes;
+                        }
+                    } );
+                }
 
                 foreach ( XParameter UpdateParam in Updates )
                 {
@@ -201,25 +267,41 @@ namespace Tasks
                     }
 
                     await ItemProcessor.ProcessLocal( SBook );
-                    BookInstruction Book = SBook.GetBook();
-
-                    if ( Book.Packed == true )
+                    if ( SBook.ProcessSuccess )
                     {
-                        string OHash = Shared.Storage.GetString( Book.TOCDatePath );
-                        await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
-                        string NHash = wenku8.System.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
+                        BookInstruction Book = SBook.GetBook();
 
-                        if ( OHash != NHash )
+                        if ( Book.Packed == true )
                         {
-                            Shared.Storage.WriteString( Book.TOCDatePath, NHash );
-                            UpdateTile( Book, TileId );
-                        }
-                    }
+                            string OHash = Shared.Storage.GetString( Book.TOCDatePath );
+                            await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
+                            string NHash = wenku8.System.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
 
-                    UpdateParam.SetValue( new XKey[] {
-                        new XKey( AppKeys.SYS_EXCEPTION, false )
-                        , BookStorage.TimeKey
-                    } );
+                            if ( OHash != NHash )
+                            {
+                                Shared.Storage.WriteString( Book.TOCDatePath, NHash );
+                                await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
+                            }
+                        }
+
+                        UpdateParam.SetValue( new XKey[] {
+                            new XKey( AppKeys.SYS_EXCEPTION, false )
+                            , new XKey( AppKeys.BTASK_RETRY, 0 )
+                            , BookStorage.TimeKey
+                        } );
+                    }
+                    else
+                    {
+                        CreateRetryTimer();
+
+                        int NRetries = UpdateParam.GetSaveInt( AppKeys.BTASK_RETRY );
+                        UpdateParam.SetValue( new XKey[]
+                        {
+                            new XKey( AppKeys.SYS_EXCEPTION, true )
+                            , new XKey( AppKeys.BTASK_RETRY, NRetries + 1 )
+                            , BookStorage.TimeKey
+                        } );
+                    }
 
                     XReg.SetParameter( UpdateParam );
                     XReg.Save();
@@ -237,19 +319,6 @@ namespace Tasks
                 }
                 catch ( Exception ) { }
             }
-        }
-
-        private void UpdateTile( BookItem Book, string TileId )
-        {
-            TileUpdater Updater = TileUpdateManager.CreateTileUpdaterForSecondaryTile( TileId );
-            Updater.EnableNotificationQueue( true );
-            Updater.Clear();
-
-            StringResBg stx = new StringResBg( "Message" );
-
-            var TemplateXml = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare150x150Text01 );
-            TemplateXml.GetElementsByTagName( "text" ).First().AppendChild( TemplateXml.CreateTextNode( stx.Str( "NewContent" ) ) );
-            Updater.Update( new TileNotification( TemplateXml ) );
         }
 
         private void OnCanceled( IBackgroundTaskInstance sender, BackgroundTaskCancellationReason reason )

@@ -116,7 +116,7 @@ namespace wenku10.ShHub
                     if( UseDeathblow )
                     {
                         IDeathblow Deathblow = ( IDeathblow ) Mesg.Payload;
-                        ControlFrame.Instance.NavigateTo( PageId.W_DEATHBLOW, () => new WDeathblow( Deathblow ) );
+                        ControlFrame.Instance.NavigateTo( PageId.W_DEATHBLOW, () => new WDeathblow( Deathblow ), P => ( ( WDeathblow ) P ).Blow() );
                     }
 
                     break;

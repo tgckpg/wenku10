@@ -41,7 +41,6 @@ namespace wenku10.Pages
 
             LB = Deathblow.GetParser();
             LayoutRoot.DataContext = LB;
-            StartProcessing();
         }
 
         #region Anima
@@ -77,7 +76,7 @@ namespace wenku10.Pages
             LayoutRoot.RenderTransform = new TranslateTransform();
         }
 
-        private async void StartProcessing()
+        public async void Blow()
         {
             if ( LB.CanProcess )
             {
@@ -93,7 +92,6 @@ namespace wenku10.Pages
                     , () => new BookInfoView( Deathblow.GetBook() )
                 );
             }
-
         }
     }
 }

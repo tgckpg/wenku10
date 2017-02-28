@@ -10,6 +10,7 @@ using Windows.Devices.Power;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Input;
 using Windows.UI.ViewManagement;
@@ -86,7 +87,7 @@ namespace wenku10.Pages
         private EpisodeStepper ES;
 
         private NavPaneSection ContentPane;
-        private List<Action> RegKey;
+        private wenku8.System.KeyboardController KbControls;
 
         private TextBlock BookTitle { get { return IsHorz ? YBookTitle : XBookTitle; } }
         private TextBlock VolTitle { get { return IsHorz ? YVolTitle : XVolTitle; } }
@@ -112,7 +113,7 @@ namespace wenku10.Pages
             if ( Disposed ) return;
             Disposed = true;
 
-            foreach ( Action p in RegKey ) p();
+            KbControls.Dispose();
 
             ClockStop();
 
@@ -130,7 +131,7 @@ namespace wenku10.Pages
             ContentPane = null;
         }
 
-        public void SoftOpen() { }
+        public void SoftOpen() { KbControls.ShowHelp(); }
         public void SoftClose() { Dispose(); }
 
         #region Anima
@@ -179,34 +180,38 @@ namespace wenku10.Pages
 
             InitAppBar();
 
-            RegKey = new List<Action>();
+            KbControls = new wenku8.System.KeyboardController( "ContentReader" );
             // KeyBoard Navigations
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.NextPara(), Windows.System.VirtualKey.J ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.PrevPara(), Windows.System.VirtualKey.K ) );
+            KbControls.AddCombo( "NextPara", e => ContentView.NextPara(), VirtualKey.J );
+            KbControls.AddCombo( "PrevPara", e => ContentView.PrevPara(), VirtualKey.K );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Up ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Down ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollMore(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.J ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.ScrollLess(), Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.K ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( ScrollBottom, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.G ) );
-            RegKey.Add( App.KeyboardControl.RegisterSequence( ScrollTop, Windows.System.VirtualKey.G, Windows.System.VirtualKey.G ) );
+            KbControls.AddCombo( "ScrollLess", e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.Up );
+            KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.Down );
+            KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.J );
+            KbControls.AddCombo( "ScrollLess", e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.K );
+            KbControls.AddCombo( "ScrollBottom", ScrollBottom, VirtualKey.Shift, VirtualKey.G );
+            KbControls.AddSeq( "ScrollTop", ScrollTop, VirtualKey.G, VirtualKey.G );
 
-            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Left ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.Shift, Windows.System.VirtualKey.Right ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( PrevChapter, Windows.System.VirtualKey.H ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( NextChapter, Windows.System.VirtualKey.L ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.U ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => ContentView.UndoJump(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Z ) );
+            KbControls.AddCombo( "EPStepper", KeyboardSlideEp, VirtualKey.B );
+
+            KbControls.AddCombo( "PrevChapter", e => ChangeChapter( e, false ), VirtualKey.Left );
+            KbControls.AddCombo( "NextChapter", e => ChangeChapter( e, true ), VirtualKey.Right );
+            KbControls.AddCombo( "PrevChapter", e => ChangeChapter( e, false ), VirtualKey.H );
+            KbControls.AddCombo( "NextChapter", e => ChangeChapter( e, true ), VirtualKey.L );
+            KbControls.AddCombo( "UndoJump", e => ContentView.UndoJump(), VirtualKey.U );
+            KbControls.AddCombo( "UndoJump", e => ContentView.UndoJump(), VirtualKey.Control, VirtualKey.Z );
 
             // `:
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), ( Windows.System.VirtualKey ) 192 ) );
-            RegKey.Add( App.KeyboardControl.RegisterCombination( e => RollOutLeftPane(), Windows.System.VirtualKey.Shift, ( Windows.System.VirtualKey ) 186 ) );
+            KbControls.AddCombo( "ShowMenu", e => RollOutLeftPane(), ( VirtualKey ) 192 );
+            KbControls.AddCombo( "ShowMenu", e => RollOutLeftPane(), VirtualKey.Shift, ( VirtualKey ) 186 );
+
+            KbControls.AddCombo( "SearchWords", e => ContentView.SearchWords( ContentView.Reader.SelectedData ), VirtualKey.Shift, VirtualKey.S );
 
             SetSlideGesture();
 
             Window.Current.SizeChanged += Current_SizeChanged;
 
-            if( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
+            if ( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
         }
 
         private void InitAppBar()
@@ -214,16 +219,29 @@ namespace wenku10.Pages
             MajorControls = new ICommandBarElement[ 0 ];
         }
 
-        private void NextChapter( KeyCombinationEventArgs e )
+        private void ChangeChapter( KeyCombinationEventArgs e, bool Next )
         {
-            ES.StepNext();
-            OpenBook( ES.Chapter );
+            if ( AnyStoryActive ) return;
+            if ( CurrManiState == ManiState.UP )
+            {
+                ContentBeginAway( Next );
+            }
+            else
+            {
+                KeyboardSlideEp( e );
+            }
         }
 
-        private void PrevChapter( KeyCombinationEventArgs e )
+        private void KeyboardSlideEp( KeyCombinationEventArgs e )
         {
-            ES.StepPrev();
-            OpenBook( ES.Chapter );
+            if ( CurrManiState == ManiState.NORMAL )
+            {
+                ReaderSlideUp();
+            }
+            else
+            {
+                ReaderSlideBack();
+            }
         }
 
         private void VC_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
@@ -259,6 +277,10 @@ namespace wenku10.Pages
         private ApplicationViewOrientation? LastAwareOri;
         private void TriggerHorzLayoutAware( Size Old, Size New )
         {
+            // if ContentView is not present
+            // then there is no need to redraw as ContentView is not drawn yet
+            if ( ContentView == null ) return;
+
             bool UpdatePane = false;
             bool LocalRedraw = false;
 
@@ -625,7 +647,12 @@ namespace wenku10.Pages
 
             RGrid.Children.Add( OriIndicator );
 
-            FontIcon LockIcon = new FontIcon() { Glyph = SegoeMDL2.Unlock };
+            bool Locked = (
+                DisplayInformation.AutoRotationPreferences == ( DisplayOrientations.Landscape | DisplayOrientations.LandscapeFlipped )
+                || DisplayInformation.AutoRotationPreferences == ( DisplayOrientations.PortraitFlipped | DisplayOrientations.Portrait )
+            );
+
+            FontIcon LockIcon = new FontIcon() { Glyph = Locked ? SegoeMDL2.Lock : SegoeMDL2.Unlock };
             LockIcon.Foreground = OriIndicator.Stroke;
 
             LockIcon.VerticalAlignment
@@ -637,8 +664,6 @@ namespace wenku10.Pages
                 = HorizontalAlignment.Center;
 
             RGrid.Children.Add( LockIcon );
-
-            bool Locked = false;
 
             Action ToggleFIcon = () =>
             {

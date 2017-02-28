@@ -120,4 +120,64 @@
   <data name="AppName" xml:space="preserve">
     <value>輕小説文庫</value>
   </data>
+  <data name="Kb_EPStepper" xml:space="preserve">
+    <value>步进集</value>
+  </data>
+  <data name="Kb_For_ContentReader" xml:space="preserve">
+    <value>阅读器</value>
+  </data>
+  <data name="Kb_For_SearchWords" xml:space="preserve">
+    <value>查字</value>
+  </data>
+  <data name="Kb_Help" xml:space="preserve">
+    <value>显示此帮助</value>
+  </data>
+  <data name="Kb_Move1stEndToLeft" xml:space="preserve">
+    <value>（ 选择 ）将第一个结束移动到右侧</value>
+  </data>
+  <data name="Kb_Move1stEndToRight" xml:space="preserve">
+    <value>（ 选择 ）将第一个结束移动到左边</value>
+  </data>
+  <data name="Kb_Move2ndEndToLeft" xml:space="preserve">
+    <value>（ 选择 ）将第二个结束移动到左边</value>
+  </data>
+  <data name="Kb_Move2ndEndToRight" xml:space="preserve">
+    <value>（ 选择 ）将第二个结束移动到右侧</value>
+  </data>
+  <data name="Kb_NextChapter" xml:space="preserve">
+    <value>下一章（  步进集 ）</value>
+  </data>
+  <data name="Kb_NextPara" xml:space="preserve">
+    <value>选择下一段</value>
+  </data>
+  <data name="Kb_PrevChapter" xml:space="preserve">
+    <value>上一章（  步进集 ）</value>
+  </data>
+  <data name="Kb_PrevPara" xml:space="preserve">
+    <value>选择上一个段落</value>
+  </data>
+  <data name="Kb_ScrollBottom" xml:space="preserve">
+    <value>滚动到底部</value>
+  </data>
+  <data name="Kb_ScrollLess" xml:space="preserve">
+    <value>向上滚动</value>
+  </data>
+  <data name="Kb_ScrollMore" xml:space="preserve">
+    <value>向下滚动</value>
+  </data>
+  <data name="Kb_ScrollTop" xml:space="preserve">
+    <value>滚动到顶部</value>
+  </data>
+  <data name="Kb_SearchWords" xml:space="preserve">
+    <value>搜索词</value>
+  </data>
+  <data name="Kb_ShowMenu" xml:space="preserve">
+    <value>显示菜单</value>
+  </data>
+  <data name="Kb_UndoJump" xml:space="preserve">
+    <value>撤消选择</value>
+  </data>
+  <data name="KeyboardControls" xml:space="preserve">
+    <value>键盘控制</value>
+  </data>
 </root>

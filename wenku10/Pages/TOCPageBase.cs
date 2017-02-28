@@ -80,8 +80,21 @@ namespace wenku10.Pages
             ReaderDirBtn.Label = stx.Str( "ContentDirection" );
             ReaderDirBtn.Foreground = UIAliases.ContextColor;
 
+            AppBarButtonEx ReloadBtn = UIAliases.CreateAppBarBtnEx( Symbol.Refresh, stx.Text( "Reload" ) );
+
+            ReloadBtn.Click += ( sender, e ) =>
+            {
+                ReloadBtn.IsLoading = true;
+                new VolumeLoader( b =>
+                {
+                    SetTOC( b );
+                    ReloadBtn.IsLoading = false;
+                } ).Load( ThisBook, false );
+            };
+
             Btns.Add( ReaderDirBtn );
             Btns.Add( JumpMarkBtn );
+            Btns.Add( ReloadBtn );
 
             MajorControls = Btns.ToArray();
         }

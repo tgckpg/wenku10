@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -14,6 +15,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using wenku8.Effects;
@@ -26,8 +29,13 @@ namespace wenku10.Pages.Dialogs
 {
     sealed partial class EBDictSearch : ContentDialog
     {
-        EBDictionary Dict;
-        DispatcherTimer Longed;
+        private EBDictionary Dict;
+        private DispatcherTimer Longed;
+
+        private wenku8.System.KeyboardController RegKey;
+
+        private int VI = 0;
+        private int VJ = 0;
 
         private EBDictSearch()
         {
@@ -47,6 +55,22 @@ namespace wenku10.Pages.Dialogs
 
         private async void SetTemplate()
         {
+            Closed += EBDictSearch_Closed;
+
+            RegKey = new wenku8.System.KeyboardController( "SearchWords" );
+            RegKey.AddCombo( "Move1stEndToRight", Right1, VirtualKey.L );
+            RegKey.AddCombo( "Move1stEndToLeft", Left1, VirtualKey.H );
+            RegKey.AddCombo( "Move2ndEndToRight", Right2, VirtualKey.Shift, VirtualKey.L );
+            RegKey.AddCombo( "Move2ndEndToLeft", Left1, VirtualKey.Shift, VirtualKey.H );
+            RegKey.AddCombo( "Move1stEndToRight", Right1, VirtualKey.Right );
+            RegKey.AddCombo( "Move1stEndToLeft", Left1, VirtualKey.Left );
+            RegKey.AddCombo( "Move2ndEndToRight", Right2, VirtualKey.Shift, VirtualKey.Right );
+            RegKey.AddCombo( "Move2ndEndToLeft", Left2, VirtualKey.Shift, VirtualKey.Left );
+            RegKey.AddCombo( "ScrollMore", ScrollMore, VirtualKey.J );
+            RegKey.AddCombo( "ScrollMore", ScrollMore, VirtualKey.Down );
+            RegKey.AddCombo( "ScrollLess", ScrollLess, VirtualKey.K );
+            RegKey.AddCombo( "ScrollLess", ScrollLess, VirtualKey.Up );
+
             EBDictManager Manager = new EBDictManager();
 
             Dict = await Manager.GetDictionary();
@@ -62,6 +86,50 @@ namespace wenku10.Pages.Dialogs
             }
         }
 
+        private void Right1( KeyCombinationEventArgs e ) { e.Handled = true; VJ++; UpdateVisual(); }
+        private void Left1( KeyCombinationEventArgs e ) { e.Handled = true; VJ--; UpdateVisual(); }
+        private void Right2( KeyCombinationEventArgs e ) { e.Handled = true; VI++; UpdateVisual(); }
+        private void Left2( KeyCombinationEventArgs e ) { e.Handled = true; VI--; UpdateVisual(); }
+
+        private void ScrollMore( KeyCombinationEventArgs e )
+        {
+            e.Handled = true;
+            ScrollViewer SV = Results.ChildAt<ScrollViewer>( 1 );
+            SV.ChangeView( null, SV.VerticalOffset + 50, null );
+        }
+
+        private void ScrollLess( KeyCombinationEventArgs e )
+        {
+            e.Handled = true;
+            ScrollViewer SV = Results.ChildAt<ScrollViewer>( 1 );
+            SV.ChangeView( null, SV.VerticalOffset - 50, null );
+        }
+
+        private void EBDictSearch_Closed( ContentDialog sender, ContentDialogClosedEventArgs args )
+        {
+            RegKey.Dispose();
+        }
+
+        private void UpdateVisual()
+        {
+            int l = ParaText.Text.Length;
+            if ( VI < 0 ) VI = 0;
+            if ( VJ < 0 ) VJ = 0;
+            if ( l < VI ) VI = l;
+            if ( l < VJ ) VJ = l;
+
+            if ( VI < VJ )
+            {
+                ParaText.SelectionStart = VI;
+                ParaText.SelectionLength = VJ - VI;
+            }
+            else
+            {
+                ParaText.SelectionStart = VJ;
+                ParaText.SelectionLength = VI - VJ;
+            }
+        }
+
         private void TextSelected( object sender, RoutedEventArgs e )
         {
             CurrentWord.Text = ParaText.SelectedText;
@@ -72,7 +140,7 @@ namespace wenku10.Pages.Dialogs
 
         private void SearchTermUpdate()
         {
-            if( Longed == null )
+            if ( Longed == null )
             {
                 Longed = new DispatcherTimer();
                 Longed.Interval = TimeSpan.FromMilliseconds( 800 );
@@ -99,7 +167,8 @@ namespace wenku10.Pages.Dialogs
             ControlFrame.Instance.NavigateTo(
                 PageId.MAIN_SETTINGS
                 , () => new Settings.MainSettings()
-                , P => {
+                , P =>
+                {
                     ( ( Settings.MainSettings ) P ).PopupSettings( typeof( Settings.Data.EBWin ) );
                 }
             );

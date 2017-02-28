@@ -71,6 +71,12 @@
             <Button Margin="0,10" Click="ViewBgTaskConf">
                 <TextBlock Text="View Background Task Config" />
             </Button>
+            <Button Margin="0,10" Click="ViewDebugLog">
+                <TextBlock Text="View Debug Log" />
+            </Button>
+            <Button Margin="0,10" Click="ClearDebugLog">
+                <TextBlock Text="Clear Debug Log" />
+            </Button>
         </StackPanel>
     </ScrollViewer>
 </Page>

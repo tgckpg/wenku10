@@ -20,7 +20,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
-using Net.Astropenguin.Logging;
 
 using wenku8.Config;
 using wenku8.Effects;
@@ -35,7 +34,7 @@ namespace wenku10.Pages.ContentReaderPane
     {
         public static readonly string ID = typeof( ReaderContent ).Name;
 
-        public ReaderView Reader { get; internal set; }
+        public ReaderView Reader { get; private set; }
         public bool UserStartReading = false;
 
         private ContentReader Container;
@@ -169,7 +168,6 @@ namespace wenku10.Pages.ContentReaderPane
             Reader.SelectIndex( Reader.SelectedIndex + 1 );
         }
 
-
         private void GoTop( object sender, RoutedEventArgs e ) { GoTop(); }
         private void GoBottom( object sender, RoutedEventArgs e ) { GoBottom(); }
 
@@ -274,10 +272,12 @@ namespace wenku10.Pages.ContentReaderPane
             SetCustomAnchor( SelectedParagraph );
         }
 
-        internal async void SearchWords( object sender, RoutedEventArgs e )
+        private void SearchWords( object sender, RoutedEventArgs e ) { SearchWords( SelectedParagraph ); }
+
+        internal async void SearchWords( Paragraph P )
         {
-            if ( SelectedParagraph == null ) return;
-            Dialogs.EBDictSearch DictDialog = new Dialogs.EBDictSearch( SelectedParagraph );
+            if ( P == null ) return;
+            Dialogs.EBDictSearch DictDialog = new Dialogs.EBDictSearch( P );
             await Popups.ShowDialog( DictDialog );
         }
 

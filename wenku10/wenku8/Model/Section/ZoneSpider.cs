@@ -145,7 +145,7 @@ namespace wenku8.Model.Section
             }
             catch( InvalidFIleException )
             {
-                ProcManager.PanelMessage( ID, () => Res.RSTR( "InvalidXML" ), LogType.ERROR );
+                ProcManager.PanelMessage( ID, Res.RSTR( "InvalidXML" ), LogType.ERROR );
             }
             catch( Exception ex )
             {
