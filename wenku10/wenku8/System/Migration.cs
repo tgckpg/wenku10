@@ -30,12 +30,11 @@ namespace wenku8.System
             {
                 switch ( Properties.VERSION )
                 {
-                    // Keep up to 5 migration versions
-                    case "2.0.8t":
-                    case "2.0.9t":
                     case "2.0.10t":
                     case "2.0.11t":
                     case "2.0.12t":
+                    case "2.0.13t":
+                    case "2.0.14t":
                         break;
 
                     case "1.4.1b":
@@ -48,9 +47,8 @@ namespace wenku8.System
                         Migrate208t_104p();
                         break;
 
-                    default:
-                        Logger.Log( ID, "Unknown Version: Will try to migrate", LogType.ERROR );
-                        goto case "1.0.3p";
+                    case "1.0.4p":
+                        break;
                 }
             }
             catch ( Exception ex )

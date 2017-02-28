@@ -232,7 +232,16 @@ namespace Tasks
                 {
                     Updates = XReg.Parameters( AppKeys.BTASK_SPIDER ).Where( x => {
                         int r = x.GetSaveInt( AppKeys.BTASK_RETRY );
-                        return r == 0 || MaxRetry <= r;
+                        if ( r == 0 || MaxRetry <= r )
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            // Consider Retry Timer dead if LastUpdate is 20 < minutes
+                            DateTime LastRun = DateTime.FromFileTimeUtc( x.GetSaveLong( AppKeys.LBS_TIME ) );
+                            return 30 < DateTime.Now.Subtract( LastRun ).TotalMinutes;
+                        }
                     } );
                 }
 
