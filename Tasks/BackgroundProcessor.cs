@@ -42,6 +42,9 @@ namespace Tasks
         private bool Retrying = false;
         private int MaxRetry = 3;
 
+        private string TASK_START { get { return Retrying ? "retry-start" : "task-start"; } }
+        private string TASK_END { get { return Retrying ? "retry-end" : "task-end"; } }
+
         private BackgroundTaskDeferral Deferral;
         private XRegistry XReg;
         private IDisposable CanvasDevice;
@@ -80,8 +83,8 @@ namespace Tasks
 
             if( taskInstance.Task.Name == TASK_RETRY )
             {
+                Logger.Log( ID, "Entering Retry Mode", LogType.INFO );
                 Retrying = true;
-                taskInstance.Task.Unregister( false );
             }
 
             // Associate a cancellation handler with the background task.
@@ -200,7 +203,7 @@ namespace Tasks
             }
 
             // Use the shortest interval as this is a retry, one shot
-            TimeTrigger MinuteTrigger = new TimeTrigger( 15, true );
+            TimeTrigger MinuteTrigger = new TimeTrigger( 15, false );
             BackgroundTaskBuilder Builder = new BackgroundTaskBuilder();
 
             Builder.Name = TASK_RETRY;
@@ -214,7 +217,7 @@ namespace Tasks
         {
             try
             {
-                XReg.SetParameter( "task-start", BookStorage.TimeKey );
+                XReg.SetParameter( TASK_START, BookStorage.TimeKey );
                 XReg.Save();
 
                 IEnumerable<XParameter> Updates;
@@ -307,7 +310,7 @@ namespace Tasks
                     XReg.Save();
                 }
 
-                XReg.SetParameter( "task-end", BookStorage.TimeKey );
+                XReg.SetParameter( TASK_END, BookStorage.TimeKey );
                 XReg.Save();
             }
             catch ( Exception ex )
