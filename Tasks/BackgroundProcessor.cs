@@ -64,40 +64,41 @@ namespace Tasks
         {
             Worker.BackgroundOnly = true;
 
+            if ( Properties.ENABLE_SYSTEM_LOG )
+            {
+                new FileSystemLog( FileLinks.ROOT_LOG + ( Retrying ? FileLinks.LOG_BGTASK_RETRY : FileLinks.LOG_BGTASK_UPDATE ) );
+				Logger.Log( ID, "BockgroundTask init, mode: " + ( Retrying ? "Retry" : "Update" ), LogType.INFO );
+            }
+
             THttpRequest.UA = string.Format( AppKeys.UA, AppSettings.SimpVersion );
             ResTaotu.SetExtractor( typeof( TasksExtractor ) );
             ResTaotu.SetMarker( typeof( TasksMarker ) );
             ResTaotu.SetListLoader( typeof( TasksListLoader ) );
             ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
-
-            if ( Properties.ENABLE_SYSTEM_LOG )
-            {
-                new FileSystemLog( "debug.log" );
-                Logger.Log( ID, "BockgroundTask init", LogType.INFO );
-            }
         }
 
-        public async void Run( IBackgroundTaskInstance taskInstance )
-        {
-            Deferral = taskInstance.GetDeferral();
+		public async void Run( IBackgroundTaskInstance taskInstance )
+		{
+			Deferral = taskInstance.GetDeferral();
 
-            if( taskInstance.Task.Name == TASK_RETRY )
-            {
-                Logger.Log( ID, "Entering Retry Mode", LogType.INFO );
-                Retrying = true;
-            }
+			// Associate a cancellation handler with the background task.
+			taskInstance.Canceled += new BackgroundTaskCanceledEventHandler( OnCanceled );
 
-            // Associate a cancellation handler with the background task.
-            taskInstance.Canceled += new BackgroundTaskCanceledEventHandler( OnCanceled );
+			try
+			{
+				Retrying = ( taskInstance.Task.Name == TASK_RETRY );
 
-            Init();
-            using ( CanvasDevice = Image.CreateCanvasDevice() )
-            {
-                await UpdateSpiders();
-            }
-
-            Deferral.Complete();
-        }
+				Init();
+				using ( CanvasDevice = Image.CreateCanvasDevice() )
+				{
+					await UpdateSpiders();
+				}
+			}
+			finally
+			{
+				Deferral.Complete();
+			}
+		}
 
         public async void CreateTileUpdateForBookSpider( string BookId, string TileId )
         {

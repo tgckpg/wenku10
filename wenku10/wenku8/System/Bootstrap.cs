@@ -10,6 +10,7 @@ namespace wenku8.System
     using Config;
     using Ext;
     using Model.REST;
+    using Settings;
     using Storage;
 
     using ResTaotu = libtaotu.Resources.Shared;
@@ -98,7 +99,7 @@ namespace wenku8.System
 			AppSettings.Initialize();
 			if( Properties.ENABLE_SYSTEM_LOG )
 			{
-				LogInstance = new FileSystemLog( "debug.log" );
+                LogInstance = new FileSystemLog( FileLinks.ROOT_LOG + FileLinks.LOG_GENERAL );
 			}
 
             // NetLog Re-initialize
