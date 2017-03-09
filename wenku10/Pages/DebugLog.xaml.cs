@@ -25,48 +25,48 @@ using wenku8.Model.Text;
 
 namespace wenku10.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class DebugLog : Page
-    {
-        public DebugLog()
-        {
-            this.InitializeComponent();
-            if( Properties.ENABLE_SYSTEM_LOG )
-            {
-                SetTemplate();
-            }
-        }
+	/// <summary>
+	/// An empty page that can be used on its own or navigated to within a Frame.
+	/// </summary>
+	public sealed partial class DebugLog : Page
+	{
+		public DebugLog()
+		{
+			this.InitializeComponent();
+			if( Properties.ENABLE_SYSTEM_LOG )
+			{
+				SetTemplate();
+			}
+		}
 
-        private void SetTemplate()
-        {
+		private void SetTemplate()
+		{
 			IsolatedStorageFile isf = new AppStorage().GetISOStorage();
-            if ( !isf.FileExists( "debug.log" ) ) return;
+			if ( !isf.FileExists( "debug.log" ) ) return;
 
-            FileSystemLog FSL = global::wenku8.System.Bootstrap.LogInstance;
-            FSL.Stop();
+			FileSystemLog FSL = global::wenku8.System.Bootstrap.LogInstance;
+			FSL.Stop();
 
-            StreamReader Reader = new StreamReader( FSL.GetStream() );
+			StreamReader Reader = new StreamReader( FSL.GetStream() );
 
-            List<LogLine> Logs = new List<LogLine>();
-            while( !Reader.EndOfStream )
-            {
-                Logs.Add( new LogLine( Reader.ReadLine() ) );
-            }
+			List<LogLine> Logs = new List<LogLine>();
+			while( !Reader.EndOfStream )
+			{
+				Logs.Add( new LogLine( Reader.ReadLine() ) );
+			}
 
-            LogList.ItemsSource = Logs;
+			LogList.ItemsSource = Logs;
 
-            Reader.Dispose();
-            FSL.Start();
-        }
+			Reader.Dispose();
+			FSL.Start();
+		}
 
-        private async void LogList_ItemClick( object sender, ItemClickEventArgs e )
-        {
-            LogLine L = e.ClickedItem as LogLine;
-            MessageDialog Mesg = new MessageDialog( L.Message, L.Tag );
-            await Popups.ShowDialog( Mesg );
-        }
+		private async void LogList_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			LogLine L = e.ClickedItem as LogLine;
+			MessageDialog Mesg = new MessageDialog( L.Message, L.Tag );
+			await Popups.ShowDialog( Mesg );
+		}
 
-    }
+	}
 }

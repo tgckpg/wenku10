@@ -18,35 +18,35 @@ using wenku8.Model.Book;
 
 namespace wenku10.Pages
 {
-    sealed partial class TOCViewHorz : TOCPageBase
-    {
-        private TOCViewHorz()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+	sealed partial class TOCViewHorz : TOCPageBase
+	{
+		private TOCViewHorz()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        public TOCViewHorz( BookItem Book ) : this() { Init( Book ); }
+		public TOCViewHorz( BookItem Book ) : this() { Init( Book ); }
 
-        protected override void SetTemplate()
-        {
-            base.SetTemplate();
-            LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
-                ? FlowDirection.RightToLeft
-                : FlowDirection.LeftToRight
-                ;
-        }
+		protected override void SetTemplate()
+		{
+			base.SetTemplate();
+			LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
+				? FlowDirection.RightToLeft
+				: FlowDirection.LeftToRight
+				;
+		}
 
-        protected override void SetTOC( BookItem b )
-        {
-            base.SetTOC( b );
-            LayoutRoot.DataContext = TOCData;
+		protected override void SetTOC( BookItem b )
+		{
+			base.SetTOC( b );
+			LayoutRoot.DataContext = TOCData;
 
-            if ( VolList != null && 0 < VolList.Items.Count() )
-            {
-                VolList.SelectedIndex = 0;
-            }
-        }
+			if ( VolList != null && 0 < VolList.Items.Count() )
+			{
+				VolList.SelectedIndex = 0;
+			}
+		}
 
-    }
+	}
 }

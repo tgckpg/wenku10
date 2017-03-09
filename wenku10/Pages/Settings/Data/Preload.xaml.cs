@@ -20,49 +20,49 @@ using wenku8.Resources;
 
 namespace wenku10.Pages.Settings.Data
 {
-    public sealed partial class Preload : Page
-    {
-        public Preload()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+	public sealed partial class Preload : Page
+	{
+		public Preload()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        private void SetTemplate()
-        {
-            StringResources stx = new StringResources( "LoadingMessage" );
-            CoverSize.Text = stx.Str( "Calculating" );
-            CalculateCoverSize();
-            TextContentSize.Text = stx.Str( "Calculating" );
-            CalculateTextSize();
-        }
+		private void SetTemplate()
+		{
+			StringResources stx = new StringResources( "LoadingMessage" );
+			CoverSize.Text = stx.Str( "Calculating" );
+			CalculateCoverSize();
+			TextContentSize.Text = stx.Str( "Calculating" );
+			CalculateTextSize();
+		}
 
-        private async void CalculateCoverSize()
-        {
-            StringResources stx = new StringResources( "Settings" );
-            CoverSize.Text = stx.Text( "Data_CacheUsed" )
-                + ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
-        }
+		private async void CalculateCoverSize()
+		{
+			StringResources stx = new StringResources( "Settings" );
+			CoverSize.Text = stx.Text( "Data_CacheUsed" )
+				+ ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
+		}
 
-        private async void CalculateTextSize()
-        {
-            StringResources stx = new StringResources( "Settings" );
-            TextContentSize.Text = stx.Text( "Data_CacheUsed" )
-                + ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() ) );
-        }
+		private async void CalculateTextSize()
+		{
+			StringResources stx = new StringResources( "Settings" );
+			TextContentSize.Text = stx.Text( "Data_CacheUsed" )
+				+ ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() ) );
+		}
 
-        private void Button_Click_1( object sender, RoutedEventArgs e )
-        {
-            Shared.Storage.CLEAR_COVER();
-            SetTemplate();
-        }
+		private void Button_Click_1( object sender, RoutedEventArgs e )
+		{
+			Shared.Storage.CLEAR_COVER();
+			SetTemplate();
+		}
 
-        private void Button_Click_2( object sender, RoutedEventArgs e )
-        {
-            Shared.Storage.CLEAR_INTRO();
-            Shared.Storage.CLEAR_VOLUME();
-            SetTemplate();
-        }
+		private void Button_Click_2( object sender, RoutedEventArgs e )
+		{
+			Shared.Storage.CLEAR_INTRO();
+			Shared.Storage.CLEAR_VOLUME();
+			SetTemplate();
+		}
 
-    }
+	}
 }

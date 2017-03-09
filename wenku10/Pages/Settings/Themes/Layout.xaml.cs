@@ -24,157 +24,157 @@ using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Themes
 {
-    public sealed partial class Layout : Page, ICmdControls
-    {
+	public sealed partial class Layout : Page, ICmdControls
+	{
 #pragma warning disable 0067
-        public event ControlChangedEvent ControlChanged;
+		public event ControlChangedEvent ControlChanged;
 #pragma warning restore 0067
 
-        public bool NoCommands { get; }
-        public bool MajorNav { get { return true; } }
+		public bool NoCommands { get; }
+		public bool MajorNav { get { return true; } }
 
-        public IList<ICommandBarElement> MajorControls { get; private set; }
-        public IList<ICommandBarElement> Major2ndControls { get; private set; }
-        public IList<ICommandBarElement> MinorControls { get; private set; }
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-        private global::wenku8.Settings.Layout.BookInfoView Conf_BookInfoView;
-        private global::wenku8.Settings.Layout.MainPage Conf_MainPage;
-        private global::wenku8.Settings.Layout.NavList Conf_NavList;
-        private global::wenku8.Settings.Layout.ContentReader Conf_ContentReader;
+		private global::wenku8.Settings.Layout.BookInfoView Conf_BookInfoView;
+		private global::wenku8.Settings.Layout.MainPage Conf_MainPage;
+		private global::wenku8.Settings.Layout.NavList Conf_NavList;
+		private global::wenku8.Settings.Layout.ContentReader Conf_ContentReader;
 
-        private bool TemplateSet = false;
-        public Layout()
-        {
-            this.InitializeComponent();
+		private bool TemplateSet = false;
+		public Layout()
+		{
+			this.InitializeComponent();
 
-            SetTemplate();
-        }
+			SetTemplate();
+		}
 
-        public void SetTemplate()
-        {
-            // MainPage
-            CustomSection();
+		public void SetTemplate()
+		{
+			// MainPage
+			CustomSection();
 
-            // NavList
-            Conf_NavList = new global::wenku8.Settings.Layout.NavList();
+			// NavList
+			Conf_NavList = new global::wenku8.Settings.Layout.NavList();
 
-            // ContentReader
-            Conf_ContentReader = new global::wenku8.Settings.Layout.ContentReader();
+			// ContentReader
+			Conf_ContentReader = new global::wenku8.Settings.Layout.ContentReader();
 
-            // BookInfoView
-            Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView();
-            LayoutToggles();
+			// BookInfoView
+			Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView();
+			LayoutToggles();
 
-            TemplateSet = true;
-        }
+			TemplateSet = true;
+		}
 
-        private void LayoutToggles()
-        {
-            TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
-            TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
-            TogNAlign.IsOn = Conf_NavList.IsHorizontal;
-            TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
-            TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
+		private void LayoutToggles()
+		{
+			TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
+			TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
+			TogNAlign.IsOn = Conf_NavList.IsHorizontal;
+			TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
+			TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
 
-            TogPageClick.IsOn = !Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
-            TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
-            TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
-        }
+			TogPageClick.IsOn = !Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
+			TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
+			TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
+		}
 
-        // NavList
-        private void Toggled_NAlign( object sender, RoutedEventArgs e )
-        {
-            Conf_NavList.IsHorizontal = TogNAlign.IsOn;
-        }
+		// NavList
+		private void Toggled_NAlign( object sender, RoutedEventArgs e )
+		{
+			Conf_NavList.IsHorizontal = TogNAlign.IsOn;
+		}
 
-        #region MainPage
-        private void CustomSection()
-        {
-            Conf_MainPage = new global::wenku8.Settings.Layout.MainPage();
-            SectionListContext.DataContext = Conf_MainPage;
-            SectionChoices.SelectedValue = Conf_MainPage.SelectedSection.Desc2;
-        }
+		#region MainPage
+		private void CustomSection()
+		{
+			Conf_MainPage = new global::wenku8.Settings.Layout.MainPage();
+			SectionListContext.DataContext = Conf_MainPage;
+			SectionChoices.SelectedValue = Conf_MainPage.SelectedSection.Desc2;
+		}
 
-        private void SectionList_SelectionChanged( object sender, SelectionChangedEventArgs e )
-        {
-            if ( e.AddedItems.Count() == 0 ) return;
+		private void SectionList_SelectionChanged( object sender, SelectionChangedEventArgs e )
+		{
+			if ( e.AddedItems.Count() == 0 ) return;
 
-            if ( Conf_MainPage.ChangeCustSection( ( ActiveItem ) e.AddedItems[ 0 ] ) )
-            {
-                ControlFrame.Instance.BackStack.Remove( PageId.W_NAV_SEL );
-                ControlFrame.Instance.CommandMgr.UpdateCustBtn();
-                ControlChanged?.Invoke( this );
-            }
-        }
-        #endregion
+			if ( Conf_MainPage.ChangeCustSection( ( ActiveItem ) e.AddedItems[ 0 ] ) )
+			{
+				ControlFrame.Instance.BackStack.Remove( PageId.W_NAV_SEL );
+				ControlFrame.Instance.CommandMgr.UpdateCustBtn();
+				ControlChanged?.Invoke( this );
+			}
+		}
+		#endregion
 
-        #region BookInfoView
-        private void Toggled_BFlow( object sender, RoutedEventArgs e )
-        {
-            Conf_BookInfoView.IsRightToLeft = ( ( ToggleSwitch ) sender ).IsOn;
-        }
+		#region BookInfoView
+		private void Toggled_BFlow( object sender, RoutedEventArgs e )
+		{
+			Conf_BookInfoView.IsRightToLeft = ( ( ToggleSwitch ) sender ).IsOn;
+		}
 
-        private void Toggled_TOCAlign( object sender, RoutedEventArgs e )
-        {
-            Conf_BookInfoView.HorizontalTOC = TogTOCAlign.IsOn;
-        }
-        #endregion
+		private void Toggled_TOCAlign( object sender, RoutedEventArgs e )
+		{
+			Conf_BookInfoView.HorizontalTOC = TogTOCAlign.IsOn;
+		}
+		#endregion
 
-        #region ContentReader
-        private void Toggled_CAlign( object sender, RoutedEventArgs e )
-        {
-            Conf_ContentReader.IsHorizontal = TogCAlign.IsOn;
-        }
+		#region ContentReader
+		private void Toggled_CAlign( object sender, RoutedEventArgs e )
+		{
+			Conf_ContentReader.IsHorizontal = TogCAlign.IsOn;
+		}
 
-        private void Toggled_CFlow( object sender, RoutedEventArgs e )
-        {
-            Conf_ContentReader.IsRightToLeft = TogContFlo.IsOn;
-        }
+		private void Toggled_CFlow( object sender, RoutedEventArgs e )
+		{
+			Conf_ContentReader.IsRightToLeft = TogContFlo.IsOn;
+		}
 
-        private void Toggled_EmbedIllus( object sender, RoutedEventArgs e )
-        {
-            Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS = TogEmbedIllus.IsOn;
-        }
+		private void Toggled_EmbedIllus( object sender, RoutedEventArgs e )
+		{
+			Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS = TogEmbedIllus.IsOn;
+		}
 
-        private async void Toggled_PageClick( object sender, RoutedEventArgs e )
-        {
-            if ( !TemplateSet ) return;
+		private async void Toggled_PageClick( object sender, RoutedEventArgs e )
+		{
+			if ( !TemplateSet ) return;
 
-            if ( TogPageClick.IsOn && Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR )
-            {
-                StringResources stx = new StringResources( "Settings" );
-                MessageDialog Msg = new MessageDialog( stx.Text( "Layout_ContentReader_UsePageClick_Warning" ), stx.Text( "Layout_ContentReader_UsePageClick" ) );
+			if ( TogPageClick.IsOn && Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR )
+			{
+				StringResources stx = new StringResources( "Settings" );
+				MessageDialog Msg = new MessageDialog( stx.Text( "Layout_ContentReader_UsePageClick_Warning" ), stx.Text( "Layout_ContentReader_UsePageClick" ) );
 
-                Msg.Commands.Add(
-                    new UICommand( stx.Text( "Enabled" ) )
-                );
+				Msg.Commands.Add(
+					new UICommand( stx.Text( "Enabled" ) )
+				);
 
-                Msg.Commands.Add(
-                    new UICommand( stx.Text( "Disabled" ), ( x ) => TogPageClick.IsOn = false )
-                );
-                await Popups.ShowDialog( Msg );
-            }
+				Msg.Commands.Add(
+					new UICommand( stx.Text( "Disabled" ), ( x ) => TogPageClick.IsOn = false )
+				);
+				await Popups.ShowDialog( Msg );
+			}
 
-            Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = !TogPageClick.IsOn;
+			Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = !TogPageClick.IsOn;
 
-            if ( TogPageClick.IsOn )
-            {
-                Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn = false;
-            }
-        }
+			if ( TogPageClick.IsOn )
+			{
+				Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn = false;
+			}
+		}
 
-        private void Toggled_DoubleTap( object sender, RoutedEventArgs e )
-        {
-            if ( !TemplateSet ) return;
+		private void Toggled_DoubleTap( object sender, RoutedEventArgs e )
+		{
+			if ( !TemplateSet ) return;
 
-            Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn;
+			Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn;
 
-            if ( TogDoubleTap.IsOn )
-            {
-                Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = true;
-                TogPageClick.IsOn = false;
-            }
-        }
-        #endregion
-    }
+			if ( TogDoubleTap.IsOn )
+			{
+				Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = true;
+				TogPageClick.IsOn = false;
+			}
+		}
+		#endregion
+	}
 }

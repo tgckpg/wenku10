@@ -24,60 +24,60 @@ using wenku8.Model.Comments;
 
 namespace wenku10.Pages.BookInfoControls
 {
-    sealed partial class ReplyList : Page
-    {
-        private Observables<Comment, Comment> Replies;
+	sealed partial class ReplyList : Page
+	{
+		private Observables<Comment, Comment> Replies;
 
-        private int CurrIndex = 1;
+		private int CurrIndex = 1;
 
-        public ReplyList()
-        {
-            this.InitializeComponent();
-            Replies = new Observables<Comment, Comment>();
-            RepliesView.ItemsSource = Replies;
-        }
+		public ReplyList()
+		{
+			this.InitializeComponent();
+			Replies = new Observables<Comment, Comment>();
+			RepliesView.ItemsSource = Replies;
+		}
 
-        public async Task OpenReview( Review R )
-        {
-            CommentLoader CL = new CommentLoader(
-                R.Id
-                , X.Call<XKey[]>( XProto.WRequest, "GetReplies", R.Id )
-                , new CommentLoader.CommentXMLParser( GetReplies )
-            );
+		public async Task OpenReview( Review R )
+		{
+			CommentLoader CL = new CommentLoader(
+				R.Id
+				, X.Call<XKey[]>( XProto.WRequest, "GetReplies", R.Id )
+				, new CommentLoader.CommentXMLParser( GetReplies )
+			);
 
-            IList<Comment> FirstLoad = await CL.NextPage();
+			IList<Comment> FirstLoad = await CL.NextPage();
 
-            Replies.ConnectLoader( CL );
-            Replies.UpdateSource( FirstLoad );
-        }
+			Replies.ConnectLoader( CL );
+			Replies.UpdateSource( FirstLoad );
+		}
 
-        private Comment[] GetReplies( string xml, out int PageCount )
-        {
-            Comment[] Comments = null;
-            XDocument p = XDocument.Parse( xml );
-            IEnumerable<XElement> CPreviews = p.Descendants( "item" );
+		private Comment[] GetReplies( string xml, out int PageCount )
+		{
+			Comment[] Comments = null;
+			XDocument p = XDocument.Parse( xml );
+			IEnumerable<XElement> CPreviews = p.Descendants( "item" );
 
-            // Set pagelimit
-            int.TryParse( p.Descendants( "page" ).ElementAt( 0 ).Attribute( "num" ).Value, out PageCount );
+			// Set pagelimit
+			int.TryParse( p.Descendants( "page" ).ElementAt( 0 ).Attribute( "num" ).Value, out PageCount );
 
-            int l = CPreviews.Count();
-            Comments = new Comment[ l ];
-            for ( int i = 0; i < l; i++ )
-            {
-                XElement xe = CPreviews.ElementAt( i );
-                XElement xu = xe.Descendants( "user" ).ElementAt( 0 );
+			int l = CPreviews.Count();
+			Comments = new Comment[ l ];
+			for ( int i = 0; i < l; i++ )
+			{
+				XElement xe = CPreviews.ElementAt( i );
+				XElement xu = xe.Descendants( "user" ).ElementAt( 0 );
 
-                Comments[ i ] = new Comment()
-                {
-                    Username = xu.Value
-                    , Index = CurrIndex++
-                    , Title = xe.Descendants( "content" ).ElementAt( 0 ).Value
-                    , UserId = xu.Attribute( "uid" ).Value
-                    , PostTime = xe.Attribute( "timestamp" ).Value
-                };
-            }
+				Comments[ i ] = new Comment()
+				{
+					Username = xu.Value
+					, Index = CurrIndex++
+					, Title = xe.Descendants( "content" ).ElementAt( 0 ).Value
+					, UserId = xu.Attribute( "uid" ).Value
+					, PostTime = xe.Attribute( "timestamp" ).Value
+				};
+			}
 
-            return Comments;
-        }
-    }
+			return Comments;
+		}
+	}
 }

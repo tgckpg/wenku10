@@ -18,31 +18,31 @@ using wenku8.Model.Book;
 
 namespace wenku10.Pages
 {
-    sealed partial class TOCViewVert : TOCPageBase
-    {
-        private TOCViewVert()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+	sealed partial class TOCViewVert : TOCPageBase
+	{
+		private TOCViewVert()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        public TOCViewVert( BookItem Book ) : this() { Init( Book ); }
+		public TOCViewVert( BookItem Book ) : this() { Init( Book ); }
 
-        protected override void SetTemplate()
-        {
-            base.SetTemplate();
-            LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
-                ? FlowDirection.RightToLeft
-                : FlowDirection.LeftToRight
-                ;
-        }
+		protected override void SetTemplate()
+		{
+			base.SetTemplate();
+			LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
+				? FlowDirection.RightToLeft
+				: FlowDirection.LeftToRight
+				;
+		}
 
-        protected override void SetTOC( BookItem b )
-        {
-            base.SetTOC( b );
-            TOCData.SetViewSource( VolumesViewSource );
-            LayoutRoot.DataContext = TOCData;
-        }
+		protected override void SetTOC( BookItem b )
+		{
+			base.SetTOC( b );
+			TOCData.SetViewSource( VolumesViewSource );
+			LayoutRoot.DataContext = TOCData;
+		}
 
-    }
+	}
 }

@@ -8,14 +8,14 @@ using Net.Astropenguin.UI.Converters;
 
 namespace wenku8.Converters
 {
-    using Config;
+	using Config;
 
-    sealed class CurrDevConverter : DataBoolConverter 
-    {
-        public override object Convert( object value, Type targetType, object parameter, string language )
-        {
-            bool IsCurrDev = DataBool( ( string ) value == AppSettings.DeviceId, parameter != null );
-            return IsCurrDev ? 1 : 0.6;
-        }
-    }
+	sealed class CurrDevConverter : DataBoolConverter 
+	{
+		public override object Convert( object value, Type targetType, object parameter, string language )
+		{
+			bool IsCurrDev = DataBool( ( string ) value == AppSettings.DeviceId, parameter != null );
+			return IsCurrDev ? 1 : 0.6;
+		}
+	}
 }

@@ -23,82 +23,82 @@ using wenku8.Resources;
 
 namespace wenku10.Pages
 {
-    public sealed partial class WUserInfo : Page, ICmdControls
-    {
-        #pragma warning disable 0067
-        public event ControlChangedEvent ControlChanged;
-        #pragma warning restore 0067
+	public sealed partial class WUserInfo : Page, ICmdControls
+	{
+		#pragma warning disable 0067
+		public event ControlChangedEvent ControlChanged;
+		#pragma warning restore 0067
 
-        public bool NoCommands { get; }
-        public bool MajorNav { get; }
+		public bool NoCommands { get; }
+		public bool MajorNav { get; }
 
-        public IList<ICommandBarElement> MajorControls { get; private set; }
-        public IList<ICommandBarElement> Major2ndControls { get; private set; }
-        public IList<ICommandBarElement> MinorControls { get ; private set; }
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-        private IMemberInfo Settings;
+		private IMemberInfo Settings;
 
-        public WUserInfo()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+		public WUserInfo()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        private void SetTemplate()
-        {
-            InitAppBar();
+		private void SetTemplate()
+		{
+			InitAppBar();
 
-            Settings = X.Instance<IMemberInfo>( XProto.MemberInfo );
+			Settings = X.Instance<IMemberInfo>( XProto.MemberInfo );
 
-            UserInfo.DataContext = Settings;
-            Sign.Text = Settings.Signature;
+			UserInfo.DataContext = Settings;
+			Sign.Text = Settings.Signature;
 
-            Settings.PropertyChanged += PropertyChanged;
-        }
+			Settings.PropertyChanged += PropertyChanged;
+		}
 
-        private void InitAppBar()
-        {
-            StringResources stx = new StringResources( "Settings", "Message", "ContextMenu" );
-            AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout" ) );
-            LogoutBtn.Click += async ( s, e ) =>
-            {
-                bool Yes = false;
-                await Popups.ShowDialog( UIAliases.CreateDialog(
-                    stx.Str( "ConfirmLogout", "Message" )
-                    , () => Yes = true
-                    , stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
-                ) );
+		private void InitAppBar()
+		{
+			StringResources stx = new StringResources( "Settings", "Message", "ContextMenu" );
+			AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout" ) );
+			LogoutBtn.Click += async ( s, e ) =>
+			{
+				bool Yes = false;
+				await Popups.ShowDialog( UIAliases.CreateDialog(
+					stx.Str( "ConfirmLogout", "Message" )
+					, () => Yes = true
+					, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
+				) );
 
-                if ( Yes )
-                {
-                    ControlFrame.Instance.CommandMgr.WLogout();
-                    ControlFrame.Instance.BackStack.Remove( PageId.W_USER_INFO );
-                    ControlFrame.Instance.GoBack();
-                }
-            };
+				if ( Yes )
+				{
+					ControlFrame.Instance.CommandMgr.WLogout();
+					ControlFrame.Instance.BackStack.Remove( PageId.W_USER_INFO );
+					ControlFrame.Instance.GoBack();
+				}
+			};
 
-            MajorControls = new ICommandBarElement[] { LogoutBtn };
-        }
+			MajorControls = new ICommandBarElement[] { LogoutBtn };
+		}
 
-        private void PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
-        {
-            Settings.PropertyChanged -= PropertyChanged;
-            InfoBubble.IsActive = false;
-        }
+		private void PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
+		{
+			Settings.PropertyChanged -= PropertyChanged;
+			InfoBubble.IsActive = false;
+		}
 
-        private async void Sign_LostFocus( object sender, RoutedEventArgs e )
-        {
-            string Sig = Sign.Text.Trim();
+		private async void Sign_LostFocus( object sender, RoutedEventArgs e )
+		{
+			string Sig = Sign.Text.Trim();
 
-            if ( await new global::wenku8.SelfCencorship().Passed( Sig ) )
-            {
-                Settings.Signature = Sig;
-            }
-            else
-            {
-                Sign.Focus( FocusState.Keyboard );
-            }
-        }
+			if ( await new global::wenku8.SelfCencorship().Passed( Sig ) )
+			{
+				Settings.Signature = Sig;
+			}
+			else
+			{
+				Sign.Focus( FocusState.Keyboard );
+			}
+		}
 
-    }
+	}
 }

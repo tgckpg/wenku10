@@ -8,61 +8,61 @@ using wenku10.Pages;
 
 namespace wenku8.Model.Section
 {
-    using Config;
-    using ListItem;
+	using Config;
+	using ListItem;
 
-    class NavPaneSection : ActiveData
-    {
-        public object Context { get; private set; }
+	class NavPaneSection : ActiveData
+	{
+		public object Context { get; private set; }
 
-        private Brush bbrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
-        private ContentReader Reader;
+		private Brush bbrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
+		private ContentReader Reader;
 
-        public Brush BackgroundBrush
-        {
-            get { return bbrush; }
-            set
-            {
-                bbrush = value;
-                NotifyChanged( "BackgroundBrush" );
-            }
-        }
+		public Brush BackgroundBrush
+		{
+			get { return bbrush; }
+			set
+			{
+				bbrush = value;
+				NotifyChanged( "BackgroundBrush" );
+			}
+		}
 
-        public IList<PaneNavButton> Nav { get; private set; }
+		public IList<PaneNavButton> Nav { get; private set; }
 
 
-        public NavPaneSection( ContentReader ReaderPage, IList<PaneNavButton> NavButtons )
-        {
-            Reader = ReaderPage;
-            Nav = NavButtons;
-            SelectSection( NavButtons[ 0 ] );
-            AppSettings.PropertyChanged += AppSettings_PropertyChanged;
-        }
+		public NavPaneSection( ContentReader ReaderPage, IList<PaneNavButton> NavButtons )
+		{
+			Reader = ReaderPage;
+			Nav = NavButtons;
+			SelectSection( NavButtons[ 0 ] );
+			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+		}
 
-        ~NavPaneSection()
-        {
-            AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
-        }
+		~NavPaneSection()
+		{
+			AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
+		}
 
-        private void AppSettings_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
-        {
-            if( e.PropertyName == Parameters.APPEARANCE_CONTENTREADER_NAVBG )
-            {
-                BackgroundBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
-            }
-        }
+		private void AppSettings_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
+		{
+			if( e.PropertyName == Parameters.APPEARANCE_CONTENTREADER_NAVBG )
+			{
+				BackgroundBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
+			}
+		}
 
-        public void SelectSection( PaneNavButton P )
-        {
-            if ( P.Action != null )
-            {
-                P.Action();
-                return;
-            }
+		public void SelectSection( PaneNavButton P )
+		{
+			if ( P.Action != null )
+			{
+				P.Action();
+				return;
+			}
 
-            Context = Activator.CreateInstance( P.Page, Reader );
-            NotifyChanged( "Context" );
-        }
+			Context = Activator.CreateInstance( P.Page, Reader );
+			NotifyChanged( "Context" );
+		}
 
-    }
+	}
 }

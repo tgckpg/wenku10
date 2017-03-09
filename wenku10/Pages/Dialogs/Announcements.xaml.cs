@@ -19,45 +19,45 @@ using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Dialogs
 {
-    public sealed partial class Announcements : ContentDialog
-    {
-        private global::wenku8.Model.Topics.Announcements AS;
+	public sealed partial class Announcements : ContentDialog
+	{
+		private global::wenku8.Model.Topics.Announcements AS;
 
-        public Announcements()
-        {
-            this.InitializeComponent();
+		public Announcements()
+		{
+			this.InitializeComponent();
 
-            StringResources stx = new StringResources( "Message" );
-            PrimaryButtonText = stx.Str( "AllRead" );
-            SecondaryButtonText = stx.Str( "OK" );
+			StringResources stx = new StringResources( "Message" );
+			PrimaryButtonText = stx.Str( "AllRead" );
+			SecondaryButtonText = stx.Str( "OK" );
 
-            FullVersion.Text = global::wenku8.Config.AppSettings.Version;
-            version.Text = global::wenku8.System.Bootstrap.Version;
+			FullVersion.Text = global::wenku8.Config.AppSettings.Version;
+			version.Text = global::wenku8.System.Bootstrap.Version;
 
-            SetTemplate();
-        }
+			SetTemplate();
+		}
 
-        private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-            AS.AllRead();
-            args.Cancel = true;
-        }
+		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+			AS.AllRead();
+			args.Cancel = true;
+		}
 
-        private void SetTemplate()
-        {
-            AS = new global::wenku8.Model.Topics.Announcements();
-            MainList.ItemsSource = AS.Topics;
-        }
+		private void SetTemplate()
+		{
+			AS = new global::wenku8.Model.Topics.Announcements();
+			MainList.ItemsSource = AS.Topics;
+		}
 
-        private void MainList_ItemClick( object sender, ItemClickEventArgs e )
-        {
-            AS.MaskAsRead( ( NewsItem ) e.ClickedItem );
-        }
+		private void MainList_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			AS.MaskAsRead( ( NewsItem ) e.ClickedItem );
+		}
 
-        private void ShowVersion( object sender, RoutedEventArgs e )
-        {
-            FlyoutBase.ShowAttachedFlyout( ( FrameworkElement ) sender );
-        }
+		private void ShowVersion( object sender, RoutedEventArgs e )
+		{
+			FlyoutBase.ShowAttachedFlyout( ( FrameworkElement ) sender );
+		}
 
-    }
+	}
 }

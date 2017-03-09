@@ -20,59 +20,59 @@ using Tasks;
 
 namespace wenku10.Pages.Settings.Advanced
 {
-    public sealed partial class Misc : Page
-    {
-        public Misc()
-        {
-            this.InitializeComponent();
-            SyntaxPatchToggle.IsOn = Properties.MISC_TEXT_PATCH_SYNTAX;
-            ChunkVolsToggle.IsOn = Properties.MISC_CHUNK_SINGLE_VOL;
+	public sealed partial class Misc : Page
+	{
+		public Misc()
+		{
+			this.InitializeComponent();
+			SyntaxPatchToggle.IsOn = Properties.MISC_TEXT_PATCH_SYNTAX;
+			ChunkVolsToggle.IsOn = Properties.MISC_CHUNK_SINGLE_VOL;
 #if DEBUG
-            BgTaskInterval.Minimum = 15;
+			BgTaskInterval.Minimum = 15;
 #else
-            BgTaskInterval.Minimum = 180;
+			BgTaskInterval.Minimum = 180;
 #endif
-            BgTaskInterval.Maximum = 2880;
-            BgTaskInterval.Value = BackgroundProcessor.Instance.TaskInterval;
-            BgTaskIntvlInput.Text = BgTaskInterval.Value.ToString();
-        }
+			BgTaskInterval.Maximum = 2880;
+			BgTaskInterval.Value = BackgroundProcessor.Instance.TaskInterval;
+			BgTaskIntvlInput.Text = BgTaskInterval.Value.ToString();
+		}
 
-        private void ToggleSynPatch( object sender, RoutedEventArgs e )
-        {
-            Manipulation.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
-            Properties.MISC_TEXT_PATCH_SYNTAX = SyntaxPatchToggle.IsOn;
-        }
+		private void ToggleSynPatch( object sender, RoutedEventArgs e )
+		{
+			Manipulation.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
+			Properties.MISC_TEXT_PATCH_SYNTAX = SyntaxPatchToggle.IsOn;
+		}
 
-        private void ToggleChunkVols( object sender, RoutedEventArgs e )
-        {
-            Properties.MISC_CHUNK_SINGLE_VOL = ChunkVolsToggle.IsOn;
-        }
+		private void ToggleChunkVols( object sender, RoutedEventArgs e )
+		{
+			Properties.MISC_CHUNK_SINGLE_VOL = ChunkVolsToggle.IsOn;
+		}
 
-        private void BgTaskInterval_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
-        {
-            BackgroundProcessor.Instance.UpdateTaskInterval( ( uint ) BgTaskInterval.Value );
+		private void BgTaskInterval_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
+		{
+			BackgroundProcessor.Instance.UpdateTaskInterval( ( uint ) BgTaskInterval.Value );
 
-            if( BackgroundProcessor.Instance.TaskInterval != BgTaskInterval.Value )
-            {
-                BgTaskInterval.Value = BackgroundProcessor.Instance.TaskInterval;
-            }
+			if( BackgroundProcessor.Instance.TaskInterval != BgTaskInterval.Value )
+			{
+				BgTaskInterval.Value = BackgroundProcessor.Instance.TaskInterval;
+			}
 
-            BgTaskIntvlInput.Text = BgTaskInterval.Value.ToString();
-        }
+			BgTaskIntvlInput.Text = BgTaskInterval.Value.ToString();
+		}
 
-        private void BgTaskIntvlInput_LostFocus( object sender, RoutedEventArgs e )
-        {
-            BgTaskInterval_PointerCaptureLost( sender, null );
-        }
+		private void BgTaskIntvlInput_LostFocus( object sender, RoutedEventArgs e )
+		{
+			BgTaskInterval_PointerCaptureLost( sender, null );
+		}
 
-        private void UpdateBgTaskSlider( object sender, TextChangedEventArgs e )
-        {
-            int Val;
-            if ( int.TryParse( BgTaskIntvlInput.Text, out Val ) )
-            {
-                BgTaskInterval.Value = Val;
-            }
-        }
+		private void UpdateBgTaskSlider( object sender, TextChangedEventArgs e )
+		{
+			int Val;
+			if ( int.TryParse( BgTaskIntvlInput.Text, out Val ) )
+			{
+				BgTaskInterval.Value = Val;
+			}
+		}
 
-    }
+	}
 }

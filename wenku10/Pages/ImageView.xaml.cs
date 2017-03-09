@@ -22,72 +22,72 @@ using wenku8.Model.Text;
 
 namespace wenku10.Pages
 {
-    public sealed partial class ImageView : Page
-    {
-        public static readonly string ID = typeof( ImageView ).Name;
+	public sealed partial class ImageView : Page
+	{
+		public static readonly string ID = typeof( ImageView ).Name;
 
-        private ImageThumb Img;
+		private ImageThumb Img;
 
-        public ImageView()
-        {
-            this.InitializeComponent();
-            LoadingRing.IsActive = true;
-        }
+		public ImageView()
+		{
+			this.InitializeComponent();
+			LoadingRing.IsActive = true;
+		}
 
-        protected override void OnNavigatedFrom( NavigationEventArgs e )
-        {
-            base.OnNavigatedFrom( e );
-            Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
-            var j = Img?.Set();
-            Img = null;
-        }
+		protected override void OnNavigatedFrom( NavigationEventArgs e )
+		{
+			base.OnNavigatedFrom( e );
+			Logger.Log( ID, string.Format( "OnNavigatedFrom: {0}", e.SourcePageType.Name ), LogType.INFO );
+			var j = Img?.Set();
+			Img = null;
+		}
 
-        protected override void OnNavigatedTo( NavigationEventArgs e )
-        {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
+		protected override void OnNavigatedTo( NavigationEventArgs e )
+		{
+			base.OnNavigatedTo( e );
+			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-            if ( e.Parameter is ImageThumb )
-            {
-                SetImage( ( ImageThumb ) e.Parameter );
-            }
-            else if ( e.Parameter is IllusPara )
-            {
-                SetImage( ( IllusPara ) e.Parameter );
-            }
-        }
+			if ( e.Parameter is ImageThumb )
+			{
+				SetImage( ( ImageThumb ) e.Parameter );
+			}
+			else if ( e.Parameter is IllusPara )
+			{
+				SetImage( ( IllusPara ) e.Parameter );
+			}
+		}
 
-        private void SetImage( IllusPara Para )
-        {
-            if ( Para.ImgThumb == null || Para.ImgThumb.IsDownloadNeeded )
-            {
-                Para.PropertyChanged += Para_PropertyChanged;
-                ContentIllusLoader.Instance.RegisterImage( Para );
-            }
-            else
-            {
-                SetImage( Para.ImgThumb );
-            }
+		private void SetImage( IllusPara Para )
+		{
+			if ( Para.ImgThumb == null || Para.ImgThumb.IsDownloadNeeded )
+			{
+				Para.PropertyChanged += Para_PropertyChanged;
+				ContentIllusLoader.Instance.RegisterImage( Para );
+			}
+			else
+			{
+				SetImage( Para.ImgThumb );
+			}
 
-        }
+		}
 
-        private void Para_PropertyChanged( object sender, PropertyChangedEventArgs e )
-        {
-            if ( e.PropertyName == "Illus" )
-            {
-                IllusPara Para = ( IllusPara ) sender;
-                Para.PropertyChanged -= Para_PropertyChanged;
+		private void Para_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			if ( e.PropertyName == "Illus" )
+			{
+				IllusPara Para = ( IllusPara ) sender;
+				Para.PropertyChanged -= Para_PropertyChanged;
 
-                SetImage( Para.ImgThumb );
-            }
-        }
+				SetImage( Para.ImgThumb );
+			}
+		}
 
-        private async void SetImage( ImageThumb Th )
-        {
-            Img = Th;
-            MainImage.Source = await Img.GetFull();
-            LoadingRing.IsActive = false;
-        }
+		private async void SetImage( ImageThumb Th )
+		{
+			Img = Th;
+			MainImage.Source = await Img.GetFull();
+			LoadingRing.IsActive = false;
+		}
 
-    }
+	}
 }

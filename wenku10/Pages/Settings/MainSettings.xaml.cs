@@ -32,296 +32,296 @@ using wenku8.Settings;
 
 namespace wenku10.Pages.Settings
 {
-    public sealed partial class MainSettings : Page, ICmdControls, IAnimaPage
-    {
-        public static readonly string ID = typeof( MainSettings ).Name;
+	public sealed partial class MainSettings : Page, ICmdControls, IAnimaPage
+	{
+		public static readonly string ID = typeof( MainSettings ).Name;
 
-        #pragma warning disable 0067
-        public event ControlChangedEvent ControlChanged;
-        #pragma warning restore 0067
+		#pragma warning disable 0067
+		public event ControlChangedEvent ControlChanged;
+		#pragma warning restore 0067
 
-        public bool NoCommands { get; }
-        public bool MajorNav { get { return true; } }
+		public bool NoCommands { get; }
+		public bool MajorNav { get { return true; } }
 
-        public IList<ICommandBarElement> MajorControls { get; private set; }
-        public IList<ICommandBarElement> Major2ndControls { get; private set; }
-        public IList<ICommandBarElement> MinorControls { get ; private set; }
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-        public static MainSettings Instance;
+		public static MainSettings Instance;
 
-        public MainSettings()
-        {
-            this.InitializeComponent();
-            Instance = this;
-            SetTemplate();
-        }
+		public MainSettings()
+		{
+			this.InitializeComponent();
+			Instance = this;
+			SetTemplate();
+		}
 
-        ~MainSettings() { Dispose(); }
+		~MainSettings() { Dispose(); }
 
-        private void Dispose()
-        {
-            NavigationHandler.OnNavigatedBack -= ClosePopup;
-            Instance = null;
-        }
+		private void Dispose()
+		{
+			NavigationHandler.OnNavigatedBack -= ClosePopup;
+			Instance = null;
+		}
 
-        private void ClosePopup( object sender, XBackRequestedEventArgs e )
-        {
-            // Restart Required
-            if ( RestartMask.State == ControlState.Reovia ) return;
+		private void ClosePopup( object sender, XBackRequestedEventArgs e )
+		{
+			// Restart Required
+			if ( RestartMask.State == ControlState.Reovia ) return;
 
-            // Go back
-            LoadingMask.HandleBack( Frame, e );
-            Dispose();
-        }
+			// Go back
+			LoadingMask.HandleBack( Frame, e );
+			Dispose();
+		}
 
-        ActionItem OneDriveButton;
+		ActionItem OneDriveButton;
 
-        #region Anima
-        Storyboard AnimaStory = new Storyboard();
+		#region Anima
+		Storyboard AnimaStory = new Storyboard();
 
-        public async Task EnterAnima()
-        {
-            AnimaStory.Stop();
-            AnimaStory.Children.Clear();
+		public async Task EnterAnima()
+		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
 
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
 
-            AnimaStory.Begin();
-            await Task.Delay( 350 );
-        }
+			AnimaStory.Begin();
+			await Task.Delay( 350 );
+		}
 
-        public async Task ExitAnima()
-        {
-            AnimaStory.Stop();
-            AnimaStory.Children.Clear();
+		public async Task ExitAnima()
+		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
 
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
 
-            AnimaStory.Begin();
-            await Task.Delay( 350 );
-        }
-        #endregion
+			AnimaStory.Begin();
+			await Task.Delay( 350 );
+		}
+		#endregion
 
-        public void SetTemplate()
-        {
-            LayoutRoot.RenderTransform = new TranslateTransform();
+		public void SetTemplate()
+		{
+			LayoutRoot.RenderTransform = new TranslateTransform();
 
-            StringResources stx = new StringResources( "Settings" );
+			StringResources stx = new StringResources( "Settings" );
 
-            string CurrentLang = Properties.LANGUAGE;
-            SettingsSection LangSection = new SettingsSection()
-            {
-                Title = stx.Text( "Language" )
-                , Data = new ActiveItem[]
-                {
-                    new ActionItem(
-                        stx.Text( "Language_E")
-                        , CurrentLang == "en-US"
-                            ? stx.Text( "Desc_Language_C" )
-                            : stx.Text( "Desc_Language_AE" )
-                        , "en-US"
-                    )
-                    , new ActionItem(
-                        stx.Text( "Language_T")
-                        , CurrentLang == "zh-TW"
-                            ? stx.Text( "Desc_Language_C" )
-                            : stx.Text( "Desc_Language_AT" )
-                        , "zh-TW"
-                    )
-                    , new ActionItem(
-                        stx.Text( "Language_S")
-                        , CurrentLang == "zh-CN"
-                            ? stx.Text( "Desc_Language_C" )
-                            : stx.Text( "Desc_Language_AS" )
-                        , "zh-CN"
-                    )
-                    , new ActionItem(
-                        stx.Text( "Language_J")
-                        , CurrentLang == "ja"
-                            ? stx.Text( "Desc_Language_C" )
-                            : stx.Text( "Desc_Language_AJ" )
-                        , "ja"
-                    )
-                }
-                , ItemAction = ChangeLanguage
-                , IsEnabled = true
-            };
+			string CurrentLang = Properties.LANGUAGE;
+			SettingsSection LangSection = new SettingsSection()
+			{
+				Title = stx.Text( "Language" )
+				, Data = new ActiveItem[]
+				{
+					new ActionItem(
+						stx.Text( "Language_E")
+						, CurrentLang == "en-US"
+							? stx.Text( "Desc_Language_C" )
+							: stx.Text( "Desc_Language_AE" )
+						, "en-US"
+					)
+					, new ActionItem(
+						stx.Text( "Language_T")
+						, CurrentLang == "zh-TW"
+							? stx.Text( "Desc_Language_C" )
+							: stx.Text( "Desc_Language_AT" )
+						, "zh-TW"
+					)
+					, new ActionItem(
+						stx.Text( "Language_S")
+						, CurrentLang == "zh-CN"
+							? stx.Text( "Desc_Language_C" )
+							: stx.Text( "Desc_Language_AS" )
+						, "zh-CN"
+					)
+					, new ActionItem(
+						stx.Text( "Language_J")
+						, CurrentLang == "ja"
+							? stx.Text( "Desc_Language_C" )
+							: stx.Text( "Desc_Language_AJ" )
+						, "ja"
+					)
+				}
+				, ItemAction = ChangeLanguage
+				, IsEnabled = true
+			};
 
-            if ( MainStage.Instance.IsPhone )
-            {
-                if ( CurrentLang != "en-US" ) LangSection.Data.ElementAt( 0 ).Desc = "Mobile user may not be able change the language here, please visit the wiki for help";
-                if ( CurrentLang != "zh-TW" ) LangSection.Data.ElementAt( 1 ).Desc = "\u624B\u6A5F\u7528\u6236\u53EF\u80FD\u7121\u6CD5\u8B8A\u66F4\u8A9E\u8A00\uFF0C\u8A73\u60C5\u8ACB\u53C3\u770B\u5E6B\u52A9";
-                if ( CurrentLang != "zh-CN" ) LangSection.Data.ElementAt( 2 ).Desc = "\u624B\u673A\u7528\u6237\u53EF\u80FD\u65E0\u6CD5\u53D8\u66F4\u8BED\u8A00\uFF0C\u8BE6\u60C5\u8BF7\u53C2\u770B\u5E2E\u52A9";
-                if ( CurrentLang != "ja" ) LangSection.Data.ElementAt( 3 ).Desc = "\u643A\u5E2F\u96FB\u8A71\u30E6\u30FC\u30B6\u30FC\u306F\u3001\u8A00\u8A9E\u3092\u5909\u66F4\u3067\u304D\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\u8A73\u7D30\u306B\u3064\u3044\u3066\u306F\u3001\u30D8\u30EB\u30D7\u3092\u53C2\u7167\u3057\u3066\u304F\u3060\u3055\u3044\u3002";
-            }
+			if ( MainStage.Instance.IsPhone )
+			{
+				if ( CurrentLang != "en-US" ) LangSection.Data.ElementAt( 0 ).Desc = "Mobile user may not be able change the language here, please visit the wiki for help";
+				if ( CurrentLang != "zh-TW" ) LangSection.Data.ElementAt( 1 ).Desc = "\u624B\u6A5F\u7528\u6236\u53EF\u80FD\u7121\u6CD5\u8B8A\u66F4\u8A9E\u8A00\uFF0C\u8A73\u60C5\u8ACB\u53C3\u770B\u5E6B\u52A9";
+				if ( CurrentLang != "zh-CN" ) LangSection.Data.ElementAt( 2 ).Desc = "\u624B\u673A\u7528\u6237\u53EF\u80FD\u65E0\u6CD5\u53D8\u66F4\u8BED\u8A00\uFF0C\u8BE6\u60C5\u8BF7\u53C2\u770B\u5E2E\u52A9";
+				if ( CurrentLang != "ja" ) LangSection.Data.ElementAt( 3 ).Desc = "\u643A\u5E2F\u96FB\u8A71\u30E6\u30FC\u30B6\u30FC\u306F\u3001\u8A00\u8A9E\u3092\u5909\u66F4\u3067\u304D\u306A\u3044\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002\u8A73\u7D30\u306B\u3064\u3044\u3066\u306F\u3001\u30D8\u30EB\u30D7\u3092\u53C2\u7167\u3057\u3066\u304F\u3060\u3055\u3044\u3002";
+			}
 
-            MainView.ItemsSource = new SettingsSection[]
-            {
-                new SettingsSection()
-                {
-                    Title = stx.Text( "Storage" )
-                    , Data = new ActiveItem[]
-                    {
-                        new ActionItem( stx.Text( "Data_Cache"), stx.Text( "Desc_Data_Cache" ), typeof( Data.Cache ) )
-                        , new ActionItem( stx.Text( "Data_Illustration"), stx.Text( "Desc_Data_Illustration" ), typeof( Data.Illustration ) )
-                        , new ActionItem( stx.Text( "Data_Preload"), stx.Text( "Desc_Data_Preload" ), typeof( Data.Preload ) )
-                        , new ActionItem( stx.Text( "EBWin"), stx.Text( "Desc_EBWin_Short" ), typeof( Data.EBWin ) )
-                        , OneDriveButton = new ActionItem( "OneDrive", Properties.ENABLE_ONEDRIVE ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
-                        // , new ActionItem( stx.Text( "Data_Connection"), stx.Text( "Desc_Data_Connection" ), typeof( Data.Cache ) )
-                    }
-                    , ItemAction = PopupSettings
-                    , IsEnabled = true
-                }
-                , new SettingsSection()
-                {
-                    Title = stx.Text( "Appearance" )
-                    , Data = new ActiveItem[]
-                    {
-                        new ActionItem( stx.Text( "Appearance_ContentReader"), stx.Text( "Desc_Appearance_ContentReader" ), typeof( Themes.ContentReader ) )
-                        , new ActionItem( stx.Text( "Appearance_Theme"), stx.Text( "Desc_Appearance_Backgrounds" ), typeof( Themes.ThemeColors ) )
-                        , new ActionItem( stx.Text( "Appearance_Layout"), stx.Text( "Desc_Appearance_Layout" ), typeof( Themes.Layout ) )
-                    }
-                    , ItemAction = PopupSettings
-                    , IsEnabled = true
-                }
-                , LangSection
-                , new SettingsSection()
-                {
-                    Title = stx.Text( "Advanced" )
-                    , Data = new ActiveItem[]
-                    {
-                        new ActionItem( stx.Text( "Advanced_Server"), stx.Text( "Desc_Advanced_Server" ), typeof( Advanced.ServerSelector ) )
-                        , new ActionItem( stx.Text( "Advanced_Misc"), stx.Text( "Desc_Advanced_Misc" ), typeof( Advanced.Misc ) )
+			MainView.ItemsSource = new SettingsSection[]
+			{
+				new SettingsSection()
+				{
+					Title = stx.Text( "Storage" )
+					, Data = new ActiveItem[]
+					{
+						new ActionItem( stx.Text( "Data_Cache"), stx.Text( "Desc_Data_Cache" ), typeof( Data.Cache ) )
+						, new ActionItem( stx.Text( "Data_Illustration"), stx.Text( "Desc_Data_Illustration" ), typeof( Data.Illustration ) )
+						, new ActionItem( stx.Text( "Data_Preload"), stx.Text( "Desc_Data_Preload" ), typeof( Data.Preload ) )
+						, new ActionItem( stx.Text( "EBWin"), stx.Text( "Desc_EBWin_Short" ), typeof( Data.EBWin ) )
+						, OneDriveButton = new ActionItem( "OneDrive", Properties.ENABLE_ONEDRIVE ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
+						// , new ActionItem( stx.Text( "Data_Connection"), stx.Text( "Desc_Data_Connection" ), typeof( Data.Cache ) )
+					}
+					, ItemAction = PopupSettings
+					, IsEnabled = true
+				}
+				, new SettingsSection()
+				{
+					Title = stx.Text( "Appearance" )
+					, Data = new ActiveItem[]
+					{
+						new ActionItem( stx.Text( "Appearance_ContentReader"), stx.Text( "Desc_Appearance_ContentReader" ), typeof( Themes.ContentReader ) )
+						, new ActionItem( stx.Text( "Appearance_Theme"), stx.Text( "Desc_Appearance_Backgrounds" ), typeof( Themes.ThemeColors ) )
+						, new ActionItem( stx.Text( "Appearance_Layout"), stx.Text( "Desc_Appearance_Layout" ), typeof( Themes.Layout ) )
+					}
+					, ItemAction = PopupSettings
+					, IsEnabled = true
+				}
+				, LangSection
+				, new SettingsSection()
+				{
+					Title = stx.Text( "Advanced" )
+					, Data = new ActiveItem[]
+					{
+						new ActionItem( stx.Text( "Advanced_Server"), stx.Text( "Desc_Advanced_Server" ), typeof( Advanced.ServerSelector ) )
+						, new ActionItem( stx.Text( "Advanced_Misc"), stx.Text( "Desc_Advanced_Misc" ), typeof( Advanced.Misc ) )
 #if DEBUG || TESTING 
-                        , new ActionItem( stx.Text( "Advanced_Debug"), stx.Text( "Desc_Advanced_Debug" ), typeof( Advanced.Debug ) )
+						, new ActionItem( stx.Text( "Advanced_Debug"), stx.Text( "Desc_Advanced_Debug" ), typeof( Advanced.Debug ) )
 #endif
-                    }
-                    , ItemAction = PopupSettings
-                    , IsEnabled = true
-                }
-                , new SettingsSection()
-                {
-                    Title = stx.Text( "Help" )
-                    , Data = new ActiveItem[]
-                    {
-                        new ActionItem( stx.Text( "Help_Wiki"), stx.Text( "Desc_Help_Wiki" ), AppLinks.WIKI )
-                        , new ActionItem( stx.Text( "Help_Slack"), stx.Text( "Desc_Help_Slack" ), AppLinks.SLACK )
-                        , new ActionItem( stx.Text( "Help_BugFeature"), stx.Text( "Desc_Help_BugFeature" ), AppLinks.BUG_REPORT )
-                    }
-                    , ItemAction = HelpAction
-                    , IsEnabled = true
-                }
-            };
-        }
+					}
+					, ItemAction = PopupSettings
+					, IsEnabled = true
+				}
+				, new SettingsSection()
+				{
+					Title = stx.Text( "Help" )
+					, Data = new ActiveItem[]
+					{
+						new ActionItem( stx.Text( "Help_Wiki"), stx.Text( "Desc_Help_Wiki" ), AppLinks.WIKI )
+						, new ActionItem( stx.Text( "Help_Slack"), stx.Text( "Desc_Help_Slack" ), AppLinks.SLACK )
+						, new ActionItem( stx.Text( "Help_BugFeature"), stx.Text( "Desc_Help_BugFeature" ), AppLinks.BUG_REPORT )
+					}
+					, ItemAction = HelpAction
+					, IsEnabled = true
+				}
+			};
+		}
 
-        private void HelpAction( object Param )
-        {
-            Uri _url = new Uri( Param.ToString() );
-            var j = Windows.System.Launcher.LaunchUriAsync( _url );
-        }
+		private void HelpAction( object Param )
+		{
+			Uri _url = new Uri( Param.ToString() );
+			var j = Windows.System.Launcher.LaunchUriAsync( _url );
+		}
 
-        private async void ChangeLanguage( object Param )
-        {
-            string LangCode = Param.ToString();
-            if ( Properties.LANGUAGE == LangCode ) return;
+		private async void ChangeLanguage( object Param )
+		{
+			string LangCode = Param.ToString();
+			if ( Properties.LANGUAGE == LangCode ) return;
 
-            if ( !await ConfirmRestart( "Language" ) ) return;
+			if ( !await ConfirmRestart( "Language" ) ) return;
 
-            Properties.LANGUAGE_TRADITIONAL = LangCode == "zh-TW";
-            Properties.LANGUAGE = LangCode;
-        }
+			Properties.LANGUAGE_TRADITIONAL = LangCode == "zh-TW";
+			Properties.LANGUAGE = LangCode;
+		}
 
-        public async Task<bool> ConfirmRestart( string CaptionRes )
-        {
-            StringResources stx = new StringResources( "Message", "Settings" );
+		public async Task<bool> ConfirmRestart( string CaptionRes )
+		{
+			StringResources stx = new StringResources( "Message", "Settings" );
 
-            bool Restart = false;
+			bool Restart = false;
 
-            await Popups.ShowDialog(
-                UIAliases.CreateDialog(
-                    stx.Str( "NeedRestart" ), stx.Text( CaptionRes, "Settings" )
-                    , () => Restart = true
-                    , stx.Str( "Yes" ), stx.Str( "No" )
-                ) );
+			await Popups.ShowDialog(
+				UIAliases.CreateDialog(
+					stx.Str( "NeedRestart" ), stx.Text( CaptionRes, "Settings" )
+					, () => Restart = true
+					, stx.Str( "Yes" ), stx.Str( "No" )
+				) );
 
-            if ( Restart )
-            {
-                await ControlFrame.Instance.CloseSubView();
-                ControlFrame.Instance.CollapseAppBar();
-                NavigationHandler.InsertHandlerOnNavigatedBack( Exit );
-                RestartMask.State = ControlState.Reovia;
-            }
+			if ( Restart )
+			{
+				await ControlFrame.Instance.CloseSubView();
+				ControlFrame.Instance.CollapseAppBar();
+				NavigationHandler.InsertHandlerOnNavigatedBack( Exit );
+				RestartMask.State = ControlState.Reovia;
+			}
 
-            return Restart;
-        }
+			return Restart;
+		}
 
-        private void ListView_ItemClick( object sender, ItemClickEventArgs e )
-        {
-            SettingsSection SettingsContext = ( sender as FrameworkElement ).DataContext as SettingsSection;
-            ActionItem Item = ( ActionItem ) e.ClickedItem;
+		private void ListView_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			SettingsSection SettingsContext = ( sender as FrameworkElement ).DataContext as SettingsSection;
+			ActionItem Item = ( ActionItem ) e.ClickedItem;
 
-            SettingsContext.ItemAction( Item.Param );
-        }
+			SettingsContext.ItemAction( Item.Param );
+		}
 
-        public async void PopupSettings( object P )
-        {
-            if( P.GetType() == typeof( bool ) )
-            {
-                StringResources sts = new StringResources( "Settings" );
-                if ( !Properties.ENABLE_ONEDRIVE )
-                {
-                    StringResources stx = new StringResources( "InitQuestions" );
-                    StringResources stm = new StringResources( "Message" );
-                    MessageDialog Msg = new MessageDialog( stx.Text( "EnableOneDrive" ), "OneDrive" );
-                    Msg.Commands.Add(
-                        new UICommand( stm.Str( "Yes" ), ( x ) => Properties.ENABLE_ONEDRIVE = true )
-                    );
-                    Msg.Commands.Add(
-                        new UICommand( stm.Str( "No" ), ( x ) => Properties.ENABLE_ONEDRIVE = false )
-                    );
+		public async void PopupSettings( object P )
+		{
+			if( P.GetType() == typeof( bool ) )
+			{
+				StringResources sts = new StringResources( "Settings" );
+				if ( !Properties.ENABLE_ONEDRIVE )
+				{
+					StringResources stx = new StringResources( "InitQuestions" );
+					StringResources stm = new StringResources( "Message" );
+					MessageDialog Msg = new MessageDialog( stx.Text( "EnableOneDrive" ), "OneDrive" );
+					Msg.Commands.Add(
+						new UICommand( stm.Str( "Yes" ), ( x ) => Properties.ENABLE_ONEDRIVE = true )
+					);
+					Msg.Commands.Add(
+						new UICommand( stm.Str( "No" ), ( x ) => Properties.ENABLE_ONEDRIVE = false )
+					);
 
-                    await Popups.ShowDialog( Msg );
+					await Popups.ShowDialog( Msg );
 
-                    if ( Properties.ENABLE_ONEDRIVE )
-                    {
-                        await global::wenku8.Storage.OneDriveSync.Instance.Authenticate();
-                    }
+					if ( Properties.ENABLE_ONEDRIVE )
+					{
+						await global::wenku8.Storage.OneDriveSync.Instance.Authenticate();
+					}
 
-                    OneDriveButton.Desc = sts.Text( "Enabled" );
-                }
-                else
-                {
-                    Properties.ENABLE_ONEDRIVE = false;
-                    await global::wenku8.Storage.OneDriveSync.Instance.UnAuthenticate();
-                    OneDriveButton.Desc = sts.Text( "Disabled" );
-                }
+					OneDriveButton.Desc = sts.Text( "Enabled" );
+				}
+				else
+				{
+					Properties.ENABLE_ONEDRIVE = false;
+					await global::wenku8.Storage.OneDriveSync.Instance.UnAuthenticate();
+					OneDriveButton.Desc = sts.Text( "Disabled" );
+				}
 
-                return;
-            }
+				return;
+			}
 
-            ControlFrame.Instance.SubNavigateTo( this, () => ( Page ) Activator.CreateInstance( ( Type ) P ) );
-        }
+			ControlFrame.Instance.SubNavigateTo( this, () => ( Page ) Activator.CreateInstance( ( Type ) P ) );
+		}
 
-        private class SettingsSection
-        {
-            public string Title { get; set; }
-            public string Footnote { get; set; }
-            public IEnumerable<ActiveItem> Data { get; set; }
-            public bool IsEnabled { get; set; }
-            public Action<object> ItemAction { get; set; }
-        }
+		private class SettingsSection
+		{
+			public string Title { get; set; }
+			public string Footnote { get; set; }
+			public IEnumerable<ActiveItem> Data { get; set; }
+			public bool IsEnabled { get; set; }
+			public Action<object> ItemAction { get; set; }
+		}
 
-        private void Button_Tapped( object sender, TappedRoutedEventArgs e )
-        {
-            Windows.ApplicationModel.Core.CoreApplication.Exit();
-        }
+		private void Button_Tapped( object sender, TappedRoutedEventArgs e )
+		{
+			Windows.ApplicationModel.Core.CoreApplication.Exit();
+		}
 
-        private void Exit( object sender, XBackRequestedEventArgs e )
-        {
-            Windows.ApplicationModel.Core.CoreApplication.Exit();
-        }
-    }
+		private void Exit( object sender, XBackRequestedEventArgs e )
+		{
+			Windows.ApplicationModel.Core.CoreApplication.Exit();
+		}
+	}
 
 }

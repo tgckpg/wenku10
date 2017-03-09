@@ -19,30 +19,30 @@ using wenku8.Resources;
 
 namespace wenku10.Pages.Settings.Data
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class Cache : Page
-    {
-        public Cache()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+	/// <summary>
+	/// An empty page that can be used on its own or navigated to within a Frame.
+	/// </summary>
+	public sealed partial class Cache : Page
+	{
+		public Cache()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        private void SetTemplate()
-        {
-            StringResources stx = new StringResources( "Settings" );
-            CacheLimit.Text = stx.Text( "Data_CacheUsed" )
-                + " " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CacheSize() );
-        }
+		private void SetTemplate()
+		{
+			StringResources stx = new StringResources( "Settings" );
+			CacheLimit.Text = stx.Text( "Data_CacheUsed" )
+				+ " " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CacheSize() );
+		}
 
-        private void Button_Click_1( object sender, RoutedEventArgs e )
-        {
-            Shared.Storage.CLEAR_CACHE();
-            SetTemplate();
-        }
+		private void Button_Click_1( object sender, RoutedEventArgs e )
+		{
+			Shared.Storage.CLEAR_CACHE();
+			SetTemplate();
+		}
 
-    }
+	}
 
 }

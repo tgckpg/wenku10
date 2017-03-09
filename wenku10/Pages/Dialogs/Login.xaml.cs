@@ -19,143 +19,143 @@ using wenku8.Ext;
 
 namespace wenku10.Pages.Dialogs
 {
-    sealed partial class Login : ContentDialog
-    {
-        public bool Canceled = true;
+	sealed partial class Login : ContentDialog
+	{
+		public bool Canceled = true;
 
-        private IMember Member;
+		private IMember Member;
 
-        public Login( IMember Member )
-        {
-            this.InitializeComponent();
-            this.Member = Member;
+		public Login( IMember Member )
+		{
+			this.InitializeComponent();
+			this.Member = Member;
 
-            StringResources stx = new StringResources();
-            PrimaryButtonText = stx.Text( "Login" );
-            SecondaryButtonText = stx.Text( "Button_Back" );
+			StringResources stx = new StringResources();
+			PrimaryButtonText = stx.Text( "Login" );
+			SecondaryButtonText = stx.Text( "Button_Back" );
 
-            if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
-            {
-                ShowMessage( stx.Text( "Login_Expired" ) );
-            }
+			if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				ShowMessage( stx.Text( "Login_Expired" ) );
+			}
 
-            Member.OnStatusChanged += Member_StatusUpdate;
+			Member.OnStatusChanged += Member_StatusUpdate;
 
-            if( Member.CanRegister )
-            {
-                RegisterBtn.Visibility = Visibility.Visible;
-            }
+			if( Member.CanRegister )
+			{
+				RegisterBtn.Visibility = Visibility.Visible;
+			}
 
-            if( !string.IsNullOrEmpty( Member.CurrentAccount ) )
-            {
-                Account.Text = Member.CurrentAccount;
-                Password.Loaded += Password_Focus;
-            }
-        }
+			if( !string.IsNullOrEmpty( Member.CurrentAccount ) )
+			{
+				Account.Text = Member.CurrentAccount;
+				Password.Loaded += Password_Focus;
+			}
+		}
 
-        void Member_StatusUpdate( object sender, MemberStatus st )
-        {
-            if ( Member.IsLoggedIn )
-            {
-                Hide();
-            }
-            else
-            {
-                IsPrimaryButtonEnabled
-                    = IsSecondaryButtonEnabled
-                    = Account.IsEnabled
-                    = Password.IsEnabled
-                    = true
-                    ;
+		void Member_StatusUpdate( object sender, MemberStatus st )
+		{
+			if ( Member.IsLoggedIn )
+			{
+				Hide();
+			}
+			else
+			{
+				IsPrimaryButtonEnabled
+					= IsSecondaryButtonEnabled
+					= Account.IsEnabled
+					= Password.IsEnabled
+					= true
+					;
 
-                ShowMessage( Member.ServerMessage );
-                Account.Focus( FocusState.Keyboard );
-            }
-        }
+				ShowMessage( Member.ServerMessage );
+				Account.Focus( FocusState.Keyboard );
+			}
+		}
 
-        ~Login()
-        {
-            Member.OnStatusChanged -= Member_StatusUpdate;
-        }
+		~Login()
+		{
+			Member.OnStatusChanged -= Member_StatusUpdate;
+		}
 
-        private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-            args.Cancel = true;
-            if ( Member.WillLogin || Member.IsLoggedIn ) return;
+		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+			args.Cancel = true;
+			if ( Member.WillLogin || Member.IsLoggedIn ) return;
 
-            DetectInputLogin();
-            Canceled = false;
-        }
+			DetectInputLogin();
+			Canceled = false;
+		}
 
-        private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-            if ( Member.WillLogin || Member.IsLoggedIn )
-            {
-                args.Cancel = true;
-            }
-        }
+		private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+			if ( Member.WillLogin || Member.IsLoggedIn )
+			{
+				args.Cancel = true;
+			}
+		}
 
-        private void OnKeyDown( object sender, KeyRoutedEventArgs e )
-        {
-            if ( e.Key == Windows.System.VirtualKey.Enter )
-            {
-                e.Handled = DetectInputLogin();
-            }
-        }
+		private void OnKeyDown( object sender, KeyRoutedEventArgs e )
+		{
+			if ( e.Key == Windows.System.VirtualKey.Enter )
+			{
+				e.Handled = DetectInputLogin();
+			}
+		}
 
-        private bool DetectInputLogin()
-        {
-            string Name = Account.Text.Trim();
-            string Passwd = Password.Password;
+		private bool DetectInputLogin()
+		{
+			string Name = Account.Text.Trim();
+			string Passwd = Password.Password;
 
-            if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Passwd ) )
-            {
-                if ( string.IsNullOrEmpty( Name ) )
-                {
-                    Account.Focus( FocusState.Keyboard );
-                }
-                else
-                {
-                    Password.Focus( FocusState.Keyboard );
-                }
-                return false;
-            }
-            else
-            {
-                IsPrimaryButtonEnabled
-                    = IsSecondaryButtonEnabled
-                    = Account.IsEnabled
-                    = Password.IsEnabled
-                    = false
-                    ;
+			if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Passwd ) )
+			{
+				if ( string.IsNullOrEmpty( Name ) )
+				{
+					Account.Focus( FocusState.Keyboard );
+				}
+				else
+				{
+					Password.Focus( FocusState.Keyboard );
+				}
+				return false;
+			}
+			else
+			{
+				IsPrimaryButtonEnabled
+					= IsSecondaryButtonEnabled
+					= Account.IsEnabled
+					= Password.IsEnabled
+					= false
+					;
 
-                // Re-focus to disable keyboard
-                this.Focus( FocusState.Pointer );
-                // Request string
-                Member.Login( Name, Passwd );
+				// Re-focus to disable keyboard
+				this.Focus( FocusState.Pointer );
+				// Request string
+				Member.Login( Name, Passwd );
 
-                return true;
-            }
-        }
+				return true;
+			}
+		}
 
-        private void ShowMessage( string Mesg )
-        {
-            if ( Mesg == null ) return;
+		private void ShowMessage( string Mesg )
+		{
+			if ( Mesg == null ) return;
 
-            ServerMessage.Text = Mesg;
-            ServerMessage.Visibility = Visibility.Visible;
-        }
+			ServerMessage.Text = Mesg;
+			ServerMessage.Visibility = Visibility.Visible;
+		}
 
-        private void Password_Focus( object sender, RoutedEventArgs e )
-        {
-            Password.Focus( FocusState.Keyboard );
-        }
+		private void Password_Focus( object sender, RoutedEventArgs e )
+		{
+			Password.Focus( FocusState.Keyboard );
+		}
 
-        private void RegisterBtn_Click( object sender, RoutedEventArgs e )
-        {
-            this.Hide();
-            Member.Register();
-        }
+		private void RegisterBtn_Click( object sender, RoutedEventArgs e )
+		{
+			this.Hide();
+			Member.Register();
+		}
 
-    }
+	}
 }

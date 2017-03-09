@@ -31,72 +31,72 @@ namespace wenku10.Pages.Settings.Advanced
 	{
 		bool ActionBlocked = false;
 
-        public Debug()
-        {
-            this.InitializeComponent();
+		public Debug()
+		{
+			this.InitializeComponent();
 			SetTemplate();
-        }
+		}
 
 		private void SetTemplate()
 		{
-            FileLogToggle.IsOn = Properties.ENABLE_SYSTEM_LOG;
-            RemoteLogToggle.IsOn = Properties.ENABLE_RSYSTEM_LOG;
-            RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
+			FileLogToggle.IsOn = Properties.ENABLE_SYSTEM_LOG;
+			RemoteLogToggle.IsOn = Properties.ENABLE_RSYSTEM_LOG;
+			RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
 
-            string Level = Properties.LOG_LEVEL;
-            LogLevelCB.SelectedItem = LogLevelCB.Items.FirstOrDefault( ( x ) => ( x as TextBlock ).Text == Level );
+			string Level = Properties.LOG_LEVEL;
+			LogLevelCB.SelectedItem = LogLevelCB.Items.FirstOrDefault( ( x ) => ( x as TextBlock ).Text == Level );
 
 			TypeInfo LogNames = typeof( FileLinks ).GetTypeInfo();
 			LogList.ItemsSource = LogNames.DeclaredFields.Where( x => x.Name.StartsWith( "LOG_" ) ).ToArray();
 		}
 
-        private void FileLog( object sender, RoutedEventArgs e )
-        {
-            Properties.ENABLE_SYSTEM_LOG = FileLogToggle.IsOn;
-        }
+		private void FileLog( object sender, RoutedEventArgs e )
+		{
+			Properties.ENABLE_SYSTEM_LOG = FileLogToggle.IsOn;
+		}
 
-        private void RemoteLog( object sender, RoutedEventArgs e )
-        {
-            Properties.ENABLE_RSYSTEM_LOG
-                = RemoteAddress.IsEnabled
-                = RemoteLogToggle.IsOn
-                ;
-        }
+		private void RemoteLog( object sender, RoutedEventArgs e )
+		{
+			Properties.ENABLE_RSYSTEM_LOG
+				= RemoteAddress.IsEnabled
+				= RemoteLogToggle.IsOn
+				;
+		}
 
-        private async void RemoteAddress_LostFocus( object sender, RoutedEventArgs e )
-        {
-            string IP = RemoteAddress.Text.Trim();
+		private async void RemoteAddress_LostFocus( object sender, RoutedEventArgs e )
+		{
+			string IP = RemoteAddress.Text.Trim();
 
-            IPAddress NotUsed;
-            if ( !IPAddress.TryParse( IP, out NotUsed ) )
-            {
-                await Popups.ShowDialog( UIAliases.CreateDialog( "This IP Address is invalid" ) );
-                RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
-            }
-            else
-            {
-                Properties.RSYSTEM_LOG_ADDRESS = IP;
-            }
-        }
+			IPAddress NotUsed;
+			if ( !IPAddress.TryParse( IP, out NotUsed ) )
+			{
+				await Popups.ShowDialog( UIAliases.CreateDialog( "This IP Address is invalid" ) );
+				RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
+			}
+			else
+			{
+				Properties.RSYSTEM_LOG_ADDRESS = IP;
+			}
+		}
 
-        private void LogLevelCB_SelectionChanged( object sender, SelectionChangedEventArgs e )
-        {
-            TextBlock T = LogLevelCB.SelectedItem as TextBlock;
-            Properties.LOG_LEVEL = T.Text;
-            LogControl.SetFilter( T.Text );
-        }
+		private void LogLevelCB_SelectionChanged( object sender, SelectionChangedEventArgs e )
+		{
+			TextBlock T = LogLevelCB.SelectedItem as TextBlock;
+			Properties.LOG_LEVEL = T.Text;
+			LogControl.SetFilter( T.Text );
+		}
 
-        private async void ViewBgTaskConf( object sender, RoutedEventArgs e )
-        {
-            if ( ActionBlocked ) return;
-            ActionBlocked = true;
+		private async void ViewBgTaskConf( object sender, RoutedEventArgs e )
+		{
+			if ( ActionBlocked ) return;
+			ActionBlocked = true;
 
-            StorageFile ISF = await AppStorage.MkTemp();
-            await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
+			StorageFile ISF = await AppStorage.MkTemp();
+			await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
 
-            await ControlFrame.Instance.CloseSubView();
-            ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
-        }
+			await ControlFrame.Instance.CloseSubView();
+			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
+		}
 
 		private async void ViewDebugLog( object sender, RoutedEventArgs e )
 		{
@@ -143,5 +143,5 @@ namespace wenku10.Pages.Settings.Advanced
 			}
 		}
 
-    }
+	}
 }

@@ -8,34 +8,34 @@ using Windows.UI.Xaml.Controls;
 
 namespace wenku8.Converters
 {
-    using Model.Loaders;
-    using Model.Text;
+	using Model.Loaders;
+	using Model.Text;
 
-    sealed public class ParaTemplateSelector : DataTemplateSelector
-    {
-        public bool IsHorizontal = true;
+	sealed public class ParaTemplateSelector : DataTemplateSelector
+	{
+		public bool IsHorizontal = true;
 
-        protected override DataTemplate SelectTemplateCore( object item, DependencyObject container )
-        {
-            FrameworkElement element = ( FrameworkElement ) container;
+		protected override DataTemplate SelectTemplateCore( object item, DependencyObject container )
+		{
+			FrameworkElement element = ( FrameworkElement ) container;
 
-            if ( item is IllusPara )
-            {
-                IllusPara Para = ( IllusPara ) item;
+			if ( item is IllusPara )
+			{
+				IllusPara Para = ( IllusPara ) item;
 
-                if ( Para.EmbedIllus )
-                {
-                    ContentIllusLoader.Instance.RegisterImage( Para );
-                    return ( DataTemplate ) element.FindName( "IllusEmbed" );
-                }
-                else
-                {
-                    return ( DataTemplate ) element.FindName( "IllusIcon" + ( IsHorizontal ? "H" : "V" ) );
-                }
-            }
+				if ( Para.EmbedIllus )
+				{
+					ContentIllusLoader.Instance.RegisterImage( Para );
+					return ( DataTemplate ) element.FindName( "IllusEmbed" );
+				}
+				else
+				{
+					return ( DataTemplate ) element.FindName( "IllusIcon" + ( IsHorizontal ? "H" : "V" ) );
+				}
+			}
 
-            return ( DataTemplate ) element.FindName( IsHorizontal ? "Horizontal" : "Vertical" );
-        }
+			return ( DataTemplate ) element.FindName( IsHorizontal ? "Horizontal" : "Vertical" );
+		}
 
-    }
+	}
 }

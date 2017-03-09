@@ -19,25 +19,25 @@ using wenku8.Model.Interfaces;
 
 namespace wenku10.Pages
 {
-    public sealed partial class ProcPanelWrapper : Page, INavPage
-    {
-        private ProcPanelWrapper()
-        {
-            this.InitializeComponent();
-        }
+	public sealed partial class ProcPanelWrapper : Page, INavPage
+	{
+		private ProcPanelWrapper()
+		{
+			this.InitializeComponent();
+		}
 
-        public ProcPanelWrapper( object Param )
-            : this()
-        {
-            LayoutRoot.Navigate( typeof( ProceduresPanel ), Param );
-        }
+		public ProcPanelWrapper( object Param )
+			: this()
+		{
+			LayoutRoot.Navigate( typeof( ProceduresPanel ), Param );
+		}
 
-        public void SoftOpen() { }
+		public void SoftOpen() { }
 
-        public void SoftClose()
-        {
-            ( ( ProceduresPanel ) LayoutRoot.Content ).Dispose();
-        }
+		public void SoftClose()
+		{
+			( ( ProceduresPanel ) LayoutRoot.Content ).Dispose();
+		}
 
-    }
+	}
 }

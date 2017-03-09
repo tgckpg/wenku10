@@ -11,9 +11,9 @@ using wenku8.Effects;
 
 namespace wenku10.Scenes
 {
-    interface IScene : IDisposable
-    {
-        void UpdateAssets( Size Sim );
-        void Draw( CanvasDrawingSession ds, CanvasSpriteBatch SBatch, TextureLoader Textures );
-    }
+	interface IScene : IDisposable
+	{
+		void UpdateAssets( Size Sim );
+		void Draw( CanvasDrawingSession ds, CanvasSpriteBatch SBatch, TextureLoader Textures );
+	}
 }

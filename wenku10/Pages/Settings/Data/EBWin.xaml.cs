@@ -20,37 +20,37 @@ using wenku8.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Data
 {
-    using EBDictManager = global::wenku8.System.EBDictManager;
+	using EBDictManager = global::wenku8.System.EBDictManager;
 
-    sealed partial class EBWin : Page
-    {
-        EBDictManager DictMgr;
-        public EBWin()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+	sealed partial class EBWin : Page
+	{
+		EBDictManager DictMgr;
+		public EBWin()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        private void SetTemplate()
-        {
-            DictMgr = new EBDictManager();
+		private void SetTemplate()
+		{
+			DictMgr = new EBDictManager();
 
-            LayoutRoot.DataContext = DictMgr;
-        }
+			LayoutRoot.DataContext = DictMgr;
+		}
 
-        private void OpenNewDict( object sender, RoutedEventArgs e )
-        {
-            DictMgr.OpenNewDict();
-        }
+		private void OpenNewDict( object sender, RoutedEventArgs e )
+		{
+			DictMgr.OpenNewDict();
+		}
 
-        private void InstallNewDict( object sender, RoutedEventArgs e )
-        {
-            DictMgr.Install();
-        }
+		private void InstallNewDict( object sender, RoutedEventArgs e )
+		{
+			DictMgr.Install();
+		}
 
-        private void RemoveDict( object sender, RoutedEventArgs e )
-        {
-            DictMgr.Remove( ( sender as Button ).DataContext as ActiveItem );
-        }
-    }
+		private void RemoveDict( object sender, RoutedEventArgs e )
+		{
+			DictMgr.Remove( ( sender as Button ).DataContext as ActiveItem );
+		}
+	}
 }

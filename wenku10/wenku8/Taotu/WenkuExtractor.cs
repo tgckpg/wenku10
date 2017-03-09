@@ -19,17 +19,17 @@ using wenku10.Pages.Dialogs.Taotu;
 
 namespace wenku8.Taotu
 {
-    sealed class WenkuExtractor : GrimoireExtractor
-    {
-        protected override IconBase Icon { get { return new IconLogout() { AutoScale = true, Direction = Direction.Rotate270 }; } }
+	sealed class WenkuExtractor : GrimoireExtractor
+	{
+		protected override IconBase Icon { get { return new IconLogout() { AutoScale = true, Direction = Direction.Rotate270 }; } }
 
-        public override async Task Edit()
-        {
-            await Popups.ShowDialog( new EditProcExtract( this ) );
-            if ( SubEdit != null )
-            {
-                MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
-            }
-        }
-    }
+		public override async Task Edit()
+		{
+			await Popups.ShowDialog( new EditProcExtract( this ) );
+			if ( SubEdit != null )
+			{
+				MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
+			}
+		}
+	}
 }

@@ -26,72 +26,72 @@ using wenku8.Resources;
 
 namespace wenku10.Pages
 {
-    public sealed partial class DirectTextViewer : Page, ICmdControls 
-    {
-        #pragma warning disable 0067
-        public event ControlChangedEvent ControlChanged;
-        #pragma warning restore 0067
+	public sealed partial class DirectTextViewer : Page, ICmdControls 
+	{
+		#pragma warning disable 0067
+		public event ControlChangedEvent ControlChanged;
+		#pragma warning restore 0067
 
-        public bool NoCommands { get; }
-        public bool MajorNav { get; }
+		public bool NoCommands { get; }
+		public bool MajorNav { get; }
 
-        public IList<ICommandBarElement> MajorControls { get; private set; }
-        public IList<ICommandBarElement> Major2ndControls { get; private set; }
-        public IList<ICommandBarElement> MinorControls { get; private set; }
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-        public static readonly string ID = typeof( DirectTextViewer ).Name;
+		public static readonly string ID = typeof( DirectTextViewer ).Name;
 
-        private IStorageFile CurrentFile;
+		private IStorageFile CurrentFile;
 
-        public DirectTextViewer()
-        {
-            this.InitializeComponent();
-        }
+		public DirectTextViewer()
+		{
+			this.InitializeComponent();
+		}
 
-        public DirectTextViewer( StorageFile ISF )
-            :this()
-        {
-            CurrentFile = ISF;
+		public DirectTextViewer( StorageFile ISF )
+			:this()
+		{
+			CurrentFile = ISF;
 
-            InitAppBar();
-            ViewFile( ISF );
-        }
+			InitAppBar();
+			ViewFile( ISF );
+		}
 
-        private void InitAppBar()
-        {
-            StringResources stx = new StringResources( "AppBar" );
+		private void InitAppBar()
+		{
+			StringResources stx = new StringResources( "AppBar" );
 
-            AppBarButton ExportBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Export, stx.Text( "Export" ) );
-            ExportBtn.Click += ExportBtn_Click;
+			AppBarButton ExportBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Export, stx.Text( "Export" ) );
+			ExportBtn.Click += ExportBtn_Click;
 
-            MajorControls = new ICommandBarElement[] { ExportBtn };
-        }
+			MajorControls = new ICommandBarElement[] { ExportBtn };
+		}
 
-        private async void ExportBtn_Click( object sender, RoutedEventArgs e )
-        {
-            IStorageFile ExFile = await AppStorage.SaveFileAsync( "Text File", new string[] { ".log" } );
-            if ( ExFile == null ) return;
-            await CurrentFile.CopyAndReplaceAsync( ExFile );
-        }
+		private async void ExportBtn_Click( object sender, RoutedEventArgs e )
+		{
+			IStorageFile ExFile = await AppStorage.SaveFileAsync( "Text File", new string[] { ".log" } );
+			if ( ExFile == null ) return;
+			await CurrentFile.CopyAndReplaceAsync( ExFile );
+		}
 
-        protected override void OnNavigatedTo( NavigationEventArgs e )
-        {
-            base.OnNavigatedTo( e );
-            Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
+		protected override void OnNavigatedTo( NavigationEventArgs e )
+		{
+			base.OnNavigatedTo( e );
+			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-            ViewFile( e.Parameter as StorageFile );
-        }
+			ViewFile( e.Parameter as StorageFile );
+		}
 
-        private async void ViewFile( StorageFile file )
-        {
-            StorageFileStreamer SFS = new StorageFileStreamer( file );
-            IList<string> FirstRead = await SFS.NextPage( 50 );
+		private async void ViewFile( StorageFile file )
+		{
+			StorageFileStreamer SFS = new StorageFileStreamer( file );
+			IList<string> FirstRead = await SFS.NextPage( 50 );
 
-            Observables<string, string> OSF = new Observables<string, string>( FirstRead );
-            OSF.ConnectLoader( SFS );
+			Observables<string, string> OSF = new Observables<string, string>( FirstRead );
+			OSF.ConnectLoader( SFS );
 
-            TextContent.ItemsSource = OSF;
-        }
+			TextContent.ItemsSource = OSF;
+		}
 
-    }
+	}
 }

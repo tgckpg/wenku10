@@ -8,90 +8,90 @@ using Net.Astropenguin.Loaders;
 
 namespace wenku8.Model.Loaders
 {
-    using AdvDM;
-    using Interfaces;
-    using ListItem;
-    using Settings;
+	using AdvDM;
+	using Interfaces;
+	using ListItem;
+	using Settings;
 
-    sealed class ContentIllusLoader
-    {
-        public static ContentIllusLoader Instance { get; private set; }
+	sealed class ContentIllusLoader
+	{
+		public static ContentIllusLoader Instance { get; private set; }
 
-        private WBackgroundTransfer Transfer;
-        private List<IIllusUpdate> ImgThumbs;
+		private WBackgroundTransfer Transfer;
+		private List<IIllusUpdate> ImgThumbs;
 
-        public ContentIllusLoader()
-        {
-            Transfer = new WBackgroundTransfer();
-            Transfer.OnThreadComplete += Transfer_OnThreadComplete;
+		public ContentIllusLoader()
+		{
+			Transfer = new WBackgroundTransfer();
+			Transfer.OnThreadComplete += Transfer_OnThreadComplete;
 
-            ImgThumbs = new List<IIllusUpdate>();
-        }
+			ImgThumbs = new List<IIllusUpdate>();
+		}
 
-        public static void Initialize()
-        {
-            if ( Instance == null )
-                Instance = new ContentIllusLoader();
-        }
+		public static void Initialize()
+		{
+			if ( Instance == null )
+				Instance = new ContentIllusLoader();
+		}
 
 
-        public async void RegisterImage( IIllusUpdate Item )
-        {
-            lock ( ImgThumbs )
-            {
-                if ( ImgThumbs.Contains( Item ) ) return;
-                ImgThumbs.Add( Item );
-            }
+		public async void RegisterImage( IIllusUpdate Item )
+		{
+			lock ( ImgThumbs )
+			{
+				if ( ImgThumbs.Contains( Item ) ) return;
+				ImgThumbs.Add( Item );
+			}
 
-            ImageThumb Thumb;
-            if ( Item.ImgThumb == null )
-            {
-                string url = Item.SrcUrl;
+			ImageThumb Thumb;
+			if ( Item.ImgThumb == null )
+			{
+				string url = Item.SrcUrl;
 
-                // Use filename as <id>.<format> since format maybe <id>.png or <id>.jpg
-                string fileName = url.Substring( url.LastIndexOf( '/' ) + 1 );
-                string imageLocation = FileLinks.ROOT_IMAGE + fileName;
+				// Use filename as <id>.<format> since format maybe <id>.png or <id>.jpg
+				string fileName = url.Substring( url.LastIndexOf( '/' ) + 1 );
+				string imageLocation = FileLinks.ROOT_IMAGE + fileName;
 
-                Thumb = new ImageThumb( imageLocation, 200, null );
-                Thumb.Reference = url;
+				Thumb = new ImageThumb( imageLocation, 200, null );
+				Thumb.Reference = url;
 
-                Item.ImgThumb = Thumb;
-            }
-            else
-            {
-                Thumb = Item.ImgThumb;
-            }
+				Item.ImgThumb = Thumb;
+			}
+			else
+			{
+				Thumb = Item.ImgThumb;
+			}
 
-            await Thumb.Set();
-            if ( Thumb.IsDownloadNeeded )
-            {
-                Guid G = await Transfer.RegisterImage( Thumb.Reference, Thumb.Location );
-                Thumb.Id = G;
-            }
-            else
-            {
-                lock ( ImgThumbs ) ImgThumbs.Remove( Item );
-                Item.Update();
-            }
-        }
+			await Thumb.Set();
+			if ( Thumb.IsDownloadNeeded )
+			{
+				Guid G = await Transfer.RegisterImage( Thumb.Reference, Thumb.Location );
+				Thumb.Id = G;
+			}
+			else
+			{
+				lock ( ImgThumbs ) ImgThumbs.Remove( Item );
+				Item.Update();
+			}
+		}
 
-        private void Transfer_OnThreadComplete( DTheradCompleteArgs DArgs )
-        {
-            ClearItem( DArgs.Id );
-        }
+		private void Transfer_OnThreadComplete( DTheradCompleteArgs DArgs )
+		{
+			ClearItem( DArgs.Id );
+		}
 
-        private void ClearItem( Guid Id )
-        {
-            lock ( ImgThumbs )
-            {
-                IIllusUpdate Item = ImgThumbs.FirstOrDefault( x => x.ImgThumb.Id.Equals( Id ) );
-                if( Item != null )
-                {
-                    Item.Update();
-                    ImgThumbs.Remove( Item );
-                }
-            }
-        }
+		private void ClearItem( Guid Id )
+		{
+			lock ( ImgThumbs )
+			{
+				IIllusUpdate Item = ImgThumbs.FirstOrDefault( x => x.ImgThumb.Id.Equals( Id ) );
+				if( Item != null )
+				{
+					Item.Update();
+					ImgThumbs.Remove( Item );
+				}
+			}
+		}
 
-    }
+	}
 }
