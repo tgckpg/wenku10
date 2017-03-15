@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
+using Windows.System.Diagnostics;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
 
@@ -42,6 +43,8 @@ namespace Tasks
 		private bool Retrying = false;
 		private int MaxRetry = 3;
 
+		private static volatile string ActiveTask = "";
+
 		private string TASK_START { get { return Retrying ? "retry-start" : "task-start"; } }
 		private string TASK_END { get { return Retrying ? "retry-end" : "task-end"; } }
 
@@ -67,7 +70,7 @@ namespace Tasks
 			if ( Properties.ENABLE_SYSTEM_LOG )
 			{
 				new FileSystemLog( FileLinks.ROOT_LOG + ( Retrying ? FileLinks.LOG_BGTASK_RETRY : FileLinks.LOG_BGTASK_UPDATE ) );
-				Logger.Log( ID, "BockgroundTask init, mode: " + ( Retrying ? "Retry" : "Update" ), LogType.INFO );
+				Logger.Log( ID, "BackgroundTask init, mode: " + ( Retrying ? "Retry" : "Update" ), LogType.INFO );
 			}
 
 			THttpRequest.UA = string.Format( AppKeys.UA, AppSettings.SimpVersion );
@@ -79,6 +82,19 @@ namespace Tasks
 
 		public async void Run( IBackgroundTaskInstance taskInstance )
 		{
+			lock ( ActiveTask )
+			{
+				uint PID = ProcessDiagnosticInfo.GetForCurrentProcess().ProcessId;
+				if ( !string.IsNullOrEmpty( ActiveTask ) )
+				{
+					Logger.Log( ID, "Another Task is already running: " + ActiveTask + " | " + PID, LogType.INFO );
+					taskInstance.GetDeferral().Complete();
+					return;
+				}
+
+				ActiveTask = string.Format( "{0}: {1}", taskInstance.Task.Name, PID );
+			}
+
 			Deferral = taskInstance.GetDeferral();
 
 			// Associate a cancellation handler with the background task.
@@ -182,6 +198,7 @@ namespace Tasks
 			Builder.Name = TASK_MAIN;
 			Builder.TaskEntryPoint = ENTRY_POINT;
 			Builder.SetTrigger( MinuteTrigger );
+			Builder.AddCondition( new SystemCondition( SystemConditionType.InternetAvailable ) );
 
 			BackgroundTaskRegistration task = Builder.Register();
 		}
@@ -210,6 +227,7 @@ namespace Tasks
 			Builder.Name = TASK_RETRY;
 			Builder.TaskEntryPoint = ENTRY_POINT;
 			Builder.SetTrigger( MinuteTrigger );
+			Builder.AddCondition( new SystemCondition( SystemConditionType.InternetAvailable ) );
 
 			BackgroundTaskRegistration task = Builder.Register();
 		}

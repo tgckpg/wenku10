@@ -700,7 +700,7 @@ namespace wenku10.Pages
 				, Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
 			};
 
-			FlowDirection = Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT
+			MainSplitView.FlowDirection = Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT
 				? FlowDirection.LeftToRight
 				: FlowDirection.RightToLeft;
 
