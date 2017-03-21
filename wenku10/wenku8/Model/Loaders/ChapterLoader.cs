@@ -47,7 +47,7 @@ namespace wenku8.Model.Loaders
 
 		public async Task LoadAsync( Chapter C, bool Cache = true )
 		{
-			if ( Cache && Shared.Storage.FileExists( C.ChapterPath ) )
+			if ( ( Cache && Shared.Storage.FileExists( C.ChapterPath ) ) || C is LocalChapter )
 			{
 				OnComplete( C );
 			}
@@ -59,7 +59,7 @@ namespace wenku8.Model.Loaders
 
 				if ( SC.TempFile != null )
 				{
-					await new ContentParser().OrganizeBookContent( await SC.TempFile.ReadString() , SC );
+					await new ContentParser().OrganizeBookContent( await SC.TempFile.ReadString(), SC );
 				}
 
 				OnComplete( C );
