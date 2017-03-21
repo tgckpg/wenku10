@@ -96,15 +96,17 @@ namespace wenku10.Pages
 
 		Rectangle OriIndicator;
 
-		public ContentReader()
+		private ContentReader()
 		{
 			this.InitializeComponent();
 		}
 
-		public ContentReader( Chapter C )
+		public ContentReader( BookItem Book, Chapter C )
 			: this()
 		{
 			SetTemplate();
+
+			CurrentBook = Book;
 			OpenBook( C );
 		}
 
@@ -386,24 +388,6 @@ namespace wenku10.Pages
 			// Throw this into background as it is resources intensive
 			Task.Run( () =>
 			{
-				if ( CurrentBook == null || C.aid != CurrentBook.Id )
-				{
-					Shared.LoadMessage( "BookConstruct" );
-
-					if ( C is SChapter )
-					{
-						CurrentBook = new BookInstruction( ( SChapter ) C );
-					}
-					else if ( C is LocalChapter )
-					{
-						CurrentBook = new LocalTextDocument( ( LocalChapter ) C );
-					}
-					else
-					{
-						CurrentBook = X.Instance<BookItem>( XProto.BookItemEx, C.aid );
-					}
-				}
-
 				BookLoader BL = new BookLoader( BookLoaded );
 				BL.Load( CurrentBook, true );
 

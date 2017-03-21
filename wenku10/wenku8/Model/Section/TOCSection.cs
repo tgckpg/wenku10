@@ -79,8 +79,8 @@ namespace wenku8.Model.Section
 					}
 				}
 			}
-			EndLoop:
 
+			EndLoop:
 			NotifyChanged( "AnchorAvailable" );
 		}
 

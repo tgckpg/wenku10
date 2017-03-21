@@ -108,7 +108,7 @@ namespace wenku10.Pages
 		protected void ChapterSelected( object sender, ItemClickEventArgs e )
 		{
 			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-			ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ( Chapter ) e.ClickedItem ) );
+			ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, ( Chapter ) e.ClickedItem ) );
 		}
 
 		protected async Task OneDriveRsync()
@@ -123,7 +123,7 @@ namespace wenku10.Pages
 		{
 			if ( TOCData == null ) return;
 			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-			ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( TOCData.AutoAnchor ) );
+			ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, TOCData.AutoAnchor ) );
 		}
 
 		protected void TOCShowVolumeAction( object sender, RightTappedRoutedEventArgs e )

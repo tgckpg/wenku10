@@ -470,7 +470,7 @@ namespace wenku10.Pages
 			if( TOCData.AnchorAvailable )
 			{
 				ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( TOCData.AutoAnchor ) );
+				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, TOCData.AutoAnchor ) );
 			}
 			else
 			{

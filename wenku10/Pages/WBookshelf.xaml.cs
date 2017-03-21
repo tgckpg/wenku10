@@ -178,12 +178,15 @@ namespace wenku10.Pages
 			FS.Reorder( ( sender as ComboBox ).SelectedIndex );
 		}
 
-		private void BookClicked( object sender, ItemClickEventArgs e )
+		private async void BookClicked( object sender, ItemClickEventArgs e )
 		{
 			if ( Locked ) return;
 			Locked = true;
 
-			BookItem Book = ItemProcessor.GetBookEx( ( ( BookInfoItem ) e.ClickedItem ).Payload );
+			string Id = ( ( BookInfoItem ) e.ClickedItem ).Payload;
+
+			IDeathblow Deathblow = await ItemProcessor.GetDeathblow( Id );
+			BookItem Book = Deathblow == null ? ItemProcessor.GetBookEx( Id ) : Deathblow.GetBook();
 
 			ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
 

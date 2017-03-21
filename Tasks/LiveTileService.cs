@@ -32,7 +32,7 @@ namespace Tasks
 				.FirstOrDefault()?.Attributes
 				.FirstOrDefault( x => x.NodeName == "src" );
 
-			string SmallTile = await Image.LiveTileBadgeImage( CanvasDevice, Book, 71, 71, "\uEDAD" );
+			string SmallTile = await Image.LiveTileBadgeImage( CanvasDevice, Book, 150, 150, "\uEDAD" );
 			if ( !string.IsNullOrEmpty( SmallTile ) )
 			{
 				ImgSrc.NodeValue = SmallTile;
