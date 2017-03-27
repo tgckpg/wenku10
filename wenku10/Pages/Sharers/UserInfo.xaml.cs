@@ -25,166 +25,166 @@ using wenku8.Resources;
 
 namespace wenku10.Pages.Sharers
 {
-    sealed partial class UserInfo : Page, ICmdControls
-    {
-        #pragma warning disable 0067
-        public event ControlChangedEvent ControlChanged;
-        #pragma warning restore 0067
+	sealed partial class UserInfo : Page, ICmdControls
+	{
+		#pragma warning disable 0067
+		public event ControlChangedEvent ControlChanged;
+		#pragma warning restore 0067
 
-        public bool NoCommands { get; }
-        public bool MajorNav { get; }
+		public bool NoCommands { get; }
+		public bool MajorNav { get; }
 
-        public IList<ICommandBarElement> MajorControls { get; private set; }
-        public IList<ICommandBarElement> Major2ndControls { get; private set; }
-        public IList<ICommandBarElement> MinorControls { get ; private set; }
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-        private RuntimeCache RCache;
+		private RuntimeCache RCache;
 
-        private string CurrentDispName;
+		private string CurrentDispName;
 
-        public UserInfo()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+		public UserInfo()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        private void SetTemplate()
-        {
-            InitAppBar();
+		private void SetTemplate()
+		{
+			InitAppBar();
 
-            RCache = new RuntimeCache();
+			RCache = new RuntimeCache();
 
-            RCache.POST(
-                Shared.ShRequest.Server
-                , Shared.ShRequest.MyProfile()
-                , ( e, id ) =>
-                {
-                    try
-                    {
-                        JsonObject JDef = JsonStatus.Parse( e.ResponseString );
-                        JsonObject JData = JDef.GetNamedObject( "data" );
-                        var j = Dispatcher.RunIdleAsync( ( x ) => SetProfileData( JData ) );
-                    }
-                    catch ( Exception ex )
-                    {
-                        ShowErrorMessage( ex.Message );
-                    }
-                    MarkIdle();
-                }
-                , ( a, b, ex ) =>
-                {
-                    ShowErrorMessage( ex.Message );
-                    MarkIdle();
-                }
-                , false
-            );
-        }
+			RCache.POST(
+				Shared.ShRequest.Server
+				, Shared.ShRequest.MyProfile()
+				, ( e, id ) =>
+				{
+					try
+					{
+						JsonObject JDef = JsonStatus.Parse( e.ResponseString );
+						JsonObject JData = JDef.GetNamedObject( "data" );
+						var j = Dispatcher.RunIdleAsync( ( x ) => SetProfileData( JData ) );
+					}
+					catch ( Exception ex )
+					{
+						ShowErrorMessage( ex.Message );
+					}
+					MarkIdle();
+				}
+				, ( a, b, ex ) =>
+				{
+					ShowErrorMessage( ex.Message );
+					MarkIdle();
+				}
+				, false
+			);
+		}
 
-        private void InitAppBar()
-        {
-            StringResources stx = new StringResources( "Settings", "Message", "ContextMenu" );
-            AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout" ) );
-            LogoutBtn.Click += async ( s, e ) =>
-            {
-                bool Yes = false;
-                await Popups.ShowDialog( UIAliases.CreateDialog(
-                    stx.Str( "ConfirmLogout", "Message" )
-                    , () => Yes = true
-                    , stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
-                ) );
+		private void InitAppBar()
+		{
+			StringResources stx = new StringResources( "Settings", "Message", "ContextMenu" );
+			AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout" ) );
+			LogoutBtn.Click += async ( s, e ) =>
+			{
+				bool Yes = false;
+				await Popups.ShowDialog( UIAliases.CreateDialog(
+					stx.Str( "ConfirmLogout", "Message" )
+					, () => Yes = true
+					, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
+				) );
 
-                if ( Yes )
-                {
-                    ControlFrame.Instance.CommandMgr.SHLogout();
-                    ControlFrame.Instance.GoBack();
-                    ControlFrame.Instance.BackStack.Remove( PageId.SH_USER_INFO );
-                }
-            };
+				if ( Yes )
+				{
+					ControlFrame.Instance.CommandMgr.SHLogout();
+					ControlFrame.Instance.GoBack();
+					ControlFrame.Instance.BackStack.Remove( PageId.SH_USER_INFO );
+				}
+			};
 
-            SecondaryIconButton ManageAuth = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
-            ManageAuth.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new ManageAuth() );
+			SecondaryIconButton ManageAuth = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
+			ManageAuth.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new ManageAuth() );
 
-            MajorControls = new ICommandBarElement[] { LogoutBtn };
-            Major2ndControls = new ICommandBarElement[] { ManageAuth };
-        }
+			MajorControls = new ICommandBarElement[] { LogoutBtn };
+			Major2ndControls = new ICommandBarElement[] { ManageAuth };
+		}
 
-        private void SetProfileData( JsonObject JData )
-        {
-            CurrentDispName = JData.GetNamedString( "display_name" );
-            DisplayName.Text = CurrentDispName;
-        }
+		private void SetProfileData( JsonObject JData )
+		{
+			CurrentDispName = JData.GetNamedString( "display_name" );
+			DisplayName.Text = CurrentDispName;
+		}
 
-        private void DispNameEnter( object sender, KeyRoutedEventArgs e )
-        {
-            if ( e.Key == Windows.System.VirtualKey.Enter )
-            {
-                Focus( FocusState.Pointer );
-            }
-        }
+		private void DispNameEnter( object sender, KeyRoutedEventArgs e )
+		{
+			if ( e.Key == Windows.System.VirtualKey.Enter )
+			{
+				Focus( FocusState.Pointer );
+			}
+		}
 
-        private void DispNameLostFocus( object sender, RoutedEventArgs e )
-        {
-            SubmitDispName();
-        }
+		private void DispNameLostFocus( object sender, RoutedEventArgs e )
+		{
+			SubmitDispName();
+		}
 
-        private void SubmitDispName()
-        {
-            string NewDispName = DisplayName.Text.Trim();
-            if ( NewDispName == CurrentDispName ) return;
+		private void SubmitDispName()
+		{
+			string NewDispName = DisplayName.Text.Trim();
+			if ( NewDispName == CurrentDispName ) return;
 
-            RCache.POST(
-                Shared.ShRequest.Server
-                , Shared.ShRequest.EditProfile( NewDispName )
-                , ( e, id ) =>
-                {
-                    try
-                    {
-                        JsonObject JDef = JsonStatus.Parse( e.ResponseString );
-                    }
-                    catch ( Exception ex )
-                    {
-                        ShowErrorMessage( ex.Message );
-                    }
-                    MarkIdle();
-                }
-                , ( a, b, ex ) =>
-                {
-                    ShowErrorMessage( ex.Message );
-                    MarkIdle();
-                }
-                , false
-            );
+			RCache.POST(
+				Shared.ShRequest.Server
+				, Shared.ShRequest.EditProfile( NewDispName )
+				, ( e, id ) =>
+				{
+					try
+					{
+						JsonObject JDef = JsonStatus.Parse( e.ResponseString );
+					}
+					catch ( Exception ex )
+					{
+						ShowErrorMessage( ex.Message );
+					}
+					MarkIdle();
+				}
+				, ( a, b, ex ) =>
+				{
+					ShowErrorMessage( ex.Message );
+					MarkIdle();
+				}
+				, false
+			);
 
-            MarkBusy();
-        }
+			MarkBusy();
+		}
 
-        private void ShowErrorMessage( string Mesg )
-        {
-            var j = Dispatcher.RunIdleAsync( ( x ) => ErrorMessage.Text = Mesg );
-        }
+		private void ShowErrorMessage( string Mesg )
+		{
+			var j = Dispatcher.RunIdleAsync( ( x ) => ErrorMessage.Text = Mesg );
+		}
 
-        private void MarkIdle()
-        {
-            var j = Dispatcher.RunIdleAsync( ( x ) =>
-            {
-                DisplayName.IsEnabled = true;
-                LoadingRing.IsActive = false;
-            } );
-        }
+		private void MarkIdle()
+		{
+			var j = Dispatcher.RunIdleAsync( ( x ) =>
+			{
+				DisplayName.IsEnabled = true;
+				LoadingRing.IsActive = false;
+			} );
+		}
 
-        private void MarkBusy()
-        {
-            var j = Dispatcher.RunIdleAsync( ( x ) =>
-            {
-                DisplayName.IsEnabled = false;
+		private void MarkBusy()
+		{
+			var j = Dispatcher.RunIdleAsync( ( x ) =>
+			{
+				DisplayName.IsEnabled = false;
 
-                LoadingRing.IsActive = true;
-            } );
-        }
+				LoadingRing.IsActive = true;
+			} );
+		}
 
-        private async void ChangePassword( object sender, RoutedEventArgs e )
-        {
-            await Popups.ShowDialog( new Dialogs.Sharers.ChangePassword() );
-        }
-    }
+		private async void ChangePassword( object sender, RoutedEventArgs e )
+		{
+			await Popups.ShowDialog( new Dialogs.Sharers.ChangePassword() );
+		}
+	}
 }

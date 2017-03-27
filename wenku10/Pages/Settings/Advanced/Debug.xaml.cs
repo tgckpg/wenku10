@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -26,107 +27,121 @@ using wenku8.System;
 
 namespace wenku10.Pages.Settings.Advanced
 {
-    public sealed partial class Debug : Page
-    {
-        bool ActionBlocked = false;
+	public sealed partial class Debug : Page
+	{
+		bool ActionBlocked = false;
 
-        public Debug()
-        {
-            this.InitializeComponent();
-            FileLogToggle.IsOn = Properties.ENABLE_SYSTEM_LOG;
-            RemoteLogToggle.IsOn = Properties.ENABLE_RSYSTEM_LOG;
-            RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
+		public Debug()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-            string Level = Properties.LOG_LEVEL;
-            LogLevelCB.SelectedItem = LogLevelCB.Items.FirstOrDefault( ( x ) => ( x as TextBlock ).Text == Level );
-        }
+		private void SetTemplate()
+		{
+			FileLogToggle.IsOn = Properties.ENABLE_SYSTEM_LOG;
+			RemoteLogToggle.IsOn = Properties.ENABLE_RSYSTEM_LOG;
+			RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
 
-        private void FileLog( object sender, RoutedEventArgs e )
-        {
-            Properties.ENABLE_SYSTEM_LOG = FileLogToggle.IsOn;
-        }
+			string Level = Properties.LOG_LEVEL;
+			LogLevelCB.SelectedItem = LogLevelCB.Items.FirstOrDefault( ( x ) => ( x as TextBlock ).Text == Level );
 
-        private void RemoteLog( object sender, RoutedEventArgs e )
-        {
-            Properties.ENABLE_RSYSTEM_LOG
-                = RemoteAddress.IsEnabled
-                = RemoteLogToggle.IsOn
-                ;
-        }
+			TypeInfo LogNames = typeof( FileLinks ).GetTypeInfo();
+			LogList.ItemsSource = LogNames.DeclaredFields.Where( x => x.Name.StartsWith( "LOG_" ) ).ToArray();
+		}
 
-        private async void RemoteAddress_LostFocus( object sender, RoutedEventArgs e )
-        {
-            string IP = RemoteAddress.Text.Trim();
+		private void FileLog( object sender, RoutedEventArgs e )
+		{
+			Properties.ENABLE_SYSTEM_LOG = FileLogToggle.IsOn;
+		}
 
-            IPAddress NotUsed;
-            if ( !IPAddress.TryParse( IP, out NotUsed ) )
-            {
-                await Popups.ShowDialog( UIAliases.CreateDialog( "This IP Address is invalid" ) );
-                RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
-            }
-            else
-            {
-                Properties.RSYSTEM_LOG_ADDRESS = IP;
-            }
-        }
+		private void RemoteLog( object sender, RoutedEventArgs e )
+		{
+			Properties.ENABLE_RSYSTEM_LOG
+				= RemoteAddress.IsEnabled
+				= RemoteLogToggle.IsOn
+				;
+		}
 
-        private void LogLevelCB_SelectionChanged( object sender, SelectionChangedEventArgs e )
-        {
-            TextBlock T = LogLevelCB.SelectedItem as TextBlock;
-            Properties.LOG_LEVEL = T.Text;
-            LogControl.SetFilter( T.Text );
-        }
+		private async void RemoteAddress_LostFocus( object sender, RoutedEventArgs e )
+		{
+			string IP = RemoteAddress.Text.Trim();
 
-        private async void ViewBgTaskConf( object sender, RoutedEventArgs e )
-        {
-            if ( ActionBlocked ) return;
-            ActionBlocked = true;
+			IPAddress NotUsed;
+			if ( !IPAddress.TryParse( IP, out NotUsed ) )
+			{
+				await Popups.ShowDialog( UIAliases.CreateDialog( "This IP Address is invalid" ) );
+				RemoteAddress.Text = Properties.RSYSTEM_LOG_ADDRESS;
+			}
+			else
+			{
+				Properties.RSYSTEM_LOG_ADDRESS = IP;
+			}
+		}
 
-            StorageFile ISF = await AppStorage.MkTemp();
-            await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
+		private void LogLevelCB_SelectionChanged( object sender, SelectionChangedEventArgs e )
+		{
+			TextBlock T = LogLevelCB.SelectedItem as TextBlock;
+			Properties.LOG_LEVEL = T.Text;
+			LogControl.SetFilter( T.Text );
+		}
 
-            await ControlFrame.Instance.CloseSubView();
-            ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
-        }
+		private async void ViewBgTaskConf( object sender, RoutedEventArgs e )
+		{
+			if ( ActionBlocked ) return;
+			ActionBlocked = true;
 
-        private async void ViewDebugLog( object sender, RoutedEventArgs e )
-        {
-            if ( ActionBlocked ) return;
-            ActionBlocked = true;
+			StorageFile ISF = await AppStorage.MkTemp();
+			await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
 
-            StorageFile ISF = await AppStorage.MkTemp();
+			await ControlFrame.Instance.CloseSubView();
+			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
+		}
 
-            if ( Shared.Storage.FileExists( "debug.log" ) )
-            {
-                Bootstrap.LogInstance.Stop();
+		private async void ViewDebugLog( object sender, RoutedEventArgs e )
+		{
+			if ( ActionBlocked ) return;
+			ActionBlocked = true;
 
-                using ( Stream s = Bootstrap.LogInstance.GetStream() )
-                using ( Stream ts = await ISF.OpenStreamForWriteAsync() )
-                {
-                    await s.CopyToAsync( ts );
-                }
+			FieldInfo LogInfo = ( FieldInfo ) ( ( Button ) sender ).DataContext;
 
-                Bootstrap.LogInstance.Start();
-            }
+			StorageFile ISF = await AppStorage.MkTemp();
+			string Location = FileLinks.ROOT_LOG + LogInfo.GetValue( null );
 
-            await ControlFrame.Instance.CloseSubView();
-            ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
-        }
+			if ( Shared.Storage.FileExists( Location ) )
+			{
+				Bootstrap.LogInstance.Stop();
 
-        private async void ClearDebugLog( object sender, RoutedEventArgs e )
-        {
-            if ( ActionBlocked ) return;
-            ActionBlocked = true;
+				using ( Stream s = Shared.Storage.GetStream( Location ) )
+				using ( Stream ts = await ISF.OpenStreamForWriteAsync() )
+				{
+					await s.CopyToAsync( ts );
+				}
 
-            StorageFile ISF = await AppStorage.MkTemp();
+				Bootstrap.LogInstance.Start();
+			}
 
-            if ( Shared.Storage.FileExists( "debug.log" ) )
-            {
-                Bootstrap.LogInstance.Stop();
-                Shared.Storage.DeleteFile( "debug.log" );
-                Bootstrap.LogInstance.Start();
-            }
-        }
+			await ControlFrame.Instance.CloseSubView();
+			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
+		}
 
-    }
+		private async void ClearDebugLog( object sender, RoutedEventArgs e )
+		{
+			if ( ActionBlocked ) return;
+			ActionBlocked = true;
+
+			FieldInfo LogInfo = ( FieldInfo ) ( ( Button ) sender ).DataContext;
+			string Location = FileLinks.ROOT_LOG + LogInfo.GetValue( null );
+
+			StorageFile ISF = await AppStorage.MkTemp();
+
+			if ( Shared.Storage.FileExists( Location ) )
+			{
+				Bootstrap.LogInstance.Stop();
+				Shared.Storage.DeleteFile( Location );
+				Bootstrap.LogInstance.Start();
+			}
+		}
+
+	}
 }

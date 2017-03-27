@@ -17,20 +17,20 @@ using wenku10.Pages.Dialogs.Taotu;
 
 namespace wenku8.Taotu
 {
-    using ThemeIcons;
+	using ThemeIcons;
 
-    sealed class WenkuMarker : GrimoireMarker
-    {
-        protected override IconBase Icon { get { return new IconExoticQuad(){ AutoScale = true }; } }
+	sealed class WenkuMarker : GrimoireMarker
+	{
+		protected override IconBase Icon { get { return new IconExoticQuad(){ AutoScale = true }; } }
 
-        public override async Task Edit()
-        {
-            await Popups.ShowDialog( new EditProcMark( this ) );
-            if( SubEdit != null )
-            {
-                MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
-            }
-        }
+		public override async Task Edit()
+		{
+			await Popups.ShowDialog( new EditProcMark( this ) );
+			if( SubEdit != null )
+			{
+				MessageBus.Send( typeof( ProceduresPanel ), "SubEdit", this );
+			}
+		}
 
-    }
+	}
 }

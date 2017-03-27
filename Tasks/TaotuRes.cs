@@ -10,25 +10,25 @@ using wenku8.Taotu;
 
 namespace Tasks
 {
-    sealed class TasksMarker : GrimoireMarker { public override Task Edit() { throw new NotImplementedException(); } } 
-    sealed class TasksExtractor : GrimoireExtractor { public override Task Edit() { throw new NotImplementedException(); } }
-    sealed class TasksListLoader : GrimoireListLoader { public override Task Edit() { throw new NotImplementedException(); } }
+	sealed class TasksMarker : GrimoireMarker { public override Task Edit() { throw new NotImplementedException(); } } 
+	sealed class TasksExtractor : GrimoireExtractor { public override Task Edit() { throw new NotImplementedException(); } }
+	sealed class TasksListLoader : GrimoireListLoader { public override Task Edit() { throw new NotImplementedException(); } }
 
-    sealed class THttpRequest : HttpRequest
-    {
-        public static string UA { get; internal set; }
+	sealed class THttpRequest : HttpRequest
+	{
+		public static string UA { get; internal set; }
 
-        public THttpRequest( Uri RequestUri )
-            : base( RequestUri )
-        {
-            EN_UITHREAD = false;
-        }
+		public THttpRequest( Uri RequestUri )
+			: base( RequestUri )
+		{
+			EN_UITHREAD = false;
+		}
 
-        override protected void CreateRequest()
-        {
-            base.CreateRequest();
-            UserAgent = UA;
-        }
-    }
+		override protected void CreateRequest()
+		{
+			base.CreateRequest();
+			UserAgent = UA;
+		}
+	}
 
 }

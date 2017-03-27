@@ -8,40 +8,40 @@ using Net.Astropenguin.IO;
 
 namespace wenku8.Settings.Layout
 {
-    using Ext;
+	using Ext;
 
-    sealed class NavList : INavList
-    {
-        private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_NAVPAGE;
-        private const string Horizontal = "IsHorizontal";
+	sealed class NavList : INavList
+	{
+		private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_NAVPAGE;
+		private const string Horizontal = "IsHorizontal";
 
-        private XRegistry LayoutSettings;
+		private XRegistry LayoutSettings;
 
-        public bool IsHorizontal
-        {
-            get
-            {
-                return LayoutSettings.Parameter( Horizontal ).GetBool( "enable" );
-            }
-            set
-            {
-                LayoutSettings.SetParameter( Horizontal, new XKey( "enable", value ) );
-                LayoutSettings.Save();
-            }
-        }
+		public bool IsHorizontal
+		{
+			get
+			{
+				return LayoutSettings.Parameter( Horizontal ).GetBool( "enable" );
+			}
+			set
+			{
+				LayoutSettings.SetParameter( Horizontal, new XKey( "enable", value ) );
+				LayoutSettings.Save();
+			}
+		}
 
-        public NavList()
-        {
+		public NavList()
+		{
 			LayoutSettings = new XRegistry( AppKeys.TS_CXML, TFileName );
-            InitParams();
-        }
+			InitParams();
+		}
 
-        private void InitParams()
-        {
-            if( LayoutSettings.Parameter( Horizontal ) == null )
-            {
-                IsHorizontal = !wenku10.MainStage.Instance.IsPhone;
-            }
-        }
-    }
+		private void InitParams()
+		{
+			if( LayoutSettings.Parameter( Horizontal ) == null )
+			{
+				IsHorizontal = !wenku10.MainStage.Instance.IsPhone;
+			}
+		}
+	}
 }

@@ -13,33 +13,33 @@ using wenku8.Resources;
 
 namespace Tasks
 {
-    sealed class LiveTileService
-    {
-        internal static async Task UpdateTile( IDisposable CanvasDevice, BookItem Book, string TileId )
-        {
-            TileUpdater Updater = TileUpdateManager.CreateTileUpdaterForSecondaryTile( TileId );
-            Updater.EnableNotificationQueue( true );
-            Updater.Clear();
+	sealed class LiveTileService
+	{
+		internal static async Task UpdateTile( IDisposable CanvasDevice, BookItem Book, string TileId )
+		{
+			TileUpdater Updater = TileUpdateManager.CreateTileUpdaterForSecondaryTile( TileId );
+			Updater.EnableNotificationQueue( true );
+			Updater.Clear();
 
-            StringResBg stx = new StringResBg( "Message" );
+			StringResBg stx = new StringResBg( "Message" );
 
-            XmlDocument Template150 = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare150x150Text01 );
-            Template150.GetElementsByTagName( "text" ).First().AppendChild( Template150.CreateTextNode( stx.Str( "NewContent" ) ) );
-            Updater.Update( new TileNotification( Template150 ) );
+			XmlDocument Template150 = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare150x150Text01 );
+			Template150.GetElementsByTagName( "text" ).First().AppendChild( Template150.CreateTextNode( stx.Str( "NewContent" ) ) );
+			Updater.Update( new TileNotification( Template150 ) );
 
-            XmlDocument Template71 = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare71x71Image );
-            IXmlNode ImgSrc = Template71.GetElementsByTagName( "image" )
-                .FirstOrDefault()?.Attributes
-                .FirstOrDefault( x => x.NodeName == "src" );
+			XmlDocument Template71 = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare71x71Image );
+			IXmlNode ImgSrc = Template71.GetElementsByTagName( "image" )
+				.FirstOrDefault()?.Attributes
+				.FirstOrDefault( x => x.NodeName == "src" );
 
-            string SmallTile = await Image.LiveTileBadgeImage( CanvasDevice, Book, 71, 71, "\uEDAD" );
-            if ( !string.IsNullOrEmpty( SmallTile ) )
-            {
-                ImgSrc.NodeValue = SmallTile;
-                Updater.Update( new TileNotification( Template71 ) );
-            }
+			string SmallTile = await Image.LiveTileBadgeImage( CanvasDevice, Book, 150, 150, "\uEDAD" );
+			if ( !string.IsNullOrEmpty( SmallTile ) )
+			{
+				ImgSrc.NodeValue = SmallTile;
+				Updater.Update( new TileNotification( Template71 ) );
+			}
 
-        }
+		}
 
-    }
+	}
 }

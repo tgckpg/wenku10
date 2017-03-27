@@ -6,44 +6,44 @@ using System.Threading.Tasks;
 
 namespace wenku10.Pages
 {
-    static class PageId
-    {
-        public const string
-            BOOK_INFO_VIEW = "BookInfoView"
-            , BOOK_SPIDER_VIEW = "BookSpiderView"
-            , ZONE_SPIDER_VIEW = "ZoneSpiderView"
-            , LOCAL_DOCS_VIEW = "LocalDocsView"
-            , ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
-            , HISTORY = "History"
-            , MANAGE_PINS = "ManagePins"
-            , PROC_PANEL = "ProceduresPanel"
-            , CONTENT_READER = "ContentReader"
-            , SCRIPT_DETAILS = "ScriptDetails"
-            , MAIN_SETTINGS = "MainSettings"
-            , SH_USER_INFO = "SHUserInfo"
-            , ABOUT = "About"
+	static class PageId
+	{
+		public const string
+			BOOK_INFO_VIEW = "BookInfoView"
+			, BOOK_SPIDER_VIEW = "BookSpiderView"
+			, ZONE_SPIDER_VIEW = "ZoneSpiderView"
+			, LOCAL_DOCS_VIEW = "LocalDocsView"
+			, ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
+			, HISTORY = "History"
+			, MANAGE_PINS = "ManagePins"
+			, PROC_PANEL = "ProceduresPanel"
+			, CONTENT_READER = "ContentReader"
+			, SCRIPT_DETAILS = "ScriptDetails"
+			, MAIN_SETTINGS = "MainSettings"
+			, SH_USER_INFO = "SHUserInfo"
+			, ABOUT = "About"
 
-            , W_BOOKSHELF = "WBookshelf"
-            , W_COMMENT = "WComment"
-            , W_SEARCH = "WSearch"
-            , W_USER_INFO = "WUserInfo"
-            , W_NAV_SEL = "WNavSelections"
-            , W_NAV_LIST = "WNavList-"
-            , W_DEATHBLOW = "WDeathblow"
+			, W_BOOKSHELF = "WBookshelf"
+			, W_COMMENT = "WComment"
+			, W_SEARCH = "WSearch"
+			, W_USER_INFO = "WUserInfo"
+			, W_NAV_SEL = "WNavSelections"
+			, W_NAV_LIST = "WNavList-"
+			, W_DEATHBLOW = "WDeathblow"
 
-            , SG_W = "SuperGiants-W"
-            , SG_SH = "SuperGiants-SH"
+			, SG_W = "SuperGiants-W"
+			, SG_SH = "SuperGiants-SH"
 
-            , MONO_REDIRECTOR = "MonoRedirector"
+			, MONO_REDIRECTOR = "MonoRedirector"
 
-            , NULL = "Null"
-        ;
+			, NULL = "Null"
+		;
 
-        // Cannot be stored in backstacks
-        public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW, MONO_REDIRECTOR };
+		// Cannot be stored in backstacks
+		public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW, MONO_REDIRECTOR };
 
-        // Can only have single instance in stack
-        public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW, SCRIPT_DETAILS };
+		// Can only have single instance in stack
+		public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW, SCRIPT_DETAILS };
 
-    }
+	}
 }

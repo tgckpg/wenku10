@@ -9,31 +9,31 @@ using Net.Astropenguin.Helpers;
 
 namespace wenku8.Model.Section.SharersHub
 {
-    using ListItem.Sharers;
+	using ListItem.Sharers;
 
-    sealed class Activities : ObservableCollection<Activity>
-    {
-        public async void CheckActivity( Activity Act )
-        {
-            Act.Value();
+	sealed class Activities : ObservableCollection<Activity>
+	{
+		public async void CheckActivity( Activity Act )
+		{
+			Act.Value();
 
-            // Roughly wait a moment then remove it
-            await Task.Delay( 400 );
-            Remove( Act );
-        }
+			// Roughly wait a moment then remove it
+			await Task.Delay( 400 );
+			Remove( Act );
+		}
 
-        public void Add( Func<string> StxText, Action A )
-        {
-            Worker.UIInvoke( () =>
-            {
-                Add( new Activity( StxText(), A ) );
-            } );
-        }
+		public void Add( Func<string> StxText, Action A )
+		{
+			Worker.UIInvoke( () =>
+			{
+				Add( new Activity( StxText(), A ) );
+			} );
+		}
 
-        public void AddUI( Activity Act )
-        {
-            Worker.UIInvoke( () => Add( Act ) );
-        }
+		public void AddUI( Activity Act )
+		{
+			Worker.UIInvoke( () => Add( Act ) );
+		}
 
-    }
+	}
 }

@@ -71,12 +71,30 @@
             <Button Margin="0,10" Click="ViewBgTaskConf">
                 <TextBlock Text="View Background Task Config" />
             </Button>
-            <Button Margin="0,10" Click="ViewDebugLog">
-                <TextBlock Text="View Debug Log" />
-            </Button>
-            <Button Margin="0,10" Click="ClearDebugLog">
-                <TextBlock Text="Clear Debug Log" />
-            </Button>
+
+            <ItemsControl x:Name="LogList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}"
+                                       Margin="5"
+                                       Foreground="{StaticResource RelativeMajorBrush}" />
+                            <Button Grid.Column="1" Click="ViewDebugLog">
+                                <TextBlock Text="View" />
+                            </Button>
+                            <Button Grid.Column="2" Click="ClearDebugLog">
+                                <TextBlock Text="Clear" />
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
         </StackPanel>
     </ScrollViewer>
 </Page>

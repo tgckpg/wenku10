@@ -21,46 +21,46 @@ using wenku8.Settings.Theme;
 
 namespace wenku10.Pages.Settings.Themes
 {
-    sealed partial class EditColors : Page
-    {
-        private ThemeSet CurrentSet;
+	sealed partial class EditColors : Page
+	{
+		private ThemeSet CurrentSet;
 
-        private EditColors()
-        {
-            this.InitializeComponent();
-        }
+		private EditColors()
+		{
+			this.InitializeComponent();
+		}
 
-        public EditColors( ThemeSet ThemeColors )
-            : this()
-        {
-            InitTemplate( CurrentSet = ThemeColors );
-        }
+		public EditColors( ThemeSet ThemeColors )
+			: this()
+		{
+			InitTemplate( CurrentSet = ThemeColors );
+		}
 
-        private void InitTemplate( ThemeSet ColorSet )
-        {
-            List<ColorItem> Items = new List<ColorItem>();
-            foreach ( KeyValuePair<string, string> s in ThemeSet.ParamMap )
-            {
-                Items.Add( new ColorItem( s.Value, ColorSet.ColorDefs[ s.Key ] ) );
-            }
-            ColorList.ItemsSource = Items;
-        }
+		private void InitTemplate( ThemeSet ColorSet )
+		{
+			List<ColorItem> Items = new List<ColorItem>();
+			foreach ( KeyValuePair<string, string> s in ThemeSet.ParamMap )
+			{
+				Items.Add( new ColorItem( s.Value, ColorSet.ColorDefs[ s.Key ] ) );
+			}
+			ColorList.ItemsSource = Items;
+		}
 
-        private async void ColorList_ItemClick( object sender, ItemClickEventArgs e )
-        {
-            ColorItem C = e.ClickedItem as ColorItem;
-            Dialogs.ColorPicker Picker = new Dialogs.ColorPicker( C );
-            await Popups.ShowDialog( Picker );
+		private async void ColorList_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			ColorItem C = e.ClickedItem as ColorItem;
+			Dialogs.ColorPicker Picker = new Dialogs.ColorPicker( C );
+			await Popups.ShowDialog( Picker );
 
-            if ( Picker.Canceled ) return;
+			if ( Picker.Canceled ) return;
 
-            C.ChangeColor( Picker.UserChoice );
+			C.ChangeColor( Picker.UserChoice );
 
-            CurrentSet.SetColor( C );
+			CurrentSet.SetColor( C );
 
-            global::wenku8.System.ThemeManager Mgr = new global::wenku8.System.ThemeManager();
-            Mgr.Remove( CurrentSet.Name );
-            Mgr.Save( CurrentSet );
-        }
-    }
+			global::wenku8.System.ThemeManager Mgr = new global::wenku8.System.ThemeManager();
+			Mgr.Remove( CurrentSet.Name );
+			Mgr.Save( CurrentSet );
+		}
+	}
 }

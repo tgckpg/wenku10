@@ -16,52 +16,52 @@ using Windows.UI.Xaml.Navigation;
 
 namespace wenku10.Pages.ContentReaderPane
 {
-    sealed partial class BookmarkList : Page
-    {
-        private ContentReader Reader;
-        private BookmarkListItem FlyoutTargetItem;
+	sealed partial class BookmarkList : Page
+	{
+		private ContentReader Reader;
+		private BookmarkListItem FlyoutTargetItem;
 
-        public BookmarkList()
-        {
-            this.InitializeComponent();
-        }
+		public BookmarkList()
+		{
+			this.InitializeComponent();
+		}
 
-        public BookmarkList( ContentReader MainReader )
-            :this()
-        {
-            Reader = MainReader;
-            Reader.ContentView.Reader.PropertyChanged += Reader_PropertyChanged;
-            MainList.ItemsSource = Reader.ContentView.Reader.CustomAnchors;
-        }
+		public BookmarkList( ContentReader MainReader )
+			:this()
+		{
+			Reader = MainReader;
+			Reader.ContentView.Reader.PropertyChanged += Reader_PropertyChanged;
+			MainList.ItemsSource = Reader.ContentView.Reader.CustomAnchors;
+		}
 
-        private void Reader_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
-        {
-            if( e.PropertyName == "CustomAnchors" )
-            {
-                MainList.ItemsSource = Reader.ContentView.Reader.CustomAnchors;
-            }
-        }
+		private void Reader_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
+		{
+			if( e.PropertyName == "CustomAnchors" )
+			{
+				MainList.ItemsSource = Reader.ContentView.Reader.CustomAnchors;
+			}
+		}
 
-        private void ListView_ItemClick( object sender, ItemClickEventArgs e )
-        {
-            BookmarkListItem Item = e.ClickedItem as BookmarkListItem;
-            Reader.OpenBookmark( Item );
-        }
+		private void ListView_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			BookmarkListItem Item = e.ClickedItem as BookmarkListItem;
+			Reader.OpenBookmark( Item );
+		}
 
-        private void Grid_RightTapped( object sender, RightTappedRoutedEventArgs e )
-        {
-            Grid ItemGrid = ( Grid ) sender;
-            FlyoutTargetItem = ItemGrid.DataContext as BookmarkListItem;
+		private void Grid_RightTapped( object sender, RightTappedRoutedEventArgs e )
+		{
+			Grid ItemGrid = ( Grid ) sender;
+			FlyoutTargetItem = ItemGrid.DataContext as BookmarkListItem;
 
-            if ( FlyoutTargetItem.AnchorIndex != -1 )
-            {
-                FlyoutBase.ShowAttachedFlyout( ItemGrid );
-            }
-        }
+			if ( FlyoutTargetItem.AnchorIndex != -1 )
+			{
+				FlyoutBase.ShowAttachedFlyout( ItemGrid );
+			}
+		}
 
-        private void RemoveBookmark( object sender, RoutedEventArgs e )
-        {
-            Reader.ContentView.Reader.RemoveAnchor( FlyoutTargetItem );
-        }
-    }
+		private void RemoveBookmark( object sender, RoutedEventArgs e )
+		{
+			Reader.ContentView.Reader.RemoveAnchor( FlyoutTargetItem );
+		}
+	}
 }

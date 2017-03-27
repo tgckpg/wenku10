@@ -7,18 +7,18 @@ using Net.Astropenguin.UnitTest;
 
 namespace wenku8
 {
-    using Ext;
-    using Resources;
-    using Settings;
+	using Ext;
+	using Resources;
+	using Settings;
 
-    class UnitTest : NetTrigger
+	class UnitTest : NetTrigger
 	{
 		public void Test_AppGateDownload( TestResult t )
 		{
 			IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
 			wc.InitDownload(
 				"Test"
-                , X.Call<XKey[]>( XProto.WRequest, "GetBookInfo", "20" )
+				, X.Call<XKey[]>( XProto.WRequest, "GetBookInfo", "20" )
 				, ( DRequestCompletedEventArgs e, string id ) =>
 				{
 					t.writeLine( "Download Success: " + id );

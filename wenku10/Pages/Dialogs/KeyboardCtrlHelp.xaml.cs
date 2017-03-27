@@ -16,30 +16,30 @@ using Windows.UI.Xaml.Navigation;
 
 namespace wenku10.Pages.Dialogs
 {
-    public sealed partial class KeyboardCtrlHelp : ContentDialog
-    {
-        private KeyboardCtrlHelp()
-        {
-            this.InitializeComponent();
-        }
+	public sealed partial class KeyboardCtrlHelp : ContentDialog
+	{
+		private KeyboardCtrlHelp()
+		{
+			this.InitializeComponent();
+		}
 
-        public KeyboardCtrlHelp( string Name, Dictionary<string, List<string>> Descs )
-            :this()
-        {
-            StringResources stx = new StringResources( "Resources" );
+		public KeyboardCtrlHelp( string Name, Dictionary<string, List<string>> Descs )
+			:this()
+		{
+			StringResources stx = new StringResources( "Resources" );
 
-            TitleText.Text = stx.Str( "Kb_For_" + Name ) + " - " + stx.Str( "KeyboardControls" );
+			TitleText.Text = stx.Str( "Kb_For_" + Name ) + " - " + stx.Str( "KeyboardControls" );
 
-            Dictionary<string, List<string>> LocalizedDesc = new Dictionary<string, List<string>>();
-            foreach ( string Key in Descs.Keys )
-            {
-                string Desc = stx.Str( "Kb_" + Key );
-                LocalizedDesc[ string.IsNullOrEmpty( Desc ) ? Key : Desc ] = Descs[ Key ];
-            }
+			Dictionary<string, List<string>> LocalizedDesc = new Dictionary<string, List<string>>();
+			foreach ( string Key in Descs.Keys )
+			{
+				string Desc = stx.Str( "Kb_" + Key );
+				LocalizedDesc[ string.IsNullOrEmpty( Desc ) ? Key : Desc ] = Descs[ Key ];
+			}
 
-            KeyList.ItemsSource = LocalizedDesc;
-        }
+			KeyList.ItemsSource = LocalizedDesc;
+		}
 
-        private void CloseDialog( object sender, ItemClickEventArgs e ) { Hide(); }
-    }
+		private void CloseDialog( object sender, ItemClickEventArgs e ) { Hide(); }
+	}
 }

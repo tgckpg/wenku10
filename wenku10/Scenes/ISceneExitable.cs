@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace wenku10.Scenes
 {
-    interface ISceneExitable
-    {
-        Task Exit();
-    }
+	interface ISceneExitable
+	{
+		Task Exit();
+	}
 }

@@ -31,263 +31,263 @@ using wenku8.Settings;
 
 namespace wenku10.Pages
 {
-    using Dialogs;
-    using Sharers;
-    using SHHub;
+	using Dialogs;
+	using Sharers;
+	using SHHub;
 
-    public sealed partial class OnlineScriptsView : Page, ICmdControls, INavPage, IAnimaPage
-    {
+	public sealed partial class OnlineScriptsView : Page, ICmdControls, INavPage, IAnimaPage
+	{
 #pragma warning disable 0067
-        public event ControlChangedEvent ControlChanged;
+		public event ControlChangedEvent ControlChanged;
 #pragma warning restore 0067
 
-        public bool NoCommands { get; }
-        public bool MajorNav { get { return true; } }
+		public bool NoCommands { get; }
+		public bool MajorNav { get { return true; } }
 
-        public IList<ICommandBarElement> MajorControls { get; private set; }
-        public IList<ICommandBarElement> Major2ndControls { get; private set; }
-        public IList<ICommandBarElement> MinorControls { get; private set; }
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-        private SharersHub SHHub;
-        private SHMember Member;
-        private AppBarButtonEx ActivyBtn;
+		private SharersHub SHHub;
+		private SHMember Member;
+		private AppBarButtonEx ActivyBtn;
 
-        public OnlineScriptsView()
-        {
-            this.InitializeComponent();
-            SetTemplate();
-        }
+		public OnlineScriptsView()
+		{
+			this.InitializeComponent();
+			SetTemplate();
+		}
 
-        public void SoftOpen()
-        {
-            MessageBus.OnDelivery += MessageBus_OnDelivery;
-            Member.OnStatusChanged += Member_OnStatusChanged;
+		public void SoftOpen()
+		{
+			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			Member.OnStatusChanged += Member_OnStatusChanged;
 
-            lock ( PendingRemove )
-            {
-                // Consume items to remove
-                foreach ( HubScriptItem HSI in PendingRemove )
-                    SHHub.SearchSet.Remove( HSI );
+			lock ( PendingRemove )
+			{
+				// Consume items to remove
+				foreach ( HubScriptItem HSI in PendingRemove )
+					SHHub.SearchSet.Remove( HSI );
 
-                PendingRemove.Clear();
-            }
-        }
+				PendingRemove.Clear();
+			}
+		}
 
-        public void SoftClose()
-        {
-            MessageBus.OnDelivery -= MessageBus_OnDelivery;
-            Member.OnStatusChanged -= Member_OnStatusChanged;
-        }
+		public void SoftClose()
+		{
+			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			Member.OnStatusChanged -= Member_OnStatusChanged;
+		}
 
-        #region Anima
-        Storyboard AnimaStory = new Storyboard();
+		#region Anima
+		Storyboard AnimaStory = new Storyboard();
 
-        public async Task EnterAnima()
-        {
-            AnimaStory.Stop();
-            AnimaStory.Children.Clear();
+		public async Task EnterAnima()
+		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
 
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
 
-            AnimaStory.Begin();
-            await Task.Delay( 350 );
-        }
+			AnimaStory.Begin();
+			await Task.Delay( 350 );
+		}
 
-        public async Task ExitAnima()
-        {
-            AnimaStory.Stop();
-            AnimaStory.Children.Clear();
+		public async Task ExitAnima()
+		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
 
-            LayoutRoot.RenderTransform = new TranslateTransform();
+			LayoutRoot.RenderTransform = new TranslateTransform();
 
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
-            SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
 
-            AnimaStory.Begin();
-            await Task.Delay( 350 );
-        }
-        #endregion
+			AnimaStory.Begin();
+			await Task.Delay( 350 );
+		}
+		#endregion
 
-        private void SetTemplate()
-        {
-            InitAppBar();
+		private void SetTemplate()
+		{
+			InitAppBar();
 
-            Member = X.Singleton<SHMember>( XProto.SHMember );
+			Member = X.Singleton<SHMember>( XProto.SHMember );
 
-            ActivyList.DataContext = Member;
-            ActivyBtn.SetBinding( AppBarButtonEx.CountProperty, new Binding() { Source = Member.Activities, Path = new PropertyPath( "Count" ) } );
+			ActivyList.DataContext = Member;
+			ActivyBtn.SetBinding( AppBarButtonEx.CountProperty, new Binding() { Source = Member.Activities, Path = new PropertyPath( "Count" ) } );
 
-            PendingRemove.Clear();
-            MessageBus.OnDelivery += StoreItemsToRemove;
+			PendingRemove.Clear();
+			MessageBus.OnDelivery += StoreItemsToRemove;
 
-            SHHub = new SharersHub();
-            SHHub.PropertyChanged += SHHub_PropertyChanged;
+			SHHub = new SharersHub();
+			SHHub.PropertyChanged += SHHub_PropertyChanged;
 
-            UpdateActivities();
+			UpdateActivities();
 
-            LayoutRoot.DataContext = SHHub;
-            SHHub.Search( "" );
+			LayoutRoot.DataContext = SHHub;
+			SHHub.Search( "" );
 
-            if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
-            {
-                var j = ControlFrame.Instance.CommandMgr.Authenticate();
-            }
-        }
+			if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				var j = ControlFrame.Instance.CommandMgr.Authenticate();
+			}
+		}
 
-        private static HashSet<HubScriptItem> PendingRemove = new HashSet<HubScriptItem>();
+		private static HashSet<HubScriptItem> PendingRemove = new HashSet<HubScriptItem>();
 
-        private static void StoreItemsToRemove( Message Mesg )
-        {
-            if( Mesg.Content == AppKeys.SH_SCRIPT_REMOVE )
-            {
-                lock ( PendingRemove ) PendingRemove.Add( ( HubScriptItem ) Mesg.Payload );
-            }
-        }
+		private static void StoreItemsToRemove( Message Mesg )
+		{
+			if( Mesg.Content == AppKeys.SH_SCRIPT_REMOVE )
+			{
+				lock ( PendingRemove ) PendingRemove.Add( ( HubScriptItem ) Mesg.Payload );
+			}
+		}
 
-        private void MessageBus_OnDelivery( Message Mesg )
-        {
-            switch ( Mesg.Content )
-            {
-                case AppKeys.SH_SHOW_GRANTS:
-                    ControlFrame.Instance.SubNavigateTo( this, () =>
-                    {
-                        ManageAuth MAuth = new ManageAuth();
-                        MAuth.GotoRequests();
-                        return MAuth;
-                    } );
-                    break;
-            }
-        }
+		private void MessageBus_OnDelivery( Message Mesg )
+		{
+			switch ( Mesg.Content )
+			{
+				case AppKeys.SH_SHOW_GRANTS:
+					ControlFrame.Instance.SubNavigateTo( this, () =>
+					{
+						ManageAuth MAuth = new ManageAuth();
+						MAuth.GotoRequests();
+						return MAuth;
+					} );
+					break;
+			}
+		}
 
-        private void Member_OnStatusChanged( object sender, MemberStatus args ) { UpdateActivities(); }
+		private void Member_OnStatusChanged( object sender, MemberStatus args ) { UpdateActivities(); }
 
-        private async void UpdateActivities()
-        {
-            if ( Member.IsLoggedIn )
-            {
-                ActivyBtn.IsLoading = true;
-                await new MyRequests().Get();
-                await new MyInbox().Get();
-                ActivyBtn.IsLoading = false;
-            }
-        }
+		private async void UpdateActivities()
+		{
+			if ( Member.IsLoggedIn )
+			{
+				ActivyBtn.IsLoading = true;
+				await new MyRequests().Get();
+				await new MyInbox().Get();
+				ActivyBtn.IsLoading = false;
+			}
+		}
 
-        private void SHHub_PropertyChanged( object sender, PropertyChangedEventArgs e )
-        {
-            switch( e.PropertyName )
-            {
-                case "Loading":
-                    ActivyBtn.IsLoading = SHHub.Loading;
-                    break;
-            }
-        }
+		private void SHHub_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				case "Loading":
+					ActivyBtn.IsLoading = SHHub.Loading;
+					break;
+			}
+		}
 
-        private void InitAppBar()
-        {
-            StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+		private void InitAppBar()
+		{
+			StringResources stx = new StringResources( "AppResources", "ContextMenu" );
 
-            ActivyBtn = new AppBarButtonEx()
-            {
-                Icon = new SymbolIcon( Symbol.Message )
-                , Label = stx.Text( "Messages" )
-                , Foreground = new SolidColorBrush( LayoutSettings.RelativeMajorBackgroundColor )
-            };
+			ActivyBtn = new AppBarButtonEx()
+			{
+				Icon = new SymbolIcon( Symbol.Message )
+				, Label = stx.Text( "Messages" )
+				, Foreground = new SolidColorBrush( LayoutSettings.RelativeMajorBackgroundColor )
+			};
 
-            ActivyBtn.Click += ToggleActivities;
+			ActivyBtn.Click += ToggleActivities;
 
-            SecondaryIconButton UploadBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Upload, stx.Text( "SubmitScript" ) );
-            UploadBtn.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new ScriptUpload( UploadExit ) );
+			SecondaryIconButton UploadBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Upload, stx.Text( "SubmitScript" ) );
+			UploadBtn.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( this, () => new ScriptUpload( UploadExit ) );
 
-            SecondaryIconButton MAuthBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
-            MAuthBtn.Click += ManageAuths;
+			SecondaryIconButton MAuthBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
+			MAuthBtn.Click += ManageAuths;
 
-            MajorControls = new ICommandBarElement[] { ActivyBtn };
+			MajorControls = new ICommandBarElement[] { ActivyBtn };
 
 #if DEBUG || TESTING
-            StringResources sts = new StringResources( "Settings" );
-            SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
-            ChangeServer.Click += async ( s, e ) =>
-            {
-                ValueHelpInput VH =  new ValueHelpInput(
-                    Shared.ShRequest.Server.ToString()
-                    , sts.Text( "Advanced_Server" ), "Address"
-                ) ;
+			StringResources sts = new StringResources( "Settings" );
+			SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
+			ChangeServer.Click += async ( s, e ) =>
+			{
+				ValueHelpInput VH =  new ValueHelpInput(
+					Shared.ShRequest.Server.ToString()
+					, sts.Text( "Advanced_Server" ), "Address"
+				) ;
 
-                await Popups.ShowDialog( VH );
-                if ( VH.Canceled ) return;
+				await Popups.ShowDialog( VH );
+				if ( VH.Canceled ) return;
 
-                try
-                {
-                    new Uri( VH.Value );
-                    wenku8.Config.Properties.SERVER_OSD_URI = VH.Value;
-                    Shared.ShRequest.UpdateServer();
-                }
-                catch ( Exception ) { }
-            };
+				try
+				{
+					new Uri( VH.Value );
+					wenku8.Config.Properties.SERVER_OSD_URI = VH.Value;
+					Shared.ShRequest.UpdateServer();
+				}
+				catch ( Exception ) { }
+			};
 
-            Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn, ChangeServer };
+			Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn, ChangeServer };
 #else
-            Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn };
+			Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn };
 #endif
-        }
+		}
 
-        private async void ToggleActivities( object sender, RoutedEventArgs e )
-        {
-            if ( !( await ControlFrame.Instance.CommandMgr.Authenticate() ) ) return;
+		private async void ToggleActivities( object sender, RoutedEventArgs e )
+		{
+			if ( !( await ControlFrame.Instance.CommandMgr.Authenticate() ) ) return;
 
-            if ( Member.Activities.Count == 0 )
-            {
-                UpdateActivities();
-            }
-            else
-            {
-                if ( TransitionDisplay.GetState( ActivyList ) == TransitionState.Active )
-                {
-                    TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
-                }
-                else
-                {
-                    TransitionDisplay.SetState( ActivyList, TransitionState.Active );
-                }
-            }
-        }
+			if ( Member.Activities.Count == 0 )
+			{
+				UpdateActivities();
+			}
+			else
+			{
+				if ( TransitionDisplay.GetState( ActivyList ) == TransitionState.Active )
+				{
+					TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
+				}
+				else
+				{
+					TransitionDisplay.SetState( ActivyList, TransitionState.Active );
+				}
+			}
+		}
 
-        private void Activities_ItemClick( object sender, ItemClickEventArgs e )
-        {
-            TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
-            Member.Activities.CheckActivity( ( Activity ) e.ClickedItem );
-        }
+		private void Activities_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
+			Member.Activities.CheckActivity( ( Activity ) e.ClickedItem );
+		}
 
-        private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
-        {
-            SHHub.Search( args.QueryText );
-        }
+		private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
+		{
+			SHHub.Search( args.QueryText );
+		}
 
-        private void HSItemClick( object sender, ItemClickEventArgs e )
-        {
-            HubScriptItem HSI = ( HubScriptItem ) e.ClickedItem;
+		private void HSItemClick( object sender, ItemClickEventArgs e )
+		{
+			HubScriptItem HSI = ( HubScriptItem ) e.ClickedItem;
 
-            if ( HSI.Faultered )
-            {
-                // Report to admin
-            }
-            else
-            {
-                ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () => new ScriptDetails( HSI ) );
-            }
-        }
+			if ( HSI.Faultered )
+			{
+				// Report to admin
+			}
+			else
+			{
+				ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () => new ScriptDetails( HSI ) );
+			}
+		}
 
-        private void UploadExit( string Id, string AccessToken )
-        {
-            var j = ControlFrame.Instance.CloseSubView();
-            SHHub.Search( "uuid: " + Id, new string[] { AccessToken } );
-        }
+		private void UploadExit( string Id, string AccessToken )
+		{
+			var j = ControlFrame.Instance.CloseSubView();
+			SHHub.Search( "uuid: " + Id, new string[] { AccessToken } );
+		}
 
-        private void ManageAuths( object sender, RoutedEventArgs e )
-        {
-            ControlFrame.Instance.SubNavigateTo( this, () => new ManageAuth() );
-        }
+		private void ManageAuths( object sender, RoutedEventArgs e )
+		{
+			ControlFrame.Instance.SubNavigateTo( this, () => new ManageAuth() );
+		}
 
-    }
+	}
 }

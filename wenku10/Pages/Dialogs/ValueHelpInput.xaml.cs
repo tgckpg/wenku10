@@ -16,109 +16,109 @@ using Windows.UI.Xaml.Navigation;
 
 namespace wenku10.Pages.Dialogs
 {
-    public sealed partial class ValueHelpInput : ContentDialog
-    {
-        public bool Canceled { get; private set; }
+	public sealed partial class ValueHelpInput : ContentDialog
+	{
+		public bool Canceled { get; private set; }
 
-        private string _Value;
-        public string Value
-        {
-            get { return _Value; }
-            set
-            {
-                _Value = value;
-                ValueInput.Text = value;
-            }
-        }
+		private string _Value;
+		public string Value
+		{
+			get { return _Value; }
+			set
+			{
+				_Value = value;
+				ValueInput.Text = value;
+			}
+		}
 
-        public bool AllowEmpty { get; set; }
+		public bool AllowEmpty { get; set; }
 
-        public Action<HyperlinkButton,RoutedEventArgs> HelpBtnClick;
+		public Action<HyperlinkButton,RoutedEventArgs> HelpBtnClick;
 
-        public ValueHelpInput(
-            string DefaultValue
-            , string Title
-            , string ValueLabel, string HelpText = null
-            , string BtnLeft = "OK", string BtnRight = "Cancel" )
-        {
-            this.InitializeComponent();
+		public ValueHelpInput(
+			string DefaultValue
+			, string Title
+			, string ValueLabel, string HelpText = null
+			, string BtnLeft = "OK", string BtnRight = "Cancel" )
+		{
+			this.InitializeComponent();
 
-            Canceled = true;
+			Canceled = true;
 
-            if ( !string.IsNullOrEmpty( DefaultValue ) )
-                ValueInput.PlaceholderText = DefaultValue;
+			if ( !string.IsNullOrEmpty( DefaultValue ) )
+				ValueInput.PlaceholderText = DefaultValue;
 
-            StringResources stx = new StringResources( "Message" );
-            PrimaryButtonText = stx.Str( BtnLeft );
-            SecondaryButtonText = stx.Str( BtnRight );
+			StringResources stx = new StringResources( "Message" );
+			PrimaryButtonText = stx.Str( BtnLeft );
+			SecondaryButtonText = stx.Str( BtnRight );
 
-            TitleText.Text = Title;
+			TitleText.Text = Title;
 
-            if ( !string.IsNullOrEmpty( ValueLabel ) )
-                ValueLbl.Text = ValueLabel;
+			if ( !string.IsNullOrEmpty( ValueLabel ) )
+				ValueLbl.Text = ValueLabel;
 
-            if ( string.IsNullOrEmpty( HelpText ) )
-            {
-                HelpBtn.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                HelpLbl.Text = HelpText;
-            }
-        }
+			if ( string.IsNullOrEmpty( HelpText ) )
+			{
+				HelpBtn.Visibility = Visibility.Collapsed;
+			}
+			else
+			{
+				HelpLbl.Text = HelpText;
+			}
+		}
 
-        private void HelpBtn_Click( object sender, RoutedEventArgs e )
-        {
-            HelpBtnClick?.Invoke( HelpBtn, e );
-        }
+		private void HelpBtn_Click( object sender, RoutedEventArgs e )
+		{
+			HelpBtnClick?.Invoke( HelpBtn, e );
+		}
 
-        private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-            DetectInput();
-        }
+		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+			DetectInput();
+		}
 
-        private void OnKeyDown( object sender, KeyRoutedEventArgs e )
-        {
-            if ( e.Key == Windows.System.VirtualKey.Enter )
-            {
-                e.Handled = true;
-                DetectInput();
-            }
-        }
+		private void OnKeyDown( object sender, KeyRoutedEventArgs e )
+		{
+			if ( e.Key == Windows.System.VirtualKey.Enter )
+			{
+				e.Handled = true;
+				DetectInput();
+			}
+		}
 
-        private void DetectInput()
-        {
-            string Value = ValueInput.Text;
+		private void DetectInput()
+		{
+			string Value = ValueInput.Text;
 
-            if ( string.IsNullOrEmpty( Value ) )
-                Value = ValueInput.PlaceholderText;
+			if ( string.IsNullOrEmpty( Value ) )
+				Value = ValueInput.PlaceholderText;
 
-            if ( string.IsNullOrEmpty( Value ) && !AllowEmpty )
-            {
-                Value = "";
-                ValueInput.Focus( FocusState.Keyboard );
-                return;
-            }
-            else
-            {
-                IsPrimaryButtonEnabled
-                    = IsSecondaryButtonEnabled
-                    = ValueInput.IsEnabled
-                    = false
-                    ;
+			if ( string.IsNullOrEmpty( Value ) && !AllowEmpty )
+			{
+				Value = "";
+				ValueInput.Focus( FocusState.Keyboard );
+				return;
+			}
+			else
+			{
+				IsPrimaryButtonEnabled
+					= IsSecondaryButtonEnabled
+					= ValueInput.IsEnabled
+					= false
+					;
 
-                if ( this.Value == Value )
-                {
-                    this.Hide();
-                    return;
-                }
+				if ( this.Value == Value )
+				{
+					this.Hide();
+					return;
+				}
 
-                this.Value = Value;
+				this.Value = Value;
 
-                this.Canceled = false;
-                this.Hide();
-            }
-        }
+				this.Canceled = false;
+				this.Hide();
+			}
+		}
 
-    }
+	}
 }

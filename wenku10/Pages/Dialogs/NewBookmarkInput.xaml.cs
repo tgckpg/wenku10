@@ -22,72 +22,72 @@ using wenku8.Settings.Theme;
 
 namespace wenku10.Pages.Dialogs
 {
-    sealed partial class NewBookmarkInput : ContentDialog
-    {
-        private IEnumerable<ColorItem> PresetColors;
-        private Paragraph BookmarkTarget;
+	sealed partial class NewBookmarkInput : ContentDialog
+	{
+		private IEnumerable<ColorItem> PresetColors;
+		private Paragraph BookmarkTarget;
 
-        public string AnchorName { get; private set; }
-        public bool Canceled { get; private set; }
+		public string AnchorName { get; private set; }
+		public bool Canceled { get; private set; }
 
-        private NewBookmarkInput()
-        {
-            this.InitializeComponent();
-            Canceled = true;
-            PresetColors = global::wenku8.System.ThemeManager.PresetColors();
-        }
+		private NewBookmarkInput()
+		{
+			this.InitializeComponent();
+			Canceled = true;
+			PresetColors = global::wenku8.System.ThemeManager.PresetColors();
+		}
 
-        public NewBookmarkInput( Paragraph P )
-            :this()
-        {
-            BookmarkTarget = P;
-            SetTemplate();
-        }
+		public NewBookmarkInput( Paragraph P )
+			:this()
+		{
+			BookmarkTarget = P;
+			SetTemplate();
+		}
 
-        private void SetTemplate()
-        {
-            StringResources stx = new StringResources( "Message" );
+		private void SetTemplate()
+		{
+			StringResources stx = new StringResources( "Message" );
 
-            PrimaryButtonText = stx.Str( "OK" );
-            SecondaryButtonText = stx.Str( "Cancel" );
+			PrimaryButtonText = stx.Str( "OK" );
+			SecondaryButtonText = stx.Str( "Cancel" );
 
-            stx = new StringResources( "AppBar" );
-            Title = stx.Text( "Bookmark" );
+			stx = new StringResources( "AppBar" );
+			Title = stx.Text( "Bookmark" );
 
-            stx = new StringResources( "AppResources" );
-            BookmarkName.PlaceholderText = stx.Text( "DefaultToParagraph" );
+			stx = new StringResources( "AppResources" );
+			BookmarkName.PlaceholderText = stx.Text( "DefaultToParagraph" );
 
-            ColorGrid.ItemsSource = PresetColors;
-        }
+			ColorGrid.ItemsSource = PresetColors;
+		}
 
-        private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-            Canceled = false;
-            ColorItem C = ColorGrid.SelectedItem as ColorItem;
-            if ( C == null ) C = PresetColors.First();
-            BookmarkTarget.AnchorColor = new SolidColorBrush( C.TColor );
+		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+			Canceled = false;
+			ColorItem C = ColorGrid.SelectedItem as ColorItem;
+			if ( C == null ) C = PresetColors.First();
+			BookmarkTarget.AnchorColor = new SolidColorBrush( C.TColor );
 
-            AnchorName = BookmarkName.Text.Trim();
+			AnchorName = BookmarkName.Text.Trim();
 
-            if( string.IsNullOrEmpty( AnchorName ) )
-            {
-                AnchorName = BookmarkTarget.Text.Trim();
-            }
+			if( string.IsNullOrEmpty( AnchorName ) )
+			{
+				AnchorName = BookmarkTarget.Text.Trim();
+			}
 
-            if( string.IsNullOrEmpty( AnchorName ) )
-            {
-                AnchorName = "Bookmark - 1";
-            }
-        }
+			if( string.IsNullOrEmpty( AnchorName ) )
+			{
+				AnchorName = "Bookmark - 1";
+			}
+		}
 
-        private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
-        {
-            Canceled = true;
-        }
+		private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+			Canceled = true;
+		}
 
-        internal void SetName( string bookmarkName )
-        {
-            BookmarkName.Text = bookmarkName;
-        }
-    }
+		internal void SetName( string bookmarkName )
+		{
+			BookmarkName.Text = bookmarkName;
+		}
+	}
 }
