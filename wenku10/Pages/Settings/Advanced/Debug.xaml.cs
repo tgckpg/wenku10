@@ -141,6 +141,8 @@ namespace wenku10.Pages.Settings.Advanced
 				Shared.Storage.DeleteFile( Location );
 				Bootstrap.LogInstance.Start();
 			}
+
+			ActionBlocked = false;
 		}
 
 	}
