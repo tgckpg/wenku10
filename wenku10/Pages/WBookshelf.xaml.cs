@@ -99,6 +99,8 @@ namespace wenku10.Pages
 
 			FS.PropertyChanged += FS_PropertyChanged;
 			LayoutRoot.DataContext = FS;
+
+			FS.Load();
 		}
 
 		private void FS_PropertyChanged( object sender, PropertyChangedEventArgs e )

@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>wenku10_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>8683C9196E76D3B0C5663DDDD810606D0E5D6BF5</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>AD68EB4EF5E2E712CD410D6697180CE86EA77279</PackageCertificateThumbprint>
     <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
@@ -112,6 +112,7 @@
     <Content Include="Assets\twitter.png" />
     <Content Include="Strings\badwords.txt" />
     <None Include="project.json" />
+    <None Include="wenku10_TemporaryKey.pfx" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
     <PRIResource Include="Strings\ja\Resources.resw" />
     <PRIResource Include="Strings\zh-TW\Resources.resw" />
