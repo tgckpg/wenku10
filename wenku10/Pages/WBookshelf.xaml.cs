@@ -93,14 +93,12 @@ namespace wenku10.Pages
 		{
 			LayoutRoot.RenderTransform = new TranslateTransform();
 
-			InitAppBar();
-
 			FS = X.Instance<IFavSection>( XProto.FavSection );
 
 			FS.PropertyChanged += FS_PropertyChanged;
 			LayoutRoot.DataContext = FS;
 
-			FS.Load();
+			InitAppBar();
 		}
 
 		private void FS_PropertyChanged( object sender, PropertyChangedEventArgs e )
@@ -137,6 +135,7 @@ namespace wenku10.Pages
 			}
 			else
 			{
+				FS.Reload();
 				MinorControls = new ICommandBarElement[] { PinAll };
 			}
 		}
