@@ -566,4 +566,7 @@
   <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
     <value>ライブタイルの更新間隔</value>
   </data>
+  <data name="Account_Remember_Warn.Text" xml:space="preserve">
+    <value> パスワードはこのデバイスに保存されます。 他のアカウントに同じパスワードを使用しないことをお勧めします。</value>
+  </data>
 </root>

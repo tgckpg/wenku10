@@ -131,8 +131,9 @@ namespace wenku10.Pages.Dialogs
 
 				// Re-focus to disable keyboard
 				this.Focus( FocusState.Pointer );
+
 				// Request string
-				Member.Login( Name, Passwd );
+				Member.Login( Name, Passwd, RememberInfo.IsChecked == true );
 
 				return true;
 			}

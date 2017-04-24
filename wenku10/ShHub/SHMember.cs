@@ -16,6 +16,7 @@ using wenku8.Resources;
 using wenku8.Settings;
 using wenku8.Model.REST;
 using wenku8.Model.Section.SharersHub;
+using wenku8.System;
 
 namespace wenku10.SHHub
 {
@@ -37,6 +38,9 @@ namespace wenku10.SHHub
 		public string CurrentAccount { get; set; }
 
 		public Activities Activities { get; private set; }
+
+		private LoginInfo Remember;
+		private LoginInfo LastAuth;
 
 		public string ServerMessage
 		{
@@ -67,10 +71,16 @@ namespace wenku10.SHHub
 			return true;
 		}
 
-		public void Login( string Account, string Password )
+		public async void Login( string Account, string Password, bool Remember = false )
 		{
+			if ( WillLogin ) return;
 			WillLogin = true;
+
 			CurrentAccount = Account;
+
+			if ( Remember )
+				this.Remember = await CredentialVault.Protect( this, Account, Password );
+
 			RCache.POST(
 				Shared.ShRequest.Server
 				, Shared.ShRequest.Login( Account, Password )
@@ -82,6 +92,10 @@ namespace wenku10.SHHub
 		public void Logout()
 		{
 			IsLoggedIn = false;
+			Remember = null;
+			LastAuth = null;
+			new CredentialVault().Remove( this );
+
 			UpdateStatus( MemberStatus.LOGGED_OUT );
 
 			RCache.POST(
@@ -119,6 +133,14 @@ namespace wenku10.SHHub
 				ServerMessage = ex.Message;
 			}
 
+			if( LastAuth != null )
+			{
+				LastAuth = null;
+				new CredentialVault().Remove( this );
+				UpdateStatus( MemberStatus.RE_LOGIN_NEEDED );
+				return;
+			}
+
 			UpdateStatus( MemberStatus.LOGGED_OUT );
 		}
 
@@ -138,7 +160,7 @@ namespace wenku10.SHHub
 			);
 		}
 
-		private void CheckResponse( DRequestCompletedEventArgs e, string QueryId )
+		private async void CheckResponse( DRequestCompletedEventArgs e, string QueryId )
 		{
 			try
 			{
@@ -146,12 +168,34 @@ namespace wenku10.SHHub
 				Id = JObj.GetNamedString( "data" );
 
 				IsLoggedIn = true;
+
 				UpdateStatus( MemberStatus.LOGGED_IN );
 			}
-			catch( Exception ex )
+			catch ( Exception ex )
 			{
+				IsLoggedIn = false;
 				Logger.Log( ID, ex.Message, LogType.DEBUG );
+			}
+
+			if ( IsLoggedIn )
+			{
+				if ( Remember != null )
+					new CredentialVault().Store( Remember );
+			}
+			else
+			{
 				ClearAuth();
+
+				if ( LastAuth == null )
+				{
+					LastAuth = await new CredentialVault().Retrieve( this );
+					if ( !string.IsNullOrEmpty( LastAuth.Account ) )
+					{
+						Login( LastAuth.Account, LastAuth.Password, false );
+						return;
+					}
+				}
+
 				UpdateStatus( MemberStatus.RE_LOGIN_NEEDED );
 			}
 		}

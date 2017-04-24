@@ -319,6 +319,10 @@ namespace wenku8.System
 				SHLoginBtn.Label = stx.Text( "Account", "Settings" );
 				SHLoginBtn.Glyph = SegoeMDL2.Accounts;
 			}
+			else if( args == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				var j = Authenticate();
+			}
 			else
 			{
 				SHLoginBtn.Label = stx.Text( "Login" );
@@ -365,6 +369,10 @@ namespace wenku8.System
 			{
 				WLoginBtn.Label = stx.Text( "Account", "Settings" );
 				WLoginBtn.Glyph = SegoeMDL2.Accounts;
+			}
+			else if( args == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				var j = WAuthenticate();
 			}
 			else
 			{
