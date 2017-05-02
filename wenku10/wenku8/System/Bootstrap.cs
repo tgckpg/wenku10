@@ -60,7 +60,7 @@ namespace wenku8.System
 			Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.0.9t", "1.5.0b", "1.0.4p" } );
 
 			// Connection Mode
-			WHttpRequest.UA = string.Format( Settings.AppKeys.UA, Version );
+			WHttpRequest.UA = string.Format( AppKeys.UA, Version );
 
 			WCacheMode.Initialize();
 			Logger.Log( ID, "WCacheMode Initilizated", LogType.INFO );
@@ -73,9 +73,6 @@ namespace wenku8.System
 			ResTaotu.SetMarker( typeof( Taotu.WenkuMarker ) );
 			ResTaotu.SetListLoader( typeof( Taotu.WenkuListLoader ) );
 			ResTaotu.CreateRequest = x => new SHttpRequest( x ) { EN_UITHREAD = false };
-
-			// Unlocking libraries
-			Net.Astropenguin.UI.VerticalStack.LOCKED = false;
 
 			// Set Logger for libeburc
 			EBDictManager.SetLogger();

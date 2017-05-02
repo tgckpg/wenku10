@@ -62,6 +62,9 @@ namespace wenku8.System
 			CreateSystemCommands();
 			CreateCommonCommands();
 
+			// Init SHListener
+			new wenku10.ShHub.MesgListerner();
+
 			InitCommands();
 		}
 
@@ -78,9 +81,6 @@ namespace wenku8.System
 				CreateSHCommands();
 				SHMember = X.Singleton<IMember>( XProto.SHMember );
 				SHMember.OnStatusChanged += SHMember_OnStatusChanged;
-
-				// Init SHListener
-				new wenku10.ShHub.MesgListerner();
 			}
 			else
 			{

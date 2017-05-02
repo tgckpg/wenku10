@@ -34,11 +34,9 @@ using Net.Astropenguin.UI.Icons;
 using wenku8.CompositeElement;
 using wenku8.Config;
 using wenku8.Effects;
-using wenku8.Ext;
 using wenku8.Model.Interfaces;
 using wenku8.Model.Loaders;
 using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
 using wenku8.Model.Pages.ContentReader;
 using wenku8.Model.ListItem;
 using wenku8.Model.Section;
@@ -292,7 +290,7 @@ namespace wenku10.Pages
 				LocalRedraw = ( IsHorz && UpdatePane );
 			}
 
-			if ( UpdatePane )
+			if ( UpdatePane && MainSplitView.State != PaneStates.Closed )
 			{
 				// This handles CommandBar goes hidden
 				MainSplitView.OpenPane();
@@ -302,7 +300,6 @@ namespace wenku10.Pages
 			if ( LocalRedraw )
 			{
 				ReaderSlideBack();
-				Redraw();
 			}
 		}
 
@@ -319,9 +316,6 @@ namespace wenku10.Pages
 			{
 				Orientation = App.ViewControl.Orientation;
 				UpdateManiMode();
-
-				NeedRedraw = false;
-				Redraw();
 			}
 
 			UpdateOriIndicator();
