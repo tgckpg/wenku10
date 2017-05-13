@@ -36,6 +36,7 @@ namespace wenku10.SHHub
 		public MemberStatus Status { get; set; }
 
 		public string CurrentAccount { get; set; }
+		public string CurrentPassword { get; set; }
 
 		public Activities Activities { get; private set; }
 
@@ -191,6 +192,8 @@ namespace wenku10.SHHub
 					LastAuth = await new CredentialVault().Retrieve( this );
 					if ( !string.IsNullOrEmpty( LastAuth.Account ) )
 					{
+						CurrentAccount = LastAuth.Account;
+						CurrentPassword = LastAuth.Password;
 						Login( LastAuth.Account, LastAuth.Password, false );
 						return;
 					}

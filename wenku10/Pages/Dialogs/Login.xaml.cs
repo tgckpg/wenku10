@@ -24,6 +24,7 @@ namespace wenku10.Pages.Dialogs
 		public bool Canceled = true;
 
 		private IMember Member;
+		private bool UseLastPass = true;
 
 		public Login( IMember Member )
 		{
@@ -49,6 +50,13 @@ namespace wenku10.Pages.Dialogs
 			if( !string.IsNullOrEmpty( Member.CurrentAccount ) )
 			{
 				Account.Text = Member.CurrentAccount;
+				Password.Loaded += Password_Focus;
+			}
+
+			if( !string.IsNullOrEmpty( Member.CurrentPassword ) )
+			{
+				UseLastPass = true;
+				Password.Password = "************";
 				Password.Loaded += Password_Focus;
 			}
 		}
@@ -101,12 +109,18 @@ namespace wenku10.Pages.Dialogs
 			{
 				e.Handled = DetectInputLogin();
 			}
+			else if ( sender == Password )
+			{
+				UseLastPass = false;
+			}
 		}
 
 		private bool DetectInputLogin()
 		{
 			string Name = Account.Text.Trim();
 			string Passwd = Password.Password;
+
+			if ( UseLastPass ) Passwd = Member.CurrentPassword;
 
 			if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Passwd ) )
 			{
