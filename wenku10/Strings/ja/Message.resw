@@ -228,4 +228,7 @@
   <data name="ConfirmTakeOver" xml:space="preserve">
     <value>このアイテムを引き継ぐことを確認しますか？</value>
   </data>
+  <data name="ProcNoOptions" xml:space="preserve">
+    <value>この プロセス には オプション ではありません</value>
+  </data>
 </root>

@@ -78,7 +78,7 @@ namespace wenku8.Model.Loaders
 					, X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.Id, C.cid )
 					, async ( DRequestCompletedEventArgs e, string path ) =>
 					{
-						await new ContentParser().OrganizeBookContent( e.ResponseString, C );
+						await new ContentParser().OrganizeBookContent( Shared.TC.Translate( e.ResponseString ), C );
 						OnComplete( C );
 
 						X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook ).Check( e.ResponseBytes );

@@ -228,4 +228,7 @@
   <data name="ConfirmTakeOver" xml:space="preserve">
     <value>确认接管此项目？</value>
   </data>
+  <data name="ProcNoOptions" xml:space="preserve">
+    <value>此步骤没有任何选项</value>
+  </data>
 </root>

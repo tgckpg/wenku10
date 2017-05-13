@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using System.Reflection;
 
+using libtaotu.Models.Procedure;
+
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Logging.Handler;
 
@@ -56,8 +58,11 @@ namespace wenku8.System
 				Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
 			}
 
+			// Traditional Chinese translation preference
+			Resources.Shared.TC = new Model.TradChinese();
+
 			// SHRequest Init
-			Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.0.9t", "1.5.0b", "1.0.4p" } );
+			Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.1.3t", "1.5.0b", "1.0.6p" } );
 
 			// Connection Mode
 			WHttpRequest.UA = string.Format( AppKeys.UA, Version );
@@ -69,9 +74,10 @@ namespace wenku8.System
 			// Shared Resources
 			ResTaotu.SourceView = typeof( global::wenku10.Pages.DirectTextViewer );
 			ResTaotu.RenameDialog = typeof( global::wenku10.Pages.Dialogs.Rename );
-			ResTaotu.SetExtractor( typeof( Taotu.WenkuExtractor ) );
-			ResTaotu.SetMarker( typeof( Taotu.WenkuMarker ) );
-			ResTaotu.SetListLoader( typeof( Taotu.WenkuListLoader ) );
+			ResTaotu.AddProcType( ProcType.EXTRACT, typeof( Taotu.WenkuExtractor ) );
+			ResTaotu.AddProcType( ProcType.MARK, typeof( Taotu.WenkuMarker ) );
+			ResTaotu.AddProcType( ProcType.LIST, typeof( Taotu.WenkuListLoader ) );
+			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( Taotu.TongWenTang ) );
 			ResTaotu.CreateRequest = x => new SHttpRequest( x ) { EN_UITHREAD = false };
 
 			// Set Logger for libeburc

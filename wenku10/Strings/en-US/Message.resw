@@ -228,4 +228,7 @@
   <data name="ConfirmTakeOver" xml:space="preserve">
     <value>Confirm to take over this item?</value>
   </data>
+  <data name="ProcNoOptions" xml:space="preserve">
+    <value>This procedure does not have options</value>
+  </data>
 </root>
