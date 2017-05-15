@@ -35,7 +35,11 @@ namespace wenku10.Pages.Dialogs
 			PrimaryButtonText = stx.Text( "Login" );
 			SecondaryButtonText = stx.Text( "Button_Back" );
 
-			if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+			if ( !string.IsNullOrEmpty( Member.ServerMessage ) )
+			{
+				ShowMessage( Member.ServerMessage );
+			}
+			else if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
 			{
 				ShowMessage( stx.Text( "Login_Expired" ) );
 			}
@@ -155,7 +159,7 @@ namespace wenku10.Pages.Dialogs
 
 		private void ShowMessage( string Mesg )
 		{
-			if ( Mesg == null ) return;
+			if ( string.IsNullOrEmpty( Mesg ) ) return;
 
 			ServerMessage.Text = Mesg;
 			ServerMessage.Visibility = Visibility.Visible;

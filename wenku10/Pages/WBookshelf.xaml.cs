@@ -135,7 +135,7 @@ namespace wenku10.Pages
 			}
 			else
 			{
-				FS.Reload();
+				FS.Reload( true );
 				MinorControls = new ICommandBarElement[] { PinAll };
 			}
 		}

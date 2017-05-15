@@ -48,19 +48,19 @@ namespace wenku8.Model.Loaders
 				wCache.InitDownload(
 					ThisBook.Id
 					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", ThisBook.Id )
-					, cacheInfo, cacheInfoFailed, false );
+					, OnWCacheInfo, OnWCacheInfoFailed, false );
 			}
 		}
 
-		private void cacheInfo( DRequestCompletedEventArgs e, string id )
+		private void OnWCacheInfo( DRequestCompletedEventArgs e, string id )
 		{
-			Shared.Storage.WriteString( ThisBook.TOCPath, Manipulation.PatchSyntax( e.ResponseString ) );
+			Shared.Storage.WriteString( ThisBook.TOCPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
 			Shared.Storage.WriteString( ThisBook.TOCDatePath, ThisBook.RecentUpdateRaw );
 
-			StepAutomation();
+			WRegisterEpRequests();
 		}
 
-		private async void StepAutomation()
+		private async void WRegisterEpRequests()
 		{
 			ES = new EpisodeStepper( new VolumesInfo( ThisBook ) );
 
@@ -102,7 +102,7 @@ namespace wenku8.Model.Loaders
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
 
-			App.RuntimeTransfer.StartThreadCycle( LoadComplete );
+			App.RuntimeTransfer.StartThreadCycle( WEpLoaded );
 			DispLog( "Complete" );
 
 			OnComplete( ThisBook );
@@ -116,21 +116,21 @@ namespace wenku8.Model.Loaders
 			if ( App.RuntimeTransfer.CurrentThread != null )
 			{
 				Logger.Log( ID, "Resuming Download Sessions ...", LogType.INFO );
-				App.RuntimeTransfer.StartThreadCycle( LoadComplete );
+				App.RuntimeTransfer.StartThreadCycle( WEpLoaded );
 			}
 		}
 
 		// Thread Complete Processor
-		public static void LoadComplete( DRequestCompletedEventArgs e, TransferInst PArgs )
+		public static void WEpLoaded( DRequestCompletedEventArgs e, TransferInst PArgs )
 		{
-			new ContentParser().OrganizeBookContent( e.ResponseString, PArgs.ID, PArgs.cParam );
+			new ContentParser().OrganizeBookContent( Shared.TC.Translate( e.ResponseString ), PArgs.ID, PArgs.cParam );
 		}
 
-		private void cacheInfoFailed( string cacheName, string id, Exception ex )
+		private void OnWCacheInfoFailed( string cacheName, string id, Exception ex )
 		{
 			if ( Shared.Storage.FileExists( ThisBook.TOCPath ) )
 			{
-				StepAutomation();
+				WRegisterEpRequests();
 			}
 		}
 
@@ -188,7 +188,7 @@ namespace wenku8.Model.Loaders
 
 				App.RuntimeTransfer.StartThreadCycle( ( a, b ) =>
 				{
-					LoadComplete( a, b );
+					WEpLoaded( a, b );
 					Worker.UIInvoke( () => { foreach ( Chapter C in Vol.ChapterList ) C.UpdateStatus(); } );
 				} );
 

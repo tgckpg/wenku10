@@ -231,4 +231,7 @@
   <data name="ProcNoOptions" xml:space="preserve">
     <value>This procedure does not have options</value>
   </data>
+  <data name="TranslateTC" xml:space="preserve">
+    <value>Do you want to translate this document to Chinese ( traditional )?</value>
+  </data>
 </root>

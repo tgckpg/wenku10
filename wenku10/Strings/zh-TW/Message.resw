@@ -231,4 +231,7 @@
   <data name="ProcNoOptions" xml:space="preserve">
     <value>此步驟沒有任何選項</value>
   </data>
+  <data name="TranslateTC" xml:space="preserve">
+    <value>要將此文件轉換為繁體中文嗎？</value>
+  </data>
 </root>
