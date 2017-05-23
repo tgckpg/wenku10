@@ -5,6 +5,7 @@
     xmlns:local="using:wenku10.Pages.Dialogs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
     mc:Ignorable="d"
     Background="{StaticResource MajorBackgroundBrush}"
     PrimaryButtonText="Button1"
@@ -16,6 +17,9 @@
                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                    Text="Login" />
     </ContentDialog.Title>
+    <ContentDialog.Resources>
+        <v:DataVisConverter x:Name="DataVisConverter" />
+    </ContentDialog.Resources>
 
     <StackPanel>
         <!-- Message -->
@@ -34,6 +38,14 @@
                    Foreground="{StaticResource MajorBrush}"
                    Text="Password" />
         <PasswordBox x:Name="Password" KeyDown="OnKeyDown"/>
+        <CheckBox x:Name="RememberInfo">
+            <TextBlock x:Uid="/Settings/Account_Remember"
+                       Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+        </CheckBox>
+        <TextBlock x:Uid="/Settings/Account_Remember_Warn"
+                   Visibility="{Binding ElementName=RememberInfo, Path=IsChecked, Converter={StaticResource DataVisConverter}}"
+                   TextWrapping="Wrap"
+                   Foreground="{StaticResource MinorBrush}"/>
         <HyperlinkButton x:Name="RegisterBtn" Click="RegisterBtn_Click"
                          Visibility="Collapsed" HorizontalAlignment="Right">
             <TextBlock x:Uid="/ContextMenu/Register" Text="Register"/>

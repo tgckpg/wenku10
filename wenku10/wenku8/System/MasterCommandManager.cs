@@ -45,29 +45,53 @@ namespace wenku8.System
 
 		SecretSwipeButton AboutBtn;
 
-		private volatile bool Unlocked = false;
 		private int InitMode = 0;
+
+		private List<int> ModeInit;
 
 		public MasterCommandManager( IObservableVector<ICommandBarElement> CommandList, IObservableVector<ICommandBarElement> SecondCmdList )
 		{
 			this.CommandList = CommandList;
 			this.SecondCmdList = SecondCmdList;
+			ModeInit = new List<int>();
 			DefaultCmds();
 		}
 
 		private void DefaultCmds()
 		{
-			SHMember = X.Singleton<IMember>( XProto.SHMember );
-			SHMember.OnStatusChanged += SHMember_OnStatusChanged;
+			CreateSystemCommands();
+			CreateCommonCommands();
 
 			// Init SHListener
 			new wenku10.ShHub.MesgListerner();
 
-			CreateSystemCommands();
-			CreateSHCommands();
-			CreateCommonCommands();
-
 			InitCommands();
+		}
+
+		private void InitModeInsts( int Mode )
+		{
+			lock ( ModeInit )
+			{
+				if ( ModeInit.Contains( Mode ) ) return;
+				ModeInit.Add( Mode );
+			}
+
+			if ( Mode == 0 )
+			{
+				CreateSHCommands();
+				SHMember = X.Singleton<IMember>( XProto.SHMember );
+				SHMember.OnStatusChanged += SHMember_OnStatusChanged;
+			}
+			else
+			{
+				new Bootstrap().Level2();
+
+				WMember = X.Singleton<IMember>( XProto.Member );
+				WMember.OnStatusChanged += WMember_OnStatusChanged;
+
+				CreateWCommands();
+				UpdateCustBtn();
+			}
 		}
 
 		private void CreateCommonCommands()
@@ -145,18 +169,32 @@ namespace wenku8.System
 			SH2ndCommands = new ICommandBarElement[] { SHLoginBtn, SpiderEditor };
 		}
 
+		private void CreateWCommands()
+		{
+			WLoginBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronRight, stx.Text( "Login" ) );
+			WLoginBtn.Click += CreateCmdHandler( WLoginBtn_Click );
+
+			SecondaryIconButton SearchBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Search, stx.Text( "Search", "AppBar" ) );
+			SearchBtn.Click += CreateCmdHandler( PageId.W_SEARCH, () => new WSearch() );
+
+			w82ndCommands = new ICommandBarElement[] { WLoginBtn, SearchBtn };
+
+			// Master commands
+			AppBarToggleButton BookShelfBtn = UIAliases.CreateToggleBtn( Symbol.Library, stx.Text( "Shelf", "AppBar" ) );
+			BookShelfBtn.Click += CreateCmdHandler( PageId.W_BOOKSHELF, () => new WBookshelf() );
+
+			w8Commands = new ICommandBarElement[] { BookShelfBtn, null, null };
+		}
+
 		private void InitCommands()
 		{
 			CommandList.Clear();
 
-			MasterCommands = SHCommands;
-			M2ndCommands = SH2ndCommands;
+			InitMode = Properties.SMODE;
+			SwapCommands( 0 );
 
 			foreach ( ICommandBarElement Btn in MasterCommands )
 				CommandList.Add( Btn );
-
-			InitMode = Properties.SMODE;
-			SwapCommands( 0 );
 		}
 
 		private RoutedEventHandler CreateCmdHandler( string Name, Func<Page> ViewFunc )
@@ -175,33 +213,6 @@ namespace wenku8.System
 				ToggleButtons( ( AppBarToggleButton ) s );
 				Handler( s, e );
 			};
-		}
-
-		private void UnlockSecret()
-		{
-			if ( Unlocked ) return;
-			Unlocked = true;
-
-			new Bootstrap().Level2();
-
-			WMember = X.Singleton<IMember>( XProto.Member );
-			WMember.OnStatusChanged += WMember_OnStatusChanged;
-
-			WLoginBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronRight, stx.Text( "Login" ) );
-			WLoginBtn.Click += CreateCmdHandler( WLoginBtn_Click );
-
-			SecondaryIconButton SearchBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Search, stx.Text( "Search", "AppBar" ) );
-			SearchBtn.Click += CreateCmdHandler( PageId.W_SEARCH, () => new WSearch() );
-
-			w82ndCommands = new ICommandBarElement[] { WLoginBtn, SearchBtn };
-
-			// Master commands
-			AppBarToggleButton BookShelfBtn = UIAliases.CreateToggleBtn( Symbol.Library, stx.Text( "Shelf", "AppBar" ) );
-			BookShelfBtn.Click += CreateCmdHandler( PageId.W_BOOKSHELF, () => new WBookshelf() );
-
-			w8Commands = new ICommandBarElement[] { BookShelfBtn, null, null };
-
-			UpdateCustBtn();
 		}
 
 		public void UpdateCustBtn()
@@ -224,6 +235,7 @@ namespace wenku8.System
 			if( InitMode == 1 )
 				Index = Index == 0 ? 1 : 0;
 
+			InitModeInsts( Index );
 			if ( Index == 0 )
 			{
 				ActionEvent.Normal();
@@ -238,8 +250,6 @@ namespace wenku8.System
 			{
 				ActionEvent.Secret();
 				Properties.SMODE = Index;
-
-				UnlockSecret();
 
 				MasterCommands = w8Commands;
 				M2ndCommands = w82ndCommands;
@@ -309,6 +319,10 @@ namespace wenku8.System
 				SHLoginBtn.Label = stx.Text( "Account", "Settings" );
 				SHLoginBtn.Glyph = SegoeMDL2.Accounts;
 			}
+			else if( args == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				var j = Authenticate();
+			}
 			else
 			{
 				SHLoginBtn.Label = stx.Text( "Login" );
@@ -355,6 +369,10 @@ namespace wenku8.System
 			{
 				WLoginBtn.Label = stx.Text( "Account", "Settings" );
 				WLoginBtn.Glyph = SegoeMDL2.Accounts;
+			}
+			else if( args == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				var j = WAuthenticate();
 			}
 			else
 			{

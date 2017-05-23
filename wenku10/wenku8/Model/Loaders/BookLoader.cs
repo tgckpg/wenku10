@@ -54,7 +54,7 @@ namespace wenku8.Model.Loaders
 			string id = b.Id;
 			string Mode = X.Const<string>( XProto.WProtocols, "ACTION_BOOK_INFO" );
 
-			if( CurrentBook.XTest( XProto.BookItemEx ) )
+			if ( CurrentBook.IsEx() )
 			{
 				Mode = CurrentBook.XField<string>( "Mode" );
 			}
@@ -147,7 +147,7 @@ namespace wenku8.Model.Loaders
 
 		private void SaveIntro( DRequestCompletedEventArgs e, string id )
 		{
-			Shared.Storage.WriteString( CurrentBook.IntroPath, Manipulation.PatchSyntax( e.ResponseString ) );
+			Shared.Storage.WriteString( CurrentBook.IntroPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
 			CurrentBook.Intro = "OK";
 		}
 
@@ -181,6 +181,7 @@ namespace wenku8.Model.Loaders
 
 		private void ExtractBookInfo( string InfoData, string id )
 		{
+			InfoData = Shared.TC.Translate( InfoData );
 			CurrentBook.ParseXml( InfoData );
 
 			if ( Shared.Storage.FileExists( CurrentBook.CoverPath ) )

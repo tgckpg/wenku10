@@ -567,4 +567,7 @@
   <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
     <value>動態磚更新間隔</value>
   </data>
+  <data name="Account_Remember_Warn.Text" xml:space="preserve">
+    <value>密碼將存儲在此設備上。 建議您不要在其他帳戶使用相同的密碼。</value>
+  </data>
 </root>

@@ -560,4 +560,7 @@
   <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
     <value>活动磁贴更新间隔</value>
   </data>
+  <data name="Account_Remember_Warn.Text" xml:space="preserve">
+    <value>密码将存储在此设备上。建议您不要在其他帐户使用相同的密码。</value>
+  </data>
 </root>

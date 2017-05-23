@@ -9,6 +9,8 @@ using Windows.System.Diagnostics;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
 
+using libtaotu.Models.Procedure;
+
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
@@ -60,6 +62,8 @@ namespace Tasks
 				XRegistry.AStorage = Shared.Storage;
 			}
 
+			Shared.TC = new wenku8.Model.TradChinese();
+
 			XReg = new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS );
 		}
 
@@ -74,9 +78,10 @@ namespace Tasks
 			}
 
 			THttpRequest.UA = string.Format( AppKeys.UA, AppSettings.SimpVersion );
-			ResTaotu.SetExtractor( typeof( TasksExtractor ) );
-			ResTaotu.SetMarker( typeof( TasksMarker ) );
-			ResTaotu.SetListLoader( typeof( TasksListLoader ) );
+			ResTaotu.AddProcType( ProcType.EXTRACT, typeof( TasksExtractor ) );
+			ResTaotu.AddProcType( ProcType.MARK, typeof( TasksMarker ) );
+			ResTaotu.AddProcType( ProcType.LIST, typeof( TasksListLoader ) );
+			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( wenku8.Taotu.TongWenTang ) );
 			ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
 		}
 

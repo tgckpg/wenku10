@@ -152,6 +152,8 @@ namespace wenku10.Pages
 			CacheStateStory.Begin();
 
 			BookLoading = true;
+
+			if ( Book.IsEx() ) Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
 			BookLoader BL = new BookLoader( BookLoadComplete );
 
 			BL.Load( Book, true );
@@ -386,7 +388,7 @@ namespace wenku10.Pages
 		{
 			StringResources stx = new StringResources( "AppBar", "AppResources", "ContextMenu" );
 
-			if ( ThisBook.XTest( XProto.BookItemEx ) )
+			if ( ThisBook.IsEx() )
 			{
 				VoteButton.Visibility = Visibility.Visible;
 

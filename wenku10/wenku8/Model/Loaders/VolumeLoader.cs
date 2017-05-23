@@ -55,7 +55,7 @@ namespace wenku8.Model.Loaders
 					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", CurrentBook.Id )
 					, ( DRequestCompletedEventArgs e, string id ) =>
 					{
-						Shared.Storage.WriteString( CurrentBook.TOCPath, Manipulation.PatchSyntax( e.ResponseString ) );
+						Shared.Storage.WriteString( CurrentBook.TOCPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
 						Shared.Storage.WriteString( CurrentBook.TOCDatePath, CurrentBook.RecentUpdateRaw );
 						OnComplete( b );
 					}

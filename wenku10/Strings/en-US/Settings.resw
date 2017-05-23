@@ -567,4 +567,7 @@
   <data name="Advanced_BgTask_Interval.Text" xml:space="preserve">
     <value>Live Tile update interval</value>
   </data>
+  <data name="Account_Remember_Warn.Text" xml:space="preserve">
+    <value>The password will be stored in this device. It is recommended you does not use the same password for other accounts.</value>
+  </data>
 </root>

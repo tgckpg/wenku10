@@ -24,6 +24,7 @@ namespace wenku10.Pages.Dialogs
 		public bool Canceled = true;
 
 		private IMember Member;
+		private bool UseLastPass = true;
 
 		public Login( IMember Member )
 		{
@@ -34,7 +35,11 @@ namespace wenku10.Pages.Dialogs
 			PrimaryButtonText = stx.Text( "Login" );
 			SecondaryButtonText = stx.Text( "Button_Back" );
 
-			if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
+			if ( !string.IsNullOrEmpty( Member.ServerMessage ) )
+			{
+				ShowMessage( Member.ServerMessage );
+			}
+			else if ( Member.Status == MemberStatus.RE_LOGIN_NEEDED )
 			{
 				ShowMessage( stx.Text( "Login_Expired" ) );
 			}
@@ -49,6 +54,13 @@ namespace wenku10.Pages.Dialogs
 			if( !string.IsNullOrEmpty( Member.CurrentAccount ) )
 			{
 				Account.Text = Member.CurrentAccount;
+				Password.Loaded += Password_Focus;
+			}
+
+			if( !string.IsNullOrEmpty( Member.CurrentPassword ) )
+			{
+				UseLastPass = true;
+				Password.Password = "************";
 				Password.Loaded += Password_Focus;
 			}
 		}
@@ -101,12 +113,18 @@ namespace wenku10.Pages.Dialogs
 			{
 				e.Handled = DetectInputLogin();
 			}
+			else if ( sender == Password )
+			{
+				UseLastPass = false;
+			}
 		}
 
 		private bool DetectInputLogin()
 		{
 			string Name = Account.Text.Trim();
 			string Passwd = Password.Password;
+
+			if ( UseLastPass ) Passwd = Member.CurrentPassword;
 
 			if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Passwd ) )
 			{
@@ -131,8 +149,9 @@ namespace wenku10.Pages.Dialogs
 
 				// Re-focus to disable keyboard
 				this.Focus( FocusState.Pointer );
+
 				// Request string
-				Member.Login( Name, Passwd );
+				Member.Login( Name, Passwd, RememberInfo.IsChecked == true );
 
 				return true;
 			}
@@ -140,7 +159,7 @@ namespace wenku10.Pages.Dialogs
 
 		private void ShowMessage( string Mesg )
 		{
-			if ( Mesg == null ) return;
+			if ( string.IsNullOrEmpty( Mesg ) ) return;
 
 			ServerMessage.Text = Mesg;
 			ServerMessage.Visibility = Visibility.Visible;

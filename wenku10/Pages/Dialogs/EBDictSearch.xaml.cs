@@ -37,6 +37,11 @@ namespace wenku10.Pages.Dialogs
 		private int VI = 0;
 		private int VJ = 0;
 
+		private bool InSearchBox
+		{
+			get { return 0 < ( CurrentWord.FocusState & ( FocusState.Keyboard | FocusState.Pointer ) ); }
+		}
+
 		private EBDictSearch()
 		{
 			this.InitializeComponent();
@@ -86,14 +91,38 @@ namespace wenku10.Pages.Dialogs
 			}
 		}
 
-		private void Right1( KeyCombinationEventArgs e ) { e.Handled = true; VJ++; UpdateVisual(); }
-		private void Left1( KeyCombinationEventArgs e ) { e.Handled = true; VJ--; UpdateVisual(); }
-		private void Right2( KeyCombinationEventArgs e ) { e.Handled = true; VI++; UpdateVisual(); }
-		private void Left2( KeyCombinationEventArgs e ) { e.Handled = true; VI--; UpdateVisual(); }
+		private void Right1( KeyCombinationEventArgs e )
+		{
+			e.Handled = true;
+			if ( InSearchBox ) return;
+			VJ++; UpdateVisual();
+		}
+
+		private void Left1( KeyCombinationEventArgs e )
+		{
+			e.Handled = true;
+			if ( InSearchBox ) return;
+			VJ--; UpdateVisual();
+		}
+
+		private void Right2( KeyCombinationEventArgs e )
+		{
+			e.Handled = true;
+			if ( InSearchBox ) return;
+			VI++; UpdateVisual();
+		}
+
+		private void Left2( KeyCombinationEventArgs e )
+		{
+			e.Handled = true;
+			if ( InSearchBox ) return;
+			VI--; UpdateVisual();
+		}
 
 		private void ScrollMore( KeyCombinationEventArgs e )
 		{
 			e.Handled = true;
+			if ( InSearchBox ) return;
 			ScrollViewer SV = Results.ChildAt<ScrollViewer>( 1 );
 			SV.ChangeView( null, SV.VerticalOffset + 50, null );
 		}
@@ -101,6 +130,7 @@ namespace wenku10.Pages.Dialogs
 		private void ScrollLess( KeyCombinationEventArgs e )
 		{
 			e.Handled = true;
+			if ( InSearchBox ) return;
 			ScrollViewer SV = Results.ChildAt<ScrollViewer>( 1 );
 			SV.ChangeView( null, SV.VerticalOffset - 50, null );
 		}

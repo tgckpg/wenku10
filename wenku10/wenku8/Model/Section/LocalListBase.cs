@@ -11,6 +11,9 @@ using Net.Astropenguin.IO;
 namespace wenku8.Model.Section
 {
 	using ListItem;
+	using Net.Astropenguin.Linq;
+	using Pages;
+	using Resources;
 	using Settings;
 	using Storage;
 
@@ -47,11 +50,18 @@ namespace wenku8.Model.Section
 			if ( Processing || SearchSet == null ) return;
 			Processing = true;
 			Terminate = false;
+
+			LocalBook[] Books = SearchSet.Cast<LocalBook>().ToArray();
+
+			if ( await Shared.TC.ConfirmTranslate( "__ALL__", "All" ) )
+			{
+				Shared.TC.SetPrefs( Books );
+			}
+
 			NotifyChanged( "Processing" );
-			ActiveItem[] Books = SearchSet.ToArray();
 			foreach ( LocalBook b in Books )
 			{
-				await b.Process();
+				await ItemProcessor.ProcessLocal( b );
 				if ( Terminate ) break;
 			}
 			Terminate = true;
