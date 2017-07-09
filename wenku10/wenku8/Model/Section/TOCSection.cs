@@ -22,6 +22,8 @@ namespace wenku8.Model.Section
 			get { return AutoAnchor != null; }
 		}
 
+		public Chapter FirstChapter { get { return Volumes.FirstOrDefault()?.ChapterList.FirstOrDefault(); } }
+
 		public Volume[] Volumes { get; private set; }
 		public Chapter[] Chapters { get; private set; }
 		public Chapter AutoAnchor { get; private set; }

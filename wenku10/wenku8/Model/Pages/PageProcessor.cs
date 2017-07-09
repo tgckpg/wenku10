@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 using wenku10.Pages;
 using wenku10.Pages.Sharers;
@@ -123,7 +124,14 @@ namespace wenku8.Model.Pages
 
 		public static async Task<AsyncTryOut<Chapter>> TryGetAutoAnchor( BookItem Book, bool Sync = true )
 		{
-			if ( Sync ) await new AutoAnchor( Book ).SyncSettings();
+			StringResources stx = new StringResources( "LoadingMessage" );
+			if ( Sync )
+			{
+				MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "SyncingAnchors" ), Book.Id );
+				await new AutoAnchor( Book ).SyncSettings();
+			}
+
+			MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "LoadingVolumes" ), Book.Id );
 
 			TaskCompletionSource<TOCSection> TCS = new TaskCompletionSource<TOCSection>();
 			new VolumeLoader( b =>
@@ -138,7 +146,7 @@ namespace wenku8.Model.Pages
 				return new AsyncTryOut<Chapter>( true, TOCData.AutoAnchor );
 			}
 
-			return new AsyncTryOut<Chapter>( false, TOCData.Chapters.First() );
+			return new AsyncTryOut<Chapter>( false, TOCData.FirstChapter );
 		}
 	}
 }

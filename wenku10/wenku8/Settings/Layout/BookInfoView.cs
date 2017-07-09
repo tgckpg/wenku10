@@ -22,12 +22,15 @@ namespace wenku8.Settings.Layout
 
 	sealed class BookInfoView
 	{
+		public enum JumpMode { CONTENT_READER = 0, INFO_VIEW = 1 }
+
 		public static readonly string ID = typeof( BookInfoView ).Name;
 
 		private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_BOOKINFOVIEW;
 		private const string RightToLeft = "RightToLeft";
 		private const string HrTOCName = "HorizontalTOC";
 		private const string TwConfirm = "TwitterConfirmed";
+		private const string JumpModeName = "JumpMode";
 
 		private Dictionary<string, BgContext> SectionBgs;
 
@@ -70,6 +73,19 @@ namespace wenku8.Settings.Layout
 			}
 		}
 
+		public JumpMode ItemJumpMode
+		{
+			get
+			{
+				return ( JumpMode ) LayoutSettings.Parameter( JumpModeName ).GetSaveInt( "val" );
+			}
+			set
+			{
+				LayoutSettings.SetParameter( JumpModeName, new XKey( "val", ( int ) value ) );
+				LayoutSettings.Save();
+			}
+		}
+
 		private XRegistry LayoutSettings;
 
 		public BookInfoView()
@@ -89,6 +105,7 @@ namespace wenku8.Settings.Layout
 					RightToLeft
 					, new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.IsRightToLeft" ) )
 				);
+				Changed = true;
 			}
 
 			if ( LayoutSettings.Parameter( HrTOCName ) == null )
@@ -97,11 +114,19 @@ namespace wenku8.Settings.Layout
 					HrTOCName
 					, new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.HorizontalTOC" ) )
 				);
+				Changed = true;
 			}
 
 			if ( LayoutSettings.Parameter( TwConfirm ) == null )
 			{
 				LayoutSettings.SetParameter( TwConfirm, new XKey( "val", false ) );
+				Changed = true;
+			}
+
+			if ( LayoutSettings.Parameter( JumpModeName ) == null )
+			{
+				LayoutSettings.SetParameter( JumpModeName, new XKey( "val", ( int ) JumpMode.CONTENT_READER ) );
+				Changed = true;
 			}
 
 			if ( Changed ) LayoutSettings.Save();

@@ -121,7 +121,7 @@
     <value>建构文章信息</value>
   </data>
   <data name="Calculating" xml:space="preserve">
-    <value>计算中...</value>
+    <value>计算中…</value>
   </data>
   <data name="CompilingTOC" xml:space="preserve">
     <value>编制目录「{0}」</value>
@@ -129,7 +129,7 @@
   <data name="EpisodeStepper" xml:space="preserve">
     <value>装载步进集</value>
   </data>
-  <data name="LoadingVolume" xml:space="preserve">
+  <data name="LoadingVolumes" xml:space="preserve">
     <value>装载卷目</value>
   </data>
   <data name="MergingContents" xml:space="preserve">
@@ -158,6 +158,9 @@
   </data>
   <data name="SubProcessRun" xml:space="preserve">
     <value>蜘蛛正在运行子进程…「{0}」</value>
+  </data>
+  <data name="SyncingAnchors" xml:space="preserve">
+    <value>正在同步锚点…</value>
   </data>
   <data name="WaitingForUI" xml:space="preserve">
     <value>正在等待界面响应</value>

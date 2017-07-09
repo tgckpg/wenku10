@@ -129,7 +129,7 @@
   <data name="EpisodeStepper" xml:space="preserve">
     <value>エピソードステッパーを読み込んでいます</value>
   </data>
-  <data name="LoadingVolume" xml:space="preserve">
+  <data name="LoadingVolumes" xml:space="preserve">
     <value>ボリュームを読み込んでいます</value>
   </data>
   <data name="MergingContents" xml:space="preserve">
@@ -145,7 +145,7 @@
     <value>情報を取得中</value>
   </data>
   <data name="ProgressIndicator_Message" xml:space="preserve">
-    <value>読み込んでいます...</value>
+    <value>読み込んでいます…</value>
   </data>
   <data name="ProgressIndicator_PleaseWait.Text" xml:space="preserve">
     <value>しばらくお待ちください</value>
@@ -158,6 +158,9 @@
   </data>
   <data name="SubProcessRun" xml:space="preserve">
     <value>クモは、サブプロセスを実行しています…「{0}」</value>
+  </data>
+  <data name="SyncingAnchors" xml:space="preserve">
+    <value>アンカー同期中…</value>
   </data>
   <data name="WaitingForUI" xml:space="preserve">
     <value>インタフェースの応答を待っています</value>

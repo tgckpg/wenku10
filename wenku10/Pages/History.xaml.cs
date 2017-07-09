@@ -44,7 +44,10 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
+		AppBarButton JumpModeBtn;
+
 		private HistorySection HistoryContext;
+		private BInfConfig LocalConfig;
 
 		private string ActiveId = "-1";
 
@@ -97,11 +100,51 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
+			LocalConfig = new BInfConfig();
+			InitAppBar();
+
 			HistoryView.RenderTransform = new TranslateTransform();
 
 			HistoryContext = new HistorySection();
 			HistoryView.DataContext = HistoryContext;
 			HistoryContext.Load();
+		}
+
+		private void InitAppBar()
+		{
+			if ( LocalConfig.ItemJumpMode == BInfConfig.JumpMode.CONTENT_READER )
+			{
+				StringResources stx = new StringResources( "Resources" );
+				JumpModeBtn = UIAliases.CreateAppBarBtn( Symbol.OpenWith, stx.Str( "Kb_For_ContentReader" ) );
+			}
+			else
+			{
+				StringResources stx = new StringResources( "AppBar" );
+				JumpModeBtn = UIAliases.CreateAppBarBtn( Symbol.OpenFile, stx.Text( "BookInfoView" ) );
+			}
+
+			JumpModeBtn.Click += ( sender, e ) => ToggleJumpMode();
+			MajorControls = new ICommandBarElement[] { JumpModeBtn };
+		}
+
+		private void ToggleJumpMode()
+		{
+			if ( LocalConfig.ItemJumpMode == BInfConfig.JumpMode.CONTENT_READER )
+			{
+				LocalConfig.ItemJumpMode = BInfConfig.JumpMode.INFO_VIEW;
+				JumpModeBtn.Icon = new SymbolIcon( Symbol.OpenFile );
+
+				StringResources stx = new StringResources( "AppBar" );
+				JumpModeBtn.Label = stx.Text( "BookInfoView" );
+			}
+			else
+			{
+				LocalConfig.ItemJumpMode = BInfConfig.JumpMode.CONTENT_READER;
+				JumpModeBtn.Icon = new SymbolIcon( Symbol.OpenWith );
+
+				StringResources stx = new StringResources( "Resources" );
+				JumpModeBtn.Label = stx.Str( "Kb_For_ContentReader" );
+			}
 		}
 
 		private async void History_ItemClick( object sender, ItemClickEventArgs e )
@@ -126,13 +169,30 @@ namespace wenku10.Pages
 				return;
 			}
 
-			if ( Book.IsLocal() )
+			if ( LocalConfig.ItemJumpMode == BInfConfig.JumpMode.CONTENT_READER )
 			{
-				ControlFrame.Instance.SubNavigateTo( this, () => new BInfConfig().HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
+				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( Book );
+				if ( TryAutoAnchor )
+				{
+					ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
+					ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( Book, TryAutoAnchor.Out ) );
+				}
+				else
+				{
+					StringResources stx = new StringResources( "Message" );
+					await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
+				}
 			}
 			else
 			{
-				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
+				if ( Book.IsLocal() )
+				{
+					ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
+				}
+				else
+				{
+					ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
+				}
 			}
 
 			MessageBus.OnDelivery -= MessageBus_OnDelivery;
