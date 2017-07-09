@@ -18,6 +18,8 @@ namespace wenku8.Model.Section
 		private Brush bbrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
 		private ContentReader Reader;
 
+		public IList<PaneNavButton> Nav { get; private set; }
+
 		public Brush BackgroundBrush
 		{
 			get { return bbrush; }
@@ -27,9 +29,6 @@ namespace wenku8.Model.Section
 				NotifyChanged( "BackgroundBrush" );
 			}
 		}
-
-		public IList<PaneNavButton> Nav { get; private set; }
-
 
 		public NavPaneSection( ContentReader ReaderPage, IList<PaneNavButton> NavButtons )
 		{

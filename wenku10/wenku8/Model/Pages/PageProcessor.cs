@@ -23,6 +23,8 @@ namespace wenku8.Model.Pages
 	using ListItem;
 	using ListItem.Sharers;
 	using Loaders;
+	using Model.Section;
+	using Storage;
 
 	sealed class PageProcessor
 	{
@@ -119,5 +121,24 @@ namespace wenku8.Model.Pages
 			}
 		}
 
+		public static async Task<AsyncTryOut<Chapter>> TryGetAutoAnchor( BookItem Book, bool Sync = true )
+		{
+			if ( Sync ) await new AutoAnchor( Book ).SyncSettings();
+
+			TaskCompletionSource<TOCSection> TCS = new TaskCompletionSource<TOCSection>();
+			new VolumeLoader( b =>
+			{
+				TCS.TrySetResult( new TOCSection( b ) );
+			} ).Load( Book );
+
+			TOCSection TOCData = await TCS.Task;
+
+			if ( TOCData.AnchorAvailable )
+			{
+				return new AsyncTryOut<Chapter>( true, TOCData.AutoAnchor );
+			}
+
+			return new AsyncTryOut<Chapter>( false, TOCData.Chapters.First() );
+		}
 	}
 }

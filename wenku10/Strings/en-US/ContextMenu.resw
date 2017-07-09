@@ -234,4 +234,7 @@
   <data name="TakeOver.Text" xml:space="preserve">
     <value>Take over</value>
   </data>
+  <data name="GotoCurrent.Text" xml:space="preserve">
+    <value>Goto Current</value>
+  </data>
 </root>

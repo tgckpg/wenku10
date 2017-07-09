@@ -16,6 +16,7 @@
         <v:TransStateConverter x:Key="TransStateConverter" />
         <v:PanePosConverter x:Key="PanePosConverter" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
+        <v:HistoryThumbConverter x:Key="HistoryThumbConverter" />
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
@@ -88,28 +89,59 @@
 
         </Grid>
 
-        <Grid x:Name="YUpperBack" Height="100"
+        <Grid x:Name="YUpperBack" Height="150"
               e:TransitionDisplay.State="Inactive"
               e:TransitionDisplay.Mode="A01_Y_N30_N30"
               Background="{Binding ESBGBrush}"
               VerticalAlignment="Top">
-            <c:TitleStepper x:Name="YVolTitleStepper" Margin="10"
-                            Foreground="{Binding ESSBrush}"
-                            FontSize="20" VerticalAlignment="Top"
-                            e:TransitionDisplay.State="{Binding RelativeSource={RelativeSource Self}, Path=Source, Converter={StaticResource TransStateConverter}}"/>
+            <ListView x:Name="YHistoryThumbs"
+                      IsItemClickEnabled="True" ItemClick="YHistoryThumbs_ItemClick"
+                      Foreground="{Binding ESSBrush}"
+                      Style="{StaticResource VerticalListView}"
+                      ItemContainerStyle="{StaticResource ListItemNoSelect}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="120" Height="120" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Payload, Converter={StaticResource HistoryThumbConverter}}" />
+                            <TextBlock Grid.Row="1"
+                                       FontSize="20" Text="{Binding Name}"
+                                       Foreground="{Binding ElementName=YHistoryThumbs, Path=Foreground}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
 
-        <Grid x:Name="XUpperBack" Width="100"
+        <Grid x:Name="XUpperBack" Width="150"
               e:TransitionDisplay.State="Inactive"
               e:TransitionDisplay.Mode="A01_X_N30_N30"
               Background="{Binding ESBGBrush}"
               HorizontalAlignment="Left">
-
-            <c:TitleStepper x:Name="XVolTitleStepper" Margin="10"
-                            FontSize="20" VerticalAlignment="Top"
-                            Foreground="{Binding ESSBrush}"
-                            Style="{StaticResource VerticalTitleStepper}"
-                            e:TransitionDisplay.State="{Binding RelativeSource={RelativeSource Self}, Path=Source, Converter={StaticResource TransStateConverter}}"/>
+            <ListView x:Name="XHistoryThumbs"
+                      IsItemClickEnabled="True" ItemClick="YHistoryThumbs_ItemClick"
+                      Foreground="{Binding ESSBrush}"
+                      ItemContainerStyle="{StaticResource ListItemNoSelect}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="120" Height="120" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Image Source="{Binding Payload, Converter={StaticResource HistoryThumbConverter}}" />
+                            <TextBlock Grid.Row="1"
+                                       FontSize="20" Text="{Binding Name}"
+                                       Foreground="{Binding ElementName=XHistoryThumbs, Path=Foreground}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
 
         <Grid x:Name="XLowerBack" Width="100"
@@ -223,7 +255,7 @@
                            HorizontalAlignment="Right" VerticalAlignment="Top"
                            Foreground="White"/>
 
-                <TextBlock x:Name="YBookTitle" Margin="15,10,15,110"
+                <TextBlock x:Name="YBookTitle" Margin="15,10,15,160"
                            e:TransitionDisplay.Mode="A01_Y_30_30"
                            e:TransitionDisplay.State="Inactive"
                            FontSize="25" Text="Book Title"
@@ -239,7 +271,7 @@
                            HorizontalAlignment="Left" VerticalAlignment="Top"
                            Foreground="White"/>
 
-                <TextBlock x:Name="XBookTitle" Margin="15,10,115,10"
+                <TextBlock x:Name="XBookTitle" Margin="15,10,165,10"
                            e:TransitionDisplay.Mode="A01_X_30_30"
                            e:TransitionDisplay.State="Inactive"
                            FontSize="25" Text="Book Title"
@@ -296,7 +328,7 @@
                                  Storyboard.TargetProperty="TranslateY"
                                  BeginTime="0:0:0.0" Duration="0:0:0.5"
                                  EasingFunction="{StaticResource EaseOutCubic}"
-                                 To="100" />
+                                 To="150" />
                 <DoubleAnimation Storyboard.TargetName="ManiDim"
                                  Storyboard.TargetProperty="Opacity"
                                  BeginTime="0:0:0.0" Duration="0:0:0.5"

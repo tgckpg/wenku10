@@ -234,4 +234,7 @@
   <data name="TakeOver.Text" xml:space="preserve">
     <value>接管</value>
   </data>
+  <data name="GotoCurrent.Text" xml:space="preserve">
+    <value>目前置位</value>
+  </data>
 </root>

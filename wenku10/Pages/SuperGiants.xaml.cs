@@ -50,8 +50,6 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		private bool PinErrored = false;
-
 		// Fireflies scroll effect
 		private float PrevOffset = 0;
 

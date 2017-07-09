@@ -386,9 +386,8 @@ namespace wenku10.Pages
 			{
 				MajorCmdBar = BottomCmdBar;
 				MinorCmdBar = TopCmdBar;
-				// Update delay in phone should be lower
-				// because SizeChange event does not fire very often
-				VerticalStack.UpdateDelay = 10;
+				// Disable Update delay in phone
+				VerticalStack.UpdateDelay = 0;
 			}
 			else
 			{

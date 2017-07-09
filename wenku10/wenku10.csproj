@@ -103,6 +103,7 @@
     </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\circle.dds" />
+    <Content Include="Assets\NewContent155x155-200.png" />
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\glitter.dds" />
     <Content Include="Assets\Samples\BgContentReader.jpg" />
