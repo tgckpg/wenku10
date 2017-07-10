@@ -131,22 +131,50 @@ namespace wenku8.Model.Pages
 				await new AutoAnchor( Book ).SyncSettings();
 			}
 
-			MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "LoadingVolumes" ), Book.Id );
+			MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "ProgressIndicator_Message" ), Book.Id );
 
 			TaskCompletionSource<TOCSection> TCS = new TaskCompletionSource<TOCSection>();
-			new VolumeLoader( b =>
+			BookLoader BLoader = new BookLoader( b =>
 			{
-				TCS.TrySetResult( new TOCSection( b ) );
-			} ).Load( Book );
+				if ( b == null )
+				{
+					TCS.TrySetResult( null );
+				}
+				else
+				{
+					MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "LoadingVolumes" ), Book.Id );
+					new VolumeLoader( b2 =>
+					{
+						if ( b2 == null )
+						{
+							TCS.TrySetResult( null );
+						}
+						else
+						{
+							TCS.TrySetResult( new TOCSection( b2 ) );
+						}
+					} ).Load( b );
+				}
+			} );
+
+			BLoader.Load( Book, true );
 
 			TOCSection TOCData = await TCS.Task;
+
+			if ( TOCData == null )
+			{
+				return new AsyncTryOut<Chapter>( false, null );
+			}
 
 			if ( TOCData.AnchorAvailable )
 			{
 				return new AsyncTryOut<Chapter>( true, TOCData.AutoAnchor );
 			}
-
-			return new AsyncTryOut<Chapter>( false, TOCData.FirstChapter );
+			else
+			{
+				return new AsyncTryOut<Chapter>( false, TOCData.FirstChapter );
+			}
 		}
+
 	}
 }

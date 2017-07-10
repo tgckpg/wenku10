@@ -23,6 +23,7 @@ using wenku8.Effects;
 using wenku8.Model.Interfaces;
 using wenku8.Model.Section;
 using wenku8.Model.ListItem;
+using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
 using wenku8.Model.Book;
 using BInfConfig = wenku8.Settings.Layout.BookInfoView;
@@ -171,11 +172,13 @@ namespace wenku10.Pages
 
 			if ( LocalConfig.ItemJumpMode == BInfConfig.JumpMode.CONTENT_READER )
 			{
+
 				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( Book );
 				if ( TryAutoAnchor )
 				{
 					ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
 					ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( Book, TryAutoAnchor.Out ) );
+					goto LoadComplete;
 				}
 				else
 				{
@@ -183,18 +186,17 @@ namespace wenku10.Pages
 					await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
 				}
 			}
+
+			if ( Book.IsLocal() )
+			{
+				ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
+			}
 			else
 			{
-				if ( Book.IsLocal() )
-				{
-					ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
-				}
-				else
-				{
-					ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
-				}
+				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
 			}
 
+			LoadComplete:
 			MessageBus.OnDelivery -= MessageBus_OnDelivery;
 			LoadingMessage.Text = "";
 			Locked = false;
