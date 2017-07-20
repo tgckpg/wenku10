@@ -55,6 +55,7 @@ namespace wenku10.Pages
 			MessageBus.OnDelivery += MessageBus_OnDelivery;
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
 
+			GR.Database.ContextManager.Migrate();
 			ApplyControlSet();
 		}
 

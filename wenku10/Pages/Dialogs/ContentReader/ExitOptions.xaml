@@ -1,0 +1,36 @@
+﻿<ContentDialog
+    x:Class="wenku10.Pages.Dialogs.ContentReader.ExitOptions"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Dialogs.ContentReader"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Style="{StaticResource ScrollContentDialog}"
+    Background="{StaticResource MajorBackgroundBrush}"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
+    <ContentDialog.Title>
+        <TextBlock x:Uid="/NavigationTitles/ExitOptions"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="Exit Options" />
+    </ContentDialog.Title>
+
+    <StackPanel>
+        <TextBlock Text="Choose an action" />
+        <ComboBox>
+            <ComboBoxItem>
+                <TextBlock Text="Go back to previous page" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="Directly exit" />
+            </ComboBoxItem>
+            <ComboBoxItem>
+                <TextBlock Text="Directly exit, resume session when app opened" />
+            </ComboBoxItem>
+        </ComboBox>
+        <CheckBox>
+            <TextBlock Text="Do not show this again" />
+        </CheckBox>
+        <TextBlock Text="You can change this option again under Settings" />
+    </StackPanel>
+</ContentDialog>

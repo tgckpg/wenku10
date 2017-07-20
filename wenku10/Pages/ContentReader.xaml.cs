@@ -48,6 +48,7 @@ using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
 namespace wenku10.Pages
 {
 	using ContentReaderPane;
+	using Dialogs.ContentReader;
 
 	sealed partial class ContentReader : Page, ICmdControls, IAnimaPage, INavPage
 	{
@@ -768,6 +769,9 @@ namespace wenku10.Pages
 			NeedRedraw = true;
 		}
 
+		volatile bool ExitOptionChosen = false;
+		ExitOptions ExitDialog;
+
 		private void OnBackRequested( object sender, XBackRequestedEventArgs e )
 		{
 			// Close the settings first
@@ -797,6 +801,26 @@ namespace wenku10.Pages
 				e.Handled = true;
 				MainSplitView.ClosePane();
 				return;
+			}
+
+			/*
+			if ( !ExitOptionChosen )
+			{
+				e.Handled = true;
+				PopupExitOptions();
+			}
+			*/
+		}
+
+		private async void PopupExitOptions()
+		{
+			if ( ExitDialog == null )
+			{
+				// Ask to direct exit and resume session
+				ExitDialog = new ExitOptions();
+				await Popups.ShowDialog( ExitDialog );
+				ExitDialog = null;
+				ExitOptionChosen = true;
 			}
 		}
 

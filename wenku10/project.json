@@ -1,11 +1,11 @@
 ﻿{
   "dependencies": {
-    "Microsoft.ApplicationInsights": "2.2.0",
+    "Microsoft.ApplicationInsights": "2.4.0",
     "Microsoft.ApplicationInsights.PersistenceChannel": "1.2.3",
     "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.3",
     "Microsoft.Toolkit.Uwp.Services": "1.1.0",
-    "Win2D.uwp": "1.20.0"
+    "Win2D.uwp": "1.21.0"
   },
   "frameworks": {
     "uap10.0": {}
