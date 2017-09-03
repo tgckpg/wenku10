@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Xaml;
-
-using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.UI;
-using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using wenku8.Effects;
 
@@ -28,6 +27,7 @@ namespace wenku10.Scenes
 		{
 			_stage = Stage;
 
+			StageSize = Size.Empty;
 			Scenes = new List<IScene>();
 
 			Textures = new TextureLoader();
@@ -51,10 +51,26 @@ namespace wenku10.Scenes
 		{
 			lock ( Scenes )
 			{
+				if ( !StageSize.IsEmpty )
+				{
+					S.UpdateAssets( StageSize );
+				}
 				Scenes.Add( S );
-				if ( StageSize != null ) S.UpdateAssets( StageSize );
 			}
 		}
+
+		public void Insert( int Index, IScene S )
+		{
+			lock ( Scenes )
+			{
+				if ( !StageSize.IsEmpty )
+				{
+					S.UpdateAssets( StageSize );
+				}
+				Scenes.Insert( Index, S );
+			}
+		}
+
 		public async Task Remove( Type SceneType )
 		{
 			IScene[] RmScenes;
@@ -115,8 +131,22 @@ namespace wenku10.Scenes
 
 		virtual protected async Task LoadTextures( CanvasAnimatedControl CC )
 		{
-			await Textures.Load( CC, Texture.Glitter, "Assets/glitter.dds" );
-			await Textures.Load( CC, Texture.Circle, "Assets/circle.dds" );
+			IEnumerable<IScene> TxScenes = Scenes.Where( x => x is ITextureScene ).ToArray();
+			foreach( ITextureScene S in TxScenes.Cast<ITextureScene>() )
+			{
+				await S.LoadTextures( CC, Textures );
+			}
+
+			if ( !StageSize.IsEmpty )
+			{
+				lock ( Scenes )
+				{
+					foreach ( IScene S in TxScenes )
+					{
+						S.UpdateAssets( StageSize );
+					}
+				}
+			}
 		}
 
 		virtual protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e )

@@ -8,7 +8,7 @@ namespace wenku10.Scenes
 {
 	static class Texture
 	{
-		public const int Glitter = 1;
-		public const int Circle = 2;
+		public const string Glitter = "GLITTER";
+		public const string Circle = "CIRCLE";
 	}
 }

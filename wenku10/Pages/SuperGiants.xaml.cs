@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.Services.Store.Engagement;
 
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
@@ -31,11 +32,11 @@ using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
 using wenku8.Resources;
 using wenku8.Settings;
-using wenku8.Storage;
 
 namespace wenku10.Pages
 {
 	using Scenes;
+	using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
 
 	sealed partial class SuperGiants : Page, IAnimaPage, ICmdControls
 	{
@@ -178,12 +179,24 @@ namespace wenku10.Pages
 			IList<ActiveItem> Items = await Loader.NextPage( 4 );
 
 			int i = 0;
+			XRegistry SSettings = new XRegistry( "<sp />", FileLinks.ROOT_SETTING + FileLinks.LAYOUT_STAFFPICKS );
 			foreach ( ActiveItem Item in Items )
 			{
 				var j = Stages[ i ].Remove( typeof( TheOrb ) );
 
 				Stars[ i ].Visibility = Visibility.Visible;
 				Stars[ i ].PointerReleased += SuperGiants_PointerReleased;
+
+				// Set the bg context
+				BgContext ItemContext = new BgContext( SSettings, "STAFF_PICKS" )
+				{
+					Book = await ItemProcessor.GetBookFromId( Item.Payload )
+				};
+				ItemContext.SetBackground( "Preset" );
+
+				ParaBg Parallax = new ParaBg( ItemContext );
+				Parallax.Bind( LayoutRoot );
+				Stages[ i ].Insert( 0, Parallax );
 
 				StarBoxes[ i ].DataContext = Item;
 				i++;
@@ -238,7 +251,6 @@ namespace wenku10.Pages
 
 				SimpleStory.DoubleAnimation( StarBoxStory, StarBox, "Opacity", 1, 0, 350, Delay );
 				SimpleStory.DoubleAnimation( StarBoxStory, StarBox.RenderTransform, "Y", 0, 30, 350, Delay );
-				SimpleStory.ObjectAnimation( StarBoxStory, StarBox, "Visibility", Visibility.Visible, Visibility.Collapsed, 0, 350 + Delay );
 				i++;
 			}
 
@@ -257,7 +269,6 @@ namespace wenku10.Pages
 
 				SimpleStory.DoubleAnimation( StarBoxStory, StarBox, "Opacity", 0, 1, 350, Delay );
 				SimpleStory.DoubleAnimation( StarBoxStory, StarBox.RenderTransform, "Y", 30, 0, 350, Delay );
-				SimpleStory.ObjectAnimation( StarBoxStory, StarBox, "Visibility", Visibility.Collapsed, Visibility.Visible, 0, Delay );
 				i++;
 			}
 

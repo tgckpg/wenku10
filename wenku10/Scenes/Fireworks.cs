@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
 
 using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using wenku8.Effects;
 using wenku8.Effects.P2DFlow;
@@ -18,11 +19,20 @@ using wenku8.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
-	sealed class Fireworks : PFScene, IScene
+	sealed class Fireworks : PFScene, ITextureScene
 	{
+		private int tGlitter;
+		private int tCircle;
+
 		public Fireworks()
 		{
 			PFSim.Create( 500 );
+		}
+
+		public async Task LoadTextures( CanvasAnimatedControl Canvas, TextureLoader Textures )
+		{
+			tCircle = await Textures.Load( Canvas, Texture.Circle, "Assets/circle.dds" );
+			tGlitter = await Textures.Load( Canvas, Texture.Glitter, "Assets/glitter.dds" );
 		}
 
 		public void UpdateAssets( Size s )
@@ -38,17 +48,17 @@ namespace wenku10.Scenes
 				float HSW = 0.5f * SW;
 
 				PFSim.Spawners.Clear();
-				PFSim.Spawners.Add( new Trail() { Texture = Texture.Glitter } );
+				PFSim.Spawners.Add( new Trail() { Texture = tGlitter } );
 				PFSim.Spawners.Add( new ExplosionParticle()
 				{
-					Texture = Texture.Circle
+					Texture = tCircle
 					, SpawnEx = ( P ) => { P.Scale *= 0.125f; }
 				} );
 				PFSim.Spawners.Add( new LinearSpawner( new Vector2( HSW, SH ), new Vector2( 0, 0 ), new Vector2( 50, -200 ) )
 				{
 					Chaos = new Vector2( 1, 0 ),
 					SpawnTrait = PFTrait.THRUST | PFTrait.EXPLODE | PFTrait.TRAIL
-					, Texture = Texture.Glitter
+					, Texture = tGlitter
 					, SpawnEx = ( P ) => { P.Tint.M44 = 0; }
 				} );
 

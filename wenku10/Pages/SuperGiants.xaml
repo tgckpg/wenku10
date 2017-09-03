@@ -2,6 +2,7 @@
     x:Class="wenku10.Pages.SuperGiants"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Net.Astropenguin.UI"
     xmlns:e="using:wenku8.Effects"
     xmlns:c="using:wenku8.CompositeElement"
     xmlns:v="using:wenku8.Converters"
@@ -13,6 +14,7 @@
 
     <Page.Resources>
         <v:TransStateConverter x:Key="TransStateConverter" />
+        <v:ParallaxConverter x:Key="ParallaxConverter" />
     </Page.Resources>
 
     <ScrollViewer x:Name="LayoutRoot">
@@ -79,7 +81,7 @@
         </VisualStateManager.VisualStateGroups>
 
         <StackPanel>
-            <Grid x:Name="StarBox1H" Height="120">
+            <Grid x:Name="StarBox1H" p:Clip.ToBounds="True" Height="120">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="StarBox1W" Width="120" />
                     <ColumnDefinition Width="*" />
@@ -107,7 +109,7 @@
                     <Run Text="{Binding Desc}" />
                 </TextBlock>
             </Grid>
-            <Grid x:Name="StarBox2H" Height="120">
+            <Grid x:Name="StarBox2H" p:Clip.ToBounds="True" Height="120">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition x:Name="StarBox2W" Width="120" />
@@ -136,7 +138,7 @@
                     <Run Text="{Binding Desc}" />
                 </TextBlock>
             </Grid>
-            <Grid x:Name="StarBox3H" Height="120">
+            <Grid x:Name="StarBox3H" p:Clip.ToBounds="True" Height="120">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="StarBox3W" Width="120" />
                     <ColumnDefinition Width="*" />
@@ -164,7 +166,7 @@
                     <Run Text="{Binding Desc}" />
                 </TextBlock>
             </Grid>
-            <Grid x:Name="StarBox4H" Height="120">
+            <Grid x:Name="StarBox4H" p:Clip.ToBounds="True" Height="120">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition x:Name="StarBox4W" Width="120" />

@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
 
 using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using wenku8.Config;
 using wenku8.Effects;
@@ -20,8 +21,9 @@ using wenku8.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
-	sealed class Glitter : PFScene, IScene
+	sealed class Glitter : PFScene, ITextureScene
 	{
+		private int tCircle;
 		private Vector4 ThemeTint;
 
 		private Wind ScrollWind = new Wind();
@@ -37,6 +39,11 @@ namespace wenku10.Scenes
 		public void WindBlow( float Strength )
 		{
 			ScrollWind.Strength = Vector2.Clamp( Vector2.One * Strength, -3 * Vector2.One, 3 * Vector2.One ).X;
+		}
+
+		public async Task LoadTextures( CanvasAnimatedControl Canvas, TextureLoader Textures )
+		{
+			tCircle = await Textures.Load( Canvas, Texture.Circle, "Assets/circle.dds" );
 		}
 
 		public void UpdateAssets( Size s )
@@ -57,7 +64,7 @@ namespace wenku10.Scenes
 				{
 					Chaos = new Vector2( 1, 1 )
 					, otMin = 5, otMax = 10
-					, Texture = Texture.Circle
+					, Texture = tCircle
 					, SpawnTrait = PFTrait.IMMORTAL
 					, SpawnEx = ( P ) =>
 					{

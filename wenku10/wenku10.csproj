@@ -191,6 +191,8 @@
     <Compile Include="Pages\ZoneSpidersView.xaml.cs">
       <DependentUpon>ZoneSpidersView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scenes\ITextureScene.cs" />
+    <Compile Include="Scenes\ParaBg.cs" />
     <Compile Include="ShHub\MesgListerner.cs" />
     <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />

@@ -148,6 +148,13 @@ namespace wenku8.Settings.Layout
 		{
 			XRegistry LayoutSettings;
 
+			private BookItem _Book;
+			public BookItem Book
+			{
+				get { return _Book ?? Shared.CurrentBook; }
+				set { _Book = value; }
+			}
+
 			private ImageSource bg, bg2;
 			public ImageSource Background
 			{
@@ -241,12 +248,10 @@ namespace wenku8.Settings.Layout
 						ApplyImage( NTimer.RandChoice( ISImgs ) );
 						break;
 					case "Preset":
-						BookItem B = Shared.CurrentBook;
-
 						try
 						{
 							List<string> ImagePaths = new List<string>();
-							foreach ( Volume V in B.GetVolumes() )
+							foreach ( Volume V in Book.GetVolumes() )
 							{
 								foreach ( Chapter C in V.ChapterList )
 								{
@@ -314,6 +319,9 @@ namespace wenku8.Settings.Layout
 								value = "ms-appx:///Assets/Samples/BgInfoView.jpg";
 								break;
 							case "CONTENT_READER":
+								value = "ms-appx:///Assets/Samples/BgContentReader.jpg";
+								break;
+							case "STAFF_PICKS":
 								value = "ms-appx:///Assets/Samples/BgContentReader.jpg";
 								break;
 						}
