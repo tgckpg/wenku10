@@ -55,9 +55,9 @@ namespace wenku10.Pages
 		private float PrevOffset = 0;
 
 		List<Grid> StarBoxes;
+		List<TextBlock> DescTexts;
 		List<FireFlies> FireFliesScenes;
 		List<CanvasStage> Stages;
-		List<FloatyButton> Stars;
 		List<CanvasAnimatedControl> Canvases;
 
 		Stack<Particle> PStack;
@@ -78,20 +78,12 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		private void FloatyButton_Loaded( object sender, RoutedEventArgs e )
-		{
-			FloatyButton Floaty = ( ( FloatyButton ) sender );
-
-			Floaty.BindTimer( NTimer.Instance );
-			Floaty.TextSpeed = NTimer.RandDouble( -2, 2 );
-		}
-
 		private void SetTemplate()
 		{
 			InitAppBar();
 			Canvases = new List<CanvasAnimatedControl>() { Stage1, Stage2, Stage3, Stage4 };
 			StarBoxes = new List<Grid>() { StarBox1H, StarBox2H, StarBox3H, StarBox4H };
-			Stars = new List<FloatyButton>() { Star1, Star2, Star3, Star4 };
+			DescTexts = new List<TextBlock> { Desc1, Desc2, Desc3, Desc4 };
 
 			NumStars = Canvases.Count();
 
@@ -109,7 +101,6 @@ namespace wenku10.Pages
 
 			for ( int i = 0; i < NumStars; i++ )
 			{
-				Stars[ i ].Visibility = Visibility.Collapsed;
 				StarBoxes[ i ].RenderTransform = new TranslateTransform();
 
 				CanvasStage CS = new CanvasStage( Canvases[ i ] );
@@ -122,8 +113,6 @@ namespace wenku10.Pages
 
 				FireFliesScenes.Add( Scene );
 				Stages.Add( CS );
-
-				Stars[ i ].StateComplete += SuperGiants_StateComplete;
 			}
 
 			LayoutRoot.ViewChanged += LayoutRoot_ViewChanged;
@@ -157,16 +146,6 @@ namespace wenku10.Pages
 			MessageBus.SendUI( typeof( wenku8.System.ActionCenter ), AppKeys.PM_CHECK_TILES );
 		}
 
-		private async void SuperGiants_StateComplete( object sender, FloatyState State )
-		{
-			if ( State == FloatyState.EXPLODE )
-			{
-				( ( FloatyButton ) sender ).Visibility = Visibility.Collapsed;
-				await Task.Delay( 2000 );
-				( ( FloatyButton ) sender ).Visibility = Visibility.Visible;
-			}
-		}
-
 		private void LayoutRoot_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )
 		{
 			float CurrOffset = ( float ) LayoutRoot.VerticalOffset;
@@ -184,8 +163,10 @@ namespace wenku10.Pages
 			{
 				var j = Stages[ i ].Remove( typeof( TheOrb ) );
 
-				Stars[ i ].Visibility = Visibility.Visible;
-				Stars[ i ].PointerReleased += SuperGiants_PointerReleased;
+				StarBoxes[ i ].PointerReleased += SuperGiants_PointerReleased;
+				StarBoxes[ i ].PointerEntered += SuperGiants_PointerEntered;
+				StarBoxes[ i ].PointerPressed += SuperGiants_PointerPressed;
+				StarBoxes[ i ].PointerExited += SuperGiants_PointerExited;
 
 				// Set the bg context
 				BgContext ItemContext = new BgContext( SSettings, "STAFF_PICKS" )
@@ -194,24 +175,51 @@ namespace wenku10.Pages
 				};
 				ItemContext.SetBackground( "Preset" );
 
-				ParaBg Parallax = new ParaBg( ItemContext );
-				Parallax.Bind( LayoutRoot );
-				Stages[ i ].Insert( 0, Parallax );
+				HyperBanner Banner = new HyperBanner( Item, ItemContext );
+				Banner.Bind( LayoutRoot );
+
+				Banner.TextSpeed = 0.005f * NTimer.RFloat();
+				Banner.TextRotation = 6.2832f * NTimer.RFloat();
+
+				if ( i % 2 == 1 )
+				{
+					Banner.Align = HorizontalAlignment.Right;
+				}
+
+				Stages[ i ].Insert( 0, Banner );
 
 				StarBoxes[ i ].DataContext = Item;
 				i++;
 			}
 		}
 
+		private int CanvasIndex( object sender )
+		{
+			Grid Banner = ( Grid ) sender;
+			return StarBoxes.IndexOf( Banner );
+		}
+
+		private void SuperGiants_PointerEntered( object sender, PointerRoutedEventArgs e )
+		{
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Hover();
+		}
+
+		private void SuperGiants_PointerPressed( object sender, PointerRoutedEventArgs e )
+		{
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Focus();
+		}
+
+		private void SuperGiants_PointerExited( object sender, PointerRoutedEventArgs e )
+		{
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Blur();
+		}
+
 		private void SuperGiants_PointerReleased( object sender, PointerRoutedEventArgs e )
 		{
 			ControlFrame.Instance.StopReacting();
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Click();
 
-			FloatyButton Btn = ( FloatyButton ) sender;
-			int i = Stars.IndexOf( Btn );
-			Stages[ i ].Add( new TheOrb( PStack, i % 2 == 0 ) );
-
-			NameValue<Func<Page>> Handler = PageProcessor.GetPageHandler( StarBoxes[ i ].DataContext );
+			NameValue<Func<Page>> Handler = PageProcessor.GetPageHandler( StarBoxes[ CanvasIndex( sender ) ].DataContext );
 			ControlFrame.Instance.NavigateTo( Handler.Name, Handler.Value );
 		}
 
@@ -221,17 +229,15 @@ namespace wenku10.Pages
 		public async Task EnterAnima()
 		{
 			StarBoxDescend();
-			StarsDescend();
 
 			await Task.Delay( 1000 );
 		}
 
 		public async Task ExitAnima()
 		{
-			StarsExplode();
 			StarBoxVanish();
 
-			foreach( CanvasStage Stg in Stages )
+			foreach ( CanvasStage Stg in Stages )
 			{
 				var j = Stg.Remove( typeof( TheOrb ) );
 			}
@@ -245,12 +251,12 @@ namespace wenku10.Pages
 			StarBoxStory.Children.Clear();
 
 			int i = 0;
-			foreach( Grid StarBox in StarBoxes.Reverse<Grid>() )
+			foreach ( Grid StarBox in StarBoxes.Reverse<Grid>() )
 			{
 				int Delay = i * 100;
 
-				SimpleStory.DoubleAnimation( StarBoxStory, StarBox, "Opacity", 1, 0, 350, Delay );
-				SimpleStory.DoubleAnimation( StarBoxStory, StarBox.RenderTransform, "Y", 0, 30, 350, Delay );
+				SimpleStory.DoubleAnimation( StarBoxStory, StarBox, "Opacity", 1, 0, 350, Delay, Easings.EaseInCubic );
+				SimpleStory.DoubleAnimation( StarBoxStory, StarBox.RenderTransform, "Y", 0, 30, 350, Delay, Easings.EaseInCubic );
 				i++;
 			}
 
@@ -263,7 +269,7 @@ namespace wenku10.Pages
 			StarBoxStory.Children.Clear();
 
 			int i = 0;
-			foreach( Grid StarBox in StarBoxes )
+			foreach ( Grid StarBox in StarBoxes )
 			{
 				int Delay = i * 100;
 
@@ -273,24 +279,6 @@ namespace wenku10.Pages
 			}
 
 			StarBoxStory.Begin();
-		}
-
-		private async void StarsExplode()
-		{
-			for ( int i = 0; i < NumStars; i++ )
-			{
-				var j = Stars[ i ].Vanquish();
-				await Task.Delay( 100 );
-			}
-		}
-
-		private async void StarsDescend()
-		{
-			for( int i = 0; i < NumStars; i ++ )
-			{
-				var j = Stars[ i ].Descend();
-				await Task.Delay( 100 );
-			}
 		}
 		#endregion
 

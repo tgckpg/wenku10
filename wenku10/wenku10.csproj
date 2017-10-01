@@ -191,8 +191,12 @@
     <Compile Include="Pages\ZoneSpidersView.xaml.cs">
       <DependentUpon>ZoneSpidersView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scenes\HyperBanner\CircleTextRenderer.cs" />
+    <Compile Include="Scenes\HyperBanner\HyperBanner.cs" />
+    <Compile Include="Scenes\ImageUtils.cs" />
     <Compile Include="Scenes\ITextureScene.cs" />
-    <Compile Include="Scenes\ParaBg.cs" />
+    <Compile Include="Scenes\HyperBanner\ParaBg.cs" />
+    <Compile Include="Scenes\HyperBanner\RippleEx.cs" />
     <Compile Include="ShHub\MesgListerner.cs" />
     <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
     <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />

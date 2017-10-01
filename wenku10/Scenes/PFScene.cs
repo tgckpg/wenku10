@@ -33,6 +33,8 @@ namespace wenku10.Scenes
 			catch( Exception ) { }
 		}
 
+		virtual public void Enter() { }
+
 		protected void DrawWireFrames( CanvasDrawingSession ds )
 		{
 #if DEBUG

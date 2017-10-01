@@ -15,5 +15,6 @@ namespace wenku10.Scenes
 	{
 		void UpdateAssets( Size S );
 		void Draw( CanvasDrawingSession ds, CanvasSpriteBatch SBatch, TextureLoader Textures );
+		void Enter();
 	}
 }

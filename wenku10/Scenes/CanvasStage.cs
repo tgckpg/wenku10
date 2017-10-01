@@ -20,6 +20,8 @@ namespace wenku10.Scenes
 		public TextureLoader Textures { get; protected set; }
 
 		public Size StageSize { get; private set; }
+		public bool StageLoaded { get; private set; }
+		public bool DeviceExist { get; private set; }
 
 		protected List<IScene> Scenes;
 
@@ -36,7 +38,7 @@ namespace wenku10.Scenes
 			Stage.GameLoopStarting += Stage_GameLoopStarting;
 			Stage.GameLoopStopped += Stage_GameLoopStopped;
 
-			Stage.SizeChanged += Stage_SizeChanged;
+			Stage.Loaded += Stage_Loaded;
 			Stage.Unloaded += Stage_Unloaded;
 		}
 
@@ -47,28 +49,39 @@ namespace wenku10.Scenes
 			Textures = SharedTextures;
 		}
 
-		public void Add( IScene S )
+		public async void Add( IScene S )
 		{
+			await LoadSceneResources( S );
+
 			lock ( Scenes )
 			{
-				if ( !StageSize.IsEmpty )
-				{
-					S.UpdateAssets( StageSize );
-				}
 				Scenes.Add( S );
+				if ( !StageSize.IsEmpty ) S.UpdateAssets( StageSize );
+				if ( StageLoaded ) S.Enter();
 			}
 		}
 
-		public void Insert( int Index, IScene S )
+		private Task LoadSceneResources( IScene S )
 		{
+			if ( !DeviceExist ) return Task.Delay( 0 );
+			return ( S as ITextureScene )?.LoadTextures( _stage, Textures );
+		}
+
+		public async void Insert( int Index, IScene S )
+		{
+			await LoadSceneResources( S );
+
 			lock ( Scenes )
 			{
-				if ( !StageSize.IsEmpty )
-				{
-					S.UpdateAssets( StageSize );
-				}
 				Scenes.Insert( Index, S );
+				if ( !StageSize.IsEmpty ) S.UpdateAssets( StageSize );
+				if ( StageLoaded ) S.Enter();
 			}
+		}
+
+		public IEnumerable<T> GetScenes<T>() where T : IScene
+		{
+			return Scenes.Where( x => x is T ).Cast<T>();
 		}
 
 		public async Task Remove( Type SceneType )
@@ -118,33 +131,52 @@ namespace wenku10.Scenes
 			_stage.Draw += Stage_Draw;
 		}
 
+		private void Stage_Loaded( object sender, RoutedEventArgs e )
+		{
+			StageLoaded = true;
+			lock ( Scenes )
+			{
+				Scenes.ForEach( x => x.Enter() );
+			}
+
+			_stage.SizeChanged += Stage_SizeChanged;
+		}
+
 		virtual protected void Stage_Unloaded( object sender, RoutedEventArgs e )
 		{
+			StageLoaded = false;
 			_stage.Draw -= Stage_Draw;
 			_stage.SizeChanged -= Stage_SizeChanged;
 		}
 
 		virtual protected void Stage_CreateResources( CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args )
 		{
+			DeviceExist = true;
 			args.TrackAsyncAction( LoadTextures( sender ).AsAsyncAction() );
 		}
 
 		virtual protected async Task LoadTextures( CanvasAnimatedControl CC )
 		{
-			IEnumerable<IScene> TxScenes = Scenes.Where( x => x is ITextureScene ).ToArray();
-			foreach( ITextureScene S in TxScenes.Cast<ITextureScene>() )
+			IScene[] TxScenes = Scenes.Where( x => x is ITextureScene ).ToArray();
+			foreach ( ITextureScene S in TxScenes.Cast<ITextureScene>() )
 			{
 				await S.LoadTextures( CC, Textures );
 			}
 
-			if ( !StageSize.IsEmpty )
+			if ( StageSize == _stage.Size )
 			{
-				lock ( Scenes )
+				return;
+			}
+			else
+			{
+				StageSize = _stage.Size;
+			}
+
+			lock ( Scenes )
+			{
+				foreach ( IScene S in TxScenes )
 				{
-					foreach ( IScene S in TxScenes )
-					{
-						S.UpdateAssets( StageSize );
-					}
+					S.UpdateAssets( StageSize );
 				}
 			}
 		}
@@ -161,7 +193,7 @@ namespace wenku10.Scenes
 		virtual protected void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
 		{
 			using ( CanvasDrawingSession ds = args.DrawingSession )
-			using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+			using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch( CanvasSpriteSortMode.Bitmap ) )
 			{
 				lock ( Scenes )
 				{
