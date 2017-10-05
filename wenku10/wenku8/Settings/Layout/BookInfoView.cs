@@ -248,19 +248,23 @@ namespace wenku8.Settings.Layout
 						ApplyImage( NTimer.RandChoice( ISImgs ) );
 						break;
 					case "Preset":
+						UseDefault = true;
 						try
 						{
 							List<string> ImagePaths = new List<string>();
-							foreach ( Volume V in Book.GetVolumes() )
+							if ( Book != null )
 							{
-								foreach ( Chapter C in V.ChapterList )
+								foreach ( Volume V in Book.GetVolumes() )
 								{
-									if ( C.HasIllustrations )
+									foreach ( Chapter C in V.ChapterList )
 									{
-										ImagePaths.AddRange(
-											Shared.Storage.GetString( C.IllustrationPath )
-											.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
-										);
+										if ( C.HasIllustrations )
+										{
+											ImagePaths.AddRange(
+												Shared.Storage.GetString( C.IllustrationPath )
+												.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
+											);
+										}
 									}
 								}
 							}
@@ -269,10 +273,7 @@ namespace wenku8.Settings.Layout
 							{
 								string Url = ImagePaths[ NTimer.RandInt( ImagePaths.Count() ) ];
 								TryUseImage( Url );
-							}
-							else
-							{
-								UseDefault = true;
+								UseDefault = false;
 							}
 						}
 						catch ( Exception ex )

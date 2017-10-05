@@ -19,6 +19,7 @@ using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using Net.Astropenguin.Linq;
 
+using wenku8.Effects;
 using wenku8.Model.ListItem;
 
 namespace wenku10.Scenes
@@ -171,7 +172,7 @@ namespace wenku10.Scenes
 
 		private void FitCover()
 		{
-			if ( StageSize.IsEmpty || CoverBmp == null ) return;
+			if ( StageSize.IsZero() || CoverBmp == null ) return;
 
 			Rect EyeRect;
 			(EyeRect, FillRect) = ImageUtils.FitImage( EyeBox, CoverBmp );

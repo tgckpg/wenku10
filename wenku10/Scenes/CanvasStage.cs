@@ -56,7 +56,7 @@ namespace wenku10.Scenes
 			lock ( Scenes )
 			{
 				Scenes.Add( S );
-				if ( !StageSize.IsEmpty ) S.UpdateAssets( StageSize );
+				if ( CanDraw() ) S.UpdateAssets( StageSize );
 				if ( StageLoaded ) S.Enter();
 			}
 		}
@@ -67,6 +67,16 @@ namespace wenku10.Scenes
 			return ( S as ITextureScene )?.LoadTextures( _stage, Textures );
 		}
 
+		private bool CanDraw()
+		{
+			if ( !StageSize.Equals( _stage.Size ) )
+			{
+				StageSize = _stage.Size;
+			}
+
+			return !StageSize.IsZero();
+		}
+
 		public async void Insert( int Index, IScene S )
 		{
 			await LoadSceneResources( S );
@@ -74,7 +84,7 @@ namespace wenku10.Scenes
 			lock ( Scenes )
 			{
 				Scenes.Insert( Index, S );
-				if ( !StageSize.IsEmpty ) S.UpdateAssets( StageSize );
+				if ( CanDraw() ) S.UpdateAssets( StageSize );
 				if ( StageLoaded ) S.Enter();
 			}
 		}
@@ -163,22 +173,17 @@ namespace wenku10.Scenes
 				await S.LoadTextures( CC, Textures );
 			}
 
-			if ( StageSize == _stage.Size )
+			if ( CanDraw() )
 			{
-				return;
-			}
-			else
-			{
-				StageSize = _stage.Size;
-			}
-
-			lock ( Scenes )
-			{
-				foreach ( IScene S in TxScenes )
+				lock ( Scenes )
 				{
-					S.UpdateAssets( StageSize );
+					foreach ( IScene S in TxScenes )
+					{
+						S.UpdateAssets( StageSize );
+					}
 				}
 			}
+
 		}
 
 		virtual protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e )

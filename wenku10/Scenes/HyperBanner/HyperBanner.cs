@@ -22,10 +22,12 @@ namespace wenku10.Scenes
 
 	sealed partial class HyperBanner : ITextureScene, ISceneExitable
 	{
-		private ICanvasResourceCreator ResCreator;
+		private ICanvasResourceCreatorWithDpi ResCreator;
+		private int Seed;
 
 		public HyperBanner( ActiveItem Item, BgContext ItemContext )
 		{
+			Seed = wenku8.System.Utils.Md5Int( Item.Name );
 			InitRipple( Item );
 			InitBackground( ItemContext );
 		}
@@ -43,7 +45,7 @@ namespace wenku10.Scenes
 
 			// RippleEx
 			CoverBmp = CanvasBitmap.CreateFromColors( Canvas, new Color[] { Colors.Transparent }, 1, 1 );
-			RingBrush = new CanvasSolidColorBrush( Canvas, LayoutSettings.Shades60 );
+			RingBrush = new CanvasSolidColorBrush( Canvas, LayoutSettings.Shades90 );
 			TextBrush = new CanvasSolidColorBrush( ResCreator, Colors.White );
 			CoverBrush = new CanvasSolidColorBrush( Canvas, Colors.Transparent );
 
@@ -106,7 +108,6 @@ namespace wenku10.Scenes
 			TextBrush_t = LayoutSettings.RelativeMajorBackgroundColor;
 			TextR_t = MaxR;
 
-			BgR_c = ImgR_c;
 			BgR_t = RingR_t;
 		}
 
@@ -135,6 +136,12 @@ namespace wenku10.Scenes
 
 		public void Dispose()
 		{
+			BgBmp?.Dispose();
+			CoverBmp?.Dispose();
+			RingBrush?.Dispose();
+			TextBrush?.Dispose();
+			CoverBrush?.Dispose();
+
 			// Background
 			if ( BoundControl != null ) BoundControl.ViewChanged -= SV_ViewChanged;
 			DataContext.PropertyChanged -= Context_PropertyChanged;

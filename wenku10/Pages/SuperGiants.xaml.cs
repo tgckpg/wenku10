@@ -38,7 +38,7 @@ namespace wenku10.Pages
 	using Scenes;
 	using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
 
-	sealed partial class SuperGiants : Page, IAnimaPage, ICmdControls
+	sealed partial class SuperGiants : Page, IAnimaPage, ICmdControls, IDisposable
 	{
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
@@ -163,10 +163,11 @@ namespace wenku10.Pages
 			{
 				var j = Stages[ i ].Remove( typeof( TheOrb ) );
 
-				StarBoxes[ i ].PointerReleased += SuperGiants_PointerReleased;
-				StarBoxes[ i ].PointerEntered += SuperGiants_PointerEntered;
+				StarBoxes[ i ].PointerEntered += SuperGiants_Hover;
+				StarBoxes[ i ].PointerReleased += SuperGiants_Hover;
 				StarBoxes[ i ].PointerPressed += SuperGiants_PointerPressed;
 				StarBoxes[ i ].PointerExited += SuperGiants_PointerExited;
+				StarBoxes[ i ].Tapped += SuperGiants_Tapped; ;
 
 				// Set the bg context
 				BgContext ItemContext = new BgContext( SSettings, "STAFF_PICKS" )
@@ -193,13 +194,19 @@ namespace wenku10.Pages
 			}
 		}
 
+		public void Dispose()
+		{
+			Stages.ForEach( x => x.Dispose() );
+			Canvases.ForEach( x => x.RemoveFromVisualTree() );
+		}
+
 		private int CanvasIndex( object sender )
 		{
 			Grid Banner = ( Grid ) sender;
 			return StarBoxes.IndexOf( Banner );
 		}
 
-		private void SuperGiants_PointerEntered( object sender, PointerRoutedEventArgs e )
+		private void SuperGiants_Hover( object sender, PointerRoutedEventArgs e )
 		{
 			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Hover();
 		}
@@ -214,7 +221,7 @@ namespace wenku10.Pages
 			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Blur();
 		}
 
-		private void SuperGiants_PointerReleased( object sender, PointerRoutedEventArgs e )
+		private void SuperGiants_Tapped( object sender, TappedRoutedEventArgs e )
 		{
 			ControlFrame.Instance.StopReacting();
 			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Click();
@@ -304,6 +311,5 @@ namespace wenku10.Pages
 			Dialogs.Announcements NewsDialog = new Dialogs.Announcements();
 			await Popups.ShowDialog( NewsDialog );
 		}
-
 	}
 }

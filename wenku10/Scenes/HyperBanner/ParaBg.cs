@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -13,7 +14,9 @@ using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
-using System.Numerics;
+using wenku8.Effects;
+using wenku8.Effects.Stage;
+using wenku8.Resources;
 
 namespace wenku10.Scenes
 {
@@ -90,6 +93,9 @@ namespace wenku10.Scenes
 
 		private void DrawIdleBg( CanvasDrawingSession ds )
 		{
+			CubicTween( ref BgY_c, BgY_t, 0.85f, 0.15f );
+			BgFillRect.Y = BgY_c;
+
 			CubicTween( ref BgR_c, BgR_t, 0.75f, 0.25f );
 			if ( BgR_c < 0 )
 			{
@@ -110,15 +116,30 @@ namespace wenku10.Scenes
 
 		private async void ReloadBackground()
 		{
-			if ( ResCreator == null || BackgroundUri == null ) return;
-			BgBmp = await CanvasBitmap.LoadAsync( ResCreator, BackgroundUri );
+			if ( ResCreator == null || BackgroundUri == null || StageSize.IsZero() ) return;
+
+			if ( BackgroundUri.Scheme == "ms-appx" )
+			{
+				BgBmp = new RandomStripe( Seed ).DrawBitmap( ResCreator, ( int ) LayoutSettings.DisplayWidth, ( int ) LayoutSettings.DisplayHeight );
+			}
+			else
+			{
+				BgBmp = await CanvasBitmap.LoadAsync( ResCreator, BackgroundUri );
+			}
 
 			FitBackground();
 		}
 
 		private void FitBackground()
 		{
-			if ( StageSize.IsEmpty || BgBmp == null ) return;
+			if ( StageSize.IsZero() ) return;
+
+			if( BgBmp == null )
+			{
+				ReloadBackground();
+				return;
+			}
+
 			(StageRect, BgFillRect) = ImageUtils.FitImage( StageSize, BgBmp );
 			vh = 0.5f * ( BgBmp.SizeInPixels.Height - ( float ) BgFillRect.Height );
 

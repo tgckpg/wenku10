@@ -56,16 +56,18 @@ namespace wenku10.Scenes
 
 			while ( i < glyphs.Length )
 			{
-				CanvasGlyph[] G = new CanvasGlyph[] { glyphs[ i ] };
-
 				float TextW = TextWidths[ i + characterIndex ];
 				float Rad = TextW / R;
 				float OffsetRad = 0.5f * ( PTextW + TextW ) / R + MovingRad;
 
-				ds.Transform = Matrix3x2.CreateTranslation( new Vector2( -0.5f * TextW, -R ) ) * Matrix3x2.CreateRotation( OffsetRad + Offset, Origin );
-				ds.DrawGlyphRun( Origin, fontFace, fontSize, G, isSideways, bidiLevel, Brush );
-
 				MovingRad += Rad;
+
+				// Stop drawing texts if ring is already crowded
+				if ( 6.2831f < ( OffsetRad + Rad ) ) break;
+
+				ds.Transform = Matrix3x2.CreateTranslation( new Vector2( -0.5f * TextW, -R ) ) * Matrix3x2.CreateRotation( OffsetRad + Offset, Origin );
+				ds.DrawGlyphRun( Origin, fontFace, fontSize, new CanvasGlyph[] { glyphs[ i ] }, isSideways, bidiLevel, Brush );
+
 				i++;
 			}
 
