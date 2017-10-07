@@ -22,18 +22,35 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <!-- width >=500 -->
-                        <AdaptiveTrigger MinWindowWidth="500" />
+                        <!-- width >=0 -->
+                        <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="StarBox1W.Width" Value="192" />
-                        <Setter Target="StarBox1H.Height" Value="192" />
+                        <Setter Target="Desc1.Margin" Value="20,5,20,20" />
+                        <Setter Target="Desc1.(Grid.Column)" Value="0" />
+                        <Setter Target="Desc1.(Grid.Row)" Value="1" />
+                        <Setter Target="Desc1.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="Desc1.(Grid.RowSpan)" Value="1" />
                         <Setter Target="StarBox2W.Width" Value="192" />
-                        <Setter Target="StarBox2H.Height" Value="192" />
+                        <Setter Target="Desc2.Margin" Value="20,5,20,20" />
+                        <Setter Target="Desc2.(Grid.Column)" Value="0" />
+                        <Setter Target="Desc2.(Grid.Row)" Value="1" />
+                        <Setter Target="Desc2.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="Desc2.(Grid.RowSpan)" Value="1" />
                         <Setter Target="StarBox3W.Width" Value="192" />
-                        <Setter Target="StarBox3H.Height" Value="192" />
+                        <Setter Target="Desc3.Margin" Value="20,5,20,20" />
+                        <Setter Target="Desc3.(Grid.Column)" Value="0" />
+                        <Setter Target="Desc3.(Grid.Row)" Value="1" />
+                        <Setter Target="Desc3.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="Desc3.(Grid.RowSpan)" Value="1" />
                         <Setter Target="StarBox4W.Width" Value="192" />
-                        <Setter Target="StarBox4H.Height" Value="192" />
+                        <Setter Target="Desc4.Margin" Value="20,5,20,20" />
+                        <Setter Target="Desc4.(Grid.Column)" Value="0" />
+                        <Setter Target="Desc4.(Grid.Row)" Value="1" />
+                        <Setter Target="Desc4.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="Desc4.(Grid.RowSpan)" Value="1" />
+                        <Setter Target="GridFlowDir.Tag" Value="V" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -43,82 +60,109 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="StarBox1W.Width" Value="360" />
-                        <Setter Target="StarBox1H.Height" Value="360" />
                         <Setter Target="StarBox2W.Width" Value="360" />
-                        <Setter Target="StarBox2H.Height" Value="360" />
                         <Setter Target="StarBox3W.Width" Value="360" />
-                        <Setter Target="StarBox3H.Height" Value="360" />
                         <Setter Target="StarBox4W.Width" Value="360" />
-                        <Setter Target="StarBox4H.Height" Value="360" />
+                        <Setter Target="GridFlowDir.Tag" Value="H" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
         <StackPanel>
-            <Grid x:Name="StarBox1H" p:Clip.ToBounds="True" Height="120">
+            <Border x:Name="GridFlowDir" Tag="V" />
+            <Grid x:Name="StarBox1" p:Clip.ToBounds="True" MinHeight="350">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="StarBox1W" Width="120" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <canvas:CanvasAnimatedControl x:Name="Stage1" Grid.ColumnSpan="3" UseSharedDevice="True"/>
-                <TextBlock x:Name="Desc1" Grid.Column="1" Margin="5,20,20,20"
-                               e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
-                               e:TransitionDisplay.Mode="A01_X_N30_0"
-                               TextAlignment="Justify"
-                               TextWrapping="Wrap"
-                               Foreground="{StaticResource RelativeMajorBackgroundBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="280"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage1"
+                                              Grid.ColumnSpan="2" Grid.RowSpan="2"
+                                              UseSharedDevice="True"/>
+                <TextBlock x:Name="Desc1"
+                           Grid.Column="1" Grid.Row="0"
+                           Grid.ColumnSpan="1" Grid.RowSpan="2"
+                           Margin="5,20,20,20"
+                           e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_N30_0"
+                           TextAlignment="Justify" TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}">
                     <Run Text="{Binding Desc2}" />
                     <LineBreak />
                     <Run Text="{Binding Desc}" />
                 </TextBlock>
             </Grid>
-            <Grid x:Name="StarBox2H" p:Clip.ToBounds="True" Height="120">
+            <Grid x:Name="StarBox2" p:Clip.ToBounds="True" MinHeight="350">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition x:Name="StarBox2W" Width="120" />
                 </Grid.ColumnDefinitions>
-                <canvas:CanvasAnimatedControl x:Name="Stage2" Grid.ColumnSpan="3" UseSharedDevice="True"/>
-                <TextBlock x:Name="Desc2" Grid.Column="0" Margin="20,20,5,20"
-                               e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
-                               e:TransitionDisplay.Mode="A01_X_30_0"
-                               TextAlignment="Justify"
-                               TextWrapping="Wrap"
-                               Foreground="{StaticResource RelativeMajorBackgroundBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="280"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage2"
+                                              Grid.ColumnSpan="2" Grid.RowSpan="2"
+                                              UseSharedDevice="True"/>
+                <TextBlock x:Name="Desc2"
+                           Grid.Column="0" Grid.Row="0"
+                           Margin="20,20,5,20"
+                           e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_30_0"
+                           TextAlignment="Justify" TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}">
                     <Run Text="{Binding Desc2}" />
                     <LineBreak />
                     <Run Text="{Binding Desc}" />
                 </TextBlock>
             </Grid>
-            <Grid x:Name="StarBox3H" p:Clip.ToBounds="True" Height="120">
+            <Grid x:Name="StarBox3" p:Clip.ToBounds="True" MinHeight="350">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition x:Name="StarBox3W" Width="120" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <canvas:CanvasAnimatedControl x:Name="Stage3" Grid.ColumnSpan="3" UseSharedDevice="True"/>
-                <TextBlock x:Name="Desc3" Grid.Column="1" Margin="5,20,20,20"
-                               e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
-                               e:TransitionDisplay.Mode="A01_X_N30_0"
-                               TextAlignment="Justify"
-                               TextWrapping="Wrap"
-                               Foreground="{StaticResource RelativeMajorBackgroundBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="280"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage3"
+                                              Grid.ColumnSpan="2" Grid.RowSpan="2"
+                                              UseSharedDevice="True"/>
+                <TextBlock x:Name="Desc3"
+                           Grid.Column="1" Grid.Row="0"
+                           Margin="5,20,20,20"
+                           e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_N30_0"
+                           TextAlignment="Justify" TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}">
                     <Run Text="{Binding Desc2}" />
                     <LineBreak />
                     <Run Text="{Binding Desc}" />
                 </TextBlock>
             </Grid>
-            <Grid x:Name="StarBox4H" p:Clip.ToBounds="True" Height="120">
+            <Grid x:Name="StarBox4" p:Clip.ToBounds="True" MinHeight="350">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition x:Name="StarBox4W" Width="120" />
                 </Grid.ColumnDefinitions>
-                <canvas:CanvasAnimatedControl x:Name="Stage4" Grid.ColumnSpan="3" UseSharedDevice="True"/>
-                <TextBlock x:Name="Desc4" Grid.Column="0" Margin="20,20,5,20"
-                               e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
-                               e:TransitionDisplay.Mode="A01_X_30_0"
-                               TextAlignment="Justify"
-                               TextWrapping="Wrap"
-                               Foreground="{StaticResource RelativeMajorBackgroundBrush}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="280"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <canvas:CanvasAnimatedControl x:Name="Stage4"
+                                              Grid.ColumnSpan="2" Grid.RowSpan="2"
+                                              UseSharedDevice="True"/>
+                <TextBlock x:Name="Desc4"
+                           Grid.Column="0" Grid.Row="0"
+                           Margin="20,20,5,20"
+                           e:TransitionDisplay.State="{Binding Desc, Converter={StaticResource TransStateConverter}}"
+                           e:TransitionDisplay.Mode="A01_X_30_0"
+                           TextAlignment="Justify" TextWrapping="Wrap"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}">
                     <Run Text="{Binding Desc2}" />
                     <LineBreak />
                     <Run Text="{Binding Desc}" />

@@ -49,7 +49,7 @@
                 <TextBlock Text="Descrption" x:Uid="/AppResources/Description"
                            Foreground="{StaticResource MajorBrush}" />
                 <TextBox x:Name="DescInput" AcceptsReturn="True"
-                         Height="50"
+                         MinHeight="100"
                          Margin="0,2,0,10" />
 
                 <!-- Zone -->

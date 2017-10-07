@@ -81,8 +81,10 @@ namespace wenku10.Pages
 		private void SetTemplate()
 		{
 			InitAppBar();
+			GridFlowDir.RegisterPropertyChangedCallback( TagProperty, UpdateCanvas );
+
 			Canvases = new List<CanvasAnimatedControl>() { Stage1, Stage2, Stage3, Stage4 };
-			StarBoxes = new List<Grid>() { StarBox1H, StarBox2H, StarBox3H, StarBox4H };
+			StarBoxes = new List<Grid>() { StarBox1, StarBox2, StarBox3, StarBox4 };
 			DescTexts = new List<TextBlock> { Desc1, Desc2, Desc3, Desc4 };
 
 			NumStars = Canvases.Count();
@@ -103,11 +105,15 @@ namespace wenku10.Pages
 			{
 				StarBoxes[ i ].RenderTransform = new TranslateTransform();
 
+				if( Canvases[ i ].Dpi != 96 )
+				{
+					Canvases[ i ].DpiScale = 96 / Canvases[ i ].Dpi;
+
+				}
 				CanvasStage CS = new CanvasStage( Canvases[ i ] );
 
 				TheOrb LoadingTrails = new TheOrb( PStack, i % 2 == 0 );
 				FireFlies Scene = new FireFlies( PStack );
-
 				CS.Add( Scene );
 				CS.Add( LoadingTrails );
 
@@ -163,6 +169,7 @@ namespace wenku10.Pages
 			{
 				var j = Stages[ i ].Remove( typeof( TheOrb ) );
 
+				StarBoxes[ i ].DataContext = Item;
 				StarBoxes[ i ].PointerEntered += SuperGiants_Hover;
 				StarBoxes[ i ].PointerReleased += SuperGiants_Hover;
 				StarBoxes[ i ].PointerPressed += SuperGiants_PointerPressed;
@@ -182,14 +189,10 @@ namespace wenku10.Pages
 				Banner.TextSpeed = 0.005f * NTimer.RFloat();
 				Banner.TextRotation = 6.2832f * NTimer.RFloat();
 
-				if ( i % 2 == 1 )
-				{
-					Banner.Align = HorizontalAlignment.Right;
-				}
+				SetBannerLayout( i, Banner );
 
 				Stages[ i ].Insert( 0, Banner );
 
-				StarBoxes[ i ].DataContext = Item;
 				i++;
 			}
 		}
@@ -219,6 +222,31 @@ namespace wenku10.Pages
 		private void SuperGiants_PointerExited( object sender, PointerRoutedEventArgs e )
 		{
 			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Blur();
+		}
+
+		private void UpdateCanvas( DependencyObject sender, DependencyProperty dp )
+		{
+			for ( int i = 0; i < NumStars; i++ )
+			{
+				HyperBanner Banner = Stages[ i ].GetScenes<HyperBanner>().FirstOrDefault();
+				if ( Banner == null ) continue;
+				SetBannerLayout( i, Banner );
+			}
+		}
+
+		private void SetBannerLayout( int i, HyperBanner Banner )
+		{
+			bool HyperBannerCenter = "V".Equals( GridFlowDir.Tag );
+			if ( HyperBannerCenter )
+			{
+				Banner.Align = HorizontalAlignment.Center;
+				Banner.SideLen = 280;
+			}
+			else
+			{
+				Banner.Align = i % 2 == 0 ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+				Banner.SideLen = 360;
+			}
 		}
 
 		private void SuperGiants_Tapped( object sender, TappedRoutedEventArgs e )

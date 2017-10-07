@@ -5,7 +5,6 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Windows.Graphics.DirectX;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -13,9 +12,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
-using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.Graphics.Canvas.Text;
-using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using Net.Astropenguin.Linq;
 
@@ -28,14 +25,25 @@ namespace wenku10.Scenes
 	{
 		public Uri CoverUri { get; private set; }
 
-		public HorizontalAlignment Align = HorizontalAlignment.Left;
+		public HorizontalAlignment Align
+		{
+			get { return _Align; }
+			set
+			{
+				_Align = value;
+			}
+		}
+
 		public ICanvasBrush RingBrush;
 		public string RingText;
+		public int SideLen = 196;
 
 		public float MarginFactor = 0.65f;
 		public float IrisFactor = 0.65f;
 		public float TextRotation = 0;
 		public float TextSpeed = 0.002f * ( float ) Math.PI;
+
+		private HorizontalAlignment _Align = HorizontalAlignment.Left;
 
 		private Size StageSize;
 		private Size EyeBox;
@@ -174,6 +182,9 @@ namespace wenku10.Scenes
 		{
 			if ( StageSize.IsZero() || CoverBmp == null ) return;
 
+			// RippleEx
+			EyeBox = new Size( SideLen, SideLen );
+
 			Rect EyeRect;
 			(EyeRect, FillRect) = ImageUtils.FitImage( EyeBox, CoverBmp );
 
@@ -193,6 +204,10 @@ namespace wenku10.Scenes
 			if ( Align == HorizontalAlignment.Right )
 			{
 				Px = ( float ) StageSize.Width - Px;
+			}
+			else if ( Align == HorizontalAlignment.Center )
+			{
+				Px = 0.5f * ( float ) StageSize.Width;
 			}
 
 			Blur();

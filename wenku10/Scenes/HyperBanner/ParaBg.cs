@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
+
 using wenku8.Effects;
 using wenku8.Effects.Stage;
 using wenku8.Resources;

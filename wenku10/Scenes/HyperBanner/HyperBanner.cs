@@ -60,10 +60,6 @@ namespace wenku10.Scenes
 			// ParaBg
 			FitBackground();
 
-			// RippleEx
-			double SideLen = Math.Min( S.Height, S.Width );
-			EyeBox = new Size( SideLen, SideLen );
-
 			FitCover();
 		}
 

@@ -11,7 +11,7 @@ namespace wenku10.Scenes
 {
 	static class ImageUtils
 	{
-		public static ( Rect, Rect ) FitImage( Size StageSize, CanvasBitmap SrcBmp )
+		public static (Rect, Rect) FitImage( Size StageSize, CanvasBitmap SrcBmp )
 		{
 			float DestWidth = ( float ) StageSize.Width;
 			float DestHeight = ( float ) StageSize.Height;
@@ -22,32 +22,16 @@ namespace wenku10.Scenes
 			float SrcWidth = SrcBmp.SizeInPixels.Width;
 			float SrcHeight = SrcBmp.SizeInPixels.Height;
 
-			float SrcRatio = SrcWidth / SrcHeight;
-			float DestRatio = DestWidth / DestHeight;
+			float SrcRatio = SrcHeight / SrcWidth;
+			float DestRatio = DestHeight / DestWidth;
 
 			if ( DestRatio < SrcRatio )
 			{
-				// Scale the Height
-				if ( DestHeight < SrcHeight )
-				{
-					FillRect = new Rect( 0, 0, DestWidth * SrcHeight / DestHeight, SrcHeight );
-				}
-				else
-				{
-					FillRect = new Rect( 0, 0, DestWidth * SrcHeight / DestHeight, DestHeight );
-				}
+				FillRect = new Rect( 0, 0, SrcWidth, SrcWidth * DestHeight / DestWidth );
 			}
 			else if ( SrcRatio < DestRatio )
 			{
-				// Scale the Width
-				if ( DestWidth < SrcWidth )
-				{
-					FillRect = new Rect( 0, 0, SrcWidth, DestHeight * SrcWidth / DestWidth );
-				}
-				else
-				{
-					FillRect = new Rect( 0, 0, DestWidth, DestHeight * SrcWidth / DestWidth );
-				}
+				FillRect = new Rect( 0, 0, SrcHeight * DestWidth / DestHeight, SrcHeight );
 			}
 			else
 			{
