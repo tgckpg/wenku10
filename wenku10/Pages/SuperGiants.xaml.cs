@@ -105,11 +105,6 @@ namespace wenku10.Pages
 			{
 				StarBoxes[ i ].RenderTransform = new TranslateTransform();
 
-				if( Canvases[ i ].Dpi != 96 )
-				{
-					Canvases[ i ].DpiScale = 96 / Canvases[ i ].Dpi;
-
-				}
 				CanvasStage CS = new CanvasStage( Canvases[ i ] );
 
 				TheOrb LoadingTrails = new TheOrb( PStack, i % 2 == 0 );
@@ -171,10 +166,11 @@ namespace wenku10.Pages
 
 				StarBoxes[ i ].DataContext = Item;
 				StarBoxes[ i ].PointerEntered += SuperGiants_Hover;
+				StarBoxes[ i ].PointerCaptureLost += SuperGiants_Hover;
 				StarBoxes[ i ].PointerReleased += SuperGiants_Hover;
 				StarBoxes[ i ].PointerPressed += SuperGiants_PointerPressed;
 				StarBoxes[ i ].PointerExited += SuperGiants_PointerExited;
-				StarBoxes[ i ].Tapped += SuperGiants_Tapped; ;
+				StarBoxes[ i ].Tapped += SuperGiants_Tapped;
 
 				// Set the bg context
 				BgContext ItemContext = new BgContext( SSettings, "STAFF_PICKS" )
@@ -211,17 +207,17 @@ namespace wenku10.Pages
 
 		private void SuperGiants_Hover( object sender, PointerRoutedEventArgs e )
 		{
-			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Hover();
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().FirstOrDefault()?.Hover();
 		}
 
 		private void SuperGiants_PointerPressed( object sender, PointerRoutedEventArgs e )
 		{
-			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Focus();
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().FirstOrDefault()?.Focus();
 		}
 
 		private void SuperGiants_PointerExited( object sender, PointerRoutedEventArgs e )
 		{
-			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Blur();
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().FirstOrDefault()?.Blur();
 		}
 
 		private void UpdateCanvas( DependencyObject sender, DependencyProperty dp )
@@ -252,7 +248,7 @@ namespace wenku10.Pages
 		private void SuperGiants_Tapped( object sender, TappedRoutedEventArgs e )
 		{
 			ControlFrame.Instance.StopReacting();
-			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().First().Click();
+			Stages[ CanvasIndex( sender ) ].GetScenes<HyperBanner>().FirstOrDefault()?.Click();
 
 			NameValue<Func<Page>> Handler = PageProcessor.GetPageHandler( StarBoxes[ CanvasIndex( sender ) ].DataContext );
 			ControlFrame.Instance.NavigateTo( Handler.Name, Handler.Value );

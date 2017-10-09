@@ -235,7 +235,7 @@
                             <Rectangle Fill="{Binding AssistBG}" Width="{Binding W}" Height="{Binding H}" VerticalAlignment="{Binding VABottom}" HorizontalAlignment="{Binding HARight}" />
                         </Grid>
                         <p:StateControl x:Name="Overlay">
-                            <Frame x:Name="OverlayFrame" />
+                            <Frame x:Name="OverlayFrame" FlowDirection="LeftToRight" />
                         </p:StateControl>
                     </Grid>
                 </c:PassiveSplitView.Content>
