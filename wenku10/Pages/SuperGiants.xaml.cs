@@ -166,9 +166,9 @@ namespace wenku10.Pages
 
 				StarBoxes[ i ].DataContext = Item;
 				StarBoxes[ i ].PointerEntered += SuperGiants_Hover;
-				StarBoxes[ i ].PointerCaptureLost += SuperGiants_Hover;
 				StarBoxes[ i ].PointerReleased += SuperGiants_Hover;
 				StarBoxes[ i ].PointerPressed += SuperGiants_PointerPressed;
+				StarBoxes[ i ].PointerCaptureLost += SuperGiants_PointerExited;
 				StarBoxes[ i ].PointerExited += SuperGiants_PointerExited;
 				StarBoxes[ i ].Tapped += SuperGiants_Tapped;
 
