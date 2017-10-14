@@ -107,7 +107,11 @@ namespace wenku10.Scenes
 			foreach ( IScene S in RmScenes )
 			{
 				if ( S is ISceneExitable ) await ( S as ISceneExitable ).Exit();
-				lock ( Scenes ) Scenes.Remove( S );
+				lock ( Scenes )
+				{
+					Scenes.Remove( S );
+					S.Dispose();
+				}
 			}
 		}
 

@@ -131,6 +131,7 @@
     <Compile Include="Pages\Dialogs\KeyboardCtrlHelp.xaml.cs">
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wenku8\Model\Topics\HyperBannerItem.cs" />
     <Compile Include="Pages\MonoRedirector.cs" />
     <Compile Include="Pages\BookInfoView.xaml.cs">
       <DependentUpon>BookInfoView.xaml</DependentUpon>

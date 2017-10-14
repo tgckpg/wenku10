@@ -13,21 +13,19 @@ namespace wenku10.Scenes
 {
 	sealed class CircleTextRenderer : ICanvasTextRenderer
 	{
-		public float Offset = 0;
-
 		private CanvasDrawingSession ds;
+		private float Offset = 0;
+		private float R;
+
 		private ICanvasBrush Brush;
 		private float[] TextWidths;
-		private float R;
 
 		private Vector2 Origin;
 
-		public CircleTextRenderer( Vector2 Origin, float R, float[] TextWidths, CanvasDrawingSession ds, ICanvasBrush Brush )
+		public CircleTextRenderer( Vector2 Origin, float[] TextWidths, ICanvasBrush Brush )
 		{
-			this.R = R;
 			this.Origin = Origin;
 			this.TextWidths = TextWidths;
-			this.ds = ds;
 			this.Brush = Brush;
 
 			PTextW = TextWidths[ 0 ];
@@ -39,6 +37,13 @@ namespace wenku10.Scenes
 
 		float MovingRad = 0;
 		float PTextW;
+
+		public void PrepareDraw( CanvasDrawingSession ds, float R, float Offset )
+		{
+			this.R = R;
+			this.ds = ds;
+			this.Offset = Offset;
+		}
 
 		public void DrawGlyphRun( Vector2 point, CanvasFontFace fontFace, float fontSize, CanvasGlyph[] glyphs, bool isSideways, uint bidiLevel, object brush, CanvasTextMeasuringMode measuringMode, string localeName, string textString, int[] clusterMapIndices, uint characterIndex, CanvasGlyphOrientation glyphOrientation )
 		{

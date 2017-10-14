@@ -117,6 +117,7 @@ namespace wenku10.Scenes
 		float BlockHeight;
 		float[] TextWidths;
 		CanvasTextLayout TextLayout;
+		CircleTextRenderer TextRenderer;
 
 		bool Clicked = false;
 
@@ -135,11 +136,8 @@ namespace wenku10.Scenes
 			// +2 to fill in the edge between the image and the ring
 			ds.DrawCircle( PCenter, RingR, RingBrush, RingW + 2 );
 
-			ICanvasTextRenderer TR = new CircleTextRenderer( PCenter, TextR_c, TextWidths, ds, TextBrush )
-			{
-				Offset = ( TextRotation += TextSpeed )
-			};
-			TextLayout.DrawToTextRenderer( TR, PCenter );
+			TextRenderer.PrepareDraw( ds, TextR_c, TextRotation += TextSpeed );
+			TextLayout.DrawToTextRenderer( TextRenderer, PCenter );
 
 			ds.FillCircle( PCenter, ImgR_c, CoverBrush );
 		}
@@ -213,6 +211,7 @@ namespace wenku10.Scenes
 			Blur();
 
 			PCenter = new Vector2( Px, Py );
+			TextRenderer = new CircleTextRenderer( PCenter, TextWidths, TextBrush );
 
 			CoverBrush = new CanvasImageBrush( ResCreator, CoverBmp )
 			{
