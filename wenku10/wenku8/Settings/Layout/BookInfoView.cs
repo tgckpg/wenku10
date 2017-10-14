@@ -22,12 +22,15 @@ namespace wenku8.Settings.Layout
 
 	sealed class BookInfoView
 	{
+		public enum JumpMode { CONTENT_READER = 0, INFO_VIEW = 1 }
+
 		public static readonly string ID = typeof( BookInfoView ).Name;
 
 		private const string TFileName = FileLinks.ROOT_SETTING + FileLinks.LAYOUT_BOOKINFOVIEW;
 		private const string RightToLeft = "RightToLeft";
 		private const string HrTOCName = "HorizontalTOC";
 		private const string TwConfirm = "TwitterConfirmed";
+		private const string JumpModeName = "JumpMode";
 
 		private Dictionary<string, BgContext> SectionBgs;
 
@@ -70,6 +73,19 @@ namespace wenku8.Settings.Layout
 			}
 		}
 
+		public JumpMode ItemJumpMode
+		{
+			get
+			{
+				return ( JumpMode ) LayoutSettings.Parameter( JumpModeName ).GetSaveInt( "val" );
+			}
+			set
+			{
+				LayoutSettings.SetParameter( JumpModeName, new XKey( "val", ( int ) value ) );
+				LayoutSettings.Save();
+			}
+		}
+
 		private XRegistry LayoutSettings;
 
 		public BookInfoView()
@@ -89,6 +105,7 @@ namespace wenku8.Settings.Layout
 					RightToLeft
 					, new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.IsRightToLeft" ) )
 				);
+				Changed = true;
 			}
 
 			if ( LayoutSettings.Parameter( HrTOCName ) == null )
@@ -97,11 +114,19 @@ namespace wenku8.Settings.Layout
 					HrTOCName
 					, new XKey( "enable", Shared.LocaleDefaults.Get<bool>( "BookInfoView.HorizontalTOC" ) )
 				);
+				Changed = true;
 			}
 
 			if ( LayoutSettings.Parameter( TwConfirm ) == null )
 			{
 				LayoutSettings.SetParameter( TwConfirm, new XKey( "val", false ) );
+				Changed = true;
+			}
+
+			if ( LayoutSettings.Parameter( JumpModeName ) == null )
+			{
+				LayoutSettings.SetParameter( JumpModeName, new XKey( "val", ( int ) JumpMode.CONTENT_READER ) );
+				Changed = true;
 			}
 
 			if ( Changed ) LayoutSettings.Save();
@@ -122,6 +147,13 @@ namespace wenku8.Settings.Layout
 		internal class BgContext : ActiveData
 		{
 			XRegistry LayoutSettings;
+
+			private BookItem _Book;
+			public BookItem Book
+			{
+				get { return _Book ?? Shared.CurrentBook; }
+				set { _Book = value; }
+			}
 
 			private ImageSource bg, bg2;
 			public ImageSource Background
@@ -216,21 +248,23 @@ namespace wenku8.Settings.Layout
 						ApplyImage( NTimer.RandChoice( ISImgs ) );
 						break;
 					case "Preset":
-						BookItem B = Shared.CurrentBook;
-
+						UseDefault = true;
 						try
 						{
 							List<string> ImagePaths = new List<string>();
-							foreach ( Volume V in B.GetVolumes() )
+							if ( Book != null )
 							{
-								foreach ( Chapter C in V.ChapterList )
+								foreach ( Volume V in Book.GetVolumes() )
 								{
-									if ( C.HasIllustrations )
+									foreach ( Chapter C in V.ChapterList )
 									{
-										ImagePaths.AddRange(
-											Shared.Storage.GetString( C.IllustrationPath )
-											.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
-										);
+										if ( C.HasIllustrations )
+										{
+											ImagePaths.AddRange(
+												Shared.Storage.GetString( C.IllustrationPath )
+												.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
+											);
+										}
 									}
 								}
 							}
@@ -239,10 +273,7 @@ namespace wenku8.Settings.Layout
 							{
 								string Url = ImagePaths[ NTimer.RandInt( ImagePaths.Count() ) ];
 								TryUseImage( Url );
-							}
-							else
-							{
-								UseDefault = true;
+								UseDefault = false;
 							}
 						}
 						catch ( Exception ex )
@@ -289,6 +320,9 @@ namespace wenku8.Settings.Layout
 								value = "ms-appx:///Assets/Samples/BgInfoView.jpg";
 								break;
 							case "CONTENT_READER":
+								value = "ms-appx:///Assets/Samples/BgContentReader.jpg";
+								break;
+							case "STAFF_PICKS":
 								value = "ms-appx:///Assets/Samples/BgContentReader.jpg";
 								break;
 						}

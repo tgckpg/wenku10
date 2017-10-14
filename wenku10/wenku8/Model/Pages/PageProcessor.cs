@@ -8,6 +8,7 @@ using Windows.UI.Xaml.Controls;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 using wenku10.Pages;
 using wenku10.Pages.Sharers;
@@ -23,6 +24,8 @@ namespace wenku8.Model.Pages
 	using ListItem;
 	using ListItem.Sharers;
 	using Loaders;
+	using Model.Section;
+	using Storage;
 
 	sealed class PageProcessor
 	{
@@ -116,6 +119,60 @@ namespace wenku8.Model.Pages
 				) );
 
 				if ( Confirmed ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+			}
+		}
+
+		public static async Task<AsyncTryOut<Chapter>> TryGetAutoAnchor( BookItem Book, bool Sync = true )
+		{
+			StringResources stx = new StringResources( "LoadingMessage" );
+			if ( Sync )
+			{
+				MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "SyncingAnchors" ), Book.Id );
+				await new AutoAnchor( Book ).SyncSettings();
+			}
+
+			MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "ProgressIndicator_Message" ), Book.Id );
+
+			TaskCompletionSource<TOCSection> TCS = new TaskCompletionSource<TOCSection>();
+			BookLoader BLoader = new BookLoader( b =>
+			{
+				if ( b == null )
+				{
+					TCS.TrySetResult( null );
+				}
+				else
+				{
+					MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "LoadingVolumes" ), Book.Id );
+					new VolumeLoader( b2 =>
+					{
+						if ( b2 == null )
+						{
+							TCS.TrySetResult( null );
+						}
+						else
+						{
+							TCS.TrySetResult( new TOCSection( b2 ) );
+						}
+					} ).Load( b );
+				}
+			} );
+
+			BLoader.Load( Book, true );
+
+			TOCSection TOCData = await TCS.Task;
+
+			if ( TOCData == null )
+			{
+				return new AsyncTryOut<Chapter>( false, null );
+			}
+
+			if ( TOCData.AnchorAvailable )
+			{
+				return new AsyncTryOut<Chapter>( true, TOCData.AutoAnchor );
+			}
+			else
+			{
+				return new AsyncTryOut<Chapter>( false, TOCData.FirstChapter );
 			}
 		}
 

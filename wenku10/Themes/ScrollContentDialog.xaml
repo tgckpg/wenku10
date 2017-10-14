@@ -1,10 +1,19 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:wenku8.Resources"
-    xmlns:Converters="using:wenku8.Converters">
+    xmlns:local="using:wenku8.Resources">
 
     <Style x:Key="ScrollContentDialog" TargetType="ContentDialog">
+        <Setter Property="Foreground" Value="{ThemeResource ContentDialogForeground}" />
+        <Setter Property="Background" Value="{ThemeResource ContentDialogBackground}" />
+        <Setter Property="BorderBrush" Value="{ThemeResource ContentDialogBorderBrush}" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="MaxHeight" Value="{ThemeResource ContentDialogMaxHeight}" />
+        <Setter Property="MinHeight" Value="{ThemeResource ContentDialogMinHeight}" />
+        <Setter Property="MaxWidth" Value="{ThemeResource ContentDialogMaxWidth}" />
+        <Setter Property="MinWidth" Value="{ThemeResource ContentDialogMinWidth}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ContentDialog">
@@ -20,12 +29,12 @@
                                     Background="{TemplateBinding Background}"
                                     FlowDirection="{TemplateBinding FlowDirection}"
                                     BorderThickness="{ThemeResource ContentDialogBorderWidth}"
-                                    BorderBrush="{ThemeResource SystemControlForegroundAccentBrush}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
                                     MaxWidth="{TemplateBinding MaxWidth}"
                                     MaxHeight="{TemplateBinding MaxHeight}"
                                     MinWidth="{TemplateBinding MinWidth}"
-                                    MinHeight="{TemplateBinding MinHeight}" >
-                                <Grid x:Name="DialogSpace" VerticalAlignment="Stretch">
+                                    MinHeight="{TemplateBinding MinHeight}">
+                                <Grid x:Name="DialogSpace" VerticalAlignment="Stretch" Padding="{ThemeResource ContentDialogPadding}">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="*" />
                                         <RowDefinition Height="Auto" />
@@ -39,24 +48,22 @@
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
-                                                <!--Here, I delete 'Height="Auto"' of RowDefinition.-->
-                                                <RowDefinition />
+                                                <RowDefinition Height="*" />
                                             </Grid.RowDefinitions>
                                             <ContentControl x:Name="Title"
                                                  Margin="{ThemeResource ContentDialogTitleMargin}"
                                                  Content="{TemplateBinding Title}"
                                                  ContentTemplate="{TemplateBinding TitleTemplate}"
                                                  FontSize="20"
-                                                 FontFamily="Segoe UI"
+                                                 FontFamily="XamlAutoFontFamily"
                                                  FontWeight="Normal"
                                                  Foreground="{TemplateBinding Foreground}"
                                                  HorizontalAlignment="Left"
                                                  VerticalAlignment="Top"
-                                                 IsTabStop="False"
-                                                 MaxHeight="{ThemeResource ContentDialogTitleMaxHeight}" >
+                                                 IsTabStop="False">
                                                 <ContentControl.Template>
                                                     <ControlTemplate TargetType="ContentControl">
-                                                        <ContentPresenter 
+                                                        <ContentPresenter
                                                              Content="{TemplateBinding Content}"
                                                              MaxLines="2"
                                                              TextWrapping="Wrap"
@@ -81,22 +88,18 @@
                                     </ScrollViewer>
                                     <Grid x:Name="CommandSpace" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition />
                                         </Grid.ColumnDefinitions>
                                         <Border x:Name="Button1Host"
                                              Margin="{ThemeResource ContentDialogButton1HostMargin}"
                                              MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
-                                             MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
-                                             Height="{ThemeResource ContentDialogButtonHeight}"
-                                             HorizontalAlignment="Stretch" />
+                                             MinHeight="{ThemeResource ContentDialogButtonMinHeight}" />
                                         <Border x:Name="Button2Host"
                                              Margin="{ThemeResource ContentDialogButton2HostMargin}"
                                              MinWidth="{ThemeResource ContentDialogButtonMinWidth}"
-                                             MaxWidth="{ThemeResource ContentDialogButtonMaxWidth}"
-                                             Height="{ThemeResource ContentDialogButtonHeight}"
-                                             Grid.Column="1"
-                                             HorizontalAlignment="Stretch" />
+                                             MinHeight="{ThemeResource ContentDialogButtonMinHeight}"
+                                             Grid.Column="1" />
                                     </Grid>
                                 </Grid>
                             </Border>

@@ -183,13 +183,11 @@ namespace wenku10.Pages
 		private void StepPrevTitle()
 		{
 			if ( CurrManiState == ManiState.UP ) EpTitleStepper.Prev();
-			else VolTitleStepper.Prev();
 		}
 
 		private void StepNextTitle()
 		{
 			if ( CurrManiState == ManiState.UP ) EpTitleStepper.Next();
-			else VolTitleStepper.Next();
 		}
 
 		private void VEManiStart( object sender, ManipulationStartedRoutedEventArgs e )
@@ -258,8 +256,16 @@ namespace wenku10.Pages
 			CGTransform.ScaleX = CGTransform.ScaleY = 1;
 			ContentRestore.Stop();
 
-			MaxVT = ( Up ? ES.PrevVolAvaible() : ES.PrevStepAvailable() ) ? double.PositiveInfinity : ( VT - 1 );
-			MinVT = ( Up ? ES.NextVolAvaible() : ES.NextStepAvailable() ) ? double.NegativeInfinity : ( 1 - VT );
+			if ( Up )
+			{
+				MaxVT = VT - 1;
+				MinVT = 1 - VT;
+			}
+			else
+			{
+				MaxVT = ES.PrevStepAvailable() ? double.PositiveInfinity : ( VT - 1 );
+				MinVT = ES.NextStepAvailable() ? double.NegativeInfinity : ( 1 - VT );
+			}
 
 			if ( IsHorz )
 			{
@@ -314,6 +320,8 @@ namespace wenku10.Pages
 			if ( ContentSlideDown.GetCurrentState() != ClockState.Active )
 			{
 				StartZoom( true );
+				HistoryThumbs.ItemsSource = new wenku8.History().GetListItems();
+
 				ContentSlideDown.Begin();
 				TransitionDisplay.SetState( VolTitle, TransitionState.Inactive );
 				TransitionDisplay.SetState( BookTitle, TransitionState.Active );

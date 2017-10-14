@@ -36,7 +36,7 @@ namespace wenku8.Model.Loaders
 			// b is null when back button is pressed before BookLoader load
 			if ( b == null ) return;
 
-			Shared.LoadMessage( "LoadingVolume" );
+			Shared.LoadMessage( "LoadingVolumes" );
 			CurrentBook = b;
 			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
 			{

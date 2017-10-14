@@ -7,8 +7,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-using Net.Astropenguin.UI.Icons;
-
 namespace wenku8.CompositeElement
 {
 	using Resources;

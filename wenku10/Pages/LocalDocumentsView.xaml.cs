@@ -76,8 +76,8 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30, 350, 0, Easings.EaseInCubic );
 
 			AnimaStory.Begin();
 			await Task.Delay( 350 );

@@ -383,26 +383,26 @@ namespace wenku10.Pages.Sharers
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 400 );
-			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 400 );
+			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 400, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 400, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc, "Opacity", 1, 0, 350, 300 );
-			SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc.RenderTransform, "Y", 0, 30, 350, 300 );
+			SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc, "Opacity", 1, 0, 350, 300, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, ScriptDesc.RenderTransform, "Y", 0, 30, 350, 300, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader, "Opacity", 1, 0, 350, 300 );
-			SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader.RenderTransform, "Y", 0, 30, 350, 300 );
+			SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader, "Opacity", 1, 0, 350, 300, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, HistoryHeader.RenderTransform, "Y", 0, 30, 350, 300, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid, "Opacity", 1, 0, 350, 300 );
-			SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid.RenderTransform, "Y", 0, 30, 350, 300 );
+			SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid, "Opacity", 1, 0, 350, 300, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, HistoryGrid.RenderTransform, "Y", 0, 30, 350, 300, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, InfoPanel, "Opacity", 1, 0, 350, 200 );
-			SimpleStory.DoubleAnimation( AnimaStory, InfoPanel.RenderTransform, "Y", 0, 30, 350, 200 );
+			SimpleStory.DoubleAnimation( AnimaStory, InfoPanel, "Opacity", 1, 0, 350, 200, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, InfoPanel.RenderTransform, "Y", 0, 30, 350, 200, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, StatPanel, "Opacity", 1, 0, 350, 100 );
-			SimpleStory.DoubleAnimation( AnimaStory, StatPanel.RenderTransform, "Y", 0, 30, 350, 100 );
+			SimpleStory.DoubleAnimation( AnimaStory, StatPanel, "Opacity", 1, 0, 350, 100, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, StatPanel.RenderTransform, "Y", 0, 30, 350, 100, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, AccessControls, "Opacity", 1, 0, 350, 100 );
-			SimpleStory.DoubleAnimation( AnimaStory, AccessControls.RenderTransform, "Y", 0, 30, 350, 100 );
+			SimpleStory.DoubleAnimation( AnimaStory, AccessControls, "Opacity", 1, 0, 350, 100, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, AccessControls.RenderTransform, "Y", 0, 30, 350, 100, Easings.EaseInCubic );
 
 			AnimaStory.Begin();
 			await Task.Delay( 1000 );

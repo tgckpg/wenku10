@@ -37,6 +37,7 @@ using wenku8.Effects;
 using wenku8.Model.Interfaces;
 using wenku8.Model.Loaders;
 using wenku8.Model.Book;
+using wenku8.Model.Pages;
 using wenku8.Model.Pages.ContentReader;
 using wenku8.Model.ListItem;
 using wenku8.Model.Section;
@@ -89,8 +90,8 @@ namespace wenku10.Pages
 
 		private TextBlock BookTitle { get { return IsHorz ? YBookTitle : XBookTitle; } }
 		private TextBlock VolTitle { get { return IsHorz ? YVolTitle : XVolTitle; } }
-		private TitleStepper VolTitleStepper { get { return IsHorz ? YVolTitleStepper : XVolTitleStepper; } }
 		private TitleStepper EpTitleStepper { get { return IsHorz ? YEpTitleStepper : XEpTitleStepper; } }
+		private ListView HistoryThumbs { get { return IsHorz ? YHistoryThumbs : XHistoryThumbs; } }
 
 		Rectangle OriIndicator;
 
@@ -156,8 +157,8 @@ namespace wenku10.Pages
 
 			LayoutRoot.RenderTransform = new TranslateTransform();
 
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30, 350, 0, Easings.EaseInCubic );
 
 			AnimaStory.Begin();
 			await Task.Delay( 350 );
@@ -189,10 +190,12 @@ namespace wenku10.Pages
 			KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.Down );
 			KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.J );
 			KbControls.AddCombo( "ScrollLess", e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.K );
-			KbControls.AddCombo( "ScrollBottom", ScrollBottom, VirtualKey.Shift, VirtualKey.G );
-			KbControls.AddSeq( "ScrollTop", ScrollTop, VirtualKey.G, VirtualKey.G );
+			KbControls.AddCombo( "ScrollCurrent", e => ContentView.GoCurrent(), VirtualKey.X );
+			KbControls.AddCombo( "ScrollTop", e => ContentView.GoBottom(), VirtualKey.Shift, VirtualKey.G );
+			KbControls.AddSeq( "ScrollBottom", e => ContentView.GoTop(), VirtualKey.G, VirtualKey.G );
 
 			KbControls.AddCombo( "EPStepper", KeyboardSlideEp, VirtualKey.B );
+			KbControls.AddCombo( "EPStepper", KeyboardSlideEp, VirtualKey.Space );
 
 			KbControls.AddCombo( "PrevChapter", e => ChangeChapter( e, false ), VirtualKey.Left );
 			KbControls.AddCombo( "NextChapter", e => ChangeChapter( e, true ), VirtualKey.Right );
@@ -262,16 +265,6 @@ namespace wenku10.Pages
 			}
 
 			LastAwareOri = Orientation;
-		}
-
-		private void ScrollTop( KeyCombinationEventArgs obj )
-		{
-			ContentView.GoTop();
-		}
-
-		private void ScrollBottom( KeyCombinationEventArgs obj )
-		{
-			ContentView.GoBottom();
 		}
 
 		private ApplicationViewOrientation? LastAwareOri;
@@ -353,13 +346,19 @@ namespace wenku10.Pages
 			OpenBook( C, false, item.AnchorIndex );
 		}
 
-		public void OpenBook( Chapter C, bool Reload = false, int Anchor = -1 )
+		public void OpenBook( Chapter C, bool Reload = false, int Anchor = -1, BookItem ToBook = null )
 		{
 			if ( OpenLock ) return;
 			if ( C == null )
 			{
 				Logger.Log( ID, "Oops, Chapter is null. Can't open nothing.", LogType.WARNING );
 				return;
+			}
+
+			bool BookChanged = ( CurrentBook.Id != C.aid );
+			if ( BookChanged )
+			{
+				CurrentBook = ToBook ?? throw new ArgumentException( "ToBook cannot be null while changing chapter accross book" );
 			}
 
 			if ( !Reload && C.Equals( CurrentChapter ) )
@@ -392,6 +391,9 @@ namespace wenku10.Pages
 					VolumeLoader VL = new VolumeLoader(
 						( BookItem b ) =>
 						{
+							// Refresh the TOC if Book is changed
+							if ( BookChanged ) ContentPane.SelectSection( ContentPane.Nav.First() );
+
 							ES = new EpisodeStepper( new VolumesInfo( b ) );
 							SetInfoTemplate();
 						}
@@ -486,12 +488,10 @@ namespace wenku10.Pages
 
 			VolTitle.Text = ES.VolTitle;
 
-			VolTitleStepper.UpdateDisplay();
 			EpTitleStepper.UpdateDisplay();
 
-			if ( ES != VolTitleStepper.Source )
+			if ( ES != EpTitleStepper.Source )
 			{
-				VolTitleStepper.Source = ES;
 				EpTitleStepper.Source = ES;
 
 				ES.PropertyChanged += ES_PropertyChanged;
@@ -504,15 +504,38 @@ namespace wenku10.Pages
 			OpenBook( ES.Chapter );
 		}
 
+		private async void YHistoryThumbs_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			ActiveItem Item = ( ActiveItem ) e.ClickedItem;
+			string Id = Item.Payload;
+
+			ReaderSlideBack();
+			if ( Id != CurrentBook.Id )
+			{
+				OpenMask();
+
+				BookItem b = await ItemProcessor.GetBookFromId( Id );
+				AsyncTryOut<Chapter> bAnchor = await PageProcessor.TryGetAutoAnchor( b );
+				// AutoAnchor will be the first chapter if anchor is not available
+				OpenBook( bAnchor.Out, false, -1, b );
+			}
+		}
+
 		private void BookLoaded( BookItem b )
 		{
 			if ( ContentPane == null ) InitPane();
 			new global::wenku8.History().Push( b );
 		}
 
-		public void RenderComplete( IdleDispatchedHandlerArgs e )
+		public async void RenderComplete( IdleDispatchedHandlerArgs e )
 		{
 			RenderMask.State = ControlState.Foreatii;
+
+			// Place a thumbnail to Reader history
+			if ( CurrentBook != null )
+			{
+				await wenku8.History.CreateThumbnail( ContentView, CurrentBook.Id );
+			}
 		}
 
 		private void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
@@ -873,5 +896,6 @@ namespace wenku10.Pages
 			} );
 		}
 		#endregion
+
 	}
 }
