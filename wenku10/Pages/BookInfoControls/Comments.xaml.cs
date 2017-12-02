@@ -127,7 +127,7 @@ namespace wenku10.Pages.BookInfoControls
 
 		private async Task Reload()
 		{
-			if( SubListView.Content != null )
+			if ( SubListView.Content != null )
 			{
 				await ( ( ReplyList ) SubListView.Content ).OpenReview( CurrentReview );
 			}
@@ -202,7 +202,11 @@ namespace wenku10.Pages.BookInfoControls
 		private async void SubmitReview()
 		{
 			ReviewsInput Input = ( ReviewsInput ) ReviewsFrame.Content;
-			if ( !await Input.Validate() ) return;
+			if ( !await Input.Validate() )
+			{
+				SubmitBtn.IsEnabled = true;
+				return;
+			}
 
 			IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, true );
 			if ( Input.IsReview )
@@ -256,8 +260,15 @@ namespace wenku10.Pages.BookInfoControls
 					Dialogs.Login Login = new Dialogs.Login( X.Singleton<IMember>( XProto.Member ) );
 					await Popups.ShowDialog( Login );
 
-					// Auto submit
-					if ( !Login.Canceled ) SubmitReview();
+					// Auto submit if possible
+					if ( Login.Canceled )
+					{
+						SubmitBtn.IsEnabled = true;
+					}
+					else
+					{
+						SubmitReview();
+					}
 				}
 			}
 		}
@@ -283,6 +294,5 @@ namespace wenku10.Pages.BookInfoControls
 			await Task.Delay( 350 );
 			F.Content = null;
 		}
-
 	}
 }
