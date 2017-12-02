@@ -132,8 +132,25 @@ namespace wenku10.Pages
 			ContentPane = null;
 		}
 
-		public void SoftOpen() { KbControls.ShowHelp(); }
-		public void SoftClose() { Dispose(); }
+		public void SoftOpen()
+		{
+			if( MainStage.Instance.IsPhone && !App.ViewControl.IsFullScreen )
+			{
+				App.ViewControl.ToggleFullScreen();
+			}
+
+			KbControls.ShowHelp();
+		}
+
+		public void SoftClose()
+		{
+			if( MainStage.Instance.IsPhone && App.ViewControl.IsFullScreen )
+			{
+				App.ViewControl.ToggleFullScreen();
+			}
+
+			Dispose();
+		}
 
 		#region Anima
 		Storyboard AnimaStory = new Storyboard();
