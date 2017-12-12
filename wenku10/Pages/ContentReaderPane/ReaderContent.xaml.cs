@@ -37,7 +37,7 @@ namespace wenku10.Pages.ContentReaderPane
 		public ReaderView Reader { get; private set; }
 		public bool UserStartReading = false;
 
-		private ContentReader Container;
+		private ContentReaderBase Container;
 		private BookItem CurrentBook { get { return Container.CurrentBook; } }
 		private Chapter CurrentChapter { get { return Container.CurrentChapter; } }
 		private Paragraph SelectedParagraph;
@@ -50,7 +50,7 @@ namespace wenku10.Pages.ContentReaderPane
 		ScrollBar VScrollBar;
 		ScrollBar HScrollBar;
 
-		public ReaderContent( ContentReader Container, int Anchor )
+		public ReaderContent( ContentReaderBase Container, int Anchor )
 		{
 			this.InitializeComponent();
 			this.Container = Container;
@@ -70,7 +70,6 @@ namespace wenku10.Pages.ContentReaderPane
 				{
 					MasterGrid.DataContext = null;
 				} );
-
 			}
 			catch ( Exception ) { }
 		}
@@ -253,10 +252,11 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( SelectedParagraph == null ) return;
 			FlyoutBase.ShowAttachedFlyout( ContentGrid );
 
-			TextBlock tb = new TextBlock();
-			tb.TextWrapping = TextWrapping.Wrap;
-			tb.Text = SelectedParagraph.Text;
-			ContentFlyout.Content = tb;
+			ContentFlyout.Content = new TextBlock()
+			{
+				TextWrapping = TextWrapping.Wrap,
+				Text = SelectedParagraph.Text
+			};
 		}
 
 		internal void ContextCopyClicked( object sender, RoutedEventArgs e )
@@ -430,37 +430,37 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( 100 < ZoomTrigger )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReader.ManiState.DOWN );
+				CRSlide( ContentReaderVert.ManiState.DOWN );
 			}
 			else if ( ZoomTrigger < -100 )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReader.ManiState.UP );
+				CRSlide( ContentReaderVert.ManiState.UP );
 			}
 			else if ( ZoomTrigger == 0 )
 			{
-				CRSlide( ContentReader.ManiState.NORMAL );
+				CRSlide( ContentReaderVert.ManiState.NORMAL );
 			}
 		}
 
-		private void CRSlide( ContentReader.ManiState State )
+		private void CRSlide( ContentReaderVert.ManiState State )
 		{
 			if ( State == Container.CurrManiState ) return;
 
 			switch ( State )
 			{
-				case ContentReader.ManiState.NORMAL:
+				case ContentReaderVert.ManiState.NORMAL:
 					Container.ReaderSlideBack();
 					break;
-				case ContentReader.ManiState.UP:
-					if ( Container.CurrManiState == ContentReader.ManiState.DOWN )
-						goto case ContentReader.ManiState.NORMAL;
+				case ContentReaderVert.ManiState.UP:
+					if ( Container.CurrManiState == ContentReaderVert.ManiState.DOWN )
+						goto case ContentReaderVert.ManiState.NORMAL;
 
 					Container.ReaderSlideUp();
 					break;
-				case ContentReader.ManiState.DOWN:
-					if ( Container.CurrManiState == ContentReader.ManiState.UP )
-						goto case ContentReader.ManiState.NORMAL;
+				case ContentReaderVert.ManiState.DOWN:
+					if ( Container.CurrManiState == ContentReaderVert.ManiState.UP )
+						goto case ContentReaderVert.ManiState.NORMAL;
 
 					Container.ReaderSlideDown();
 					break;

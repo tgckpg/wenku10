@@ -49,10 +49,8 @@ namespace wenku10.Pages
 {
 	using ContentReaderPane;
 
-	sealed partial class ContentReader : Page, ICmdControls, IAnimaPage, INavPage
+	abstract class ContentReaderBase : Page, ICmdControls
 	{
-		public static readonly string ID = typeof( ContentReader ).Name;
-
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
 #pragma warning restore 0067
@@ -60,54 +58,53 @@ namespace wenku10.Pages
 		public bool NoCommands { get { return true; } }
 		public bool MajorNav { get; }
 
-		public IList<ICommandBarElement> MajorControls { get; private set; }
-		public IList<ICommandBarElement> Major2ndControls { get; private set; }
-		public IList<ICommandBarElement> MinorControls { get; private set; }
+		public IList<ICommandBarElement> MajorControls { get; protected set; }
+		public IList<ICommandBarElement> Major2ndControls { get; protected set; }
+		public IList<ICommandBarElement> MinorControls { get; protected set; }
 
-		public BookItem CurrentBook { get; private set; }
-		public Chapter CurrentChapter { get; private set; }
-		public ReaderContent ContentView { get; private set; }
-		public TimeSpan TimpSpan { get; private set; }
+		public BookItem CurrentBook { get; protected set; }
+		public Chapter CurrentChapter { get; protected set; }
+		public ReaderContent ContentView { get; protected set; }
+		public TimeSpan TimpSpan { get; protected set; }
 
-		private bool IsHorz { get { return ContentView.Reader.Settings.IsHorizontal; } }
 		public bool UseInertia
 		{
 			get { return Properties.CONTENTREADER_USEINERTIA; }
 			set { Properties.CONTENTREADER_USEINERTIA = value; }
 		}
 
-		private Action ReloadReader;
-		private volatile bool OpenLock = false;
-		private bool NeedRedraw = false;
-		private bool Disposed = false;
+		protected bool OrientationRedraw = false;
 
-		private ApplicationViewOrientation? Orientation;
+		protected Action ReloadReader;
+		protected volatile bool OpenLock = false;
+		protected bool NeedRedraw = false;
+		protected bool Disposed = false;
 
-		private EpisodeStepper ES;
+		protected ApplicationViewOrientation? Orientation;
 
-		private NavPaneSection ContentPane;
-		private wenku8.System.KeyboardController KbControls;
+		protected EpisodeStepper ES;
 
-		private TextBlock BookTitle { get { return IsHorz ? YBookTitle : XBookTitle; } }
-		private TextBlock VolTitle { get { return IsHorz ? YVolTitle : XVolTitle; } }
-		private TitleStepper EpTitleStepper { get { return IsHorz ? YEpTitleStepper : XEpTitleStepper; } }
-		private ListView HistoryThumbs { get { return IsHorz ? YHistoryThumbs : XHistoryThumbs; } }
+		protected NavPaneSection ContentPane;
+		protected wenku8.System.KeyboardController KbControls;
+
+		protected TextBlock _BookTitle;
+		protected TextBlock _VolTitle;
+		protected TitleStepper _EpTitleStepper;
+		protected ListView _HistoryThubms;
+
+		protected FrameworkElement _LayoutRoot;
+		protected Frame _OverlayFrame;
+		protected Frame _ContentFrame;
+		protected Grid _ContentBg;
+		protected Grid _PaneGrid;
+		protected Grid _FocusHelper;
+		protected Grid _VESwipe;
+
+		protected PassiveSplitView _MainSplitView;
+		protected StateControl _Overlay;
+		protected TipMask _RenderMask;
 
 		Rectangle OriIndicator;
-
-		private ContentReader()
-		{
-			this.InitializeComponent();
-		}
-
-		public ContentReader( BookItem Book, Chapter C )
-			: this()
-		{
-			SetTemplate();
-
-			CurrentBook = Book;
-			OpenBook( C );
-		}
 
 		void Dispose()
 		{
@@ -134,7 +131,7 @@ namespace wenku10.Pages
 
 		public void SoftOpen()
 		{
-			if( MainStage.Instance.IsPhone && !App.ViewControl.IsFullScreen )
+			if ( MainStage.Instance.IsPhone && !App.ViewControl.IsFullScreen )
 			{
 				App.ViewControl.ToggleFullScreen();
 			}
@@ -144,7 +141,7 @@ namespace wenku10.Pages
 
 		public void SoftClose()
 		{
-			if( MainStage.Instance.IsPhone && App.ViewControl.IsFullScreen )
+			if ( MainStage.Instance.IsPhone && App.ViewControl.IsFullScreen )
 			{
 				App.ViewControl.ToggleFullScreen();
 			}
@@ -160,8 +157,8 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
+			SimpleStory.DoubleAnimation( AnimaStory, _LayoutRoot, "Opacity", 0, 1 );
+			SimpleStory.DoubleAnimation( AnimaStory, _LayoutRoot.RenderTransform, "Y", 30, 0 );
 
 			AnimaStory.Begin();
 			await Task.Delay( 350 );
@@ -172,28 +169,28 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			LayoutRoot.RenderTransform = new TranslateTransform();
+			_LayoutRoot.RenderTransform = new TranslateTransform();
 
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30, 350, 0, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, _LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, _LayoutRoot.RenderTransform, "Y", 0, 30, 350, 0, Easings.EaseInCubic );
 
 			AnimaStory.Begin();
 			await Task.Delay( 350 );
 		}
 		#endregion
 
-		private void SetTemplate()
+		protected void SetTemplate()
 		{
 			ContentIllusLoader.Initialize();
 
-			LayoutRoot.RenderTransform = new TranslateTransform();
+			_LayoutRoot.RenderTransform = new TranslateTransform();
 
 			NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
 
 			// First Trigger don't redraw
 			TriggerOrientation();
 
-			FocusHelper.DataContext = new AssistContext();
+			_FocusHelper.DataContext = new AssistContext();
 			App.ViewControl.PropertyChanged += VC_PropertyChanged;
 
 			InitAppBar();
@@ -297,14 +294,14 @@ namespace wenku10.Pages
 			if ( LastAwareOri == Orientation )
 			{
 				UpdatePane = ( Old.Height != New.Height );
-				LocalRedraw = ( IsHorz && UpdatePane );
+				LocalRedraw = ( OrientationRedraw && UpdatePane );
 			}
 
-			if ( UpdatePane && MainSplitView.State != PaneStates.Closed )
+			if ( UpdatePane && _MainSplitView.State != PaneStates.Closed )
 			{
 				// This handles CommandBar goes hidden
-				MainSplitView.OpenPane();
-				MainSplitView.ClosePane();
+				_MainSplitView.OpenPane();
+				_MainSplitView.ClosePane();
 			}
 
 			if ( LocalRedraw )
@@ -349,7 +346,7 @@ namespace wenku10.Pages
 
 		private void UpdateManiMode()
 		{
-			MainSplitView.ManiMode =
+			_MainSplitView.ManiMode =
 				( MainStage.Instance.IsPhone && Orientation == ApplicationViewOrientation.Landscape )
 				? ManipulationModes.TranslateY
 				: ManipulationModes.TranslateX;
@@ -368,7 +365,7 @@ namespace wenku10.Pages
 			if ( OpenLock ) return;
 			if ( C == null )
 			{
-				Logger.Log( ID, "Oops, Chapter is null. Can't open nothing.", LogType.WARNING );
+				Logger.Log( "ContentReaderBase", "Oops, Chapter is null. Can't open nothing.", LogType.WARNING );
 				return;
 			}
 
@@ -425,12 +422,12 @@ namespace wenku10.Pages
 
 				ReloadReader = () =>
 				{
-					ContentFrame.Content = null;
+					_ContentFrame.Content = null;
 					Shared.LoadMessage( "RedrawingContent" );
 					ContentView?.Dispose();
 
 					// Set Predefined BlockHeight if available
-					if( 0 < Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+					if ( 0 < Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
 					{
 						VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( Properties.APPEARANCE_CONTENTREADER_FONTSIZE );
 						LogaTable.Override( Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT );
@@ -440,7 +437,7 @@ namespace wenku10.Pages
 
 					SetLayoutAware();
 
-					ContentFrame.Content = ContentView;
+					_ContentFrame.Content = ContentView;
 					// Load Content at the very end
 					ContentView.Load( false );
 				};
@@ -473,14 +470,14 @@ namespace wenku10.Pages
 
 		private void SetLayoutAware()
 		{
-			if ( ContentBg.DataContext == null )
+			if ( _ContentBg.DataContext == null )
 			{
-				ContentBg.DataContext = ContentView.Reader.Settings.GetBgContext();
+				_ContentBg.DataContext = ContentView.Reader.Settings.GetBgContext();
 			}
 
-			( ( BgContext ) ContentBg.DataContext ).Reload();
+			( ( BgContext ) _ContentBg.DataContext ).Reload();
 
-			BookTitle.Text = CurrentBook.Title;
+			_BookTitle.Text = CurrentBook.Title;
 			SetClock();
 			SetManiState();
 
@@ -503,13 +500,13 @@ namespace wenku10.Pages
 		{
 			if ( ContentView == null || ES == null ) return;
 
-			VolTitle.Text = ES.VolTitle;
+			_VolTitle.Text = ES.VolTitle;
 
-			EpTitleStepper.UpdateDisplay();
+			_EpTitleStepper.UpdateDisplay();
 
-			if ( ES != EpTitleStepper.Source )
+			if ( ES != _EpTitleStepper.Source )
 			{
-				EpTitleStepper.Source = ES;
+				_EpTitleStepper.Source = ES;
 
 				ES.PropertyChanged += ES_PropertyChanged;
 			}
@@ -521,7 +518,7 @@ namespace wenku10.Pages
 			OpenBook( ES.Chapter );
 		}
 
-		private async void YHistoryThumbs_ItemClick( object sender, ItemClickEventArgs e )
+		protected async void HistoryThumbs_ItemClick( object sender, ItemClickEventArgs e )
 		{
 			ActiveItem Item = ( ActiveItem ) e.ClickedItem;
 			string Id = Item.Payload;
@@ -546,7 +543,7 @@ namespace wenku10.Pages
 
 		public async void RenderComplete( IdleDispatchedHandlerArgs e )
 		{
-			RenderMask.State = ControlState.Foreatii;
+			_RenderMask.State = ControlState.Foreatii;
 
 			// Place a thumbnail to Reader history
 			if ( CurrentBook != null )
@@ -555,7 +552,7 @@ namespace wenku10.Pages
 			}
 		}
 
-		private void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
+		protected void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
 		{
 			if ( ContentView.Reader.UsePageClick || !ContentView.Reader.UseDoubleTap ) return;
 			RollOutLeftPane();
@@ -564,9 +561,9 @@ namespace wenku10.Pages
 		public void RollOutLeftPane()
 		{
 			// Config is open, do not roll out the pane
-			if ( Overlay.State == ControlState.Reovia && OverlayFrame.Content is Settings.Themes.ContentReader ) return;
+			if ( _Overlay.State == ControlState.Reovia && _OverlayFrame.Content is Settings.Themes.ContentReader ) return;
 			ContentView.UserStartReading = false;
-			MainSplitView.OpenPane();
+			_MainSplitView.OpenPane();
 		}
 
 		private void InitPane()
@@ -595,10 +592,10 @@ namespace wenku10.Pages
 			ContentPane = new NavPaneSection( this, Sections );
 			ContentPane.SelectSection( Sections[ 0 ] );
 
-			PaneGrid.DataContext = ContentPane;
-			MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
+			_PaneGrid.DataContext = ContentPane;
+			_MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
 
-			Overlay.OnStateChanged += Overlay_OnStateChanged;
+			_Overlay.OnStateChanged += Overlay_OnStateChanged;
 		}
 
 		private PaneNavButton InertiaButton()
@@ -656,9 +653,12 @@ namespace wenku10.Pages
 			Grid RGrid = new Grid();
 			OriIndicator = new Rectangle
 			{
-				Width = 35, Height = 35
-				, Stroke = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
-				, StrokeThickness = 2
+				Width = 35,
+				Height = 35
+				,
+				Stroke = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
+				,
+				StrokeThickness = 2
 			};
 
 			UpdateOriIndicator();
@@ -714,11 +714,12 @@ namespace wenku10.Pages
 
 			Rectangle RectInd = new Rectangle()
 			{
-				Width = 20, Height = 40
-				, Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
+				Width = 20,
+				Height = 40,
+				Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
 			};
 
-			MainSplitView.FlowDirection = Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT
+			_MainSplitView.FlowDirection = Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT
 				? FlowDirection.LeftToRight
 				: FlowDirection.RightToLeft;
 
@@ -730,17 +731,17 @@ namespace wenku10.Pages
 
 			Action ToggleFIcon = () =>
 			{
-				if ( MainSplitView.FlowDirection == FlowDirection.LeftToRight )
+				if ( _MainSplitView.FlowDirection == FlowDirection.LeftToRight )
 				{
 					Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT = false;
 					RectInd.HorizontalAlignment = HorizontalAlignment.Right;
-					MainSplitView.FlowDirection = FlowDirection.RightToLeft;
+					_MainSplitView.FlowDirection = FlowDirection.RightToLeft;
 				}
 				else
 				{
 					Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT = true;
 					RectInd.HorizontalAlignment = HorizontalAlignment.Left;
-					MainSplitView.FlowDirection = FlowDirection.LeftToRight;
+					_MainSplitView.FlowDirection = FlowDirection.LeftToRight;
 				}
 			};
 
@@ -749,7 +750,7 @@ namespace wenku10.Pages
 			return FlowDirButton;
 		}
 
-		private void SectionClicked( object sender, ItemClickEventArgs e )
+		protected void SectionClicked( object sender, ItemClickEventArgs e )
 		{
 			PaneNavButton Section = e.ClickedItem as PaneNavButton;
 			ContentPane.SelectSection( Section );
@@ -758,9 +759,9 @@ namespace wenku10.Pages
 		internal void ClosePane()
 		{
 			// Detecting state could skip the Visual State Checking 
-			if ( MainSplitView.State == PaneStates.Opened )
+			if ( _MainSplitView.State == PaneStates.Opened )
 			{
-				MainSplitView.State = PaneStates.Closed;
+				_MainSplitView.State = PaneStates.Closed;
 			}
 		}
 
@@ -771,15 +772,15 @@ namespace wenku10.Pages
 
 		private void GotoSettings()
 		{
-			MainSplitView.ClosePane();
-			Overlay.State = ControlState.Reovia;
-			OverlayFrame.Content = new Settings.Themes.ContentReader();
+			_MainSplitView.ClosePane();
+			_Overlay.State = ControlState.Reovia;
+			_OverlayFrame.Content = new Settings.Themes.ContentReader();
 		}
 
 		public void OverNavigate( Type Page, object Param )
 		{
-			Overlay.State = ControlState.Reovia;
-			OverlayFrame.Navigate( Page, Param );
+			_Overlay.State = ControlState.Reovia;
+			_OverlayFrame.Navigate( Page, Param );
 		}
 
 		private void ToggleFullScreen()
@@ -791,12 +792,12 @@ namespace wenku10.Pages
 		private void OnBackRequested( object sender, XBackRequestedEventArgs e )
 		{
 			// Close the settings first
-			if ( Overlay.State == ControlState.Reovia )
+			if ( _Overlay.State == ControlState.Reovia )
 			{
-				Overlay.State = ControlState.Foreatii;
-				Settings.Themes.ContentReader Settings = OverlayFrame.Content as Settings.Themes.ContentReader;
-				MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
-				FocusHelper.DataContext = new AssistContext();
+				_Overlay.State = ControlState.Foreatii;
+				Settings.Themes.ContentReader Settings = _OverlayFrame.Content as Settings.Themes.ContentReader;
+				_MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
+				_FocusHelper.DataContext = new AssistContext();
 
 				// If the overlay frame content is settings, and the settings is changed
 				if ( Settings != null && Settings.NeedRedraw ) Redraw();
@@ -805,17 +806,17 @@ namespace wenku10.Pages
 				return;
 			}
 
-			if ( CurrManiState != ManiState.NORMAL || ContentSlideBack.GetCurrentState() == ClockState.Active )
+			if ( CurrManiState != ManiState.NORMAL || _ContentSlideBack.GetCurrentState() == ClockState.Active )
 			{
 				e.Handled = true;
 				ReaderSlideBack();
 				return;
 			}
 
-			if ( MainSplitView.State == PaneStates.Opened )
+			if ( _MainSplitView.State == PaneStates.Opened )
 			{
 				e.Handled = true;
-				MainSplitView.ClosePane();
+				_MainSplitView.ClosePane();
 				return;
 			}
 		}
@@ -824,8 +825,8 @@ namespace wenku10.Pages
 		{
 			if ( args == ControlState.Foreatii )
 			{
-				OverlayFrame.Content = null;
-				( ( BgContext ) ContentBg.DataContext )?.Reload();
+				_OverlayFrame.Content = null;
+				( ( BgContext ) _ContentBg.DataContext )?.Reload();
 			}
 		}
 
@@ -840,22 +841,21 @@ namespace wenku10.Pages
 			// No need to RenderComplete since this is handled by
 			// property changed Data event in ReaderView
 			// await Task.Delay( 2000 );
-			// var NOP = ContentFrame.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( RenderComplete ) );
+			// var NOP = _ContentFrame.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( RenderComplete ) );
 		}
 
 		private void OpenMask()
 		{
 			StringResources stx = new StringResources( "LoadingMessage" );
-			RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
-			RenderMask.State = ControlState.Reovia;
+			_RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
+			_RenderMask.State = ControlState.Reovia;
 		}
 
 		#region Clock
-
-		private QClock RClock { get { return IsHorz ? YClock : XClock; } }
-		private TextBlock Month { get { return IsHorz ? YMonth : XMonth; } }
-		private TextBlock DayofWeek { get { return IsHorz ? YDayofWeek : XDayofWeek; } }
-		private TextBlock DayofMonth { get { return IsHorz ? YDayofMonth : XDayofMonth; } }
+		protected QClock _Clock;
+		protected TextBlock _Month;
+		protected TextBlock _DayofWeek;
+		protected TextBlock _DayofMonth;
 		DispatcherTimer ClockTicker;
 
 		private void SetClock()
@@ -865,8 +865,8 @@ namespace wenku10.Pages
 			ClockTicker = new DispatcherTimer();
 			ClockTicker.Interval = TimeSpan.FromSeconds( 5 );
 
-			UpperBack.DataContext
-				= LowerBack.DataContext
+			_UpperBack.DataContext
+				= _LowerBack.DataContext
 				= new ESContext();
 
 			ClockTick();
@@ -882,9 +882,9 @@ namespace wenku10.Pages
 			if ( ClockTicker == null ) return;
 			ClockTicker.Stop();
 
-			( RClock.DataContext as ESContext ).Dispose();
-			UpperBack.DataContext
-				= LowerBack.DataContext
+			( _Clock.DataContext as ESContext ).Dispose();
+			_UpperBack.DataContext
+				= _LowerBack.DataContext
 				= null;
 
 			ClockTicker.Tick -= ClockTicker_Tick;
@@ -896,10 +896,10 @@ namespace wenku10.Pages
 
 		private void ClockTick()
 		{
-			RClock.Time = DateTime.Now;
-			DayofWeek.Text = RClock.Time.ToString( "dddd" );
-			DayofMonth.Text = RClock.Time.Day.ToString();
-			Month.Text = RClock.Time.ToString( "MMMM" );
+			_Clock.Time = DateTime.Now;
+			_DayofWeek.Text = _Clock.Time.ToString( "dddd" );
+			_DayofMonth.Text = _Clock.Time.Day.ToString();
+			_Month.Text = _Clock.Time.ToString( "MMMM" );
 		}
 
 		private void AggregateBattery_ReportUpdated( Battery sender, object args )
@@ -909,10 +909,177 @@ namespace wenku10.Pages
 			if ( Report.RemainingCapacityInMilliwattHours == null ) return;
 			Worker.UIInvoke( () =>
 			{
-				RClock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
+				_Clock.Progress = ( float ) Report.RemainingCapacityInMilliwattHours / ( float ) Report.FullChargeCapacityInMilliwattHours;
 			} );
 		}
 		#endregion
 
+		#region Swipe Controller
+		public enum ManiState { UP, NORMAL, DOWN }
+		public ManiState CurrManiState = ManiState.NORMAL;
+
+		protected double ZoomTrigger = 0;
+
+		protected Storyboard ContentAway;
+		protected Storyboard _ContentRestore;
+		protected Storyboard _ContentSlideUp;
+		protected Storyboard _ContentSlideDown;
+		protected Storyboard _ContentSlideBack;
+		protected CompositeTransform _CGTransform;
+
+		protected double MaxVT = double.PositiveInfinity;
+		protected double MinVT = double.NegativeInfinity;
+
+		protected double VT = 130;
+
+		protected Grid _UpperBack;
+		protected Grid _LowerBack;
+
+		protected bool AnyStoryActive
+		{
+			get
+			{
+				return new Storyboard[] {
+					_ContentSlideBack, _ContentSlideUp, ContentAway
+				}.Any( x => x?.GetCurrentState() == ClockState.Active );
+			}
+		}
+
+		protected void SetSlideGesture()
+		{
+			_ContentSlideBack.Completed += ( s, e ) => CurrManiState = ManiState.NORMAL;
+			_ContentSlideUp.Completed += ( s, e ) => CurrManiState = ManiState.UP;
+			_ContentSlideDown.Completed += ( s, e ) => CurrManiState = ManiState.DOWN;
+
+			_VESwipe.ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY | ManipulationModes.TranslateRailsX | ManipulationModes.TranslateRailsY;
+			_VESwipe.ManipulationStarted += VEManiStart;
+		}
+
+		protected void SetManiState()
+		{
+			_CGTransform.TranslateX = _CGTransform.TranslateY = 0;
+			_CGTransform.ScaleX = _CGTransform.ScaleY = 1;
+			_ContentSlideBack.Stop();
+			_ContentSlideDown.Stop();
+			_ContentSlideUp.Stop();
+		}
+
+
+		abstract protected void ContentBeginAway( bool Next );
+
+		protected void StepPrevTitle()
+		{
+			if ( CurrManiState == ManiState.UP ) _EpTitleStepper.Prev();
+		}
+
+		protected void StepNextTitle()
+		{
+			if ( CurrManiState == ManiState.UP ) _EpTitleStepper.Next();
+		}
+
+		protected void VEManiStart( object sender, ManipulationStartedRoutedEventArgs e )
+		{
+			_CGTransform.SetValue( CompositeTransform.TranslateXProperty, _CGTransform.GetValue( CompositeTransform.TranslateXProperty ) );
+			_CGTransform.SetValue( CompositeTransform.TranslateYProperty, _CGTransform.GetValue( CompositeTransform.TranslateYProperty ) );
+			_ContentRestore.Stop();
+		}
+
+		protected void VEZoomBackUp( double dv )
+		{
+			ZoomTrigger += dv;
+			if ( 100 < ZoomTrigger ) ReaderSlideBack();
+			else if ( ZoomTrigger < 0 ) ZoomTrigger = 0;
+		}
+
+		protected void VEZoomBackDown( double dv )
+		{
+			ZoomTrigger += dv;
+			if ( ZoomTrigger < -100 ) ReaderSlideBack();
+			else if ( 0 < ZoomTrigger ) ZoomTrigger = 0;
+		}
+
+		protected void StopZoom()
+		{
+			ZoomTrigger = 0;
+			_VESwipe.IsHitTestVisible = false;
+			_VESwipe.ManipulationDelta -= ManiZoomBackUp;
+			_VESwipe.ManipulationDelta -= ManiZoomBackDown;
+			_VESwipe.ManipulationCompleted -= ManiZoomEnd;
+		}
+
+		abstract protected void ManiZoomBackUp( object sender, ManipulationDeltaRoutedEventArgs e );
+		abstract protected void ManiZoomBackDown( object sender, ManipulationDeltaRoutedEventArgs e );
+		abstract protected void ManiZoomEnd( object sender, ManipulationCompletedRoutedEventArgs e );
+
+		protected void StartZoom( bool Up )
+		{
+			ZoomTrigger = 0;
+			_VESwipe.IsHitTestVisible = true;
+
+			_CGTransform.TranslateX = _CGTransform.TranslateY = 0;
+			_CGTransform.ScaleX = _CGTransform.ScaleY = 1;
+			_ContentRestore.Stop();
+
+			if ( Up )
+			{
+				MaxVT = VT - 1;
+				MinVT = 1 - VT;
+			}
+			else
+			{
+				MaxVT = ES.PrevStepAvailable() ? double.PositiveInfinity : ( VT - 1 );
+				MinVT = ES.NextStepAvailable() ? double.NegativeInfinity : ( 1 - VT );
+			}
+
+			_VESwipe.ManipulationCompleted += ManiZoomEnd;
+			if ( Up ) _VESwipe.ManipulationDelta += ManiZoomBackDown;
+			else _VESwipe.ManipulationDelta += ManiZoomBackUp;
+		}
+
+		public void ReaderSlideBack()
+		{
+			if ( _ContentSlideBack.GetCurrentState() != ClockState.Active )
+			{
+				StopZoom();
+				_ContentRestore.Begin();
+				_ContentSlideBack.Begin();
+				TransitionDisplay.SetState( _VolTitle, TransitionState.Inactive );
+				TransitionDisplay.SetState( _BookTitle, TransitionState.Inactive );
+				TransitionDisplay.SetState( _LowerBack, TransitionState.Inactive );
+				TransitionDisplay.SetState( _UpperBack, TransitionState.Inactive );
+
+				// Compensate for Storyboard.Completed event not firing
+				CurrManiState = ManiState.NORMAL;
+			}
+		}
+
+		public void ReaderSlideUp()
+		{
+			if ( _ContentSlideUp.GetCurrentState() != ClockState.Active )
+			{
+				StartZoom( false );
+				_ContentSlideUp.Begin();
+				TransitionDisplay.SetState( _VolTitle, TransitionState.Active );
+				TransitionDisplay.SetState( _BookTitle, TransitionState.Inactive );
+				TransitionDisplay.SetState( _LowerBack, TransitionState.Active );
+				TransitionDisplay.SetState( _UpperBack, TransitionState.Inactive );
+			}
+		}
+
+		public void ReaderSlideDown()
+		{
+			if ( _ContentSlideDown.GetCurrentState() != ClockState.Active )
+			{
+				StartZoom( true );
+				_HistoryThubms.ItemsSource = new wenku8.History().GetListItems();
+
+				_ContentSlideDown.Begin();
+				TransitionDisplay.SetState( _VolTitle, TransitionState.Inactive );
+				TransitionDisplay.SetState( _BookTitle, TransitionState.Active );
+				TransitionDisplay.SetState( _LowerBack, TransitionState.Inactive );
+				TransitionDisplay.SetState( _UpperBack, TransitionState.Active );
+			}
+		}
+		#endregion
 	}
 }

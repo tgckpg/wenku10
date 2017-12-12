@@ -34,8 +34,8 @@ namespace wenku10.Pages.ContentReaderPane
 {
 	sealed partial class ImageList : Page
 	{
-		private ContentReader ReaderPage;
-		public ImageList( ContentReader R )
+		private ContentReaderVert ReaderPage;
+		public ImageList( ContentReaderVert R )
 		{
 			this.InitializeComponent();
 

@@ -92,7 +92,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Background="{Binding AnchorColor}" />
+                        <Rectangle Fill="{Binding AnchorColor}" />
                         <TextBlock
                             Grid.Column="1"
                             Text="{Binding Text}"

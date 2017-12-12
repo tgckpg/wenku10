@@ -17,7 +17,8 @@ namespace wenku10.Pages
 			, HISTORY = "History"
 			, MANAGE_PINS = "ManagePins"
 			, PROC_PANEL = "ProceduresPanel"
-			, CONTENT_READER = "ContentReader"
+			, CONTENT_READER_H = "ContentReaderHorz"
+			, CONTENT_READER_V = "ContentReaderVert"
 			, SCRIPT_DETAILS = "ScriptDetails"
 			, MAIN_SETTINGS = "MainSettings"
 			, SH_USER_INFO = "SHUserInfo"
@@ -40,7 +41,7 @@ namespace wenku10.Pages
 		;
 
 		// Cannot be stored in backstacks
-		public static readonly string[] NonStackables = new string[] { CONTENT_READER, W_DEATHBLOW, MONO_REDIRECTOR };
+		public static readonly string[] NonStackables = new string[] { CONTENT_READER_H, CONTENT_READER_V, W_DEATHBLOW, MONO_REDIRECTOR };
 
 		// Can only have single instance in stack
 		public static readonly string[] MonoStack = new string[] { BOOK_INFO_VIEW, SCRIPT_DETAILS };

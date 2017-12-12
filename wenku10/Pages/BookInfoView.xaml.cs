@@ -467,8 +467,7 @@ namespace wenku10.Pages
 
 			if( TryAutoAnchor )
 			{
-				ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, TryAutoAnchor.Out ) );
+				PageProcessor.NavigateToReader( ThisBook, TryAutoAnchor.Out );
 			}
 			else
 			{

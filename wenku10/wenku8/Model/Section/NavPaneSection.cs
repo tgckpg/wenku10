@@ -16,7 +16,7 @@ namespace wenku8.Model.Section
 		public object Context { get; private set; }
 
 		private Brush bbrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
-		private ContentReader Reader;
+		private ContentReaderBase Reader;
 
 		public IList<PaneNavButton> Nav { get; private set; }
 
@@ -30,7 +30,7 @@ namespace wenku8.Model.Section
 			}
 		}
 
-		public NavPaneSection( ContentReader ReaderPage, IList<PaneNavButton> NavButtons )
+		public NavPaneSection( ContentReaderBase ReaderPage, IList<PaneNavButton> NavButtons )
 		{
 			Reader = ReaderPage;
 			Nav = NavButtons;
