@@ -13,7 +13,8 @@ namespace wenku10.Scenes
 {
 	interface IScene : IDisposable
 	{
-		void UpdateAssets( Size Sim );
+		void UpdateAssets( Size S );
 		void Draw( CanvasDrawingSession ds, CanvasSpriteBatch SBatch, TextureLoader Textures );
+		void Enter();
 	}
 }

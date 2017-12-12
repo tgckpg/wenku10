@@ -203,8 +203,8 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private void SetScrollBar()
 		{
-			VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 1 );
-			HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+			VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+			HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 3 );
 
 			UpdateScrollBar();
 		}

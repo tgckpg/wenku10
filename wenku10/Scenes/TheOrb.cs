@@ -15,10 +15,11 @@ using wenku8.Effects.P2DFlow;
 using wenku8.Effects.P2DFlow.ForceFields;
 using wenku8.Effects.P2DFlow.Reapers;
 using wenku8.Effects.P2DFlow.Spawners;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 
 namespace wenku10.Scenes
 {
-	sealed class TheOrb : PFScene, IScene, ISceneExitable
+	sealed class TheOrb : PFScene, ITextureScene, ISceneExitable
 	{
 		private bool Left = true;
 		private bool Exited = false;
@@ -28,6 +29,8 @@ namespace wenku10.Scenes
 
 		private Vector2 Center;
 		private Vector4 OrbTint;
+
+		private int tCircle;
 
 		public TheOrb( Stack<Particle> ParticleQueue, bool Left )
 		{
@@ -44,6 +47,11 @@ namespace wenku10.Scenes
 			OrbTint.Y = MColor.G / 255f;
 			OrbTint.Z = MColor.B / 255f;
 			OrbTint.W = MColor.A / 255f;
+		}
+
+		public async Task LoadTextures( CanvasAnimatedControl Canvas, TextureLoader Textures )
+		{
+			tCircle = await Textures.Load( Canvas, Texture.Glitter, "Assets/circle.dds" );
 		}
 
 		public void UpdateAssets( Size s )
@@ -71,7 +79,7 @@ namespace wenku10.Scenes
 
 				LinearSpawner Mantra = new LinearSpawner( Center, 30 * Vector2.One, 30 * Vector2.One )
 				{
-					Texture = Texture.Circle
+					Texture = tCircle
 					, ttl = 30
 					, spf = 3
 					, SpawnEx = P =>
@@ -82,7 +90,7 @@ namespace wenku10.Scenes
 				};
 
 				PFSim.Spawners.Clear();
-				PFSim.Spawners.Add( new Trail() { mf = 0f, Texture = Texture.Circle, Scale = new Vector2( 0.125f, 0.125f ) } );
+				PFSim.Spawners.Add( new Trail() { mf = 0f, Texture = tCircle, Scale = new Vector2( 0.125f, 0.125f ) } );
 				PFSim.Spawners.Add( OrbAura );
 				PFSim.Spawners.Add( Mantra );
 

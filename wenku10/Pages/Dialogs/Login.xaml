@@ -7,9 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     mc:Ignorable="d"
+    Style="{StaticResource ScrollContentDialog}"
     Background="{StaticResource MajorBackgroundBrush}"
-    PrimaryButtonText="Button1"
-    SecondaryButtonText="Button2"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
     <ContentDialog.Title>

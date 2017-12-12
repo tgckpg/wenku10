@@ -609,22 +609,22 @@ namespace wenku10.Pages
 
 			if( SplashCover.Filling )
 			{
-				SimpleStory.DoubleAnimation( AnimaStory, SplashCover, "Opacity", 1, 0, 350 );
+				SimpleStory.DoubleAnimation( AnimaStory, SplashCover, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
 			}
 
 			SplashCover.SplashOut();
 
-			SimpleStory.DoubleAnimation( AnimaStory, Indicators, "Opacity", 1, 0, 350, 400 );
-			SimpleStory.DoubleAnimation( AnimaStory, Indicators.RenderTransform, "Y", 0, -30, 350, 400 );
+			SimpleStory.DoubleAnimation( AnimaStory, Indicators, "Opacity", 1, 0, 350, 400, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, Indicators.RenderTransform, "Y", 0, -30, 350, 400, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 300 );
-			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 300 );
+			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel, "Opacity", 1, 0, 350, 300, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, HeaderPanel.RenderTransform, "Y", 0, 30, 350, 300, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, StatusPanel, "Opacity", 1, 0, 350, 200 );
-			SimpleStory.DoubleAnimation( AnimaStory, StatusPanel.RenderTransform, "Y", 0, 30, 350, 200 );
+			SimpleStory.DoubleAnimation( AnimaStory, StatusPanel, "Opacity", 1, 0, 350, 200, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, StatusPanel.RenderTransform, "Y", 0, 30, 350, 200, Easings.EaseInCubic );
 
-			SimpleStory.DoubleAnimation( AnimaStory, IntroText, "Opacity", 1, 0, 350, 100 );
-			SimpleStory.DoubleAnimation( AnimaStory, IntroText.RenderTransform, "Y", 0, 30, 350, 100 );
+			SimpleStory.DoubleAnimation( AnimaStory, IntroText, "Opacity", 1, 0, 350, 100, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, IntroText.RenderTransform, "Y", 0, 30, 350, 100, Easings.EaseInCubic );
 
 			AnimaStory.Begin();
 			await Task.Delay( 1000 );

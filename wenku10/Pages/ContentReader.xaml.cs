@@ -133,8 +133,25 @@ namespace wenku10.Pages
 			ContentPane = null;
 		}
 
-		public void SoftOpen() { KbControls.ShowHelp(); }
-		public void SoftClose() { Dispose(); }
+		public void SoftOpen()
+		{
+			if( MainStage.Instance.IsPhone && !App.ViewControl.IsFullScreen )
+			{
+				App.ViewControl.ToggleFullScreen();
+			}
+
+			KbControls.ShowHelp();
+		}
+
+		public void SoftClose()
+		{
+			if( MainStage.Instance.IsPhone && App.ViewControl.IsFullScreen )
+			{
+				App.ViewControl.ToggleFullScreen();
+			}
+
+			Dispose();
+		}
 
 		#region Anima
 		Storyboard AnimaStory = new Storyboard();
@@ -158,8 +175,8 @@ namespace wenku10.Pages
 
 			LayoutRoot.RenderTransform = new TranslateTransform();
 
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0 );
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30, 350, 0, Easings.EaseInCubic );
 
 			AnimaStory.Begin();
 			await Task.Delay( 350 );
@@ -191,9 +208,9 @@ namespace wenku10.Pages
 			KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.Down );
 			KbControls.AddCombo( "ScrollMore", e => ContentView.ScrollMore(), VirtualKey.Shift, VirtualKey.J );
 			KbControls.AddCombo( "ScrollLess", e => ContentView.ScrollLess(), VirtualKey.Shift, VirtualKey.K );
-			KbControls.AddCombo( "ScrollBottom", e => ContentView.GoTop(), VirtualKey.Shift, VirtualKey.G );
 			KbControls.AddCombo( "ScrollCurrent", e => ContentView.GoCurrent(), VirtualKey.X );
-			KbControls.AddSeq( "ScrollTop", e => ContentView.GoBottom(), VirtualKey.G, VirtualKey.G );
+			KbControls.AddCombo( "ScrollTop", e => ContentView.GoBottom(), VirtualKey.Shift, VirtualKey.G );
+			KbControls.AddSeq( "ScrollBottom", e => ContentView.GoTop(), VirtualKey.G, VirtualKey.G );
 
 			KbControls.AddCombo( "EPStepper", KeyboardSlideEp, VirtualKey.B );
 			KbControls.AddCombo( "EPStepper", KeyboardSlideEp, VirtualKey.Space );
@@ -533,7 +550,10 @@ namespace wenku10.Pages
 			RenderMask.State = ControlState.Foreatii;
 
 			// Place a thumbnail to Reader history
-			await wenku8.History.CreateThumbnail( ContentView, CurrentBook.Id );
+			if ( CurrentBook != null )
+			{
+				await wenku8.History.CreateThumbnail( ContentView, CurrentBook.Id );
+			}
 		}
 
 		private void MainGrid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )

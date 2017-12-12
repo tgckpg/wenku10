@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI;
+using Microsoft.Graphics.Canvas.UI.Xaml;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Windows.Foundation;
+using Windows.UI;
 using Windows.UI.Xaml;
-
-using Microsoft.Graphics.Canvas;
-using Microsoft.Graphics.Canvas.UI;
-using Microsoft.Graphics.Canvas.UI.Xaml;
 
 using wenku8.Effects;
 
@@ -21,6 +20,8 @@ namespace wenku10.Scenes
 		public TextureLoader Textures { get; protected set; }
 
 		public Size StageSize { get; private set; }
+		public bool StageLoaded { get; private set; }
+		public bool DeviceExist { get; private set; }
 
 		protected List<IScene> Scenes;
 
@@ -28,6 +29,7 @@ namespace wenku10.Scenes
 		{
 			_stage = Stage;
 
+			StageSize = Size.Empty;
 			Scenes = new List<IScene>();
 
 			Textures = new TextureLoader();
@@ -36,7 +38,7 @@ namespace wenku10.Scenes
 			Stage.GameLoopStarting += Stage_GameLoopStarting;
 			Stage.GameLoopStopped += Stage_GameLoopStopped;
 
-			Stage.SizeChanged += Stage_SizeChanged;
+			Stage.Loaded += Stage_Loaded;
 			Stage.Unloaded += Stage_Unloaded;
 		}
 
@@ -47,14 +49,51 @@ namespace wenku10.Scenes
 			Textures = SharedTextures;
 		}
 
-		public void Add( IScene S )
+		public async void Add( IScene S )
 		{
+			await LoadSceneResources( S );
+
 			lock ( Scenes )
 			{
 				Scenes.Add( S );
-				if ( StageSize != null ) S.UpdateAssets( StageSize );
+				if ( CanDraw() ) S.UpdateAssets( StageSize );
+				if ( StageLoaded ) S.Enter();
 			}
 		}
+
+		private Task LoadSceneResources( IScene S )
+		{
+			if ( !DeviceExist ) return Task.Delay( 0 );
+			return ( S as ITextureScene )?.LoadTextures( _stage, Textures );
+		}
+
+		private bool CanDraw()
+		{
+			if ( !StageSize.Equals( _stage.Size ) )
+			{
+				StageSize = _stage.Size;
+			}
+
+			return !StageSize.IsZero();
+		}
+
+		public async void Insert( int Index, IScene S )
+		{
+			await LoadSceneResources( S );
+
+			lock ( Scenes )
+			{
+				Scenes.Insert( Index, S );
+				if ( CanDraw() ) S.UpdateAssets( StageSize );
+				if ( StageLoaded ) S.Enter();
+			}
+		}
+
+		public IEnumerable<T> GetScenes<T>() where T : IScene
+		{
+			return Scenes.Where( x => x is T ).Cast<T>();
+		}
+
 		public async Task Remove( Type SceneType )
 		{
 			IScene[] RmScenes;
@@ -68,7 +107,11 @@ namespace wenku10.Scenes
 			foreach ( IScene S in RmScenes )
 			{
 				if ( S is ISceneExitable ) await ( S as ISceneExitable ).Exit();
-				lock ( Scenes ) Scenes.Remove( S );
+				lock ( Scenes )
+				{
+					Scenes.Remove( S );
+					S.Dispose();
+				}
 			}
 		}
 
@@ -102,21 +145,49 @@ namespace wenku10.Scenes
 			_stage.Draw += Stage_Draw;
 		}
 
+		private void Stage_Loaded( object sender, RoutedEventArgs e )
+		{
+			StageLoaded = true;
+			lock ( Scenes )
+			{
+				Scenes.ForEach( x => x.Enter() );
+			}
+
+			_stage.SizeChanged += Stage_SizeChanged;
+		}
+
 		virtual protected void Stage_Unloaded( object sender, RoutedEventArgs e )
 		{
+			StageLoaded = false;
 			_stage.Draw -= Stage_Draw;
 			_stage.SizeChanged -= Stage_SizeChanged;
 		}
 
 		virtual protected void Stage_CreateResources( CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args )
 		{
+			DeviceExist = true;
 			args.TrackAsyncAction( LoadTextures( sender ).AsAsyncAction() );
 		}
 
 		virtual protected async Task LoadTextures( CanvasAnimatedControl CC )
 		{
-			await Textures.Load( CC, Texture.Glitter, "Assets/glitter.dds" );
-			await Textures.Load( CC, Texture.Circle, "Assets/circle.dds" );
+			IScene[] TxScenes = Scenes.Where( x => x is ITextureScene ).ToArray();
+			foreach ( ITextureScene S in TxScenes.Cast<ITextureScene>() )
+			{
+				await S.LoadTextures( CC, Textures );
+			}
+
+			if ( CanDraw() )
+			{
+				lock ( Scenes )
+				{
+					foreach ( IScene S in TxScenes )
+					{
+						S.UpdateAssets( StageSize );
+					}
+				}
+			}
+
 		}
 
 		virtual protected void Stage_SizeChanged( object sender, SizeChangedEventArgs e )
@@ -131,7 +202,7 @@ namespace wenku10.Scenes
 		virtual protected void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
 		{
 			using ( CanvasDrawingSession ds = args.DrawingSession )
-			using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch() )
+			using ( CanvasSpriteBatch SBatch = ds.CreateSpriteBatch( CanvasSpriteSortMode.Bitmap ) )
 			{
 				lock ( Scenes )
 				{

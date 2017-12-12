@@ -72,7 +72,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Background="{Binding AnchorColor}" />
+                        <Rectangle Fill="{Binding AnchorColor}" />
                         <p:VerticalStack
                             Grid.Row="1"
                             Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"

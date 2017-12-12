@@ -19,11 +19,13 @@ using wenku8.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
-	sealed class FireFlies : PFScene, IScene
+	sealed class FireFlies : PFScene, ITextureScene
 	{
 		private Vector4 ThemeTint;
 
 		private Wind ScrollWind = new Wind();
+
+		private int tCircle;
 
 		public FireFlies()
 		{
@@ -40,6 +42,11 @@ namespace wenku10.Scenes
 		public void WindBlow( float Strength )
 		{
 			ScrollWind.Strength = Vector2.Clamp( Vector2.One * Strength, -3 * Vector2.One, 3 * Vector2.One ).X;
+		}
+
+		public async Task LoadTextures( CanvasAnimatedControl Canvas, TextureLoader Textures )
+		{
+			tCircle = await Textures.Load( Canvas, Texture.Circle, "Assets/circle.dds" );
 		}
 
 		public void UpdateAssets( Size s )
@@ -62,7 +69,7 @@ namespace wenku10.Scenes
 					, otMin = 5
 					, otMax = 10
 					, spf = 60
-					, Texture = Texture.Circle
+					, Texture = tCircle
 					, SpawnEx = ( P ) =>
 					{
 						P.Tint.M11 = ThemeTint.X;

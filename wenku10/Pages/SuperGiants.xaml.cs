@@ -19,6 +19,7 @@ using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.Services.Store.Engagement;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
@@ -29,15 +30,15 @@ using wenku8.Model.Interfaces;
 using wenku8.Model.ListItem;
 using wenku8.Model.Loaders;
 using wenku8.Model.Pages;
+using wenku8.Model.Topics;
 using wenku8.Resources;
 using wenku8.Settings;
-using wenku8.Storage;
 
 namespace wenku10.Pages
 {
 	using Scenes;
 
-	sealed partial class SuperGiants : Page, IAnimaPage, ICmdControls
+	sealed partial class SuperGiants : Page, IAnimaPage, ICmdControls, IDisposable
 	{
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
@@ -53,19 +54,12 @@ namespace wenku10.Pages
 		// Fireflies scroll effect
 		private float PrevOffset = 0;
 
-		List<Grid> StarBoxes;
-		List<FireFlies> FireFliesScenes;
-		List<CanvasStage> Stages;
-		List<FloatyButton> Stars;
-		List<CanvasAnimatedControl> Canvases;
-
 		Stack<Particle> PStack;
+		HyperBannerItem[] HBItems;
 
 		AppBarButton FeedbackBtn;
 		AppBarButton NewsBtn;
 		Storyboard NewsStory;
-
-		int NumStars = 0;
 
 		ILoader<ActiveItem> Loader;
 
@@ -77,22 +71,14 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		private void FloatyButton_Loaded( object sender, RoutedEventArgs e )
-		{
-			FloatyButton Floaty = ( ( FloatyButton ) sender );
-
-			Floaty.BindTimer( NTimer.Instance );
-			Floaty.TextSpeed = NTimer.RandDouble( -2, 2 );
-		}
-
 		private void SetTemplate()
 		{
 			InitAppBar();
-			Canvases = new List<CanvasAnimatedControl>() { Stage1, Stage2, Stage3, Stage4 };
-			StarBoxes = new List<Grid>() { StarBox1H, StarBox2H, StarBox3H, StarBox4H };
-			Stars = new List<FloatyButton>() { Star1, Star2, Star3, Star4 };
 
-			NumStars = Canvases.Count();
+			LayoutRoot.RenderTransform = new TranslateTransform();
+			LayoutRoot.ViewChanged += LayoutRoot_ViewChanged;
+
+			CanvasListView.RegisterPropertyChangedCallback( TagProperty, UpdateCanvas );
 
 			NTimer.Instance.Start();
 
@@ -102,30 +88,6 @@ namespace wenku10.Pages
 
 			for ( int i = 0; i < l; i++ )
 				PStack.Push( new Particle() );
-
-			Stages = new List<CanvasStage>( NumStars );
-			FireFliesScenes = new List<FireFlies>( NumStars );
-
-			for ( int i = 0; i < NumStars; i++ )
-			{
-				Stars[ i ].Visibility = Visibility.Collapsed;
-				StarBoxes[ i ].RenderTransform = new TranslateTransform();
-
-				CanvasStage CS = new CanvasStage( Canvases[ i ] );
-
-				TheOrb LoadingTrails = new TheOrb( PStack, i % 2 == 0 );
-				FireFlies Scene = new FireFlies( PStack );
-
-				CS.Add( Scene );
-				CS.Add( LoadingTrails );
-
-				FireFliesScenes.Add( Scene );
-				Stages.Add( CS );
-
-				Stars[ i ].StateComplete += SuperGiants_StateComplete;
-			}
-
-			LayoutRoot.ViewChanged += LayoutRoot_ViewChanged;
 
 			LoadContents();
 		}
@@ -156,20 +118,10 @@ namespace wenku10.Pages
 			MessageBus.SendUI( typeof( wenku8.System.ActionCenter ), AppKeys.PM_CHECK_TILES );
 		}
 
-		private async void SuperGiants_StateComplete( object sender, FloatyState State )
-		{
-			if ( State == FloatyState.EXPLODE )
-			{
-				( ( FloatyButton ) sender ).Visibility = Visibility.Collapsed;
-				await Task.Delay( 2000 );
-				( ( FloatyButton ) sender ).Visibility = Visibility.Visible;
-			}
-		}
-
 		private void LayoutRoot_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )
 		{
 			float CurrOffset = ( float ) LayoutRoot.VerticalOffset;
-			FireFliesScenes?.ForEach( x => x.WindBlow( CurrOffset - PrevOffset ) );
+			HBItems.ExecEach( x => x.FireFliesScene.WindBlow( CurrOffset - PrevOffset ) );
 			PrevOffset = CurrOffset;
 		}
 
@@ -177,109 +129,91 @@ namespace wenku10.Pages
 		{
 			IList<ActiveItem> Items = await Loader.NextPage( 4 );
 
+			bool NarrowScreen = "V".Equals( CanvasListView.Tag );
 			int i = 0;
-			foreach ( ActiveItem Item in Items )
+
+			HBItems = Items.Remap( x =>
 			{
-				var j = Stages[ i ].Remove( typeof( TheOrb ) );
+				HyperBannerItem Item = new HyperBannerItem( x, PStack );
+				Item.Index = i++;
+				Item.NarrowScr = NarrowScreen;
+				Item.SetBanner( LayoutRoot );
+				return Item;
+			} );
 
-				Stars[ i ].Visibility = Visibility.Visible;
-				Stars[ i ].PointerReleased += SuperGiants_PointerReleased;
-
-				StarBoxes[ i ].DataContext = Item;
-				i++;
-			}
+			CanvasListView.ItemsSource = HBItems;
 		}
 
-		private void SuperGiants_PointerReleased( object sender, PointerRoutedEventArgs e )
+		public void Dispose()
+		{
+			HBItems?.ExecEach( x => x.Dispose() );
+		}
+
+		private HyperBannerItem GridContext( object sender )
+		{
+			Grid Banner = ( Grid ) sender;
+			return ( HyperBannerItem ) Banner.DataContext;
+		}
+
+		private void SuperGiants_Hover( object sender, PointerRoutedEventArgs e )
+		{
+			GridContext( sender ).Banner?.Hover();
+		}
+
+		private void SuperGiants_PointerPressed( object sender, PointerRoutedEventArgs e )
+		{
+			GridContext( sender ).Banner?.Focus();
+		}
+
+		private void SuperGiants_PointerExited( object sender, PointerRoutedEventArgs e )
+		{
+			GridContext( sender ).Banner?.Blur();
+		}
+
+		private void UpdateCanvas( DependencyObject sender, DependencyProperty dp )
+		{
+			bool NarrowScreen = "V".Equals( CanvasListView.Tag );
+			HBItems.ExecEach( x => x.NarrowScr = NarrowScreen );
+		}
+
+		private void SuperGiants_Tapped( object sender, TappedRoutedEventArgs e )
 		{
 			ControlFrame.Instance.StopReacting();
+			HyperBannerItem Item = GridContext( sender );
+			Item.Banner?.Click();
 
-			FloatyButton Btn = ( FloatyButton ) sender;
-			int i = Stars.IndexOf( Btn );
-			Stages[ i ].Add( new TheOrb( PStack, i % 2 == 0 ) );
-
-			NameValue<Func<Page>> Handler = PageProcessor.GetPageHandler( StarBoxes[ i ].DataContext );
+			NameValue<Func<Page>> Handler = PageProcessor.GetPageHandler( Item.Source );
 			ControlFrame.Instance.NavigateTo( Handler.Name, Handler.Value );
 		}
 
 		#region Anima
-		Storyboard StarBoxStory = new Storyboard();
+		Storyboard AnimaStory = new Storyboard();
 
 		public async Task EnterAnima()
 		{
-			StarBoxDescend();
-			StarsDescend();
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
 
-			await Task.Delay( 1000 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1 );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 30, 0 );
+
+			AnimaStory.Begin();
+			await Task.Delay( 850 );
 		}
 
 		public async Task ExitAnima()
 		{
-			StarsExplode();
-			StarBoxVanish();
+			Type Orb = typeof( TheOrb );
+			HBItems.ExecEach( x => { var j = x.Stage.Remove( Orb ); } );
 
-			foreach( CanvasStage Stg in Stages )
-			{
-				var j = Stg.Remove( typeof( TheOrb ) );
-			}
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
 
-			await Task.Delay( 1000 );
-		}
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 500, Easings.EaseInCubic );
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot.RenderTransform, "Y", 0, 30, 350, 500, Easings.EaseInCubic );
 
-		private void StarBoxVanish()
-		{
-			StarBoxStory.Stop();
-			StarBoxStory.Children.Clear();
-
-			int i = 0;
-			foreach( Grid StarBox in StarBoxes.Reverse<Grid>() )
-			{
-				int Delay = i * 100;
-
-				SimpleStory.DoubleAnimation( StarBoxStory, StarBox, "Opacity", 1, 0, 350, Delay );
-				SimpleStory.DoubleAnimation( StarBoxStory, StarBox.RenderTransform, "Y", 0, 30, 350, Delay );
-				SimpleStory.ObjectAnimation( StarBoxStory, StarBox, "Visibility", Visibility.Visible, Visibility.Collapsed, 0, 350 + Delay );
-				i++;
-			}
-
-			StarBoxStory.Begin();
-		}
-
-		private void StarBoxDescend()
-		{
-			StarBoxStory.Stop();
-			StarBoxStory.Children.Clear();
-
-			int i = 0;
-			foreach( Grid StarBox in StarBoxes )
-			{
-				int Delay = i * 100;
-
-				SimpleStory.DoubleAnimation( StarBoxStory, StarBox, "Opacity", 0, 1, 350, Delay );
-				SimpleStory.DoubleAnimation( StarBoxStory, StarBox.RenderTransform, "Y", 30, 0, 350, Delay );
-				SimpleStory.ObjectAnimation( StarBoxStory, StarBox, "Visibility", Visibility.Collapsed, Visibility.Visible, 0, Delay );
-				i++;
-			}
-
-			StarBoxStory.Begin();
-		}
-
-		private async void StarsExplode()
-		{
-			for ( int i = 0; i < NumStars; i++ )
-			{
-				var j = Stars[ i ].Vanquish();
-				await Task.Delay( 100 );
-			}
-		}
-
-		private async void StarsDescend()
-		{
-			for( int i = 0; i < NumStars; i ++ )
-			{
-				var j = Stars[ i ].Descend();
-				await Task.Delay( 100 );
-			}
+			AnimaStory.Begin();
+			await Task.Delay( 850 );
 		}
 		#endregion
 
@@ -305,6 +239,5 @@ namespace wenku10.Pages
 			Dialogs.Announcements NewsDialog = new Dialogs.Announcements();
 			await Popups.ShowDialog( NewsDialog );
 		}
-
 	}
 }

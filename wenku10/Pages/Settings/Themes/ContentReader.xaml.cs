@@ -425,8 +425,8 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void ContentGrid_Loaded( object sender, RoutedEventArgs e )
 		{
-			VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 1 );
-			HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+			VScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+			HScrollBar = ContentGrid.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 3 );
 			UpdateScrollBar();
 		}
 
