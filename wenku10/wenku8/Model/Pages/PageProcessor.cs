@@ -176,5 +176,28 @@ namespace wenku8.Model.Pages
 			}
 		}
 
+		private static string PrepareReader( BookItem Book )
+		{
+			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER_H );
+			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER_V );
+			// TODO: Guess the Orientation
+
+			return PageId.CONTENT_READER_H;
+		}
+
+		public static void NavigateToReader( BookItem Book, Chapter C )
+		{
+			string PageName = PrepareReader( Book );
+
+			if ( PageName == PageId.CONTENT_READER_H )
+			{
+				ControlFrame.Instance.NavigateTo( PageName, () => new ContentReaderHorz( Book, C ) );
+			}
+			else
+			{
+				ControlFrame.Instance.NavigateTo( PageName, () => new ContentReaderVert( Book, C ) );
+			}
+		}
+
 	}
 }

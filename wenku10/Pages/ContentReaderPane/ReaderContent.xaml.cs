@@ -37,7 +37,7 @@ namespace wenku10.Pages.ContentReaderPane
 		public ReaderView Reader { get; private set; }
 		public bool UserStartReading = false;
 
-		private ContentReader Container;
+		private ContentReaderBase Container;
 		private BookItem CurrentBook { get { return Container.CurrentBook; } }
 		private Chapter CurrentChapter { get { return Container.CurrentChapter; } }
 		private Paragraph SelectedParagraph;
@@ -45,15 +45,19 @@ namespace wenku10.Pages.ContentReaderPane
 		private volatile bool HoldOneMore = false;
 		private volatile int UndoingJump = 0;
 
+		private bool IsHorz = false;
+
 		private AHQueue AnchorHistory;
 
 		ScrollBar VScrollBar;
 		ScrollBar HScrollBar;
 
-		public ReaderContent( ContentReader Container, int Anchor )
+		public ReaderContent( ContentReaderBase Container, int Anchor )
 		{
 			this.InitializeComponent();
 			this.Container = Container;
+			IsHorz = ( Container is ContentReaderHorz );
+
 			SetTemplate( Anchor );
 		}
 
@@ -70,13 +74,13 @@ namespace wenku10.Pages.ContentReaderPane
 				{
 					MasterGrid.DataContext = null;
 				} );
-
 			}
 			catch ( Exception ) { }
 		}
 
 		internal void SetTemplate( int Anchor )
 		{
+
 			if ( Reader != null )
 				Reader.PropertyChanged -= ScrollToParagraph;
 
@@ -86,7 +90,7 @@ namespace wenku10.Pages.ContentReaderPane
 			AnchorHistory = new AHQueue( 20 );
 			HCount.DataContext = AnchorHistory;
 
-			ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ Reader.Settings.IsHorizontal ? "HPanel" : "VPanel" ];
+			ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ IsHorz ? "HPanel" : "VPanel" ];
 
 			MasterGrid.DataContext = Reader;
 			Reader.PropertyChanged += ScrollToParagraph;
@@ -130,7 +134,7 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
 			double d = 50;
-			if ( Reader.Settings.IsHorizontal )
+			if ( IsHorz )
 			{
 				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset + d, null, null );
@@ -146,7 +150,7 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
 			double d = 50;
-			if ( Reader.Settings.IsHorizontal )
+			if ( IsHorz )
 			{
 				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset - d, null, null );
@@ -253,10 +257,11 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( SelectedParagraph == null ) return;
 			FlyoutBase.ShowAttachedFlyout( ContentGrid );
 
-			TextBlock tb = new TextBlock();
-			tb.TextWrapping = TextWrapping.Wrap;
-			tb.Text = SelectedParagraph.Text;
-			ContentFlyout.Content = tb;
+			ContentFlyout.Content = new TextBlock()
+			{
+				TextWrapping = TextWrapping.Wrap,
+				Text = SelectedParagraph.Text
+			};
 		}
 
 		internal void ContextCopyClicked( object sender, RoutedEventArgs e )
@@ -301,7 +306,7 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( Reader.UsePageClick )
 			{
 				Point P = e.GetPosition( MasterGrid );
-				if ( Reader.Settings.IsHorizontal )
+				if ( IsHorz )
 				{
 					double HW = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenWidth;
 					if ( Reader.Settings.IsRightToLeft )
@@ -430,37 +435,37 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( 100 < ZoomTrigger )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReader.ManiState.DOWN );
+				CRSlide( ContentReaderVert.ManiState.DOWN );
 			}
 			else if ( ZoomTrigger < -100 )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReader.ManiState.UP );
+				CRSlide( ContentReaderVert.ManiState.UP );
 			}
 			else if ( ZoomTrigger == 0 )
 			{
-				CRSlide( ContentReader.ManiState.NORMAL );
+				CRSlide( ContentReaderVert.ManiState.NORMAL );
 			}
 		}
 
-		private void CRSlide( ContentReader.ManiState State )
+		private void CRSlide( ContentReaderVert.ManiState State )
 		{
 			if ( State == Container.CurrManiState ) return;
 
 			switch ( State )
 			{
-				case ContentReader.ManiState.NORMAL:
+				case ContentReaderVert.ManiState.NORMAL:
 					Container.ReaderSlideBack();
 					break;
-				case ContentReader.ManiState.UP:
-					if ( Container.CurrManiState == ContentReader.ManiState.DOWN )
-						goto case ContentReader.ManiState.NORMAL;
+				case ContentReaderVert.ManiState.UP:
+					if ( Container.CurrManiState == ContentReaderVert.ManiState.DOWN )
+						goto case ContentReaderVert.ManiState.NORMAL;
 
 					Container.ReaderSlideUp();
 					break;
-				case ContentReader.ManiState.DOWN:
-					if ( Container.CurrManiState == ContentReader.ManiState.UP )
-						goto case ContentReader.ManiState.NORMAL;
+				case ContentReaderVert.ManiState.DOWN:
+					if ( Container.CurrManiState == ContentReaderVert.ManiState.UP )
+						goto case ContentReaderVert.ManiState.NORMAL;
 
 					Container.ReaderSlideDown();
 					break;

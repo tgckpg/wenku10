@@ -28,7 +28,7 @@ namespace wenku10.Pages.ContentReaderPane
 	{
 		public static readonly string ID = typeof( TableOfContents ).Name;
 
-		private ContentReader Reader;
+		private ContentReaderBase Reader;
 
 		private TOCPane TOC;
 
@@ -37,7 +37,7 @@ namespace wenku10.Pages.ContentReaderPane
 			InitializeComponent();
 		}
 
-		public TableOfContents( ContentReader MainReader )
+		public TableOfContents( ContentReaderBase MainReader )
 			:this()
 		{
 			Reader = MainReader;

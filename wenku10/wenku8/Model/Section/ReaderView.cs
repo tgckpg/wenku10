@@ -66,36 +66,9 @@ namespace wenku8.Model.Section
 			get { return GetAnchors(); }
 		}
 
-		public FlowDirection FlowDir
-		{
-			get
-			{
-				return Settings.IsRightToLeft
-					? FlowDirection.RightToLeft
-					: FlowDirection.LeftToRight
-					;
-			}
-		}
-
-		public Thickness Margin
-		{
-			get
-			{
-				return Settings.IsHorizontal
-					? new Thickness( 0, 10, 0, 10 )
-					: new Thickness( 10, 0, 10, 0 );
-			}
-		}
-
-		public string AlignMode
-		{
-			get
-			{
-				return Settings.IsHorizontal
-					? "ContentReaderListViewHorizontal"
-					: "ContentReaderListViewVertical";
-			}
-		}
+		public FlowDirection FlowDir { get; private set; }
+		public Thickness Margin { get; private set; }
+		public string AlignMode { get; private set; }
 
 		public Action OnComplete { get; private set; }
 
@@ -106,6 +79,17 @@ namespace wenku8.Model.Section
 		private Paragraph Selected;
 
 		private int AutoAnchorOvd = -1;
+
+		/// <summary>
+		/// For Use in Settings
+		/// </summary>
+		public ReaderView()
+		{
+			Settings = new Settings.Layout.ContentReader();
+
+			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+			InitParams();
+		}
 
 		public ReaderView( BookItem B, Chapter C )
 			:this()
@@ -128,25 +112,35 @@ namespace wenku8.Model.Section
 			catch ( Exception ) { }
 		}
 
-		/// <summary>
-		/// For Use in Settings
-		/// </summary>
-		public ReaderView()
-		{
-			Settings = new Settings.Layout.ContentReader();
-
-			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
-			InitParams();
-		}
-
 		~ReaderView() { Dispose(); }
 
 		private void InitParams()
 		{
-			TemplateSelector = new Converters.ParaTemplateSelector();
-			TemplateSelector.IsHorizontal = Settings.IsHorizontal;
+			bool IsHorz = true;
+			if ( IsHorz )
+			{
+				AlignMode = "ContentReaderListViewHorizontal";
+				Margin = new Thickness( 0, 10, 0, 10 );
+			}
+			else
+			{
+				AlignMode = "ContentReaderListViewVertical";
+				Margin = new Thickness( 10, 0, 10, 0 );
+			}
 
-			Paragraph.SetHorizontal( Settings.IsHorizontal );
+			TemplateSelector = new Converters.ParaTemplateSelector();
+			TemplateSelector.IsHorizontal = IsHorz;
+			Paragraph.SetHorizontal( IsHorz );
+
+			bool IsRTL = true;
+			if ( IsRTL )
+			{
+				FlowDir = FlowDirection.RightToLeft;
+			}
+			else
+			{
+				FlowDir = FlowDirection.LeftToRight;
+			}
 		}
 
 		public void Load( bool Cache = true )

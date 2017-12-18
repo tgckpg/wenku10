@@ -131,6 +131,10 @@
     <Compile Include="Pages\Dialogs\ContentReader\ExitOptions.xaml.cs">
       <DependentUpon>ExitOptions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ContentReaderHorz.xaml.cs">
+      <DependentUpon>ContentReaderHorz.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderBase.cs" />
     <Compile Include="Pages\Dialogs\KeyboardCtrlHelp.xaml.cs">
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
@@ -316,11 +320,8 @@
     <Compile Include="Pages\WUserInfo.xaml.cs">
       <DependentUpon>WUserInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ContentReader.xaml.cs">
-      <DependentUpon>ContentReader.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ContentReader-VESwipe.xaml.cs">
-      <DependentUpon>ContentReader.xaml</DependentUpon>
+    <Compile Include="Pages\ContentReaderVert.xaml.cs">
+      <DependentUpon>ContentReaderVert.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
       <DependentUpon>BookmarkList.xaml</DependentUpon>
@@ -429,6 +430,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\ContentReaderHorz.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Dialogs\KeyboardCtrlHelp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -473,7 +478,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ContentReader.xaml">
+    <Page Include="Pages\ContentReaderVert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

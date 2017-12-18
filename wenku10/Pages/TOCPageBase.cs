@@ -17,6 +17,7 @@ using wenku8.CompositeElement;
 using wenku8.Model.Book;
 using wenku8.Model.Interfaces;
 using wenku8.Model.Loaders;
+using wenku8.Model.Pages;
 using wenku8.Model.Section;
 using wenku8.Storage;
 using wenku8.Resources;
@@ -107,8 +108,7 @@ namespace wenku10.Pages
 
 		protected void ChapterSelected( object sender, ItemClickEventArgs e )
 		{
-			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-			ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, ( Chapter ) e.ClickedItem ) );
+			PageProcessor.NavigateToReader( ThisBook, ( Chapter ) e.ClickedItem );
 		}
 
 		protected async Task OneDriveRsync()
@@ -122,8 +122,7 @@ namespace wenku10.Pages
 		protected void JumpToBookmark( object sender, RoutedEventArgs e )
 		{
 			if ( TOCData == null ) return;
-			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-			ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, TOCData.AutoAnchor ) );
+			PageProcessor.NavigateToReader( ThisBook, TOCData.AutoAnchor );
 		}
 
 		protected void TOCShowVolumeAction( object sender, RightTappedRoutedEventArgs e )

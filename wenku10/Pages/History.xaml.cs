@@ -176,8 +176,7 @@ namespace wenku10.Pages
 				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( Book );
 				if ( TryAutoAnchor )
 				{
-					ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-					ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( Book, TryAutoAnchor.Out ) );
+					PageProcessor.NavigateToReader( Book, TryAutoAnchor.Out );
 					goto LoadComplete;
 				}
 				else
