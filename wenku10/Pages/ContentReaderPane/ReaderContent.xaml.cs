@@ -45,6 +45,8 @@ namespace wenku10.Pages.ContentReaderPane
 		private volatile bool HoldOneMore = false;
 		private volatile int UndoingJump = 0;
 
+		private bool IsHorz = false;
+
 		private AHQueue AnchorHistory;
 
 		ScrollBar VScrollBar;
@@ -54,6 +56,8 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			this.InitializeComponent();
 			this.Container = Container;
+			IsHorz = ( Container is ContentReaderHorz );
+
 			SetTemplate( Anchor );
 		}
 
@@ -76,6 +80,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void SetTemplate( int Anchor )
 		{
+
 			if ( Reader != null )
 				Reader.PropertyChanged -= ScrollToParagraph;
 
@@ -85,7 +90,7 @@ namespace wenku10.Pages.ContentReaderPane
 			AnchorHistory = new AHQueue( 20 );
 			HCount.DataContext = AnchorHistory;
 
-			ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ Reader.Settings.IsHorizontal ? "HPanel" : "VPanel" ];
+			ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ IsHorz ? "HPanel" : "VPanel" ];
 
 			MasterGrid.DataContext = Reader;
 			Reader.PropertyChanged += ScrollToParagraph;
@@ -129,7 +134,7 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
 			double d = 50;
-			if ( Reader.Settings.IsHorizontal )
+			if ( IsHorz )
 			{
 				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset + d, null, null );
@@ -145,7 +150,7 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
 			double d = 50;
-			if ( Reader.Settings.IsHorizontal )
+			if ( IsHorz )
 			{
 				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset - d, null, null );
@@ -301,7 +306,7 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( Reader.UsePageClick )
 			{
 				Point P = e.GetPosition( MasterGrid );
-				if ( Reader.Settings.IsHorizontal )
+				if ( IsHorz )
 				{
 					double HW = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenWidth;
 					if ( Reader.Settings.IsRightToLeft )
