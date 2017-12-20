@@ -18,9 +18,9 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.DataModel;
 
-using wenku8.Ext;
-using wenku8.Model.Loaders;
-using wenku8.Model.Comments;
+using GR.Ext;
+using GR.Model.Loaders;
+using GR.Model.Comments;
 
 namespace wenku10.Pages.BookInfoControls
 {

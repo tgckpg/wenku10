@@ -22,9 +22,9 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 using Net.Astropenguin.Helpers;
 
-using wenku8.Resources;
-using wenku8.Storage;
-using wenku8.Settings;
+using GR.Resources;
+using GR.Storage;
+using GR.Settings;
 
 namespace wenku10
 {
@@ -35,9 +35,9 @@ namespace wenku10
 	{
 		public static readonly string ID = typeof( App ).Name;
 
-		internal static global::wenku8.AdvDM.WRuntimeTransfer RuntimeTransfer;
+		internal static global::GR.AdvDM.WRuntimeTransfer RuntimeTransfer;
 
-		internal static global::wenku8.System.ViewControl ViewControl;
+		internal static global::GR.GSystem.ViewControl ViewControl;
 		internal static KeyboardControl KeyboardControl;
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
@@ -76,7 +76,7 @@ namespace wenku10
 			// NetLog
 			Worker.Initialize();
 
-			new global::wenku8.System.Bootstrap().Start();
+			new global::GR.GSystem.Bootstrap().Start();
 		}
 
 		/// <summary>

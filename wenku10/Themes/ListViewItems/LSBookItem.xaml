@@ -3,9 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:xi="using:wenku8.ThemeIcons"
-    xmlns:c="using:wenku8.CompositeElement"
-    xmlns:e="using:wenku8.Effects">
+    xmlns:xi="using:GR.ThemeIcons"
+    xmlns:c="using:GR.CompositeElement"
+    xmlns:e="using:GR.Effects">
 
     <Style TargetType="c:LSBookItem">
         <Setter Property="Template">

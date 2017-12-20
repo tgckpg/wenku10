@@ -12,15 +12,15 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Config;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.Section;
-using wenku8.Storage;
-using wenku8.Resources;
+using GR.Config;
+using GR.CompositeElement;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Model.Section;
+using GR.Storage;
+using GR.Resources;
 
 namespace wenku10.Pages
 {
@@ -40,7 +40,7 @@ namespace wenku10.Pages
 		protected AppBarButton JumpMarkBtn;
 
 		protected TOCSection TOCData;
-		protected global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
+		protected global::GR.Settings.Layout.BookInfoView LayoutSettings;
 
 		protected BookItem ThisBook;
 		protected Volume RightClickedVolume;
@@ -56,7 +56,7 @@ namespace wenku10.Pages
 
 		virtual protected void SetTemplate()
 		{
-			LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+			LayoutSettings = new global::GR.Settings.Layout.BookInfoView();
 			InitAppBar();
 		}
 

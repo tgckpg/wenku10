@@ -10,11 +10,11 @@ using Windows.UI.Xaml;
 
 using Microsoft.Graphics.Canvas;
 
-using wenku8.Effects;
-using wenku8.Effects.P2DFlow;
-using wenku8.Effects.P2DFlow.ForceFields;
-using wenku8.Effects.P2DFlow.Reapers;
-using wenku8.Effects.P2DFlow.Spawners;
+using GR.Effects;
+using GR.Effects.P2DFlow;
+using GR.Effects.P2DFlow.ForceFields;
+using GR.Effects.P2DFlow.Reapers;
+using GR.Effects.P2DFlow.Spawners;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
 namespace wenku10.Scenes
@@ -41,7 +41,7 @@ namespace wenku10.Scenes
 		}
 		private void SetColor()
 		{
-			Color MColor = wenku8.Resources.LayoutSettings.MajorColor;
+			Color MColor = GR.Resources.LayoutSettings.MajorColor;
 
 			OrbTint.X = MColor.R / 255f;
 			OrbTint.Y = MColor.G / 255f;

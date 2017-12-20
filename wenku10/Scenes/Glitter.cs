@@ -12,12 +12,12 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Effects.P2DFlow;
-using wenku8.Effects.P2DFlow.ForceFields;
-using wenku8.Effects.P2DFlow.Reapers;
-using wenku8.Effects.P2DFlow.Spawners;
+using GR.Config;
+using GR.Effects;
+using GR.Effects.P2DFlow;
+using GR.Effects.P2DFlow.ForceFields;
+using GR.Effects.P2DFlow.Reapers;
+using GR.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {

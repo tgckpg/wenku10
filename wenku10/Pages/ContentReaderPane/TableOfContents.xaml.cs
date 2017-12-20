@@ -15,9 +15,9 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Logging;
 
-using wenku8.Model.Book;
-using wenku8.Model.ListItem;
-using wenku8.Model.Section;
+using GR.Model.Book;
+using GR.Model.ListItem;
+using GR.Model.Section;
 
 namespace wenku10.Pages.ContentReaderPane
 {

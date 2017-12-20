@@ -10,13 +10,13 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.AdvDM;
-using wenku8.Ext;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Model.REST;
-using wenku8.Model.Section.SharersHub;
-using wenku8.System;
+using GR.AdvDM;
+using GR.Ext;
+using GR.Resources;
+using GR.Settings;
+using GR.Model.REST;
+using GR.Model.Section.SharersHub;
+using GR.GSystem;
 
 namespace wenku10.SHHub
 {

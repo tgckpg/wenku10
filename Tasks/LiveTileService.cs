@@ -8,8 +8,8 @@ using Windows.UI.Notifications;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.Book;
-using wenku8.Resources;
+using GR.Model.Book;
+using GR.Resources;
 
 namespace Tasks
 {

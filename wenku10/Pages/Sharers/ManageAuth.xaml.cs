@@ -21,19 +21,19 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Ext;
-using wenku8.Model.Interfaces;
-using wenku8.Model.Loaders;
-using wenku8.Model.ListItem;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.Section.SharersHub;
+using GR.CompositeElement;
+using GR.Ext;
+using GR.Model.Interfaces;
+using GR.Model.Loaders;
+using GR.Model.ListItem;
+using GR.Model.ListItem.Sharers;
+using GR.Model.Section.SharersHub;
 
-using CryptAES = wenku8.System.CryptAES;
-using RSAManager = wenku8.System.RSAManager;
-using AESManager = wenku8.System.AESManager;
-using TokenManager = wenku8.System.TokenManager;
-using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
+using CryptAES = GR.GSystem.CryptAES;
+using RSAManager = GR.GSystem.RSAManager;
+using AESManager = GR.GSystem.AESManager;
+using TokenManager = GR.GSystem.TokenManager;
+using SHTarget = GR.Model.REST.SharersRequest.SHTarget;
 
 namespace wenku10.Pages.Sharers
 {
@@ -252,7 +252,7 @@ namespace wenku10.Pages.Sharers
 			}
 		}
 
-		private void ReloadAuths<T>( ListView LView, SHTarget Target, global::wenku8.System.AuthManager<T> Mgr )
+		private void ReloadAuths<T>( ListView LView, SHTarget Target, global::GR.GSystem.AuthManager<T> Mgr )
 		{
 			LView.ItemsSource = Mgr.AuthList.Remap( x =>
 			{
@@ -303,7 +303,7 @@ namespace wenku10.Pages.Sharers
 			{
 				using ( Stream s = await ISF.OpenStreamForWriteAsync() )
 				{
-					await global::wenku8.Resources.Shared.Storage.GetStream(
+					await global::GR.Resources.Shared.Storage.GetStream(
 						Tag == "Keys"
 							? AESMgr.SettingsFile
 							: TokMgr.SettingsFile

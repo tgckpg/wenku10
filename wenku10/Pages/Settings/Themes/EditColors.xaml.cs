@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 
-using wenku8.Settings.Theme;
+using GR.Settings.Theme;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -58,7 +58,7 @@ namespace wenku10.Pages.Settings.Themes
 
 			CurrentSet.SetColor( C );
 
-			global::wenku8.System.ThemeManager Mgr = new global::wenku8.System.ThemeManager();
+			global::GR.GSystem.ThemeManager Mgr = new global::GR.GSystem.ThemeManager();
 			Mgr.Remove( CurrentSet.Name );
 			Mgr.Save( CurrentSet );
 		}

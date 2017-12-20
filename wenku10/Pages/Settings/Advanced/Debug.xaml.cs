@@ -19,11 +19,11 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.System;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Resources;
+using GR.Settings;
+using GR.GSystem;
 
 namespace wenku10.Pages.Settings.Advanced
 {

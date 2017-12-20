@@ -15,8 +15,8 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Config;
-using wenku8.Resources;
+using GR.Config;
+using GR.Resources;
 
 namespace wenku10.Pages.Settings.Data
 {
@@ -45,7 +45,7 @@ namespace wenku10.Pages.Settings.Data
 		{
 			StringResources stx = new StringResources( "Settings" );
 			illus_Size.Text = stx.Text( "Data_CacheUsed" )
-				+ ": " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.ImageSize() );
+				+ ": " + global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.ImageSize() );
 		}
 
 		void SaveLocation_Loaded( object sender, RoutedEventArgs e )

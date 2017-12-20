@@ -16,9 +16,9 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Logging;
 
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Text;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Text;
 
 namespace wenku10.Pages
 {

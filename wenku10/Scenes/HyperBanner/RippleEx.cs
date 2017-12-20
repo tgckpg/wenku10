@@ -16,8 +16,8 @@ using Microsoft.Graphics.Canvas.Text;
 
 using Net.Astropenguin.Linq;
 
-using wenku8.Effects;
-using wenku8.Model.ListItem;
+using GR.Effects;
+using GR.Model.ListItem;
 
 namespace wenku10.Scenes
 {

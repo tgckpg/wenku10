@@ -23,16 +23,16 @@ using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Effects.P2DFlow;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.Topics;
-using wenku8.Resources;
-using wenku8.Settings;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Effects.P2DFlow;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Model.Topics;
+using GR.Resources;
+using GR.Settings;
 
 namespace wenku10.Pages
 {
@@ -115,7 +115,7 @@ namespace wenku10.Pages
 
 			GetAnnouncements();
 
-			MessageBus.SendUI( typeof( wenku8.System.ActionCenter ), AppKeys.PM_CHECK_TILES );
+			MessageBus.SendUI( typeof( GR.GSystem.ActionCenter ), AppKeys.PM_CHECK_TILES );
 		}
 
 		private void LayoutRoot_ViewChanged( object sender, ScrollViewerViewChangedEventArgs e )

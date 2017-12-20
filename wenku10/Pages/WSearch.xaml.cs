@@ -19,12 +19,12 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Resources;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Resources;
 
 namespace wenku10.Pages
 {

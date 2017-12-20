@@ -31,19 +31,19 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Interfaces;
-using wenku8.Model.Loaders;
-using wenku8.Model.Book;
-using wenku8.Model.Pages;
-using wenku8.Model.Pages.ContentReader;
-using wenku8.Model.ListItem;
-using wenku8.Model.Section;
-using wenku8.Resources;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Interfaces;
+using GR.Model.Loaders;
+using GR.Model.Book;
+using GR.Model.Pages;
+using GR.Model.Pages.ContentReader;
+using GR.Model.ListItem;
+using GR.Model.Section;
+using GR.Resources;
 
-using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
 
 namespace wenku10.Pages
 {

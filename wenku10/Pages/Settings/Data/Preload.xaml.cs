@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Resources;
+using GR.Resources;
 
 namespace wenku10.Pages.Settings.Data
 {
@@ -41,14 +41,14 @@ namespace wenku10.Pages.Settings.Data
 		{
 			StringResources stx = new StringResources( "Settings" );
 			CoverSize.Text = stx.Text( "Data_CacheUsed" )
-				+ ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
+				+ ": " + await Task.Run( () => global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
 		}
 
 		private async void CalculateTextSize()
 		{
 			StringResources stx = new StringResources( "Settings" );
 			TextContentSize.Text = stx.Text( "Data_CacheUsed" )
-				+ ": " + await Task.Run( () => global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() ) );
+				+ ": " + await Task.Run( () => global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() ) );
 		}
 
 		private void Button_Click_1( object sender, RoutedEventArgs e )

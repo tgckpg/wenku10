@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Resources;
+using GR.Resources;
 
 namespace wenku10.Pages.Settings.Data
 {
@@ -34,7 +34,7 @@ namespace wenku10.Pages.Settings.Data
 		{
 			StringResources stx = new StringResources( "Settings" );
 			CacheLimit.Text = stx.Text( "Data_CacheUsed" )
-				+ " " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CacheSize() );
+				+ " " + global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.CacheSize() );
 		}
 
 		private void Button_Click_1( object sender, RoutedEventArgs e )

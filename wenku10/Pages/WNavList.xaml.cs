@@ -14,13 +14,13 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Section;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Section;
 
 namespace wenku10.Pages
 {

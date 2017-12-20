@@ -21,14 +21,14 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Resources;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Resources;
 
 namespace wenku10.Pages.ContentReaderPane
 {

@@ -18,9 +18,9 @@ using Windows.UI.Xaml.Shapes;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Config;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
+using GR.Config;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -37,10 +37,10 @@ namespace wenku10.Pages.Settings.Themes
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		private global::wenku8.Settings.Layout.BookInfoView Conf_BookInfoView;
-		private global::wenku8.Settings.Layout.MainPage Conf_MainPage;
-		private global::wenku8.Settings.Layout.NavList Conf_NavList;
-		private global::wenku8.Settings.Layout.ContentReader Conf_ContentReader;
+		private global::GR.Settings.Layout.BookInfoView Conf_BookInfoView;
+		private global::GR.Settings.Layout.MainPage Conf_MainPage;
+		private global::GR.Settings.Layout.NavList Conf_NavList;
+		private global::GR.Settings.Layout.ContentReader Conf_ContentReader;
 
 		private bool TemplateSet = false;
 		public Layout()
@@ -56,13 +56,13 @@ namespace wenku10.Pages.Settings.Themes
 			CustomSection();
 
 			// NavList
-			Conf_NavList = new global::wenku8.Settings.Layout.NavList();
+			Conf_NavList = new global::GR.Settings.Layout.NavList();
 
 			// ContentReader
-			Conf_ContentReader = new global::wenku8.Settings.Layout.ContentReader();
+			Conf_ContentReader = new global::GR.Settings.Layout.ContentReader();
 
 			// BookInfoView
-			Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView();
+			Conf_BookInfoView = new global::GR.Settings.Layout.BookInfoView();
 			LayoutToggles();
 
 			TemplateSet = true;
@@ -90,7 +90,7 @@ namespace wenku10.Pages.Settings.Themes
 		#region MainPage
 		private void CustomSection()
 		{
-			Conf_MainPage = new global::wenku8.Settings.Layout.MainPage();
+			Conf_MainPage = new global::GR.Settings.Layout.MainPage();
 			SectionListContext.DataContext = Conf_MainPage;
 			SectionChoices.SelectedValue = Conf_MainPage.SelectedSection.Desc2;
 		}

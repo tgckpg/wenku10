@@ -19,15 +19,15 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.Section.SharersHub;
-using wenku8.Resources;
-using wenku8.Section;
-using wenku8.Settings;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Interfaces;
+using GR.Model.ListItem.Sharers;
+using GR.Model.Section.SharersHub;
+using GR.Resources;
+using GR.Section;
+using GR.Settings;
 
 namespace wenku10.Pages
 {
@@ -215,7 +215,7 @@ namespace wenku10.Pages
 				try
 				{
 					new Uri( VH.Value );
-					wenku8.Config.Properties.SERVER_OSD_URI = VH.Value;
+					GR.Config.Properties.SERVER_OSD_URI = VH.Value;
 					Shared.ShRequest.UpdateServer();
 				}
 				catch ( Exception ) { }

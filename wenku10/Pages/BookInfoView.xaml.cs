@@ -17,24 +17,24 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.Section;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Storage;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
+using GR.Model.Interfaces;
+using GR.Model.ListItem.Sharers;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Model.Section;
+using GR.Resources;
+using GR.Settings;
+using GR.Storage;
 
-using TokenManager = wenku8.System.TokenManager;
+using TokenManager = GR.GSystem.TokenManager;
 using WComments = wenku10.Pages.BookInfoControls.Comments;
 
 namespace wenku10.Pages
@@ -57,7 +57,7 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-		private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
+		private global::GR.Settings.Layout.BookInfoView LayoutSettings;
 
 		AppBarButton FavBtn;
 		AppBarButton BrowserBtn;
@@ -100,7 +100,7 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
-			LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+			LayoutSettings = new global::GR.Settings.Layout.BookInfoView();
 
 			Indicators.RenderTransform = new TranslateTransform();
 			HeaderPanel.RenderTransform = new TranslateTransform();
@@ -312,7 +312,7 @@ namespace wenku10.Pages
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
 			}
 
-			if ( !await wenku8.Model.Twitter.AuthData.Authenticate() ) return;
+			if ( !await GR.Model.Twitter.AuthData.Authenticate() ) return;
 
 			ControlFrame.Instance.SubNavigateTo( this, () => new TwitterCommentView( ThisBook ) );
 

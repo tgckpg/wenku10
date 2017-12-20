@@ -16,11 +16,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.Model.ListItem;
+using GR.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Data
 {
-	using EBDictManager = global::wenku8.System.EBDictManager;
+	using EBDictManager = global::GR.GSystem.EBDictManager;
 
 	sealed partial class EBWin : Page
 	{

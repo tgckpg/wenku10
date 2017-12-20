@@ -31,19 +31,19 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 using Net.Astropenguin.UI.Icons;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Interfaces;
-using wenku8.Model.Loaders;
-using wenku8.Model.Book;
-using wenku8.Model.Pages;
-using wenku8.Model.Pages.ContentReader;
-using wenku8.Model.ListItem;
-using wenku8.Model.Section;
-using wenku8.Resources;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Interfaces;
+using GR.Model.Loaders;
+using GR.Model.Book;
+using GR.Model.Pages;
+using GR.Model.Pages.ContentReader;
+using GR.Model.ListItem;
+using GR.Model.Section;
+using GR.Resources;
 
-using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
 
 namespace wenku10.Pages
 {
@@ -86,7 +86,7 @@ namespace wenku10.Pages
 		protected EpisodeStepper ES;
 
 		protected NavPaneSection ContentPane;
-		protected wenku8.System.KeyboardController KbControls;
+		protected GR.GSystem.KeyboardController KbControls;
 
 		protected TextBlock _BookTitle;
 		protected TextBlock _VolTitle;
@@ -196,7 +196,7 @@ namespace wenku10.Pages
 
 			InitAppBar();
 
-			KbControls = new wenku8.System.KeyboardController( "ContentReader" );
+			KbControls = new GR.GSystem.KeyboardController( "ContentReader" );
 			// KeyBoard Navigations
 			KbControls.AddCombo( "NextPara", e => ContentView.NextPara(), VirtualKey.J );
 			KbControls.AddCombo( "PrevPara", e => ContentView.PrevPara(), VirtualKey.K );
@@ -539,7 +539,7 @@ namespace wenku10.Pages
 		private void BookLoaded( BookItem b )
 		{
 			if ( ContentPane == null ) InitPane();
-			new global::wenku8.History().Push( b );
+			new global::GR.History().Push( b );
 		}
 
 		public async void RenderComplete( IdleDispatchedHandlerArgs e )
@@ -549,7 +549,7 @@ namespace wenku10.Pages
 			// Place a thumbnail to Reader history
 			if ( CurrentBook != null )
 			{
-				await wenku8.History.CreateThumbnail( ContentView, CurrentBook.Id );
+				await GR.History.CreateThumbnail( ContentView, CurrentBook.Id );
 			}
 		}
 
@@ -1095,7 +1095,7 @@ namespace wenku10.Pages
 			if ( _ContentSlideDown.GetCurrentState() != ClockState.Active )
 			{
 				StartZoom( true );
-				_HistoryThubms.ItemsSource = new wenku8.History().GetListItems();
+				_HistoryThubms.ItemsSource = new GR.History().GetListItems();
 
 				_ContentSlideDown.Begin();
 				TransitionDisplay.SetState( _VolTitle, TransitionState.Inactive );

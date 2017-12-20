@@ -7,7 +7,7 @@ using Windows.Foundation;
 
 using Microsoft.Graphics.Canvas;
 
-using wenku8.Effects;
+using GR.Effects;
 
 namespace wenku10.Scenes
 {

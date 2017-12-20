@@ -15,11 +15,11 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Pages;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Pages;
 
 namespace wenku10.Pages
 {

@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Ext;
+using GR.Ext;
 
 namespace wenku10.Pages.Dialogs
 {

@@ -13,8 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.Config;
-using wenku8.Model.Text;
+using GR.Config;
+using GR.Model.Text;
 
 using Tasks;
 

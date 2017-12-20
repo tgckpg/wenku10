@@ -34,7 +34,7 @@ namespace wenku10
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			if ( global::wenku8.Config.Properties.FIRST_TIME_RUN )
+			if ( global::GR.Config.Properties.FIRST_TIME_RUN )
 			{
 				RootFrame.Navigate( typeof( Pages.Settings.FirstTimeSettings ) );
 				return;
@@ -70,7 +70,7 @@ namespace wenku10
 			SystemNavigationManager.GetForCurrentView().BackRequested += NavigationHandler.MasterNavigationHandler;
 
 			// Initialize the Controls
-			App.ViewControl = new global::wenku8.System.ViewControl();
+			App.ViewControl = new global::GR.GSystem.ViewControl();
 			App.KeyboardControl = new KeyboardControl( Window.Current.CoreWindow );
 
 			// Full Screen Ctrl + F

@@ -138,7 +138,7 @@
     <Compile Include="Pages\Dialogs\KeyboardCtrlHelp.xaml.cs">
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wenku8\Model\Topics\HyperBannerItem.cs" />
+    <Compile Include="GR\Model\Topics\HyperBannerItem.cs" />
     <Compile Include="Pages\MonoRedirector.cs" />
     <Compile Include="Pages\BookInfoView.xaml.cs">
       <DependentUpon>BookInfoView.xaml</DependentUpon>
@@ -206,23 +206,23 @@
     <Compile Include="Scenes\HyperBanner\ParaBg.cs" />
     <Compile Include="Scenes\HyperBanner\RippleEx.cs" />
     <Compile Include="ShHub\MesgListerner.cs" />
-    <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
-    <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
-    <Compile Include="wenku8\Converters\CurrDevConverter.cs" />
-    <Compile Include="wenku8\Converters\ParaTemplateSelector.cs" />
-    <Compile Include="wenku8\Converters\PinTemplateSelector.cs" />
-    <Compile Include="wenku8\Model\Loaders\ContentIllusLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\TwitterLoader.cs" />
-    <Compile Include="wenku8\Model\Pages\PageProcessor.cs" />
-    <Compile Include="wenku8\Model\Section\DocumentList.cs" />
-    <Compile Include="wenku8\Model\Section\LocalListBase.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub\Activities.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub\MyInbox.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub\MyRequests.cs" />
-    <Compile Include="wenku8\Model\Twitter\AuthData.cs" />
-    <Compile Include="wenku8\Model\Twitter\TSExtended.cs" />
-    <Compile Include="wenku8\System\KeyboardController.cs" />
-    <Compile Include="wenku8\System\MasterCommandManager.cs" />
+    <Compile Include="GR\CompositeElement\AttachedDictAction.cs" />
+    <Compile Include="GR\CompositeElement\CRDirToggle.cs" />
+    <Compile Include="GR\Converters\CurrDevConverter.cs" />
+    <Compile Include="GR\Converters\ParaTemplateSelector.cs" />
+    <Compile Include="GR\Converters\PinTemplateSelector.cs" />
+    <Compile Include="GR\Model\Loaders\ContentIllusLoader.cs" />
+    <Compile Include="GR\Model\Loaders\TwitterLoader.cs" />
+    <Compile Include="GR\Model\Pages\PageProcessor.cs" />
+    <Compile Include="GR\Model\Section\DocumentList.cs" />
+    <Compile Include="GR\Model\Section\LocalListBase.cs" />
+    <Compile Include="GR\Model\Section\SharersHub\Activities.cs" />
+    <Compile Include="GR\Model\Section\SharersHub\MyInbox.cs" />
+    <Compile Include="GR\Model\Section\SharersHub\MyRequests.cs" />
+    <Compile Include="GR\Model\Twitter\AuthData.cs" />
+    <Compile Include="GR\Model\Twitter\TSExtended.cs" />
+    <Compile Include="GR\System\KeyboardController.cs" />
+    <Compile Include="GR\System\MasterCommandManager.cs" />
     <Compile Include="Pages\Sharers\HSCommentView.xaml.cs">
       <DependentUpon>HSCommentView.xaml</DependentUpon>
     </Compile>
@@ -257,20 +257,20 @@
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wenku8\CompositeElement\ProcStateItem.cs" />
-    <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
-    <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
-    <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
-    <Compile Include="wenku8\Model\Loaders\ZSFeedbackLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub.cs" />
-    <Compile Include="wenku8\Model\Section\ZoneList.cs" />
-    <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
-    <Compile Include="wenku8\System\ActionEvent.cs" />
-    <Compile Include="wenku8\System\Migration.cs" />
-    <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
-    <Compile Include="wenku8\ThemeIcons.cs" />
+    <Compile Include="GR\CompositeElement\ProcStateItem.cs" />
+    <Compile Include="GR\CompositeElement\LSBookItem.cs" />
+    <Compile Include="GR\Converters\HubStatusConverter.cs" />
+    <Compile Include="GR\Converters\PhoneVAlignConverter.cs" />
+    <Compile Include="GR\Model\Loaders\ZSFeedbackLoader.cs" />
+    <Compile Include="GR\Model\Loaders\HSLoader.cs" />
+    <Compile Include="GR\Model\Loaders\SHSearchLoader.cs" />
+    <Compile Include="GR\Model\Section\SharersHub.cs" />
+    <Compile Include="GR\Model\Section\ZoneList.cs" />
+    <Compile Include="GR\Model\Section\ZoneSpider.cs" />
+    <Compile Include="GR\System\ActionEvent.cs" />
+    <Compile Include="GR\System\Migration.cs" />
+    <Compile Include="GR\Taotu\WenkuListLoader.cs" />
+    <Compile Include="GR\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>
     </Compile>
@@ -298,22 +298,22 @@
     <Compile Include="Pages\Settings\Data\EBWin.xaml.cs">
       <DependentUpon>EBWin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wenku8\Model\Loaders\AutoCache.cs" />
-    <Compile Include="wenku8\Model\Loaders\BookLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\ChapterLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\CommentLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\NewsLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\VolumeLoader.cs" />
-    <Compile Include="wenku8\Model\Pages\ContentReader\ESContext.cs" />
-    <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
-    <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
-    <Compile Include="wenku8\Model\Section\BookSpiderList.cs" />
-    <Compile Include="wenku8\Model\Section\SearchSections.cs" />
-    <Compile Include="wenku8\Model\Section\LoginStatus.cs" />
-    <Compile Include="wenku8\Model\Section\NavPaneSection.cs" />
-    <Compile Include="wenku8\Model\Section\ReaderView.cs" />
-    <Compile Include="wenku8\Model\Section\TOCPane.cs" />
-    <Compile Include="wenku8\Model\Section\TOCSection.cs" />
+    <Compile Include="GR\Model\Loaders\AutoCache.cs" />
+    <Compile Include="GR\Model\Loaders\BookLoader.cs" />
+    <Compile Include="GR\Model\Loaders\ChapterLoader.cs" />
+    <Compile Include="GR\Model\Loaders\CommentLoader.cs" />
+    <Compile Include="GR\Model\Loaders\NewsLoader.cs" />
+    <Compile Include="GR\Model\Loaders\VolumeLoader.cs" />
+    <Compile Include="GR\Model\Pages\ContentReader\ESContext.cs" />
+    <Compile Include="GR\Model\Pages\ContentReader\AssistContext.cs" />
+    <Compile Include="GR\Model\Section\CategorizedSection.cs" />
+    <Compile Include="GR\Model\Section\BookSpiderList.cs" />
+    <Compile Include="GR\Model\Section\SearchSections.cs" />
+    <Compile Include="GR\Model\Section\LoginStatus.cs" />
+    <Compile Include="GR\Model\Section\NavPaneSection.cs" />
+    <Compile Include="GR\Model\Section\ReaderView.cs" />
+    <Compile Include="GR\Model\Section\TOCPane.cs" />
+    <Compile Include="GR\Model\Section\TOCSection.cs" />
     <Compile Include="Pages\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
@@ -408,15 +408,15 @@
       <DependentUpon>ThemeColors.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="wenku8\Model\Topics\PressList.cs" />
-    <Compile Include="wenku8\Settings\Layout\BookInfoView.cs" />
-    <Compile Include="wenku8\Settings\Layout\ContentReader.cs" />
-    <Compile Include="wenku8\Settings\Layout\MainPage.cs" />
-    <Compile Include="wenku8\Settings\Layout\NavList.cs" />
-    <Compile Include="wenku8\System\Bootstrap.cs" />
-    <Compile Include="wenku8\System\UnitTest.cs" />
-    <Compile Include="wenku8\Taotu\WenkuMarker.cs" />
-    <Compile Include="wenku8\Taotu\WenkuExtractor.cs" />
+    <Compile Include="GR\Model\Topics\PressList.cs" />
+    <Compile Include="GR\Settings\Layout\BookInfoView.cs" />
+    <Compile Include="GR\Settings\Layout\ContentReader.cs" />
+    <Compile Include="GR\Settings\Layout\MainPage.cs" />
+    <Compile Include="GR\Settings\Layout\NavList.cs" />
+    <Compile Include="GR\System\Bootstrap.cs" />
+    <Compile Include="GR\System\UnitTest.cs" />
+    <Compile Include="GR\Taotu\WenkuMarker.cs" />
+    <Compile Include="GR\Taotu\WenkuExtractor.cs" />
     <Compile Include="Microsoft.Phone.Controls\WrapPanel.cs" />
     <Page Include="MainStage.xaml">
       <SubType>Designer</SubType>
@@ -860,7 +860,7 @@
       <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.4.0</Version>
+      <Version>5.4.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Services">
       <Version>1.1.0</Version>
@@ -892,9 +892,9 @@
       <Project>{119b84b1-d42b-460c-8f72-4fae1e2614f1}</Project>
       <Name>libtaotu</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libs\libwenku8\libwenku8.csproj">
+    <ProjectReference Include="..\libs\GR\GR.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
-      <Name>libwenku8</Name>
+      <Name>GR</Name>
     </ProjectReference>
     <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
       <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>

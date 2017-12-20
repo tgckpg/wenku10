@@ -123,14 +123,14 @@
       <Project>{119B84B1-D42B-460C-8F72-4FAE1E2614F1}</Project>
       <Name>libtaotu</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libs\libwenku8\libwenku8.csproj">
+    <ProjectReference Include="..\libs\GR\GR.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
-      <Name>libwenku8</Name>
+      <Name>GR</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.4.0</Version>
+      <Version>5.4.1</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

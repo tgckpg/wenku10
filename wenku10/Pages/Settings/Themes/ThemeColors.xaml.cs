@@ -23,11 +23,11 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Model.Interfaces;
-using wenku8.Resources;
-using wenku8.Settings.Theme;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Model.Interfaces;
+using GR.Resources;
+using GR.Settings.Theme;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -48,7 +48,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private ObservableCollection<ThemeSet> PresetThemeColors;
 		private ThemeSet SelectedTheme;
-		private global::wenku8.System.ThemeManager Manager;
+		private global::GR.GSystem.ThemeManager Manager;
 
 		public Visibility IsSystemSet
 		{
@@ -100,7 +100,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void SetTemplates()
 		{
-			Manager = new global::wenku8.System.ThemeManager();
+			Manager = new global::GR.GSystem.ThemeManager();
 			ThemePresets();
 			InitAppBar();
 		}

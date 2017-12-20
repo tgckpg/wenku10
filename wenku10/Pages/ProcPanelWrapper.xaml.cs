@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using libtaotu.Pages;
-using wenku8.Model.Interfaces;
+using GR.Model.Interfaces;
 
 
 namespace wenku10.Pages

@@ -12,13 +12,13 @@ using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
-using wenku8.Effects;
-using wenku8.Resources;
-using wenku8.Model.ListItem;
+using GR.Effects;
+using GR.Resources;
+using GR.Model.ListItem;
 
 namespace wenku10.Scenes
 {
-	using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+	using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
 
 	sealed partial class HyperBanner : ITextureScene, ISceneExitable
 	{
@@ -27,7 +27,7 @@ namespace wenku10.Scenes
 
 		public HyperBanner( ActiveItem Item, BgContext ItemContext )
 		{
-			Seed = wenku8.System.Utils.Md5Int( Item.Name );
+			Seed = GR.GSystem.Utils.Md5Int( Item.Name );
 			InitRipple( Item );
 			InitBackground( ItemContext );
 		}

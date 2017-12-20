@@ -17,15 +17,15 @@ using Windows.UI.StartScreen;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Pages;
-using wenku8.Model.Section;
-using wenku8.Resources;
-using wenku8.Storage;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Model.Book.Spider;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Pages;
+using GR.Model.Section;
+using GR.Resources;
+using GR.Storage;
 
 namespace wenku10.Pages
 {

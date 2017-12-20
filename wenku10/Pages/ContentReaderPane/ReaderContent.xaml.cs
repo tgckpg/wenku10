@@ -21,12 +21,12 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Section;
-using wenku8.Model.Text;
-using wenku8.Resources;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Book;
+using GR.Model.Section;
+using GR.Model.Text;
+using GR.Resources;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -136,12 +136,12 @@ namespace wenku10.Pages.ContentReaderPane
 			double d = 50;
 			if ( IsHorz )
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
+				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset + d, null, null );
 			}
 			else
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenHeight;
+				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenHeight;
 				SV.ChangeView( null, SV.VerticalOffset + d, null );
 			}
 		}
@@ -152,12 +152,12 @@ namespace wenku10.Pages.ContentReaderPane
 			double d = 50;
 			if ( IsHorz )
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
+				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset - d, null, null );
 			}
 			else
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenHeight;
+				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenHeight;
 				SV.ChangeView( null, SV.VerticalOffset - d, null );
 			}
 		}
@@ -308,7 +308,7 @@ namespace wenku10.Pages.ContentReaderPane
 				Point P = e.GetPosition( MasterGrid );
 				if ( IsHorz )
 				{
-					double HW = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenWidth;
+					double HW = 0.5 * global::GR.Resources.LayoutSettings.ScreenWidth;
 					if ( Reader.Settings.IsRightToLeft )
 						if ( P.X < HW ) ScrollMore( true ); else ScrollLess( true );
 					else
@@ -316,7 +316,7 @@ namespace wenku10.Pages.ContentReaderPane
 				}
 				else
 				{
-					double HS = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenHeight;
+					double HS = 0.5 * global::GR.Resources.LayoutSettings.ScreenHeight;
 					if ( P.Y < HS ) ScrollLess( true ); else ScrollMore( true );
 				}
 			}

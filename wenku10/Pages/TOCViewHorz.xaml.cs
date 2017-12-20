@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.Model.Book;
+using GR.Model.Book;
 
 namespace wenku10.Pages
 {

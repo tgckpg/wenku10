@@ -21,17 +21,17 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.REST;
-using wenku8.Resources;
-using CryptAES = wenku8.System.CryptAES;
-using AESManager = wenku8.System.AESManager;
-using TokenManager = wenku8.System.TokenManager;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.ListItem.Sharers;
+using GR.Model.REST;
+using GR.Resources;
+using CryptAES = GR.GSystem.CryptAES;
+using AESManager = GR.GSystem.AESManager;
+using TokenManager = GR.GSystem.TokenManager;
 
 namespace wenku10.Pages.Sharers
 {

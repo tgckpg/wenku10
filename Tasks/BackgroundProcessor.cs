@@ -16,14 +16,14 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Logging.Handler;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.ListItem;
-using wenku8.Model.Pages;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Storage;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Model.Book.Spider;
+using GR.Model.ListItem;
+using GR.Model.Pages;
+using GR.Resources;
+using GR.Settings;
+using GR.Storage;
 
 namespace Tasks
 {
@@ -62,7 +62,7 @@ namespace Tasks
 				XRegistry.AStorage = Shared.Storage;
 			}
 
-			Shared.TC = new wenku8.Model.TradChinese();
+			Shared.TC = new GR.Model.TradChinese();
 
 			XReg = new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS );
 		}
@@ -81,7 +81,7 @@ namespace Tasks
 			ResTaotu.AddProcType( ProcType.EXTRACT, typeof( TasksExtractor ) );
 			ResTaotu.AddProcType( ProcType.MARK, typeof( TasksMarker ) );
 			ResTaotu.AddProcType( ProcType.LIST, typeof( TasksListLoader ) );
-			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( wenku8.Taotu.TongWenTang ) );
+			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( GR.Taotu.TongWenTang ) );
 			ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
 		}
 
@@ -302,7 +302,7 @@ namespace Tasks
 						{
 							string OHash = Shared.Storage.GetString( Book.TOCDatePath );
 							await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
-							string NHash = wenku8.System.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
+							string NHash = GR.GSystem.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
 
 							if ( OHash != NHash )
 							{

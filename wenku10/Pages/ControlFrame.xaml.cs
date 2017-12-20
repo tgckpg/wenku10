@@ -15,12 +15,12 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI;
 
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Pages;
-using wenku8.Settings;
+using GR.Effects;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Pages;
+using GR.Settings;
 
 namespace wenku10.Pages
 {
@@ -30,8 +30,8 @@ namespace wenku10.Pages
 
 		public CommandBar MajorCmdBar { get; private set; }
 		public CommandBar MinorCmdBar { get; private set; }
-		public global::wenku8.System.MasterCommandManager CommandMgr { get; private set; }
-		public global::wenku8.System.BackStackManager BackStack { get; private set; }
+		public global::GR.GSystem.MasterCommandManager CommandMgr { get; private set; }
+		public global::GR.GSystem.BackStackManager BackStack { get; private set; }
 
 		private bool InSubView { get { return TransitionDisplay.GetState( SubView ) == TransitionState.Active; } }
 
@@ -50,12 +50,12 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
-			BackStack = new global::wenku8.System.BackStackManager();
+			BackStack = new global::GR.GSystem.BackStackManager();
 
 			MessageBus.OnDelivery += MessageBus_OnDelivery;
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
 
-			GR.Database.ContextManager.Migrate();
+			// GR.Database.ContextManager.Migrate();
 			ApplyControlSet();
 		}
 
@@ -403,7 +403,7 @@ namespace wenku10.Pages
 			// Be aware of possible infinite event loop
 			MinorCmdBar.Closing += ( sender, e ) => MajorCmdBar.IsOpen = false;
 
-			CommandMgr = new global::wenku8.System.MasterCommandManager( MajorCmdBar.PrimaryCommands, MajorCmdBar.SecondaryCommands );
+			CommandMgr = new global::GR.GSystem.MasterCommandManager( MajorCmdBar.PrimaryCommands, MajorCmdBar.SecondaryCommands );
 		}
 
 		public void ReloadCommands()

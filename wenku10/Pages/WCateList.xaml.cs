@@ -14,8 +14,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.Model.ListItem;
-using wenku8.Model.Section;
+using GR.Model.ListItem;
+using GR.Model.Section;
 
 namespace wenku10.Pages
 {

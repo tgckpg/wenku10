@@ -24,9 +24,9 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
-using wenku8.Effects;
-using wenku8.Model.Interfaces;
-using wenku8.Model.Book;
+using GR.Effects;
+using GR.Model.Interfaces;
+using GR.Model.Book;
 
 namespace wenku10.Pages
 {

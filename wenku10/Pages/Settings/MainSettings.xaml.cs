@@ -23,12 +23,12 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Settings;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Settings;
 
 namespace wenku10.Pages.Settings
 {
@@ -286,7 +286,7 @@ namespace wenku10.Pages.Settings
 
 					if ( Properties.ENABLE_ONEDRIVE )
 					{
-						await global::wenku8.Storage.OneDriveSync.Instance.Authenticate();
+						await global::GR.Storage.OneDriveSync.Instance.Authenticate();
 					}
 
 					OneDriveButton.Desc = sts.Text( "Enabled" );
@@ -294,7 +294,7 @@ namespace wenku10.Pages.Settings
 				else
 				{
 					Properties.ENABLE_ONEDRIVE = false;
-					await global::wenku8.Storage.OneDriveSync.Instance.UnAuthenticate();
+					await global::GR.Storage.OneDriveSync.Instance.UnAuthenticate();
 					OneDriveButton.Desc = sts.Text( "Disabled" );
 				}
 

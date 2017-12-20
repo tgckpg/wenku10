@@ -16,12 +16,12 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.REST;
-using wenku8.Resources;
+using GR.AdvDM;
+using GR.Model.ListItem.Sharers;
+using GR.Model.REST;
+using GR.Resources;
 
-using RSAManager = wenku8.System.RSAManager;
+using RSAManager = GR.GSystem.RSAManager;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {

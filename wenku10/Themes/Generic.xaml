@@ -1,9 +1,9 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:wenku8.Resources"
-    xmlns:v="using:wenku8.Converters"
-    xmlns:Converters="using:wenku8.Converters">
+    xmlns:local="using:GR.Resources"
+    xmlns:v="using:GR.Converters"
+    xmlns:Converters="using:GR.Converters">
 
     <local:LayoutResources x:Key="LayoutResources"/>
     <SolidColorBrush x:Key="MajorBrush" Color="{Binding LayoutSettings.MajorColor, Source={StaticResource LayoutResources}}" />

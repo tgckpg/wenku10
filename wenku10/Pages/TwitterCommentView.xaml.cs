@@ -25,15 +25,15 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Text;
-using wenku8.Model.Twitter;
-using wenku8.Resources;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Text;
+using GR.Model.Twitter;
+using GR.Resources;
 
 namespace wenku10.Pages
 {

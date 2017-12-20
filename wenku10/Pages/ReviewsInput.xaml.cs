@@ -17,8 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.Book;
-using wenku8.Model.Comments;
+using GR.Model.Book;
+using GR.Model.Comments;
 
 namespace wenku10.Pages
 {
@@ -37,14 +37,14 @@ namespace wenku10.Pages
 			this.InitializeComponent();
 			STopicType.SelectedIndex = 0;
 
-			if( global::wenku8.Config.Properties.REVIEWS_SIGN == null )
+			if( global::GR.Config.Properties.REVIEWS_SIGN == null )
 			{
 				StringResources stx = new StringResources( "Settings" );
-				global::wenku8.Config.Properties.REVIEWS_SIGN
+				global::GR.Config.Properties.REVIEWS_SIGN
 					= stx.Text( "Account_Reviews_Post_Sign_Default" );
 			}
 
-			Sign.Text = global::wenku8.Config.Properties.REVIEWS_SIGN;
+			Sign.Text = global::GR.Config.Properties.REVIEWS_SIGN;
 		}
 
 		public ReviewsInput( BookItem B )
@@ -68,7 +68,7 @@ namespace wenku10.Pages
 
 		public async Task<bool> Validate()
 		{
-			global::wenku8.SelfCencorship SS = new global::wenku8.SelfCencorship();
+			global::GR.SelfCencorship SS = new global::GR.SelfCencorship();
 
 			string Cont = "";
 

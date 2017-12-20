@@ -11,22 +11,22 @@ using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.Ext;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.ListItem;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.REST;
-using wenku8.Storage;
-using wenku8.Resources;
-using wenku8.Settings;
+using GR.AdvDM;
+using GR.Ext;
+using GR.CompositeElement;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
+using GR.Model.ListItem;
+using GR.Model.ListItem.Sharers;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Model.REST;
+using GR.Storage;
+using GR.Resources;
+using GR.Settings;
 
-using StatusType = wenku8.Model.REST.SharersRequest.StatusType;
-using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
+using StatusType = GR.Model.REST.SharersRequest.StatusType;
+using SHTarget = GR.Model.REST.SharersRequest.SHTarget;
 
 namespace wenku10.ShHub
 {
@@ -190,7 +190,7 @@ namespace wenku10.ShHub
 			if ( !PinErrored )
 			{
 				PinErrored = true;
-				wenku8.System.ActionCenter.Instance.ShowError( "PM_SourceMissing" );
+				GR.GSystem.ActionCenter.Instance.ShowError( "PM_SourceMissing" );
 			}
 		}
 
@@ -271,7 +271,7 @@ namespace wenku10.ShHub
 					, Shared.ShRequest.Search( "uuid: " + Id, 0, 1 )
 					// Pass the uuid instead of the query id
 					, ( re, q ) => MessageBus.Send( GetType(), AppKeys.HS_REPORT_SUCCESS, new Tuple<string, DRequestCompletedEventArgs>( Id, re ) )
-					, wenku8.System.Utils.DoNothing
+					, GR.GSystem.Utils.DoNothing
 					, true
 				);
 			}

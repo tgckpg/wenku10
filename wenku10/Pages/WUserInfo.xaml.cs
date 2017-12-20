@@ -16,10 +16,10 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Ext;
-using wenku8.Model.Interfaces;
-using wenku8.Resources;
+using GR.CompositeElement;
+using GR.Ext;
+using GR.Model.Interfaces;
+using GR.Resources;
 
 namespace wenku10.Pages
 {
@@ -90,7 +90,7 @@ namespace wenku10.Pages
 		{
 			string Sig = Sign.Text.Trim();
 
-			if ( await new global::wenku8.SelfCencorship().Passed( Sig ) )
+			if ( await new global::GR.SelfCencorship().Passed( Sig ) )
 			{
 				Settings.Signature = Sig;
 			}

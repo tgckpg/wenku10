@@ -17,8 +17,8 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.Text;
-using wenku8.Settings.Theme;
+using GR.Model.Text;
+using GR.Settings.Theme;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -34,7 +34,7 @@ namespace wenku10.Pages.Dialogs
 		{
 			this.InitializeComponent();
 			Canceled = true;
-			PresetColors = global::wenku8.System.ThemeManager.PresetColors();
+			PresetColors = global::GR.GSystem.ThemeManager.PresetColors();
 		}
 
 		public NewBookmarkInput( Paragraph P )
