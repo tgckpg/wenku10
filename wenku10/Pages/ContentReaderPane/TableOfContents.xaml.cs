@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Logging;
 
-using GR.Model.Book;
+using GR.Database.Models;
 using GR.Model.ListItem;
 using GR.Model.Section;
 

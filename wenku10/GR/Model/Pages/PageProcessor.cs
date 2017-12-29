@@ -17,15 +17,16 @@ using Tasks;
 
 namespace GR.Model.Pages
 {
-	using Book;
 	using Book.Spider;
 	using CompositeElement;
+	using Database.Models;
 	using Ext;
 	using ListItem;
 	using ListItem.Sharers;
 	using Loaders;
 	using Model.Section;
 	using Storage;
+	using BookItem = Book.BookItem;
 
 	sealed class PageProcessor
 	{
@@ -59,11 +60,11 @@ namespace GR.Model.Pages
 
 		public static Task<string> PinToStart( BookItem Book )
 		{
-			if ( Book.IsSpider() )
+			if ( Book.Type == BookType.S )
 			{
 				return CreateSecondaryTile( Book );
 			}
-			else if ( Book.IsLocal() )
+			else if ( Book.Type == BookType.L )
 			{
 				// TODO
 			}
@@ -78,16 +79,16 @@ namespace GR.Model.Pages
 
 		public static void ReadSecondaryTile( BookItem Book )
 		{
-			if( Book.IsSpider() )
+			if( Book.Type == BookType.S )
 			{
-				BackgroundProcessor.Instance.ClearTileStatus( Book.Id );
+				BackgroundProcessor.Instance.ClearTileStatus( Book.GID );
 			}
 		}
 
 		private static async Task<string> CreateSecondaryTile( BookItem Book )
 		{
 			string TilePath = await Resources.Image.CreateTileImage( Book );
-			string TileId = "ShellTile.grimoire." + GSystem.Utils.Md5( Book.Id );
+			string TileId = "ShellTile.grimoire." + GSystem.Utils.Md5( Book.GID );
 
 			SecondaryTile S = new SecondaryTile()
 			{
@@ -118,7 +119,7 @@ namespace GR.Model.Pages
 					, stx.Str( "Yes" ), stx.Str( "No" )
 				) );
 
-				if ( Confirmed ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.Id, TileId );
+				if ( Confirmed ) BackgroundProcessor.Instance.CreateTileUpdateForBookSpider( Book.GID, TileId );
 			}
 		}
 

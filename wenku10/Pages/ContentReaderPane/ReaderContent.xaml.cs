@@ -22,11 +22,13 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 
 using GR.Config;
+using GR.Database.Models;
 using GR.Effects;
-using GR.Model.Book;
 using GR.Model.Section;
 using GR.Model.Text;
 using GR.Resources;
+
+using BookItem = GR.Model.Book.BookItem;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -104,7 +106,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void Load( bool Reload = false )
 		{
-			Reader.Load( !Reload || CurrentBook.IsLocal() );
+			Reader.Load( !Reload || CurrentBook.Type == BookType.L );
 		}
 
 		internal void ContentGrid_SelectionChanged( object sender, SelectionChangedEventArgs e )

@@ -10,22 +10,23 @@ using wenku10;
 
 namespace GR.Model.Loaders
 {
-	using Ext; 
-	using Book;
+	using Ext;
+	using Database.Models;
 	using Book.Spider;
 	using Resources;
+	using Settings;
 
 	sealed class ChapterLoader
 	{
 		public static readonly string ID = typeof( ChapterLoader ).Name;
 
-		public BookItem CurrentBook { get; private set; }
+		public Model.Book.BookItem CurrentBook { get; private set; }
 
 		private Action<Chapter> CompleteHandler;
 
 		public bool ProtoMode { get; private set; }
 
-		public ChapterLoader( BookItem b, Action<Chapter> CompleteHandler )
+		public ChapterLoader( Model.Book.BookItem b, Action<Chapter> CompleteHandler )
 		{
 			ProtoMode = true;
 			CurrentBook = b;
@@ -47,38 +48,47 @@ namespace GR.Model.Loaders
 
 		public async Task LoadAsync( Chapter C, bool Cache = true )
 		{
-			if ( ( Cache && Shared.Storage.FileExists( C.ChapterPath ) ) || C is LocalChapter )
+			if( C.Content == null )
+			{
+				await Shared.BooksDb.Entry( C ).Reference( b => b.Content ).LoadAsync();
+			}
+
+			if ( Cache && C.Content != null )
 			{
 				OnComplete( C );
 			}
-			else if ( C is SChapter )
+			else if ( C.Book.Type == BookType.S )
 			{
+				throw new NotImplementedException();
 				// if this belongs to the spider
-				SChapter SC = C as SChapter;
+				/*
+				SChapter SC = new SChapter( C );
 				await SC.SubProcRun( Cache );
 
 				if ( SC.TempFile != null )
 				{
-					await new ContentParser().OrganizeBookContent( await SC.TempFile.ReadString(), SC );
+					await new ContentParser().ParseAsync( await SC.TempFile.ReadString(), SC );
 				}
-
+				*/
 				OnComplete( C );
 			}
 			else
 			{
-				if ( !ProtoMode ) throw new InvalidOperationException( "ChapterLoader is in Bare mode" );
+				if ( !ProtoMode )
+					throw new InvalidOperationException( "ChapterLoader is in Bare mode" );
+
 				IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
 
 				// Cancel thread if there is same job downloading
-				App.RuntimeTransfer.CancelThread( C.ChapterPath );
+				App.RuntimeTransfer.CancelThread( C.Id.ToString() );
 
 				// Initiate download, precache should not be done internally.
 				wCache.InitDownload(
-					C.ChapterPath
-					, X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.Id, C.cid )
+					C.Id.ToString()
+					, X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.ZItemId, C.Meta[ AppKeys.GLOBAL_CID ] )
 					, async ( DRequestCompletedEventArgs e, string path ) =>
 					{
-						await new ContentParser().OrganizeBookContent( Shared.TC.Translate( e.ResponseString ), C );
+						await new ContentParser().ParseAsync( Shared.TC.Translate( e.ResponseString ), C );
 						OnComplete( C );
 
 						X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook ).Check( e.ResponseBytes );

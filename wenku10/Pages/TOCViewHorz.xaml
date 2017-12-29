@@ -45,7 +45,7 @@
                             FontSize="20"
                             RightTapped="TOCShowVolumeAction"
                             FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                            Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
+                            Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
                         />
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -79,7 +79,7 @@
                                 </i:IconStar>
                             </Border>
                             <p:VerticalStack
-                                Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
+                                Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
                                 HorizontalAlignment="Center"
                                 Foreground="{StaticResource RelativeShadesBrush}"
                                 FontSize="20"

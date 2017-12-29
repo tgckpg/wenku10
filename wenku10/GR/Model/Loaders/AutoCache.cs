@@ -13,8 +13,9 @@ using wenku10;
 namespace GR.Model.Loaders
 {
 	using Book;
-	using Book.Spider;
+	using Database.Models;
 	using Ext;
+	using GR.Settings;
 	using Resources;
 	using Text;
 
@@ -46,8 +47,8 @@ namespace GR.Model.Loaders
 			if ( CurrentCount < AutoLimit )
 			{
 				wCache.InitDownload(
-					ThisBook.Id
-					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", ThisBook.Id )
+					ThisBook.ZItemId
+					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", ThisBook.ZItemId )
 					, OnWCacheInfo, OnWCacheInfoFailed, false );
 			}
 		}
@@ -70,6 +71,9 @@ namespace GR.Model.Loaders
 				return;
 			}
 
+			throw new NotImplementedException();
+
+			/*
 			try
 			{
 				bool NotCached = false;
@@ -101,6 +105,7 @@ namespace GR.Model.Loaders
 				global::System.Diagnostics.Debugger.Break();
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
+			*/
 
 			App.RuntimeTransfer.StartThreadCycle( WEpLoaded );
 			DispLog( "Complete" );
@@ -123,7 +128,8 @@ namespace GR.Model.Loaders
 		// Thread Complete Processor
 		public static void WEpLoaded( DRequestCompletedEventArgs e, TransferInst PArgs )
 		{
-			new ContentParser().OrganizeBookContent( Shared.TC.Translate( e.ResponseString ), PArgs.ID, PArgs.cParam );
+			throw new NotImplementedException();
+			// new ContentParser().Parse( Shared.TC.Translate( e.ResponseString ), PArgs.ID, PArgs.cParam );
 		}
 
 		private void OnWCacheInfoFailed( string cacheName, string id, Exception ex )
@@ -148,49 +154,52 @@ namespace GR.Model.Loaders
 		{
 			if ( ThisBook.IsSpider() )
 			{
-				Chapter[] Chs = Vol.ChapterList;
-
-				int i = 0; int l = Chs.Length;
+				int i = 0; int l = Vol.Chapters.Count;
 
 				ChapterLoader Loader = null;
 				Loader = new ChapterLoader( ThisBook, C => {
-					C.UpdateStatus();
+					throw new NotImplementedException();
+					// C.UpdateStatus();
 
 					if ( i < l )
 					{
-						Loader.Load( Chs[ i++ ] );
+						Loader.Load( Vol.Chapters[ i++ ] );
 					}
 				} );
 
-				Loader.Load( Chs[ i++ ] );
+				Loader.Load( Vol.Chapters[ i++ ] );
 				return;
 			}
 
 
 			Worker.ReisterBackgroundWork( () =>
 			{
-				string id = ThisBook.Id;
-				string CVid = Vol.vid;
+				string id = ThisBook.ZItemId;
 
-				foreach ( Chapter c in Vol.ChapterList )
+				foreach ( Chapter c in Vol.Chapters )
 				{
-					if ( !c.IsCached )
+					if ( !string.IsNullOrEmpty( c.Content.Text ) )
 					{
-						Logger.Log( ID, "Registering: " + c.ChapterTitle, LogType.DEBUG );
+						throw new NotImplementedException();
+						Logger.Log( ID, "Registering: " + c.Title, LogType.DEBUG );
 						App.RuntimeTransfer.RegisterRuntimeThread(
-							X.Call<XKey[]>( XProto.WRequest, "GetBookContent", id, c.cid )
-							, c.ChapterPath, Guid.NewGuid()
-							, Uri.EscapeDataString( ThisBook.Title ) + "&" + Uri.EscapeDataString( Vol.VolumeTitle ) + "&" + Uri.EscapeDataString( c.ChapterTitle )
-							, c.IllustrationPath
+							X.Call<XKey[]>( XProto.WRequest, "GetBookContent", id, c.Meta[ AppKeys.GLOBAL_CID ] )
+							, "DEPRECATED_THING", Guid.NewGuid()
+							, Uri.EscapeDataString( ThisBook.Title ) + "&" + Uri.EscapeDataString( Vol.Title ) + "&" + Uri.EscapeDataString( c.Title )
+							, "DEPRECATED_PARAM"
 						);
 					}
 				}
 
+				throw new NotImplementedException();
+
+				/*
 				App.RuntimeTransfer.StartThreadCycle( ( a, b ) =>
 				{
 					WEpLoaded( a, b );
-					Worker.UIInvoke( () => { foreach ( Chapter C in Vol.ChapterList ) C.UpdateStatus(); } );
+					Worker.UIInvoke( () => { foreach ( Chapter C in Vol.Chapters ) C.UpdateStatus(); } );
 				} );
+				*/
 
 				App.RuntimeTransfer.ResumeThread();
 			} );

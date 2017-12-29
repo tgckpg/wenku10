@@ -119,7 +119,7 @@ namespace wenku10.Pages.Sharers
 			LockedFile = true;
 			BindBook = Book;
 
-			PredefineFile( Book.Id );
+			PredefineFile( Book.ZItemId );
 			this.OnExit = OnExit;
 		}
 

@@ -128,7 +128,7 @@ namespace GR.Model.Section
 						 *   in InitProcMan() method
 						 *   Fortunately, ssid will be set correctly inside the ReadInfo method
 						 */
-						ProcessSpider( BInst.Id, await SpiderBook.CreateAsyncSpider( BInst.Id ) );
+						ProcessSpider( BInst.ZItemId, await SpiderBook.CreateAsyncSpider( BInst.ZItemId ) );
 					}
 				}
 				else

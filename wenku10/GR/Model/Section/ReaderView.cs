@@ -11,14 +11,17 @@ using Net.Astropenguin.IO;
 
 namespace GR.Model.Section
 {
-	using Book;
 	using Config;
+	using Database.Models;
 	using ListItem;
 	using Loaders;
 	using Settings;
 	using Storage;
 	using GSystem;
 	using Text;
+
+	using BookItem = Book.BookItem;
+	using ChapterVModel = Book.ChapterVModel;
 
 	class ReaderView : ActiveData, IDisposable
 	{
@@ -150,8 +153,8 @@ namespace GR.Model.Section
 
 		private void SetContent( Chapter C )
 		{
-			Data = C.GetParagraphs();
-			ApplyCustomAnchors( C.cid, Data );
+			Data = new ChapterVModel( C ).GetParagraphs();
+			ApplyCustomAnchors( C.Meta[ AppKeys.GLOBAL_CID ], Data );
 
 			NotifyChanged( "Data", "SelectedData" );
 			SelectedData = GetAutoAnchor();
@@ -166,9 +169,9 @@ namespace GR.Model.Section
 			foreach( Volume Vol in Vols )
 			{
 				Items.Add( new BookmarkListItem( Vol ) );
-				foreach( Chapter C in Vol.ChapterList )
+				foreach ( Chapter C in Vol.Chapters )
 				{
-					IEnumerable<XParameter> Params = Anchors.GetCustomAncs( C.cid );
+					IEnumerable<XParameter> Params = Anchors.GetCustomAncs( C.Meta[ AppKeys.GLOBAL_CID ] );
 					if ( Params == null ) continue;
 					foreach( XParameter Param in Params )
 					{
@@ -183,7 +186,7 @@ namespace GR.Model.Section
 		internal void RemoveAnchor( BookmarkListItem flyoutTargetItem )
 		{
 			int index = flyoutTargetItem.AnchorIndex;
-			Anchors.RemoveCustomAnc( flyoutTargetItem.GetChapter().cid, index );
+			Anchors.RemoveCustomAnc( flyoutTargetItem.GetChapter().Meta[ AppKeys.GLOBAL_CID ], index );
 			if( index < Data.Count() )
 			{
 				Data[ index ].AnchorColor = null;
@@ -201,7 +204,7 @@ namespace GR.Model.Section
 				int index = -1;
 				if ( AutoAnchor )
 				{
-					index = Anchors.GetAutoChAnc( BindChapter.cid );
+					index = Anchors.GetAutoChAnc( BindChapter.Meta[ AppKeys.GLOBAL_CID ] );
 				}
 
 				if( AutoAnchorOvd != -1 )
@@ -229,7 +232,7 @@ namespace GR.Model.Section
 			SelectedData = P;
 			if( AutoAnchor )
 			{
-				Anchors.SaveAutoChAnc( BindChapter.cid, Data.IndexOf( P ) );
+				Anchors.SaveAutoChAnc( BindChapter.Meta[ AppKeys.GLOBAL_CID ], Data.IndexOf( P ) );
 			}
 		}
 
@@ -243,18 +246,18 @@ namespace GR.Model.Section
 
 		public void AutoVolumeAnchor()
 		{
-			BS.BookRead( BindChapter.aid );
+			BS.BookRead( BindChapter.Meta[ AppKeys.GLOBAL_CID ] );
 
 			if( AutoBookmark )
 			{
-				Anchors.SaveAutoVolAnc( BindChapter.cid );
+				Anchors.SaveAutoVolAnc( BindChapter.Meta[ AppKeys.GLOBAL_CID ] );
 			}
 		}
 
 		public void SetCustomAnchor( string Name, Paragraph P )
 		{
 			Anchors.SetCustomAnc(
-				BindChapter.cid
+				BindChapter.Meta[ AppKeys.GLOBAL_CID ]
 				, Name
 				, Data.IndexOf( P )
 				, ThemeManager.ColorString( P.AnchorColor.Color )

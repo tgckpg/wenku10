@@ -20,6 +20,7 @@ using Net.Astropenguin.Logging;
 using GR.AdvDM;
 using GR.CompositeElement;
 using GR.Config;
+using GR.Database.Models;
 using GR.Effects;
 using GR.Ext;
 using GR.Model.Book;
@@ -322,8 +323,8 @@ namespace wenku10.Pages
 		{
 			HSBtn.IsEnabled = false;
 
-			string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
-			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );
+			string Token = ( string ) new TokenManager().GetAuthById( ThisBook.ZItemId )?.Value;
+			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.ZItemId, Token );
 
 			if ( HSI == null )
 			{
@@ -351,7 +352,7 @@ namespace wenku10.Pages
 			await ControlFrame.Instance.CloseSubView();
 			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( Id, AccessToken );
 
-			if ( ThisBook.Id != Id )
+			if ( ThisBook.ZItemId != Id )
 			{
 				ThisBook.Update( await ItemProcessor.GetBookFromId( Id ) );
 			}
@@ -371,12 +372,12 @@ namespace wenku10.Pages
 			BookStorage BS = new BookStorage();
 			if ( ThisBook.IsFav )
 			{
-				BS.RemoveBook( ThisBook.Id );
+				BS.RemoveBook( ThisBook.ZItemId );
 				ThisBook.IsFav = false;
 			}
 			else
 			{
-				BS.SaveBook( ThisBook.Id, ThisBook.Title, ThisBook.RecentUpdate, ThisBook.LatestSection );
+				BS.SaveBook( ThisBook.ZItemId, ThisBook.Title, ThisBook.RecentUpdate, ThisBook.LatestSection );
 				ThisBook.IsFav = true;
 			}
 
@@ -429,7 +430,7 @@ namespace wenku10.Pages
 				PinManager PM = new PinManager();
 				PM.RegPin( ThisBook, TileId, true );
 
-				SpiderBook SpDef = await SpiderBook.CreateAsyncSpider( ThisBook.Id );
+				SpiderBook SpDef = await SpiderBook.CreateAsyncSpider( ThisBook.ZItemId );
 				await PageProcessor.RegLiveSpider( SpDef, ( BookInstruction ) ThisBook, TileId );
 			}
 		}

@@ -6,7 +6,7 @@ using Net.Astropenguin.DataModel;
 
 namespace GR.Model.Section
 {
-	using Book;
+	using Database.Models;
 	using ListItem;
 	using Interfaces;
 
@@ -51,7 +51,7 @@ namespace GR.Model.Section
 			foreach( Volume V in Vols )
 			{
 				Items.Add( new TOCItem( V ) );
-				foreach( Chapter C in V.ChapterList )
+				foreach( Chapter C in V.Chapters )
 				{
 					TOCItem Item = new TOCItem( C );
 					Items.Add( Item );

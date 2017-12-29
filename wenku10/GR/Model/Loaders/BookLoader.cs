@@ -49,7 +49,7 @@ namespace GR.Model.Loaders
 			}
 			else if ( CurrentBook.IsEx() )
 			{
-				string BookId = b.Id;
+				string BookId = b.ZItemId;
 				string Mode = CurrentBook.XField<string>( "Mode" );
 				string FlagMode = "MODE_" + Mode;
 
@@ -94,7 +94,8 @@ namespace GR.Model.Loaders
 			if ( B.Packed != true && B.Packable )
 			{
 				B.PackVolumes( SBook.GetPPConvoy() );
-				await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
+				throw new NotImplementedException();
+				// await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
 			}
 
 			if ( SBook.Processed && SBook.ProcessSuccess )
@@ -114,7 +115,7 @@ namespace GR.Model.Loaders
 			if ( !useCache || string.IsNullOrEmpty( b.Info.LongDescription ) )
 			{
 				X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
-					b.Id
+					b.ZItemId
 					, X.Call<XKey[]>( XProto.WRequest, "GetBookIntro", b.Id )
 					, SaveIntro, IntroFailed, false
 				);

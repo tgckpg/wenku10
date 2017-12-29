@@ -23,12 +23,12 @@ using Net.Astropenguin.Loaders;
 
 using GR.AdvDM;
 using GR.CompositeElement;
-using GR.Model.Book;
+using GR.Database.Models;
 using GR.Model.Book.Spider;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Loaders;
-using GR.Resources;
+using GR.Settings;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -46,7 +46,7 @@ namespace wenku10.Pages.ContentReaderPane
 		private async void SetTemplate()
 		{
 			Chapter C = ReaderPage.CurrentChapter;
-			if ( !C.HasIllustrations )
+			if ( C.Image == null )
 			{
 				AsyncTryOut<Chapter> ASC;
 				if ( ASC = await TryFoundIllustration() )
@@ -62,17 +62,11 @@ namespace wenku10.Pages.ContentReaderPane
 
 			ChapterList.Visibility = Visibility.Collapsed;
 
-			string[] ImagePaths = Shared.Storage.GetString( C.IllustrationPath )
-				.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries );
-
-			int l = ImagePaths.Length;
-
 			List<MViewUpdate> MViews = new List<MViewUpdate>();
 
-			for ( int i = 0; i < l; i++ )
+			foreach( string url in C.Image.Urls )
 			{
 				// Retrive URL
-				string url = ImagePaths[ i ];
 				MViewUpdate MView = new MViewUpdate() { SrcUrl = url };
 				ContentIllusLoader.Instance.RegisterImage( MView );
 				MViews.Add( MView );
@@ -102,8 +96,8 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()
 		{
-			VolumesInfo VF = new VolumesInfo( ReaderPage.CurrentBook );
-			EpisodeStepper ES = new EpisodeStepper( VF );
+			GR.Model.Book.VolumesInfo VF = new GR.Model.Book.VolumesInfo( ReaderPage.CurrentBook );
+			GR.Model.Book.EpisodeStepper ES = new GR.Model.Book.EpisodeStepper( VF );
 
 			ES.SetCurrentPosition( ReaderPage.CurrentChapter, true );
 
@@ -111,17 +105,22 @@ namespace wenku10.Pages.ContentReaderPane
 
 			bool NeedDownload = false;
 
-			string Vid = ReaderPage.CurrentChapter.vid;
+			int Vid = ReaderPage.CurrentChapter.Volume.Id;
 			while ( ES.Vid == Vid )
 			{
 				Chapter Ch = ES.Chapter;
 				Chs.Add( Ch );
 
-				if ( !Ch.IsCached ) NeedDownload = true;
-				if( Ch.HasIllustrations )
+				if ( !string.IsNullOrEmpty( Ch.Content.Text ) )
+				{
+					NeedDownload = true;
+				}
+
+				if( Ch.Image != null )
 				{
 					return new AsyncTryOut<Chapter>( true, Ch );
 				}
+
 				if ( !ES.StepNext() ) break;
 			}
 
@@ -149,17 +148,17 @@ namespace wenku10.Pages.ContentReaderPane
 
 			// Really, this desperate?
 			TaskCompletionSource<AsyncTryOut<Chapter>> TCSChapter = new TaskCompletionSource<AsyncTryOut<Chapter>>();
-			Volume V = ReaderPage.CurrentBook.GetVolumes().First( x => x.vid == ReaderPage.CurrentChapter.vid );
-			ChapterList.ItemsSource = V.ChapterList;
+			Volume V = ReaderPage.CurrentBook.Volumes.First( x => x.Id == ReaderPage.CurrentChapter.VolumeId );
+			ChapterList.ItemsSource = V.Chapters;
 
 			WRuntimeTransfer.DCycleCompleteHandler CycleComp = null;
 
 			CycleComp = delegate ( object sender, DCycleCompleteArgs e )
 			{
 				App.RuntimeTransfer.OnCycleComplete -= CycleComp;
-				bool AllSet = V.ChapterList.All( x => x.IsCached );
+				bool AllSet = V.Chapters.All( x => !string.IsNullOrEmpty( x.Content.Text ) );
 
-				Chapter C = V.ChapterList.FirstOrDefault( x => x.HasIllustrations );
+				Chapter C = V.Chapters.FirstOrDefault( x => x.Image != null );
 
 				if ( C == null )
 				{
@@ -171,12 +170,13 @@ namespace wenku10.Pages.ContentReaderPane
 				TCSChapter.TrySetResult( new AsyncTryOut<Chapter>( true, C ) );
 			};
 
-			if ( ReaderPage.CurrentBook.IsSpider() )
+			if ( ReaderPage.CurrentBook.Type == BookType.S )
 			{
-				foreach( SChapter C in V.ChapterList.Cast<SChapter>() )
+				foreach( SChapter C in V.Chapters.Cast<SChapter>() )
 				{
-					await new ChapterLoader().LoadAsync( C );
-					C.UpdateStatus();
+					throw new NotImplementedException(); // TODO
+					// await new ChapterLoader().LoadAsync( C );
+					// C.UpdateStatus();
 				}
 
 				// Fire the event myself

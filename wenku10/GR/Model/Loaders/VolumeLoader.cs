@@ -14,6 +14,7 @@ namespace GR.Model.Loaders
 	using Ext;
 	using Book;
 	using Book.Spider;
+	using Database.Models;
 	using Resources;
 	using Text;
 	using Settings;
@@ -31,32 +32,40 @@ namespace GR.Model.Loaders
 			this.CompleteHandler = CompleteHandler;
 		}
 
-		public void Load( BookItem b, bool useCache = true )
+		public async void Load( BookItem b, bool useCache = true )
 		{
 			// b is null when back button is pressed before BookLoader load
 			if ( b == null ) return;
 
 			Shared.LoadMessage( "LoadingVolumes" );
 			CurrentBook = b;
-			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && Shared.Storage.FileExists( CurrentBook.TOCPath ) ) )
+
+			if( CurrentBook.Volumes == null )
 			{
+				await Shared.BooksDb.Entry( b.Entry ).Collection( x => x.Volumes ).LoadAsync();
+			}
+
+			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && CurrentBook.Volumes.Any() ) )
+			{
+				foreach( Volume Vol in CurrentBook.Volumes )
+					await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).LoadAsync();
+
 				OnComplete( b );
 			}
 			else if ( b.IsSpider() )
 			{
 				LoadInst( ( BookInstruction ) b );
 			}
-			else // wenku8 Protocol
+			else if ( b.IsEx() )
 			{
 				IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
 				// This occurs when tapping pinned book but cache is cleared
 				wCache.InitDownload(
-					CurrentBook.Id
-					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", CurrentBook.Id )
+					CurrentBook.ZItemId
+					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", CurrentBook.ZItemId )
 					, ( DRequestCompletedEventArgs e, string id ) =>
 					{
-						Shared.Storage.WriteString( CurrentBook.TOCPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
-						Shared.Storage.WriteString( CurrentBook.TOCDatePath, CurrentBook.Info.RecentUpdate );
+						CurrentBook.ParseVolumeData( Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
 						OnComplete( b );
 					}
 					, ( string RequestURI, string id, Exception ex ) =>
@@ -70,12 +79,13 @@ namespace GR.Model.Loaders
 
 		public async void LoadInst( BookInstruction b )
 		{
-			IEnumerable<SVolume> Vols = b.GetVolumes().Cast<SVolume>();
-			foreach ( SVolume Vol in Vols )
+			throw new NotImplementedException();
+			Volume[] Vols = b.GetVolumes();
+			foreach ( Volume Vol in Vols )
 			{
-				Shared.LoadMessage( "SubProcessRun", Vol.VolumeTitle );
+				Shared.LoadMessage( "SubProcessRun", Vol.Title );
 				// This should finalize the chapter info
-				await Vol.SubProcRun( b );
+				// await Vol.SubProcRun( b );
 			}
 
 			if( Vols.Count() == 0 )
@@ -84,7 +94,7 @@ namespace GR.Model.Loaders
 			}
 
 			Shared.LoadMessage( "CompilingTOC", b.Title );
-			await b.SaveTOC( Vols );
+			// await b.SaveTOC( Vols );
 			Shared.Storage.WriteString( b.TOCDatePath, GSystem.Utils.Md5( Shared.Storage.GetBytes( b.TOCPath ).AsBuffer() ) );
 			OnComplete( b );
 		}

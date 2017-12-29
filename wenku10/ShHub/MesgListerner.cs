@@ -99,7 +99,7 @@ namespace wenku10.ShHub
 					break;
 
 				case AppKeys.HS_NO_VOLDATA:
-					ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).Id, StatusType.HS_NO_VOLDATA );
+					ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).ZItemId, StatusType.HS_NO_VOLDATA );
 					break;
 
 				case AppKeys.EX_DEATHBLOW:

@@ -158,9 +158,9 @@ namespace wenku10.Pages
 
 			BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
 			SpiderBook Item;
-			if ( ProcessedItems.ContainsKey( BInst.Id ) )
+			if ( ProcessedItems.ContainsKey( BInst.ZItemId ) )
 			{
-				Item = ProcessedItems[ BInst.Id ];
+				Item = ProcessedItems[ BInst.ZItemId ];
 			}
 			else
 			{
@@ -175,7 +175,7 @@ namespace wenku10.Pages
 				if ( !Item.ProcessSuccess && Item.CanProcess )
 				{
 					await ItemProcessor.ProcessLocal( Item );
-					ProcessedItems[ BInst.Id ] = Item;
+					ProcessedItems[ BInst.ZItemId ] = Item;
 				}
 			}
 

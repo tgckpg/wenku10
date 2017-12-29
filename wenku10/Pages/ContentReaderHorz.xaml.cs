@@ -26,6 +26,7 @@ using Windows.UI.Xaml.Shapes;
 
 using GR.Effects;
 using GR.Model.Interfaces;
+using GR.Database.Models;
 using GR.Model.Book;
 
 namespace wenku10.Pages

@@ -16,9 +16,11 @@ using Net.Astropenguin.Logging;
 namespace GR.Settings.Layout
 {
 	using AdvDM;
+	using Database.Models;
 	using Effects;
-	using Model.Book;
 	using Resources;
+
+	using BookItem = Model.Book.BookItem;
 
 	sealed class BookInfoView
 	{
@@ -256,14 +258,11 @@ namespace GR.Settings.Layout
 							{
 								foreach ( Volume V in Book.GetVolumes() )
 								{
-									foreach ( Chapter C in V.ChapterList )
+									foreach ( Chapter C in V.Chapters )
 									{
-										if ( C.HasIllustrations )
+										if ( C.Image != null )
 										{
-											ImagePaths.AddRange(
-												Shared.Storage.GetString( C.IllustrationPath )
-												.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
-											);
+											ImagePaths.AddRange( C.Image.Urls );
 										}
 									}
 								}

@@ -43,7 +43,7 @@
                                 <TextBlock Margin="10"
                                            Foreground="{StaticResource RelativeShadesBrush}"
                                            FontSize="20" TextWrapping="Wrap"
-                                           Text="{Binding ChapterTitle}" />
+                                           Text="{Binding Title}" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -57,7 +57,7 @@
 										FontSize="20" TextWrapping="Wrap"
 										RightTapped="TOCShowVolumeAction"
 										FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-										Text="{Binding Vol.VolumeTitle}"
+										Text="{Binding Vol.Title}"
 									/>
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
@@ -74,7 +74,7 @@
 								Margin="10"
 								Foreground="{StaticResource RelativeShadesBrush}"
 								FontSize="20" TextWrapping="Wrap"
-								Text="{Binding Group.Vol.VolumeTitle}"
+								Text="{Binding Group.Vol.Title}"
 							/>
                         </DataTemplate>
                     </ListView.ItemTemplate>

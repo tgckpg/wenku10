@@ -19,13 +19,14 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
 using GR.CompositeElement;
+using GR.Database.Models;
 using GR.Effects;
 using GR.Model.Interfaces;
 using GR.Model.Section;
 using GR.Model.ListItem;
-using GR.Model.Loaders;
 using GR.Model.Pages;
-using GR.Model.Book;
+
+using BookItem = GR.Model.Book.BookItem;
 using BInfConfig = GR.Settings.Layout.BookInfoView;
 
 namespace wenku10.Pages
@@ -186,7 +187,7 @@ namespace wenku10.Pages
 				}
 			}
 
-			if ( Book.IsLocal() )
+			if ( Book.Type == BookType.L )
 			{
 				ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
 			}

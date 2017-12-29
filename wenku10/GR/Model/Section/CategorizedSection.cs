@@ -265,7 +265,7 @@ namespace GR.Model.Section
 					else
 					{
 						b = new NonCollectedBook( book.Value );
-						BookReference[ "-1" ] = b;
+						BookReference[ b.Id ] = b;
 					}
 				}
 			}

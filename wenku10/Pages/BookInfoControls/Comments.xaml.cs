@@ -140,8 +140,8 @@ namespace wenku10.Pages.BookInfoControls
 		private async Task ReloadComments()
 		{
 			CommentLoader CL = new CommentLoader(
-				ThisBook.Id
-				, X.Call<XKey[]>( XProto.WRequest, "GetComments", ThisBook.Id )
+				ThisBook.ZItemId
+				, X.Call<XKey[]>( XProto.WRequest, "GetComments", ThisBook.ZItemId )
 				, new CommentLoader.CommentXMLParser( GetReviews )
 			);
 

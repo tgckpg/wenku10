@@ -33,6 +33,7 @@ using Net.Astropenguin.UI.Icons;
 
 using GR.CompositeElement;
 using GR.Config;
+using GR.Database.Models;
 using GR.Effects;
 using GR.Model.Interfaces;
 using GR.Model.Loaders;
@@ -370,7 +371,7 @@ namespace wenku10.Pages
 				return;
 			}
 
-			bool BookChanged = ( CurrentBook.Id != C.aid );
+			bool BookChanged = ( CurrentBook.Id != C.BookId );
 			if ( BookChanged )
 			{
 				CurrentBook = ToBook ?? throw new ArgumentException( "ToBook cannot be null while changing chapter accross book" );
@@ -400,7 +401,7 @@ namespace wenku10.Pages
 				BL.Load( CurrentBook, true );
 
 				// Fire up Episode stepper, used for stepping next episode
-				if ( ES == null || ES.Chapter.aid != C.aid )
+				if ( ES == null || ES.Chapter.BookId != C.BookId )
 				{
 					Shared.LoadMessage( "EpisodeStepper" );
 					VolumeLoader VL = new VolumeLoader(
@@ -525,7 +526,7 @@ namespace wenku10.Pages
 			string Id = Item.Payload;
 
 			ReaderSlideBack();
-			if ( Id != CurrentBook.Id )
+			if ( Id != CurrentBook.GID )
 			{
 				OpenMask();
 
@@ -549,7 +550,7 @@ namespace wenku10.Pages
 			// Place a thumbnail to Reader history
 			if ( CurrentBook != null )
 			{
-				await GR.History.CreateThumbnail( ContentView, CurrentBook.Id );
+				await GR.History.CreateThumbnail( ContentView, CurrentBook.GID );
 			}
 		}
 

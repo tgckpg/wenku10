@@ -14,13 +14,15 @@ using Net.Astropenguin.Loaders;
 
 using GR.Config;
 using GR.CompositeElement;
-using GR.Model.Book;
+using GR.Database.Models;
 using GR.Model.Interfaces;
 using GR.Model.Loaders;
 using GR.Model.Pages;
 using GR.Model.Section;
 using GR.Storage;
 using GR.Resources;
+
+using BookItem = GR.Model.Book.BookItem;
 
 namespace wenku10.Pages
 {
@@ -145,7 +147,7 @@ namespace wenku10.Pages
 
 			await Popups.ShowDialog(
 				UIAliases.CreateDialog(
-					RightClickedVolume.VolumeTitle, stx.Text( "AutoUpdate", "ContextMenu" )
+					RightClickedVolume.Title, stx.Text( "AutoUpdate", "ContextMenu" )
 					, () => Confirmed = true
 					, stx.Str( "Yes" ), stx.Str( "No" )
 			) );

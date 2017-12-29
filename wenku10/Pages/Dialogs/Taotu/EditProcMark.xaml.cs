@@ -23,7 +23,7 @@ using libtaotu.Controls;
 using libtaotu.Models.Procedure;
 using libtaotu.Pages;
 
-using GR.Model.Book;
+using GR.Database.Models;
 using GR.Model.Book.Spider;
 using GR.Model.ListItem;
 using GR.Model.Loaders;
@@ -122,12 +122,15 @@ namespace wenku10.Pages.Dialogs.Taotu
 				return;
 			}
 
+			throw new NotImplementedException();
+			/*(
 			new ChapterLoader(
 				C => {
 					ShowSource( ( C as SChapter ).TempFile );
 					TestRunning.IsActive = false;
 				}
 			).Load( Ch );
+			*/
 		}
 
 		private void ShowSource( StorageFile SF )
