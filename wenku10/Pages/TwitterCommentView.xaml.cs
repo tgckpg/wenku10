@@ -203,11 +203,11 @@ namespace wenku10.Pages
 			if ( !string.IsNullOrEmpty( ThisBook.Title ) )
 				TagsAvailable.AddRange( ThisBook.Title.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
-			if ( !string.IsNullOrEmpty( ThisBook.PressRaw ) )
-				TagsAvailable.AddRange( ThisBook.PressRaw.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
+			if ( !string.IsNullOrEmpty( ThisBook.Info.Press ) )
+				TagsAvailable.AddRange( ThisBook.Info.Press.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
-			if ( !string.IsNullOrEmpty( ThisBook.AuthorRaw ) )
-				TagsAvailable.AddRange( ThisBook.AuthorRaw.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
+			if ( !string.IsNullOrEmpty( ThisBook.Info.Author ) )
+				TagsAvailable.AddRange( ThisBook.Info.Author.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
 			Keywords.Text = ThisBook.Title.TrimForSearch();
 			HashTags.ItemsSource = TagsAvailable;

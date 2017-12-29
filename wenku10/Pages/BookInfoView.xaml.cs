@@ -29,7 +29,6 @@ using GR.Model.ListItem.Sharers;
 using GR.Model.ListItem;
 using GR.Model.Loaders;
 using GR.Model.Pages;
-using GR.Model.Section;
 using GR.Resources;
 using GR.Settings;
 using GR.Storage;
@@ -186,7 +185,7 @@ namespace wenku10.Pages
 						= BingCoverBtn.IsEnabled
 						= BingExists;
 
-					bool CanBing = BingExists || string.IsNullOrEmpty( Book.CoverSrcUrl );
+					bool CanBing = BingExists || string.IsNullOrEmpty( Book.Info.CoverSrcUrl );
 
 					UsingBing.Foreground = new SolidColorBrush(
 						BingExists
@@ -240,7 +239,7 @@ namespace wenku10.Pages
 			else
 			{
 				CommentBtn.IsEnabled = !ThisBook.IsLocal();
-				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.OriginalUrl );
+				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.Info.OriginalUrl );
 				LayoutRoot.DataContext = ThisBook;
 				InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
 			}
@@ -277,7 +276,7 @@ namespace wenku10.Pages
 
 		private void BrowserBtn_Click( object sender, RoutedEventArgs e )
 		{
-			var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
+			var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.Info.OriginalUrl ) );
 		}
 
 		private void TOCBtn_Click( object sender, RoutedEventArgs e )
@@ -364,7 +363,7 @@ namespace wenku10.Pages
 		{
 			ControlFrame.Instance.NavigateTo(
 				PageId.W_SEARCH, () => new WSearch()
-				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.AuthorRaw ) );
+				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.Author ) );
 		}
 
 		private void AddOrRemoveFav( object sender, RoutedEventArgs e )
@@ -377,7 +376,7 @@ namespace wenku10.Pages
 			}
 			else
 			{
-				BS.SaveBook( ThisBook.Id, ThisBook.Title, ThisBook.RecentUpdateRaw, ThisBook.LatestSection );
+				BS.SaveBook( ThisBook.Id, ThisBook.Title, ThisBook.RecentUpdate, ThisBook.LatestSection );
 				ThisBook.IsFav = true;
 			}
 
@@ -544,7 +543,7 @@ namespace wenku10.Pages
 		private void BingReloadCover()
 		{
 			BookLoader BL = new BookLoader( BookLoadComplete );
-			ThisBook.CoverSrcUrl = null;
+			ThisBook.Info.CoverSrcUrl = null;
 			BL.LoadCover( ThisBook, false );
 		}
 

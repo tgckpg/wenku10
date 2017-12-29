@@ -140,8 +140,8 @@ namespace wenku10.Pages.Sharers
 					if ( string.IsNullOrEmpty( DescInput.Text ) ) DescInput.Text = B.Intro;
 					break;
 				case "Press":
-					ZoneInput.PlaceholderText = B.PressRaw;
-					if ( string.IsNullOrEmpty( ZoneInput.Text ) ) ZoneInput.Text = B.PressRaw;
+					ZoneInput.PlaceholderText = B.Info.Press;
+					if ( string.IsNullOrEmpty( ZoneInput.Text ) ) ZoneInput.Text = B.Info.Press;
 					break;
 			}
 		}

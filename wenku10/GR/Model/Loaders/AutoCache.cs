@@ -55,7 +55,7 @@ namespace GR.Model.Loaders
 		private void OnWCacheInfo( DRequestCompletedEventArgs e, string id )
 		{
 			Shared.Storage.WriteString( ThisBook.TOCPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
-			Shared.Storage.WriteString( ThisBook.TOCDatePath, ThisBook.RecentUpdateRaw );
+			Shared.Storage.WriteString( ThisBook.TOCDatePath, ThisBook.Info.RecentUpdate );
 
 			WRegisterEpRequests();
 		}

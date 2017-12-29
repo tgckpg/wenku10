@@ -56,7 +56,7 @@ namespace GR.Model.Loaders
 					, ( DRequestCompletedEventArgs e, string id ) =>
 					{
 						Shared.Storage.WriteString( CurrentBook.TOCPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
-						Shared.Storage.WriteString( CurrentBook.TOCDatePath, CurrentBook.RecentUpdateRaw );
+						Shared.Storage.WriteString( CurrentBook.TOCDatePath, CurrentBook.Info.RecentUpdate );
 						OnComplete( b );
 					}
 					, ( string RequestURI, string id, Exception ex ) =>

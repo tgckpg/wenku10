@@ -80,8 +80,6 @@ namespace wenku10.Pages
 
 			CanvasListView.RegisterPropertyChangedCallback( TagProperty, UpdateCanvas );
 
-			NTimer.Instance.Start();
-
 			PStack = new Stack<Particle>();
 
 			int l = MainStage.Instance.IsPhone ? 100 : 500;
@@ -173,7 +171,7 @@ namespace wenku10.Pages
 		private void UpdateCanvas( DependencyObject sender, DependencyProperty dp )
 		{
 			bool NarrowScreen = "V".Equals( CanvasListView.Tag );
-			HBItems.ExecEach( x => x.NarrowScr = NarrowScreen );
+			HBItems?.ExecEach( x => x.NarrowScr = NarrowScreen );
 		}
 
 		private void SuperGiants_Tapped( object sender, TappedRoutedEventArgs e )

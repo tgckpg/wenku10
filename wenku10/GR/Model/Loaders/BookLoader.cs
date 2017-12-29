@@ -39,40 +39,31 @@ namespace GR.Model.Loaders
 		{
 			CurrentBook = b;
 
-			if( b.IsLocal() )
+			if ( b.IsLocal() )
 			{
 				OnComplete( b );
-				return;
 			}
-
-			if ( b.IsSpider() )
+			else if ( b.IsSpider() )
 			{
 				LoadInstruction( ( BookInstruction ) b, useCache );
-				return;
 			}
-
-			string id = b.Id;
-			string Mode = X.Const<string>( XProto.WProtocols, "ACTION_BOOK_INFO" );
-
-			if ( CurrentBook.IsEx() )
+			else if ( CurrentBook.IsEx() )
 			{
-				Mode = CurrentBook.XField<string>( "Mode" );
-			}
+				string BookId = b.Id;
+				string Mode = CurrentBook.XField<string>( "Mode" );
+				string FlagMode = "MODE_" + Mode;
 
-			XKey[] ReqKeys = X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, id );
-			if ( useCache )
-			{
-				string cacheName = X.Call<string>( XProto.WRuntimeCache, "GetCacheString", new object[] { ReqKeys } );
-				if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
+				if ( useCache && b.Info.Flags.Contains( FlagMode ) )
 				{
-					b.LastCache = Shared.Storage.FileTime( FileLinks.ROOT_CACHE + cacheName ).LocalDateTime;
-					ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
-					return;
+					OnComplete( b );
+				}
+				else
+				{
+					b.Info.Flags.Add( FlagMode );
+					X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
+						.InitDownload( BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId ), PrelaodBookInfo, PrelaodBookInfo, true );
 				}
 			}
-
-			X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
-				.InitDownload( id, ReqKeys, PrelaodBookInfo, PrelaodBookInfo, true );
 		}
 
 		public async void LoadInstruction( BookInstruction B, bool useCache )
@@ -120,13 +111,7 @@ namespace GR.Model.Loaders
 
 			CurrentBook = b;
 
-			if ( useCache && Shared.Storage.FileExists( b.IntroPath ) )
-			{
-				// This will trigger NotifyChanged for Intro
-				// getter will automatically retieved intro stored in IntroPath
-				CurrentBook.Intro = "OK";
-			}
-			else
+			if ( !useCache || string.IsNullOrEmpty( b.Info.LongDescription ) )
 			{
 				X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
 					b.Id
@@ -138,39 +123,19 @@ namespace GR.Model.Loaders
 
 		private void IntroFailed( string arg1, string arg2, Exception arg3 )
 		{
-			if ( !Shared.Storage.FileExists( CurrentBook.IntroPath ) )
-			{
-				StringResources stx = new StringResources( "Error" );
-				CurrentBook.Intro = stx.Str( "Download" );
-			}
+			StringResources stx = new StringResources( "Error" );
+			CurrentBook.IntroError( stx.Str( "Download" ) );
 		}
 
 		private void SaveIntro( DRequestCompletedEventArgs e, string id )
 		{
-			Shared.Storage.WriteString( CurrentBook.IntroPath, Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
-			CurrentBook.Intro = "OK";
+			CurrentBook.Intro = Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) );
 		}
 
 		private void PrelaodBookInfo( string cacheName, string id, Exception ex )
 		{
-			// This method is called when download is failed.
-			Logger.Log( ID, "Download failed: " + cacheName, LogType.INFO );
-			// Check if cache exist
-			cacheName = Uri.EscapeDataString( cacheName );
-			if ( Shared.Storage.FileExists( FileLinks.ROOT_CACHE + cacheName ) )
-			{
-				CurrentBook.LastCache = Shared.Storage.FileTime( FileLinks.ROOT_CACHE + cacheName ).LocalDateTime;
-				// Should inform user would using previous cache as data.
-				ExtractBookInfo( Shared.Storage.GetString( FileLinks.ROOT_CACHE + cacheName ), id );
-				// MessageBox.Show( "Some information could not be downloaded, using previous cache." );
-			}
-			else
-			{
-				// Download failed and no cache is available.
-				// Inform user there is a network problem
-				// MessageBox.Show( "Some information could not be downloaded, please try again later." );
-				OnComplete( null );
-			}
+			// Deprecated as info are already present in database
+			OnComplete( null );
 		}
 
 		private void PrelaodBookInfo( DRequestCompletedEventArgs e, string id )
@@ -183,6 +148,7 @@ namespace GR.Model.Loaders
 		{
 			InfoData = Shared.TC.Translate( InfoData );
 			CurrentBook.ParseXml( InfoData );
+			CurrentBook.SaveInfo();
 
 			if ( Shared.Storage.FileExists( CurrentBook.CoverPath ) )
 			{
@@ -208,13 +174,13 @@ namespace GR.Model.Loaders
 		{
 			if ( Cache && Shared.Storage.FileExists( B.CoverPath ) ) return;
 
-			if ( string.IsNullOrEmpty( B.CoverSrcUrl ) )
+			if ( string.IsNullOrEmpty( B.Info.CoverSrcUrl ) )
 			{
 				// Use bing service
 				string ThumbUrl = await new BingService( B ).GetImage();
 				if ( string.IsNullOrEmpty( ThumbUrl ) ) return;
 
-				B.CoverSrcUrl = ThumbUrl;
+				B.Info.CoverSrcUrl = ThumbUrl;
 			}
 
 			TaskCompletionSource<int> Awaitable = new TaskCompletionSource<int>();
@@ -223,13 +189,13 @@ namespace GR.Model.Loaders
 			new RuntimeCache( a => {
 				HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
 
-				if ( !string.IsNullOrEmpty( B.OriginalUrl ) )
+				if ( !string.IsNullOrEmpty( B.Info.OriginalUrl ) )
 				{
-					R.RequestHeaders.Referrer = new Uri( B.OriginalUrl );
+					R.RequestHeaders.Referrer = new Uri( B.Info.OriginalUrl );
 				}
 
 				return R;
-			} ).GET( new Uri( B.CoverSrcUrl ), ( a, b ) => {
+			} ).GET( new Uri( B.Info.CoverSrcUrl ), ( a, b ) => {
 				CoverDownloaded( a, b );
 				Awaitable.TrySetResult( 0 );
 			}
