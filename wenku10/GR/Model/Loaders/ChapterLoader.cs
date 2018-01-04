@@ -112,7 +112,7 @@ namespace GR.Model.Loaders
 			EpInstruction Inst = new EpInstruction( C, Settings );
 			IEnumerable<ProcConvoy> Convoys = await Inst.Process();
 
-			C.Content = new ChapterContent { Text = "" };
+			string ChapterText = "";
 
 			foreach ( ProcConvoy Konvoi in Convoys )
 			{
@@ -127,20 +127,19 @@ namespace GR.Model.Loaders
 
 				if ( Convoy.Payload is IStorageFile )
 				{
-					C.Content.Text += await ( ( IStorageFile ) Convoy.Payload ).ReadString();
+					ChapterText += await ( ( IStorageFile ) Convoy.Payload ).ReadString();
 				}
 				else if ( Convoy.Payload is IEnumerable<IStorageFile> )
 				{
 					foreach ( IStorageFile ISF in ( ( IEnumerable<IStorageFile> ) Convoy.Payload ) )
 					{
 						Shared.LoadMessage( "MergingContents", ISF.Name );
-						C.Content.Text += ( await ISF.ReadString() ) + "\n";
+						ChapterText += ( await ISF.ReadString() ) + "\n";
 					}
 				}
 			}
 
-			Shared.BooksDb.Chapters.Update( C );
-			await Shared.BooksDb.SaveChangesAsync();
+			await new ContentParser().ParseAsync( ChapterText, C );
 
 			OnComplete( C );
 		}
