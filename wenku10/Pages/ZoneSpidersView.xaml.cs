@@ -156,27 +156,30 @@ namespace wenku10.Pages
 			if ( Hold ) return;
 			Hold = true;
 
-			BookInstruction BInst = ( BookInstruction ) e.ClickedItem;
+			BookInstruction ZSInst = ( BookInstruction ) e.ClickedItem;
 			SpiderBook Item;
-			if ( ProcessedItems.ContainsKey( BInst.ZItemId ) )
+			if ( ProcessedItems.ContainsKey( ZSInst.ZItemId ) )
 			{
-				Item = ProcessedItems[ BInst.ZItemId ];
+				Item = ProcessedItems[ ZSInst.ZItemId ];
 			}
 			else
 			{
-				ClickedInner.DataContext = BInst;
+				ClickedInner.DataContext = ZSInst;
 
-				// ZoneId is set, we can save the instruction now
-				BInst.ZoneId = ZoneListContext.CurrentZone.ZoneId;
-				BInst.SaveInfo();
+				string ZoneId = ZoneListContext.CurrentZone.ZoneId;
 
-				Item = await SpiderBook.CreateSAsync( BInst.ZoneId, BInst.ZItemId, BInst.BookSpiderDef );
+				// We are saving it by getting the Book Entry from database first
+				BookInstruction BkInst = new BookInstruction( ZoneId, ZSInst.ZItemId );
+				BkInst.Update( ZSInst );
+				BkInst.SaveInfo();
+
+				Item = await SpiderBook.CreateSAsync( BkInst.ZoneId, BkInst.ZItemId, ZSInst.BookSpiderDef );
 				ClickedSpider.DataContext = Item;
 
 				if ( !Item.ProcessSuccess && Item.CanProcess )
 				{
 					await ItemProcessor.ProcessLocal( Item );
-					ProcessedItems[ BInst.ZItemId ] = Item;
+					ProcessedItems[ ZSInst.ZItemId ] = Item;
 				}
 			}
 

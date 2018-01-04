@@ -19,9 +19,9 @@ namespace GR.Model.Loaders
 	using Book.Spider;
 	using Ext;
 	using Database.Models;
+	using ListItem;
 	using Resources;
 	using Settings;
-	using GR.Model.ListItem;
 
 	sealed class ChapterLoader
 	{

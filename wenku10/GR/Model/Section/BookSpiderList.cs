@@ -65,7 +65,9 @@ namespace GR.Model.Section
 					continue;
 
 				Loading = LoadText + ": " + Bk.ZItemId;
-				SpiderBook LB = await SpiderBook.CreateSAsync( Bk.ZItemId );
+
+				BookInstruction BkInst = new BookInstruction( Bk );
+				SpiderBook LB = await SpiderBook.CreateSAsync( BkInst.ZoneId, BkInst.ZItemId, BkInst.BookSpiderDef );
 
 				if ( LB.ProcessSuccess || LB.CanProcess )
 				{
