@@ -123,7 +123,7 @@ namespace GR.Section
 				case AppKeys.SP_PROCESS_COMP:
 
 					LocalBook SBook = ( LocalBook ) Mesg.Payload;
-					HubScriptItem HSC = SearchSet.Cast<HubScriptItem>().FirstOrDefault( x => x.Id == SBook.aid );
+					HubScriptItem HSC = SearchSet.Cast<HubScriptItem>().FirstOrDefault( x => x.Id == SBook.ZItemId );
 
 					if ( HSC == null )
 					{

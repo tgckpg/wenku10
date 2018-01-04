@@ -286,7 +286,7 @@ namespace Tasks
 						continue;
 					}
 
-					SpiderBook SBook = await SpiderBook.CreateAsyncSpider( UpdateParam.Id );
+					SpiderBook SBook = await SpiderBook.CreateSAsync( UpdateParam.Id );
 					if ( !SBook.CanProcess )
 					{
 						XReg.RemoveParameter( UpdateParam.Id );
@@ -300,13 +300,10 @@ namespace Tasks
 
 						if ( Book.Packed == true )
 						{
-							string OHash = Shared.Storage.GetString( Book.TOCDatePath );
-							await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
-							string NHash = GR.GSystem.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
-
-							if ( OHash != NHash )
+							// TODO: Hash the entire TOC for updates
+							throw new NotImplementedException();
+							if ( Book.NeedUpdate )
 							{
-								Shared.Storage.WriteString( Book.TOCDatePath, NHash );
 								await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
 							}
 						}

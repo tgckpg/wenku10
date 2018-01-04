@@ -430,7 +430,7 @@ namespace wenku10.Pages
 				PinManager PM = new PinManager();
 				PM.RegPin( ThisBook, TileId, true );
 
-				SpiderBook SpDef = await SpiderBook.CreateAsyncSpider( ThisBook.ZItemId );
+				SpiderBook SpDef = await SpiderBook.CreateSAsync( ThisBook.ZItemId );
 				await PageProcessor.RegLiveSpider( SpDef, ( BookInstruction ) ThisBook, TileId );
 			}
 		}

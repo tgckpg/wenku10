@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
@@ -40,14 +41,14 @@ namespace GR.Model.Loaders
 			Shared.LoadMessage( "LoadingVolumes" );
 			CurrentBook = b;
 
-			if( CurrentBook.Volumes == null )
+			if ( CurrentBook.Volumes == null )
 			{
 				await Shared.BooksDb.Entry( b.Entry ).Collection( x => x.Volumes ).LoadAsync();
 			}
 
 			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && CurrentBook.Volumes.Any() ) )
 			{
-				foreach( Volume Vol in CurrentBook.Volumes )
+				foreach ( Volume Vol in CurrentBook.Volumes )
 					await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).LoadAsync();
 
 				OnComplete( b );
@@ -77,25 +78,30 @@ namespace GR.Model.Loaders
 			}
 		}
 
-		public async void LoadInst( BookInstruction b )
+		private async void LoadInst( BookInstruction b )
 		{
-			throw new NotImplementedException();
-			Volume[] Vols = b.GetVolumes();
-			foreach ( Volume Vol in Vols )
+			foreach ( VolInstruction VInst in b.GetVolInsts() )
 			{
-				Shared.LoadMessage( "SubProcessRun", Vol.Title );
+				Shared.LoadMessage( "SubProcessRun", VInst.Title );
 				// This should finalize the chapter info
-				// await Vol.SubProcRun( b );
+				var Convoy = await VInst.Process( b );
 			}
 
-			if( Vols.Count() == 0 )
+			Shared.LoadMessage( "CompilingTOC", b.Title );
+
+			IEnumerable<Volume> Vols = b.GetVolInsts().Remap( x => x.ToVolume( b.Entry ) );
+
+			if ( Vols.Any() )
+			{
+				b.Entry.Volumes.Clear();
+				b.Entry.Volumes.AddRange( Vols );
+				b.SaveInfo();
+			}
+			else
 			{
 				MessageBus.SendUI( GetType(), AppKeys.HS_NO_VOLDATA, b );
 			}
 
-			Shared.LoadMessage( "CompilingTOC", b.Title );
-			// await b.SaveTOC( Vols );
-			Shared.Storage.WriteString( b.TOCDatePath, GSystem.Utils.Md5( Shared.Storage.GetBytes( b.TOCPath ).AsBuffer() ) );
 			OnComplete( b );
 		}
 

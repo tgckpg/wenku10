@@ -71,7 +71,7 @@ namespace GR.Model.Section
 
 		public LocalBook GetById( string Id )
 		{
-			return Data?.Cast<LocalBook>().FirstOrDefault( x => x.aid == Id );
+			return Data?.Cast<LocalBook>().FirstOrDefault( x => x.ZItemId == Id );
 		}
 
 		protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
@@ -79,7 +79,7 @@ namespace GR.Model.Section
 			if ( Items != null && FavOnly )
 			{
 				string[] ids = new BookStorage().GetIdList();
-				Items = Items.Where( x => ids.Contains( ( x as LocalBook ).aid ) );
+				Items = Items.Where( x => ids.Contains( ( x as LocalBook ).ZItemId ) );
 			}
 
 			return base.Filter( Items );
@@ -107,7 +107,7 @@ namespace GR.Model.Section
 
 				foreach ( string Id in BookIds )
 				{
-					if ( Data != null && Data.Any( x => ( x as LocalBook ).aid == Id ) )
+					if ( Data != null && Data.Any( x => ( x as LocalBook ).ZItemId == Id ) )
 					{
 						continue;
 					}

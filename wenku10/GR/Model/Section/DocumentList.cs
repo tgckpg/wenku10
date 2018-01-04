@@ -64,7 +64,7 @@ namespace GR.Model.Section
 				}
 
 				LocalBook LB = new LocalBook( x );
-				LB.IsFav = ids.Contains( LB.aid );
+				LB.IsFav = ids.Contains( LB.ZItemId );
 				return LB;
 			} );
 

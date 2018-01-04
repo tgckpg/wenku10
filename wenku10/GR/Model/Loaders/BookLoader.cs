@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.Helpers;
@@ -14,10 +14,9 @@ namespace GR.Model.Loaders
 	using Ext;
 	using Book;
 	using Book.Spider;
+	using GSystem;
 	using ListItem;
 	using Resources;
-	using Settings;
-	using GSystem;
 	using Text;
 
 	sealed class BookLoader : IBookLoader
@@ -68,23 +67,27 @@ namespace GR.Model.Loaders
 
 		public async void LoadInstruction( BookInstruction B, bool useCache )
 		{
-			SpiderBook SBook = new SpiderBook( B );
+			SpiderBook SBook = await SpiderBook.CreateSAsync( B.ZoneId, B.ZItemId, B.BookSpiderDef );
 
 			if ( Shared.Storage.FileExists( SBook.MetaLocation ) )
 			{
 				B.LastCache = Shared.Storage.FileTime( SBook.MetaLocation ).LocalDateTime;
 			}
 
-			if ( useCache && Shared.Storage.FileExists( B.TOCPath ) )
+
+			if ( useCache && ( B.Packed == true || Shared.BooksDb.Volumes.Any( x => x.Book == B.Entry ) ) )
 			{
-				B.PackSavedVols( SBook.PSettings );
+				if ( B.Packed != true )
+				{
+					B.PackSavedVols( SBook.PSettings );
+				}
 			}
 			else
 			{
 				await SBook.Process();
 
 				// Cannot download content, use cache if available
-				if ( !( B.Packed == true || B.Packable ) && Shared.Storage.FileExists( B.TOCPath ) )
+				if ( !( B.Packed == true || B.Packable ) && Shared.BooksDb.Volumes.Any( x => x.Book == B.Entry ) )
 				{
 					Logger.Log( ID, "Spider failed to produce instructions, using cache instead", LogType.WARNING );
 					B.PackSavedVols( SBook.PSettings );
@@ -94,8 +97,6 @@ namespace GR.Model.Loaders
 			if ( B.Packed != true && B.Packable )
 			{
 				B.PackVolumes( SBook.GetPPConvoy() );
-				throw new NotImplementedException();
-				// await B.SaveTOC( B.GetVolumes().Remap( x => ( SVolume ) x ) );
 			}
 
 			if ( SBook.Processed && SBook.ProcessSuccess )

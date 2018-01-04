@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Windows.Storage;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
+using libtaotu.Controls;
+using libtaotu.Models.Procedure;
+
 using wenku10;
 
 namespace GR.Model.Loaders
 {
+	using Book.Spider;
 	using Ext;
 	using Database.Models;
-	using Book.Spider;
 	using Resources;
 	using Settings;
+	using GR.Model.ListItem;
 
 	sealed class ChapterLoader
 	{
@@ -59,18 +66,7 @@ namespace GR.Model.Loaders
 			}
 			else if ( C.Book.Type == BookType.S )
 			{
-				throw new NotImplementedException();
-				// if this belongs to the spider
-				/*
-				SChapter SC = new SChapter( C );
-				await SC.SubProcRun( Cache );
-
-				if ( SC.TempFile != null )
-				{
-					await new ContentParser().ParseAsync( await SC.TempFile.ReadString(), SC );
-				}
-				*/
-				OnComplete( C );
+				LoadChapterInst( C, ( BookInstruction ) CurrentBook );
 			}
 			else
 			{
@@ -107,6 +103,46 @@ namespace GR.Model.Loaders
 		public async void Load( Chapter C, bool Cache = true )
 		{
 			await LoadAsync( C, Cache );
+		}
+
+		private async void LoadChapterInst( Chapter C, BookInstruction BkInst )
+		{
+			XRegistry Settings = SpiderBook.GetSettings( BkInst.ZoneId, BkInst.ZItemId );
+
+			EpInstruction Inst = new EpInstruction( C, Settings );
+			IEnumerable<ProcConvoy> Convoys = await Inst.Process();
+
+			C.Content = new ChapterContent { Text = "" };
+
+			foreach ( ProcConvoy Konvoi in Convoys )
+			{
+				ProcConvoy Convoy = ProcManager.TracePackage(
+					Konvoi
+					, ( d, c ) =>
+					c.Payload is IEnumerable<IStorageFile>
+					|| c.Payload is IStorageFile
+				);
+
+				if ( Convoy == null ) continue;
+
+				if ( Convoy.Payload is IStorageFile )
+				{
+					C.Content.Text += await ( ( IStorageFile ) Convoy.Payload ).ReadString();
+				}
+				else if ( Convoy.Payload is IEnumerable<IStorageFile> )
+				{
+					foreach ( IStorageFile ISF in ( ( IEnumerable<IStorageFile> ) Convoy.Payload ) )
+					{
+						Shared.LoadMessage( "MergingContents", ISF.Name );
+						C.Content.Text += ( await ISF.ReadString() ) + "\n";
+					}
+				}
+			}
+
+			Shared.BooksDb.Chapters.Update( C );
+			await Shared.BooksDb.SaveChangesAsync();
+
+			OnComplete( C );
 		}
 
 		private void OnComplete( Chapter C )

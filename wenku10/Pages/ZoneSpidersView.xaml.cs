@@ -166,10 +166,11 @@ namespace wenku10.Pages
 			{
 				ClickedInner.DataContext = BInst;
 
-				// "Z" to let LocalFileList know this is a Zone directory
-				BInst.SetId( AppKeys.SP_ZONE_PFX + ZoneListContext.CurrentZone.ZoneId );
+				// ZoneId is set, we can save the instruction now
+				BInst.ZoneId = ZoneListContext.CurrentZone.ZoneId;
+				BInst.SaveInfo();
 
-				Item = await SpiderBook.CreateFromZoneInst( BInst );
+				Item = await SpiderBook.CreateSAsync( BInst.ZoneId, BInst.ZItemId, BInst.BookSpiderDef );
 				ClickedSpider.DataContext = Item;
 
 				if ( !Item.ProcessSuccess && Item.CanProcess )

@@ -148,7 +148,7 @@ namespace wenku10.Pages.Sharers
 
 		private async void PredefineFile( string Id )
 		{
-			SelectedBook = await SpiderBook.CreateAsyncSpider( Id );
+			SelectedBook = await SpiderBook.CreateSAsync( Id );
 			FileName.Text = SelectedBook.MetaLocation;
 		}
 

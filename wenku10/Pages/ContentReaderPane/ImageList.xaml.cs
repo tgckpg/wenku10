@@ -172,7 +172,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 			if ( ReaderPage.CurrentBook.Type == BookType.S )
 			{
-				foreach( SChapter C in V.Chapters.Cast<SChapter>() )
+				foreach( Chapter C in V.Chapters )
 				{
 					throw new NotImplementedException(); // TODO
 					// await new ChapterLoader().LoadAsync( C );
