@@ -91,10 +91,6 @@ namespace GR.GSystem
 			L2 = true;
 
 			X.Instance<object>( XProto.LibStart );
-
-			// 1. Runtime Queue
-			global::wenku10.App.RuntimeTransfer = new WRuntimeTransfer();
-			Logger.Log( ID, "WRuntimeTransfer Initilizated", LogType.INFO );
 		}
 
 		private void AppSettingsInit()

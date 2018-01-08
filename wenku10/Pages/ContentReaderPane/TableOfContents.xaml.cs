@@ -97,8 +97,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private void TOCList_SelectionChanged( object sender, SelectionChangedEventArgs e )
 		{
-			if ( e.AddedItems.Count() < 1 ) return;
-
+			if ( !e.AddedItems.Any() ) return;
 			Reader.OpenBook( ( e.AddedItems[ 0 ] as TOCItem ).GetChapter() );
 		}
 

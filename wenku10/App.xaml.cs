@@ -35,8 +35,6 @@ namespace wenku10
 	{
 		public static readonly string ID = typeof( App ).Name;
 
-		internal static global::GR.AdvDM.WRuntimeTransfer RuntimeTransfer;
-
 		internal static global::GR.GSystem.ViewControl ViewControl;
 		internal static KeyboardControl KeyboardControl;
 		/// <summary>

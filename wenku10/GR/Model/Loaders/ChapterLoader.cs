@@ -12,8 +12,6 @@ using Net.Astropenguin.Logging;
 using libtaotu.Controls;
 using libtaotu.Models.Procedure;
 
-using wenku10;
-
 namespace GR.Model.Loaders
 {
 	using Book.Spider;
@@ -53,7 +51,7 @@ namespace GR.Model.Loaders
 			}
 		}
 
-		public async Task LoadAsync( Chapter C, bool Cache = true )
+		public async void Load( Chapter C, bool Cache = true )
 		{
 			if( C.Content == null )
 			{
@@ -66,7 +64,7 @@ namespace GR.Model.Loaders
 			}
 			else if ( C.Book.Type == BookType.S )
 			{
-				LoadChapterInst( C, ( BookInstruction ) CurrentBook );
+				LoadChapterInst( C );
 			}
 			else
 			{
@@ -74,9 +72,6 @@ namespace GR.Model.Loaders
 					throw new InvalidOperationException( "ChapterLoader is in Bare mode" );
 
 				IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
-
-				// Cancel thread if there is same job downloading
-				App.RuntimeTransfer.CancelThread( C.Id.ToString() );
 
 				// Initiate download, precache should not be done internally.
 				wCache.InitDownload(
@@ -93,20 +88,16 @@ namespace GR.Model.Loaders
 					{
 						Logger.Log( ID, ex.Message, LogType.ERROR );
 						GSystem.ActionCenter.Instance.ShowError( "Download" );
-						// OnComplete( C );
+						OnComplete( C );
 					}
 					, false
 				);
 			}
 		}
 
-		public async void Load( Chapter C, bool Cache = true )
+		private async void LoadChapterInst( Chapter C )
 		{
-			await LoadAsync( C, Cache );
-		}
-
-		private async void LoadChapterInst( Chapter C, BookInstruction BkInst )
-		{
+			BookInstruction BkInst = ( BookInstruction ) CurrentBook ?? new BookInstruction( C.Book );
 			XRegistry Settings = SpiderBook.GetSettings( BkInst.ZoneId, BkInst.ZItemId );
 
 			EpInstruction Inst = new EpInstruction( C, Settings );

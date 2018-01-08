@@ -10,9 +10,9 @@ using GR.Taotu;
 
 namespace Tasks
 {
-	sealed class TasksMarker : GrimoireMarker { public override Task Edit() { throw new NotImplementedException(); } } 
-	sealed class TasksExtractor : GrimoireExtractor { public override Task Edit() { throw new NotImplementedException(); } }
-	sealed class TasksListLoader : GrimoireListLoader { public override Task Edit() { throw new NotImplementedException(); } }
+	sealed class TasksMarker : GrimoireMarker { public override Task Edit() { throw new NotSupportedException(); } } 
+	sealed class TasksExtractor : GrimoireExtractor { public override Task Edit() { throw new NotSupportedException(); } }
+	sealed class TasksListLoader : GrimoireListLoader { public override Task Edit() { throw new NotSupportedException(); } }
 
 	sealed class THttpRequest : HttpRequest
 	{

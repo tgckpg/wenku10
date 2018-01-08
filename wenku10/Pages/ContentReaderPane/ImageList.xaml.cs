@@ -28,14 +28,14 @@ using GR.Model.Book.Spider;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Loaders;
-using GR.Settings;
+using GR.Resources;
 
 namespace wenku10.Pages.ContentReaderPane
 {
 	sealed partial class ImageList : Page
 	{
-		private ContentReaderVert ReaderPage;
-		public ImageList( ContentReaderVert R )
+		private ContentReaderBase ReaderPage;
+		public ImageList( ContentReaderBase R )
 		{
 			this.InitializeComponent();
 
@@ -96,33 +96,10 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()
 		{
-			GR.Model.Book.VolumesInfo VF = new GR.Model.Book.VolumesInfo( ReaderPage.CurrentBook );
-			GR.Model.Book.EpisodeStepper ES = new GR.Model.Book.EpisodeStepper( VF );
-
-			ES.SetCurrentPosition( ReaderPage.CurrentChapter, true );
-
-			List<Chapter> Chs = new List<Chapter>();
-
 			bool NeedDownload = false;
 
-			int Vid = ReaderPage.CurrentChapter.Volume.Id;
-			while ( ES.Vid == Vid )
-			{
-				Chapter Ch = ES.Chapter;
-				Chs.Add( Ch );
-
-				if ( !string.IsNullOrEmpty( Ch.Content.Text ) )
-				{
-					NeedDownload = true;
-				}
-
-				if( Ch.Image != null )
-				{
-					return new AsyncTryOut<Chapter>( true, Ch );
-				}
-
-				if ( !ES.StepNext() ) break;
-			}
+			Volume V = ReaderPage.CurrentChapter.Volume;
+			NeedDownload = Shared.BooksDb.Chapters.Any( x => x.Volume == V && x.Content == null );
 
 			if ( !NeedDownload )
 			{
@@ -148,14 +125,12 @@ namespace wenku10.Pages.ContentReaderPane
 
 			// Really, this desperate?
 			TaskCompletionSource<AsyncTryOut<Chapter>> TCSChapter = new TaskCompletionSource<AsyncTryOut<Chapter>>();
-			Volume V = ReaderPage.CurrentBook.Volumes.First( x => x.Id == ReaderPage.CurrentChapter.VolumeId );
 			ChapterList.ItemsSource = V.Chapters;
 
-			WRuntimeTransfer.DCycleCompleteHandler CycleComp = null;
+			Action<object, DCycleCompleteArgs> CycleComp = null;
 
 			CycleComp = delegate ( object sender, DCycleCompleteArgs e )
 			{
-				App.RuntimeTransfer.OnCycleComplete -= CycleComp;
 				bool AllSet = V.Chapters.All( x => !string.IsNullOrEmpty( x.Content.Text ) );
 
 				Chapter C = V.Chapters.FirstOrDefault( x => x.Image != null );
@@ -170,23 +145,7 @@ namespace wenku10.Pages.ContentReaderPane
 				TCSChapter.TrySetResult( new AsyncTryOut<Chapter>( true, C ) );
 			};
 
-			if ( ReaderPage.CurrentBook.Type == BookType.S )
-			{
-				foreach( Chapter C in V.Chapters )
-				{
-					throw new NotImplementedException(); // TODO
-					// await new ChapterLoader().LoadAsync( C );
-					// C.UpdateStatus();
-				}
-
-				// Fire the event myself
-				CycleComp( this, new DCycleCompleteArgs() );
-			}
-			else
-			{
-				App.RuntimeTransfer.OnCycleComplete += CycleComp;
-				AutoCache.DownloadVolume( ReaderPage.CurrentBook, V );
-			}
+			AutoCache.DownloadVolume( ReaderPage.CurrentBook, V );
 
 			return await TCSChapter.Task;
 		}
