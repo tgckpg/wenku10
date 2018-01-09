@@ -117,7 +117,7 @@ namespace GR.Model.Loaders
 			{
 				X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
 					b.ZItemId
-					, X.Call<XKey[]>( XProto.WRequest, "GetBookIntro", b.Id )
+					, X.Call<XKey[]>( XProto.WRequest, "GetBookIntro", b.ZItemId )
 					, SaveIntro, IntroFailed, false
 				);
 			}

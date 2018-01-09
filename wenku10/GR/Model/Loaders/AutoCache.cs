@@ -3,29 +3,32 @@ using System.Collections;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.Helpers;
-using Net.Astropenguin.IO;
-using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
-
-using wenku10;
 
 namespace GR.Model.Loaders
 {
 	using Book;
+	using Database.Models;
 	using Ext;
 
 	sealed class AutoCache : ActiveData, IAutoCache
 	{
-		public static readonly string ID = typeof( AutoCache ).Name;
-
 		private const int AutoLimit = 2;
 		private static int CurrentCount = 1;
 
 		BookItem ThisBook;
 		Action<BookItem> OnComplete;
 
-		public string StatusText { get; private set; }
+		private string _StatusText;
+		public string StatusText
+		{
+			get => _StatusText;
+			private set
+			{
+				_StatusText = value;
+				NotifyChanged( "StatusText" );
+			}
+		}
 
 		public AutoCache( BookItem b, Action<BookItem> Handler )
 		{
@@ -35,26 +38,31 @@ namespace GR.Model.Loaders
 			StatusText = "Ready";
 			if ( CurrentCount < AutoLimit )
 			{
-				// XXX
+				new VolumeLoader( LoadAllVolumes ).Load( b );
 			}
 		}
 
-		private void DispLog( string p )
+		private async void LoadAllVolumes( BookItem b )
 		{
-			Logger.Log( ID, p, LogType.DEBUG );
-			Worker.UIInvoke( () =>
+			foreach( Volume Vol in b.GetVolumes() )
 			{
-				StatusText = p;
-				NotifyChanged( "StatusText" );
-			} );
+				foreach ( Chapter Ch in Vol.Chapters )
+				{
+					StatusText = Vol.Title + "[" + Ch.Title + "]";
+					TaskCompletionSource<bool> ChLoaded = new TaskCompletionSource<bool>();
+					new ChapterLoader( b, x => { ChLoaded.SetResult( true ); } ).Load( Ch );
+					await ChLoaded.Task;
+				}
+			}
+			OnComplete( b );
 		}
 
-		internal static async void DownloadVolume( BookItem Book, Database.Models.Volume Vol )
+		internal static async void DownloadVolume( BookItem Book, Volume Vol )
 		{
-			foreach ( Database.Models.Chapter C in Vol.Chapters )
+			foreach ( Chapter C in Vol.Chapters )
 			{
 				TaskCompletionSource<bool> ChLoaded = new TaskCompletionSource<bool>();
-				new ChapterLoader( x => { ChLoaded.SetResult( true ); } ).Load( C );
+				new ChapterLoader( Book, x => { ChLoaded.SetResult( true ); } ).Load( C );
 				await ChLoaded.Task;
 			}
 		}

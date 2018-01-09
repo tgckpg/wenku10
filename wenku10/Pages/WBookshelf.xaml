@@ -118,7 +118,7 @@
                                 </TextBlock>
                             </StackPanel>
                             <Border Grid.Column="0" Grid.Row="1"
-                                    Visibility="{Binding UpdateActive, Converter={StaticResource DataVisConverter}, ConverterParameter=1}"
+                                    Visibility="{Binding UpdateActive, Converter={StaticResource DataVisConverter}}"
                                     Background="{StaticResource Shades40}">
                                 <TextBlock Foreground="{StaticResource RelativeShadesBrush}"
                                            TextTrimming="WordEllipsis"

@@ -38,19 +38,6 @@ namespace GR.Model.Loaders
 			this.CompleteHandler = CompleteHandler;
 		}
 
-		public ChapterLoader( Action<Chapter> CompleteHandler = null )
-		{
-			ProtoMode = false;
-			if( CompleteHandler == null )
-			{
-				this.CompleteHandler = x => { };
-			}
-			else
-			{
-				this.CompleteHandler = CompleteHandler;
-			}
-		}
-
 		public async void Load( Chapter C, bool Cache = true )
 		{
 			if( C.Content == null )
@@ -68,9 +55,6 @@ namespace GR.Model.Loaders
 			}
 			else
 			{
-				if ( !ProtoMode )
-					throw new InvalidOperationException( "ChapterLoader is in Bare mode" );
-
 				IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
 
 				// Initiate download, precache should not be done internally.
