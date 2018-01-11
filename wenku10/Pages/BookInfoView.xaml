@@ -99,7 +99,7 @@
                 <c:SplashRipple x:Name="SplashCover"
                                 Grid.RowSpan="4"
                                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                                Source="{Binding CoverExistsPath}" />
+                                Source="{Binding CoverSourcePath}" />
 
                 <Grid x:Name="Indicators" Margin="0,15"
                         VerticalAlignment="Top">

@@ -77,7 +77,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 			if( EditTarget.PropDefs.Count == 0 )
 			{
-				EditTarget.PropDefs.Add( new WenkuExtractor.PropExt( BookInfo.Title ) );
+				EditTarget.PropDefs.Add( new WenkuExtractor.PropExt( PropType.Title ) );
 			}
 
 			IncomingCheck.IsChecked = EditTarget.Incoming;
@@ -182,7 +182,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 			if ( e.AddedItems.Count == 0 ) return;
 
 			ComboBox Cb = sender as ComboBox;
-			GenericData<BookInfo> NType = e.AddedItems[ 0 ] as GenericData<BookInfo>;
+			GenericData<PropType> NType = e.AddedItems[ 0 ] as GenericData<PropType>;
 
 			GrimoireExtractor.PropExt Ext = ( GrimoireExtractor.PropExt ) Cb.DataContext;
 			Ext.PType = NType.Data;

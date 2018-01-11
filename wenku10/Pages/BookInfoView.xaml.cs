@@ -158,6 +158,7 @@ namespace wenku10.Pages
 
 			BL.Load( Book, true );
 			BL.LoadIntro( Book, true );
+			BL.LoadCover( Book, true );
 
 			SyncAnchors();
 			SetContext();
@@ -543,7 +544,7 @@ namespace wenku10.Pages
 
 		private void BingReloadCover()
 		{
-			BookLoader BL = new BookLoader( BookLoadComplete );
+			BookLoader BL = new BookLoader();
 			ThisBook.Info.CoverSrcUrl = null;
 			BL.LoadCover( ThisBook, false );
 		}

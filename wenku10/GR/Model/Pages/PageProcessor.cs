@@ -17,6 +17,7 @@ using Tasks;
 
 namespace GR.Model.Pages
 {
+	using Book;
 	using Book.Spider;
 	using CompositeElement;
 	using Database.Models;
@@ -25,8 +26,8 @@ namespace GR.Model.Pages
 	using ListItem.Sharers;
 	using Loaders;
 	using Model.Section;
+	using Resources;
 	using Storage;
-	using BookItem = Book.BookItem;
 
 	sealed class PageProcessor
 	{
@@ -46,12 +47,14 @@ namespace GR.Model.Pages
 				return new NameValue<Func<Page>>( PageId.SCRIPT_DETAILS, () => new ScriptDetails( HSI ) );
 			}
 
-			else if ( Item is BookInfoItem )
+			else if ( Item is BookBannerItem )
 			{
-				BookInfoItem BItem = ( BookInfoItem ) Item;
+				BookBannerItem BItem = ( BookBannerItem ) Item;
+				Book Bk = Shared.BooksDb.Books.Find( BItem.BookId );
+
 				return new NameValue<Func<Page>>(
 					PageId.BOOK_INFO_VIEW
-					, () => new BookInfoView( X.Instance<BookItem>( XProto.BookItemEx, BItem.Payload ) )
+					, () => new BookInfoView( X.Instance<BookItem>( XProto.BookItemEx, Bk.ZItemId ) )
 				);
 			}
 

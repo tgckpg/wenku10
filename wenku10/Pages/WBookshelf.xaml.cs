@@ -184,7 +184,7 @@ namespace wenku10.Pages
 			if ( Locked ) return;
 			Locked = true;
 
-			string Id = ( ( BookInfoItem ) e.ClickedItem ).Payload;
+			string Id = ( ( BookBannerItem ) e.ClickedItem ).Payload;
 
 			IDeathblow Deathblow = await ItemProcessor.GetDeathblow( Id );
 			BookItem Book = Deathblow == null ? ItemProcessor.GetBookEx( Id ) : Deathblow.GetBook();

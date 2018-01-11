@@ -60,7 +60,7 @@ namespace GR.Model.Loaders
 				{
 					b.Info.Flags.Add( FlagMode );
 					X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
-						.InitDownload( BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId ), PrelaodBookInfo, PrelaodBookInfo, true );
+						.InitDownload( BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId ), PreloadBookInfo, PreloadBookInfo, true );
 				}
 			}
 		}
@@ -102,8 +102,6 @@ namespace GR.Model.Loaders
 			if ( SBook.Processed && SBook.ProcessSuccess )
 				B.LastCache = DateTime.Now;
 
-			await CacheCover( B, true );
-
 			OnComplete( B );
 		}
 
@@ -134,47 +132,32 @@ namespace GR.Model.Loaders
 			CurrentBook.Intro = Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) );
 		}
 
-		private void PrelaodBookInfo( string cacheName, string id, Exception ex )
+		private void PreloadBookInfo( string cacheName, string id, Exception ex )
 		{
 			// Deprecated as info are already present in database
 			OnComplete( null );
 		}
 
-		private void PrelaodBookInfo( DRequestCompletedEventArgs e, string id )
+		private void PreloadBookInfo( DRequestCompletedEventArgs e, string id )
 		{
-			CurrentBook.LastCache = DateTime.Now;
-			ExtractBookInfo( e.ResponseString, id );
+			CurrentBook.ParseXml( Shared.TC.Translate( e.ResponseString ) );
+			CurrentBook.SaveInfo();
+			OnComplete( CurrentBook );
 		}
 
-		private void ExtractBookInfo( string InfoData, string id )
+		public async void LoadCover( BookItem B, bool Cache )
 		{
-			InfoData = Shared.TC.Translate( InfoData );
-			CurrentBook.ParseXml( InfoData );
-			CurrentBook.SaveInfo();
+			if ( Cache && B.CoverExist ) return;
 
-			if ( Shared.Storage.FileExists( CurrentBook.CoverPath ) )
-			{
-				OnComplete( CurrentBook );
-			}
-			else
+			if ( B.IsEx() )
 			{
 				X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
-					id, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", id )
-					, CoverDownloaded, Utils.DoNothing, false
+					B.ZItemId, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", B.ZItemId )
+					, ( e, id ) => B.SaveCover( e.ResponseBytes )
+					, Utils.DoNothing, false
 				);
+				return;
 			}
-		}
-
-		public async void LoadCover( BookItem Book, bool Cache )
-		{
-			CurrentBook = Book;
-			await CacheCover( Book, Cache );
-			OnComplete( Book );
-		}
-
-		private async Task CacheCover( BookItem B, bool Cache )
-		{
-			if ( Cache && Shared.Storage.FileExists( B.CoverPath ) ) return;
 
 			if ( string.IsNullOrEmpty( B.Info.CoverSrcUrl ) )
 			{
@@ -188,7 +171,8 @@ namespace GR.Model.Loaders
 			TaskCompletionSource<int> Awaitable = new TaskCompletionSource<int>();
 
 			// Set the referer, as it is required by some site such as fanfiction.net
-			new RuntimeCache( a => {
+			new RuntimeCache( a =>
+			{
 				HttpRequest R = new WHttpRequest( a ) { EN_UITHREAD = false };
 
 				if ( !string.IsNullOrEmpty( B.Info.OriginalUrl ) )
@@ -197,30 +181,7 @@ namespace GR.Model.Loaders
 				}
 
 				return R;
-			} ).GET( new Uri( B.Info.CoverSrcUrl ), ( a, b ) => {
-				CoverDownloaded( a, b );
-				Awaitable.TrySetResult( 0 );
-			}
-			// Failed handler
-			, ( a, b, c ) =>
-			{
-				Awaitable.TrySetResult( 0 );
-			}, false );
-
-			await Awaitable.Task;
-		}
-
-		private void CoverDownloaded( DRequestCompletedEventArgs e, string id )
-		{
-			Shared.Storage.WriteBytes( CurrentBook.CoverPath, e.ResponseBytes );
-
-			SetCover( CurrentBook );
-			OnComplete( CurrentBook );
-		}
-
-		private void SetCover( BookItem B )
-		{
-			B.CoverUpdate();
+			} ).GET( new Uri( B.Info.CoverSrcUrl ), ( e, id ) => B.SaveCover( e.ResponseBytes ), Utils.DoNothing, false );
 		}
 
 		private void OnComplete( BookItem b )
