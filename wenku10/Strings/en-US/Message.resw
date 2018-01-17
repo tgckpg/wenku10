@@ -234,4 +234,7 @@
   <data name="TranslateTC" xml:space="preserve">
     <value>Do you want to translate this document to Chinese ( traditional )?</value>
   </data>
+  <data name="SourceNotAvailable" xml:space="preserve">
+    <value>Item source has either been lost or deleted</value>
+  </data>
 </root>

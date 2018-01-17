@@ -49,7 +49,12 @@ namespace GR.Model.Loaders
 			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && CurrentBook.Volumes.Any() ) )
 			{
 				foreach ( Volume Vol in CurrentBook.Volumes )
-					await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).LoadAsync();
+				{
+					if ( Vol.Chapters == null )
+					{
+						await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).LoadAsync();
+					}
+				}
 
 				OnComplete( b );
 			}
@@ -66,7 +71,7 @@ namespace GR.Model.Loaders
 					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", CurrentBook.ZItemId )
 					, ( DRequestCompletedEventArgs e, string id ) =>
 					{
-						CurrentBook.ParseVolumeData( Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
+						CurrentBook.XCall( "ParseVolume", Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
 						OnComplete( b );
 					}
 					, ( string RequestURI, string id, Exception ex ) =>

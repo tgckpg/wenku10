@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
@@ -140,7 +139,7 @@ namespace GR.Model.Loaders
 
 		private void PreloadBookInfo( DRequestCompletedEventArgs e, string id )
 		{
-			CurrentBook.ParseXml( Shared.TC.Translate( e.ResponseString ) );
+			CurrentBook.XCall( "ParseXml", Shared.TC.Translate( e.ResponseString ) );
 			CurrentBook.SaveInfo();
 			OnComplete( CurrentBook );
 		}

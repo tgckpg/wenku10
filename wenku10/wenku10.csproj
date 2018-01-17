@@ -104,6 +104,7 @@
     </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\circle.dds" />
+    <Content Include="Assets\grbk.png" />
     <Content Include="Assets\NewContent155x155-200.png" />
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\glitter.dds" />
@@ -221,8 +222,8 @@
     <Compile Include="GR\Model\Section\SharersHub\MyRequests.cs" />
     <Compile Include="GR\Model\Twitter\AuthData.cs" />
     <Compile Include="GR\Model\Twitter\TSExtended.cs" />
-    <Compile Include="GR\System\KeyboardController.cs" />
-    <Compile Include="GR\System\MasterCommandManager.cs" />
+    <Compile Include="GR\GSystem\KeyboardController.cs" />
+    <Compile Include="GR\GSystem\MasterCommandManager.cs" />
     <Compile Include="Pages\Sharers\HSCommentView.xaml.cs">
       <DependentUpon>HSCommentView.xaml</DependentUpon>
     </Compile>
@@ -267,8 +268,8 @@
     <Compile Include="GR\Model\Section\SharersHub.cs" />
     <Compile Include="GR\Model\Section\ZoneList.cs" />
     <Compile Include="GR\Model\Section\ZoneSpider.cs" />
-    <Compile Include="GR\System\ActionEvent.cs" />
-    <Compile Include="GR\System\Migration.cs" />
+    <Compile Include="GR\GSystem\ActionEvent.cs" />
+    <Compile Include="GR\GSystem\Migration.cs" />
     <Compile Include="GR\Taotu\WenkuListLoader.cs" />
     <Compile Include="GR\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
@@ -413,8 +414,8 @@
     <Compile Include="GR\Settings\Layout\ContentReader.cs" />
     <Compile Include="GR\Settings\Layout\MainPage.cs" />
     <Compile Include="GR\Settings\Layout\NavList.cs" />
-    <Compile Include="GR\System\Bootstrap.cs" />
-    <Compile Include="GR\System\UnitTest.cs" />
+    <Compile Include="GR\GSystem\Bootstrap.cs" />
+    <Compile Include="GR\GSystem\UnitTest.cs" />
     <Compile Include="GR\Taotu\WenkuMarker.cs" />
     <Compile Include="GR\Taotu\WenkuExtractor.cs" />
     <Compile Include="Microsoft.Phone.Controls\WrapPanel.cs" />

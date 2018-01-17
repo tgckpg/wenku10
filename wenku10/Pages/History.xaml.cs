@@ -28,6 +28,7 @@ using GR.Model.Pages;
 
 using BookItem = GR.Model.Book.BookItem;
 using BInfConfig = GR.Settings.Layout.BookInfoView;
+using GR.Resources;
 
 namespace wenku10.Pages
 {
@@ -158,26 +159,16 @@ namespace wenku10.Pages
 			ActiveId = Item.Payload;
 
 			MessageBus.OnDelivery += MessageBus_OnDelivery;
-			BookItem Book = await ItemProcessor.GetBookFromId( Item.Payload );
 
-			if ( Book == null )
-			{
-				StringResources stx = new StringResources( "Message" );
-				await Popups.ShowDialog(
-					UIAliases.CreateDialog( "Item source has either been lost or deleted", "Item" )
-				);
-
-				Locked = false;
-				return;
-			}
+			Book Bk = ( Book ) Item.RawPayload;
+			BookItem BkItem = ItemProcessor.GetBookItem( Bk );
 
 			if ( LocalConfig.ItemJumpMode == BInfConfig.JumpMode.CONTENT_READER )
 			{
-
-				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( Book );
+				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( BkItem );
 				if ( TryAutoAnchor )
 				{
-					PageProcessor.NavigateToReader( Book, TryAutoAnchor.Out );
+					PageProcessor.NavigateToReader( BkItem, TryAutoAnchor.Out );
 					goto LoadComplete;
 				}
 				else
@@ -187,13 +178,13 @@ namespace wenku10.Pages
 				}
 			}
 
-			if ( Book.Type == BookType.L )
+			if ( BkItem.Type == BookType.L )
 			{
-				ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( Book ) : ( Page ) new TOCViewVert( Book ) );
+				ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( BkItem ) : ( Page ) new TOCViewVert( BkItem ) );
 			}
 			else
 			{
-				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( Book ) );
+				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
 			}
 
 			LoadComplete:

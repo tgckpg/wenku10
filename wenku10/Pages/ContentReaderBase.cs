@@ -523,14 +523,14 @@ namespace wenku10.Pages
 		protected async void HistoryThumbs_ItemClick( object sender, ItemClickEventArgs e )
 		{
 			ActiveItem Item = ( ActiveItem ) e.ClickedItem;
-			string Id = Item.Payload;
+			Book Bk = ( Book ) Item.RawPayload;
 
 			ReaderSlideBack();
-			if ( Id != CurrentBook.GID )
+			if ( Bk.Id != CurrentBook.Id )
 			{
 				OpenMask();
 
-				BookItem b = await ItemProcessor.GetBookFromId( Id );
+				BookItem b = ItemProcessor.GetBookItem( Bk );
 				AsyncTryOut<Chapter> bAnchor = await PageProcessor.TryGetAutoAnchor( b );
 				// AutoAnchor will be the first chapter if anchor is not available
 				OpenBook( bAnchor.Out, false, -1, b );
@@ -540,17 +540,18 @@ namespace wenku10.Pages
 		private void BookLoaded( BookItem b )
 		{
 			if ( ContentPane == null ) InitPane();
-			new global::GR.History().Push( b );
+			b.Entry.LastAccess = DateTime.UtcNow;
+			b.SaveInfo();
 		}
 
 		public async void RenderComplete( IdleDispatchedHandlerArgs e )
 		{
-			_RenderMask.State = ControlState.Foreatii;
+			CloseMask();
 
 			// Place a thumbnail to Reader history
 			if ( CurrentBook != null )
 			{
-				await GR.History.CreateThumbnail( ContentView, CurrentBook.GID );
+				await GR.History.CreateThumbnail( ContentView, CurrentBook.Id );
 			}
 		}
 
@@ -874,6 +875,11 @@ namespace wenku10.Pages
 			StringResources stx = new StringResources( "LoadingMessage" );
 			_RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
 			_RenderMask.State = ControlState.Reovia;
+		}
+
+		private void CloseMask()
+		{
+			_RenderMask.State = ControlState.Foreatii;
 		}
 
 		#region Clock

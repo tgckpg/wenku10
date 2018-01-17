@@ -59,7 +59,7 @@ namespace GR.Model.Section
 				Existings = Data.Remap( x => ( ( SpiderBook ) x ).ZItemId );
 			}
 
-			foreach ( Database.Models.Book Bk in Shared.QueryBooks( Database.Models.BookType.S )  )
+			foreach ( Database.Models.Book Bk in Shared.BooksDb.QueryBooks( Database.Models.BookType.S )  )
 			{
 				if ( Existings.Contains( Bk.ZItemId ) )
 					continue;

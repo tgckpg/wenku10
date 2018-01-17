@@ -234,4 +234,7 @@
   <data name="TranslateTC" xml:space="preserve">
     <value>要將此文件轉換為繁體中文嗎？</value>
   </data>
+  <data name="SourceNotAvailable" xml:space="preserve">
+    <value>來源已經遺失或已被刪除</value>
+  </data>
 </root>

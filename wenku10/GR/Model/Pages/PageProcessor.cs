@@ -131,11 +131,11 @@ namespace GR.Model.Pages
 			StringResources stx = new StringResources( "LoadingMessage" );
 			if ( Sync )
 			{
-				MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "SyncingAnchors" ), Book.Id );
+				MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "SyncingAnchors" ), Book.ZItemId );
 				await new AutoAnchor( Book ).SyncSettings();
 			}
 
-			MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "ProgressIndicator_Message" ), Book.Id );
+			MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "ProgressIndicator_Message" ), Book.ZItemId );
 
 			TaskCompletionSource<TOCSection> TCS = new TaskCompletionSource<TOCSection>();
 			BookLoader BLoader = new BookLoader( b =>
@@ -146,7 +146,7 @@ namespace GR.Model.Pages
 				}
 				else
 				{
-					MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "LoadingVolumes" ), Book.Id );
+					MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "LoadingVolumes" ), Book.ZItemId );
 					new VolumeLoader( b2 =>
 					{
 						if ( b2 == null )

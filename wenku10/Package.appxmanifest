@@ -25,6 +25,15 @@
         </uap:InitialRotationPreference>
       </uap:VisualElements>
       <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="grbk">
+            <uap:DisplayName>GR Book</uap:DisplayName>
+            <uap:Logo>Assets/grbk.png</uap:Logo>
+            <uap:SupportedFileTypes>
+              <uap:FileType>.grbk</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
         <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.BackgroundProcessor">
           <BackgroundTasks>
             <Task Type="timer" />

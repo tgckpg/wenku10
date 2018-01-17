@@ -234,4 +234,7 @@
   <data name="TranslateTC" xml:space="preserve">
     <value>この文書を中国語（繁体字）に翻訳しますか？</value>
   </data>
+  <data name="SourceNotAvailable" xml:space="preserve">
+    <value>アイテムソースが失われているか、削除されている</value>
+  </data>
 </root>
