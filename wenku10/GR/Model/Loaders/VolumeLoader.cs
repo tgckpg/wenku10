@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -43,7 +44,7 @@ namespace GR.Model.Loaders
 
 			if ( CurrentBook.Volumes == null )
 			{
-				await Shared.BooksDb.Entry( b.Entry ).Collection( x => x.Volumes ).LoadAsync();
+				b.Entry.Volumes = await Shared.BooksDb.Entry( b.Entry ).Collection( x => x.Volumes ).Query().OrderBy( x => x.Index ).ToListAsync();
 			}
 
 			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && CurrentBook.Volumes.Any() ) )
@@ -52,7 +53,7 @@ namespace GR.Model.Loaders
 				{
 					if ( Vol.Chapters == null )
 					{
-						await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).LoadAsync();
+						Vol.Chapters = await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).Query().OrderBy( x => x.Index ).ToListAsync();
 					}
 				}
 

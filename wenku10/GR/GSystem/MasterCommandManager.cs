@@ -255,7 +255,8 @@ namespace GR.GSystem
 				MasterCommands = w8Commands;
 				M2ndCommands = w82ndCommands;
 
-				ControlFrame.Instance.SetHomePage( PageId.SG_W, () => new SuperGiants( X.Instance<ILoader<ActiveItem>>( XProto.StaffPicks ) ) );
+				ControlFrame.Instance.SetHomePage( PageId.W_BOOKSHELF, () => new WBookshelf() );
+				// ControlFrame.Instance.SetHomePage( PageId.SG_W, () => new SuperGiants( X.Instance<ILoader<ActiveItem>>( XProto.StaffPicks ) ) );
 			}
 		}
 

@@ -95,8 +95,6 @@
                                                VerticalAlignment="Top" HorizontalAlignment="Center" />
                             </StackPanel>
 
-                            <Image Stretch="UniformToFill" Source="{Binding Banner}" />
-
                             <Rectangle Fill="{StaticResource MajorBrush}" Opacity="0.3"/>
                             <Rectangle Fill="{StaticResource Shades90}"/>
                             <Rectangle Fill="{StaticResource Shades90}"/>
