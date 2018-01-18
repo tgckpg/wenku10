@@ -400,27 +400,20 @@ namespace wenku10.Pages
 				BookLoader BL = new BookLoader( BookLoaded );
 				BL.Load( CurrentBook, true );
 
+				// Refresh the TOC if Book has changed
+				if ( BookChanged )
+				{
+					ContentPane.SelectSection( ContentPane.Nav.First() );
+				}
+
 				// Fire up Episode stepper, used for stepping next episode
 				if ( ES == null || ES.Chapter.BookId != C.BookId )
 				{
 					Shared.LoadMessage( "EpisodeStepper" );
-					VolumeLoader VL = new VolumeLoader(
-						( BookItem b ) =>
-						{
-							// Refresh the TOC if Book is changed
-							if ( BookChanged ) ContentPane.SelectSection( ContentPane.Nav.First() );
-
-							ES = new EpisodeStepper( new VolumesInfo( b ) );
-							SetInfoTemplate();
-						}
-					);
-
-					VL.Load( CurrentBook );
+					ES = new EpisodeStepper( new VolumesInfo( CurrentBook ) );
 				}
-				else
-				{
-					Worker.UIInvoke( () => SetInfoTemplate() );
-				}
+
+				Worker.UIInvoke( () => SetInfoTemplate() );
 
 				ReloadReader = () =>
 				{
@@ -444,7 +437,7 @@ namespace wenku10.Pages
 					ContentView.Load( false );
 				};
 
-				// Override reload here since
+				// Override reload here
 				// Since the selected index just won't update
 				if ( Reload )
 				{

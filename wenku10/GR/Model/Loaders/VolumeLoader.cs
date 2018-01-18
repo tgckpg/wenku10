@@ -42,14 +42,14 @@ namespace GR.Model.Loaders
 			Shared.LoadMessage( "LoadingVolumes" );
 			CurrentBook = b;
 
-			if ( CurrentBook.Volumes == null )
+			if ( b.Volumes == null )
 			{
 				b.Entry.Volumes = await Shared.BooksDb.Entry( b.Entry ).Collection( x => x.Volumes ).Query().OrderBy( x => x.Index ).ToListAsync();
 			}
 
-			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && CurrentBook.Volumes.Any() ) )
+			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && b.Volumes.Any() ) )
 			{
-				foreach ( Volume Vol in CurrentBook.Volumes )
+				foreach ( Volume Vol in b.Volumes )
 				{
 					if ( Vol.Chapters == null )
 					{
@@ -68,11 +68,11 @@ namespace GR.Model.Loaders
 				IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
 				// This occurs when tapping pinned book but cache is cleared
 				wCache.InitDownload(
-					CurrentBook.ZItemId
-					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", CurrentBook.ZItemId )
+					b.ZItemId
+					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", b.ZItemId )
 					, ( DRequestCompletedEventArgs e, string id ) =>
 					{
-						CurrentBook.XCall( "ParseVolume", Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
+						b.XCall( "ParseVolume", Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
 						OnComplete( b );
 					}
 					, ( string RequestURI, string id, Exception ex ) =>
