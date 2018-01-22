@@ -180,26 +180,18 @@ namespace GR.Model.Pages
 			}
 		}
 
-		private static string PrepareReader( BookItem Book )
+		public static void NavigateToReader( BookItem Book, Chapter C )
 		{
 			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER_H );
 			ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER_V );
-			// TODO: Guess the Orientation
 
-			return PageId.CONTENT_READER_H;
-		}
-
-		public static void NavigateToReader( BookItem Book, Chapter C )
-		{
-			string PageName = PrepareReader( Book );
-
-			if ( PageName == PageId.CONTENT_READER_H )
+			if ( Book.Entry.TextLayout.HasFlag( LayoutMethod.VerticalWriting ) )
 			{
-				ControlFrame.Instance.NavigateTo( PageName, () => new ContentReaderHorz( Book, C ) );
+				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER_H, () => new ContentReaderHorz( Book, C ) );
 			}
 			else
 			{
-				ControlFrame.Instance.NavigateTo( PageName, () => new ContentReaderVert( Book, C ) );
+				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER_V, () => new ContentReaderVert( Book, C ) );
 			}
 		}
 

@@ -76,6 +76,9 @@ namespace GR.GSystem
 				ModeInit.Add( Mode );
 			}
 
+			// XXX: Should init based on application state
+			new Bootstrap().Level2();
+
 			if ( Mode == 0 )
 			{
 				CreateSHCommands();
@@ -84,8 +87,6 @@ namespace GR.GSystem
 			}
 			else
 			{
-				new Bootstrap().Level2();
-
 				WMember = X.Singleton<IMember>( XProto.Member );
 				WMember.OnStatusChanged += WMember_OnStatusChanged;
 
@@ -245,7 +246,7 @@ namespace GR.GSystem
 				M2ndCommands = SH2ndCommands;
 
 				// ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "featured: 1", null ) ) );
-				ControlFrame.Instance.SetHomePage( PageId.LOCAL_DOCS_VIEW, () => new LocalDocumentsView() );
+				ControlFrame.Instance.SetHomePage( PageId.LOCAL_DOCS_VIEW, () => new Explorer() );
 			}
 			else
 			{

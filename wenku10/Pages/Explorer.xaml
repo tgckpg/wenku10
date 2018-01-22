@@ -1,0 +1,214 @@
+﻿<Page
+    x:Class="wenku10.Pages.Explorer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <DataTemplate x:Key="MobileItem" x:DataType="local:GRRow">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" >
+                    <TextBlock Foreground="White" Text="{x:Bind C00}" />
+                    <TextBlock Foreground="White" Text="{x:Bind C01}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DskDetailsItem" x:DataType="local:GRRow">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind W00}" />
+                    <ColumnDefinition Width="{x:Bind W01}" />
+                    <ColumnDefinition Width="{x:Bind W02}" />
+                    <ColumnDefinition Width="{x:Bind W03}" />
+                    <ColumnDefinition Width="{x:Bind W04}" />
+                    <ColumnDefinition Width="{x:Bind W05}" />
+                    <ColumnDefinition Width="{x:Bind W06}" />
+                    <ColumnDefinition Width="{x:Bind W07}" />
+                    <ColumnDefinition Width="{x:Bind W08}" />
+                    <ColumnDefinition Width="{x:Bind W09}" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,5" Foreground="White" Text="{x:Bind C00}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Margin="10,5" Foreground="White" Text="{x:Bind C01}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Margin="10,5" Foreground="White" Text="{x:Bind C02}" />
+                <TextBlock Grid.Row="0" Grid.Column="3" Margin="10,5" Foreground="White" Text="{x:Bind C03}" />
+                <TextBlock Grid.Row="0" Grid.Column="4" Margin="10,5" Foreground="White" Text="{x:Bind C04}" />
+                <TextBlock Grid.Row="0" Grid.Column="5" Margin="10,5" Foreground="White" Text="{x:Bind C05}" />
+                <TextBlock Grid.Row="0" Grid.Column="6" Margin="10,5" Foreground="White" Text="{x:Bind C06}" />
+                <TextBlock Grid.Row="0" Grid.Column="7" Margin="10,5" Foreground="White" Text="{x:Bind C07}" />
+                <TextBlock Grid.Row="0" Grid.Column="8" Margin="10,5" Foreground="White" Text="{x:Bind C08}" />
+                <TextBlock Grid.Row="0" Grid.Column="9" Margin="10,5" Foreground="White" Text="{x:Bind C09}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DskDetailsHeader" x:DataType="local:GRRow">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind W00}" />
+                    <ColumnDefinition Width="{x:Bind W01}" />
+                    <ColumnDefinition Width="{x:Bind W02}" />
+                    <ColumnDefinition Width="{x:Bind W03}" />
+                    <ColumnDefinition Width="{x:Bind W04}" />
+                    <ColumnDefinition Width="{x:Bind W05}" />
+                    <ColumnDefinition Width="{x:Bind W06}" />
+                    <ColumnDefinition Width="{x:Bind W07}" />
+                    <ColumnDefinition Width="{x:Bind W08}" />
+                    <ColumnDefinition Width="{x:Bind W09}" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C00}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C01}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C02}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C03}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C04}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="5" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C05}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="6" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C06}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="7" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C07}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="8" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C08}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="9" Style="{StaticResource PlainButton}">
+                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C09}" />
+                </Button>
+            </Grid>
+        </DataTemplate>
+        <Style TargetType="ListView" x:Key="DesktopDetailsView">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="TabNavigation" Value="Once" />
+            <Setter Property="IsSwipeEnabled" Value="True" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False" />
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled" />
+            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True" />
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
+            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True" />
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="ItemContainerTransitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition />
+                        <ContentThemeTransition />
+                        <ReorderThemeTransition />
+                        <EntranceThemeTransition IsStaggeringEnabled="False" />
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                            Background="{TemplateBinding Background}" 
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <ContentControl Content="{TemplateBinding Header}"
+                                                HorizontalContentAlignment="Stretch"
+                                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                ContentTransitions="{TemplateBinding HeaderTransitions}"/>
+
+                                <ScrollViewer x:Name="ScrollViewer" Grid.Row="1"
+                                                TabNavigation="{TemplateBinding TabNavigation}"
+                                                HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                                HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                                IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}"
+                                                VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                                IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}"
+                                                IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+                                                IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                                                ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}"
+                                                IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                                                BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}"
+                                                AutomationProperties.AccessibilityView="Raw">
+                                    <ItemsPresenter 
+                                                Footer="{TemplateBinding Footer}"
+                                                FooterTemplate="{TemplateBinding FooterTemplate}"
+                                                FooterTransitions="{TemplateBinding FooterTransitions}"
+                                                Padding="{TemplateBinding Padding}" />
+                                </ScrollViewer>
+
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="Black">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=0 -->
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource MobileItem}" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ItemList.Style" Value="{StaticResource DesktopDetailsView}" />
+                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource DskDetailsItem}" />
+                        <Setter Target="ItemList.HeaderTemplate" Value="{StaticResource DskDetailsHeader}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <ListView x:Name="ItemList"
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  DataContext="{x:Bind Table}"
+                  ItemsSource="{Binding Items}"
+                  IsItemClickEnabled="True" ItemClick="ItemList_ItemClick"/>
+    </Grid>
+
+</Page>

@@ -175,7 +175,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Row="0" x:Uid="/Book/TotalHitsCount"
+                    <TextBlock Grid.Row="0" x:Uid="/Book/TotalHitCount"
                                Foreground="{StaticResource SubtleBrush}"
                                Margin="5" Text="Total Hits" />
 

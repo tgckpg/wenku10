@@ -224,9 +224,6 @@ namespace wenku10.Pages
 
 		private void SetContext()
 		{
-#if DEBUG
-			if ( ThisBook == null ) ThisBook = BookItem.DummyBook();
-#endif
 			ToggleFav();
 			ToggleAppBar();
 
@@ -365,7 +362,7 @@ namespace wenku10.Pages
 		{
 			ControlFrame.Instance.NavigateTo(
 				PageId.W_SEARCH, () => new WSearch()
-				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.Author ) );
+				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.Info.Author ) );
 		}
 
 		private void AddOrRemoveFav( object sender, RoutedEventArgs e )
@@ -378,7 +375,7 @@ namespace wenku10.Pages
 			}
 			else
 			{
-				BS.SaveBook( ThisBook.ZItemId, ThisBook.Title, ThisBook.RecentUpdate, ThisBook.LatestSection );
+				BS.SaveBook( ThisBook.ZItemId, ThisBook.Title, ThisBook.LastUpdateDate, ThisBook.LatestSection );
 				ThisBook.IsFav = true;
 			}
 

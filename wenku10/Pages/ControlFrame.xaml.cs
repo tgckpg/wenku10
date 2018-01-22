@@ -48,7 +48,7 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		private void SetTemplate()
+		private async void SetTemplate()
 		{
 			BackStack = new global::GR.GSystem.BackStackManager();
 
@@ -56,6 +56,8 @@ namespace wenku10.Pages
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
 
 			GR.Database.ContextManager.Migrate();
+			await GR.Migrations.MigrateGR.Start();
+
 			ApplyControlSet();
 		}
 

@@ -59,7 +59,15 @@ namespace GR.Model.Loaders
 				{
 					b.Info.Flags.Add( FlagMode );
 					X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
-						.InitDownload( BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId ), PreloadBookInfo, PreloadBookInfo, true );
+						.InitDownload(
+							BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId )
+							, PreloadBookInfo
+							, ( cache, id, ex ) =>
+							{
+								b.Info.Flags.Remove( FlagMode );
+								OnComplete( null );
+							}, true
+						);
 				}
 			}
 		}
@@ -129,12 +137,6 @@ namespace GR.Model.Loaders
 		private void SaveIntro( DRequestCompletedEventArgs e, string id )
 		{
 			CurrentBook.Intro = Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) );
-		}
-
-		private void PreloadBookInfo( string cacheName, string id, Exception ex )
-		{
-			// Deprecated as info are already present in database
-			OnComplete( null );
 		}
 
 		private void PreloadBookInfo( DRequestCompletedEventArgs e, string id )

@@ -79,7 +79,7 @@
                                                        Text="{Binding TotalHitCount, Converter={StaticResource NumberSimplifier}}"
                                                        Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                             <TextBlock TextTrimming="CharacterEllipsis"
-                                                       Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
+                                                       Text="{Binding DailyHitCount, Converter={StaticResource NumberSimplifier}}"
                                                        Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                                             <TextBlock TextTrimming="CharacterEllipsis"
                                                        Text="{Binding PushCount, Converter={StaticResource NumberSimplifier}}"

@@ -11,6 +11,7 @@ namespace wenku10.Pages
 		public const string
 			BOOK_INFO_VIEW = "BookInfoView"
 			, BOOK_SPIDER_VIEW = "BookSpiderView"
+			, EXPLORER = "Explorer"
 			, ZONE_SPIDER_VIEW = "ZoneSpiderView"
 			, LOCAL_DOCS_VIEW = "LocalDocsView"
 			, ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"

@@ -208,8 +208,8 @@
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                     <TextBlock Margin="5,0"
                                TextWrapping="Wrap"
-                               Text="{Binding RecentUpdate}"
-                               Visibility="{Binding RecentUpdate, Converter={StaticResource DataVisConverter}}"
+                               Text="{Binding LastUpdateDate}"
+                               Visibility="{Binding LastUpdateDate, Converter={StaticResource DataVisConverter}}"
                                Foreground="{StaticResource SubtleBrush}" />
                 </StackPanel>
 
@@ -244,9 +244,9 @@
                                    Visibility="{Binding TotalHitCount, Converter={StaticResource DataVisConverter}}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                         <TextBlock TextWrapping="Wrap"
-                                   ToolTipService.ToolTip="{Binding TodayHitCount}"
-                                   Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
-                                   Visibility="{Binding TodayHitCount, Converter={StaticResource DataVisConverter}}"
+                                   ToolTipService.ToolTip="{Binding DailyHitCount}"
+                                   Text="{Binding DailyHitCount, Converter={StaticResource NumberSimplifier}}"
+                                   Visibility="{Binding DailyHitCount, Converter={StaticResource DataVisConverter}}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                         <Grid x:Name="PushGrid"
                               Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}">

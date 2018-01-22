@@ -140,6 +140,9 @@
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
     <Compile Include="GR\Model\Topics\HyperBannerItem.cs" />
+    <Compile Include="Pages\Explorer.xaml.cs">
+      <DependentUpon>Explorer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MonoRedirector.cs" />
     <Compile Include="Pages\BookInfoView.xaml.cs">
       <DependentUpon>BookInfoView.xaml</DependentUpon>
@@ -440,6 +443,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Dialogs\ValueHelpInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
