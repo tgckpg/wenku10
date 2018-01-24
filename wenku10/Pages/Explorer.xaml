@@ -5,8 +5,61 @@
     xmlns:local="using:wenku10.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:g="using:GR.Converters"
     mc:Ignorable="d">
+
+    <Grid Background="{StaticResource MajorBackgroundBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=0 -->
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource MobileItem}" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ItemList.Style" Value="{StaticResource DesktopDetailsView}" />
+                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource DskDetailsItem}" />
+                        <Setter Target="ItemList.HeaderTemplate" Value="{StaticResource DskDetailsHeader}" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBox Grid.Row="0" Grid.Column="0" Margin="10" PlaceholderText="Search" />
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="TableSettings" Click="TableSettings_Click" Style="{StaticResource ThemeButton}" Padding="10">
+                <SymbolIcon Symbol="List" />
+            </Button>
+        </StackPanel>
+
+        <ListView x:Name="ItemList"
+                  Grid.Row="1" Grid.ColumnSpan="2"
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  DataContext="{x:Bind Table}"
+                  ItemsSource="{Binding Items}"
+                  IsItemClickEnabled="True" ItemClick="ItemList_ItemClick"/>
+    </Grid>
+
     <Page.Resources>
+        <g:ColumnVisConverter x:Key="ColumnVisConverter" />
         <DataTemplate x:Key="MobileItem" x:DataType="local:GRRow">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,85 +75,190 @@
         <DataTemplate x:Key="DskDetailsItem" x:DataType="local:GRRow">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{x:Bind W00}" />
-                    <ColumnDefinition Width="{x:Bind W01}" />
-                    <ColumnDefinition Width="{x:Bind W02}" />
-                    <ColumnDefinition Width="{x:Bind W03}" />
-                    <ColumnDefinition Width="{x:Bind W04}" />
-                    <ColumnDefinition Width="{x:Bind W05}" />
-                    <ColumnDefinition Width="{x:Bind W06}" />
-                    <ColumnDefinition Width="{x:Bind W07}" />
-                    <ColumnDefinition Width="{x:Bind W08}" />
-                    <ColumnDefinition Width="{x:Bind W09}" />
+                    <ColumnDefinition Width="{x:Bind Table.H00}" />
+                    <ColumnDefinition Width="{x:Bind Table.H01}" />
+                    <ColumnDefinition Width="{x:Bind Table.H02}" />
+                    <ColumnDefinition Width="{x:Bind Table.H03}" />
+                    <ColumnDefinition Width="{x:Bind Table.H04}" />
+                    <ColumnDefinition Width="{x:Bind Table.H05}" />
+                    <ColumnDefinition Width="{x:Bind Table.H06}" />
+                    <ColumnDefinition Width="{x:Bind Table.H07}" />
+                    <ColumnDefinition Width="{x:Bind Table.H08}" />
+                    <ColumnDefinition Width="{x:Bind Table.H09}" />
+                    <ColumnDefinition Width="{x:Bind Table.HSP}" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,5" Foreground="White" Text="{x:Bind C00}" />
-                <TextBlock Grid.Row="0" Grid.Column="1" Margin="10,5" Foreground="White" Text="{x:Bind C01}" />
-                <TextBlock Grid.Row="0" Grid.Column="2" Margin="10,5" Foreground="White" Text="{x:Bind C02}" />
-                <TextBlock Grid.Row="0" Grid.Column="3" Margin="10,5" Foreground="White" Text="{x:Bind C03}" />
-                <TextBlock Grid.Row="0" Grid.Column="4" Margin="10,5" Foreground="White" Text="{x:Bind C04}" />
-                <TextBlock Grid.Row="0" Grid.Column="5" Margin="10,5" Foreground="White" Text="{x:Bind C05}" />
-                <TextBlock Grid.Row="0" Grid.Column="6" Margin="10,5" Foreground="White" Text="{x:Bind C06}" />
-                <TextBlock Grid.Row="0" Grid.Column="7" Margin="10,5" Foreground="White" Text="{x:Bind C07}" />
-                <TextBlock Grid.Row="0" Grid.Column="8" Margin="10,5" Foreground="White" Text="{x:Bind C08}" />
-                <TextBlock Grid.Row="0" Grid.Column="9" Margin="10,5" Foreground="White" Text="{x:Bind C09}" />
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H00, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" Text="{x:Bind C00}" />
+                <TextBlock Grid.Row="0" Grid.Column="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H01, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C01}" />
+                <TextBlock Grid.Row="0" Grid.Column="2"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H02, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C02}" />
+                <TextBlock Grid.Row="0" Grid.Column="3"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H03, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C03}" />
+                <TextBlock Grid.Row="0" Grid.Column="4"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H04, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C04}" />
+                <TextBlock Grid.Row="0" Grid.Column="5"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H05, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C05}" />
+                <TextBlock Grid.Row="0" Grid.Column="6"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H06, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C06}" />
+                <TextBlock Grid.Row="0" Grid.Column="7"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H07, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C07}" />
+                <TextBlock Grid.Row="0" Grid.Column="8"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H08, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C08}" />
+                <TextBlock Grid.Row="0" Grid.Column="9"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H09, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C09}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="DskDetailsHeader" x:DataType="local:GRRow">
+        <DataTemplate x:Key="DskDetailsHeader" x:DataType="local:GRTable">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{x:Bind W00}" />
-                    <ColumnDefinition Width="{x:Bind W01}" />
-                    <ColumnDefinition Width="{x:Bind W02}" />
-                    <ColumnDefinition Width="{x:Bind W03}" />
-                    <ColumnDefinition Width="{x:Bind W04}" />
-                    <ColumnDefinition Width="{x:Bind W05}" />
-                    <ColumnDefinition Width="{x:Bind W06}" />
-                    <ColumnDefinition Width="{x:Bind W07}" />
-                    <ColumnDefinition Width="{x:Bind W08}" />
-                    <ColumnDefinition Width="{x:Bind W09}" />
+                    <ColumnDefinition Width="{x:Bind H00}" />
+                    <ColumnDefinition Width="{x:Bind H01}" />
+                    <ColumnDefinition Width="{x:Bind H02}" />
+                    <ColumnDefinition Width="{x:Bind H03}" />
+                    <ColumnDefinition Width="{x:Bind H04}" />
+                    <ColumnDefinition Width="{x:Bind H05}" />
+                    <ColumnDefinition Width="{x:Bind H06}" />
+                    <ColumnDefinition Width="{x:Bind H07}" />
+                    <ColumnDefinition Width="{x:Bind H08}" />
+                    <ColumnDefinition Width="{x:Bind H09}" />
+                    <ColumnDefinition Width="{x:Bind HSP}" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-
-                <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C00}" />
+                <Button Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="1" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C01}" />
+                <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C02}" />
+                <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="3" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C03}" />
+                <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="4" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C04}" />
+                <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="5" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C05}" />
+                <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="6" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C06}" />
+                <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="7" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C07}" />
+                <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="8" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C08}" />
+                <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08}" />
                 </Button>
-                <Button Grid.Row="0" Grid.Column="9" Style="{StaticResource PlainButton}">
-                    <TextBlock Margin="10,5" Foreground="White" Text="{x:Bind C09}" />
+                <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09}" />
                 </Button>
             </Grid>
         </DataTemplate>
+        <Style x:Key="ColumnButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="1,0,1,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="RootGrid" Background="{StaticResource MajorBackgroundBrush}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Shades20}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MajorBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Shades20}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MinorBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Shades30}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"
+                                              Padding="0"
+                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              Content="{TemplateBinding Content}"
+                                              BorderThickness="{TemplateBinding BorderThickness}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="ListView" x:Key="DesktopDetailsView">
             <Setter Property="IsTabStop" Value="False" />
             <Setter Property="TabNavigation" Value="Once" />
@@ -177,38 +335,4 @@
             </Setter>
         </Style>
     </Page.Resources>
-
-    <Grid Background="Black">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <!-- width >=0 -->
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource MobileItem}" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <!-- width >=800 -->
-                        <AdaptiveTrigger MinWindowWidth="800" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="ItemList.Style" Value="{StaticResource DesktopDetailsView}" />
-                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource DskDetailsItem}" />
-                        <Setter Target="ItemList.HeaderTemplate" Value="{StaticResource DskDetailsHeader}" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
-
-        <ListView x:Name="ItemList"
-                  ItemContainerStyle="{StaticResource BareListItem}"
-                  DataContext="{x:Bind Table}"
-                  ItemsSource="{Binding Items}"
-                  IsItemClickEnabled="True" ItemClick="ItemList_ItemClick"/>
-    </Grid>
-
 </Page>
