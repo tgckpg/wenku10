@@ -51,6 +51,8 @@ namespace wenku10.Pages
         }
 
 		private List<PropFunc<BookDisplay>> BkProps;
+		private Dictionary<PropFunc<BookDisplay>, int> PropIndexes;
+		private List<MenuFlyoutItem> ColToggles;
 
 		public void SoftOpen()
 		{
@@ -68,7 +70,7 @@ namespace wenku10.Pages
 				Cell = ( i, x ) => BookItem.PropertyName( BkProps[ i ].Property ),
 			};
 
-			Table.SetCol( 5, -1, false );
+			Table.SetCol( 4, -1, false );
 
 			ReloadItems();
 		}
@@ -76,8 +78,12 @@ namespace wenku10.Pages
 		private void SetTemplate()
 		{
 			MenuFlyout TableFlyout = new MenuFlyout();
-			foreach ( PropFunc<BookDisplay> BkProp in BkProps )
+			ColToggles = new List<MenuFlyoutItem>();
+
+			for ( int i = 0, l = BkProps.Count; i < l; i ++ )
 			{
+				PropFunc<BookDisplay> BkProp = BkProps[ i ];
+
 				MenuFlyoutItem Item = new MenuFlyoutItem()
 				{
 					Icon = new SymbolIcon( Symbol.Accept ),
@@ -85,7 +91,10 @@ namespace wenku10.Pages
 					Tag = BkProp
 				};
 
+				Item.Icon.Opacity = Table.ColEnabled( i ) ? 1 : 0;
 				Item.Click += ToggleCol_Click;
+
+				ColToggles.Add( Item );
 				TableFlyout.Items.Add( Item );
 			}
 
@@ -97,16 +106,50 @@ namespace wenku10.Pages
 			MenuFlyoutItem Item = ( MenuFlyoutItem ) sender;
 			PropFunc<BookDisplay> BkProp = ( PropFunc<BookDisplay> ) Item.Tag;
 
-			if( Item.Icon.Opacity == 0 )
+			int ActiveCols = ColToggles.Where( x => 0 < x.Icon.Opacity ).Count();
+
+			if ( Item.Icon.Opacity == 0 )
 			{
 				Item.Icon.Opacity = 1;
+				if ( ActiveCols < PropIndexes[ BkProp ] )
+				{
+					PropIndexes[ BkProp ] = ActiveCols;
+				}
+				MoveColumn( BkProp, PropIndexes[ BkProp ] );
+				ActiveCols++;
 			}
 			else
 			{
 				Item.Icon.Opacity = 0;
-
+				PropIndexes[ BkProp ] = BkProps.IndexOf( BkProp );
+				MoveColumn( BkProp, BkProps.Count - 1 );
+				ActiveCols--;
 			}
 
+			Table.SetCol( PropIndexes[ BkProp ], ActiveCols - 1, true );
+			Table.SetCol( ActiveCols, -1, false );
+		}
+
+		private void MoveColumn( PropFunc<BookDisplay> BkProp, int Index )
+		{
+			int k = BkProps.IndexOf( BkProp );
+
+			if ( k < Index )
+			{
+				for ( int i = k; i < Index; i++ )
+				{
+					BkProps[ i ] = BkProps[ i + 1 ];
+				}
+			}
+			else
+			{
+				for ( int i = k; Index < i; i-- )
+				{
+					BkProps[ i ] = BkProps[ i - 1 ];
+				}
+			}
+
+			BkProps[ Index ] = BkProp;
 		}
 
 		private void ReloadItems()
@@ -149,6 +192,10 @@ namespace wenku10.Pages
 						&& !( x.Name.StartsWith( "Json_" ) || InfoExclude.Contains( x.Name ) ) )
 					.Remap( p => new PropFunc<BookDisplay>( p ) { Path = x => x.Entry.Info } )
 			);
+
+			PropIndexes = new Dictionary<PropFunc<BookDisplay>, int>();
+
+			BkProps.ExecEach( ( x, i ) => { PropIndexes[ x ] = i; } );
 		}
 
 		private void ItemList_ItemClick( object sender, ItemClickEventArgs e )
@@ -233,6 +280,19 @@ namespace wenku10.Pages
 		{
 			return Cell( ColIndex, Source );
 		}
+
+		virtual public void RefreshCols( int FromCol, int ToCol )
+		{
+			IEnumerable<string> _Cells = CellNames;
+
+			if ( 0 < FromCol )
+				_Cells = _Cells.Skip( FromCol );
+
+			if ( FromCol < ToCol )
+				_Cells = _Cells.Take( ToCol - FromCol + 1 );
+
+			NotifyChanged( _Cells.ToArray() );
+		}
 	}
 
 	public class GRRow : _GRCells
@@ -289,36 +349,34 @@ namespace wenku10.Pages
 
 		public bool ColEnabled( int ColIndex )
 		{
-			return 0 < ( ( GridLength ) Headers[ ColIndex ].GetValue( this ) ).Value;
+			return ColIndex < Headers.Count && 0 < ( ( GridLength ) Headers[ ColIndex ].GetValue( this ) ).Value;
 		}
 
-		public void Toggle( int ColIndex )
+		public override void RefreshCols( int FromCol, int ToCol )
 		{
-			GridLength GL = ( GridLength ) Headers[ ColIndex ].GetValue( this );
+			IEnumerable<string> _HdNames = HeaderNames;
 
-			if ( GL.Value == 0 )
-			{
-				Headers[ ColIndex ].SetValue( this, new GridLength( 100, GL.GridUnitType ) );
-			}
-			else
-			{
-				Headers[ ColIndex ].SetValue( this, new GridLength( 0, GL.GridUnitType ) );
-			}
+			if ( 0 < FromCol )
+				_HdNames = _HdNames.Skip( FromCol );
 
-			NotifyChanged( _HeaderNames );
-			NotifyChanged( _CellNames );
+			if ( FromCol < ToCol )
+				_HdNames = _HdNames.Take( ToCol - FromCol + 1 );
+
+			NotifyChanged( _HdNames.ToArray() );
+			base.RefreshCols( FromCol, ToCol );
+
+			Items?.ExecEach( x => x.RefreshCols( FromCol, ToCol ) );
 		}
 
 		public void SetCol( int FromCol, int ToCol, bool Enable )
 		{
 			IEnumerable<PropertyInfo> Cols = Headers;
-			FromCol = FromCol - 1;
 
 			if ( 0 < FromCol )
 				Cols = Cols.Skip( FromCol );
 
 			if ( FromCol < ToCol )
-				Cols = Cols.Take( ToCol - FromCol );
+				Cols = Cols.Take( ToCol - FromCol + 1 );
 
 			if ( Enable )
 			{
@@ -336,6 +394,8 @@ namespace wenku10.Pages
 					GLInfo.SetValue( this, new GridLength( 0, GL.GridUnitType ) );
 				}
 			}
+
+			RefreshCols( FromCol, ToCol );
 		}
 	}
 }

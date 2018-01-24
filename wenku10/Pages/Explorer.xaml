@@ -60,140 +60,6 @@
 
     <Page.Resources>
         <g:ColumnVisConverter x:Key="ColumnVisConverter" />
-        <DataTemplate x:Key="MobileItem" x:DataType="local:GRRow">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" >
-                    <TextBlock Foreground="White" Text="{x:Bind C00}" />
-                    <TextBlock Foreground="White" Text="{x:Bind C01}" />
-                </StackPanel>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="DskDetailsItem" x:DataType="local:GRRow">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{x:Bind Table.H00}" />
-                    <ColumnDefinition Width="{x:Bind Table.H01}" />
-                    <ColumnDefinition Width="{x:Bind Table.H02}" />
-                    <ColumnDefinition Width="{x:Bind Table.H03}" />
-                    <ColumnDefinition Width="{x:Bind Table.H04}" />
-                    <ColumnDefinition Width="{x:Bind Table.H05}" />
-                    <ColumnDefinition Width="{x:Bind Table.H06}" />
-                    <ColumnDefinition Width="{x:Bind Table.H07}" />
-                    <ColumnDefinition Width="{x:Bind Table.H08}" />
-                    <ColumnDefinition Width="{x:Bind Table.H09}" />
-                    <ColumnDefinition Width="{x:Bind Table.HSP}" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H00, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" Text="{x:Bind C00}" />
-                <TextBlock Grid.Row="0" Grid.Column="1"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H01, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C01}" />
-                <TextBlock Grid.Row="0" Grid.Column="2"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H02, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C02}" />
-                <TextBlock Grid.Row="0" Grid.Column="3"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H03, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C03}" />
-                <TextBlock Grid.Row="0" Grid.Column="4"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H04, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C04}" />
-                <TextBlock Grid.Row="0" Grid.Column="5"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H05, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C05}" />
-                <TextBlock Grid.Row="0" Grid.Column="6"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H06, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C06}" />
-                <TextBlock Grid.Row="0" Grid.Column="7"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H07, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C07}" />
-                <TextBlock Grid.Row="0" Grid.Column="8"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H08, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C08}" />
-                <TextBlock Grid.Row="0" Grid.Column="9"
-                           Margin="10,5" TextTrimming="CharacterEllipsis"
-                           Visibility="{x:Bind Table.H09, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C09}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="DskDetailsHeader" x:DataType="local:GRTable">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{x:Bind H00}" />
-                    <ColumnDefinition Width="{x:Bind H01}" />
-                    <ColumnDefinition Width="{x:Bind H02}" />
-                    <ColumnDefinition Width="{x:Bind H03}" />
-                    <ColumnDefinition Width="{x:Bind H04}" />
-                    <ColumnDefinition Width="{x:Bind H05}" />
-                    <ColumnDefinition Width="{x:Bind H06}" />
-                    <ColumnDefinition Width="{x:Bind H07}" />
-                    <ColumnDefinition Width="{x:Bind H08}" />
-                    <ColumnDefinition Width="{x:Bind H09}" />
-                    <ColumnDefinition Width="{x:Bind HSP}" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08}" />
-                </Button>
-                <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09}" />
-                </Button>
-            </Grid>
-        </DataTemplate>
         <Style x:Key="ColumnButton" TargetType="Button">
             <Setter Property="BorderThickness" Value="1,0,1,0" />
             <Setter Property="Template">
@@ -334,5 +200,139 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <DataTemplate x:Key="MobileItem" x:DataType="local:GRRow">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" >
+                    <TextBlock Foreground="White" Text="{x:Bind C00, Mode=OneWay}" />
+                    <TextBlock Foreground="White" Text="{x:Bind C01, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DskDetailsItem" x:DataType="local:GRRow">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind Table.H00, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H01, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H02, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H03, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H04, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H05, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H06, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H07, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H08, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H09, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.HSP, Mode=OneWay}" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" Text="{x:Bind C00, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C01, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="2"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C02, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="3"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C03, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="4"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C04, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="5"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C05, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="6"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C06, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="7"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C07, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="8"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C08, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="9"
+                           Margin="10,5" TextTrimming="CharacterEllipsis"
+                           Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C09, Mode=OneWay}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DskDetailsHeader" x:DataType="local:GRTable">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind H00, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H01, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H02, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H03, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H04, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H05, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H06, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H07, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H08, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H09, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind HSP, Mode=OneWay}" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08, Mode=OneWay}" />
+                </Button>
+                <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Style="{StaticResource ColumnButton}">
+                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09, Mode=OneWay}" />
+                </Button>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 </Page>
