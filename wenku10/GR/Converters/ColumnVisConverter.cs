@@ -13,7 +13,7 @@ namespace GR.Converters
 	{
 		public override object Convert( object value, Type targetType, object parameter, string language )
 		{
-			return DataBool( ( ( GridLength ) value ), parameter != null ) ? Visibility.Visible : Visibility.Collapsed;
+			return DataBool( ( ( GridLength ) value ).Value, parameter != null ) ? Visibility.Visible : Visibility.Collapsed;
 		}
 	}
 }

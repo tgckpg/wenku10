@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
@@ -18,6 +19,7 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Messaging;
 
+using GR.Data;
 using GR.Database.Models;
 using GR.Model.Book;
 using GR.Model.Pages;
@@ -152,15 +154,62 @@ namespace wenku10.Pages
 			BkProps[ Index ] = BkProp;
 		}
 
-		private void ReloadItems()
+		private void SortByColumn_Click( object sender, RoutedEventArgs e )
 		{
-			Table.Items = Shared.BooksDb.Books
-				.Where( x => x.Fav || x.Type == BookType.S || x.Type == BookType.L )
-				.Remap( x => new GRRow( Table )
-				{
-					Source = new BookDisplay( x ),
-					Cell = ( _i, _x ) => BkProps[ _i ].Value( ( BookDisplay ) _x ),
-				} );
+			Button ColBtn = ( Button ) sender;
+			int ColIndex = int.Parse( ( string ) ColBtn.Tag );
+
+			ParameterExpression _x = Expression.Parameter( typeof( Book ), "x" );
+
+			Expression OrderExp;
+
+			PropertyInfo Prop = BkProps[ ColIndex ].Property;
+			if ( Prop.DeclaringType == typeof( Book ) )
+			{
+				OrderExp = Expression.PropertyOrField( _x, Prop.Name );
+			}
+			else if ( Prop.DeclaringType == typeof( BookInfo ) )
+			{
+				OrderExp = Expression.PropertyOrField( _x, "Info" );
+				OrderExp = Expression.PropertyOrField( OrderExp, Prop.Name );
+			}
+			else
+			{
+				return;
+			}
+
+			PropertyInfo SortCol = Table.Sortings[ ColIndex ];
+			int _Sort = ( ( int ) SortCol.GetValue( Table ) == 1 ) ? -1 : 1;
+
+			Table.SortCol( ColIndex, _Sort );
+
+			string OrderMethod = _Sort == 1 ? "OrderBy" : "OrderByDescending";
+
+			ReloadItems( x =>
+			{
+				Expression _Exp = Expression.Call(
+							typeof( Queryable ), OrderMethod,
+							new Type[] { x.ElementType, OrderExp.Type },
+							x.Expression, Expression.Quote( Expression.Lambda( OrderExp, _x ) ) );
+				return x.Provider.CreateQuery<Book>( _Exp );
+			} );
+		}
+
+		private void ReloadItems( Func<IQueryable<Book>, IQueryable<Book>> Filter = null )
+		{
+			IQueryable<Book> Books = Shared.BooksDb.Books
+				.Where( x => x.Fav || x.Type == BookType.S || x.Type == BookType.L );
+
+			if( Filter != null )
+			{
+				Books = Filter( Books );
+			}
+
+			Table.Items = Books.Remap( x => new GRRow( Table )
+			{
+				Source = new BookDisplay( x ),
+				Cell = ( _i, _x ) => BkProps[ _i ].Value( ( BookDisplay ) _x ),
+			} );
 		}
 
 		private void _xBuildColumns()
@@ -220,6 +269,7 @@ namespace wenku10.Pages
 		private class PropFunc<T>
 		{
 			public PropertyInfo Property;
+			public bool LeadOrderAsc = true;
 			public Func<T, object> Path = x => x;
 			public string Value( T x ) => ( string ) Property.GetValue( Path( x ) );
 
@@ -228,174 +278,11 @@ namespace wenku10.Pages
 				this.Property = Property;
 			}
 		}
-	}
 
-	public class _GRCells : ActiveData
-	{
-		public static readonly Type _GRCellType = typeof( _GRCells );
-		public string C00 => _Cell( 0 );
-		public string C01 => _Cell( 1 );
-		public string C02 => _Cell( 2 );
-		public string C03 => _Cell( 3 );
-		public string C04 => _Cell( 4 );
-		public string C05 => _Cell( 5 );
-		public string C06 => _Cell( 6 );
-		public string C07 => _Cell( 7 );
-		public string C08 => _Cell( 8 );
-		public string C09 => _Cell( 9 );
-
-		public object Source { get; set; }
-		public Func<int, object, string> Cell = ( i, x ) => "";
-
-		private static IReadOnlyList<PropertyInfo> _CellProps;
-		public IReadOnlyList<PropertyInfo> Cells
+		private void Grid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
 		{
-			get
-			{
-				if ( _CellProps == null )
-				{
-					List<PropertyInfo> _Cells = new List<PropertyInfo>();
-
-					for ( int i = 0; ; i++ )
-					{
-						PropertyInfo PropInfo = _GRCellType.GetProperty( string.Format( "C{0:00}", i ) );
-
-						if ( PropInfo == null )
-							break;
-
-						_Cells.Add( PropInfo );
-					}
-
-					_CellProps = _Cells.AsReadOnly();
-				}
-
-				return _CellProps;
-			}
-		}
-
-		protected string[] _CellNames;
-		public IReadOnlyList<string> CellNames => _CellNames ?? ( _CellNames = Cells.Remap( x => x.Name ) );
-
-		virtual protected string _Cell( int ColIndex )
-		{
-			return Cell( ColIndex, Source );
-		}
-
-		virtual public void RefreshCols( int FromCol, int ToCol )
-		{
-			IEnumerable<string> _Cells = CellNames;
-
-			if ( 0 < FromCol )
-				_Cells = _Cells.Skip( FromCol );
-
-			if ( FromCol < ToCol )
-				_Cells = _Cells.Take( ToCol - FromCol + 1 );
-
-			NotifyChanged( _Cells.ToArray() );
+			System.Diagnostics.Debugger.Break();
 		}
 	}
 
-	public class GRRow : _GRCells
-	{
-		public GRTable Table { get; set; }
-
-		public GRRow( GRTable Table )
-		{
-			this.Table = Table;
-		}
-
-		protected override string _Cell( int ColIndex )
-		{
-			return Table.ColEnabled( ColIndex ) ? base._Cell( ColIndex ) : "";
-		}
-	}
-
-	public class GRTable : _GRCells
-	{
-		public static readonly Type GRTableType = typeof( GRTable );
-
-		public GridLength H00 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H01 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H02 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H03 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H04 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H05 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H06 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H07 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H08 { get; set; } = new GridLength( 100, GridUnitType.Star );
-		public GridLength H09 { get; set; } = new GridLength( 100, GridUnitType.Star );
-
-		public GridLength HSP { get; set; } = new GridLength( 0, GridUnitType.Star );
-
-		public IEnumerable<GRRow> _Items;
-		public IEnumerable<GRRow> Items
-		{
-			get => _Items;
-			set
-			{
-				_Items = value;
-				NotifyChanged( "Items" );
-			}
-		}
-
-		private static IReadOnlyList<PropertyInfo> _Headers;
-		public IReadOnlyList<PropertyInfo> Headers
-			=> _Headers ?? (
-				_Headers = Cells.Remap( x => GRTableType.GetProperty( x.Name.Replace( 'C', 'H' ) ) ).ToList().AsReadOnly()
-			);
-
-		private string[] _HeaderNames;
-		public IReadOnlyList<string> HeaderNames => _HeaderNames ?? ( _HeaderNames = Headers.Remap( x => x.Name ) );
-
-		public bool ColEnabled( int ColIndex )
-		{
-			return ColIndex < Headers.Count && 0 < ( ( GridLength ) Headers[ ColIndex ].GetValue( this ) ).Value;
-		}
-
-		public override void RefreshCols( int FromCol, int ToCol )
-		{
-			IEnumerable<string> _HdNames = HeaderNames;
-
-			if ( 0 < FromCol )
-				_HdNames = _HdNames.Skip( FromCol );
-
-			if ( FromCol < ToCol )
-				_HdNames = _HdNames.Take( ToCol - FromCol + 1 );
-
-			NotifyChanged( _HdNames.ToArray() );
-			base.RefreshCols( FromCol, ToCol );
-
-			Items?.ExecEach( x => x.RefreshCols( FromCol, ToCol ) );
-		}
-
-		public void SetCol( int FromCol, int ToCol, bool Enable )
-		{
-			IEnumerable<PropertyInfo> Cols = Headers;
-
-			if ( 0 < FromCol )
-				Cols = Cols.Skip( FromCol );
-
-			if ( FromCol < ToCol )
-				Cols = Cols.Take( ToCol - FromCol + 1 );
-
-			if ( Enable )
-			{
-				foreach ( PropertyInfo GLInfo in Cols )
-				{
-					GridLength GL = ( GridLength ) GLInfo.GetValue( this );
-					GLInfo.SetValue( this, new GridLength( 100, GL.GridUnitType ) );
-				}
-			}
-			else
-			{
-				foreach ( PropertyInfo GLInfo in Cols )
-				{
-					GridLength GL = ( GridLength ) GLInfo.GetValue( this );
-					GLInfo.SetValue( this, new GridLength( 0, GL.GridUnitType ) );
-				}
-			}
-
-			RefreshCols( FromCol, ToCol );
-		}
-	}
 }

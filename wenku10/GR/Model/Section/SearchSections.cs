@@ -1,6 +1,8 @@
 ﻿namespace GR.Model.Section
 {
-	class HistorySection : SearchableContext
+	using static GR.History;
+
+	class HistorySection : SearchableContext<HistoryItem>
 	{
 		private History History;
 

@@ -17,7 +17,7 @@ namespace GR.Model.Section
 	using Settings;
 	using Storage;
 
-	class LocalListBase : SearchableContext
+	class LocalListBase : SearchableContext<LocalBook>
 	{
 		public bool FavOnly { get; protected set; }
 
@@ -74,7 +74,7 @@ namespace GR.Model.Section
 			return Data?.Cast<LocalBook>().FirstOrDefault( x => x.ZItemId == Id );
 		}
 
-		protected override IEnumerable<ActiveItem> Filter( IEnumerable<ActiveItem> Items )
+		protected override IEnumerable<LocalBook> Filter( IEnumerable<LocalBook> Items )
 		{
 			if ( Items != null && FavOnly )
 			{
@@ -87,9 +87,8 @@ namespace GR.Model.Section
 
 		public void CleanUp()
 		{
-			Data = Data.Where( x =>
+			Data = Data.Where( b =>
 			{
-				LocalBook b = x as LocalBook;
 				return b.CanProcess || ( FavOnly && b.IsFav ) || ( b.Processed && b.ProcessSuccess );
 			} );
 
@@ -103,7 +102,7 @@ namespace GR.Model.Section
 				BookStorage BS = new BookStorage();
 				string[] BookIds = BS.GetIdList();
 
-				List<ActiveItem> SS = new List<ActiveItem>();
+				List<LocalBook> SS = new List<LocalBook>();
 
 				foreach ( string Id in BookIds )
 				{

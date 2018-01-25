@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:g="using:GR.Converters"
+    xmlns:grt="using:GR.Data"
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource MajorBackgroundBrush}">
@@ -55,7 +56,7 @@
                   ItemContainerStyle="{StaticResource BareListItem}"
                   DataContext="{x:Bind Table}"
                   ItemsSource="{Binding Items}"
-                  IsItemClickEnabled="True" ItemClick="ItemList_ItemClick"/>
+                  IsItemClickEnabled="True" />
     </Grid>
 
     <Page.Resources>
@@ -200,7 +201,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <DataTemplate x:Key="MobileItem" x:DataType="local:GRRow">
+        <DataTemplate x:Key="MobileItem" x:DataType="grt:GRRow">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -212,7 +213,7 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="DskDetailsItem" x:DataType="local:GRRow">
+        <DataTemplate x:Key="DskDetailsItem" x:DataType="grt:GRRow">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind Table.H00, Mode=OneWay}" />
@@ -263,8 +264,8 @@
                            Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C09, Mode=OneWay}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="DskDetailsHeader" x:DataType="local:GRTable">
-            <Grid>
+        <DataTemplate x:Key="DskDetailsHeader" x:DataType="grt:GRTable">
+            <Grid DoubleTapped="Grid_DoubleTapped" IsDoubleTapEnabled="True">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind H00, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind H01, Mode=OneWay}" />
@@ -283,54 +284,84 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="0" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S00 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="1" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S01 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="2" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S02 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="3" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S03 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="4" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S04 ), Mode=OneWay}"/>
                     <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="5" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S05 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="6" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S06 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="7" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S07 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="8" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S08 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08, Mode=OneWay}" />
+                    </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Style="{StaticResource ColumnButton}">
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09, Mode=OneWay}" />
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="9" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRTable.IconSort( S09 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09, Mode=OneWay}" />
+                    </Grid>
                 </Button>
             </Grid>
         </DataTemplate>
