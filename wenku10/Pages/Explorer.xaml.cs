@@ -28,7 +28,7 @@ using GR.Resources;
 
 namespace wenku10.Pages
 {
-    public sealed partial class Explorer : Page, ICmdControls, INavPage
+	public sealed partial class Explorer : Page, ICmdControls, INavPage
     {
 		private volatile bool Locked = false;
 
@@ -43,7 +43,7 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		private GRTable Table { get; set; }
+		private GRTable<BookDisplay> Table { get; set; }
 
         public Explorer()
         {
@@ -52,8 +52,6 @@ namespace wenku10.Pages
 			SetTemplate();
         }
 
-		private List<PropFunc<BookDisplay>> BkProps;
-		private Dictionary<PropFunc<BookDisplay>, int> PropIndexes;
 		private List<MenuFlyoutItem> ColToggles;
 
 		public void SoftOpen()
@@ -65,15 +63,9 @@ namespace wenku10.Pages
 
 		private void _xSetTemplate()
 		{
-			_xBuildColumns();
-
-			Table = new GRTable()
-			{
-				Cell = ( i, x ) => BookItem.PropertyName( BkProps[ i ].Property ),
-			};
+			_xStructTable();
 
 			Table.SetCol( 4, -1, false );
-
 			ReloadItems();
 		}
 
@@ -82,9 +74,9 @@ namespace wenku10.Pages
 			MenuFlyout TableFlyout = new MenuFlyout();
 			ColToggles = new List<MenuFlyoutItem>();
 
-			for ( int i = 0, l = BkProps.Count; i < l; i ++ )
+			for ( int i = 0, l = Table.CellProps.Count; i < l; i ++ )
 			{
-				PropFunc<BookDisplay> BkProp = BkProps[ i ];
+				GRCell<BookDisplay> BkProp = Table.CellProps[ i ];
 
 				MenuFlyoutItem Item = new MenuFlyoutItem()
 				{
@@ -106,52 +98,8 @@ namespace wenku10.Pages
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
 		{
 			MenuFlyoutItem Item = ( MenuFlyoutItem ) sender;
-			PropFunc<BookDisplay> BkProp = ( PropFunc<BookDisplay> ) Item.Tag;
-
-			int ActiveCols = ColToggles.Where( x => 0 < x.Icon.Opacity ).Count();
-
-			if ( Item.Icon.Opacity == 0 )
-			{
-				Item.Icon.Opacity = 1;
-				if ( ActiveCols < PropIndexes[ BkProp ] )
-				{
-					PropIndexes[ BkProp ] = ActiveCols;
-				}
-				MoveColumn( BkProp, PropIndexes[ BkProp ] );
-				ActiveCols++;
-			}
-			else
-			{
-				Item.Icon.Opacity = 0;
-				PropIndexes[ BkProp ] = BkProps.IndexOf( BkProp );
-				MoveColumn( BkProp, BkProps.Count - 1 );
-				ActiveCols--;
-			}
-
-			Table.SetCol( PropIndexes[ BkProp ], ActiveCols - 1, true );
-			Table.SetCol( ActiveCols, -1, false );
-		}
-
-		private void MoveColumn( PropFunc<BookDisplay> BkProp, int Index )
-		{
-			int k = BkProps.IndexOf( BkProp );
-
-			if ( k < Index )
-			{
-				for ( int i = k; i < Index; i++ )
-				{
-					BkProps[ i ] = BkProps[ i + 1 ];
-				}
-			}
-			else
-			{
-				for ( int i = k; Index < i; i-- )
-				{
-					BkProps[ i ] = BkProps[ i - 1 ];
-				}
-			}
-
-			BkProps[ Index ] = BkProp;
+			GRCell<BookDisplay> BkProp = ( GRCell<BookDisplay> ) Item.Tag;
+			Item.Icon.Opacity = Table.ToggleCol( BkProp ) ? 1 : 0;
 		}
 
 		private void SortByColumn_Click( object sender, RoutedEventArgs e )
@@ -163,7 +111,7 @@ namespace wenku10.Pages
 
 			Expression OrderExp;
 
-			PropertyInfo Prop = BkProps[ ColIndex ].Property;
+			PropertyInfo Prop = Table.CellProps[ ColIndex ].Property;
 			if ( Prop.DeclaringType == typeof( Book ) )
 			{
 				OrderExp = Expression.PropertyOrField( _x, Prop.Name );
@@ -205,16 +153,16 @@ namespace wenku10.Pages
 				Books = Filter( Books );
 			}
 
-			Table.Items = Books.Remap( x => new GRRow( Table )
+			Table.Items = Books.Remap( x => new GRRow<BookDisplay>( Table )
 			{
 				Source = new BookDisplay( x ),
-				Cell = ( _i, _x ) => BkProps[ _i ].Value( ( BookDisplay ) _x ),
+				Cell = ( _i, _x ) => Table.CellProps[ _i ].Value( ( BookDisplay ) _x ),
 			} );
 		}
 
-		private void _xBuildColumns()
+		private void _xStructTable()
 		{
-			BkProps = new List<PropFunc<BookDisplay>>();
+			List<GRCell<BookDisplay>> BkProps = new List<GRCell<BookDisplay>>();
 
 			Type StringType = typeof( string );
 
@@ -226,25 +174,24 @@ namespace wenku10.Pages
 					.Where(
 						x => x.PropertyType == StringType
 						&& !( x.Name.StartsWith( "Json_" ) || BkExclude.Contains( x.Name ) ) )
-					.Remap( p => new PropFunc<BookDisplay>( p ) { Path = x => x.Entry } )
+					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry } )
 			);
 
 			BkProps.AddRange(
 				typeof( BookDisplay ).GetProperties()
 					.Where( x => x.PropertyType == StringType )
-					.Remap( p => new PropFunc<BookDisplay>( p ) )
+					.Remap( p => new GRCell<BookDisplay>( p ) )
 			);
 
 			BkProps.AddRange(
 				typeof( BookInfo ).GetProperties()
 					.Where( x => x.PropertyType == StringType
 						&& !( x.Name.StartsWith( "Json_" ) || InfoExclude.Contains( x.Name ) ) )
-					.Remap( p => new PropFunc<BookDisplay>( p ) { Path = x => x.Entry.Info } )
+					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry.Info } )
 			);
 
-			PropIndexes = new Dictionary<PropFunc<BookDisplay>, int>();
-
-			BkProps.ExecEach( ( x, i ) => { PropIndexes[ x ] = i; } );
+			Table = new GRTable<BookDisplay>( BkProps );
+			Table.Cell = ( i, x ) => BookItem.PropertyName( Table.CellProps[ i ].Property );
 		}
 
 		private void ItemList_ItemClick( object sender, ItemClickEventArgs e )
@@ -252,7 +199,7 @@ namespace wenku10.Pages
 			if ( Locked ) return;
 			Locked = true;
 
-			BookDisplay Item = ( BookDisplay ) ( ( GRRow ) e.ClickedItem ).Source;
+			BookDisplay Item = ( ( GRRow<BookDisplay> ) e.ClickedItem ).Source;
 
 			Book Bk = Item.Entry;
 			BookItem BkItem = ItemProcessor.GetBookItem( Bk );
@@ -264,19 +211,6 @@ namespace wenku10.Pages
 		private void TableSettings_Click( object sender, RoutedEventArgs e )
 		{
 			FlyoutBase.ShowAttachedFlyout( ( Button ) sender );
-		}
-
-		private class PropFunc<T>
-		{
-			public PropertyInfo Property;
-			public bool LeadOrderAsc = true;
-			public Func<T, object> Path = x => x;
-			public string Value( T x ) => ( string ) Property.GetValue( Path( x ) );
-
-			public PropFunc( PropertyInfo Property )
-			{
-				this.Property = Property;
-			}
 		}
 
 		private void Grid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
