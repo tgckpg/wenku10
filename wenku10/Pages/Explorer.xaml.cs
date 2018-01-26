@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
-using Net.Astropenguin.Messaging;
+using Net.Astropenguin.Logging;
 
 using GR.Data;
 using GR.Database.Models;
@@ -29,12 +29,12 @@ using GR.Resources;
 namespace wenku10.Pages
 {
 	public sealed partial class Explorer : Page, ICmdControls, INavPage
-    {
+	{
 		private volatile bool Locked = false;
 
-		#pragma warning disable 0067
+#pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
-		#pragma warning restore 0067
+#pragma warning restore 0067
 
 		public bool NoCommands { get; }
 		public bool MajorNav { get { return true; } }
@@ -45,12 +45,12 @@ namespace wenku10.Pages
 
 		private GRTable<BookDisplay> Table { get; set; }
 
-        public Explorer()
-        {
+		public Explorer()
+		{
 			_xSetTemplate();
-            this.InitializeComponent();
+			this.InitializeComponent();
 			SetTemplate();
-        }
+		}
 
 		private List<MenuFlyoutItem> ColToggles;
 
@@ -59,7 +59,7 @@ namespace wenku10.Pages
 			ReloadItems();
 		}
 
-		public void SoftClose() {}
+		public void SoftClose() { }
 
 		private void _xSetTemplate()
 		{
@@ -74,7 +74,7 @@ namespace wenku10.Pages
 			MenuFlyout TableFlyout = new MenuFlyout();
 			ColToggles = new List<MenuFlyoutItem>();
 
-			for ( int i = 0, l = Table.CellProps.Count; i < l; i ++ )
+			for ( int i = 0, l = Table.CellProps.Count; i < l; i++ )
 			{
 				GRCell<BookDisplay> BkProp = Table.CellProps[ i ];
 
@@ -148,7 +148,7 @@ namespace wenku10.Pages
 			IQueryable<Book> Books = Shared.BooksDb.Books
 				.Where( x => x.Fav || x.Type == BookType.S || x.Type == BookType.L );
 
-			if( Filter != null )
+			if ( Filter != null )
 			{
 				Books = Filter( Books );
 			}
@@ -213,9 +213,45 @@ namespace wenku10.Pages
 			FlyoutBase.ShowAttachedFlyout( ( Button ) sender );
 		}
 
-		private void Grid_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
+		private void CursorResize()
 		{
-			System.Diagnostics.Debugger.Break();
+			Window.Current.CoreWindow.PointerCursor =
+				new Windows.UI.Core.CoreCursor( Windows.UI.Core.CoreCursorType.SizeWestEast, 2 );
+		}
+
+		private void CursorArrow()
+		{
+			Window.Current.CoreWindow.PointerCursor =
+				new Windows.UI.Core.CoreCursor( Windows.UI.Core.CoreCursorType.Arrow, 1 );
+		}
+
+		private void Handle_Enter( object sender, PointerRoutedEventArgs e ) => CursorResize();
+
+		private void Handle_Exit( object sender, PointerRoutedEventArgs e )
+		{
+			if ( ColResizeIndex == -1 )
+			{
+				CursorArrow();
+			}
+		}
+
+		private int ColResizeIndex = -1;
+
+		private void Handle_DragStart( object sender, ManipulationStartedRoutedEventArgs e )
+		{
+			ColResizeIndex = int.Parse( ( string ) ( ( FrameworkElement ) sender ).Tag );
+			CursorResize();
+		}
+
+		private void Handle_DragEnd( object sender, ManipulationCompletedRoutedEventArgs e )
+		{
+			ColResizeIndex = -1;
+			CursorArrow();
+		}
+
+		private void Handle_Drag( object sender, ManipulationDeltaRoutedEventArgs e )
+		{
+			Table.ResizeCol( ColResizeIndex, e.Delta.Translation.X );
 		}
 	}
 

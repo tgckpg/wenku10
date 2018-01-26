@@ -265,7 +265,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DskDetailsHeader" x:DataType="grt:IGRTable">
-            <Grid DoubleTapped="Grid_DoubleTapped" IsDoubleTapEnabled="True">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind H00, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind H01, Mode=OneWay}" />
@@ -291,6 +291,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="0"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="0" />
+                <Rectangle Grid.Row="0" Grid.Column="1"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="0" />
                 <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="1" Style="{StaticResource ColumnButton}">
@@ -299,6 +311,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="1"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="1" />
+                <Rectangle Grid.Row="0" Grid.Column="2"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="1" />
                 <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="2" Style="{StaticResource ColumnButton}">
@@ -307,6 +331,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="2"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="2" />
+                <Rectangle Grid.Row="0" Grid.Column="3"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="2" />
                 <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="3" Style="{StaticResource ColumnButton}">
@@ -315,14 +351,38 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="3"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="3" />
+                <Rectangle Grid.Row="0" Grid.Column="4"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="3" />
                 <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="4" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S04 ), Mode=OneWay}"/>
-                    <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="4"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="4" />
+                <Rectangle Grid.Row="0" Grid.Column="5"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="4" />
                 <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="5" Style="{StaticResource ColumnButton}">
@@ -331,6 +391,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="5"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="5" />
+                <Rectangle Grid.Row="0" Grid.Column="6"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="5" />
                 <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="6" Style="{StaticResource ColumnButton}">
@@ -339,6 +411,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="6"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="6" />
+                <Rectangle Grid.Row="0" Grid.Column="7"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="6" />
                 <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="7" Style="{StaticResource ColumnButton}">
@@ -347,6 +431,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="7"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="7" />
+                <Rectangle Grid.Row="0" Grid.Column="8"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="7" />
                 <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="8" Style="{StaticResource ColumnButton}">
@@ -355,6 +451,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="8"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="8" />
+                <Rectangle Grid.Row="0" Grid.Column="9"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="8" />
                 <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
                         Click="SortByColumn_Click" Tag="9" Style="{StaticResource ColumnButton}">
@@ -363,6 +471,18 @@
                         <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09, Mode=OneWay}" />
                     </Grid>
                 </Button>
+                <Rectangle Grid.Row="0" Grid.Column="9"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="9" />
+                <Rectangle Grid.Row="0" Grid.Column="10"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Handle_Enter" PointerExited="Handle_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Handle_Drag"
+                           ManipulationStarted="Handle_DragStart" ManipulationCompleted="Handle_DragEnd"
+                           Fill="Transparent" Width="5" Tag="9" />
             </Grid>
         </DataTemplate>
     </Page.Resources>
