@@ -598,7 +598,7 @@ namespace wenku10.Pages
 		{
 			PaneNavButton InertiaButton = null;
 
-			Action ToggleFIcon = () =>
+			void ToggleFIcon()
 			{
 				if ( UseInertia = !UseInertia )
 				{
@@ -609,7 +609,7 @@ namespace wenku10.Pages
 					InertiaButton.UpdateIcon( new IconNoInertia() { AutoScale = true } );
 				}
 				ContentView.ToggleInertia();
-			};
+			}
 
 			InertiaButton = UseInertia
 				? new PaneNavButton( new IconUseInertia() { AutoScale = true }, ToggleFIcon )
@@ -987,7 +987,6 @@ namespace wenku10.Pages
 			_ContentSlideDown.Stop();
 			_ContentSlideUp.Stop();
 		}
-
 
 		abstract protected void ContentBeginAway( bool Next );
 
