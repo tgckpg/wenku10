@@ -127,6 +127,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
+    <Compile Include="GR\DataSources\BookDisplayData.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
@@ -141,8 +142,11 @@
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
     <Compile Include="GR\Model\Topics\HyperBannerItem.cs" />
-    <Compile Include="Pages\Explorer.xaml.cs">
-      <DependentUpon>Explorer.xaml</DependentUpon>
+    <Compile Include="Pages\MasterExplorer.xaml.cs">
+      <DependentUpon>MasterExplorer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\GRTableView.xaml.cs">
+      <DependentUpon>GRTableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MonoRedirector.cs" />
     <Compile Include="Pages\BookInfoView.xaml.cs">
@@ -447,7 +451,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Explorer.xaml">
+    <Page Include="Pages\MasterExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\GRTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

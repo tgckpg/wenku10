@@ -246,7 +246,7 @@ namespace GR.GSystem
 				M2ndCommands = SH2ndCommands;
 
 				// ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "featured: 1", null ) ) );
-				ControlFrame.Instance.SetHomePage( PageId.LOCAL_DOCS_VIEW, () => new Explorer() );
+				ControlFrame.Instance.SetHomePage( PageId.LOCAL_DOCS_VIEW, () => new MasterExplorer() );
 			}
 			else
 			{
