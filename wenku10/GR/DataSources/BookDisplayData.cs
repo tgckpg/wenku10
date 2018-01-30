@@ -23,6 +23,7 @@ namespace GR.DataSources
 	class BookDisplayData : GRDataSource
 	{
 		private GRTable<BookDisplay> BkTable;
+		private Func<IQueryable<Book>, IQueryable<Book>> QueryExp;
 
 		virtual public string Name => "Library";
 		public override IGRTable Table => BkTable;
@@ -34,44 +35,18 @@ namespace GR.DataSources
 		}
 
 		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
-		public override void Reload() => Reload( null );
+		public override void Reload() => Reload( QueryExp );
 
-		public override void Sort( int ColIndex )
+		public override void ToggleSort( int ColIndex )
 		{
-			ParameterExpression _x = Expression.Parameter( typeof( Book ), "x" );
-
-			Expression OrderExp;
-
-			PropertyInfo Prop = BkTable.CellProps[ ColIndex ].Property;
-			if ( Prop.DeclaringType == typeof( Book ) )
-			{
-				OrderExp = Expression.PropertyOrField( _x, Prop.Name );
-			}
-			else if ( Prop.DeclaringType == typeof( BookInfo ) )
-			{
-				OrderExp = Expression.PropertyOrField( _x, "Info" );
-				OrderExp = Expression.PropertyOrField( OrderExp, Prop.Name );
-			}
-			else
-			{
-				return;
-			}
-
 			PropertyInfo SortCol = BkTable.Sortings[ ColIndex ];
-			int _Sort = ( ( int ) SortCol.GetValue( BkTable ) == 1 ) ? -1 : 1;
+			Sort( ColIndex, ( ( int ) SortCol.GetValue( BkTable ) == 1 ) ? -1 : 1 );
+		}
 
-			BkTable.SortCol( ColIndex, _Sort );
-
-			string OrderMethod = _Sort == 1 ? "OrderBy" : "OrderByDescending";
-
-			Reload( x =>
-			{
-				Expression _Exp = Expression.Call(
-							typeof( Queryable ), OrderMethod,
-							new Type[] { x.ElementType, OrderExp.Type },
-							x.Expression, Expression.Quote( Expression.Lambda( OrderExp, _x ) ) );
-				return x.Provider.CreateQuery<Book>( _Exp );
-			} );
+		public override void Sort( int ColIndex, int Order )
+		{
+			SortExp( ColIndex, Order );
+			Reload( QueryExp );
 		}
 
 		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
@@ -145,6 +120,12 @@ namespace GR.DataSources
 				}
 
 				BkTable.Configure( Config );
+
+				ColumnConfig SortingCol = Config.Columns.FirstOrDefault( x => x.Order != 0 && 0 < x.Width );
+				if( SortingCol != null )
+				{
+					SortExp( BkTable.CellProps.FindIndex( x => x.Property.Name == SortingCol.Name ), SortingCol.Order );
+				}
 			}
 		}
 
@@ -163,11 +144,46 @@ namespace GR.DataSources
 				Config.Columns.AddRange( BkTable.Headers.Remap( ( x, i ) => new ColumnConfig()
 				{
 					Name = BkTable.CellProps[ i ].Property.Name,
-					Width = ( ( GridLength ) x.GetValue( BkTable ) ).Value
+					Width = ( ( GridLength ) x.GetValue( BkTable ) ).Value,
+					Order = ( int ) BkTable.Sortings[ i ].GetValue( BkTable )
 				} ) );
 
 				await Settings.SaveChangesAsync();
 			}
+		}
+
+		virtual protected void SortExp( int ColIndex, int Order )
+		{
+			ParameterExpression _x = Expression.Parameter( typeof( Book ), "x" );
+
+			Expression OrderExp;
+
+			PropertyInfo Prop = BkTable.CellProps[ ColIndex ].Property;
+			if ( Prop.DeclaringType == typeof( Book ) )
+			{
+				OrderExp = Expression.PropertyOrField( _x, Prop.Name );
+			}
+			else if ( Prop.DeclaringType == typeof( BookInfo ) )
+			{
+				OrderExp = Expression.PropertyOrField( _x, "Info" );
+				OrderExp = Expression.PropertyOrField( OrderExp, Prop.Name );
+			}
+			else
+			{
+				return;
+			}
+
+			BkTable.SortCol( ColIndex, Order );
+			string OrderMethod = Order == 1 ? "OrderBy" : "OrderByDescending";
+
+			QueryExp = ( x ) =>
+			{
+				Expression _Exp = Expression.Call(
+							typeof( Queryable ), OrderMethod,
+							new Type[] { x.ElementType, OrderExp.Type },
+							x.Expression, Expression.Quote( Expression.Lambda( OrderExp, _x ) ) );
+				return x.Provider.CreateQuery<Book>( _Exp );
+			};
 		}
 
 	}

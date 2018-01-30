@@ -111,7 +111,8 @@ namespace wenku10.Pages.Explorer
 			Button ColBtn = ( Button ) sender;
 			int ColIndex = int.Parse( ( string ) ColBtn.Tag );
 
-			DataSource.Sort( ColIndex );
+			DataSource.ToggleSort( ColIndex );
+			DataSource.SaveConfig();
 		}
 
 		private void ItemList_ItemClick( object sender, ItemClickEventArgs e )
