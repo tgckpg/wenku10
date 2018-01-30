@@ -38,27 +38,40 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		public GRDataSource BkData;
-
 		public MasterExplorer()
 		{
 			this.InitializeComponent();
 			SetTemplate();
 		}
 
-		public void SetTemplate()
+		private struct GRViewSource
 		{
-			BkData = new BookDisplayData();
-			GRTableView BkDisplayView = new GRTableView( BkData );
-			LayoutRoot.Children.Add( BkDisplayView );
+			public string Name { get; set; }
+
+			public Type DataSourceType { get; set; }
+
+			private GRDataSource _DataSource;
+			public GRDataSource DataSource => _DataSource ?? ( _DataSource = ( GRDataSource ) Activator.CreateInstance( DataSourceType ) );
 		}
 
-		public void SoftOpen()
-		{
-			BkData.Reload();
-		}
-
+		public void SoftOpen() { }
 		public void SoftClose() { }
 
+		public void SetTemplate()
+		{
+			List<GRViewSource> Nav = new List<GRViewSource>()
+			{
+				new GRViewSource() { Name = "My Library", DataSourceType = typeof( BookDisplayData ) },
+				new GRViewSource() { Name = "History", DataSourceType = typeof( HistoryData ) }
+			};
+
+			MasterNav.ItemsSource = Nav;
+		}
+
+		private async void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
+		{
+			GRViewSource Nav = ( GRViewSource ) e.ClickedItem;
+			await ExplorerView.LoadDataSource( Nav.DataSource );
+		}
 	}
 }

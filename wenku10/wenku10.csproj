@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
+    <Compile Include="GR\DataSources\HistoryData.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>

@@ -60,17 +60,18 @@ namespace wenku10.Pages.Explorer
 			}
 		}
 
-		public GRTableView( GRDataSource DataSource )
+		public GRTableView()
+		{
+			this.InitializeComponent();
+		}
+
+		public async Task LoadDataSource( GRDataSource DataSource )
 		{
 			this.DataSource = DataSource;
 			DataSource.StructTable();
 
-			this.InitializeComponent();
-			SetTemplate();
-		}
+			ItemList.DataContext = DataSource.Table;
 
-		private async void SetTemplate()
-		{
 			await DataSource.Configure();
 
 			MenuFlyout TableFlyout = new MenuFlyout();
@@ -95,6 +96,8 @@ namespace wenku10.Pages.Explorer
 			}
 
 			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
+
+			DataSource.Reload();
 		}
 
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
@@ -120,7 +123,7 @@ namespace wenku10.Pages.Explorer
 			if ( Locked ) return;
 			Locked = true;
 
-			DataSource.ItemAction( ( GRRow<object> ) e.ClickedItem );
+			DataSource.ItemAction( ( IGRRow ) e.ClickedItem );
 
 			Locked = false;
 		}

@@ -56,7 +56,6 @@
         <ListView x:Name="ItemList"
                   Grid.Row="1" Grid.ColumnSpan="2"
                   ItemContainerStyle="{StaticResource BareListItem}"
-                  DataContext="{x:Bind Table}"
                   ItemsSource="{Binding Items}"
                   IsItemClickEnabled="True" />
     </Grid>

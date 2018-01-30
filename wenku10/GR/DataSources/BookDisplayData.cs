@@ -22,8 +22,8 @@ namespace GR.DataSources
 {
 	class BookDisplayData : GRDataSource
 	{
-		private GRTable<BookDisplay> BkTable;
-		private Func<IQueryable<Book>, IQueryable<Book>> QueryExp;
+		protected GRTable<BookDisplay> BkTable;
+		protected Func<IQueryable<Book>, IQueryable<Book>> QueryExp;
 
 		virtual public string Name => "Library";
 		public override IGRTable Table => BkTable;
@@ -49,25 +49,11 @@ namespace GR.DataSources
 			Reload( QueryExp );
 		}
 
-		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
-		{
-			IQueryable<Book> Books = Shared.BooksDb.Books
-				.Where( x => x.Fav || x.Type == BookType.S || x.Type == BookType.L );
-
-			if ( Filter != null )
-			{
-				Books = Filter( Books );
-			}
-
-			BkTable.Items = Books.Remap( x => new GRRow<BookDisplay>( BkTable )
-			{
-				Source = new BookDisplay( x ),
-				Cell = ( _i, _x ) => BkTable.CellProps[ _i ].Value( ( BookDisplay ) _x ),
-			} );
-		}
-
 		public override void StructTable()
 		{
+			if ( BkTable != null )
+				return;
+
 			List<IGRCell> BkProps = new List<IGRCell>();
 
 			Type StringType = typeof( string );
@@ -150,6 +136,25 @@ namespace GR.DataSources
 
 				await Settings.SaveChangesAsync();
 			}
+		}
+
+		virtual protected IQueryable<Book> QuerySet( IQueryable<Book> Context )
+			=> Context.Where( x => x.Fav || x.Type == BookType.S || x.Type == BookType.L );
+
+		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
+		{
+			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );
+
+			if ( Filter != null )
+			{
+				Books = Filter( Books );
+			}
+
+			BkTable.Items = Books.Remap( x => new GRRow<BookDisplay>( BkTable )
+			{
+				Source = new BookDisplay( x ),
+				Cell = ( _i, _x ) => BkTable.CellProps[ _i ].Value( ( BookDisplay ) _x ),
+			} );
 		}
 
 		virtual protected void SortExp( int ColIndex, int Order )
