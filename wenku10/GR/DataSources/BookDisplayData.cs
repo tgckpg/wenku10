@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 using Net.Astropenguin.Linq;
 
@@ -23,9 +24,8 @@ namespace GR.DataSources
 	{
 		private GRTable<BookDisplay> BkTable;
 
+		virtual public string Name => "Library";
 		public override IGRTable Table => BkTable;
-
-		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
 
 		public override void ItemAction( IGRRow Row )
 		{
@@ -33,6 +33,7 @@ namespace GR.DataSources
 			ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
 		}
 
+		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
 		public override void Reload() => Reload( null );
 
 		public override void Sort( int ColIndex )
@@ -128,12 +129,12 @@ namespace GR.DataSources
 		{
 			using ( SettingsContext Settings = new SettingsContext() )
 			{
-				GRTableConfig Config = Settings.TableConfigs.Find( "Library" );
+				GRTableConfig Config = Settings.TableConfigs.Find( Name );
 
 				// Set the default configs
 				if ( Config == null )
 				{
-					Config = new GRTableConfig() { Id = "Library" };
+					Config = new GRTableConfig() { Id = Name };
 					Config.Columns.AddRange(
 						new string[] { "Title", "Author", "Zone", "LastUpdateDate", "Status" }
 						.Remap( x => new ColumnConfig() { Name = x, Width = Table.H00.Value } )
@@ -144,6 +145,28 @@ namespace GR.DataSources
 				}
 
 				BkTable.Configure( Config );
+			}
+		}
+
+		public override async Task SaveConfig()
+		{
+			using ( SettingsContext Settings = new SettingsContext() )
+			{
+				GRTableConfig Config = Settings.TableConfigs.Find( Name );
+				if ( Config == null )
+				{
+					Config = new GRTableConfig() { Id = Name };
+					Settings.TableConfigs.Add( Config );
+				}
+
+				Config.Columns.Clear();
+				Config.Columns.AddRange( BkTable.Headers.Remap( ( x, i ) => new ColumnConfig()
+				{
+					Name = BkTable.CellProps[ i ].Property.Name,
+					Width = ( ( GridLength ) x.GetValue( BkTable ) ).Value
+				} ) );
+
+				await Settings.SaveChangesAsync();
 			}
 		}
 

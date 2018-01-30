@@ -34,6 +34,8 @@ namespace wenku10.Pages.Explorer
 		private GRDataSource DataSource;
 		private IGRTable Table => DataSource.Table;
 
+		private int ColResizeIndex = -1;
+
 		private Button ColReorder = null;
 		private TranslateTransform DragColTrans = null;
 		private int ColZIndex = -1;
@@ -69,6 +71,8 @@ namespace wenku10.Pages.Explorer
 
 		private async void SetTemplate()
 		{
+			await DataSource.Configure();
+
 			MenuFlyout TableFlyout = new MenuFlyout();
 			ColToggles = new List<MenuFlyoutItem>();
 
@@ -91,14 +95,13 @@ namespace wenku10.Pages.Explorer
 			}
 
 			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
-
-			await DataSource.Configure();
 		}
 
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
 		{
 			MenuFlyoutItem Item = ( MenuFlyoutItem ) sender;
 			Item.Icon.Opacity = Table.ToggleCol( ( IGRCell ) Item.Tag ) ? 1 : 0;
+			DataSource.SaveConfig();
 		}
 
 		private void SortByColumn_Click( object sender, RoutedEventArgs e )
@@ -138,8 +141,6 @@ namespace wenku10.Pages.Explorer
 				new Windows.UI.Core.CoreCursor( Windows.UI.Core.CoreCursorType.Arrow, 1 );
 		}
 
-		private int ColResizeIndex = -1;
-
 		private void Rezise_Enter( object sender, PointerRoutedEventArgs e ) => CursorResize();
 
 		private void Rezise_Exit( object sender, PointerRoutedEventArgs e )
@@ -160,6 +161,7 @@ namespace wenku10.Pages.Explorer
 		{
 			ColResizeIndex = -1;
 			CursorArrow();
+			DataSource.SaveConfig();
 		}
 
 		private void Resize_Drag( object sender, ManipulationDeltaRoutedEventArgs e )
@@ -269,6 +271,8 @@ namespace wenku10.Pages.Explorer
 				PreventColMisfire();
 				Table.MoveColumn( OIndex, NewColIndex );
 				NewColIndex = -1;
+
+				DataSource.SaveConfig();
 			}
 
 			ColReorder = null;
