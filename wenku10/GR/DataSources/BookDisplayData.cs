@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Net.Astropenguin.Linq;
 
 using GR.Data;
+using GR.Database.Contexts;
 using GR.Database.Models;
 using GR.Model.Book;
 using GR.Model.Pages;
@@ -25,40 +26,6 @@ namespace GR.DataSources
 		public override IGRTable Table => BkTable;
 
 		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
-
-		public override void StructTable()
-		{
-			List<IGRCell> BkProps = new List<IGRCell>();
-
-			Type StringType = typeof( string );
-
-			string[] BkExclude = new string[] { "ZoneId", "ZItemId", "Description" };
-			string[] InfoExclude = new string[] { "LongDescription" };
-
-			BkProps.AddRange(
-				typeof( Book ).GetProperties()
-					.Where(
-						x => x.PropertyType == StringType
-						&& !( x.Name.StartsWith( "Json_" ) || BkExclude.Contains( x.Name ) ) )
-					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry } )
-			);
-
-			BkProps.AddRange(
-				typeof( BookDisplay ).GetProperties()
-					.Where( x => x.PropertyType == StringType )
-					.Remap( p => new GRCell<BookDisplay>( p ) )
-			);
-
-			BkProps.AddRange(
-				typeof( BookInfo ).GetProperties()
-					.Where( x => x.PropertyType == StringType
-						&& !( x.Name.StartsWith( "Json_" ) || InfoExclude.Contains( x.Name ) ) )
-					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry.Info } )
-			);
-
-			BkTable = new GRTable<BookDisplay>( BkProps );
-			BkTable.Cell = ( i, x ) => BookItem.PropertyName( BkTable.CellProps[ i ].Property );
-		}
 
 		public override void ItemAction( IGRRow Row )
 		{
@@ -121,6 +88,63 @@ namespace GR.DataSources
 				Source = new BookDisplay( x ),
 				Cell = ( _i, _x ) => BkTable.CellProps[ _i ].Value( ( BookDisplay ) _x ),
 			} );
+		}
+
+		public override void StructTable()
+		{
+			List<IGRCell> BkProps = new List<IGRCell>();
+
+			Type StringType = typeof( string );
+
+			string[] BkExclude = new string[] { "ZoneId", "ZItemId", "Description" };
+			string[] InfoExclude = new string[] { "LongDescription" };
+
+			BkProps.AddRange(
+				typeof( Book ).GetProperties()
+					.Where(
+						x => x.PropertyType == StringType
+						&& !( x.Name.StartsWith( "Json_" ) || BkExclude.Contains( x.Name ) ) )
+					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry } )
+			);
+
+			BkProps.AddRange(
+				typeof( BookDisplay ).GetProperties()
+					.Where( x => x.PropertyType == StringType )
+					.Remap( p => new GRCell<BookDisplay>( p ) )
+			);
+
+			BkProps.AddRange(
+				typeof( BookInfo ).GetProperties()
+					.Where( x => x.PropertyType == StringType
+						&& !( x.Name.StartsWith( "Json_" ) || InfoExclude.Contains( x.Name ) ) )
+					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry.Info } )
+			);
+
+			BkTable = new GRTable<BookDisplay>( BkProps );
+			BkTable.Cell = ( i, x ) => BookItem.PropertyName( BkTable.CellProps[ i ].Property );
+		}
+
+		public override async Task Configure()
+		{
+			using ( SettingsContext Settings = new SettingsContext() )
+			{
+				GRTableConfig Config = Settings.TableConfigs.Find( "Library" );
+
+				// Set the default configs
+				if ( Config == null )
+				{
+					Config = new GRTableConfig() { Id = "Library" };
+					Config.Columns.AddRange(
+						new string[] { "Title", "Author", "Zone", "LastUpdateDate", "Status" }
+						.Remap( x => new ColumnConfig() { Name = x, Width = Table.H00.Value } )
+					);
+
+					Settings.TableConfigs.Add( Config );
+					await Settings.SaveChangesAsync();
+				}
+
+				BkTable.Configure( Config );
+			}
 		}
 
 	}

@@ -34,17 +34,40 @@ namespace wenku10.Pages.Explorer
 		private GRDataSource DataSource;
 		private IGRTable Table => DataSource.Table;
 
+		private Button ColReorder = null;
+		private TranslateTransform DragColTrans = null;
+		private int ColZIndex = -1;
+		private int NewColIndex = -1;
+		private double ColDragX0 = 0;
+
+		private Button[] AllCols;
+
+		private Dictionary<int, Vector2> WayPoints;
+		private Dictionary<int, ReorderStory> ReorderStories;
+		private Dictionary<int, TranslateTransform> ColTransforms;
+
+		private struct ReorderStory
+		{
+			public Storyboard Move, Restore;
+			public (Storyboard, Storyboard) Tuples => (Move, Restore);
+
+			public ReorderStory( Storyboard Move, Storyboard Restore )
+			{
+				this.Move = Move;
+				this.Restore = Restore;
+			}
+		}
+
 		public GRTableView( GRDataSource DataSource )
 		{
 			this.DataSource = DataSource;
 			DataSource.StructTable();
-			Table.SetCol( 4, -1, false );
 
 			this.InitializeComponent();
 			SetTemplate();
 		}
 
-		private void SetTemplate()
+		private async void SetTemplate()
 		{
 			MenuFlyout TableFlyout = new MenuFlyout();
 			ColToggles = new List<MenuFlyoutItem>();
@@ -68,6 +91,8 @@ namespace wenku10.Pages.Explorer
 			}
 
 			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
+
+			await DataSource.Configure();
 		}
 
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
@@ -142,19 +167,6 @@ namespace wenku10.Pages.Explorer
 			Table.ResizeCol( ColResizeIndex, e.Delta.Translation.X );
 		}
 
-		private Button ColReorder = null;
-		private int ColZIndex = -1;
-		private int NewColIndex = -1;
-		private TranslateTransform DragColTrans = null;
-
-		private Dictionary<int, Vector2> WayPoints;
-		private Dictionary<int, Tuple<Storyboard, Storyboard>> ReorderStories;
-		private Dictionary<int, TranslateTransform> ColTransforms;
-
-		private Button[] AllCols;
-
-		private double StartX = 0;
-
 		private void Column_DragStart( object sender, ManipulationStartedRoutedEventArgs e )
 		{
 			ColReorder = ( Button ) sender;
@@ -169,10 +181,10 @@ namespace wenku10.Pages.Explorer
 			GridLength GL = ( GridLength ) Table.Headers[ ColIndex ].GetValue( Table );
 
 			ColTransforms = ColTransforms ?? new Dictionary<int, TranslateTransform>();
-			ReorderStories = new Dictionary<int, Tuple<Storyboard, Storyboard>>();
+			ReorderStories = new Dictionary<int, ReorderStory>();
 			WayPoints = new Dictionary<int, Vector2>();
 
-			StartX = 0;
+			ColDragX0 = 0;
 
 			bool BeforeTarget = true;
 
@@ -191,8 +203,8 @@ namespace wenku10.Pages.Explorer
 
 				if ( Col == ColReorder )
 				{
-					StartX += e.Position.X;
-					ReorderStories[ i ] = new Tuple<Storyboard, Storyboard>( null, null );
+					ColDragX0 += e.Position.X;
+					ReorderStories[ i ] = new ReorderStory( null, null );
 					BeforeTarget = false;
 					continue;
 				}
@@ -201,14 +213,14 @@ namespace wenku10.Pages.Explorer
 
 				if ( ReorderStories.ContainsKey( i ) )
 				{
-					sb = ReorderStories[ i ].Item1;
-					ReorderStories[ i ].Item2.Children.Clear();
+					sb = ReorderStories[ i ].Move;
+					ReorderStories[ i ].Restore.Children.Clear();
 					sb.Children.Clear();
 				}
 				else
 				{
 					sb = new Storyboard { FillBehavior = FillBehavior.HoldEnd };
-					ReorderStories[ i ] = new Tuple<Storyboard, Storyboard>( sb, new Storyboard { FillBehavior = FillBehavior.HoldEnd } );
+					ReorderStories[ i ] = new ReorderStory( sb, new Storyboard { FillBehavior = FillBehavior.HoldEnd } );
 				}
 
 				TranslateTransform ColTransform;
@@ -226,7 +238,7 @@ namespace wenku10.Pages.Explorer
 
 				if ( BeforeTarget )
 				{
-					StartX += ColWidth;
+					ColDragX0 += ColWidth;
 					SimpleStory.DoubleAnimation( sb, ColTransform, "X", 0, GL.Value );
 				}
 				else
@@ -247,7 +259,7 @@ namespace wenku10.Pages.Explorer
 			ColZIndex = -1;
 			DragColTrans = null;
 
-			ReorderStories.Values.ExecEach( x => { x.Item1?.Stop(); x.Item2?.Stop(); } );
+			ReorderStories.Values.ExecEach( x => { x.Move?.Stop(); x.Restore?.Stop(); } );
 			ColTransforms.ExecEach( x => x.Value.X = 0 );
 			AllCols.ExecEach( x => x.RenderTransform = null );
 
@@ -272,7 +284,7 @@ namespace wenku10.Pages.Explorer
 		private void Column_Drag( object sender, ManipulationDeltaRoutedEventArgs e )
 		{
 			DragColTrans.X += e.Delta.Translation.X;
-			ColReorderAnima( StartX + e.Cumulative.Translation.X );
+			ColReorderAnima( ColDragX0 + e.Cumulative.Translation.X );
 		}
 
 		private void ColReorderAnima( double X )
@@ -285,7 +297,7 @@ namespace wenku10.Pages.Explorer
 
 				if ( InRange ) NewColIndex = i;
 
-				(Storyboard MoveSt, Storyboard RestoreSt) = ReorderStories[ i ];
+				(Storyboard MoveSt, Storyboard RestoreSt) = ReorderStories[ i ].Tuples;
 				if ( MoveSt == null )
 				{
 					BeforeTarget = false;
@@ -301,6 +313,7 @@ namespace wenku10.Pages.Explorer
 						MoveSt.Begin();
 					}
 				}
+				// Determine if we could restore the column order animation
 				else if (
 					!( BeforeTarget ? ( X < WayPoint.Value.Y ) : ( WayPoint.Value.X < X ) )
 					&& RestoreSt.GetCurrentState() == ClockState.Stopped )
