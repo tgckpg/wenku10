@@ -56,6 +56,7 @@
         <ListView x:Name="ItemList"
                   Grid.Row="1" Grid.ColumnSpan="2"
                   ItemContainerStyle="{StaticResource BareListItem}"
+                  IsDoubleTapEnabled="True" DoubleTapped="ItemList_DoubleTapped"
                   ItemsSource="{Binding Items}"
                   IsItemClickEnabled="True" />
     </Grid>

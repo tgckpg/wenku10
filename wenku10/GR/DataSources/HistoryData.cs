@@ -14,12 +14,16 @@ namespace GR.DataSources
 	sealed class HistoryData : BookDisplayData
 	{
 		public override string Name => "Hisotry";
+		public override ColumnConfig[] DefaultColumns => new ColumnConfig[]
+		{
+			new ColumnConfig() { Name = "Title", Width = 390 },
+			new ColumnConfig() { Name = "Author", Width = 100 },
+			new ColumnConfig() { Name = "Status", Width = 100 },
+			new ColumnConfig() { Name = "LastAccess", Width = 200, Order = -1 },
+		};
 
 		protected override IQueryable<Book> QuerySet( IQueryable<Book> Context )
 			=> Context.Where( x => x.LastAccess != null );
 
-		public override void ItemAction( IGRRow Row )
-		{
-		}
 	}
 }

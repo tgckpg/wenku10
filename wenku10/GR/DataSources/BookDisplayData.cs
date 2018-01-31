@@ -26,6 +26,15 @@ namespace GR.DataSources
 		protected Func<IQueryable<Book>, IQueryable<Book>> QueryExp;
 
 		virtual public string Name => "Library";
+		virtual public ColumnConfig[] DefaultColumns => new ColumnConfig[]
+		{
+			new ColumnConfig() { Name = "Title", Width = 355 },
+			new ColumnConfig() { Name = "Author", Width = 100 },
+			new ColumnConfig() { Name = "Zone", Width = 110 },
+			new ColumnConfig() { Name = "Status", Width = 100 },
+			new ColumnConfig() { Name = "LastUpdateDate", Width = 160, Order = -1 },
+		};
+
 		public override IGRTable Table => BkTable;
 
 		public override void ItemAction( IGRRow Row )
@@ -96,10 +105,7 @@ namespace GR.DataSources
 				if ( Config == null )
 				{
 					Config = new GRTableConfig() { Id = Name };
-					Config.Columns.AddRange(
-						new string[] { "Title", "Author", "Zone", "LastUpdateDate", "Status" }
-						.Remap( x => new ColumnConfig() { Name = x, Width = Table.H00.Value } )
-					);
+					Config.Columns.AddRange( DefaultColumns );
 
 					Settings.TableConfigs.Add( Config );
 					await Settings.SaveChangesAsync();
@@ -172,6 +178,18 @@ namespace GR.DataSources
 			{
 				OrderExp = Expression.PropertyOrField( _x, "Info" );
 				OrderExp = Expression.PropertyOrField( OrderExp, Prop.Name );
+			}
+			else if ( Prop.DeclaringType == typeof( BookDisplay ) )
+			{
+				// Special fields
+				switch ( Prop.Name )
+				{
+					case "LastAccess":
+						OrderExp = Expression.PropertyOrField( _x, Prop.Name );
+						break;
+					default:
+						return;
+				}
 			}
 			else
 			{

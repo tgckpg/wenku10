@@ -32,7 +32,7 @@ namespace wenku10.Pages.Explorer
 		private volatile bool ColMisfire = false;
 
 		private GRDataSource DataSource;
-		private IGRTable Table => DataSource.Table;
+		private IGRTable Table => DataSource?.Table;
 
 		private int ColResizeIndex = -1;
 
@@ -70,6 +70,7 @@ namespace wenku10.Pages.Explorer
 			this.DataSource = DataSource;
 			DataSource.StructTable();
 
+			ItemList.DataContext = null;
 			ItemList.DataContext = DataSource.Table;
 
 			await DataSource.Configure();
@@ -109,7 +110,7 @@ namespace wenku10.Pages.Explorer
 
 		private void SortByColumn_Click( object sender, RoutedEventArgs e )
 		{
-			if ( ColMisfire ) return;
+			if ( ColMisfire || DataSource == null ) return;
 
 			Button ColBtn = ( Button ) sender;
 			int ColIndex = int.Parse( ( string ) ColBtn.Tag );
@@ -128,9 +129,19 @@ namespace wenku10.Pages.Explorer
 			Locked = false;
 		}
 
+		private void ItemList_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
+		{
+			IGRRow Row = ( ( FrameworkElement ) e.OriginalSource ).DataContext as IGRRow;
+			if ( Row == null || Locked ) return;
+
+			DataSource.ItemAction( Row );
+			Locked = false;
+		}
+
 		private void TableSettings_Click( object sender, RoutedEventArgs e )
 		{
-			FlyoutBase.ShowAttachedFlyout( ( Button ) sender );
+			if ( FlyoutBase.GetAttachedFlyout( ( Button ) sender ) != null )
+				FlyoutBase.ShowAttachedFlyout( ( Button ) sender );
 		}
 
 		private void CursorResize()
@@ -165,16 +176,18 @@ namespace wenku10.Pages.Explorer
 		{
 			ColResizeIndex = -1;
 			CursorArrow();
-			DataSource.SaveConfig();
+			DataSource?.SaveConfig();
 		}
 
 		private void Resize_Drag( object sender, ManipulationDeltaRoutedEventArgs e )
 		{
-			Table.ResizeCol( ColResizeIndex, e.Delta.Translation.X );
+			Table?.ResizeCol( ColResizeIndex, e.Delta.Translation.X );
 		}
 
 		private void Column_DragStart( object sender, ManipulationStartedRoutedEventArgs e )
 		{
+			if ( Table == null ) return;
+
 			ColReorder = ( Button ) sender;
 			DragColTrans = new TranslateTransform();
 			ColReorder.RenderTransform = DragColTrans;
@@ -259,6 +272,8 @@ namespace wenku10.Pages.Explorer
 
 		private void Column_DragEnd( object sender, ManipulationCompletedRoutedEventArgs e )
 		{
+			if ( ColReorder == null ) return;
+
 			Grid ColContainer = ( Grid ) ColReorder.Parent;
 			ColContainer.Children.Move( ( uint ) ColContainer.Children.IndexOf( ColReorder ), ( uint ) ColZIndex );
 
@@ -291,6 +306,8 @@ namespace wenku10.Pages.Explorer
 
 		private void Column_Drag( object sender, ManipulationDeltaRoutedEventArgs e )
 		{
+			if ( DragColTrans == null ) return;
+
 			DragColTrans.X += e.Delta.Translation.X;
 			ColReorderAnima( ColDragX0 + e.Cumulative.Translation.X );
 		}
