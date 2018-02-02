@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
@@ -13,7 +14,6 @@ namespace GR.Model.Section
 {
 	using Book.Spider;
 	using ListItem;
-	using Net.Astropenguin.Linq;
 	using Resources;
 	using Settings;
 	using Storage;

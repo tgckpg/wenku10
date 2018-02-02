@@ -4,9 +4,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
     xmlns:ex="using:wenku10.Pages.Explorer"
+    xmlns:gl="using:GR.Model.ListItem"
+    xmlns:v="using:GR.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <v:TreeMarginConverter x:Key="TreeMarginConverter" />
+    </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
         <Grid.ColumnDefinitions>
@@ -17,8 +22,11 @@
                   IsItemClickEnabled="True" ItemClick="MasterNav_ItemClick"
                   Grid.Column="0" Width="200">
             <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
+                <DataTemplate x:DataType="gl:TreeItem">
+                    <TextBlock Text="{x:Bind ItemTitle}"
+                               TextWrapping="Wrap"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Margin="{x:Bind TreeLevel, Converter={StaticResource TreeMarginConverter}}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

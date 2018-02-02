@@ -22,61 +22,7 @@ namespace GR.Settings.Layout
 
 		private XRegistry LayoutSettings;
 
-		#region Section Definitions
-		private static readonly Dictionary<string, Tuple<Type, string>> SectionDefs = new Dictionary<string, Tuple<Type, string>>()
-		{
-			{
-				"NewestEntries"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					, X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_NEW_ARRIVALS" )
-				)
-			},
-			{
-				"RecentUpdate"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					, X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_RECENT_UPDATE" )
-				)
-			},
-			{
-				"TopList_DDigest"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					,  X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_DDigest" )
-				)
-			},
-			{
-				"TopList_HITs"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					, X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_HITs" )
-				)
-			},
-			{
-				"TopList_WDigest"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					, X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_WDigest" )
-				)
-			},
-			{
-				"TopList_Favourite"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					, X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_Favourite" )
-				)
-			},
-			{
-				"Finished"
-				, new Tuple<Type, string>(
-					typeof( wenku10.Pages.WNavList )
-					, X.Const<string>( XProto.WProtocols, "COMMAND_XML_PARAM_FIN" )
-				)
-			},
-		};
-		#endregion
-
+		public static readonly IReadOnlyDictionary<string, string> SectionDefs = new Dictionary<string, string>() { };
 		private IEnumerable<ActiveItem> _secList = null;
 		// The Param of Selected Section
 		private XParameter WSSec
@@ -97,6 +43,7 @@ namespace GR.Settings.Layout
 			}
 		}
 
+		[Obsolete]
 		public IEnumerable<ActiveItem> SectionList
 		{
 			get
@@ -108,11 +55,7 @@ namespace GR.Settings.Layout
 					StringResources stx = new StringResources( "NavigationTitles" );
 					foreach ( string Key in SectionDefs.Keys )
 					{
-						Items.Add( new ActiveItem(
-							stx.Text( Key )
-							, stx.Text( "Desc_" + Key )
-							, Key
-						) );
+						Items.Add( new ActiveItem( stx.Text( Key ), stx.Text( "Desc_" + Key ), Key ) );
 					}
 					_secList = Items;
 				}
@@ -177,28 +120,12 @@ namespace GR.Settings.Layout
 
 		public Tuple<Type, string> PayloadCommand( string Payload )
 		{
-			return SectionDefs[ Payload ];
+			throw new NotSupportedException();
 		}
 
 		public IEnumerable<SubtleUpdateItem> NavSections()
 		{
-			IEnumerable<XParameter> Params = Customs.Where( ( x ) => !x.GetBool( "custom" ) );
-
-			List<SubtleUpdateItem> Secs = new List<SubtleUpdateItem>();
-			StringResources stx = new StringResources( "NavigationTitles" );
-			foreach ( XParameter Param in Params )
-			{
-				if ( !SectionDefs.ContainsKey( Param.Id ) ) continue;
-				Tuple<Type, string> Def = SectionDefs[ Param.Id ];
-				Secs.Add(
-					new SubtleUpdateItem(
-						stx.Text( Param.Id ), stx.Text( "Desc_" + Param.Id )
-						, Def.Item1 , Def.Item2
-					)
-				);
-			}
-
-			return Secs;
+			throw new NotSupportedException();
 		}
 	}
 

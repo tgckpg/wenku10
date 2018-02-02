@@ -73,7 +73,7 @@ namespace wenku10.Pages.Explorer
 			ItemList.DataContext = null;
 			ItemList.DataContext = DataSource.Table;
 
-			await DataSource.Configure();
+			await DataSource.ConfigureAsync();
 
 			MenuFlyout TableFlyout = new MenuFlyout();
 			ColToggles = new List<MenuFlyoutItem>();

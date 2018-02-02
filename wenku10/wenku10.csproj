@@ -878,7 +878,7 @@
       <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.4.1</Version>
+      <Version>5.4.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Services">
       <Version>1.1.0</Version>

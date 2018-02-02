@@ -135,6 +135,9 @@
   <data name="Intro.Text" xml:space="preserve">
     <value>簡介</value>
   </data>
+  <data name="LastAccess.Text" xml:space="preserve">
+    <value>最後存取</value>
+  </data>
   <data name="LastUpdateDate.Text" xml:space="preserve">
     <value>最後更新日期</value>
   </data>

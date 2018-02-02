@@ -95,7 +95,7 @@ namespace GR.DataSources
 			BkTable.Cell = ( i, x ) => BookItem.PropertyName( BkTable.CellProps[ i ].Property );
 		}
 
-		public override async Task Configure()
+		public override async Task ConfigureAsync()
 		{
 			using ( SettingsContext Settings = new SettingsContext() )
 			{

@@ -202,4 +202,7 @@
 - 自動的に固定する：タイルが欠落している場合、スタートに戻る
 - 何をすべきか：何をすべきか尋ねる</value>
   </data>
+  <data name="MyLibrary.Text" xml:space="preserve">
+    <value>コレクション</value>
+  </data>
 </root>

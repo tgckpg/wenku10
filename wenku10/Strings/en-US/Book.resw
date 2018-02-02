@@ -135,6 +135,9 @@
   <data name="Intro.Text" xml:space="preserve">
     <value>Intro</value>
   </data>
+  <data name="LastAccess.Text" xml:space="preserve">
+    <value>Last Access</value>
+  </data>
   <data name="LastUpdateDate.Text" xml:space="preserve">
     <value>Last Update Date</value>
   </data>

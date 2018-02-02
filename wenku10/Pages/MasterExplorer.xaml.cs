@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -18,10 +19,11 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Loaders;
+
 using GR.DataSources;
 using GR.Model.Interfaces;
-
-using wenku10.Pages.Explorer;
+using GR.Model.ListItem;
 
 namespace wenku10.Pages
 {
@@ -38,20 +40,12 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
+		private TreeList NavTree;
+
 		public MasterExplorer()
 		{
 			this.InitializeComponent();
 			SetTemplate();
-		}
-
-		private struct GRViewSource
-		{
-			public string Name { get; set; }
-
-			public Type DataSourceType { get; set; }
-
-			private GRDataSource _DataSource;
-			public GRDataSource DataSource => _DataSource ?? ( _DataSource = ( GRDataSource ) Activator.CreateInstance( DataSourceType ) );
 		}
 
 		public void SoftOpen() { }
@@ -59,19 +53,38 @@ namespace wenku10.Pages
 
 		public void SetTemplate()
 		{
-			List<GRViewSource> Nav = new List<GRViewSource>()
+			StringResources stx = new StringResources( "NavigationTitles" );
+			List<TreeItem> Nav = new List<TreeItem>()
 			{
-				new GRViewSource() { Name = "My Library", DataSourceType = typeof( BookDisplayData ) },
-				new GRViewSource() { Name = "History", DataSourceType = typeof( HistoryData ) }
+				new GRViewSource( stx.Text( "MyLibrary" ) ) { DataSourceType = typeof( BookDisplayData ) },
+				new GRViewSource( stx.Text( "History" ) ) { DataSourceType = typeof( HistoryData ) },
 			};
 
-			MasterNav.ItemsSource = Nav;
+			// Get Zone Entries
+			TreeItem ZoneVS = new TreeItem( "Zones" );
+			List<TreeItem> Zones = new List<TreeItem>();
+			Zones.AddRange( GR.Resources.Shared.ExpZones );
+			ZoneVS.Children = Zones;
+
+			Nav.Add( ZoneVS );
+
+			NavTree = new TreeList( Nav );
+			MasterNav.ItemsSource = NavTree;
 		}
 
 		private async void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
 		{
-			GRViewSource Nav = ( GRViewSource ) e.ClickedItem;
-			await ExplorerView.LoadDataSource( Nav.DataSource );
+			TreeItem Nav = ( TreeItem ) e.ClickedItem;
+			if ( Nav is GRViewSource )
+			{
+				await ExplorerView.LoadDataSource( ( ( GRViewSource ) Nav ).DataSource );
+			}
+
+			if ( Nav.Children?.Any() == true )
+			{
+				NavTree.Toggle( Nav );
+			}
 		}
+
 	}
 }

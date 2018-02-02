@@ -124,7 +124,7 @@ namespace wenku10.Pages.Settings.Advanced
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
 
-			AvailableServers.ItemsSource = SC;
+			Worker.UIInvoke( () => AvailableServers.ItemsSource = SC );
 		}
 
 		private void ToggleSettings( bool b )
