@@ -16,20 +16,16 @@ namespace GR.Model.Section
 	using Resources;
 	using Settings;
 
-	sealed class ZoneList : ActiveData
+	sealed class ZSContext : ActiveData
 	{
-		public static readonly string ID = typeof( ZoneList ).Name;
+		public static readonly string ID = typeof( ZSContext ).Name;
 
-		public ObservableCollection<ZoneSpider> Zones { get; private set; }
+		public Action<ZoneSpider> ZoneEntry = x => { };
 
-		// For releasing memories
-		private ZoneSpider PrevZone = null;
-		public ZoneSpider CurrentZone { get; private set; }
+		public ZSContext() { }
 
-		public ZoneList()
+		public void ScanZones()
 		{
-			Zones = new ObservableCollection<ZoneSpider>();
-
 			var j = Task.Run( () =>
 			{
 				string[] StoredZones = Shared.Storage.ListFiles( FileLinks.ROOT_ZSPIDER );
@@ -48,34 +44,6 @@ namespace GR.Model.Section
 			} );
 		}
 
-		public void EnterZone( ZoneSpider ZS )
-		{
-			CurrentZone = ZS;
-			NotifyChanged( "CurrentZone" );
-
-			try
-			{
-				var j = ZS.Init();
-			}
-			catch ( Exception ex )
-			{
-				Logger.Log( ID, ex.Message, LogType.WARNING );
-				ExitZone();
-			}
-		}
-
-		public void ExitZone()
-		{
-			if ( CurrentZone != PrevZone )
-			{
-				PrevZone?.Reset();
-				PrevZone = CurrentZone;
-			}
-
-			CurrentZone = null;
-			NotifyChanged( "CurrentZone" );
-		}
-
 		public async void OpenFile()
 		{
 			IStorageFile ISF = await AppStorage.OpenFileAsync( ".xml" );
@@ -87,8 +55,7 @@ namespace GR.Model.Section
 		{
 			try
 			{
-				ZoneSpider ZS = ReadZone( await ISF.ReadString() );
-				EnterZone( ZS );
+				ReadZone( await ISF.ReadString() );
 				return true;
 			}
 			catch ( Exception ex )
@@ -99,37 +66,19 @@ namespace GR.Model.Section
 			return false;
 		}
 
-		private ZoneSpider ReadZone( string ZData, bool Init = false )
+		private void ReadZone( string ZData, bool Init = false )
 		{
 			ZoneSpider ZS = new ZoneSpider();
 			XRegistry ZDef = new XRegistry( ZData, null, false );
 
 			if ( ZS.Open( ZDef ) )
 			{
-				// Remove the old Zone
-				if ( Init )
+				ZoneEntry( ZS );
+				if ( !Init )
 				{
-					AddZone( ZS );
+					Worker.ReisterBackgroundWork( () => { Shared.Storage.WriteString( ZS.MetaLocation, ZData ); } );
 				}
-				else
-				{
-					RemoveZone( Zones.FirstOrDefault( x => x.ZoneId == ZS.ZoneId ) );
-					AddZone( ZS );
-					var j = Task.Run( () => { Shared.Storage.WriteString( ZS.MetaLocation, ZData ); } );
-				}
-
-				return ZS;
 			}
-
-			return null;
-		}
-
-		private void AddZone( ZoneSpider ZS )
-		{
-			Worker.UIInvoke( () =>
-			{
-				Zones.Add( ZS );
-			} );
 		}
 
 		public void RemoveZone( ZoneSpider ZS )
@@ -141,12 +90,6 @@ namespace GR.Model.Section
 				Shared.Storage.DeleteFile( ZS.MetaLocation );
 			}
 			catch ( Exception ) { }
-
-			Worker.UIInvoke( () =>
-			{
-				Zones.Remove( ZS );
-				ZS.Reset();
-			} );
 		}
 	}
 }

@@ -81,7 +81,6 @@ namespace GR.Model.Loaders
 				B.LastCache = Shared.Storage.FileTime( SBook.MetaLocation ).LocalDateTime;
 			}
 
-
 			if ( useCache && ( B.Packed == true || Shared.BooksDb.Volumes.Any( x => x.Book == B.Entry ) ) )
 			{
 				if ( B.Packed != true )
@@ -91,23 +90,29 @@ namespace GR.Model.Loaders
 			}
 			else
 			{
+				bool UpdateFailed = true;
+
 				await SBook.Process();
+				if ( SBook.Processed && SBook.ProcessSuccess )
+				{
+					B.LastCache = DateTime.Now;
+					BookInstruction BUpdate = SBook.GetBook();
+
+					if ( BUpdate.Packable && BUpdate.Packed != true )
+					{
+						BUpdate.PackVolumes( SBook.GetPPConvoy() );
+						B.Update( BUpdate );
+						UpdateFailed = false;
+					}
+				}
 
 				// Cannot download content, use cache if available
-				if ( !( B.Packed == true || B.Packable ) && Shared.BooksDb.Volumes.Any( x => x.Book == B.Entry ) )
+				if ( UpdateFailed && Shared.BooksDb.Volumes.Any( x => x.Book == B.Entry ) )
 				{
 					Logger.Log( ID, "Spider failed to produce instructions, using cache instead", LogType.WARNING );
 					B.PackSavedVols( SBook.PSettings );
 				}
 			}
-
-			if ( B.Packed != true && B.Packable )
-			{
-				B.PackVolumes( SBook.GetPPConvoy() );
-			}
-
-			if ( SBook.Processed && SBook.ProcessSuccess )
-				B.LastCache = DateTime.Now;
 
 			OnComplete( B );
 		}
@@ -130,7 +135,7 @@ namespace GR.Model.Loaders
 
 		private void IntroFailed( string arg1, string arg2, Exception arg3 )
 		{
-			StringResources stx = new StringResources( "Error" );
+			StringResBg stx = new StringResBg( "Error" );
 			CurrentBook.IntroError( stx.Str( "Download" ) );
 		}
 

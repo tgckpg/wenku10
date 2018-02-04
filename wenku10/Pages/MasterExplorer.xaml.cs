@@ -19,11 +19,16 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
+using GR.Data;
 using GR.DataSources;
+using GR.Model.Book;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
+using GR.Model.Pages;
+using GR.Model.Section;
 
 namespace wenku10.Pages
 {
@@ -41,6 +46,7 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
 		private TreeList NavTree;
+		private TreeItem ZoneVS;
 
 		public MasterExplorer()
 		{
@@ -61,15 +67,27 @@ namespace wenku10.Pages
 			};
 
 			// Get Zone Entries
-			TreeItem ZoneVS = new TreeItem( "Zones" );
+			ZoneVS = new TreeItem( "Zones" );
 			List<TreeItem> Zones = new List<TreeItem>();
+
 			Zones.AddRange( GR.Resources.Shared.ExpZones );
+
+			ZSContext ZoneListCont = new ZSContext()
+			{
+				ZoneEntry = ( x ) =>
+				{
+					ZoneVS.Children = new ZSViewSource[] { new ZSViewSource( x.ZoneId, x ) };
+				}
+			};
+
 			ZoneVS.Children = Zones;
 
 			Nav.Add( ZoneVS );
 
 			NavTree = new TreeList( Nav );
 			MasterNav.ItemsSource = NavTree;
+
+			ZoneListCont.ScanZones();
 		}
 
 		private async void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
@@ -77,12 +95,24 @@ namespace wenku10.Pages
 			TreeItem Nav = ( TreeItem ) e.ClickedItem;
 			if ( Nav is GRViewSource )
 			{
-				await ExplorerView.LoadDataSource( ( ( GRViewSource ) Nav ).DataSource );
+				GRViewSource ViewSource = ( GRViewSource ) Nav;
+				ViewSource.ItemAction = OpenBook;
+
+				await ExplorerView.View( ViewSource );
 			}
 
 			if ( Nav.Children?.Any() == true )
 			{
 				NavTree.Toggle( Nav );
+			}
+		}
+
+		private void OpenBook( IGRRow Row )
+		{
+			if ( Row is GRRow<BookDisplay> )
+			{
+				BookItem BkItem = ItemProcessor.GetBookItem( ( ( GRRow<BookDisplay> ) Row ).Source.Entry );
+				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
 			}
 		}
 

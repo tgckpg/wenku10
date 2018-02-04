@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -13,10 +14,7 @@ using GR.Data;
 using GR.Database.Contexts;
 using GR.Database.Models;
 using GR.Model.Book;
-using GR.Model.Pages;
 using GR.Resources;
-
-using wenku10.Pages;
 
 namespace GR.DataSources
 {
@@ -36,12 +34,6 @@ namespace GR.DataSources
 		};
 
 		public override IGRTable Table => BkTable;
-
-		public override void ItemAction( IGRRow Row )
-		{
-			BookItem BkItem = ItemProcessor.GetBookItem( ( ( GRRow<BookDisplay> ) Row ).Source.Entry );
-			ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
-		}
 
 		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
 		public override void Reload() => Reload( QueryExp );
@@ -149,7 +141,7 @@ namespace GR.DataSources
 
 		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
 		{
-			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );
+			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.Include( x => x.Info ).AsQueryable() );
 
 			if ( Filter != null )
 			{

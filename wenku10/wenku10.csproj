@@ -129,6 +129,8 @@
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
     <Compile Include="GR\DataSources\HistoryData.cs" />
+    <Compile Include="GR\DataSources\ZSDisplayData.cs" />
+    <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
@@ -275,7 +277,7 @@
     <Compile Include="GR\Model\Loaders\HSLoader.cs" />
     <Compile Include="GR\Model\Loaders\SHSearchLoader.cs" />
     <Compile Include="GR\Model\Section\SharersHub.cs" />
-    <Compile Include="GR\Model\Section\ZoneList.cs" />
+    <Compile Include="GR\Model\Section\ZSContext.cs" />
     <Compile Include="GR\Model\Section\ZoneSpider.cs" />
     <Compile Include="GR\GSystem\ActionEvent.cs" />
     <Compile Include="GR\GSystem\Migration.cs" />

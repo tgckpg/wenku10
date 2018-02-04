@@ -12,7 +12,6 @@ using Net.Astropenguin.Messaging;
 
 using libtaotu.Controls;
 using libtaotu.Models.Procedure;
-using static libtaotu.Pages.ProceduresPanel;
 
 namespace GR.Model.Section
 {
@@ -28,9 +27,6 @@ namespace GR.Model.Section
 
 		public string ZoneId { get { return PM.GUID; } }
 		public string MetaLocation { get { return FileLinks.ROOT_ZSPIDER + ZoneId + ".xml"; } }
-
-		public bool DataReady { get; private set; }
-		public Observables<BookItem, BookItem> Data { get; private set; }
 
 		public ObservableCollection<Procedure> ProcList { get { return PM?.ProcList; } }
 		public Uri Banner { get; private set; }
@@ -50,25 +46,7 @@ namespace GR.Model.Section
 			}
 		}
 
-		public ZoneSpider()
-		{
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
-		}
-
-		~ZoneSpider()
-		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
-		}
-
-		private void MessageBus_OnDelivery( Message Mesg )
-		{
-			if ( Mesg.Payload is PanelLog )
-			{
-				PanelLog PLog = ( PanelLog ) Mesg.Payload;
-				Message = Mesg.Content;
-				NotifyChanged( "Message" );
-			}
-		}
+		public ZoneSpider() { }
 
 		private void SetBanner()
 		{
@@ -83,50 +61,18 @@ namespace GR.Model.Section
 			NotifyChanged( "Banner" );
 		}
 
-		public void Reset()
-		{
-			if ( Data != null )
-			{
-				Data.DisconnectLoaders();
-				Data.Clear();
-			}
-
-			DataReady = false;
-			NotifyChanged( "Data", "DataReady" );
-		}
-
 		public void Reload()
 		{
 			try
 			{
 				Open( new XRegistry( "<zs />", MetaLocation ) );
 			}
-			catch ( Exception ex )
-			{
-			}
+			catch ( Exception ) { }
 		}
 
-		public async Task Init()
+		public ZSFeedbackLoader<BookItem> CreateLoader()
 		{
-			if ( DataReady ) return;
-
-			IsLoading = true;
-			try
-			{
-				ZSFeedbackLoader<BookItem> ZSF = new ZSFeedbackLoader<BookItem>( PM.CreateSpider() );
-				Data = new Observables<BookItem, BookItem>( await ZSF.NextPage() );
-				Data.ConnectLoader( ZSF );
-
-				Data.LoadStart += ( s, e ) => IsLoading = true;
-				Data.LoadEnd += ( s, e ) => IsLoading = false;
-
-				DataReady = true;
-				NotifyChanged( "Data", "DataReady" );
-			}
-			finally
-			{
-				IsLoading = false;
-			}
+			return new ZSFeedbackLoader<BookItem>( PM.CreateSpider() );
 		}
 
 		public bool Open( XRegistry ZDef )

@@ -31,8 +31,9 @@ namespace wenku10.Pages.Explorer
 		private volatile bool Locked = false;
 		private volatile bool ColMisfire = false;
 
-		private GRDataSource DataSource;
-		private IGRTable Table => DataSource?.Table;
+		private GRViewSource ViewSource;
+		private GRDataSource DataSource => ViewSource.DataSource;
+		private IGRTable Table => ViewSource?.DataSource.Table;
 
 		private int ColResizeIndex = -1;
 
@@ -65,9 +66,9 @@ namespace wenku10.Pages.Explorer
 			this.InitializeComponent();
 		}
 
-		public async Task LoadDataSource( GRDataSource DataSource )
+		public async Task View( GRViewSource ViewSource )
 		{
-			this.DataSource = DataSource;
+			this.ViewSource = ViewSource;
 			DataSource.StructTable();
 
 			ItemList.DataContext = null;
@@ -119,22 +120,20 @@ namespace wenku10.Pages.Explorer
 			DataSource.SaveConfig();
 		}
 
-		private void ItemList_ItemClick( object sender, ItemClickEventArgs e )
+		private void ItemList_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
+		{
+			IGRRow Row = ( ( FrameworkElement ) e.OriginalSource ).DataContext as IGRRow;
+			if ( Row == null ) return;
+			GRTable_ItemAction( Row );
+		}
+
+		private void GRTable_ItemAction( IGRRow Row )
 		{
 			if ( Locked ) return;
 			Locked = true;
 
-			DataSource.ItemAction( ( IGRRow ) e.ClickedItem );
+			ViewSource.ItemAction?.Invoke( Row );
 
-			Locked = false;
-		}
-
-		private void ItemList_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
-		{
-			IGRRow Row = ( ( FrameworkElement ) e.OriginalSource ).DataContext as IGRRow;
-			if ( Row == null || Locked ) return;
-
-			DataSource.ItemAction( Row );
 			Locked = false;
 		}
 

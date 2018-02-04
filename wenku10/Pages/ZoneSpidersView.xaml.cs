@@ -45,7 +45,7 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		private ZoneList ZoneListContext;
+		private ZSContext ZoneListContext;
 		private ZoneSpider SelectedZone;
 
 		private SecondaryIconButton OpenZoneBtn;
@@ -65,16 +65,16 @@ namespace wenku10.Pages
 		{
 			InitAppBar();
 
-			ZoneListContext = new ZoneList();
+			ZoneListContext = new ZSContext();
 
 			LayoutRoot.RenderTransform = new TranslateTransform();
 			LayoutRoot.DataContext = ZoneListContext;
-			ZoneListContext.Zones.CollectionChanged += Zones_CollectionChanged;
+			// ZoneListContext.Zones.CollectionChanged += Zones_CollectionChanged;
 		}
 
 		private void Zones_CollectionChanged( object sender, NotifyCollectionChangedEventArgs e )
 		{
-			TransitionDisplay.SetState( Desc, ZoneListContext.Zones.Any() ? TransitionState.Inactive : TransitionState.Active );
+			// TransitionDisplay.SetState( Desc, ZoneListContext.Zones.Any() ? TransitionState.Inactive : TransitionState.Active );
 		}
 
 		private void InitAppBar()
@@ -84,10 +84,7 @@ namespace wenku10.Pages
 			OpenZoneBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.OpenFile, stx.Text( "OpenZone" ) );
 			OpenZoneBtn.Click += ( s, e ) =>
 			{
-				if ( ZoneListContext.CurrentZone == null )
-				{
-					ZoneListContext.OpenFile();
-				}
+				throw new NotSupportedException();
 			};
 
 			Major2ndControls = new ICommandBarElement[] { OpenZoneBtn };
@@ -126,15 +123,11 @@ namespace wenku10.Pages
 
 		private void OnNavBack( object sender, XBackRequestedEventArgs e )
 		{
-			if ( ZoneListContext.CurrentZone != null )
-			{
-				ZoneListContext.ExitZone();
-				e.Handled = true;
-			}
+			throw new NotSupportedException();
 		}
 
 		private void EditZone( object sender, RoutedEventArgs e ) { EditItem( SelectedZone ); }
-		private void ResetZoneState( object sender, RoutedEventArgs e ) { SelectedZone.Reset(); }
+		private void ResetZoneState( object sender, RoutedEventArgs e ) { throw new NotSupportedException(); }
 		private void ReloadZone( object sender, RoutedEventArgs e ) { SelectedZone.Reload(); }
 
 		private void RemoveZone( object sender, RoutedEventArgs e )
@@ -145,7 +138,7 @@ namespace wenku10.Pages
 
 		private void ZoneList_ItemClick( object sender, ItemClickEventArgs e )
 		{
-			ZoneListContext.EnterZone( ( ZoneSpider ) e.ClickedItem );
+			throw new NotSupportedException();
 		}
 
 		private volatile bool Hold = false;
@@ -166,8 +159,9 @@ namespace wenku10.Pages
 			{
 				ClickedInner.DataContext = ZSInst;
 
-				string ZoneId = ZoneListContext.CurrentZone.ZoneId;
+				throw new NotSupportedException();
 
+				string ZoneId = "NULL";
 				// We are saving it by getting the Book Entry from database first
 				BookInstruction BkInst = new BookInstruction( ZoneId, ZSInst.ZItemId );
 				BkInst.Update( ZSInst );
