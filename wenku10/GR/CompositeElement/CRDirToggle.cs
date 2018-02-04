@@ -9,33 +9,36 @@ using Windows.UI.Xaml.Media;
 
 namespace GR.CompositeElement
 {
+	using GR.Database.Models;
+	using GR.Model.Book;
 	using Resources;
-	using Settings.Layout;
 
 	sealed class CRDirToggle : AppBarButton
 	{
 		private int DirMode;
 		private int InitMode;
 
-		private ContentReader CRSettings;
-
 		TextBlock ArrowIcon { get; set; }
 		TextBlock AlignIcon { get; set; }
 
+		private BookItem Bk;
+
 		CompositeTransform AlignTransform;
 
-		public CRDirToggle()
+		public Action OnToggle { get; set; }
+
+		public CRDirToggle( BookItem Bk )
 			: base()
 		{
 			DefaultStyleKey = typeof( CRDirToggle );
-			CRSettings = new ContentReader();
+			this.Bk = Bk;
 		}
 
 		private void SetDirection()
 		{
-			if ( CRSettings.IsHorizontal )
+			if ( Bk.Entry.TextLayout.HasFlag( LayoutMethod.VerticalWriting ) )
 			{
-				if ( CRSettings.IsRightToLeft )
+				if ( Bk.Entry.TextLayout.HasFlag( LayoutMethod.RightToLeft ) )
 				{
 					InitMode = 0;
 
@@ -68,28 +71,28 @@ namespace GR.CompositeElement
 			}
 		}
 
-		public void ToggleDirection()
+		private void ToggleDirection()
 		{
 			switch ( ++DirMode )
 			{
 				case 0:
-					CRSettings.IsHorizontal = true;
-					CRSettings.IsRightToLeft = true;
+					Bk.Entry.TextLayout = LayoutMethod.VerticalWriting | LayoutMethod.RightToLeft;
 					break;
 				case 1:
-					CRSettings.IsHorizontal = true;
-					CRSettings.IsRightToLeft = false;
+					Bk.Entry.TextLayout = LayoutMethod.VerticalWriting;
 					break;
 				case 2:
-					CRSettings.IsHorizontal = false;
-					CRSettings.IsRightToLeft = false;
+					Bk.Entry.TextLayout = 0;
 					break;
 				default:
 					DirMode = 0;
 					goto case 0;
 			}
 
+			Bk.SaveInfo();
 			SetDirection();
+
+			OnToggle?.Invoke();
 		}
 
 		protected override void OnApplyTemplate()

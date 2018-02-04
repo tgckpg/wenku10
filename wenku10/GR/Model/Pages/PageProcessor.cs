@@ -195,5 +195,17 @@ namespace GR.Model.Pages
 			}
 		}
 
+		public static void NavigateToTOC( object sender, BookItem Book )
+		{
+			if ( Book.Entry.TextLayout.HasFlag( LayoutMethod.VerticalWriting ) )
+			{
+				ControlFrame.Instance.SubNavigateTo( sender, () => ( Page ) new TOCViewHorz( Book ) );
+			}
+			else
+			{
+				ControlFrame.Instance.SubNavigateTo( sender, () => ( Page ) new TOCViewVert( Book ) );
+			}
+		}
+
 	}
 }

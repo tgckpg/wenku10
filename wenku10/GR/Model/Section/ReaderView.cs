@@ -95,11 +95,13 @@ namespace GR.Model.Section
 		}
 
 		public ReaderView( BookItem B, Chapter C )
-			:this()
+			: this()
 		{
 			BindChapter = C;
 			Anchors = new AutoAnchor( B );
 			CL = new ChapterLoader( B, SetContent );
+
+			OverrideParams( B );
 		}
 
 		public void Dispose()
@@ -119,7 +121,19 @@ namespace GR.Model.Section
 
 		private void InitParams()
 		{
-			bool IsHorz = true;
+			SetLayout( Settings.IsHorizontal, Settings.IsRightToLeft );
+		}
+
+		private void OverrideParams( BookItem B )
+		{
+			SetLayout(
+				B.Entry.TextLayout.HasFlag( LayoutMethod.VerticalWriting )
+				, B.Entry.TextLayout.HasFlag( LayoutMethod.RightToLeft )
+			);
+		}
+
+		private void SetLayout( bool IsHorz, bool RTL )
+		{
 			if ( IsHorz )
 			{
 				AlignMode = "ContentReaderListViewHorizontal";
@@ -135,8 +149,7 @@ namespace GR.Model.Section
 			TemplateSelector.IsHorizontal = IsHorz;
 			Paragraph.SetHorizontal( IsHorz );
 
-			bool IsRTL = true;
-			if ( IsRTL )
+			if ( RTL )
 			{
 				FlowDir = FlowDirection.RightToLeft;
 			}

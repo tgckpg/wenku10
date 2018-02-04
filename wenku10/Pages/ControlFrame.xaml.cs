@@ -233,7 +233,7 @@ namespace wenku10.Pages
 
 		public async void SubNavigateTo( object sender, Func<Page> Target )
 		{
-			if ( View.Content != sender )
+			if ( !( View.Content == sender || SubView.Content == sender ) )
 			{
 				Logger.Log( ID, "Main view has been differed, not showing sub view", LogType.INFO );
 				return;
@@ -245,13 +245,20 @@ namespace wenku10.Pages
 			StopReacting();
 			SetBackButton( true );
 
+			if ( SubView.Content != null )
+			{
+				TransitionDisplay.SetState( SubView, TransitionState.Inactive );
+				await Task.Delay( 350 );
+
+				( SubView.Content as INavPage )?.SoftClose();
+			}
+
 			SubView.Content = Target();
 
 			( SubView.Content as INavPage )?.SoftOpen();
 			SetControls( SubView.Content, true );
 
 			TransitionDisplay.SetState( SubView, TransitionState.Active );
-
 			await Task.Delay( 350 );
 
 			Navigating = false;

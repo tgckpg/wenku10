@@ -204,7 +204,7 @@ namespace wenku10.Pages
 			if ( Item.ProcessSuccess )
 			{
 				BookItem Doc = new LocalTextDocument( Item.ZItemId );
-				ControlFrame.Instance.SubNavigateTo( this, () => new BInfConfig().HorizontalTOC ? new TOCViewHorz( Doc ) : ( Page ) new TOCViewVert( Doc ) );
+				PageProcessor.NavigateToTOC( this, Doc );
 			}
 			else if ( !Item.Processing && Item.File != null )
 			{

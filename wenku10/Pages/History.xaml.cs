@@ -28,7 +28,6 @@ using GR.Model.Pages;
 
 using BookItem = GR.Model.Book.BookItem;
 using BInfConfig = GR.Settings.Layout.BookInfoView;
-using GR.Resources;
 
 namespace wenku10.Pages
 {
@@ -180,7 +179,7 @@ namespace wenku10.Pages
 
 			if ( BkItem.Type == BookType.L )
 			{
-				ControlFrame.Instance.SubNavigateTo( this, () => LocalConfig.HorizontalTOC ? new TOCViewHorz( BkItem ) : ( Page ) new TOCViewVert( BkItem ) );
+				PageProcessor.NavigateToTOC( this, BkItem );
 			}
 			else
 			{

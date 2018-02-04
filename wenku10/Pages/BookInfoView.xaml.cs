@@ -280,7 +280,7 @@ namespace wenku10.Pages
 
 		private void TOCBtn_Click( object sender, RoutedEventArgs e )
 		{
-			ControlFrame.Instance.SubNavigateTo( this, () => LayoutSettings.HorizontalTOC ? new TOCViewHorz( ThisBook ) : ( Page ) new TOCViewVert( ThisBook ) );
+			PageProcessor.NavigateToTOC( this, ThisBook );
 		}
 
 		private void ReloadBtn_Click( object sender, RoutedEventArgs e )

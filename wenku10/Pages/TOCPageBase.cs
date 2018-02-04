@@ -54,12 +54,13 @@ namespace wenku10.Pages
 			{
 				new VolumeLoader( SetTOC ).Load( b );
 			} ).Load( Book, true );
+
+			InitAppBar();
 		}
 
 		virtual protected void SetTemplate()
 		{
 			LayoutSettings = new global::GR.Settings.Layout.BookInfoView();
-			InitAppBar();
 		}
 
 		protected void InitAppBar()
@@ -79,9 +80,12 @@ namespace wenku10.Pages
 			JumpMarkBtn = UIAliases.CreateAppBarBtn( Symbol.Tag, stx.Text( "JumpToAnchor" ) );
 			JumpMarkBtn.Click += JumpToBookmark;
 
-			CRDirToggle ReaderDirBtn = new CRDirToggle();
-			ReaderDirBtn.Label = stx.Str( "ContentDirection" );
-			ReaderDirBtn.Foreground = UIAliases.ContextColor;
+			CRDirToggle ReaderDirBtn = new CRDirToggle( ThisBook )
+			{
+				Label = stx.Str( "ContentDirection" ),
+				Foreground = UIAliases.ContextColor,
+				OnToggle = ToggleDir
+			};
 
 			AppBarButtonEx ReloadBtn = UIAliases.CreateAppBarBtnEx( Symbol.Refresh, stx.Text( "Reload" ) );
 
@@ -101,6 +105,8 @@ namespace wenku10.Pages
 
 			MajorControls = Btns.ToArray();
 		}
+
+		abstract protected void ToggleDir();
 
 		protected void VolumeChanged( object sender, SelectionChangedEventArgs e )
 		{
