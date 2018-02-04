@@ -13,8 +13,8 @@ namespace GR.DataSources
 {
 	sealed class HistoryData : BookDisplayData
 	{
-		public override string Name => "Hisotry";
-		public override ColumnConfig[] DefaultColumns => new ColumnConfig[]
+		protected override string ConfigId => "Hisotry";
+		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Title", Width = 390 },
 			new ColumnConfig() { Name = "Author", Width = 100 },

@@ -23,10 +23,8 @@ namespace GR.DataSources
 	/// </summary>
 	sealed class GLDisplayData : BookDisplayData
 	{
-		private ZoneSpider ZS;
-		public override string Name => "ZS-" + ZS.ZoneId;
-
-		public override ColumnConfig[] DefaultColumns => new ColumnConfig[]
+		protected override string ConfigId => "ZS-" + ZS.ZoneId;
+		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Title", Width = 200 },
 			new ColumnConfig() { Name = "Intro", Width = 265 },
@@ -34,6 +32,8 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "Status", Width = 100 },
 			new ColumnConfig() { Name = "LastUpdateDate", Width = 160 },
 		};
+
+		private ZoneSpider ZS;
 
 		public GLDisplayData( ZoneSpider ZS )
 		{

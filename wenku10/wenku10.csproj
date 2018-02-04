@@ -129,6 +129,7 @@
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
     <Compile Include="GR\DataSources\HistoryData.cs" />
+    <Compile Include="GR\DataSources\ONSDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">

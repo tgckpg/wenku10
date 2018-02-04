@@ -60,10 +60,12 @@ namespace wenku10.Pages
 		public void SetTemplate()
 		{
 			StringResources stx = new StringResources( "NavigationTitles" );
+			StringResources sta = new StringResources( "AppBar" );
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
 				new GRViewSource( stx.Text( "MyLibrary" ) ) { DataSourceType = typeof( BookDisplayData ) },
 				new GRViewSource( stx.Text( "History" ) ) { DataSourceType = typeof( HistoryData ) },
+				new GRViewSource( sta.Text( "OnlineScriptDir" ) ) { DataSourceType = typeof( ONSDisplayData ) },
 			};
 
 			// Get Zone Entries

@@ -6,12 +6,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
 
 using Net.Astropenguin.Linq;
 
 using GR.Data;
-using GR.Database.Contexts;
 using GR.Database.Models;
 using GR.Model.Book;
 using GR.Resources;
@@ -20,11 +18,14 @@ namespace GR.DataSources
 {
 	class BookDisplayData : GRDataSource
 	{
+		protected override string ConfigId => "Library";
+
+		public override IGRTable Table => BkTable;
+
 		protected GRTable<BookDisplay> BkTable;
 		protected Func<IQueryable<Book>, IQueryable<Book>> QueryExp;
 
-		virtual public string Name => "Library";
-		virtual public ColumnConfig[] DefaultColumns => new ColumnConfig[]
+		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Title", Width = 355 },
 			new ColumnConfig() { Name = "Author", Width = 100 },
@@ -32,8 +33,6 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "Status", Width = 100 },
 			new ColumnConfig() { Name = "LastUpdateDate", Width = 160, Order = -1 },
 		};
-
-		public override IGRTable Table => BkTable;
 
 		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
 		public override void Reload() => Reload( QueryExp );
@@ -84,56 +83,7 @@ namespace GR.DataSources
 			);
 
 			BkTable = new GRTable<BookDisplay>( BkProps );
-			BkTable.Cell = ( i, x ) => BookItem.PropertyName( BkTable.CellProps[ i ].Property );
-		}
-
-		public override async Task ConfigureAsync()
-		{
-			using ( SettingsContext Settings = new SettingsContext() )
-			{
-				GRTableConfig Config = Settings.TableConfigs.Find( Name );
-
-				// Set the default configs
-				if ( Config == null )
-				{
-					Config = new GRTableConfig() { Id = Name };
-					Config.Columns.AddRange( DefaultColumns );
-
-					Settings.TableConfigs.Add( Config );
-					await Settings.SaveChangesAsync();
-				}
-
-				BkTable.Configure( Config );
-
-				ColumnConfig SortingCol = Config.Columns.FirstOrDefault( x => x.Order != 0 && 0 < x.Width );
-				if( SortingCol != null )
-				{
-					SortExp( BkTable.CellProps.FindIndex( x => x.Property.Name == SortingCol.Name ), SortingCol.Order );
-				}
-			}
-		}
-
-		public override async Task SaveConfig()
-		{
-			using ( SettingsContext Settings = new SettingsContext() )
-			{
-				GRTableConfig Config = Settings.TableConfigs.Find( Name );
-				if ( Config == null )
-				{
-					Config = new GRTableConfig() { Id = Name };
-					Settings.TableConfigs.Add( Config );
-				}
-
-				Config.Columns.Clear();
-				Config.Columns.AddRange( BkTable.Headers.Remap( ( x, i ) => new ColumnConfig()
-				{
-					Name = BkTable.CellProps[ i ].Property.Name,
-					Width = ( ( GridLength ) x.GetValue( BkTable ) ).Value,
-					Order = ( int ) BkTable.Sortings[ i ].GetValue( BkTable )
-				} ) );
-
-				await Settings.SaveChangesAsync();
-			}
+			BkTable.Cell = ( i, x ) => ColumnName( BkTable.CellProps[ i ] );
 		}
 
 		virtual protected IQueryable<Book> QuerySet( IQueryable<Book> Context )
@@ -141,12 +91,14 @@ namespace GR.DataSources
 
 		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
 		{
-			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.Include( x => x.Info ).AsQueryable() );
+			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );
 
 			if ( Filter != null )
 			{
 				Books = Filter( Books );
 			}
+
+			Books = Books.Include( x => x.Info );
 
 			BkTable.Items = Books.Remap( x => new GRRow<BookDisplay>( BkTable )
 			{
@@ -199,6 +151,11 @@ namespace GR.DataSources
 							x.Expression, Expression.Quote( Expression.Lambda( OrderExp, _x ) ) );
 				return x.Provider.CreateQuery<Book>( _Exp );
 			};
+		}
+
+		protected override void ConfigureSort( string PropertyName, int Order )
+		{
+			SortExp( BkTable.CellProps.FindIndex( x => x.Property.Name == PropertyName ), Order );
 		}
 
 	}

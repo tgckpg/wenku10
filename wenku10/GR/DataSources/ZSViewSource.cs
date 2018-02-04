@@ -46,6 +46,9 @@ namespace GR.DataSources
 			// Save the book here
 			Payload.SaveInfo();
 
+			// Reload the BookDisplay as Entry might changed from SaveInfo
+			Row.Source = new BookDisplay( Payload.Entry );
+
 			SpiderBook Item = await SpiderBook.CreateSAsync( Payload.ZoneId, Payload.ZItemId, Payload.BookSpiderDef );
 
 			if ( !Item.ProcessSuccess && Item.CanProcess )

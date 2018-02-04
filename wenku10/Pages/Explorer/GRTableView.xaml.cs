@@ -32,7 +32,7 @@ namespace wenku10.Pages.Explorer
 		private volatile bool ColMisfire = false;
 
 		private GRViewSource ViewSource;
-		private GRDataSource DataSource => ViewSource.DataSource;
+		private GRDataSource DataSource => ViewSource?.DataSource;
 		private IGRTable Table => ViewSource?.DataSource.Table;
 
 		private int ColResizeIndex = -1;
