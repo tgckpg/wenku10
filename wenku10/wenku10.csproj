@@ -130,8 +130,10 @@
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
     <Compile Include="GR\DataSources\HistoryData.cs" />
     <Compile Include="GR\DataSources\ONSDisplayData.cs" />
+    <Compile Include="GR\DataSources\ONSViewSource.cs" />
     <Compile Include="GR\DataSources\ZSDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
+    <Compile Include="GR\PageExtensions\ONSPageExtension.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>

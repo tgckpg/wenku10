@@ -151,22 +151,10 @@ namespace GR.GSystem
 			SHLoginBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronRight, stx.Text( "Login" ) );
 			SHLoginBtn.Click += CreateCmdHandler( SHLoginBtn_Click );
 
-			AppBarToggleButton ZoneSpiders = UIAliases.CreateToggleBtn( SegoeMDL2.MapLayers, stx.Text( "ZoneSpider" ) );
-			ZoneSpiders.Click += CreateCmdHandler( PageId.ZONE_SPIDER_VIEW, () => new ZoneSpidersView() );
-
-			AppBarToggleButton LocalTextDocs = UIAliases.CreateToggleBtn( SegoeMDL2.TreeFolderFolder, stx.Text( "LocalDocuments", "AppBar" ) );
-			LocalTextDocs.Click += CreateCmdHandler( PageId.LOCAL_DOCS_VIEW, () => new LocalDocumentsView() );
-
-			AppBarToggleButton BookSpiders = UIAliases.CreateToggleBtn( SegoeMDL2.MapPin, stx.Text( "BookSpider" ) );
-			BookSpiders.Click += CreateCmdHandler( PageId.BOOK_SPIDER_VIEW, () => new BookSpidersView() );
-
-			AppBarToggleButton OnlineScriptDir = UIAliases.CreateToggleBtn( SegoeMDL2.HomeGroup, stx.Text( "OnlineScriptDir", "AppBar" ) );
-			OnlineScriptDir.Click += CreateCmdHandler( PageId.ONLINE_SCRIPTS_VIEW, () => new OnlineScriptsView() );
-
 			SecondaryIconButton SpiderEditor = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Edit, stx.Text( "SpiderEdit", "ContextMenu" ) );
 			SpiderEditor.Click += CreateCmdHandler( PageId.PROC_PANEL, () => new ProcPanelWrapper( null ) );
 
-			SHCommands = new ICommandBarElement[] { LocalTextDocs, ZoneSpiders, BookSpiders, OnlineScriptDir };
+			SHCommands = new ICommandBarElement[] {};
 			SH2ndCommands = new ICommandBarElement[] { SHLoginBtn, SpiderEditor };
 		}
 

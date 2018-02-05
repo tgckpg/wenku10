@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace GR.DataSources
 {
-	using GR.Data;
-	using GR.Model.Book;
-	using GR.Model.Book.Spider;
-	using GR.Model.ListItem;
-	using GR.Model.Pages;
+	using Data;
+	using Model.Book;
+	using Model.Book.Spider;
+	using Model.ListItem;
+	using Model.Pages;
 	using Model.Section;
 
 	sealed class ZSViewSource : GRViewSource

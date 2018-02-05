@@ -5,31 +5,53 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
 
 namespace GR.DataSources
 {
 	using Data;
 	using Database.Models;
+	using GSystem;
+	using Model.Loaders;
 	using Model.ListItem.Sharers;
 
 	sealed class ONSDisplayData : GRDataSource
 	{
 		public override IGRTable Table => HSTable;
+		public override string SearchExample => "zone: <Zone> type: <Type> tags: <Tag>";
 
 		protected override string ConfigId => "ONS";
-		protected override ColumnConfig[] DefaultColumns => throw new NotImplementedException();
+		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
+		{
+			new ColumnConfig() { Name = "Name", Width = 200 },
+			new ColumnConfig() { Name = "Description", Width = 265 },
+			new ColumnConfig() { Name = "Author", Width = 100 },
+			new ColumnConfig() { Name = "Status", Width = 100 },
+		};
 
 		private GRTable<HSDisplay> HSTable;
 
-		public override string ColumnName( IGRCell CellProp )
+		public override string ColumnName( IGRCell CellProp ) => HSDisplay.PropertyName( CellProp.Property );
+
+		public override async void Reload()
 		{
-			throw new NotImplementedException();
+			IEnumerable<string> AccessTokens = new TokenManager().AuthList.Remap( x => ( string ) x.Value );
+
+			SHSearchLoader SHLoader = new SHSearchLoader( Search, AccessTokens );
+
+			IList<HubScriptItem> FirstPage = await SHLoader.NextPage();
+			Observables<HubScriptItem, GRRow<HSDisplay>> OHS = new Observables<HubScriptItem, GRRow<HSDisplay>>( FirstPage.Remap( ToGRRow ) );
+			HSTable.Items = OHS;
 		}
 
-		public override void Reload()
+		private GRRow<HSDisplay> ToGRRow( HubScriptItem HSItem )
 		{
-			throw new NotImplementedException();
+			return new GRRow<HSDisplay>( HSTable )
+			{
+				Source = new HSDisplay( HSItem ),
+				Cell = ( _i, _x ) => HSTable.CellProps[ _i ].Value( ( HSDisplay ) _x )
+			};
 		}
 
 		public override void StructTable()
@@ -48,7 +70,7 @@ namespace GR.DataSources
 			);
 
 			HSTable = new GRTable<HSDisplay>( HSProps );
-			HSTable.Cell = ( i, x ) => HSTable.ColEnabled( i ) ? HSDisplay.PropertyName( HSTable.CellProps[ i ].Property ) : "";
+			HSTable.Cell = ( i, x ) => HSTable.ColEnabled( i ) ? ColumnName( HSTable.CellProps[ i ] ) : "";
 		}
 
 		public override void Sort( int ColIndex, int Order ) { /* Not Supported */ }
@@ -56,4 +78,5 @@ namespace GR.DataSources
 
 		protected override void ConfigureSort( string Name, int Order ) { /* Not Supported */ }
 	}
+
 }

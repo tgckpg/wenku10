@@ -45,7 +45,10 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Grid.Column="0" Margin="10" PlaceholderText="Search" />
+        <AutoSuggestBox x:Name="SearchTerm"
+                        Grid.Row="0" Grid.Column="0" Margin="10"
+                        QueryIcon="Find"
+                        QuerySubmitted="SearchBox_QuerySubmitted" />
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
             <Button x:Name="TableSettings" Click="TableSettings_Click" Style="{StaticResource ThemeButton}" Margin="0,10,10,10">
@@ -216,7 +219,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DskDetailsItem" x:DataType="grt:IGRRow">
-            <Grid>
+            <Grid FlyoutBase.AttachedFlyout="{x:Bind ContextMenu.Invoke( CellData )}" RightTapped="ShowContextMenu">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind Table.H00, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Table.H01, Mode=OneWay}" />

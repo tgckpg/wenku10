@@ -99,6 +99,8 @@ namespace wenku10.Pages.Explorer
 
 			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
 
+			SearchTerm.PlaceholderText = DataSource.SearchExample;
+			SearchTerm.Text = DataSource.Search;
 			DataSource.Reload();
 		}
 
@@ -106,7 +108,7 @@ namespace wenku10.Pages.Explorer
 		{
 			MenuFlyoutItem Item = ( MenuFlyoutItem ) sender;
 			Item.Icon.Opacity = Table.ToggleCol( ( IGRCell ) Item.Tag ) ? 1 : 0;
-			DataSource.SaveConfig();
+			var j = DataSource.SaveConfig();
 		}
 
 		private void SortByColumn_Click( object sender, RoutedEventArgs e )
@@ -117,7 +119,12 @@ namespace wenku10.Pages.Explorer
 			int ColIndex = int.Parse( ( string ) ColBtn.Tag );
 
 			DataSource.ToggleSort( ColIndex );
-			DataSource.SaveConfig();
+			var j = DataSource.SaveConfig();
+		}
+
+		private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
+		{
+			DataSource.Search = args.QueryText;
 		}
 
 		private void ItemList_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
@@ -290,7 +297,7 @@ namespace wenku10.Pages.Explorer
 				Table.MoveColumn( OIndex, NewColIndex );
 				NewColIndex = -1;
 
-				DataSource.SaveConfig();
+				var j = DataSource.SaveConfig();
 			}
 
 			ColReorder = null;
@@ -356,5 +363,19 @@ namespace wenku10.Pages.Explorer
 			}
 		}
 
+		private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
+		{
+			if ( sender is FrameworkElement Elem )
+			{
+				if ( FlyoutBase.GetAttachedFlyout( Elem ) is MenuFlyout CMenu )
+				{
+					CMenu.ShowAt( Elem, e.GetPosition( Elem ) );
+				}
+				else
+				{
+					FlyoutBase.ShowAttachedFlyout( Elem );
+				}
+			}
+		}
 	}
 }
