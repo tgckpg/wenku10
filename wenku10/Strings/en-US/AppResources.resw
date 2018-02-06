@@ -255,8 +255,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>Press again to exit</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>Click To Read</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>Read</value>
   </data>
   <data name="Size.Text" xml:space="preserve">
     <value>Size</value>

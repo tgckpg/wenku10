@@ -254,8 +254,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>请再按一次退出</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>点击阅题</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>阅读</value>
   </data>
   <data name="Size.Text" xml:space="preserve">
     <value>大小</value>

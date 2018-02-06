@@ -237,4 +237,13 @@
   <data name="GotoCurrent.Text" xml:space="preserve">
     <value>Goto Current</value>
   </data>
+  <data name="Open.Text" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OpenWith.Text" xml:space="preserve">
+    <value>Open with ...</value>
+  </data>
+  <data name="ChangeDefault.Text" xml:space="preserve">
+    <value>Change default</value>
+  </data>
 </root>

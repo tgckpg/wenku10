@@ -4,24 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Net.Astropenguin.Loaders;
-
 namespace GR.DataSources
 {
+	using GR.Data;
 	using Model.Interfaces;
 	using PageExtensions;
 
 	sealed class ONSViewSource : GRViewSource, IExtViewSource
 	{
-		private PageExtension _Extension;
-		public PageExtension Extension => _Extension ?? ( _Extension = new ONSPageExtension( this ) );
+		private ONSPageExt _Extension;
+		public PageExtension Extension => _Extension ?? ( _Extension = new ONSPageExt( this ) );
 
-		public ONSViewSource()
-			: base( "OnlineScriptDir" )
+		public override Action<IGRRow> ItemAction => ( ( ONSPageExt ) Extension ).OpenItem;
+
+		public ONSViewSource( string Name, Type DataType )
+			: base( Name )
 		{
-			StringResources sta = new StringResources( "AppBar" );
-			ItemTitle = sta.Text( ItemTitle );
-			DataSourceType = typeof( ONSDisplayData );
+			DataSourceType = DataType;
 		}
 	}
 }

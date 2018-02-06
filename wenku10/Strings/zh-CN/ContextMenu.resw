@@ -175,7 +175,7 @@
     <value>打开地址</value>
   </data>
   <data name="PresetBackground.Text" xml:space="preserve">
-    <value>预设背景</value>
+    <value>默应背景</value>
   </data>
   <data name="Register.Text" xml:space="preserve">
     <value>注册</value>
@@ -236,5 +236,14 @@
   </data>
   <data name="GotoCurrent.Text" xml:space="preserve">
     <value>当前位置</value>
+  </data>
+  <data name="Open.Text" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="OpenWith.Text" xml:space="preserve">
+    <value>使用…打开</value>
+  </data>
+  <data name="ChangeDefault.Text" xml:space="preserve">
+    <value>更改默应</value>
   </data>
 </root>

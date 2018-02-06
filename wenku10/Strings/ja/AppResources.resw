@@ -250,8 +250,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>もう一度押すと終了します</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>クリックしてください</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>読む</value>
   </data>
   <data name="Size.Text" xml:space="preserve">
     <value>サイズ</value>

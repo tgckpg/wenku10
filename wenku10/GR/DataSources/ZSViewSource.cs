@@ -22,7 +22,7 @@ namespace GR.DataSources
 		public ZSViewSource( string Name, ZoneSpider ZS )
 			: base( Name )
 		{
-			DataSourceType = typeof( GLDisplayData );
+			DataSourceType = typeof( ZSDisplayData );
 			this.ZS = ZS;
 		}
 
@@ -33,12 +33,16 @@ namespace GR.DataSources
 				if ( base.ItemAction == null )
 					return base.ItemAction;
 
-				return ZSItemAction;
+				return ( x ) =>
+				{
+					RowAction( x );
+					base.ItemAction( x );
+				};
 			}
 			set => base.ItemAction = value;
 		}
 
-		private async void ZSItemAction( IGRRow _Row )
+		private async void RowAction( IGRRow _Row )
 		{
 			GRRow<BookDisplay> Row = ( GRRow<BookDisplay> ) _Row;
 
@@ -55,8 +59,6 @@ namespace GR.DataSources
 			{
 				await ItemProcessor.ProcessLocal( Item );
 			}
-
-			base.ItemAction( _Row );
 		}
 	}
 }

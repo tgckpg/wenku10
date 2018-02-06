@@ -18,10 +18,12 @@ namespace GR.PageExtensions
 {
 	using CompositeElement;
 	using DataSources;
+	using GR.Data;
+	using GR.Model.ListItem.Sharers;
 	using Model.Interfaces;
 	using Resources;
 
-	sealed class ONSPageExtension : PageExtension, ICmdControls
+	sealed class ONSPageExt : PageExtension, ICmdControls
 	{
 		#pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
@@ -37,9 +39,27 @@ namespace GR.PageExtensions
 		private ONSViewSource ViewSource;
 		private AppBarButtonEx ActivyBtn;
 
-		public ONSPageExtension( ONSViewSource ViewSource )
+		public ONSPageExt( ONSViewSource ViewSource )
 		{
 			this.ViewSource = ViewSource;
+		}
+
+		public void OpenItem( IGRRow Row )
+		{
+			if ( Row is GRRow<HSDisplay> )
+			{
+				HubScriptItem HSI = ( ( GRRow<HSDisplay> ) Row ).Source.Item;
+
+				if ( HSI.Faultered )
+				{
+					// Report to admin
+				}
+				else
+				{
+					ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () => new ScriptDetails( HSI ) );
+				}
+
+			}
 		}
 
 		protected override void SetTemplate()

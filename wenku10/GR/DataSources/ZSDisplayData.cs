@@ -19,9 +19,9 @@ namespace GR.DataSources
 	using Model.Section;
 
 	/// <summary>
-	/// Generic Loader DisplayData ( ILoader<BookItem> )
+	/// Zone Spider DisplayData ( ILoader<BookItem> )
 	/// </summary>
-	sealed class GLDisplayData : BookDisplayData
+	sealed class ZSDisplayData : BookDisplayData
 	{
 		protected override string ConfigId => "ZS-" + ZS.ZoneId;
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
@@ -35,7 +35,7 @@ namespace GR.DataSources
 
 		private ZoneSpider ZS;
 
-		public GLDisplayData( ZoneSpider ZS )
+		public ZSDisplayData( ZoneSpider ZS )
 		{
 			this.ZS = ZS;
 		}

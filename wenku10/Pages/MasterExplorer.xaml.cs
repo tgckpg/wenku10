@@ -56,23 +56,21 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		private IGRRow OpenedRow;
-
 		public void SoftOpen()
 		{
-			OpenedRow?.Refresh();
+			ExplorerView.Refresh();
 		}
 
 		public void SoftClose() { }
 
 		public void SetTemplate()
 		{
-			StringResources stx = new StringResources( "NavigationTitles" );
+			StringResources stx = new StringResources( "NavigationTitles", "AppBar" );
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
-				new GRViewSource( stx.Text( "MyLibrary" ) ) { DataSourceType = typeof( BookDisplayData ) },
-				new GRViewSource( stx.Text( "History" ) ) { DataSourceType = typeof( HistoryData ) },
-				new ONSViewSource(),
+				new BookDisplayVS( stx.Text( "MyLibrary" ), typeof( BookDisplayData ) ),
+				new BookDisplayVS( stx.Text( "History" ), typeof( HistoryData ) ),
+				new ONSViewSource( stx.Text( "OnlineScriptDir", "AppBar" ), typeof( ONSDisplayData ) ),
 			};
 
 			// Get Zone Entries
@@ -104,9 +102,7 @@ namespace wenku10.Pages
 			TreeItem Nav = ( TreeItem ) e.ClickedItem;
 			if ( Nav is GRViewSource ViewSource )
 			{
-				ViewSource.ItemAction = OpenItem;
 				await ExplorerView.View( ViewSource );
-
 				ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
 			}
 
@@ -167,31 +163,6 @@ namespace wenku10.Pages
 		private void ExtCmd_ControlChanged( object sender )
 		{
 			ControlChanged?.Invoke( this );
-		}
-
-		private void OpenItem( IGRRow Row )
-		{
-			if ( Row is GRRow<BookDisplay> )
-			{
-				OpenedRow = Row;
-				BookItem BkItem = ItemProcessor.GetBookItem( ( ( GRRow<BookDisplay> ) Row ).Source.Entry );
-				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
-			}
-			else if ( Row is GRRow<HSDisplay> )
-			{
-				OpenedRow = Row;
-				HubScriptItem HSI = ( ( GRRow<HSDisplay> ) Row ).Source.Item;
-
-				if ( HSI.Faultered )
-				{
-					// Report to admin
-				}
-				else
-				{
-					ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () => new ScriptDetails( HSI ) );
-				}
-
-			}
 		}
 
 	}

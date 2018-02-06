@@ -6,19 +6,17 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 
 using Net.Astropenguin.Linq;
 
-using GR.Data;
-using GR.Database.Models;
-using GR.Model.Book;
-using GR.Resources;
-
 namespace GR.DataSources
 {
+	using Data;
+	using Database.Models;
+	using Model.Book;
+	using Model.Interfaces;
+	using Resources;
+
 	class BookDisplayData : GRDataSource
 	{
 		protected override string ConfigId => "Library";
@@ -112,47 +110,7 @@ namespace GR.DataSources
 			{
 				Source = new BookDisplay( x ),
 				Cell = ( _i, _x ) => BkTable.CellProps[ _i ].Value( ( BookDisplay ) _x ),
-				ContextMenu = GetContextMenu,
 			} );
-		}
-
-		private Dictionary<BookType, MenuFlyout> BkContext = new Dictionary<BookType, MenuFlyout>();
-
-		private FlyoutBase GetContextMenu( object arg )
-		{
-			if ( arg is BookDisplay BkDisplay )
-			{
-				BookType BType = BkDisplay.Entry.Type;
-				if ( !BkContext.ContainsKey( BType ) )
-				{
-					MenuFlyout Context = new MenuFlyout();
-
-					MenuFlyoutItem Item0 = new MenuFlyoutItem() { Text = "Item 1" };
-					Item0.Click += Item0_Click;
-					Context.Items.Add( Item0 );
-
-					if ( BkDisplay.Entry.Type == BookType.S )
-					{
-						MenuFlyoutItem Item1 = new MenuFlyoutItem() { Text = "Type S Action" };
-						Context.Items.Add( Item1 );
-					}
-
-					if ( BkDisplay.Entry.Type == BookType.W )
-					{
-						MenuFlyoutItem Item2 = new MenuFlyoutItem() { Text = "Type W Action" };
-						Context.Items.Add( Item2 );
-					}
-
-					BkContext[ BType ] = Context;
-				}
-
-				return BkContext[ BType ];
-			}
-			return null;
-		}
-
-		private void Item0_Click( object sender, RoutedEventArgs e )
-		{
 		}
 
 		virtual protected void SortExp( int ColIndex, int Order )

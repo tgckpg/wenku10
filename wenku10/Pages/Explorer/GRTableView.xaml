@@ -219,7 +219,7 @@
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DskDetailsItem" x:DataType="grt:IGRRow">
-            <Grid FlyoutBase.AttachedFlyout="{x:Bind ContextMenu.Invoke( CellData )}" RightTapped="ShowContextMenu">
+            <Grid RightTapped="ShowContextMenu">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{x:Bind Table.H00, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Table.H01, Mode=OneWay}" />

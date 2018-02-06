@@ -21,6 +21,7 @@ using Net.Astropenguin.Linq;
 using GR.Data;
 using GR.DataSources;
 using GR.Effects;
+using GR.Model.Interfaces;
 
 namespace wenku10.Pages.Explorer
 {
@@ -34,6 +35,7 @@ namespace wenku10.Pages.Explorer
 		private GRViewSource ViewSource;
 		private GRDataSource DataSource => ViewSource?.DataSource;
 		private IGRTable Table => ViewSource?.DataSource.Table;
+		private IGRRow OpenedRow;
 
 		private int ColResizeIndex = -1;
 
@@ -64,6 +66,12 @@ namespace wenku10.Pages.Explorer
 		public GRTableView()
 		{
 			this.InitializeComponent();
+		}
+
+		public void Refresh()
+		{
+			OpenedRow?.Refresh();
+			OpenedRow = null;
 		}
 
 		public async Task View( GRViewSource ViewSource )
@@ -131,6 +139,7 @@ namespace wenku10.Pages.Explorer
 		{
 			IGRRow Row = ( ( FrameworkElement ) e.OriginalSource ).DataContext as IGRRow;
 			if ( Row == null ) return;
+			OpenedRow = Row;
 			GRTable_ItemAction( Row );
 		}
 
@@ -365,17 +374,24 @@ namespace wenku10.Pages.Explorer
 
 		private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
 		{
-			if ( sender is FrameworkElement Elem )
+			if ( sender is FrameworkElement Elem && ViewSource is IExtViewSource ExtViewSource )
 			{
-				if ( FlyoutBase.GetAttachedFlyout( Elem ) is MenuFlyout CMenu )
+				if ( Elem.DataContext is IGRRow Row )
 				{
-					CMenu.ShowAt( Elem, e.GetPosition( Elem ) );
-				}
-				else
-				{
-					FlyoutBase.ShowAttachedFlyout( Elem );
+					FlyoutBase ItemMenu = ExtViewSource.Extension.GetContextMenu( Elem );
+					FlyoutBase.SetAttachedFlyout( Elem, ItemMenu );
+
+					if ( ItemMenu is MenuFlyout CMenu )
+					{
+						CMenu.ShowAt( Elem, e.GetPosition( Elem ) );
+					}
+					else if ( ItemMenu != null )
+					{
+						FlyoutBase.ShowAttachedFlyout( Elem );
+					}
 				}
 			}
 		}
+
 	}
 }
