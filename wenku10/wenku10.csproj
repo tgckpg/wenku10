@@ -373,9 +373,6 @@
     <Compile Include="Pages\Dialogs\Rename.xaml.cs">
       <DependentUpon>Rename.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\History.xaml.cs">
-      <DependentUpon>History.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
@@ -588,10 +585,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\DirectTextViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\History.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

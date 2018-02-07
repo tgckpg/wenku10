@@ -98,7 +98,8 @@ namespace GR.GSystem
 		private void CreateCommonCommands()
 		{
 			SecondaryIconButton HistoryBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.History, stx.Text( "History", "NavigationTitles" ) );
-			HistoryBtn.Click += CreateCmdHandler( PageId.HISTORY, () => new wenku10.Pages.History() );
+			// Goto Explorer, Auto Select History
+			// HistoryBtn.Click += CreateCmdHandler( PageId.HISTORY, () => new wenku10.Pages.History() );
 
 			SecondaryIconButton ManagePinsBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Pinned, stx.Text( "ManagePins", "NavigationTitles" ) );
 			ManagePinsBtn.Click += CreateCmdHandler( PageId.MANAGE_PINS, () => new ManagePins() );

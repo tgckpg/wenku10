@@ -5,13 +5,20 @@
     xmlns:local="using:wenku10.Pages.Explorer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:n="using:Net.Astropenguin.UI.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:g="using:GR.Converters"
     xmlns:grt="using:GR.Data"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid Background="{StaticResource MajorBackgroundBrush}">
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.Resources>
+            <n:DataVisConverter x:Key="DataVisConverter" />
+            <g:TransStateConverter x:Key="TransStateConverter" />
+        </Grid.Resources>
+
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -45,9 +52,8 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <AutoSuggestBox x:Name="SearchTerm"
+        <AutoSuggestBox x:Name="SearchTerm" QueryIcon="Find"
                         Grid.Row="0" Grid.Column="0" Margin="10"
-                        QueryIcon="Find"
                         QuerySubmitted="SearchBox_QuerySubmitted" />
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
@@ -62,6 +68,25 @@
                   IsDoubleTapEnabled="True" DoubleTapped="ItemList_DoubleTapped"
                   ItemsSource="{Binding Items}"
                   IsItemClickEnabled="True" />
+
+        <!-- Loading Message -->
+        <Grid x:Name="LoadingMessage"
+              Grid.Row="1" Grid.ColumnSpan="2"
+              Background="{StaticResource MinorBrush}"
+              VerticalAlignment="Bottom" HorizontalAlignment="Center"
+              e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+              e:TransitionDisplay.Mode="A01_Y_30_30" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ProgressRing Grid.Column="0" Margin="10"
+                          IsActive="{Binding IsLoading}" Foreground="{StaticResource RelativeMajorBrush}" />
+            <TextBlock Grid.Column="1" Margin="0,0,10,0" VerticalAlignment="Center"
+                       MaxLines="1" TextTrimming="CharacterEllipsis"
+                       Visibility="{Binding Message, Converter={StaticResource DataVisConverter}}"
+                       Text="{Binding Message}" Foreground="{StaticResource RelativeMajorBrush}" />
+        </Grid>
     </Grid>
 
     <UserControl.Resources>

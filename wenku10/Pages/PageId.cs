@@ -15,7 +15,6 @@ namespace wenku10.Pages
 			, ZONE_SPIDER_VIEW = "ZoneSpiderView"
 			, LOCAL_DOCS_VIEW = "LocalDocsView"
 			, ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
-			, HISTORY = "History"
 			, MANAGE_PINS = "ManagePins"
 			, PROC_PANEL = "ProceduresPanel"
 			, CONTENT_READER_H = "ContentReaderHorz"

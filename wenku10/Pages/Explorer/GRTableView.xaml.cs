@@ -106,6 +106,8 @@ namespace wenku10.Pages.Explorer
 			}
 
 			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
+			TableSettings.DataContext = DataSource;
+			LoadingMessage.DataContext = DataSource;
 
 			SearchTerm.PlaceholderText = DataSource.SearchExample;
 			SearchTerm.Text = DataSource.Search;
