@@ -14,7 +14,6 @@ namespace GR.DataSources
 	using Data;
 	using Database.Models;
 	using Model.Book;
-	using Model.Interfaces;
 	using Resources;
 
 	class BookDisplayData : GRDataSource

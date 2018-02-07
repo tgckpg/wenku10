@@ -76,7 +76,7 @@ namespace GR.Model.Section
 				ZoneEntry( ZS );
 				if ( !Init )
 				{
-					Worker.ReisterBackgroundWork( () => { Shared.Storage.WriteString( ZS.MetaLocation, ZData ); } );
+					Worker.Register( () => { Shared.Storage.WriteString( ZS.MetaLocation, ZData ); } );
 				}
 			}
 		}

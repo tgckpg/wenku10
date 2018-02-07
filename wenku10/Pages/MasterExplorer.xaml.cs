@@ -21,13 +21,9 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using GR.Data;
 using GR.DataSources;
-using GR.Model.Book;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
-using GR.Model.ListItem.Sharers;
-using GR.Model.Pages;
 using GR.Model.Section;
 
 namespace wenku10.Pages

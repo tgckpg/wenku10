@@ -71,9 +71,6 @@ namespace wenku10
 
 		private void BootstrapApplication()
 		{
-			// NetLog
-			Worker.Initialize();
-
 			new global::GR.GSystem.Bootstrap().Start();
 		}
 
