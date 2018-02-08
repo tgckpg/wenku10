@@ -165,7 +165,7 @@ namespace GR.GSystem
 			WLoginBtn.Click += CreateCmdHandler( WLoginBtn_Click );
 
 			SecondaryIconButton SearchBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Search, stx.Text( "Search", "AppBar" ) );
-			SearchBtn.Click += CreateCmdHandler( PageId.W_SEARCH, () => new WSearch() );
+			// TODO: Auto Goto Search
 
 			w82ndCommands = new ICommandBarElement[] { WLoginBtn, SearchBtn };
 
@@ -235,7 +235,7 @@ namespace GR.GSystem
 				M2ndCommands = SH2ndCommands;
 
 				// ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "featured: 1", null ) ) );
-				ControlFrame.Instance.SetHomePage( PageId.LOCAL_DOCS_VIEW, () => new MasterExplorer() );
+				ControlFrame.Instance.SetHomePage( PageId.MASTER_EXPLORER, () => new MasterExplorer() );
 			}
 			else
 			{

@@ -21,6 +21,7 @@ namespace GR.PageExtensions
 	using Database.Contexts;
 	using Database.Models;
 	using Model.Book;
+	using Model.Book.Spider;
 	using Model.ListItem;
 	using Model.Pages;
 	using Model.Interfaces;
@@ -150,9 +151,20 @@ namespace GR.PageExtensions
 			}
 		}
 
-		private void Edit_Click( object sender, RoutedEventArgs e )
+		private async void Edit_Click( object sender, RoutedEventArgs e )
 		{
-			throw new NotImplementedException();
+			object DataContext = ( ( FrameworkElement ) sender ).DataContext;
+
+			if ( DataContext is GRRow<BookDisplay> BkRow )
+			{
+				BookItem BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
+
+				SpiderBook SBk = await SpiderBook.CreateSAsync( BkItem.ZoneId, BkItem.ZItemId, null );
+				if ( SBk.CanProcess )
+				{
+					ControlFrame.Instance.NavigateTo( PageId.PROC_PANEL, () => new ProcPanelWrapper( SBk.MetaLocation ) );
+				}
+			}
 		}
 
 		private void DefaultAction_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )

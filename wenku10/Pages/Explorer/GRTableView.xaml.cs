@@ -106,12 +106,19 @@ namespace wenku10.Pages.Explorer
 			}
 
 			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
-			TableSettings.DataContext = DataSource;
-			LoadingMessage.DataContext = DataSource;
+			LayoutRoot.DataContext = DataSource;
 
 			SearchTerm.PlaceholderText = DataSource.SearchExample;
 			SearchTerm.Text = DataSource.Search;
-			DataSource.Reload();
+
+			try
+			{
+				DataSource.Reload();
+			}
+			catch( EmptySearchQueryException )
+			{
+				var j = Dispatcher.RunIdleAsync( ( x ) => SearchTerm.Focus( FocusState.Keyboard ) );
+			}
 		}
 
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
@@ -134,7 +141,14 @@ namespace wenku10.Pages.Explorer
 
 		private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
 		{
-			DataSource.Search = args.QueryText;
+			try
+			{
+				DataSource.Search = args.QueryText;
+			}
+			catch ( EmptySearchQueryException )
+			{
+				SearchTerm.Focus( FocusState.Keyboard );
+			}
 		}
 
 		private void ItemList_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )

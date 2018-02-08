@@ -37,13 +37,16 @@ namespace GR.DataSources
 			GRRow<BookDisplay> Row = ( GRRow<BookDisplay> ) _Row;
 
 			BookInstruction Payload = ( BookInstruction ) Row.Source.Payload;
-			// Save the book here
-			Payload.SaveInfo();
+			if ( Payload != null )
+			{
+				// Save the book here
+				Payload.SaveInfo();
 
-			// Reload the BookDisplay as Entry might changed from SaveInfo
-			Row.Source = new BookDisplay( Payload.Entry );
+				// Reload the BookDisplay as Entry might changed from SaveInfo
+				Row.Source = new BookDisplay( Payload.Entry );
+			}
 
-			SpiderBook Item = await SpiderBook.CreateSAsync( Payload.ZoneId, Payload.ZItemId, Payload.BookSpiderDef );
+			SpiderBook Item = await SpiderBook.CreateSAsync( Row.Source.Entry.ZoneId, Row.Source.Entry.ZItemId, Payload?.BookSpiderDef );
 
 			if ( !Item.ProcessSuccess && Item.CanProcess )
 			{

@@ -59,7 +59,17 @@ namespace wenku10.Pages
 
 		public void SoftClose() { }
 
-		public void SetTemplate()
+		public void NavigateToViewSource( GRViewSource Payload )
+		{
+			NavTree.Open( Payload );
+			if( NavTree.Contains( Payload ) )
+			{
+				MasterNav.SelectedItem = Payload;
+				OpenView( Payload );
+			}
+		}
+
+		private void SetTemplate()
 		{
 			StringResources stx = new StringResources( "NavigationTitles", "AppBar" );
 			List<TreeItem> Nav = new List<TreeItem>()
@@ -93,19 +103,24 @@ namespace wenku10.Pages
 			ZoneListCont.ScanZones();
 		}
 
-		private async void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
+		private void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
 		{
 			TreeItem Nav = ( TreeItem ) e.ClickedItem;
 			if ( Nav is GRViewSource ViewSource )
 			{
-				await ExplorerView.View( ViewSource );
-				ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
+				OpenView( ViewSource );
 			}
 
 			if ( Nav.Children?.Any() == true )
 			{
 				NavTree.Toggle( Nav );
 			}
+		}
+
+		private async void OpenView( GRViewSource ViewSource )
+		{
+			await ExplorerView.View( ViewSource );
+			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
 		}
 
 		private PageExtension PageExt;

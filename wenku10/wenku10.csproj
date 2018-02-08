@@ -385,9 +385,6 @@
     <Compile Include="Pages\ReviewsInput.xaml.cs">
       <DependentUpon>ReviewsInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WSearch.xaml.cs">
-      <DependentUpon>WSearch.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\Settings\Advanced\Debug.xaml.cs">
       <DependentUpon>Debug.xaml</DependentUpon>
     </Compile>
@@ -613,10 +610,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ReviewsInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

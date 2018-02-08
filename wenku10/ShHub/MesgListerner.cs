@@ -14,6 +14,7 @@ using Net.Astropenguin.Messaging;
 using GR.AdvDM;
 using GR.Ext;
 using GR.CompositeElement;
+using GR.DataSources;
 using GR.Model.Book;
 using GR.Model.Book.Spider;
 using GR.Model.ListItem;
@@ -123,6 +124,10 @@ namespace wenku10.ShHub
 
 				case AppKeys.PM_CHECK_TILES:
 					CheckTiles();
+					break;
+
+				case AppKeys.OPEN_VIEWSOURCE:
+					ControlFrame.Instance.NavigateTo( PageId.MASTER_EXPLORER, () => new MasterExplorer(), P => ( ( MasterExplorer ) P ).NavigateToViewSource( ( GRViewSource ) Mesg.Payload ) );
 					break;
 			}
 		}

@@ -13,7 +13,6 @@ namespace wenku10.Pages
 			, BOOK_SPIDER_VIEW = "BookSpiderView"
 			, MASTER_EXPLORER = "MasterExplorer"
 			, ZONE_SPIDER_VIEW = "ZoneSpiderView"
-			, LOCAL_DOCS_VIEW = "LocalDocsView"
 			, ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
 			, MANAGE_PINS = "ManagePins"
 			, PROC_PANEL = "ProceduresPanel"
@@ -26,7 +25,6 @@ namespace wenku10.Pages
 
 			, W_BOOKSHELF = "WBookshelf"
 			, W_COMMENT = "WComment"
-			, W_SEARCH = "WSearch"
 			, W_USER_INFO = "WUserInfo"
 			, W_NAV_SEL = "WNavSelections"
 			, W_NAV_LIST = "WNavList-"

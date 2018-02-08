@@ -53,6 +53,7 @@
         </Grid.ColumnDefinitions>
 
         <AutoSuggestBox x:Name="SearchTerm" QueryIcon="Find"
+                        IsEnabled="{Binding Searchable}"
                         Grid.Row="0" Grid.Column="0" Margin="10"
                         QuerySubmitted="SearchBox_QuerySubmitted" />
 

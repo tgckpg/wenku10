@@ -16,6 +16,7 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
 using GR.AdvDM;
 using GR.CompositeElement;
@@ -360,9 +361,7 @@ namespace wenku10.Pages
 
 		private void SearchAuthor( object sender, RoutedEventArgs e )
 		{
-			ControlFrame.Instance.NavigateTo(
-				PageId.W_SEARCH, () => new WSearch()
-				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.Info.Author ) );
+			MessageBus.Send( GetType(), AppKeys.SEARCH_AUTHOR, ThisBook.Entry );
 		}
 
 		private void AddOrRemoveFav( object sender, RoutedEventArgs e )
