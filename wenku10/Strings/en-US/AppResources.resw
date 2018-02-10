@@ -381,8 +381,8 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>Book</value>
   </data>
-  <data name="PleaseClick.Text" xml:space="preserve">
-    <value>Please Click</value>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>Unprocessed item</value>
   </data>
   <data name="ZoneSpider.Text" xml:space="preserve">
     <value>Zone Spider</value>
@@ -416,5 +416,8 @@
   </data>
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 characters ( #wenku10 )</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>Record exist</value>
   </data>
 </root>

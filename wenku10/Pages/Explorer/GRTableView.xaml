@@ -63,12 +63,21 @@
             </Button>
         </StackPanel>
 
-        <ListView x:Name="ItemList"
-                  Grid.Row="1" Grid.ColumnSpan="2"
-                  ItemContainerStyle="{StaticResource BareListItem}"
-                  IsDoubleTapEnabled="True" DoubleTapped="ItemList_DoubleTapped"
-                  ItemsSource="{Binding Items}"
-                  IsItemClickEnabled="True" />
+        <ScrollViewer x:Name="HZCont" SizeChanged="HZCont_SizeChanged"
+                      VerticalAlignment="Stretch"
+                      VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden"
+                      IsVerticalRailEnabled="False" IsVerticalScrollChainingEnabled="False"
+                      HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto"
+                      Grid.Row="1" Grid.ColumnSpan="2" >
+            <ListView x:Name="ItemList"
+                      ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsHorizontalScrollChainingEnabled="False"
+                      ItemContainerStyle="{StaticResource BareListItem}"
+                      IsDoubleTapEnabled="True" DoubleTapped="ItemList_DoubleTapped"
+                      ItemsSource="{Binding Items}"
+                      IsItemClickEnabled="True" />
+        </ScrollViewer>
 
         <!-- Loading Message -->
         <Grid x:Name="LoadingMessage"
@@ -257,7 +266,7 @@
                     <ColumnDefinition Width="{x:Bind Table.H07, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Table.H08, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind Table.H09, Mode=OneWay}" />
-                    <ColumnDefinition Width="{x:Bind Table.HSP, Mode=OneWay}" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -308,7 +317,7 @@
                     <ColumnDefinition Width="{x:Bind H07, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind H08, Mode=OneWay}" />
                     <ColumnDefinition Width="{x:Bind H09, Mode=OneWay}" />
-                    <ColumnDefinition Width="{x:Bind HSP, Mode=OneWay}" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

@@ -89,7 +89,7 @@ namespace GR.Model.Section
 		{
 			Data = Data.Where( b =>
 			{
-				return b.CanProcess || ( FavOnly && b.IsFav ) || ( b.Processed && b.ProcessSuccess );
+				return b.CanProcess || ( b.Processed && b.ProcessSuccess );
 			} );
 
 			NotifyChanged( "SearchSet" );
@@ -120,7 +120,6 @@ namespace GR.Model.Section
 						LB.CanProcess = false;
 					}
 
-					LB.IsFav = true;
 					SS.Add( LB );
 				}
 
@@ -137,13 +136,7 @@ namespace GR.Model.Section
 				FavOnly = false;
 				if ( Data != null )
 				{
-					Data = Data.Where( x =>
-					{
-						LocalBook LB = x as LocalBook;
-						if ( LB.IsFav ) return LB.ProcessSuccess || LB.Processing || LB.CanProcess;
-
-						return true;
-					} );
+					Data = Data.Where( x => x.ProcessSuccess || x.Processing || x.CanProcess );
 				}
 			}
 

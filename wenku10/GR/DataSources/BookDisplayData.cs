@@ -108,7 +108,6 @@ namespace GR.DataSources
 			BkTable.Items = Books.Remap( x => new GRRow<BookDisplay>( BkTable )
 			{
 				Source = new BookDisplay( x ),
-				Cell = ( _i, _x ) => BkTable.CellProps[ _i ].Value( ( BookDisplay ) _x ),
 			} );
 		}
 
@@ -135,6 +134,9 @@ namespace GR.DataSources
 				{
 					case "LastAccess":
 						OrderExp = Expression.PropertyOrField( _x, Prop.Name );
+						break;
+					case "Zone":
+						OrderExp = Expression.PropertyOrField( _x, "ZoneId" );
 						break;
 					default:
 						return;

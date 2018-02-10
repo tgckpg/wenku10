@@ -28,8 +28,6 @@ using GR.Model.Section;
 
 namespace wenku10.Pages
 {
-	using Sharers;
-
 	public sealed partial class MasterExplorer : Page, ICmdControls, INavPage
 	{
 #pragma warning disable 0067
@@ -71,10 +69,19 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "NavigationTitles", "AppBar" );
+			StringResources stx = new StringResources( "NavigationTitles", "AppBar", "AppResources" );
+
+			BookDisplayVS MyLibrary = new BookDisplayVS( stx.Text( "MyLibrary" ), typeof( BookDisplayData ) );
+
+			BookSpiderVS NPSpiders = new BookSpiderVS( stx.Text( "BookSpider", "AppResources" ) );
+			MyLibrary.AddChild( NPSpiders );
+
+			// BookSpiderVS LocalDocs = new BookSpiderVS( stx.Text( "LocalDocuments", "AppBar" ), typeof( NPSpiderDisplayData ) );
+			// MyLibrary.AddChild( LocalDocs );
+
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
-				new BookDisplayVS( stx.Text( "MyLibrary" ), typeof( BookDisplayData ) ),
+				MyLibrary,
 				new BookDisplayVS( stx.Text( "History" ), typeof( HistoryData ) ),
 				new ONSViewSource( stx.Text( "OnlineScriptDir", "AppBar" ), typeof( ONSDisplayData ) ),
 			};
@@ -120,6 +127,7 @@ namespace wenku10.Pages
 		private async void OpenView( GRViewSource ViewSource )
 		{
 			await ExplorerView.View( ViewSource );
+			LoadingMessage.DataContext = ViewSource;
 			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
 		}
 

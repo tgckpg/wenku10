@@ -160,11 +160,6 @@ namespace wenku10.Pages
 			SelectedBook = ( LocalBook ) G.DataContext;
 		}
 
-		private void ToggleFav( object sender, RoutedEventArgs e )
-		{
-			SelectedBook.ToggleFav();
-		}
-
 		private void RemoveSource( object sender, RoutedEventArgs e )
 		{
 			try

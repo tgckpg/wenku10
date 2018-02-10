@@ -414,4 +414,10 @@
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 字 ( #wenku10 )</value>
   </data>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>未處理的項目</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>記錄存在</value>
+  </data>
 </root>

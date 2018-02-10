@@ -380,9 +380,6 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>书</value>
   </data>
-  <data name="PleaseClick.Text" xml:space="preserve">
-    <value>请点击</value>
-  </data>
   <data name="ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛</value>
   </data>
@@ -418,5 +415,11 @@
   </data>
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 字 ( #wenku10 )</value>
+  </data>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>未处理的项目</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>记录存在</value>
   </data>
 </root>

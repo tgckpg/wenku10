@@ -5,12 +5,15 @@
     xmlns:local="using:wenku10.Pages"
     xmlns:ex="using:wenku10.Pages.Explorer"
     xmlns:gl="using:GR.Model.ListItem"
+    xmlns:n="using:Net.Astropenguin.UI.Converters"
     xmlns:v="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
@@ -31,5 +34,23 @@
             </ListView.ItemTemplate>
         </ListView>
         <ex:GRTableView x:Name="ExplorerView" Grid.Column="1" />
+        <!-- Loading Message -->
+        <Grid x:Name="LoadingMessage"
+              Grid.Row="1" Grid.ColumnSpan="2"
+              BorderThickness="1" BorderBrush="{StaticResource MinorBrush}"
+              Background="{StaticResource MajorBackgroundBrush}"
+              VerticalAlignment="Center" HorizontalAlignment="Center"
+              e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+              e:TransitionDisplay.Mode="A01_Y_N30_0" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ProgressRing Grid.Column="0" Margin="20"
+                          IsActive="{Binding IsLoading}" Foreground="{StaticResource MajorBrush}" />
+            <TextBlock Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
+                       MaxLines="1" TextTrimming="CharacterEllipsis"
+                       Text="{Binding Message}" Foreground="{StaticResource MajorBrush}" />
+        </Grid>
     </Grid>
 </Page>

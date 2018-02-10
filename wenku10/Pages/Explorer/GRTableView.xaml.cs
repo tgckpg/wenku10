@@ -409,5 +409,9 @@ namespace wenku10.Pages.Explorer
 			}
 		}
 
+		private void HZCont_SizeChanged( object sender, SizeChangedEventArgs e )
+		{
+			ItemList.Height = HZCont.ActualHeight;
+		}
 	}
 }

@@ -39,10 +39,12 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 		private IStorageFile PreviewFile;
 		private WenkuExtractor EditTarget;
+		private ProceduralSpider MCrawler;
 
 		private EditProcExtract()
 		{
 			this.InitializeComponent();
+			MCrawler = new ProceduralSpider( new Procedure[ 0 ] );
 			SetTemplate();
 		}
 
@@ -106,7 +108,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 			try
 			{
 				if ( PreviewFile == null )
-					PreviewFile = await ProceduralSpider.DownloadSource( Url );
+					PreviewFile = await MCrawler.DownloadSource( Url );
 
 				// The resulting convoy may not be the book instruction originally created
 				ProcConvoy Convoy = await new ProceduralSpider( new Procedure[] { EditTarget } )

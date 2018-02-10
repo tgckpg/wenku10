@@ -85,7 +85,6 @@ namespace GR.DataSources
 			return new GRRow<BookDisplay>( BkTable )
 			{
 				Source = new BookDisplay( B.Entry ) { Payload = B },
-				Cell = ( _i, _x ) => BkTable.CellProps[ _i ].Value( ( BookDisplay ) _x )
 			};
 		}
 

@@ -50,7 +50,6 @@ namespace GR.DataSources
 			return new GRRow<HSDisplay>( HSTable )
 			{
 				Source = new HSDisplay( HSItem ),
-				Cell = ( _i, _x ) => HSTable.CellProps[ _i ].Value( ( HSDisplay ) _x )
 			};
 		}
 

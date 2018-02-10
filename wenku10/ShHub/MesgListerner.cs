@@ -226,10 +226,7 @@ namespace wenku10.ShHub
 
 			if ( Parse )
 			{
-				ControlFrame.Instance.NavigateTo(
-					PageId.BOOK_SPIDER_VIEW, () => new BookSpidersView()
-					, ( View ) => ( ( BookSpidersView ) View ).Parse( Book )
-				);
+				throw new NotImplementedException();
 			}
 		}
 

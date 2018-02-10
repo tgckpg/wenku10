@@ -43,7 +43,6 @@ namespace GR.Model.Section
 				if ( LB.ProcessSuccess )
 				{
 					Items.Add( LB );
-					LB.IsFav = favs.Contains( Id );
 				}
 			}
 
@@ -64,7 +63,6 @@ namespace GR.Model.Section
 				}
 
 				LocalBook LB = new LocalBook( x );
-				LB.IsFav = ids.Contains( LB.ZItemId );
 				return LB;
 			} );
 

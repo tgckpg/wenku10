@@ -1,16 +1,15 @@
-﻿using GR.Data;
-using GR.Database.Models;
-using GR.Model.Book;
-using GR.Resources;
-using Net.Astropenguin.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.Linq;
+
 namespace GR.DataSources
 {
+	using Database.Models;
+
 	sealed class HistoryData : BookDisplayData
 	{
 		protected override string ConfigId => "Hisotry";
