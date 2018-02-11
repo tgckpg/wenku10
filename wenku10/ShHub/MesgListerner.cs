@@ -22,6 +22,7 @@ using GR.Model.ListItem.Sharers;
 using GR.Model.Loaders;
 using GR.Model.Pages;
 using GR.Model.REST;
+using GR.Model.Section;
 using GR.Storage;
 using GR.Resources;
 using GR.Settings;
@@ -52,10 +53,7 @@ namespace wenku10.ShHub
 
 					if ( ( HSI.Scope & SpiderScope.ZONE ) != 0 )
 					{
-						ControlFrame.Instance.NavigateTo(
-							PageId.ZONE_SPIDER_VIEW
-							, () => new ZoneSpidersView()
-							, View => ( ( ZoneSpidersView ) View ).OpenZone( HSI ) );
+						throw new NotImplementedException();
 						break;
 					}
 
@@ -128,6 +126,10 @@ namespace wenku10.ShHub
 
 				case AppKeys.OPEN_VIEWSOURCE:
 					ControlFrame.Instance.NavigateTo( PageId.MASTER_EXPLORER, () => new MasterExplorer(), P => ( ( MasterExplorer ) P ).NavigateToViewSource( ( GRViewSource ) Mesg.Payload ) );
+					break;
+
+				case AppKeys.OPEN_ZONE:
+					ControlFrame.Instance.NavigateTo( PageId.MASTER_EXPLORER, () => new MasterExplorer(), P => ( ( MasterExplorer ) P ).NavigateToZone( ( ZoneSpider ) Mesg.Payload ) );
 					break;
 			}
 		}

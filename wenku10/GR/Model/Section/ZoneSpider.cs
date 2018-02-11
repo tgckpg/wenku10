@@ -29,6 +29,8 @@ namespace GR.Model.Section
 		public string MetaLocation { get { return FileLinks.ROOT_ZSPIDER + ZoneId + ".xml"; } }
 
 		public ObservableCollection<Procedure> ProcList { get { return PM?.ProcList; } }
+
+		public string Name { get; set; }
 		public Uri Banner { get; private set; }
 
 		private ProcManager PM;
@@ -58,6 +60,7 @@ namespace GR.Model.Section
 			}
 
 			Banner = PLL.BannerSrc;
+			Name = PLL.ZoneName;
 			NotifyChanged( "Banner" );
 		}
 

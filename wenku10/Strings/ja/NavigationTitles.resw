@@ -205,4 +205,10 @@
   <data name="MyLibrary.Text" xml:space="preserve">
     <value>コレクション</value>
   </data>
+  <data name="AllRecords.Text" xml:space="preserve">
+    <value>すべてのレコード</value>
+  </data>
+  <data name="Zones.Text" xml:space="preserve">
+    <value>領域</value>
+  </data>
 </root>

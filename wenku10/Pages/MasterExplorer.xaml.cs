@@ -67,17 +67,28 @@ namespace wenku10.Pages
 			}
 		}
 
+		internal void NavigateToZone( ZoneSpider ZS )
+		{
+			ZSViewSource ViewSource = ZoneVS.Children.Where( x => x is ZSViewSource ).Cast<ZSViewSource>().FirstOrDefault( x => x.ZS == ZS );
+			if( ViewSource != null )
+			{
+				NavigateToViewSource( ViewSource );
+			}
+		}
+
 		private void SetTemplate()
 		{
 			StringResources stx = new StringResources( "NavigationTitles", "AppBar", "AppResources" );
 
-			BookDisplayVS MyLibrary = new BookDisplayVS( stx.Text( "MyLibrary" ), typeof( BookDisplayData ) );
-
-			BookSpiderVS NPSpiders = new BookSpiderVS( stx.Text( "BookSpider", "AppResources" ) );
-			MyLibrary.AddChild( NPSpiders );
-
-			TextDocVS LocalDocs = new TextDocVS( stx.Text( "LocalDocuments", "AppBar" ) );
-			MyLibrary.AddChild( LocalDocs );
+			TreeItem MyLibrary = new TreeItem( stx.Text( "MyLibrary" ) )
+			{
+				Children = new TreeItem[]
+				{
+					new BookDisplayVS( stx.Text( "AllRecords" ), typeof( BookDisplayData ) ),
+					new BookSpiderVS( stx.Text( "BookSpider", "AppResources" ) ),
+					new TextDocVS( stx.Text( "LocalDocuments", "AppBar" ) ),
+				}
+			};
 
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
@@ -87,18 +98,14 @@ namespace wenku10.Pages
 			};
 
 			// Get Zone Entries
-			ZoneVS = new TreeItem( "Zones" );
+			ZoneVS = new TreeItem( stx.Text( "Zones" ) );
 			List<TreeItem> Zones = new List<TreeItem>();
 
-			Zones.AddRange( GR.Resources.Shared.ExpZones );
+			ZSManagerVS ManageZones = new ZSManagerVS( stx.Text( "ZoneSpider", "AppResources" ) );
+			ManageZones.ZSMData.ZoneOpened += ( s, x ) => ZoneVS.AddChild( new ZSViewSource( x.Name, ( ZoneSpider ) x ) );
+			Zones.Add( ManageZones );
 
-			ZSContext ZoneListCont = new ZSContext()
-			{
-				ZoneEntry = ( x ) =>
-				{
-					ZoneVS.Children = new ZSViewSource[] { new ZSViewSource( x.ZoneId, x ) };
-				}
-			};
+			Zones.AddRange( GR.Resources.Shared.ExpZones );
 
 			ZoneVS.Children = Zones;
 
@@ -107,7 +114,9 @@ namespace wenku10.Pages
 			NavTree = new TreeList( Nav );
 			MasterNav.ItemsSource = NavTree;
 
-			ZoneListCont.ScanZones();
+			// Initialize ZoneSpiders
+			ManageZones.ZSMData.StructTable();
+			ManageZones.ZSMData.Reload();
 		}
 
 		private void MasterNav_ItemClick( object sender, ItemClickEventArgs e )

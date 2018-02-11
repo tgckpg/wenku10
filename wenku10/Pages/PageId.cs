@@ -10,9 +10,7 @@ namespace wenku10.Pages
 	{
 		public const string
 			BOOK_INFO_VIEW = "BookInfoView"
-			, BOOK_SPIDER_VIEW = "BookSpiderView"
 			, MASTER_EXPLORER = "MasterExplorer"
-			, ZONE_SPIDER_VIEW = "ZoneSpiderView"
 			, ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
 			, MANAGE_PINS = "ManagePins"
 			, PROC_PANEL = "ProceduresPanel"

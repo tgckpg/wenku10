@@ -17,10 +17,10 @@ using wenku10.Pages.Sharers;
 namespace GR.PageExtensions
 {
 	using CompositeElement;
+	using Data;
 	using DataSources;
-	using GR.Data;
-	using GR.Model.ListItem.Sharers;
 	using Model.Interfaces;
+	using Model.ListItem.Sharers;
 	using Resources;
 
 	sealed class ONSPageExt : PageExtension, ICmdControls

@@ -208,4 +208,10 @@
   <data name="MyLibrary.Text" xml:space="preserve">
     <value>資料庫</value>
   </data>
+  <data name="AllRecords.Text" xml:space="preserve">
+    <value>所有記錄</value>
+  </data>
+  <data name="Zones.Text" xml:space="preserve">
+    <value>區域</value>
+  </data>
 </root>

@@ -20,7 +20,7 @@ namespace GR.DataSources
 
 	sealed class ZSViewSource : GRViewSource, IExtViewSource
 	{
-		private ZoneSpider ZS;
+		public ZoneSpider ZS { get; private set; }
 
 		public override GRDataSource DataSource => _DataSource ?? ( _DataSource = ( GRDataSource ) Activator.CreateInstance( DataSourceType, ZS ) );
 		public override Action<IGRRow> ItemAction => RowAction;

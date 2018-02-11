@@ -14,6 +14,7 @@ using Windows.Storage;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
@@ -25,15 +26,10 @@ namespace GR.PageExtensions
 	using CompositeElement;
 	using Data;
 	using DataSources;
-	using Database.Contexts;
-	using Database.Models;
 	using Model.ListItem;
-	using Model.Loaders;
 	using Model.Pages;
 	using Model.Interfaces;
 	using Resources;
-	using Storage;
-	using Net.Astropenguin.Linq;
 
 	sealed class TextDocPageExt : PageExtension, ICmdControls
 	{
@@ -74,9 +70,9 @@ namespace GR.PageExtensions
 		{
 		}
 
-		public async void ProcessItem( IGRRow obj )
+		public async void ProcessItem( IGRRow DataContext )
 		{
-			if ( obj is GRRow<IBookProcess> Row )
+			if ( DataContext is GRRow<IBookProcess> Row )
 			{
 				await ItemProcessor.ProcessLocal( ( LocalBook ) Row.Source );
 			}
@@ -166,7 +162,6 @@ namespace GR.PageExtensions
 
 			if ( PTargets.Any() )
 			{
-
 				if ( await Shared.TC.ConfirmTranslate( "__ALL__", "All" ) )
 				{
 					Shared.TC.SetPrefs( PTargets );
@@ -236,14 +231,9 @@ namespace GR.PageExtensions
 			ViewSource.BSData.ImportItem( new LocalBook( ISF ) );
 		}
 
-		private async void Reanalyze_Click( object sender, RoutedEventArgs e )
+		private void Reanalyze_Click( object sender, RoutedEventArgs e )
 		{
-			object DataContext = ( ( FrameworkElement ) sender ).DataContext;
-
-			if ( DataContext is GRRow<IBookProcess> Row )
-			{
-				await ItemProcessor.ProcessLocal( ( LocalBook ) Row.Source );
-			}
+			ProcessItem( ( IGRRow ) ( ( FrameworkElement ) sender ).DataContext );
 		}
 
 		private void DirectView_Click( object sender, RoutedEventArgs e )

@@ -21,6 +21,8 @@ namespace GR.DataSources
 
 		private BookSpiderDisplayData BSData => ( BookSpiderDisplayData ) DataSource;
 
+		public override Action<IGRRow> ItemAction => ( ( BookSpiderPageExt ) Extension ).ProcessItem;
+
 		public BookSpiderVS( string Name )
 			: base( Name )
 		{

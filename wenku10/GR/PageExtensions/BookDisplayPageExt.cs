@@ -21,7 +21,6 @@ namespace GR.PageExtensions
 	using Database.Contexts;
 	using Database.Models;
 	using Model.Book;
-	using Model.Book.Spider;
 	using Model.ListItem;
 	using Model.Pages;
 	using Model.Interfaces;

@@ -10,7 +10,6 @@ using Net.Astropenguin.IO;
 namespace GR.DataSources
 {
 	using Data;
-	using Model.ListItem;
 	using Model.Interfaces;
 	using PageExtensions;
 

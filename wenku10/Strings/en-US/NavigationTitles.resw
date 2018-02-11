@@ -208,4 +208,10 @@
   <data name="MyLibrary.Text" xml:space="preserve">
     <value>Library</value>
   </data>
+  <data name="AllRecords.Text" xml:space="preserve">
+    <value>All records</value>
+  </data>
+  <data name="Zones.Text" xml:space="preserve">
+    <value>Zones</value>
+  </data>
 </root>

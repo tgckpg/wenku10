@@ -137,11 +137,14 @@
     <Compile Include="GR\DataSources\TextDocDisplayData.cs" />
     <Compile Include="GR\DataSources\TextDocVS.cs" />
     <Compile Include="GR\DataSources\ZSDisplayData.cs" />
+    <Compile Include="GR\DataSources\ZSManagerVS.cs" />
+    <Compile Include="GR\DataSources\ZSMDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
     <Compile Include="GR\PageExtensions\TextDocPageExt.cs" />
+    <Compile Include="GR\PageExtensions\ZSMPageExt.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
@@ -212,9 +215,6 @@
     </Compile>
     <Compile Include="Pages\WNavSelections.xaml.cs">
       <DependentUpon>WNavSelections.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ZoneSpidersView.xaml.cs">
-      <DependentUpon>ZoneSpidersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scenes\HyperBanner\CircleTextRenderer.cs" />
     <Compile Include="Scenes\HyperBanner\HyperBanner.cs" />
@@ -691,10 +691,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\WBookshelf.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ZoneSpidersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

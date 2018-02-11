@@ -113,10 +113,13 @@ namespace GR.PageExtensions
 			}
 		}
 
-		private async void Reanalyze_Click( object sender, RoutedEventArgs e )
+		private void Reanalyze_Click( object sender, RoutedEventArgs e )
 		{
-			object DataContext = ( ( FrameworkElement ) sender ).DataContext;
+			ProcessItem( ( IGRRow ) ( ( FrameworkElement ) sender ).DataContext );
+		}
 
+		public async void ProcessItem( IGRRow DataContext )
+		{
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
 				SpiderBook BkProc = ( SpiderBook ) Row.Source;
@@ -179,5 +182,6 @@ namespace GR.PageExtensions
 				}
 			}
 		}
+
 	}
 }
