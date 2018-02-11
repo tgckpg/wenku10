@@ -129,16 +129,19 @@
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
     <Compile Include="GR\DataSources\BookDisplayVS.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
-    <Compile Include="GR\DataSources\BookProcVS.cs" />
+    <Compile Include="GR\DataSources\BookSpiderVS.cs" />
     <Compile Include="GR\DataSources\HistoryData.cs" />
     <Compile Include="GR\DataSources\BookSpiderDisplayData.cs" />
     <Compile Include="GR\DataSources\ONSDisplayData.cs" />
     <Compile Include="GR\DataSources\ONSViewSource.cs" />
+    <Compile Include="GR\DataSources\TextDocDisplayData.cs" />
+    <Compile Include="GR\DataSources\TextDocVS.cs" />
     <Compile Include="GR\DataSources\ZSDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
-    <Compile Include="GR\PageExtensions\BkProcPageExt.cs" />
+    <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
+    <Compile Include="GR\PageExtensions\TextDocPageExt.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
@@ -180,9 +183,6 @@
     </Compile>
     <Compile Include="Pages\Dialogs\ValueHelpInput.xaml.cs">
       <DependentUpon>ValueHelpInput.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\LocalDocumentsView.xaml.cs">
-      <DependentUpon>LocalDocumentsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\OnlineScriptsView.xaml.cs">
       <DependentUpon>OnlineScriptsView.xaml</DependentUpon>
@@ -231,8 +231,6 @@
     <Compile Include="GR\Model\Loaders\ContentIllusLoader.cs" />
     <Compile Include="GR\Model\Loaders\TwitterLoader.cs" />
     <Compile Include="GR\Model\Pages\PageProcessor.cs" />
-    <Compile Include="GR\Model\Section\DocumentList.cs" />
-    <Compile Include="GR\Model\Section\LocalListBase.cs" />
     <Compile Include="GR\Model\Section\SharersHub\Activities.cs" />
     <Compile Include="GR\Model\Section\SharersHub\MyInbox.cs" />
     <Compile Include="GR\Model\Section\SharersHub\MyRequests.cs" />
@@ -585,10 +583,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\BookInfoControls\ReplyList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\LocalDocumentsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

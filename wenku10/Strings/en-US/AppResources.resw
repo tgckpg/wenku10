@@ -420,4 +420,7 @@
   <data name="RecordExist.Text" xml:space="preserve">
     <value>Record exist</value>
   </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>Ready</value>
+  </data>
 </root>

@@ -421,4 +421,7 @@
   <data name="RecordExist.Text" xml:space="preserve">
     <value>記録がある</value>
   </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>準備完了</value>
+  </data>
 </root>

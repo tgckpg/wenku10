@@ -9,7 +9,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.Storage;
 
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
@@ -20,9 +19,6 @@ namespace GR.PageExtensions
 	using CompositeElement;
 	using Data;
 	using DataSources;
-	using Database.Contexts;
-	using Database.Models;
-	using Model.Book;
 	using Model.Book.Spider;
 	using Model.ListItem;
 	using Model.Loaders;
@@ -31,14 +27,14 @@ namespace GR.PageExtensions
 	using Resources;
 	using Storage;
 
-	sealed class BkProcPageExt : PageExtension, ICmdControls
+	sealed class BookSpiderPageExt : PageExtension, ICmdControls
 	{
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
 #pragma warning restore 0067
 
 		public bool NoCommands { get; }
-		public bool MajorNav => true;
+		public bool MajorNav => false;
 
 		public IList<ICommandBarElement> MajorControls { get; private set; }
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
@@ -51,10 +47,9 @@ namespace GR.PageExtensions
 		MenuFlyoutItem Reanalyze;
 		MenuFlyoutItem Edit;
 		MenuFlyoutItem Copy;
-		MenuFlyoutItem DirectView;
 		MenuFlyoutItem DeleteBtn;
 
-		public BkProcPageExt( BookSpiderVS ViewSource )
+		public BookSpiderPageExt( BookSpiderVS ViewSource )
 			: base()
 		{
 			this.ViewSource = ViewSource;
@@ -66,28 +61,36 @@ namespace GR.PageExtensions
 
 		protected override void SetTemplate()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources", "ContextMenu", "Resources" );
+			InitAppBar();
+
+			StringResources stx = new StringResources( "ContextMenu" );
 			ContextMenu = new MenuFlyout();
 
-			Reanalyze = new MenuFlyoutItem() { Text = stx.Text( "Reanalyze", "ContextMenu" ) };
+			Reanalyze = new MenuFlyoutItem() { Text = stx.Text( "Reanalyze" ) };
 			Reanalyze.Click += Reanalyze_Click;
 			ContextMenu.Items.Add( Reanalyze );
 
-			Edit = new MenuFlyoutItem() { Text = stx.Text( "Edit", "ContextMenu" ) };
+			Edit = new MenuFlyoutItem() { Text = stx.Text( "Edit" ) };
 			Edit.Click += Edit_Click;
 			ContextMenu.Items.Add( Edit );
 
-			Copy = new MenuFlyoutItem() { Text = stx.Text( "Copy", "ContextMenu" ) };
+			Copy = new MenuFlyoutItem() { Text = stx.Text( "Copy" ) };
 			Copy.Click += Copy_Click;
 			ContextMenu.Items.Add( Copy );
 
-			DirectView = new MenuFlyoutItem() { Text = stx.Text( "DirectView", "ContextMenu" ) };
-			DirectView.Click += DirectView_Click;
-			ContextMenu.Items.Add( DirectView );
-
-			DeleteBtn = new MenuFlyoutItem() { Text = stx.Text( "Delete", "ContextMenu" ) };
+			DeleteBtn = new MenuFlyoutItem() { Text = stx.Text( "Delete" ) };
 			DeleteBtn.Click += DeleteBtn_Click;
 			ContextMenu.Items.Add( DeleteBtn );
+		}
+
+		private void InitAppBar()
+		{
+			StringResources stx = new StringResources( "ContextMenu" );
+
+			AppBarButton ImportSpider = UIAliases.CreateAppBarBtn( SegoeMDL2.OpenFile, stx.Text( "ImportSpider" ) );
+			ImportSpider.Click += OpenSpider;
+
+			MajorControls = new ICommandBarElement[] { ImportSpider };
 		}
 
 		private void Edit_Click( object sender, RoutedEventArgs e )
@@ -117,26 +120,12 @@ namespace GR.PageExtensions
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
 				SpiderBook BkProc = ( SpiderBook ) Row.Source;
+				await ItemProcessor.ProcessLocal( BkProc );
 
-				if ( !BkProc.Processed && BkProc.CanProcess )
+				if ( BkProc.GetBook().Packed == true )
 				{
-					await ItemProcessor.ProcessLocal( BkProc );
-
-					if( BkProc.GetBook().Packed == true )
-					{
-						new VolumeLoader( ( x ) => { } ).Load( BkProc.GetBook() );
-					}
+					new VolumeLoader( ( x ) => { } ).Load( BkProc.GetBook() );
 				}
-			}
-		}
-
-		private void DirectView_Click( object sender, RoutedEventArgs e )
-		{
-			object DataContext = ( ( FrameworkElement ) sender ).DataContext;
-
-			if ( DataContext is GRRow<IBookProcess> Row )
-			{
-				ControlFrame.Instance.SubNavigateTo( this, () => new DirectTextViewer( ( ( LocalBook ) Row.Source ).File ) );
 			}
 		}
 
@@ -156,34 +145,13 @@ namespace GR.PageExtensions
 			{
 				IBookProcess BkProc = Row.Source;
 
-				Edit.Visibility = Visibility.Collapsed;
-				Copy.Visibility = Visibility.Collapsed;
-				DirectView.Visibility = Visibility.Collapsed;
-
-				if( BkProc is SpiderBook )
-				{
-					Copy.Visibility = Visibility.Visible;
-					Edit.Visibility = Visibility.Visible;
-					DeleteBtn.IsEnabled = !BkProc.Processing;
-				}
-				else if( BkProc is LocalBook )
-				{
-					DirectView.Visibility = Visibility.Visible;
-				}
+				Copy.Visibility = Visibility.Visible;
+				Edit.Visibility = Visibility.Visible;
+				DeleteBtn.IsEnabled = !BkProc.Processing;
 
 				return ContextMenu;
 			}
 			return null;
-		}
-
-		private void InitAppBar()
-		{
-			StringResources stx = new StringResources( "ContextMenu" );
-
-			SecondaryIconButton ImportSpider = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.OpenFile, stx.Text( "ImportSpider" ) );
-			ImportSpider.Click += OpenSpider;
-
-			Major2ndControls = new ICommandBarElement[] { ImportSpider };
 		}
 
 		public async void OpenSpider( object sender, RoutedEventArgs e )

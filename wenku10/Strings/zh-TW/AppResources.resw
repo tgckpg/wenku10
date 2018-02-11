@@ -420,4 +420,7 @@
   <data name="RecordExist.Text" xml:space="preserve">
     <value>記錄存在</value>
   </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>準備就緒</value>
+  </data>
 </root>

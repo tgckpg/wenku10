@@ -76,8 +76,8 @@ namespace wenku10.Pages
 			BookSpiderVS NPSpiders = new BookSpiderVS( stx.Text( "BookSpider", "AppResources" ) );
 			MyLibrary.AddChild( NPSpiders );
 
-			// BookSpiderVS LocalDocs = new BookSpiderVS( stx.Text( "LocalDocuments", "AppBar" ), typeof( NPSpiderDisplayData ) );
-			// MyLibrary.AddChild( LocalDocs );
+			TextDocVS LocalDocs = new TextDocVS( stx.Text( "LocalDocuments", "AppBar" ) );
+			MyLibrary.AddChild( LocalDocs );
 
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
@@ -142,11 +142,18 @@ namespace wenku10.Pages
 
 		private void ViewSourceCommand( PageExtension Ext )
 		{
+
 			// Unload Existing Page Extension
 			if ( PageExt != null )
 			{
 				if ( PageExt is ICmdControls OExt )
 				{
+					MajorControls = _MajorControls;
+					Major2ndControls = _Major2ndControls;
+					MinorControls = _MinorControls;
+					NoCommands = _NoCommands;
+					MajorNav = _MajorNav;
+
 					OExt.ControlChanged -= ExtCmd_ControlChanged;
 				}
 				PageExt.Unload();
@@ -154,7 +161,10 @@ namespace wenku10.Pages
 			}
 
 			if( Ext == null )
+			{
+				ControlChanged?.Invoke( this );
 				return;
+			}
 
 			Ext.Extend( this );
 
@@ -172,10 +182,9 @@ namespace wenku10.Pages
 				NoCommands = ExtCmd.NoCommands;
 				MajorNav = ExtCmd.MajorNav;
 				ExtCmd.ControlChanged += ExtCmd_ControlChanged;
-
-				ControlChanged?.Invoke( this );
 			}
 
+			ControlChanged?.Invoke( this );
 			PageExt = Ext;
 		}
 

@@ -16,8 +16,8 @@ namespace GR.DataSources
 
 	sealed class BookSpiderVS : GRViewSource, IExtViewSource
 	{
-		private BkProcPageExt _Extension;
-		public PageExtension Extension => _Extension ?? ( _Extension = new BkProcPageExt( this ) );
+		private BookSpiderPageExt _Extension;
+		public PageExtension Extension => _Extension ?? ( _Extension = new BookSpiderPageExt( this ) );
 
 		private BookSpiderDisplayData BSData => ( BookSpiderDisplayData ) DataSource;
 

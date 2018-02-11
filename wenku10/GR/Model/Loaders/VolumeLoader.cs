@@ -44,7 +44,7 @@ namespace GR.Model.Loaders
 
 			if ( b.Volumes == null )
 			{
-				b.Entry.Volumes = await Shared.BooksDb.Entry( b.Entry ).Collection( x => x.Volumes ).Query().OrderBy( x => x.Index ).ToListAsync();
+				b.Entry.Volumes = await Shared.BooksDb.LoadCollection( b.Entry, x => x.Volumes, x => x.Index );
 			}
 
 			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && b.Volumes.Any() ) )
@@ -53,7 +53,7 @@ namespace GR.Model.Loaders
 				{
 					if ( Vol.Chapters == null )
 					{
-						Vol.Chapters = await Shared.BooksDb.Entry( Vol ).Collection( x => x.Chapters ).Query().OrderBy( x => x.Index ).ToListAsync();
+						Vol.Chapters = await Shared.BooksDb.LoadCollection( Vol, x => x.Chapters, x => x.Index );
 					}
 				}
 

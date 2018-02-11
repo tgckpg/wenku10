@@ -42,7 +42,7 @@ namespace GR.Model.Loaders
 		{
 			if( C.Content == null )
 			{
-				await Shared.BooksDb.Entry( C ).Reference( b => b.Content ).LoadAsync();
+				await Task.Run( () => Shared.BooksDb.LoadRef( C, b => b.Content ) );
 			}
 
 			if ( Cache && C.Content != null )

@@ -422,4 +422,7 @@
   <data name="RecordExist.Text" xml:space="preserve">
     <value>记录存在</value>
   </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>准备就绪</value>
+  </data>
 </root>
