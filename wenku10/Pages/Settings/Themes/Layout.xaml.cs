@@ -38,8 +38,6 @@ namespace wenku10.Pages.Settings.Themes
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
 		private global::GR.Settings.Layout.BookInfoView Conf_BookInfoView;
-		private global::GR.Settings.Layout.MainPage Conf_MainPage;
-		private global::GR.Settings.Layout.NavList Conf_NavList;
 		private global::GR.Settings.Layout.ContentReader Conf_ContentReader;
 
 		private bool TemplateSet = false;
@@ -52,12 +50,6 @@ namespace wenku10.Pages.Settings.Themes
 
 		public void SetTemplate()
 		{
-			// MainPage
-			CustomSection();
-
-			// NavList
-			Conf_NavList = new global::GR.Settings.Layout.NavList();
-
 			// ContentReader
 			Conf_ContentReader = new global::GR.Settings.Layout.ContentReader();
 
@@ -72,7 +64,6 @@ namespace wenku10.Pages.Settings.Themes
 		{
 			TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
 			TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
-			TogNAlign.IsOn = Conf_NavList.IsHorizontal;
 			TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
 			TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
 
@@ -80,33 +71,6 @@ namespace wenku10.Pages.Settings.Themes
 			TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
 			TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
 		}
-
-		// NavList
-		private void Toggled_NAlign( object sender, RoutedEventArgs e )
-		{
-			Conf_NavList.IsHorizontal = TogNAlign.IsOn;
-		}
-
-		#region MainPage
-		private void CustomSection()
-		{
-			Conf_MainPage = new global::GR.Settings.Layout.MainPage();
-			SectionListContext.DataContext = Conf_MainPage;
-			SectionChoices.SelectedValue = Conf_MainPage.SelectedSection.Desc2;
-		}
-
-		private void SectionList_SelectionChanged( object sender, SelectionChangedEventArgs e )
-		{
-			if ( e.AddedItems.Count() == 0 ) return;
-
-			if ( Conf_MainPage.ChangeCustSection( ( ActiveItem ) e.AddedItems[ 0 ] ) )
-			{
-				ControlFrame.Instance.BackStack.Remove( PageId.W_NAV_SEL );
-				ControlFrame.Instance.CommandMgr.UpdateCustBtn();
-				ControlChanged?.Invoke( this );
-			}
-		}
-		#endregion
 
 		#region BookInfoView
 		private void Toggled_BFlow( object sender, RoutedEventArgs e )

@@ -21,11 +21,8 @@ namespace wenku10.Pages
 			, SH_USER_INFO = "SHUserInfo"
 			, ABOUT = "About"
 
-			, W_BOOKSHELF = "WBookshelf"
 			, W_COMMENT = "WComment"
 			, W_USER_INFO = "WUserInfo"
-			, W_NAV_SEL = "WNavSelections"
-			, W_NAV_LIST = "WNavList-"
 			, W_DEATHBLOW = "WDeathblow"
 
 			, SG_W = "SuperGiants-W"

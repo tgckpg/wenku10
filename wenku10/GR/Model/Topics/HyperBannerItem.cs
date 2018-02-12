@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
@@ -18,8 +19,6 @@ namespace GR.Model.Topics
 	using Settings;
 
 	using BgContext = Settings.Layout.BookInfoView.BgContext;
-	using Windows.UI.Xaml;
-	using Windows.UI.Xaml.Controls;
 
 	sealed class HyperBannerItem : ActiveItem, IDisposable
 	{

@@ -423,4 +423,7 @@
   <data name="Ready.Text" xml:space="preserve">
     <value>Ready</value>
   </data>
+  <data name="Search_By_Id.Text" xml:space="preserve">
+    <value>ID</value>
+  </data>
 </root>

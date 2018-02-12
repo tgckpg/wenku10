@@ -35,7 +35,6 @@ namespace GR.GSystem
 		private ICommandBarElement[] SHCommands;
 		private ICommandBarElement[] SH2ndCommands;
 
-		private ICommandBarElement[] w8Commands;
 		private ICommandBarElement[] w82ndCommands;
 
 		private ICommandBarElement[] CommonCommands;
@@ -91,7 +90,6 @@ namespace GR.GSystem
 				WMember.OnStatusChanged += WMember_OnStatusChanged;
 
 				CreateWCommands();
-				UpdateCustBtn();
 			}
 		}
 
@@ -168,12 +166,6 @@ namespace GR.GSystem
 			// TODO: Auto Goto Search
 
 			w82ndCommands = new ICommandBarElement[] { WLoginBtn, SearchBtn };
-
-			// Master commands
-			AppBarToggleButton BookShelfBtn = UIAliases.CreateToggleBtn( Symbol.Library, stx.Text( "Shelf", "AppBar" ) );
-			BookShelfBtn.Click += CreateCmdHandler( PageId.W_BOOKSHELF, () => new WBookshelf() );
-
-			w8Commands = new ICommandBarElement[] { BookShelfBtn, null, null };
 		}
 
 		private void InitCommands()
@@ -205,21 +197,6 @@ namespace GR.GSystem
 			};
 		}
 
-		public void UpdateCustBtn()
-		{
-			INavSelections NavSeletions = X.Instance<INavSelections>( XProto.NavSelections );
-			SubtleUpdateItem CustSections = NavSeletions.CustomSection();
-
-			AppBarToggleButton CustBtn = UIAliases.CreateToggleBtn( SegoeMDL2.Asterisk, CustSections.Name );
-			CustBtn.Click += CreateCmdHandler( PageId.W_NAV_LIST + CustSections.Name, () => new WNavList( CustSections ) );
-
-			AppBarToggleButton MoreNavs = UIAliases.CreateToggleBtn( Symbol.AllApps, stx.Text( "Appearance_Layout_NavPages", "Settings" ) );
-			MoreNavs.Click += CreateCmdHandler( PageId.W_NAV_SEL, () => new WNavSelections( NavSeletions ) );
-
-			w8Commands[ 1 ] = CustBtn;
-			w8Commands[ 2 ] = MoreNavs;
-		}
-
 		private void SwapCommands( int Index )
 		{
 			if( InitMode == 1 )
@@ -242,10 +219,9 @@ namespace GR.GSystem
 				ActionEvent.Secret();
 				Properties.SMODE = Index;
 
-				MasterCommands = w8Commands;
 				M2ndCommands = w82ndCommands;
 
-				ControlFrame.Instance.SetHomePage( PageId.W_BOOKSHELF, () => new WBookshelf() );
+				// ControlFrame.Instance.SetHomePage( PageId.W_BOOKSHELF, () => new WBookshelf() );
 				// ControlFrame.Instance.SetHomePage( PageId.SG_W, () => new SuperGiants( X.Instance<ILoader<ActiveItem>>( XProto.StaffPicks ) ) );
 			}
 		}

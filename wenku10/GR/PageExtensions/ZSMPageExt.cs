@@ -22,15 +22,9 @@ using wenku10.Pages;
 
 namespace GR.PageExtensions
 {
-	using AdvDM;
 	using CompositeElement;
 	using Data;
 	using DataSources;
-	using Database.Contexts;
-	using Database.Models;
-	using Model.ListItem;
-	using Model.Loaders;
-	using Model.Pages;
 	using Model.Interfaces;
 	using Resources;
 	using Settings;

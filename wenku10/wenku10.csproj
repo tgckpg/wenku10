@@ -213,9 +213,6 @@
     <Compile Include="Pages\WDeathblow.xaml.cs">
       <DependentUpon>WDeathblow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WNavSelections.xaml.cs">
-      <DependentUpon>WNavSelections.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Scenes\HyperBanner\CircleTextRenderer.cs" />
     <Compile Include="Scenes\HyperBanner\HyperBanner.cs" />
     <Compile Include="Scenes\ImageUtils.cs" />
@@ -280,7 +277,6 @@
     <Compile Include="GR\Model\Loaders\HSLoader.cs" />
     <Compile Include="GR\Model\Loaders\SHSearchLoader.cs" />
     <Compile Include="GR\Model\Section\SharersHub.cs" />
-    <Compile Include="GR\Model\Section\ZSContext.cs" />
     <Compile Include="GR\Model\Section\ZoneSpider.cs" />
     <Compile Include="GR\GSystem\ActionEvent.cs" />
     <Compile Include="GR\GSystem\Migration.cs" />
@@ -321,8 +317,6 @@
     <Compile Include="GR\Model\Loaders\VolumeLoader.cs" />
     <Compile Include="GR\Model\Pages\ContentReader\ESContext.cs" />
     <Compile Include="GR\Model\Pages\ContentReader\AssistContext.cs" />
-    <Compile Include="GR\Model\Section\CategorizedSection.cs" />
-    <Compile Include="GR\Model\Section\SearchSections.cs" />
     <Compile Include="GR\Model\Section\LoginStatus.cs" />
     <Compile Include="GR\Model\Section\NavPaneSection.cs" />
     <Compile Include="GR\Model\Section\ReaderView.cs" />
@@ -339,9 +333,6 @@
     </Compile>
     <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
       <DependentUpon>BookmarkList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\WCateList.xaml.cs">
-      <DependentUpon>WCateList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReaderPane\ImageList.xaml.cs">
       <DependentUpon>ImageList.xaml</DependentUpon>
@@ -375,9 +366,6 @@
     </Compile>
     <Compile Include="Pages\BookInfoControls\ReplyList.xaml.cs">
       <DependentUpon>ReplyList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\WNavList.xaml.cs">
-      <DependentUpon>WNavList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ReviewsInput.xaml.cs">
       <DependentUpon>ReviewsInput.xaml</DependentUpon>
@@ -419,8 +407,6 @@
     <Compile Include="GR\Model\Topics\PressList.cs" />
     <Compile Include="GR\Settings\Layout\BookInfoView.cs" />
     <Compile Include="GR\Settings\Layout\ContentReader.cs" />
-    <Compile Include="GR\Settings\Layout\MainPage.cs" />
-    <Compile Include="GR\Settings\Layout\NavList.cs" />
     <Compile Include="GR\GSystem\Bootstrap.cs" />
     <Compile Include="GR\GSystem\UnitTest.cs" />
     <Compile Include="GR\Taotu\WenkuMarker.cs" />
@@ -474,10 +460,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\WNavSelections.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\WUserInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -495,10 +477,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ContentReaderPane\BookmarkList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WCateList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -587,10 +565,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ControlFrame.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WNavList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
