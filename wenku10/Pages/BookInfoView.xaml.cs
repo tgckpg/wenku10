@@ -154,7 +154,9 @@ namespace wenku10.Pages
 
 			BookLoading = true;
 
-			if ( Book.IsEx() ) Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+			if ( Book.IsEx() )
+				Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+
 			BookLoader BL = new BookLoader( BookLoadComplete );
 
 			BL.Load( Book, true );

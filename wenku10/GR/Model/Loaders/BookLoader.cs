@@ -49,22 +49,21 @@ namespace GR.Model.Loaders
 			{
 				string BookId = b.ZItemId;
 				string Mode = CurrentBook.XField<string>( "Mode" );
-				string FlagMode = "MODE_" + Mode;
 
-				if ( useCache && b.Info.Flags.Contains( FlagMode ) )
+				if ( useCache && b.Info.Flags.Contains( Mode ) )
 				{
 					OnComplete( b );
 				}
 				else
 				{
-					b.Info.Flags.Add( FlagMode );
+					b.Info.Flags.Add( Mode );
 					X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
 						.InitDownload(
 							BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId )
 							, PreloadBookInfo
 							, ( cache, id, ex ) =>
 							{
-								b.Info.Flags.Remove( FlagMode );
+								b.Info.Flags.Remove( Mode );
 								OnComplete( null );
 							}, true
 						);
