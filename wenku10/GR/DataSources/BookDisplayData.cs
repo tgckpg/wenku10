@@ -86,8 +86,7 @@ namespace GR.DataSources
 			BkTable.Cell = ( i, x ) => BkTable.ColEnabled( i ) ? ColumnName( BkTable.CellProps[ i ] ) : "";
 		}
 
-		virtual protected IQueryable<Book> QuerySet( IQueryable<Book> Context )
-			=> Context.Where( x => x.Fav || x.Type == BookType.S || x.Type == BookType.L );
+		virtual protected IQueryable<Book> QuerySet( IQueryable<Book> Context ) => Context.AsQueryable();
 
 		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
 		{

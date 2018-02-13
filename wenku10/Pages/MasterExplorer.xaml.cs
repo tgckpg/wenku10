@@ -175,7 +175,7 @@ namespace wenku10.Pages
 				return;
 			}
 
-			Ext.Extend( this );
+			Ext.Initialize( this );
 
 			if ( Ext is ICmdControls ExtCmd )
 			{

@@ -32,6 +32,7 @@ namespace GR.PageExtensions
 
 		MenuFlyoutItem OpenDefault;
 		MenuFlyoutItem Edit;
+		MenuFlyoutItem PinToStart;
 		MenuFlyoutItem GotoTOC;
 		MenuFlyoutItem GotoReader;
 		MenuFlyoutItem GotoInfo;
@@ -81,6 +82,10 @@ namespace GR.PageExtensions
 			ContextMenu.Items.Add( OpenDefault );
 
 			ContextMenu.Items.Add( Edit );
+
+			PinToStart = new MenuFlyoutItem() { Text = stx.Text( "PinToStart", "ContextMenu" ) };
+			PinToStart.Click += PinToStart_Click;
+			ContextMenu.Items.Add( PinToStart );
 
 			ChangeDefault = new MenuFlyoutSubItem() { Text = stx.Text( "ChangeDefault", "ContextMenu" ) };
 			ChangeDefault.Items.Add( DefaultTOC );
@@ -137,6 +142,15 @@ namespace GR.PageExtensions
 				case "TOC": OpenTOC( obj ); break;
 				case "Info": OpenInfo( obj ); break;
 				case "Reader": OpenReader( obj ); break;
+			}
+		}
+
+		private async void PinToStart_Click( object sender, RoutedEventArgs e )
+		{
+			if ( ( ( FrameworkElement ) sender ).DataContext is GRRow<BookDisplay> BkRow )
+			{
+				BookItem BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
+				await PageProcessor.PinToStart( BkItem );
 			}
 		}
 

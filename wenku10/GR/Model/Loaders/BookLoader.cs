@@ -150,25 +150,41 @@ namespace GR.Model.Loaders
 			OnComplete( CurrentBook );
 		}
 
-		public async void LoadCover( BookItem B, bool Cache )
+		public void LoadCover( BookItem B, bool Cache )
 		{
-			if ( Cache && B.CoverExist ) return;
+			var j = LoadCoverAsync( B, Cache );
+		}
 
+		public async Task<bool> LoadCoverAsync( BookItem B, bool Cache )
+		{
+			if ( Cache && B.CoverExist )
+				return true;
+
+			TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
 			if ( B.IsEx() )
 			{
 				X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
 					B.ZItemId, X.Call<XKey[]>( XProto.WRequest, "GetBookCover", B.ZItemId )
-					, ( e, id ) => B.SaveCover( e.ResponseBytes )
-					, Utils.DoNothing, false
+					, ( e, id ) =>
+					{
+						B.SaveCover( e.ResponseBytes );
+						TCS.TrySetResult( true );
+					}
+					, ( c, i, ex ) => TCS.TrySetResult( false )
+					, false
 				);
-				return;
+
+				return await TCS.Task;
 			}
 
 			if ( string.IsNullOrEmpty( B.Info.CoverSrcUrl ) )
 			{
 				// Use bing service
 				string ThumbUrl = await new BingService( B ).GetImage();
-				if ( string.IsNullOrEmpty( ThumbUrl ) ) return;
+				if ( string.IsNullOrEmpty( ThumbUrl ) )
+				{
+					return false;
+				}
 
 				B.Info.CoverSrcUrl = ThumbUrl;
 			}
@@ -186,7 +202,16 @@ namespace GR.Model.Loaders
 				}
 
 				return R;
-			} ).GET( new Uri( B.Info.CoverSrcUrl ), ( e, id ) => B.SaveCover( e.ResponseBytes ), Utils.DoNothing, false );
+			} ).GET( new Uri( B.Info.CoverSrcUrl )
+			, ( e, id ) =>
+			{
+				B.SaveCover( e.ResponseBytes );
+				TCS.TrySetResult( true );
+			}
+			, ( c, i, ex ) => TCS.TrySetResult( false )
+			, false );
+
+			return await TCS.Task;
 		}
 
 		private void OnComplete( BookItem b )

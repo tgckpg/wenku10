@@ -61,44 +61,21 @@ namespace GR.Model.Pages
 			return new NameValue<Func<Page>>( PageId.NULL, () => null );
 		}
 
-		public static Task<string> PinToStart( BookItem Book )
-		{
-			if ( Book.Type == BookType.S )
-			{
-				return CreateSecondaryTile( Book );
-			}
-			else if ( Book.Type == BookType.L )
-			{
-				// TODO
-			}
-			else if ( X.Exists )
-			{
-				Task<string> PinTask = ( Task<string> ) X.Method( XProto.ItemProcessorEx, "CreateTile" ).Invoke( null, new BookItem[] { Book } );
-				return PinTask;
-			}
-
-			return null;
-		}
-
 		public static void ReadSecondaryTile( BookItem Book )
 		{
-			if( Book.Type == BookType.S )
-			{
-				BackgroundProcessor.Instance.ClearTileStatus( Book.GID );
-			}
+			(string Args, string TileId) = TileParams( Book.Entry );
+			BackgroundProcessor.Instance.ClearTileStatus( TileId );
 		}
 
-		private static async Task<string> CreateSecondaryTile( BookItem Book )
+		public static async Task<string> PinToStart( BookItem Book )
 		{
-			string TilePath = await Resources.Image.CreateTileImage( Book );
-			string TileId = "ShellTile.grimoire." + GSystem.Utils.Md5( Book.GID );
+			BookLoader BL = new BookLoader();
+			await BL.LoadCoverAsync( Book, true );
 
-			SecondaryTile S = new SecondaryTile()
-			{
-				TileId = TileId
-				, DisplayName = Book.Title
-				, Arguments = "spider|" + Book.Id
-			};
+			string TilePath = await Resources.Image.CreateTileImage( Book );
+
+			(string Args, string TileId) = TileParams( Book.Entry );
+			SecondaryTile S = new SecondaryTile() { TileId = TileId, DisplayName = Book.Title, Arguments = Args };
 
 			S.VisualElements.Square150x150Logo = new Uri( TilePath );
 			S.VisualElements.ShowNameOnSquare150x150Logo = true;
@@ -106,6 +83,13 @@ namespace GR.Model.Pages
 			if ( await S.RequestCreateAsync() ) return TileId;
 
 			return null;
+		}
+
+		private static (string, string) TileParams( Book Entry )
+		{
+			string Args = string.Format( "{0}|{1}|{2}", Entry.Type, Entry.ZoneId, Entry.ZItemId );
+			string TileId = "ShellTile.grimoire." + GSystem.Utils.Md5( Args );
+			return (Args, TileId);
 		}
 
 		public static async Task RegLiveSpider( SpiderBook SBook, BookInstruction Book, string TileId )

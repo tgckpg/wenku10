@@ -33,6 +33,7 @@ using SHTarget = GR.Model.REST.SharersRequest.SHTarget;
 namespace wenku10.ShHub
 {
 	using Pages;
+	using Pages.Dialogs;
 	using Pages.Sharers;
 
 	sealed class MesgListerner
@@ -130,6 +131,16 @@ namespace wenku10.ShHub
 
 				case AppKeys.OPEN_ZONE:
 					ControlFrame.Instance.NavigateTo( PageId.MASTER_EXPLORER, () => new MasterExplorer(), P => ( ( MasterExplorer ) P ).NavigateToZone( ( ZoneSpider ) Mesg.Payload ) );
+					break;
+
+				case AppKeys.PROMPT_LOGIN:
+					(IMember Member, Action DialogClosed) = ( Tuple<IMember, Action> ) Mesg.Payload;
+					if ( !Member.IsLoggedIn )
+					{
+						Login LoginDialog = new Login( Member );
+						await Popups.ShowDialog( LoginDialog );
+					}
+					DialogClosed();
 					break;
 			}
 		}
