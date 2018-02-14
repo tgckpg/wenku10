@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 
 namespace GR.DataSources
 {
@@ -54,35 +54,7 @@ namespace GR.DataSources
 			if ( BkTable != null )
 				return;
 
-			List<IGRCell> BkProps = new List<IGRCell>();
-
-			Type StringType = typeof( string );
-
-			string[] BkExclude = new string[] { "ZoneId", "ZItemId", "Description" };
-			string[] InfoExclude = new string[] { "LongDescription" };
-
-			BkProps.AddRange(
-				typeof( Book ).GetProperties()
-					.Where(
-						x => x.PropertyType == StringType
-						&& !( x.Name.StartsWith( "Json_" ) || BkExclude.Contains( x.Name ) ) )
-					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry } )
-			);
-
-			BkProps.AddRange(
-				typeof( BookDisplay ).GetProperties()
-					.Where( x => x.PropertyType == StringType )
-					.Remap( p => new GRCell<BookDisplay>( p ) )
-			);
-
-			BkProps.AddRange(
-				typeof( BookInfo ).GetProperties()
-					.Where( x => x.PropertyType == StringType
-						&& !( x.Name.StartsWith( "Json_" ) || InfoExclude.Contains( x.Name ) ) )
-					.Remap( p => new GRCell<BookDisplay>( p ) { Path = x => x.Entry.Info } )
-			);
-
-			BkTable = new GRTable<BookDisplay>( BkProps );
+			BkTable = new GRTable<BookDisplay>( BookDisplay.GetHeaders() );
 			BkTable.Cell = ( i, x ) => BkTable.ColEnabled( i ) ? ColumnName( BkTable.CellProps[ i ] ) : "";
 		}
 
@@ -90,6 +62,11 @@ namespace GR.DataSources
 
 		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
 		{
+			IsLoading = true;
+
+			StringResBg stx = new StringResBg( "AppResources" );
+			Message = stx.Text( "Loading" );
+
 			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );
 
 			if ( Filter != null )
@@ -108,55 +85,19 @@ namespace GR.DataSources
 			{
 				Source = new BookDisplay( x ),
 			} );
+
+			IsLoading = false;
 		}
 
 		virtual protected void SortExp( int ColIndex, int Order )
 		{
-			ParameterExpression _x = Expression.Parameter( typeof( Book ), "x" );
-
-			Expression OrderExp;
-
 			PropertyInfo Prop = BkTable.CellProps[ ColIndex ].Property;
-			if ( Prop.DeclaringType == typeof( Book ) )
-			{
-				OrderExp = Expression.PropertyOrField( _x, Prop.Name );
-			}
-			else if ( Prop.DeclaringType == typeof( BookInfo ) )
-			{
-				OrderExp = Expression.PropertyOrField( _x, "Info" );
-				OrderExp = Expression.PropertyOrField( OrderExp, Prop.Name );
-			}
-			else if ( Prop.DeclaringType == typeof( BookDisplay ) )
-			{
-				// Special fields
-				switch ( Prop.Name )
-				{
-					case "LastAccess":
-						OrderExp = Expression.PropertyOrField( _x, Prop.Name );
-						break;
-					case "Zone":
-						OrderExp = Expression.PropertyOrField( _x, "ZoneId" );
-						break;
-					default:
-						return;
-				}
-			}
-			else
-			{
-				return;
-			}
+			QueryExp = BookDisplay.QuerySort( Prop, Order );
 
-			BkTable.SortCol( ColIndex, Order );
-			string OrderMethod = Order == 1 ? "OrderBy" : "OrderByDescending";
-
-			QueryExp = ( x ) =>
+			if ( QueryExp != null )
 			{
-				Expression _Exp = Expression.Call(
-							typeof( Queryable ), OrderMethod,
-							new Type[] { x.ElementType, OrderExp.Type },
-							x.Expression, Expression.Quote( Expression.Lambda( OrderExp, _x ) ) );
-				return x.Provider.CreateQuery<Book>( _Exp );
-			};
+				BkTable.SortCol( ColIndex, Order );
+			}
 		}
 
 		protected override void ConfigureSort( string PropertyName, int Order )

@@ -427,4 +427,7 @@
   <data name="Search_By_Id.Text" xml:space="preserve">
     <value>ID</value>
   </data>
+  <data name="IssueDate.Text" xml:space="preserve">
+    <value>発行日</value>
+  </data>
 </root>

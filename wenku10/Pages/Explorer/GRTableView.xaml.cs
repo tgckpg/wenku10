@@ -113,7 +113,7 @@ namespace wenku10.Pages.Explorer
 
 			try
 			{
-				DataSource.Reload();
+				var j = Task.Run( () => DataSource.Reload() );
 			}
 			catch( EmptySearchQueryException )
 			{
