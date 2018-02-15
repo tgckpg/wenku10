@@ -241,7 +241,7 @@ namespace Tasks
 		{
 			try
 			{
-				XReg.SetParameter( TASK_START, BookStorage.TimeKey );
+				XReg.SetParameter( TASK_START, CustomAnchor.TimeKey );
 				XReg.Save();
 
 				IEnumerable<XParameter> Updates;
@@ -280,7 +280,7 @@ namespace Tasks
 					{
 						UpdateParam.SetValue( new XKey[] {
 							new XKey( AppKeys.SYS_EXCEPTION, "App Tile is missing" )
-							, BookStorage.TimeKey
+							, CustomAnchor.TimeKey
 						} );
 						XReg.SetParameter( UpdateParam );
 						continue;
@@ -311,7 +311,7 @@ namespace Tasks
 						UpdateParam.SetValue( new XKey[] {
 							new XKey( AppKeys.SYS_EXCEPTION, false )
 							, new XKey( AppKeys.BTASK_RETRY, 0 )
-							, BookStorage.TimeKey
+							, CustomAnchor.TimeKey
 						} );
 					}
 					else
@@ -323,7 +323,7 @@ namespace Tasks
 						{
 							new XKey( AppKeys.SYS_EXCEPTION, true )
 							, new XKey( AppKeys.BTASK_RETRY, NRetries + 1 )
-							, BookStorage.TimeKey
+							, CustomAnchor.TimeKey
 						} );
 					}
 
@@ -331,7 +331,7 @@ namespace Tasks
 					XReg.Save();
 				}
 
-				XReg.SetParameter( TASK_END, BookStorage.TimeKey );
+				XReg.SetParameter( TASK_END, CustomAnchor.TimeKey );
 				XReg.Save();
 			}
 			catch ( Exception ex )

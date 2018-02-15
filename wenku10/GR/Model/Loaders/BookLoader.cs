@@ -13,12 +13,11 @@ namespace GR.Model.Loaders
 	using Ext;
 	using Book;
 	using Book.Spider;
-	using GSystem;
 	using ListItem;
 	using Resources;
 	using Text;
 
-	sealed class BookLoader : IBookLoader
+	sealed class BookLoader
 	{
 		public static readonly string ID = typeof( BookLoader ).Name;
 

@@ -368,18 +368,16 @@ namespace wenku10.Pages
 
 		private void AddOrRemoveFav( object sender, RoutedEventArgs e )
 		{
-			BookStorage BS = new BookStorage();
 			if ( ThisBook.IsFav )
 			{
-				BS.RemoveBook( ThisBook.ZItemId );
 				ThisBook.IsFav = false;
 			}
 			else
 			{
-				BS.SaveBook( ThisBook.ZItemId, ThisBook.Title, ThisBook.LastUpdateDate, ThisBook.LatestSection );
 				ThisBook.IsFav = true;
 			}
 
+			ThisBook.SaveInfo();
 			ToggleFav();
 		}
 
@@ -446,12 +444,12 @@ namespace wenku10.Pages
 
 			if( ThisBook.IsFav )
 			{
-				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.UnFavorite;
+				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
 				FavBtn.Label = stx.Str( "FavOut" );
 			}
 			else
 			{
-				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
+				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.OutlineStar;
 				FavBtn.Label = stx.Str( "FavIn" );
 			}
 		}

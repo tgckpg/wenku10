@@ -237,4 +237,7 @@
   <data name="SourceNotAvailable" xml:space="preserve">
     <value>アイテムソースが失われているか、削除されている</value>
   </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>{0} を削除しますか？</value>
+  </data>
 </root>

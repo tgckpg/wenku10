@@ -87,18 +87,18 @@ namespace GR.PageExtensions
 			PinToStart.Click += PinToStart_Click;
 			ContextMenu.Items.Add( PinToStart );
 
-			ChangeDefault = new MenuFlyoutSubItem() { Text = stx.Text( "ChangeDefault", "ContextMenu" ) };
-			ChangeDefault.Items.Add( DefaultTOC );
-			ChangeDefault.Items.Add( DefaultReader );
-			ChangeDefault.Items.Add( DefaultInfo );
-			ContextMenu.Items.Add( ChangeDefault );
-
 			OpenWith = new MenuFlyoutSubItem() { Text = stx.Text( "OpenWith", "ContextMenu" ) };
 			OpenWith.Items.Add( GotoTOC );
 			OpenWith.Items.Add( GotoReader );
 			OpenWith.Items.Add( GotoInfo );
 
 			ContextMenu.Items.Add( OpenWith );
+
+			ChangeDefault = new MenuFlyoutSubItem() { Text = stx.Text( "ChangeDefault", "ContextMenu" ) };
+			ChangeDefault.Items.Add( DefaultTOC );
+			ChangeDefault.Items.Add( DefaultReader );
+			ChangeDefault.Items.Add( DefaultInfo );
+			ContextMenu.Items.Add( ChangeDefault );
 
 			DefaultAction = new NameValue<string>( "", "" );
 			DefaultAction.PropertyChanged += DefaultAction_PropertyChanged;

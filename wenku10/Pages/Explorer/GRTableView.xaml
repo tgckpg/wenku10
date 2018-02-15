@@ -274,34 +274,44 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C00, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" Text="{x:Bind C00, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F00, Mode=OneWay}" Text="{x:Bind C00, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="1" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C01, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C01, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F01, Mode=OneWay}" Text="{x:Bind C01, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="2" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C02, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C02, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F02, Mode=OneWay}" Text="{x:Bind C02, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="3" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C03, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C03, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F03, Mode=OneWay}" Text="{x:Bind C03, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="4" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C04, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C04, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F04, Mode=OneWay}" Text="{x:Bind C04, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="5" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C05, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C05, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F05, Mode=OneWay}" Text="{x:Bind C05, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="6" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C06, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C06, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F06, Mode=OneWay}" Text="{x:Bind C06, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="7" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C07, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C07, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F07, Mode=OneWay}" Text="{x:Bind C07, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="8" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C08, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C08, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F08, Mode=OneWay}" Text="{x:Bind C08, Mode=OneWay}" />
                 <TextBlock Grid.Row="0" Grid.Column="9" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C09, Mode=OneWay}"
-                           Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}" Text="{x:Bind C09, Mode=OneWay}" />
+                           Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F09, Mode=OneWay}" Text="{x:Bind C09, Mode=OneWay}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DskDetailsHeader" x:DataType="grt:IGRTable">

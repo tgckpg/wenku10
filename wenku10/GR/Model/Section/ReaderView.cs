@@ -75,7 +75,6 @@ namespace GR.Model.Section
 
 		public Action OnComplete { get; private set; }
 
-		private BookStorage BS = new BookStorage();
 		private AutoAnchor Anchors;
 		private ChapterLoader CL;
 		private Chapter BindChapter;
@@ -111,7 +110,6 @@ namespace GR.Model.Section
 				AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
 				foreach ( Paragraph P in Data ) P.Dispose();
 				CL = null;
-				BS = null;
 				Data = null;
 			}
 			catch ( Exception ) { }
@@ -259,7 +257,8 @@ namespace GR.Model.Section
 
 		public void AutoVolumeAnchor()
 		{
-			BS.BookRead( BindChapter.Meta[ AppKeys.GLOBAL_CID ] );
+			CL.CurrentBook.Entry.LastAccess = DateTime.Now;
+			CL.CurrentBook.SaveInfo();
 
 			if( AutoBookmark )
 			{

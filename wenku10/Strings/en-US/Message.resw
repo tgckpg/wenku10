@@ -237,4 +237,7 @@
   <data name="SourceNotAvailable" xml:space="preserve">
     <value>Item source has either been lost or deleted</value>
   </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value> Are you sure you want to delete {0}?</value>
+  </data>
 </root>

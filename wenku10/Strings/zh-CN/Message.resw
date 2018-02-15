@@ -237,4 +237,7 @@
   <data name="SourceNotAvailable" xml:space="preserve">
     <value>来源已经丢失或已被删除</value>
   </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>您确定想要删除 {0} 吗？</value>
+  </data>
 </root>

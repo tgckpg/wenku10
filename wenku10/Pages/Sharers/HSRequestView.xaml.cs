@@ -83,7 +83,7 @@ namespace wenku10.Pages.Sharers
 			this.ReqTarget = ReqTarget;
 			this.AccessToken = AccessToken;
 
-			XGrant.SetParameter( BindItem.Id, BookStorage.TimeKey );
+			XGrant.SetParameter( BindItem.Id, CustomAnchor.TimeKey );
 			ShowRequest( ReqTarget );
 		}
 
