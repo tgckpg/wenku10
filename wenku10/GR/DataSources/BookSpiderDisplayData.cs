@@ -35,7 +35,7 @@ namespace GR.DataSources
 		{
 			new ColumnConfig() { Name = "Name", Width = 335 },
 			new ColumnConfig() { Name = "Zone", Width = 100 },
-			new ColumnConfig() { Name = "Message", Width = 355 },
+			new ColumnConfig() { Name = "Desc", Width = 355 },
 		};
 
 		public override string ColumnName( IGRCell BkProp )
@@ -61,7 +61,7 @@ namespace GR.DataSources
 			string LoadText = stx.Str( "ProgressIndicator_Message" );
 
 			PsTable.Items = _Items;
-			_Items.Clear();
+			Worker.UIInvoke( () => _Items.Clear() );
 
 			IEnumerable<string> ZoneIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
 
