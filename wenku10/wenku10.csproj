@@ -266,8 +266,6 @@
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GR\CompositeElement\ProcStateItem.cs" />
-    <Compile Include="GR\CompositeElement\LSBookItem.cs" />
     <Compile Include="GR\Converters\HubStatusConverter.cs" />
     <Compile Include="GR\Converters\PhoneVAlignConverter.cs" />
     <Compile Include="GR\Model\Loaders\ZSFeedbackLoader.cs" />
@@ -699,14 +697,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\ListViewItems\CommentListItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ListViewItems\ProcStateItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ListViewItems\LSBookItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

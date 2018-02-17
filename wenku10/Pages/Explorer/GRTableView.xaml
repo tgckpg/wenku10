@@ -272,6 +272,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <Rectangle x:Name="Sensor" Grid.ColumnSpan="10"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent" />
                 <TextBlock Grid.Row="0" Grid.Column="0" MaxLines="1"
                            Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C00, Mode=OneWay}"
                            Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"

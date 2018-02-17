@@ -82,10 +82,13 @@ namespace GR.PageExtensions
 			ContextMenu.Items.Add( OpenDefault );
 
 			ContextMenu.Items.Add( Edit );
+			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
 
 			PinToStart = new MenuFlyoutItem() { Text = stx.Text( "PinToStart", "ContextMenu" ) };
 			PinToStart.Click += PinToStart_Click;
 			ContextMenu.Items.Add( PinToStart );
+
+			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
 
 			OpenWith = new MenuFlyoutSubItem() { Text = stx.Text( "OpenWith", "ContextMenu" ) };
 			OpenWith.Items.Add( GotoTOC );

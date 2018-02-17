@@ -394,6 +394,8 @@ namespace wenku10.Pages.Explorer
 			{
 				if ( Elem.DataContext is IGRRow Row )
 				{
+					ItemList.SelectedItem = Row;
+
 					FlyoutBase ItemMenu = ExtViewSource.Extension.GetContextMenu( Elem );
 					FlyoutBase.SetAttachedFlyout( Elem, ItemMenu );
 

@@ -23,8 +23,6 @@
 
                 <ResourceDictionary Source="/Themes/ListViewItems/CommentListItem.xaml" />
                 <ResourceDictionary Source="/Themes/ListViewItems/ListViewItems.xaml" />
-                <ResourceDictionary Source="/Themes/ListViewItems/LSBookItem.xaml" />
-                <ResourceDictionary Source="/Themes/ListViewItems/ProcStateItem.xaml" />
 
                 <ResourceDictionary Source="/Themes/ScrollContentDialog.xaml" />
                 <ResourceDictionary Source="/Themes/VerticalListView.xaml" />
