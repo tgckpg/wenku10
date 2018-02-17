@@ -32,6 +32,7 @@ namespace GR.DataSources
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Name", Width = 355 },
+			new ColumnConfig() { Name = "ZoneId", Width = 200 },
 		};
 
 		public delegate void ZSEvent( object sender, IMetaSpider MetaSpider );
@@ -41,19 +42,21 @@ namespace GR.DataSources
 
 		private ObservableCollection<GRRow<IMetaSpider>> MetaSpiders = new ObservableCollection<GRRow<IMetaSpider>>();
 
-		public override string ColumnName( IGRCell CellProp )
-		{
-			return CellProp.Property.Name;
-		}
+		public override string ColumnName( IGRCell CellProp ) => GStrings.ColumnNameResolver.IBookProcess( CellProp.Property.Name );
 
 		public override void Reload()
 		{
+			if ( ZSTable.Items == null )
+			{
+				ZSTable.Items = MetaSpiders;
+			}
+
 			string[] StoredZones = Shared.Storage.ListFiles( FileLinks.ROOT_ZSPIDER );
 			foreach ( string Zone in StoredZones )
 			{
 				try
 				{
-					AddZone( Shared.Storage.GetString( FileLinks.ROOT_ZSPIDER + Zone ) );
+					var j = AddZone( Shared.Storage.GetString( FileLinks.ROOT_ZSPIDER + Zone ) );
 				}
 				catch ( Exception ex )
 				{
@@ -61,8 +64,6 @@ namespace GR.DataSources
 					Logger.Log( ID, ex.Message, LogType.DEBUG );
 				}
 			}
-
-			ZSTable.Items = MetaSpiders;
 		}
 
 		public override void StructTable()
@@ -92,7 +93,7 @@ namespace GR.DataSources
 		{
 			try
 			{
-				IMetaSpider ZS = AddZone( await ISF.ReadString() );
+				IMetaSpider ZS = await AddZone( await ISF.ReadString() );
 
 				if ( ZS != null )
 				{
@@ -119,30 +120,30 @@ namespace GR.DataSources
 			catch ( Exception ) { }
 		}
 
-		private IMetaSpider AddZone( string ZData )
+		private async Task<IMetaSpider> AddZone( string ZData )
 		{
 			ZoneSpider ZS = new ZoneSpider();
 			XRegistry ZDef = new XRegistry( ZData, null, false );
 
-			if ( ZS.Open( ZDef ) )
+			if ( await Task.Run( () => ZS.Open( ZDef ) ) )
 			{
 				GRRow<IMetaSpider> Existing = MetaSpiders.FirstOrDefault( x => x.Source.MetaLocation == ZS.MetaLocation );
-				if( Existing != null )
+				if ( Existing != null )
 				{
 					return Existing.Source;
 				}
 
 				ZoneOpened?.Invoke( this, ZS );
-				AddZone( ZS );
+				await AddZone( ZS );
 				return ZS;
 			}
 
 			return null;
 		}
 
-		private void AddZone( ZoneSpider ZS )
+		private Task AddZone( ZoneSpider ZS )
 		{
-			Worker.UIInvoke( () => MetaSpiders.Add( new GRRow<IMetaSpider>( ZSTable ) { Source = ZS } ) );
+			return Worker.RunUIAsync( () => MetaSpiders.Add( new GRRow<IMetaSpider>( ZSTable ) { Source = ZS } ) );
 		}
 
 	}

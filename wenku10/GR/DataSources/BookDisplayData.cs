@@ -13,6 +13,7 @@ namespace GR.DataSources
 {
 	using Data;
 	using Database.Models;
+	using GStrings;
 	using Model.Book;
 	using Resources;
 
@@ -34,7 +35,17 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "LastUpdateDate", Width = 160, Order = -1 },
 		};
 
-		public override string ColumnName( IGRCell BkProp ) => BookItem.PropertyName( BkProp.Property );
+		public override string ColumnName( IGRCell BkProp )
+		{
+			switch ( BkProp.Property.Name )
+			{
+				case "Zone":
+					return ColumnNameResolver.IBookProcess( BkProp.Property.Name );
+			}
+
+			return BookItem.PropertyName( BkProp.Property );
+		}
+
 		public override void Reload() => Reload( QueryExp );
 
 		public override void ToggleSort( int ColIndex )
@@ -81,9 +92,11 @@ namespace GR.DataSources
 
 			Books = Books.Include( x => x.Info );
 
-			BkTable.Items = Books.Remap( x => new GRRow<BookDisplay>( BkTable )
+			BkTable.Items = Books.Remap( x =>
 			{
-				Source = new BookDisplay( x ),
+				BookDisplay Bk = new BookDisplay( x );
+				ZoneNameResolver.Instance.Resolve( Bk.Entry.ZoneId, n => Bk.Zone = n );
+				return new GRRow<BookDisplay>( BkTable ) { Source = Bk };
 			} );
 
 			IsLoading = false;

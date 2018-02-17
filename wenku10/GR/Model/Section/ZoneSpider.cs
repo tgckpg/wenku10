@@ -61,7 +61,18 @@ namespace GR.Model.Section
 
 			Banner = PLL.BannerSrc;
 			Name = PLL.ZoneName;
-			NotifyChanged( "Banner" );
+
+			if( string.IsNullOrEmpty( Name ) )
+			{
+				Name = "[ Untitled ]";
+				GStrings.ZoneNameResolver.Instance.Resolve( ZoneId, x =>
+				{
+					Name = x;
+					NotifyChanged( "Name" );
+				} );
+			}
+
+			NotifyChanged( "Name", "Banner" );
 		}
 
 		public void Reload()

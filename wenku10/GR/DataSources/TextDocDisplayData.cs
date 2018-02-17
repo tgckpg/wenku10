@@ -36,18 +36,7 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "Desc2", Width = 200 },
 		};
 
-		public override string ColumnName( IGRCell BkProp )
-		{
-			switch( BkProp.Property.Name )
-			{
-				case "Desc":
-					return "Message";
-				case "Desc2":
-					return "Source";
-			}
-
-			return BkProp.Property.Name;
-		}
+		public override string ColumnName( IGRCell CellProp ) => GStrings.ColumnNameResolver.IBookProcess( CellProp.Property.Name );
 
 		public override void Reload()
 		{

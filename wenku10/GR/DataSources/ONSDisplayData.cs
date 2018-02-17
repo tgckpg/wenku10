@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 
 namespace GR.DataSources
 {
@@ -36,13 +37,23 @@ namespace GR.DataSources
 
 		public override async void Reload()
 		{
+			IsLoading = true;
+
+			StringResources stx = new StringResBg( "LoadingMessage" );
+			Message = stx.Str( "ProgressIndicator_Message" );
+
 			IEnumerable<string> AccessTokens = new TokenManager().AuthList.Remap( x => ( string ) x.Value );
 
 			SHSearchLoader SHLoader = new SHSearchLoader( Search, AccessTokens );
 
 			IList<HubScriptItem> FirstPage = await SHLoader.NextPage();
 			Observables<HubScriptItem, GRRow<HSDisplay>> OHS = new Observables<HubScriptItem, GRRow<HSDisplay>>( FirstPage.Remap( ToGRRow ) );
+
+			OHS.LoadEnd += ( s, e ) => IsLoading = false;
+			OHS.LoadStart += ( s, e ) => IsLoading = true;
+
 			HSTable.Items = OHS;
+			IsLoading = false;
 		}
 
 		private GRRow<HSDisplay> ToGRRow( HubScriptItem HSItem )

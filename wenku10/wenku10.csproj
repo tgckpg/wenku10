@@ -127,6 +127,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
+    <Compile Include="GR\GStrings\ColumnNameResolver.cs" />
     <Compile Include="GR\DataSources\BookDisplayVS.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
     <Compile Include="GR\DataSources\BookSpiderVS.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="GR\DataSources\ZSManagerVS.cs" />
     <Compile Include="GR\DataSources\ZSMDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
+    <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />

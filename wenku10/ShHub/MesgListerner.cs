@@ -54,7 +54,23 @@ namespace wenku10.ShHub
 
 					if ( ( HSI.Scope & SpiderScope.ZONE ) != 0 )
 					{
-						throw new NotImplementedException();
+						ControlFrame.Instance.NavigateTo(
+							PageId.MASTER_EXPLORER, () => new MasterExplorer()
+							//  Open ZoneSpider Manager
+							, P => ( ( MasterExplorer ) P ).NavigateToViewSource(
+								typeof( ZSManagerVS )
+								, async ( ZSVS ) =>
+								{
+									// Using the manager, import this script
+									ZSMDisplayData DisplayData = ( ( ZSManagerVS ) ZSVS ).ZSMData;
+									if ( await DisplayData.OpenFile( HSI.ScriptFile ) )
+									{
+										// Open the imported script
+										ZoneSpider ZSpider = DisplayData.ZSTable.Items.Select( x => ( ZoneSpider ) x.Source ).FirstOrDefault( x => x.ZoneId == HSI.Id );
+										( ( MasterExplorer ) P ).NavigateToZone( ZSpider );
+									}
+								}
+							) );
 						break;
 					}
 

@@ -15,6 +15,7 @@ namespace GR.DataSources
 {
 	using Data;
 	using Database.Models;
+	using GStrings;
 	using Model.Interfaces;
 	using Model.ListItem;
 	using Resources;
@@ -38,16 +39,7 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "Desc", Width = 355 },
 		};
 
-		public override string ColumnName( IGRCell BkProp )
-		{
-			switch ( BkProp.Property.Name )
-			{
-				case "Desc":
-					return "Message";
-			}
-
-			return BkProp.Property.Name;
-		}
+		public override string ColumnName( IGRCell CellProp ) => ColumnNameResolver.IBookProcess( CellProp.Property.Name );
 
 		public override async void Reload()
 		{
@@ -89,6 +81,7 @@ namespace GR.DataSources
 
 						if ( LB.ProcessSuccess || LB.CanProcess )
 						{
+							ZoneNameResolver.Instance.Resolve( LB.ZoneId, x => LB.Zone = x );
 							await AddRowAsync( new GRRow<IBookProcess>( PsTable ) { Source = LB } );
 						}
 						else

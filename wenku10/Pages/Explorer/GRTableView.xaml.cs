@@ -76,46 +76,49 @@ namespace wenku10.Pages.Explorer
 
 		public async Task View( GRViewSource ViewSource )
 		{
-			this.ViewSource = ViewSource;
-			DataSource.StructTable();
-
-			ItemList.DataContext = null;
-			ItemList.DataContext = DataSource.Table;
-
-			await DataSource.ConfigureAsync();
-
-			MenuFlyout TableFlyout = new MenuFlyout();
-			ColToggles = new List<MenuFlyoutItem>();
-
-			for ( int i = 0, l = Table.CellProps.Count; i < l; i++ )
+			if ( this.ViewSource != ViewSource )
 			{
-				IGRCell CellProp = Table.CellProps[ i ];
+				this.ViewSource = ViewSource;
+				DataSource.StructTable();
 
-				MenuFlyoutItem Item = new MenuFlyoutItem()
+				ItemList.DataContext = null;
+				ItemList.DataContext = DataSource.Table;
+
+				await DataSource.ConfigureAsync();
+
+				MenuFlyout TableFlyout = new MenuFlyout();
+				ColToggles = new List<MenuFlyoutItem>();
+
+				for ( int i = 0, l = Table.CellProps.Count; i < l; i++ )
 				{
-					Icon = new SymbolIcon( Symbol.Accept ),
-					Text = DataSource.ColumnName( CellProp ),
-					Tag = CellProp
-				};
+					IGRCell CellProp = Table.CellProps[ i ];
 
-				Item.Icon.Opacity = Table.ColEnabled( i ) ? 1 : 0;
-				Item.Click += ToggleCol_Click;
+					MenuFlyoutItem Item = new MenuFlyoutItem()
+					{
+						Icon = new SymbolIcon( Symbol.Accept ),
+						Text = DataSource.ColumnName( CellProp ),
+						Tag = CellProp
+					};
 
-				ColToggles.Add( Item );
-				TableFlyout.Items.Add( Item );
+					Item.Icon.Opacity = Table.ColEnabled( i ) ? 1 : 0;
+					Item.Click += ToggleCol_Click;
+
+					ColToggles.Add( Item );
+					TableFlyout.Items.Add( Item );
+				}
+
+				FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
+				LayoutRoot.DataContext = DataSource;
+
+				SearchTerm.PlaceholderText = DataSource.SearchExample;
+				SearchTerm.Text = DataSource.Search;
 			}
-
-			FlyoutBase.SetAttachedFlyout( TableSettings, TableFlyout );
-			LayoutRoot.DataContext = DataSource;
-
-			SearchTerm.PlaceholderText = DataSource.SearchExample;
-			SearchTerm.Text = DataSource.Search;
 
 			try
 			{
 				var j = Task.Run( () => DataSource.Reload() );
 			}
-			catch( EmptySearchQueryException )
+			catch ( EmptySearchQueryException )
 			{
 				var j = Dispatcher.RunIdleAsync( ( x ) => SearchTerm.Focus( FocusState.Keyboard ) );
 			}

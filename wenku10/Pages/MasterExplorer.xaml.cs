@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using GR.DataSources;
@@ -134,6 +135,17 @@ namespace wenku10.Pages
 
 			ZSManagerVS ManageZones = new ZSManagerVS( stx.Text( "ZoneSpider", "AppResources" ) );
 			ManageZones.ZSMData.ZoneOpened += ( s, x ) => ZoneVS.AddChild( new ZSViewSource( x.Name, ( ZoneSpider ) x ) );
+			ManageZones.ZSMData.ZoneRemoved += ( s, _ZS ) =>
+			{
+				ZoneSpider ZS = ( ZoneSpider ) _ZS;
+
+				TreeItem ZVS = ZoneVS.Children
+					.Where( x => x is ZSViewSource )
+					.FirstOrDefault( x => ( ( ZSViewSource ) x ).ZS == ZS );
+
+				Worker.UIInvoke( () => NavTree.Remove( ZVS ) );
+				ZoneVS.RemoveChild( ZVS );
+			};
 			Zones.Add( ManageZones );
 
 			Zones.AddRange( GR.Resources.Shared.ExpZones );
@@ -182,7 +194,6 @@ namespace wenku10.Pages
 
 		private void ViewSourceCommand( PageExtension Ext )
 		{
-
 			// Unload Existing Page Extension
 			if ( PageExt != null )
 			{
