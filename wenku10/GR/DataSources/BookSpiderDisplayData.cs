@@ -40,7 +40,7 @@ namespace GR.DataSources
 
 		public override string ColumnName( IGRCell BkProp )
 		{
-			switch( BkProp.Property.Name )
+			switch ( BkProp.Property.Name )
 			{
 				case "Desc":
 					return "Message";
@@ -61,6 +61,9 @@ namespace GR.DataSources
 			string LoadText = stx.Str( "ProgressIndicator_Message" );
 
 			PsTable.Items = _Items;
+
+			// Store existing items
+			GRRow<IBookProcess>[] Items = _Items.ToArray();
 			Worker.UIInvoke( () => _Items.Clear() );
 
 			IEnumerable<string> ZoneIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
@@ -76,23 +79,29 @@ namespace GR.DataSources
 					if ( ZItemId == "METADATA" )
 						continue;
 
-					SpiderBook LB = await SpiderBook.CreateSAsync( ZoneId, ZItemId, null );
-
-					if ( LB.ProcessSuccess || LB.CanProcess )
+					if ( FindRow( Items, ZoneId, ZItemId, out GRRow<IBookProcess> Row ) )
 					{
-						GRRow<IBookProcess> Row = new GRRow<IBookProcess>( PsTable ) { Source = LB };
-						AddRow( Row );
+						await AddRowAsync( Row );
 					}
 					else
 					{
-						try
+						SpiderBook LB = await SpiderBook.CreateSAsync( ZoneId, ZItemId, null );
+
+						if ( LB.ProcessSuccess || LB.CanProcess )
 						{
-							Logger.Log( ID, "Removing invalid script: " + ZItemId, LogType.INFO );
-							Shared.Storage.DeleteFile( LB.MetaLocation );
+							await AddRowAsync( new GRRow<IBookProcess>( PsTable ) { Source = LB } );
 						}
-						catch ( Exception ex )
+						else
 						{
-							Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
+							try
+							{
+								Logger.Log( ID, "Removing invalid script: " + ZItemId, LogType.INFO );
+								Shared.Storage.DeleteFile( LB.MetaLocation );
+							}
+							catch ( Exception ex )
+							{
+								Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
+							}
 						}
 					}
 				}
@@ -103,19 +112,13 @@ namespace GR.DataSources
 
 		public void ImportItem( SpiderBook Item )
 		{
-			SpiderBook Existing = _Items.FirstOrDefault( x =>
+			if ( FindRow( _Items, Item.ZoneId, Item.ZItemId, out GRRow<IBookProcess> Existing ) )
 			{
-				SpiderBook b = ( SpiderBook ) x.Source;
-				return b.ZoneId == Item.ZoneId && b.ZItemId == Item.ZItemId;
-			} )?.Source as SpiderBook;
-
-			if ( Existing == null )
-			{
-				AddRow( new GRRow<IBookProcess>( PsTable ) { Source = Item } );
+				// TODO: Ask to replace
 			}
 			else
 			{
-				// TODO: Ask to replace
+				AddRowBg( new GRRow<IBookProcess>( PsTable ) { Source = Item } );
 			}
 		}
 
@@ -127,10 +130,31 @@ namespace GR.DataSources
 			Worker.UIInvoke( () => _Items.Remove( Row ) );
 		}
 
-		private void AddRow( GRRow<IBookProcess> Row )
+		public IGRRow FindRow( string ZoneId, string ZItemId )
 		{
-			Worker.UIInvoke( () => _Items.Add( Row ) );
+			FindRow( _Items, ZoneId, ZItemId, out GRRow<IBookProcess> Item );
+			return Item;
 		}
+
+		private bool FindRow( IEnumerable<GRRow<IBookProcess>> Source, string ZoneId, string ZItemId, out GRRow<IBookProcess> Item )
+		{
+			foreach ( GRRow<IBookProcess> P in Source )
+			{
+				SpiderBook x = ( SpiderBook ) P.Source;
+
+				if ( x.ZoneId == ZoneId && x.ZItemId == ZItemId )
+				{
+					Item = P;
+					return true;
+				}
+			}
+
+			Item = null;
+			return false;
+		}
+
+		private void AddRowBg( GRRow<IBookProcess> Row ) => Worker.UIInvoke( () => _Items.Add( Row ) );
+		private Task AddRowAsync( GRRow<IBookProcess> Row ) => Worker.RunUIAsync( () => _Items.Add( Row ) );
 
 		public override void StructTable()
 		{

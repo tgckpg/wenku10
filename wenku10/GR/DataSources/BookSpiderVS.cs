@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,11 @@ namespace GR.DataSources
 		public PageExtension Extension => _Extension ?? ( _Extension = new BookSpiderPageExt( this ) );
 
 		private BookSpiderDisplayData BSData => ( BookSpiderDisplayData ) DataSource;
+		public BookSpiderPageExt BSExt => ( BookSpiderPageExt ) Extension;
 
-		public override Action<IGRRow> ItemAction => ( ( BookSpiderPageExt ) Extension ).ProcessItem;
+		public override Action<IGRRow> ItemAction => BSExt.ProcessItem;
+
+		private ConcurrentQueue<Tuple<string, string>> PQueue = new ConcurrentQueue<Tuple<string, string>>();
 
 		public BookSpiderVS( string Name )
 			: base( Name )
@@ -44,6 +48,29 @@ namespace GR.DataSources
 			}
 
 			return false;
+		}
+
+		public void Process( string ZoneId, string ZItemId )
+		{
+			PQueue.Enqueue( new Tuple<string, string>( ZoneId, ZItemId ) );
+
+			BSData.PropertyChanged -= BSData_PropertyChanged;
+			BSData.PropertyChanged += BSData_PropertyChanged;
+		}
+
+		private void BSData_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+		{
+			if( e.PropertyName == "IsLoading" && BSData.IsLoading == false )
+			{
+				while ( PQueue.TryDequeue( out Tuple<string, string> PQ ) )
+				{
+					IGRRow Row = BSData.FindRow( PQ.Item1, PQ.Item2 );
+					if( Row != null )
+					{
+						BSExt.ProcessItem( Row );
+					}
+				}
+			}
 		}
 
 		public async void Copy( SpiderBook BkProc )

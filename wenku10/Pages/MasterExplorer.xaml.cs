@@ -67,6 +67,37 @@ namespace wenku10.Pages
 			}
 		}
 
+		public void NavigateToViewSource( Type TViewSource, Action<GRViewSource> VSAction )
+		{
+			GRViewSource VS = SearchViewSource( NavTree, TViewSource );
+			if ( VS != null )
+			{
+				NavigateToViewSource( VS );
+				VSAction?.Invoke( VS );
+			}
+		}
+
+		private GRViewSource SearchViewSource( IEnumerable<TreeItem> NTree, Type TViewSource )
+		{
+			foreach ( TreeItem Nav in NTree )
+			{
+				if ( Nav.GetType() == TViewSource && Nav is GRViewSource GVS )
+				{
+					return GVS;
+				}
+				else if ( Nav.Children.Any() )
+				{
+					GRViewSource K = SearchViewSource( Nav.Children, TViewSource );
+					if ( K != null )
+					{
+						return K;
+					}
+				}
+			}
+
+			return null;
+		}
+
 		internal void NavigateToZone( ZoneSpider ZS )
 		{
 			ZSViewSource ViewSource = ZoneVS.Children.Where( x => x is ZSViewSource ).Cast<ZSViewSource>().FirstOrDefault( x => x.ZS == ZS );
@@ -127,7 +158,7 @@ namespace wenku10.Pages
 				OpenView( ViewSource );
 			}
 
-			if ( Nav.Children?.Any() == true )
+			if ( Nav.Children.Any() )
 			{
 				NavTree.Toggle( Nav );
 			}

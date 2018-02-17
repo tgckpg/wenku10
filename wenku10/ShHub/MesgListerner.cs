@@ -239,7 +239,11 @@ namespace wenku10.ShHub
 
 			if ( Parse )
 			{
-				throw new NotImplementedException();
+				ControlFrame.Instance.NavigateTo(
+					PageId.MASTER_EXPLORER, () => new MasterExplorer()
+					, P => ( ( MasterExplorer ) P ).NavigateToViewSource( typeof( BookSpiderVS )
+					, VS => ( ( BookSpiderVS ) VS ).Process( Book.ZoneId, Book.ZItemId ) )
+				);
 			}
 		}
 

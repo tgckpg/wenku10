@@ -24,7 +24,6 @@ namespace GR.PageExtensions
 	using Model.ListItem;
 	using Model.Pages;
 	using Model.Interfaces;
-	using Resources;
 
 	sealed class BookDisplayPageExt : PageExtension
 	{
@@ -123,7 +122,7 @@ namespace GR.PageExtensions
 				if ( BType == BookType.S )
 				{
 					Edit.Visibility = Visibility.Visible;
-					Edit.IsEnabled = Shared.BooksDb.Entry( BkDisplay.Entry ).IsKeySet;
+					Edit.IsEnabled = BkDisplay.Entry.Id != 0;
 				}
 
 				if( BType != BookType.L )
