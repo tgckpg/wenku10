@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
 namespace GR.Model.Loaders
 {
@@ -57,13 +57,21 @@ namespace GR.Model.Loaders
 			OnComplete( b );
 		}
 
-		internal static async void DownloadVolume( BookItem Book, Volume Vol )
+		internal static void DownloadVolume( BookItem Book, Volume Vol )
+		{
+			var j = DownloadVolumeAsync( Book, Vol );
+		}
+
+		internal static async Task DownloadVolumeAsync( BookItem Book, Volume Vol )
 		{
 			foreach ( Chapter C in Vol.Chapters )
 			{
 				TaskCompletionSource<bool> ChLoaded = new TaskCompletionSource<bool>();
 				new ChapterLoader( Book, x => { ChLoaded.SetResult( true ); } ).Load( C );
-				await ChLoaded.Task;
+				if ( await ChLoaded.Task )
+				{
+					ChapterVModel.ChapterLoaded.Deliver( new Message( typeof( AutoCache ), null, C ) );
+				}
 			}
 		}
 

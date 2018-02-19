@@ -13,6 +13,7 @@ namespace GR.Model.Section
 {
 	using Config;
 	using Database.Models;
+	using Model.Book;
 	using Settings;
 	using Storage;
 
@@ -29,7 +30,7 @@ namespace GR.Model.Section
 		public Chapter FirstChapter { get { return Volumes.FirstOrDefault()?.Chapters.FirstOrDefault(); } }
 
 		public Volume[] Volumes { get; private set; }
-		public Chapter[] Chapters { get; private set; }
+		public ChapterVModel[] Chapters { get; private set; }
 		public Chapter AutoAnchor { get; private set; }
 
 		public IObservableVector<object> VolumeCollections { get; private set; }
@@ -57,7 +58,7 @@ namespace GR.Model.Section
 
 		public void SelectVolume( Volume v )
 		{
-			Chapters = v.Chapters.ToArray();
+			Chapters = v.Chapters.Select( x => new ChapterVModel( x ) ).ToArray();
 			NotifyChanged( "Chapters" );
 		}
 
@@ -100,5 +101,6 @@ namespace GR.Model.Section
 				Vol = V;
 			}
 		}
+
 	}
 }

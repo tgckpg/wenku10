@@ -20,11 +20,12 @@ using Net.Astropenguin.Controls;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 using GR.AdvDM;
 using GR.CompositeElement;
 using GR.Database.Models;
-using GR.Model.Book.Spider;
+using GR.Model.Book;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Loaders;
@@ -96,10 +97,15 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()
 		{
-			bool NeedDownload = false;
-
 			Volume V = ReaderPage.CurrentChapter.Volume;
-			NeedDownload = Shared.BooksDb.Chapters.Any( x => x.Volume == V && x.Content == null );
+			ChapterImage CImage = Shared.BooksDb.ChapterImages.FirstOrDefault( x => V.Chapters.Contains( x.Chapter ) );
+
+			if ( CImage != null )
+			{
+				return new AsyncTryOut<Chapter>( true, CImage.Chapter );
+			}
+
+			bool NeedDownload = Shared.BooksDb.Chapters.Any( x => x.Volume == V && x.Content == null );
 
 			if ( !NeedDownload )
 			{
@@ -123,31 +129,18 @@ namespace wenku10.Pages.ContentReaderPane
 				return new AsyncTryOut<Chapter>();
 			}
 
-			// Really, this desperate?
-			TaskCompletionSource<AsyncTryOut<Chapter>> TCSChapter = new TaskCompletionSource<AsyncTryOut<Chapter>>();
-			ChapterList.ItemsSource = V.Chapters;
+			ChapterList.ItemsSource = V.Chapters.Select( x => new ChapterVModel( x ) );
+			await AutoCache.DownloadVolumeAsync( ReaderPage.CurrentBook, V );
 
-			Action<object, DCycleCompleteArgs> CycleComp = null;
+			Chapter ImageChapter = V.Chapters.FirstOrDefault( x => x.Image != null );
 
-			CycleComp = delegate ( object sender, DCycleCompleteArgs e )
+			if ( ImageChapter == null )
 			{
-				bool AllSet = V.Chapters.All( x => !string.IsNullOrEmpty( x.Content.Text ) );
+				Worker.UIInvoke( () => Message.Text = "No Illustration available" );
+				return new AsyncTryOut<Chapter>();
+			}
 
-				Chapter C = V.Chapters.FirstOrDefault( x => x.Image != null );
-
-				if ( C == null )
-				{
-					if ( AllSet ) Worker.UIInvoke( () => Message.Text = "No Illustration available" );
-					TCSChapter.TrySetResult( new AsyncTryOut<Chapter>() );
-					return;
-				}
-
-				TCSChapter.TrySetResult( new AsyncTryOut<Chapter>( true, C ) );
-			};
-
-			AutoCache.DownloadVolume( ReaderPage.CurrentBook, V );
-
-			return await TCSChapter.Task;
+			return new AsyncTryOut<Chapter>( true, ImageChapter );
 		}
 
 		private class MViewUpdate : ActiveData, IIllusUpdate

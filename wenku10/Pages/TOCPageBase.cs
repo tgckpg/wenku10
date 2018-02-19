@@ -15,14 +15,13 @@ using Net.Astropenguin.Loaders;
 using GR.Config;
 using GR.CompositeElement;
 using GR.Database.Models;
+using GR.Model.Book;
 using GR.Model.Interfaces;
 using GR.Model.Loaders;
 using GR.Model.Pages;
 using GR.Model.Section;
 using GR.Storage;
 using GR.Resources;
-
-using BookItem = GR.Model.Book.BookItem;
 
 namespace wenku10.Pages
 {
@@ -116,7 +115,7 @@ namespace wenku10.Pages
 
 		protected void ChapterSelected( object sender, ItemClickEventArgs e )
 		{
-			PageProcessor.NavigateToReader( ThisBook, ( Chapter ) e.ClickedItem );
+			PageProcessor.NavigateToReader( ThisBook, ( ( ChapterVModel ) e.ClickedItem ).Ch );
 		}
 
 		protected async Task OneDriveRsync()

@@ -73,7 +73,12 @@ namespace GR.DataSources
 
 		public void Reload( Func<IQueryable<Book>, IQueryable<Book>> Filter )
 		{
-			IsLoading = true;
+			lock ( this )
+			{
+				if ( IsLoading )
+					return;
+				IsLoading = true;
+			}
 
 			StringResBg stx = new StringResBg( "AppResources" );
 			Message = stx.Text( "Loading" );

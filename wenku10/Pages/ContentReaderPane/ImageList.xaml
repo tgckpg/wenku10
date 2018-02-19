@@ -63,7 +63,7 @@
                         </p:StateControl>
                         <TextBlock Grid.Row="1" Foreground="White"
                                    FontSize="20" Margin="0"
-                                   Text="{Binding ChapterTitle}"
+                                   Text="{Binding Title}"
                                    HorizontalAlignment="Center" />
                     </Grid>
                 </DataTemplate>

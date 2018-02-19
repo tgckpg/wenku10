@@ -38,6 +38,7 @@ namespace GR.PageExtensions
 		MenuFlyoutItem DefaultTOC;
 		MenuFlyoutItem DefaultReader;
 		MenuFlyoutItem DefaultInfo;
+		MenuFlyoutItem BrowserBtn;
 
 		MenuFlyoutSubItem ChangeDefault;
 		MenuFlyoutSubItem OpenWith;
@@ -77,30 +78,30 @@ namespace GR.PageExtensions
 			DefaultInfo = new MenuFlyoutItem() { Text = stx.Text( "BookInfoView" ), Icon = new SymbolIcon( Symbol.Accept ) };
 			DefaultInfo.Click += DefaultInfo_Click;
 
-			ContextMenu = new MenuFlyout();
-			ContextMenu.Items.Add( OpenDefault );
-
-			ContextMenu.Items.Add( Edit );
-			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
-
-			PinToStart = new MenuFlyoutItem() { Text = stx.Text( "PinToStart", "ContextMenu" ) };
-			PinToStart.Click += PinToStart_Click;
-			ContextMenu.Items.Add( PinToStart );
-
-			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
+			BrowserBtn = new MenuFlyoutItem() { Text = stx.Text( "OpenInBrowser" ) };
+			BrowserBtn.Click += BrowserBtn_Click;
 
 			OpenWith = new MenuFlyoutSubItem() { Text = stx.Text( "OpenWith", "ContextMenu" ) };
 			OpenWith.Items.Add( GotoTOC );
 			OpenWith.Items.Add( GotoReader );
 			OpenWith.Items.Add( GotoInfo );
 
-			ContextMenu.Items.Add( OpenWith );
+			PinToStart = new MenuFlyoutItem() { Text = stx.Text( "PinToStart", "ContextMenu" ) };
+			PinToStart.Click += PinToStart_Click;
 
+			ContextMenu = new MenuFlyout();
+			ContextMenu.Items.Add( OpenDefault );
+			ContextMenu.Items.Add( Edit );
+			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
+			ContextMenu.Items.Add( PinToStart );
+			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
+			ContextMenu.Items.Add( OpenWith );
 			ChangeDefault = new MenuFlyoutSubItem() { Text = stx.Text( "ChangeDefault", "ContextMenu" ) };
 			ChangeDefault.Items.Add( DefaultTOC );
 			ChangeDefault.Items.Add( DefaultReader );
 			ChangeDefault.Items.Add( DefaultInfo );
 			ContextMenu.Items.Add( ChangeDefault );
+			ContextMenu.Items.Add( BrowserBtn );
 
 			DefaultAction = new NameValue<string>( "", "" );
 			DefaultAction.PropertyChanged += DefaultAction_PropertyChanged;
@@ -131,6 +132,8 @@ namespace GR.PageExtensions
 					DefaultInfo.Visibility = Visibility.Visible;
 				}
 
+				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( BkDisplay.Entry.Info.OriginalUrl );
+
 				return ContextMenu;
 			}
 
@@ -144,6 +147,14 @@ namespace GR.PageExtensions
 				case "TOC": OpenTOC( obj ); break;
 				case "Info": OpenInfo( obj ); break;
 				case "Reader": OpenReader( obj ); break;
+			}
+		}
+
+		private void BrowserBtn_Click( object sender, RoutedEventArgs e )
+		{
+			if ( ( ( FrameworkElement ) sender ).DataContext is GRRow<BookDisplay> BkRow )
+			{
+				var j = Windows.System.Launcher.LaunchUriAsync( new Uri( BkRow.Source.Entry.Info.OriginalUrl ) );
 			}
 		}
 
