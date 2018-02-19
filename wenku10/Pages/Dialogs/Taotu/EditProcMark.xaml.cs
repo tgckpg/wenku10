@@ -116,7 +116,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 			TestRunning.IsActive = true;
 
 			TOCItem Item = ( TOCItem ) e.AddedItems[ 0 ];
-			Chapter Ch = Item.GetChapter();
+			Chapter Ch = Item.Ch;
 
 			if ( Ch == null )
 			{

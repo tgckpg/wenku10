@@ -8,82 +8,45 @@ namespace GR.Model.Section
 {
 	using Database.Models;
 	using ListItem;
-	using Interfaces;
 
-	class TOCPane : ActiveData, ISearchableSection<TOCItem>
+	sealed class TOCPane : ActiveData
 	{
-		public IList<TOCItem> TOCItems { get; private set; }
+		private List<TOCItem> Volumes;
+		private List<TOCItem> Chapters;
 
-		private string Terms;
+		public TreeList SearchSet { get; private set; }
 
-		public IEnumerable<TOCItem> SearchSet
+		public string SearchTerm;
+
+		public TOCPane( Volume[] Vols )
 		{
-			get
-			{
-				return Filter( TOCItems );
-			}
+			Volumes = new List<TOCItem>();
+			Chapters = new List<TOCItem>();
 
-			set
-			{
-				TOCItems = ( IList<TOCItem> ) value;
-				NotifyChanged( "SearchSet" );
-			}
-		}
-
-		public string SearchTerm
-		{
-			get
-			{
-				return Terms;
-			}
-			set
-			{
-				Terms = value;
-				NotifyChanged( "SearchSet" );
-			}
-		}
-
-		public TOCItem CurrentIndex;
-
-		public TOCPane( Volume[] Vols, Chapter CurrentCh = null )
-		{
-			List<TOCItem> Items = new List<TOCItem>();
 			foreach( Volume V in Vols )
 			{
-				Items.Add( new TOCItem( V ) );
-				foreach( Chapter C in V.Chapters )
-				{
-					TOCItem Item = new TOCItem( C );
-					Items.Add( Item );
+				IEnumerable<TOCItem> Chs = V.Chapters.Select( C => new TOCItem( C ) ).ToArray();
+				Chapters.AddRange( Chs );
 
-					if( C.Equals( CurrentCh ) )
-					{
-						CurrentIndex = Item;
-					}
-				}			   
+				TOCItem VItem = new TOCItem( V ) { Children = Chs.ToList() };
+				Volumes.Add( VItem );
 			}
 
-			SearchSet = Items;
+			SearchSet = new TreeList( Volumes.ToArray() );
 		}
 
-		public TOCItem GetItem( Chapter C )
+		public TOCItem OpenChapter( Chapter C )
 		{
-			foreach( TOCItem Item in TOCItems )
+			foreach( TOCItem Item in Chapters )
 			{
-				if ( Item.IsItem( C ) )
+				if ( Item.Ch == C )
+				{
+					SearchSet.Open( Item );
 					return Item;
+				}
 			}
 			return null;
 		}
 
-		private IEnumerable<TOCItem> Filter( IEnumerable<TOCItem> Items )
-		{
-			if ( string.IsNullOrEmpty( SearchTerm ) ) return Items;
-
-			return Items.Where( ( TOCItem e ) =>
-			 {
-				 return e.TreeLevel == 0 || e.ItemTitle.IndexOf( SearchTerm, StringComparison.CurrentCultureIgnoreCase ) != -1;
-			 } );
-		}
 	}
 }

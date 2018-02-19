@@ -85,16 +85,8 @@ namespace wenku10
 			App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Back );
 		}
 
-		private static readonly Type[] SpecialElement = new Type[]
-		{
-			typeof( TextBox ), typeof( RichEditBox ), typeof( PasswordBox )
-		};
-
 		private void Escape( KeyCombinationEventArgs e )
 		{
-			object o = FocusManager.GetFocusedElement();
-			if ( o != null && SpecialElement.Contains( o.GetType() ) ) return;
-
 			// Always Close the dialog first
 			if ( Net.Astropenguin.Helpers.Popups.CloseDialog() ) return;
 

@@ -181,6 +181,7 @@
             <TextBox TextChanging="TextBox_TextChanging" Margin="20" PlaceholderText="Search"/>
         </StackPanel>
         <ListView x:Name="TOCList" Margin="20,100,20,20"
+                  IsItemClickEnabled="True" ItemClick="SearchSet_ItemClick"
                   ItemContainerStyle="{StaticResource TOCPaneListItem}"
                   ItemsSource="{Binding SearchSet}" >
             <ListView.ItemTemplate>
