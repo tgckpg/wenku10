@@ -42,7 +42,7 @@ namespace GR.Model.Loaders
 			}
 			else if ( b.IsSpider() )
 			{
-				LoadInstruction( ( BookInstruction ) b, useCache );
+				Task.Run( () => LoadInstruction( ( BookInstruction ) b, useCache ) );
 			}
 			else if ( CurrentBook.IsEx() )
 			{
@@ -70,7 +70,7 @@ namespace GR.Model.Loaders
 			}
 		}
 
-		public async void LoadInstruction( BookInstruction B, bool useCache )
+		private async void LoadInstruction( BookInstruction B, bool useCache )
 		{
 			SpiderBook SBook = await SpiderBook.CreateSAsync( B.ZoneId, B.ZItemId, B.BookSpiderDef );
 

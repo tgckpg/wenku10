@@ -60,15 +60,10 @@ namespace GR.Section
 
 			RCache = new RuntimeCache();
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 
 			SearchSet.LoadStart += ( s, e ) => { Searching = true; };
 			SearchSet.LoadEnd += ( s, e ) => { Searching = false; };
-		}
-
-		~SharersHub()
-		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
 		}
 
 		public async void Search( string Query, IEnumerable<string> AccessTokens = null )

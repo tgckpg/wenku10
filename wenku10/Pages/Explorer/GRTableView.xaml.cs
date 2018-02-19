@@ -78,6 +78,11 @@ namespace wenku10.Pages.Explorer
 		{
 			if ( this.ViewSource != ViewSource )
 			{
+				if( DataSource != null)
+				{
+					DataSource.PropertyChanged -= SearchTerm_PropertyChanged;
+				}
+
 				this.ViewSource = ViewSource;
 				DataSource.StructTable();
 
@@ -112,6 +117,8 @@ namespace wenku10.Pages.Explorer
 
 				SearchTerm.PlaceholderText = DataSource.SearchExample;
 				SearchTerm.Text = DataSource.Search;
+
+				DataSource.PropertyChanged += SearchTerm_PropertyChanged;
 			}
 
 			try
@@ -121,6 +128,14 @@ namespace wenku10.Pages.Explorer
 			catch ( EmptySearchQueryException )
 			{
 				var j = Dispatcher.RunIdleAsync( ( x ) => SearchTerm.Focus( FocusState.Keyboard ) );
+			}
+		}
+
+		private void SearchTerm_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+		{
+			if ( e.PropertyName == "Search" )
+			{
+				SearchTerm.Text = ( ( GRDataSource ) sender ).Search;
 			}
 		}
 

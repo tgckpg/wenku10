@@ -77,30 +77,30 @@ namespace GR.PageExtensions
 
 			ActivyBtn = new AppBarButtonEx()
 			{
-				Icon = new SymbolIcon( Symbol.Message )
-				, Label = stx.Text( "Messages" )
-				, Foreground = new SolidColorBrush( LayoutSettings.RelativeMajorBackgroundColor )
+				Icon = new SymbolIcon( Symbol.Message ),
+				Label = stx.Text( "Messages" ),
+				Foreground = new SolidColorBrush( LayoutSettings.RelativeMajorBackgroundColor )
 			};
 
 			ActivyBtn.Click += ToggleActivities;
 
-			SecondaryIconButton UploadBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Upload, stx.Text( "SubmitScript" ) );
+			AppBarButton UploadBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Upload, stx.Text( "SubmitScript" ) );
 			UploadBtn.Click += ( s, e ) => ControlFrame.Instance.SubNavigateTo( Page, () => new ScriptUpload( UploadExit ) );
 
 			SecondaryIconButton MAuthBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Manage, stx.Text( "ManageAuths", "ContextMenu" ) );
 			MAuthBtn.Click += ManageAuths;
 
-			MajorControls = new ICommandBarElement[] { ActivyBtn };
+			MajorControls = new ICommandBarElement[] { ActivyBtn, UploadBtn };
 
 #if DEBUG || TESTING
 			StringResources sts = new StringResources( "Settings" );
 			SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
 			ChangeServer.Click += async ( s, e ) =>
 			{
-				ValueHelpInput VH =  new ValueHelpInput(
+				ValueHelpInput VH = new ValueHelpInput(
 					Shared.ShRequest.Server.ToString()
 					, sts.Text( "Advanced_Server" ), "Address"
-				) ;
+				);
 
 				await Popups.ShowDialog( VH );
 				if ( VH.Canceled ) return;
@@ -114,7 +114,7 @@ namespace GR.PageExtensions
 				catch ( Exception ) { }
 			};
 
-			Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn, ChangeServer };
+			Major2ndControls = new ICommandBarElement[] { MAuthBtn, ChangeServer };
 #else
 			Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn };
 #endif
@@ -123,7 +123,7 @@ namespace GR.PageExtensions
 		private void UploadExit( string Id, string AccessToken )
 		{
 			var j = ControlFrame.Instance.CloseSubView();
-			// SHHub.Search( "uuid: " + Id, new string[] { AccessToken } );
+			ViewSource.DataSource.Search = "uuid: " + Id;
 		}
 
 		private void ManageAuths( object sender, RoutedEventArgs e )

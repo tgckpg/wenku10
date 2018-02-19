@@ -62,7 +62,7 @@ namespace GR.GSystem
 			Resources.Shared.TC = new Model.TradChinese();
 
 			// SHRequest Init
-			Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.1.3t", "1.5.0b", "1.0.6p" } );
+			Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.2.0t", "1.5.0b", "1.1.0p" } );
 
 			// Connection Mode
 			WHttpRequest.UA = string.Format( AppKeys.UA, Version );

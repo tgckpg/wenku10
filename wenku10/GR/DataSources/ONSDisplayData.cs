@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
 namespace GR.DataSources
 {
@@ -16,6 +18,7 @@ namespace GR.DataSources
 	using GSystem;
 	using Model.Loaders;
 	using Model.ListItem.Sharers;
+	using Settings;
 
 	sealed class ONSDisplayData : GRDataSource
 	{
@@ -34,6 +37,27 @@ namespace GR.DataSources
 		private GRTable<HSDisplay> HSTable;
 
 		public override string ColumnName( IGRCell CellProp ) => HSDisplay.PropertyName( CellProp.Property );
+
+		public ONSDisplayData()
+			: base()
+		{
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
+		}
+
+		private void MessageBus_OnDelivery( Message Mesg )
+		{
+			if ( Mesg.Content == AppKeys.SH_SCRIPT_REMOVE && Mesg.Payload is HubScriptItem HSI )
+			{
+				if ( HSTable.Items is ObservableCollection<GRRow<HSDisplay>> Collection )
+				{
+					GRRow<HSDisplay> Row = Collection.FirstOrDefault( x => x.Source.Item == HSI );
+					if ( Row != null )
+					{
+						Collection.Remove( Row );
+					}
+				}
+			}
+		}
 
 		public override async void Reload()
 		{
@@ -58,10 +82,7 @@ namespace GR.DataSources
 
 		private GRRow<HSDisplay> ToGRRow( HubScriptItem HSItem )
 		{
-			return new GRRow<HSDisplay>( HSTable )
-			{
-				Source = new HSDisplay( HSItem ),
-			};
+			return new GRRow<HSDisplay>( HSTable ) { Source = new HSDisplay( HSItem ) };
 		}
 
 		public override void StructTable()

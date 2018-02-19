@@ -52,7 +52,7 @@ namespace wenku10.Pages
 		{
 			BackStack = new global::GR.GSystem.BackStackManager();
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
 
 			GR.Database.ContextManager.Migrate();

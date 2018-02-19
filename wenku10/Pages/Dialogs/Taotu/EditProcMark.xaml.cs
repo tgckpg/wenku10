@@ -48,14 +48,12 @@ namespace wenku10.Pages.Dialogs.Taotu
 			this.InitializeComponent();
 			SetTemplate();
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
-
-		~EditProcMark() { Dispose(); }
 
 		public void Dispose()
 		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 		}
 
 		private void SetTemplate()

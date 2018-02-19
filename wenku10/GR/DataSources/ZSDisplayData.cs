@@ -54,22 +54,22 @@ namespace GR.DataSources
 
 			IsLoading = true;
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			IList<GRRow<BookDisplay>> FirstPage = ( await Loader.NextPage( 30 ) ).Remap( ToGRRow );
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 
 			Observables<BookItem, GRRow<BookDisplay>> ItemsObservable = new Observables<BookItem, GRRow<BookDisplay>>( FirstPage );
 
 			ItemsObservable.LoadEnd += ( s, e ) =>
 			{
-				MessageBus.OnDelivery -= MessageBus_OnDelivery;
+				MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 				IsLoading = false;
 			};
 
 			ItemsObservable.LoadStart += ( s, e ) =>
 			{
 				IsLoading = true;
-				MessageBus.OnDelivery += MessageBus_OnDelivery;
+				MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			};
 
 			ItemsObservable.ConnectLoader( Loader, b => b.Remap( ToGRRow ) );

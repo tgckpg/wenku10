@@ -60,7 +60,7 @@ namespace wenku10.Pages
 
 		public void SoftOpen()
 		{
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			Member.OnStatusChanged += Member_OnStatusChanged;
 
 			lock ( PendingRemove )
@@ -75,7 +75,7 @@ namespace wenku10.Pages
 
 		public void SoftClose()
 		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			Member.OnStatusChanged -= Member_OnStatusChanged;
 		}
 
@@ -119,7 +119,7 @@ namespace wenku10.Pages
 			ActivyBtn.SetBinding( AppBarButtonEx.CountProperty, new Binding() { Source = Member.Activities, Path = new PropertyPath( "Count" ) } );
 
 			PendingRemove.Clear();
-			MessageBus.OnDelivery += StoreItemsToRemove;
+			MessageBus.Subscribe( this, StoreItemsToRemove );
 
 			SHHub = new SharersHub();
 			SHHub.PropertyChanged += SHHub_PropertyChanged;

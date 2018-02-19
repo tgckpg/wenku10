@@ -12,6 +12,7 @@ using Net.Astropenguin.Loaders;
 
 using wenku10;
 using wenku10.Pages;
+using wenku10.ShHub;
 using wenku10.Pages.Dialogs;
 using wenku10.Pages.Sharers;
 
@@ -20,8 +21,6 @@ namespace GR.GSystem
 	using CompositeElement;
 	using Config;
 	using Ext;
-	using Model.ListItem;
-	using Model.Loaders;
 	using Resources;
 
 	sealed class MasterCommandManager
@@ -47,11 +46,15 @@ namespace GR.GSystem
 		private int InitMode = 0;
 
 		private List<int> ModeInit;
+		private MesgListerner SHListener;
 
 		public MasterCommandManager( IObservableVector<ICommandBarElement> CommandList, IObservableVector<ICommandBarElement> SecondCmdList )
 		{
 			this.CommandList = CommandList;
 			this.SecondCmdList = SecondCmdList;
+
+			SHListener = new MesgListerner();
+
 			ModeInit = new List<int>();
 			DefaultCmds();
 		}
@@ -60,9 +63,6 @@ namespace GR.GSystem
 		{
 			CreateSystemCommands();
 			CreateCommonCommands();
-
-			// Init SHListener
-			new wenku10.ShHub.MesgListerner();
 
 			InitCommands();
 		}

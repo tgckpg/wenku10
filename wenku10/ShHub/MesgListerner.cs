@@ -42,7 +42,7 @@ namespace wenku10.ShHub
 
 		public MesgListerner()
 		{
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
 
 		private async void MessageBus_OnDelivery( Message Mesg )

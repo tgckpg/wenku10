@@ -51,15 +51,13 @@ namespace wenku10.Pages.Dialogs.Taotu
 			StringResources stx = new StringResources( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
 
 		public void Dispose()
 		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 		}
-
-		~EditProcListLoader() { Dispose(); }
 
 		public EditProcListLoader( WenkuListLoader EditTarget )
 			: this()
