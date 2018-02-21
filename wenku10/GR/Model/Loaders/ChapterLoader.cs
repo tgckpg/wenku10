@@ -8,6 +8,7 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
 using libtaotu.Controls;
 using libtaotu.Models.Procedure;
@@ -54,29 +55,37 @@ namespace GR.Model.Loaders
 			{
 				LoadChapterInst( C );
 			}
-			else
+			else if( C.Book.Type.HasFlag( BookType.W ) )
 			{
-				IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
+				if ( C.Book.Type.HasFlag( BookType.L ) )
+				{
+					IDeathblow Db = X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook );
+					MessageBus.SendUI( GetType(), AppKeys.EX_DEATHBLOW, Db );
+				}
+				else
+				{
+					IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache );
 
-				// Initiate download, precache should not be done internally.
-				wCache.InitDownload(
-					C.Id.ToString()
-					, X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.ZItemId, C.Meta[ AppKeys.GLOBAL_CID ] )
-					, async ( DRequestCompletedEventArgs e, string path ) =>
-					{
-						await new ContentParser().ParseAsync( Shared.TC.Translate( e.ResponseString ), C );
-						OnComplete( C );
+					// Initiate download, precache should not be done internally.
+					wCache.InitDownload(
+						C.Id.ToString()
+						, X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.ZItemId, C.Meta[ AppKeys.GLOBAL_CID ] )
+						, async ( DRequestCompletedEventArgs e, string path ) =>
+						{
+							await new ContentParser().ParseAsync( Shared.TC.Translate( e.ResponseString ), C );
+							OnComplete( C );
 
-						X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook ).Check( e.ResponseBytes );
-					}
-					, ( string Request, string path, Exception ex ) =>
-					{
-						Logger.Log( ID, ex.Message, LogType.ERROR );
-						GSystem.ActionCenter.Instance.ShowError( "Download" );
-						OnComplete( C );
-					}
-					, false
-				);
+							X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook ).Check( e.ResponseBytes );
+						}
+						, ( string Request, string path, Exception ex ) =>
+						{
+							Logger.Log( ID, ex.Message, LogType.ERROR );
+							GSystem.ActionCenter.Instance.ShowError( "Download" );
+							OnComplete( C );
+						}
+						, false
+					);
+				}
 			}
 		}
 

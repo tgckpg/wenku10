@@ -85,11 +85,9 @@ namespace wenku10.Pages
 
 			if ( LB.ProcessSuccess )
 			{
-				Deathblow.Register();
-
 				ControlFrame.Instance.NavigateTo(
 					PageId.BOOK_INFO_VIEW
-					, () => new BookInfoView( Deathblow.GetBook() )
+					, () => new BookInfoView( ItemProcessor.GetBookEx( LB.ZItemId ) )
 				);
 			}
 		}

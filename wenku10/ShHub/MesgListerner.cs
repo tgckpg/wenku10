@@ -126,7 +126,7 @@ namespace wenku10.ShHub
 					await Popups.ShowDialog( UIAliases.CreateDialog(
 						stx.Str( "ConfirmDeathblow" )
 						, () => UseDeathblow = true
-						, stx.Str( "Yes" ), stx.Str( "No")
+						, stx.Str( "Yes" ), stx.Str( "No" )
 					) );
 
 					if( UseDeathblow )
