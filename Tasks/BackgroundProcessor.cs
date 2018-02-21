@@ -117,6 +117,7 @@ namespace Tasks
 			}
 			finally
 			{
+				ActiveTask = "";
 				Deferral.Complete();
 			}
 		}
@@ -286,26 +287,36 @@ namespace Tasks
 						continue;
 					}
 
-					SpiderBook SBook = await SpiderBook.CreateSAsync( UpdateParam.Id );
+					string[] Keys = UpdateParam.Id.Split( '.' );
+
+					if( Keys.Length != 3 )
+					{
+						XReg.RemoveParameter( UpdateParam.Id );
+						continue;
+					}
+
+					SpiderBook SBook = await SpiderBook.CreateSAsync( Keys[ 0 ], Keys[ 2 ], null );
 					if ( !SBook.CanProcess )
 					{
 						XReg.RemoveParameter( UpdateParam.Id );
 						continue;
 					}
 
+					SBook.MarkUnprocessed();
+
+					string OHash = null, NHash = null;
+					SBook.GetBook()?.Entry.Meta.TryGetValue( "TOCHash", out OHash );
+
 					await ItemProcessor.ProcessLocal( SBook );
+
 					if ( SBook.ProcessSuccess )
 					{
-						BookInstruction Book = SBook.GetBook();
+						BookInstruction NBook = SBook.GetBook();
+						NBook?.Entry.Meta.TryGetValue( "TOCHash", out NHash );
 
-						if ( Book.Packed == true )
+						if ( NBook.Packed == true && ( NBook.NeedUpdate || OHash != NHash ) )
 						{
-							// TODO: Hash the entire TOC for updates
-							throw new NotImplementedException();
-							if ( Book.NeedUpdate )
-							{
-								await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
-							}
+							await LiveTileService.UpdateTile( CanvasDevice, NBook, TileId );
 						}
 
 						UpdateParam.SetValue( new XKey[] {

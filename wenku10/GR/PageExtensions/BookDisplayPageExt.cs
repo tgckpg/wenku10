@@ -21,9 +21,11 @@ namespace GR.PageExtensions
 	using Database.Contexts;
 	using Database.Models;
 	using Model.Book;
+	using Model.Book.Spider;
 	using Model.ListItem;
 	using Model.Pages;
 	using Model.Interfaces;
+	using Storage;
 
 	sealed class BookDisplayPageExt : PageExtension
 	{
@@ -163,7 +165,18 @@ namespace GR.PageExtensions
 			if ( ( ( FrameworkElement ) sender ).DataContext is GRRow<BookDisplay> BkRow )
 			{
 				BookItem BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
-				await PageProcessor.PinToStart( BkItem );
+				string TileId = await PageProcessor.PinToStart( BkItem );
+				if ( !string.IsNullOrEmpty( TileId ) )
+				{
+					PinManager PM = new PinManager();
+					PM.RegPin( BkItem, TileId, true );
+
+					if ( BkItem is BookInstruction BInst )
+					{
+						SpiderBook SBook = await SpiderBook.CreateSAsync( BkItem.ZoneId, BkItem.ZItemId, null );
+						await PageProcessor.RegLiveSpider( SBook, BInst, TileId );
+					}
+				}
 			}
 		}
 
