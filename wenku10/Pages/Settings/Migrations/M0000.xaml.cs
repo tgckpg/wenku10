@@ -101,11 +101,11 @@ namespace wenku10.Pages.Settings.Migrations
 			Mesg( "Books - Type S" );
 			await M0002_Books_TypeS();
 
-			Mesg( "Books - Type L" );
-			await M0003_Books_TypeL();
-
 			Mesg( "Books - Type W" );
-			await M0004_Books_TypeW();
+			await M0003_Books_TypeW();
+
+			Mesg( "Books - Type L" );
+			await M0004_Books_TypeL();
 
 			Mesg( "Reading History" );
 			M0005_ReadingHistory();
@@ -153,124 +153,40 @@ namespace wenku10.Pages.Settings.Migrations
 			List<Book> Entries = new List<Book>();
 			int l = Dirs.Length;
 
-			await Dirs.ExecEach( async ( Id, i ) =>
+			await Dirs.Where( x => x != AppKeys.ZLOCAL ).ExecEach( async ( ZoneId, i ) =>
 			{
-				MesgR( string.Format( "Processing ... ( {1} / {2} ): {0}", Id, i + 1, l ) );
 				Book Entry = null;
-				string SRoot = SVolRoot + Id + "/";
+				string SRoot = SVolRoot + ZoneId + "/";
 
-				if ( Id[ 0 ] == 'Z' )
+				if ( ZoneId[ 0 ] == 'Z' )
 				{
-
+					string[] ZItemIds = Shared.Storage.ListDirs( SRoot );
+					int m = ZItemIds.Length;
+					await ZItemIds.ExecEach( async ( ZItemId, j ) =>
+					{
+						MesgR( string.Format( "Processing ( ZMode ) ... ( {1} / {2} ): {0}", ZItemId, j + 1, m ) );
+						string ZSRoot = SRoot + ZItemId + "/";
+						Entry = await MigrateBookSpider( ZSRoot, ZoneId.Substring( 1 ), ZItemId );
+						Entries.Add( Entry );
+					} );
 				}
 				else
 				{
-					BookInstruction BkInst = new BookInstruction( AppKeys.ZLOCAL, Id );
+					MesgR( string.Format( "Processing ( LMode ) ... ( {1} / {2} ): {0}", ZoneId, i + 1, l ) );
+					Entry = await MigrateBookSpider( SRoot, AppKeys.ZLOCAL, ZoneId );
 
-					XRegistry MetaDefs = new XRegistry( "<metadata />", SRoot + "METADATA.xml" );
-					XParameter MetaParam = MetaDefs.Parameter( "METADATA" );
-
-					BkInst.Title = MetaParam.GetValue( "Title" );
-					BkInst.Info.Author = MetaParam.GetValue( "Author" );
-					BkInst.Info.Press = MetaParam.GetValue( "Press" );
-					BkInst.Info.LastUpdateDate = MetaParam.GetValue( "LastUpdateDate" );
-					BkInst.Info.TotalHitCount = MetaParam.GetValue( "TotalHitCount" );
-					BkInst.Info.DailyHitCount = MetaParam.GetValue( "TodayHitCount" );
-					BkInst.Info.PushCount = MetaParam.GetValue( "PushCount" );
-					BkInst.Info.FavCount = MetaParam.GetValue( "FavCount" );
-					BkInst.Info.Length = MetaParam.GetValue( "Length" );
-					BkInst.Info.LatestSection = MetaParam.GetValue( "LatestSection" );
-					BkInst.Info.LongDescription = MetaParam.GetValue( "Intro" );
-
-					Entry = BkInst.Entry;
-					await Shared.BooksDb.LoadCollection( Entry, x => x.Volumes, x => x.Index );
-					Entry.Volumes.Clear();
-
-					XRegistry TOCDefs = new XRegistry( "<metadata />", SRoot + "/" + "toc.txt" );
-
-					int vi = 0;
-					XParameter VolParam = TOCDefs.Parameter( "VolInst" + vi );
-					while ( VolParam != null )
-					{
-						Volume Vol = new Volume()
-						{
-							Book = Entry,
-							Title = VolParam.GetValue( "Title" ),
-							Index = VolParam.GetSaveInt( "Index" ),
-							Chapters = new List<Chapter>()
-						};
-
-						Vol.Meta[ "ProcId" ] = VolParam.GetValue( "ProcId" );
-
-						XParameter PParam = VolParam.Parameter( "0" );
-						for ( int p = 1; PParam != null; p++ )
-						{
-							Vol.Meta[ "P" + PParam.Id ] = PParam.GetValue( "Value" );
-							PParam = VolParam.Parameter( p.ToString() );
-						}
-
-						string MVolHash = Utils.Md5( Vol.Title );
-
-						int ei = 0;
-						XParameter ChParam = VolParam.Parameter( "EpInst" + ei );
-						while ( ChParam != null )
-						{
-							Chapter Ch = new Chapter()
-							{
-								Book = Entry,
-								Volume = Vol,
-								Title = ChParam.GetValue( "Title" ),
-								Index = ChParam.GetSaveInt( "Index" )
-							};
-
-							string MChHash = Utils.Md5( Ch.Title );
-
-							PParam = ChParam.Parameter( "0" );
-							for ( int p = 1; PParam != null; p++ )
-							{
-								Ch.Meta[ "P" + PParam.Id ] = PParam.GetValue( "Value" );
-								PParam = ChParam.Parameter( p.ToString() );
-							}
-
-							Vol.Chapters.Add( Ch );
-
-							string ChLocation = SRoot + MVolHash + "/" + MChHash + ".txt";
-							if ( Shared.Storage.FileExists( ChLocation ) )
-							{
-								ChapterContent ChCont = new ChapterContent()
-								{
-									Chapter = Ch,
-									Text = Shared.Storage.GetString( ChLocation )
-								};
-
-								Shared.BooksDb.ChapterContents.Add( ChCont );
-							}
-
-							ChParam = VolParam.Parameter( "EpInst" + ( ++ei ) );
-						}
-
-						Entry.Volumes.Add( Vol );
-
-						VolParam = TOCDefs.Parameter( "VolInst" + ( ++vi ) );
-					}
-
-					SpiderBook SBk = await SpiderBook.CreateSAsync( AppKeys.ZLOCAL, Id, MetaDefs.Parameter( "Procedures" ) );
-					SBk.PSettings.Save();
+					if ( Entry != null )
+						Entries.Add( Entry );
 				}
-
-				if ( Entry != null )
-				{
-					Entries.Add( Entry );
-				}
+				MesgR( "Purging files ..." + SRoot );
+				Shared.Storage.PurgeContents( SRoot, true );
 			} );
 
 			MesgR( "Saving records" );
 			Shared.BooksDb.SaveBooks( Entries.ToArray() );
 		}
 
-		private async Task M0003_Books_TypeL() { }
-
-		private async Task M0004_Books_TypeW()
+		private async Task M0003_Books_TypeW()
 		{
 			if ( !X.Exists )
 				return;
@@ -307,6 +223,92 @@ namespace wenku10.Pages.Settings.Migrations
 
 			Mesg( "Purging Volume Root" );
 			Shared.Storage.PurgeContents( VRoot, true );
+		}
+
+		private async Task M0004_Books_TypeL()
+		{
+			string LRoot = "shared/transfers/LVolumes/";
+
+			string[] Ids = Shared.Storage.ListDirs( LRoot );
+
+			int l = Ids.Length;
+			List<Book> Entries = new List<Book>();
+			await Ids.ExecEach( async ( Id, i ) =>
+			{
+				MesgR( string.Format( "Processing ... ( {1} / {2} ): {0}", Id, i + 1, l ) );
+
+				Book Entry = null;
+				if ( int.TryParse( Id, out int k ) && X.Exists )
+				{
+					BookItem Item = X.Instance<BookItem>( XProto.BookItemEx, Id );
+					Entry = Item.Entry;
+					Entry.Type = Entry.Type | BookType.L;
+				}
+				else
+				{
+					BookItem Item = new LocalTextDocument( Id );
+					Entry = Item.Entry;
+				}
+
+				await Shared.BooksDb.LoadCollection( Entry, x => x.Volumes, x => x.Index );
+				Entry.Volumes.Clear();
+
+				string BRoot = LRoot + Id + "/";
+				string MetaLoc = BRoot + "METADATA.xml";
+
+				XRegistry XMeta = new XRegistry( "<Meta />", MetaLoc );
+
+				XParameter[] VolDefs = XMeta.Parameters( "vid" );
+
+				VolDefs.ExecEach( ( VolDef, vi ) =>
+				{
+					Volume Vol = new Volume()
+					{
+						Book = Entry,
+						Title = VolDef.GetValue( "name" ),
+						Chapters = new List<Chapter>(),
+						Index = vi
+					};
+
+					XRegistry ChReg = new XRegistry( "<ch />", BRoot + VolDef.Id + ".vol" );
+					XParameter[] ChDefs = ChReg.Parameters( "cid" );
+
+					ChDefs.ExecEach( ( ChDef, ei ) =>
+					{
+						Chapter Ch = new Chapter()
+						{
+							Book = Entry,
+							Volume = Vol,
+							Title = ChDef.GetValue( "name" ),
+							Index = ei
+						};
+
+						string ChLocation = BRoot + VolDef.Id + "/" + ChDef.Id + ".txt";
+						if ( Shared.Storage.FileExists( ChLocation ) )
+						{
+							ChapterContent ChCont = new ChapterContent()
+							{
+								Chapter = Ch,
+								Text = Shared.Storage.GetString( ChLocation )
+							};
+
+							Shared.BooksDb.ChapterContents.Add( ChCont );
+						}
+
+						Vol.Chapters.Add( Ch );
+					} );
+
+					Entry.Volumes.Add( Vol );
+				} );
+
+				Entries.Add( Entry );
+			} );
+
+			MesgR( "Saving records" );
+			Shared.BooksDb.SaveBooks( Entries.ToArray() );
+
+			Mesg( "Purging Volume Root" );
+			Shared.Storage.PurgeContents( LRoot, true );
 		}
 
 		private void M0005_ReadingHistory()
@@ -390,6 +392,104 @@ namespace wenku10.Pages.Settings.Migrations
 				OEntry.Type = Entry.Type;
 				OEntry.Value = Entry.Value;
 			}
+		}
+
+		private async Task<Book> MigrateBookSpider( string SRoot, string ZoneId, string ZItemId )
+		{
+			if ( !Shared.Storage.FileExists( SRoot + "METADATA.xml" ) )
+				return null;
+
+			XRegistry MetaDefs = new XRegistry( "<metadata />", SRoot + "METADATA.xml" );
+			XParameter MetaParam = MetaDefs.Parameter( "METADATA" );
+
+			BookInstruction BkInst = new BookInstruction( ZoneId, ZItemId );
+			BkInst.Title = MetaParam.GetValue( "Title" );
+			BkInst.Info.Author = MetaParam.GetValue( "Author" );
+			BkInst.Info.Press = MetaParam.GetValue( "Press" );
+			BkInst.Info.LastUpdateDate = MetaParam.GetValue( "LastUpdateDate" );
+			BkInst.Info.TotalHitCount = MetaParam.GetValue( "TotalHitCount" );
+			BkInst.Info.DailyHitCount = MetaParam.GetValue( "TodayHitCount" );
+			BkInst.Info.PushCount = MetaParam.GetValue( "PushCount" );
+			BkInst.Info.FavCount = MetaParam.GetValue( "FavCount" );
+			BkInst.Info.Length = MetaParam.GetValue( "Length" );
+			BkInst.Info.LatestSection = MetaParam.GetValue( "LatestSection" );
+			BkInst.Info.LongDescription = MetaParam.GetValue( "Intro" );
+
+			Book Entry = BkInst.Entry;
+			await Shared.BooksDb.LoadCollection( Entry, x => x.Volumes, x => x.Index );
+			Entry.Volumes.Clear();
+
+			XRegistry TOCDefs = new XRegistry( "<metadata />", SRoot + "/" + "toc.txt" );
+
+			int vi = 0;
+			XParameter VolParam = TOCDefs.Parameter( "VolInst" + vi );
+			while ( VolParam != null )
+			{
+				Volume Vol = new Volume()
+				{
+					Book = Entry,
+					Title = VolParam.GetValue( "Title" ),
+					Index = VolParam.GetSaveInt( "Index" ),
+					Chapters = new List<Chapter>()
+				};
+
+				Vol.Meta[ "ProcId" ] = VolParam.GetValue( "ProcId" );
+
+				XParameter PParam = VolParam.Parameter( "0" );
+				for ( int p = 1; PParam != null; p++ )
+				{
+					Vol.Meta[ "P" + PParam.Id ] = PParam.GetValue( "Value" );
+					PParam = VolParam.Parameter( p.ToString() );
+				}
+
+				string MVolHash = Utils.Md5( Vol.Title );
+
+				int ei = 0;
+				XParameter ChParam = VolParam.Parameter( "EpInst" + ei );
+				while ( ChParam != null )
+				{
+					Chapter Ch = new Chapter()
+					{
+						Book = Entry,
+						Volume = Vol,
+						Title = ChParam.GetValue( "Title" ),
+						Index = ChParam.GetSaveInt( "Index" )
+					};
+
+					string MChHash = Utils.Md5( Ch.Title );
+
+					PParam = ChParam.Parameter( "0" );
+					for ( int p = 1; PParam != null; p++ )
+					{
+						Ch.Meta[ "P" + PParam.Id ] = PParam.GetValue( "Value" );
+						PParam = ChParam.Parameter( p.ToString() );
+					}
+
+					Vol.Chapters.Add( Ch );
+
+					string ChLocation = SRoot + MVolHash + "/" + MChHash + ".txt";
+					if ( Shared.Storage.FileExists( ChLocation ) )
+					{
+						ChapterContent ChCont = new ChapterContent()
+						{
+							Chapter = Ch,
+							Text = Shared.Storage.GetString( ChLocation )
+						};
+
+						Shared.BooksDb.ChapterContents.Add( ChCont );
+					}
+
+					ChParam = VolParam.Parameter( "EpInst" + ( ++ei ) );
+				}
+
+				Entry.Volumes.Add( Vol );
+
+				VolParam = TOCDefs.Parameter( "VolInst" + ( ++vi ) );
+			}
+
+			SpiderBook SBk = await SpiderBook.CreateSAsync( ZoneId, ZItemId, MetaDefs.Parameter( "Procedures" ) );
+			SBk.PSettings.Save();
+			return Entry;
 		}
 	}
 }
