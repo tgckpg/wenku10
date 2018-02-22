@@ -120,9 +120,6 @@
   <data name="AccessTokens.Text" xml:space="preserve">
     <value>權杖</value>
   </data>
-  <data name="AutoUpdate.Text" xml:space="preserve">
-    <value>自動加載</value>
-  </data>
   <data name="Copy.Text" xml:space="preserve">
     <value>複製</value>
   </data>
@@ -131,9 +128,6 @@
   </data>
   <data name="DirectView.Text" xml:space="preserve">
     <value>檢視原始檔</value>
-  </data>
-  <data name="DisAutomation.Text" xml:space="preserve">
-    <value>停用自動加載</value>
   </data>
   <data name="Edit.Text" xml:space="preserve">
     <value>編輯</value>

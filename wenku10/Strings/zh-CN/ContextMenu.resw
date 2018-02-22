@@ -120,9 +120,6 @@
   <data name="AccessTokens.Text" xml:space="preserve">
     <value>令牌</value>
   </data>
-  <data name="AutoUpdate.Text" xml:space="preserve">
-    <value>自动加载</value>
-  </data>
   <data name="Copy.Text" xml:space="preserve">
     <value>拷貝</value>
   </data>
@@ -131,9 +128,6 @@
   </data>
   <data name="DirectView.Text" xml:space="preserve">
     <value>检视原始档</value>
-  </data>
-  <data name="DisAutomation.Text" xml:space="preserve">
-    <value>停用自动加载</value>
   </data>
   <data name="Edit.Text" xml:space="preserve">
     <value>更改</value>

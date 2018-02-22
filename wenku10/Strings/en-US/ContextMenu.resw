@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AutoUpdate.Text" xml:space="preserve">
-    <value>Auto Update</value>
-  </data>
   <data name="Copy.Text" xml:space="preserve">
     <value>Copy</value>
   </data>
@@ -128,9 +125,6 @@
   </data>
   <data name="DirectView.Text" xml:space="preserve">
     <value>View source</value>
-  </data>
-  <data name="DisAutomation.Text" xml:space="preserve">
-    <value>No auto update</value>
   </data>
   <data name="Edit.Text" xml:space="preserve">
     <value>Edit</value>

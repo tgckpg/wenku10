@@ -1,61 +1,17 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Messaging;
 
 namespace GR.Model.Loaders
 {
 	using Book;
 	using Database.Models;
-	using Ext;
 
-	sealed class AutoCache : ActiveData, IAutoCache
+	sealed class AutoCache
 	{
-		private const int AutoLimit = 2;
-		private static int CurrentCount = 1;
-
-		BookItem ThisBook;
-		Action<BookItem> OnComplete;
-
-		private string _StatusText;
-		public string StatusText
-		{
-			get => _StatusText;
-			private set
-			{
-				_StatusText = value;
-				NotifyChanged( "StatusText" );
-			}
-		}
-
-		public AutoCache( BookItem b, Action<BookItem> Handler )
-		{
-			ThisBook = b;
-			OnComplete = Handler;
-
-			StatusText = "Ready";
-			if ( CurrentCount < AutoLimit )
-			{
-				new VolumeLoader( LoadAllVolumes ).Load( b );
-			}
-		}
-
-		private async void LoadAllVolumes( BookItem b )
-		{
-			foreach( Volume Vol in b.GetVolumes() )
-			{
-				foreach ( Chapter Ch in Vol.Chapters )
-				{
-					StatusText = Vol.Title + "[" + Ch.Title + "]";
-					TaskCompletionSource<bool> ChLoaded = new TaskCompletionSource<bool>();
-					new ChapterLoader( b, x => { ChLoaded.SetResult( true ); } ).Load( Ch );
-					await ChLoaded.Task;
-				}
-			}
-			OnComplete( b );
-		}
+		private static List<int> ActiveLoaders = new List<int>();
 
 		internal static void DownloadVolume( BookItem Book, Volume Vol )
 		{
@@ -64,6 +20,12 @@ namespace GR.Model.Loaders
 
 		internal static async Task DownloadVolumeAsync( BookItem Book, Volume Vol )
 		{
+			lock ( ActiveLoaders )
+			{
+				if ( ActiveLoaders.Contains( Vol.Id ) ) return;
+				ActiveLoaders.Add( Vol.Id );
+			}
+
 			foreach ( Chapter C in Vol.Chapters )
 			{
 				TaskCompletionSource<bool> ChLoaded = new TaskCompletionSource<bool>();
@@ -73,6 +35,8 @@ namespace GR.Model.Loaders
 					ChapterVModel.ChapterLoaded.Deliver( new Message( typeof( AutoCache ), null, C ) );
 				}
 			}
+
+			ActiveLoaders.Remove( Vol.Id );
 		}
 
 	}
