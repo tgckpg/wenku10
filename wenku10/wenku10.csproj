@@ -199,6 +199,9 @@
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\Migrations\M0000.xaml.cs">
+      <DependentUpon>M0000.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TOCPageBase.cs" />
     <Compile Include="Pages\TOCViewHorz.xaml.cs">
       <DependentUpon>TOCViewHorz.xaml</DependentUpon>
@@ -446,6 +449,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Migrations\M0000.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

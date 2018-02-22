@@ -44,11 +44,10 @@ namespace wenku10.Pages.Settings.Data
 				+ ": " + await Task.Run( () => global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
 		}
 
-		private async void CalculateTextSize()
+		private void CalculateTextSize()
 		{
 			StringResources stx = new StringResources( "Settings" );
-			TextContentSize.Text = stx.Text( "Data_CacheUsed" )
-				+ ": " + await Task.Run( () => global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.GetStaticContentsUsage() ) );
+			TextContentSize.Text = stx.Text( "Data_CacheUsed" ) + "NotImplemented";
 		}
 
 		private void Button_Click_1( object sender, RoutedEventArgs e )
@@ -59,8 +58,6 @@ namespace wenku10.Pages.Settings.Data
 
 		private void Button_Click_2( object sender, RoutedEventArgs e )
 		{
-			Shared.Storage.CLEAR_INTRO();
-			Shared.Storage.CLEAR_VOLUME();
 			SetTemplate();
 		}
 

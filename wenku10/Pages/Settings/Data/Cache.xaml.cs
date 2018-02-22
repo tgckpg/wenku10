@@ -33,13 +33,12 @@ namespace wenku10.Pages.Settings.Data
 		private void SetTemplate()
 		{
 			StringResources stx = new StringResources( "Settings" );
-			CacheLimit.Text = stx.Text( "Data_CacheUsed" )
-				+ " " + global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.CacheSize() );
+			CacheLimit.Text = stx.Text( "Data_CacheUsed" ) + "NotImplementedYet";
+			// + " " + global::GR.GSystem.Utils.AutoByteUnit();
 		}
 
 		private void Button_Click_1( object sender, RoutedEventArgs e )
 		{
-			Shared.Storage.CLEAR_CACHE();
 			SetTemplate();
 		}
 

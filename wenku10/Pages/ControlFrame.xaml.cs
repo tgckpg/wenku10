@@ -48,15 +48,12 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		private async void SetTemplate()
+		private void SetTemplate()
 		{
 			BackStack = new global::GR.GSystem.BackStackManager();
 
 			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
-
-			GR.Database.ContextManager.Migrate();
-			await GR.Migrations.MigrateGR.Start();
 
 			ApplyControlSet();
 		}
