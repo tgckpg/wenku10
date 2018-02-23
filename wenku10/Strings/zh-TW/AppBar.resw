@@ -255,4 +255,7 @@
   <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
     <value>移除記錄</value>
   </data>
+  <data name="RebuildIndex.Text" xml:space="preserve">
+    <value>重建索引</value>
+  </data>
 </root>

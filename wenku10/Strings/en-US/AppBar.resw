@@ -255,4 +255,7 @@
   <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
     <value>Remove missing tiles</value>
   </data>
+  <data name="RebuildIndex.Text" xml:space="preserve">
+    <value>Rebuild Index</value>
+  </data>
 </root>

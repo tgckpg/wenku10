@@ -300,12 +300,8 @@ namespace wenku10.Pages.Settings.Migrations
 						string ChLocation = BRoot + VolDef.Id + "/" + ChDef.Id + ".txt";
 						if ( Shared.Storage.FileExists( ChLocation ) )
 						{
-							ChapterContent ChCont = new ChapterContent()
-							{
-								Chapter = Ch,
-								Text = Shared.Storage.GetString( ChLocation )
-							};
-
+							ChapterContent ChCont = new ChapterContent() { Chapter = Ch, };
+							ChCont.Data.BytesValue = Shared.Storage.GetBytes( ChLocation );
 							Shared.BooksDb.ChapterContents.Add( ChCont );
 						}
 
@@ -508,12 +504,8 @@ namespace wenku10.Pages.Settings.Migrations
 					string ChLocation = SRoot + MVolHash + "/" + MChHash + ".txt";
 					if ( Shared.Storage.FileExists( ChLocation ) )
 					{
-						ChapterContent ChCont = new ChapterContent()
-						{
-							Chapter = Ch,
-							Text = Shared.Storage.GetString( ChLocation )
-						};
-
+						ChapterContent ChCont = new ChapterContent() { Chapter = Ch, };
+						ChCont.Data.BytesValue = Shared.Storage.GetBytes( ChLocation );
 						Shared.BooksDb.ChapterContents.Add( ChCont );
 					}
 

@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
     <Compile Include="GR\DataSources\FTSDisplayData.cs" />
+    <Compile Include="GR\DataSources\FTSViewSource.cs" />
     <Compile Include="GR\GStrings\ColumnNameResolver.cs" />
     <Compile Include="GR\DataSources\BookDisplayVS.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
+    <Compile Include="GR\PageExtensions\FTSDataPageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
     <Compile Include="GR\PageExtensions\TextDocPageExt.cs" />
     <Compile Include="GR\PageExtensions\ZSMPageExt.cs" />

@@ -214,4 +214,7 @@
   <data name="Zones.Text" xml:space="preserve">
     <value>區域</value>
   </data>
+  <data name="FullTextSearch.Text" xml:space="preserve">
+    <value>全文搜尋</value>
+  </data>
 </root>
