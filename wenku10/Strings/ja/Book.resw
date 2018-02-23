@@ -120,6 +120,9 @@
   <data name="Author.Text" xml:space="preserve">
     <value>著者</value>
   </data>
+  <data name="Chapter.Text" xml:space="preserve">
+    <value>章</value>
+  </data>
   <data name="ChapterMapping.Text" xml:space="preserve">
     <value>チャプターマッピング</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="TotalHitCount.Text" xml:space="preserve">
     <value>合計ヒット数</value>
+  </data>
+  <data name="Volume.Text" xml:space="preserve">
+    <value>巻</value>
   </data>
   <data name="VolumeMapping.Text" xml:space="preserve">
     <value>ボリュームマッピング</value>

@@ -240,4 +240,7 @@
   <data name="ConfirmDelete" xml:space="preserve">
     <value>{0} を削除しますか？</value>
   </data>
+  <data name="ConfirmBuildFTS" xml:space="preserve">
+    <value>全文検索の索引には、追加容量を使用する必要があります（推定値 {0} ）。 索引を作成しますか？</value>
+  </data>
 </root>

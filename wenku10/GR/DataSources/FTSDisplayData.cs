@@ -13,7 +13,9 @@ using Net.Astropenguin.Loaders;
 namespace GR.DataSources
 {
 	using Data;
+	using Database.Contexts;
 	using Database.Models;
+	using GStrings;
 	using Model.Book;
 	using Resources;
 
@@ -37,12 +39,17 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "EpTitle", Width = 100 },
 		};
 
-		public override string ColumnName( IGRCell CellProp ) => CellProp.Property.Name;
+		public override string ColumnName( IGRCell CellProp ) => ColumnNameResolver.FTSColumns( CellProp.Property.Name );
+
+		public bool IsBuilt => Database.ContextManager.ContextExists( typeof( FTSDataContext ) );
 
 		public override void Reload()
 		{
 			if ( string.IsNullOrEmpty( Search ) )
 				throw new EmptySearchQueryException();
+
+			if ( !IsBuilt )
+				return;
 
 			lock ( this )
 			{
@@ -53,7 +60,7 @@ namespace GR.DataSources
 			StringResources stx = new StringResBg( "LoadingMessage" );
 			Message = stx.Str( "ProgressIndicator_Message" );
 
-			using ( var FTSD = new Database.Contexts.FTSDataContext() )
+			using ( var FTSD = new FTSDataContext() )
 			{
 				MatchTable.Items = FTSD.Search( Search ).Select( x => new GRRow<FTSResult>( MatchTable ) { Source = new FTSResult( x.ChapterId, x.Text ) } ).ToArray();
 			}
@@ -76,7 +83,7 @@ namespace GR.DataSources
 
 			await Task.Run( () =>
 			{
-				using ( var FTSD = new Database.Contexts.FTSDataContext() )
+				using ( var FTSD = new FTSDataContext() )
 				{
 					FTSD.FTSChapters.AddRange(
 						Shared.BooksDb.ChapterContents

@@ -16,7 +16,7 @@ namespace GR.DataSources
 		public PageExtension Extension => _Extension ?? ( _Extension = new FTSDataPageExt( this ) );
 
 		public FTSDisplayData FTSData => ( FTSDisplayData ) DataSource;
-		public override Action<IGRRow> ItemAction => ( ( BookDisplayPageExt ) Extension ).OpenItem;
+		public override Action<IGRRow> ItemAction => ( ( FTSDataPageExt ) Extension ).OpenItem;
 
 		public FTSViewSource( string Name, Type DataType )
 			: base( Name )

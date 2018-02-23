@@ -240,4 +240,7 @@
   <data name="ConfirmDelete" xml:space="preserve">
     <value> Are you sure you want to delete {0}?</value>
   </data>
+  <data name="ConfirmBuildFTS" xml:space="preserve">
+    <value>Additional space must be used for FTS index ( estimated {0} ). Build this index?</value>
+  </data>
 </root>

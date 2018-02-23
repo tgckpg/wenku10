@@ -120,6 +120,9 @@
   <data name="Author.Text" xml:space="preserve">
     <value>Author</value>
   </data>
+  <data name="Chapter.Text" xml:space="preserve">
+    <value>Chapter</value>
+  </data>
   <data name="ChapterMapping.Text" xml:space="preserve">
     <value>Chapter Mapping</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="TotalHitCount.Text" xml:space="preserve">
     <value>Total Hits</value>
+  </data>
+  <data name="Volume.Text" xml:space="preserve">
+    <value>Volume</value>
   </data>
   <data name="VolumeMapping.Text" xml:space="preserve">
     <value>Volume Mapping</value>

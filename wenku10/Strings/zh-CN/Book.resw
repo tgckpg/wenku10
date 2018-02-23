@@ -120,6 +120,9 @@
   <data name="Author.Text" xml:space="preserve">
     <value>作者</value>
   </data>
+  <data name="Chapter.Text" xml:space="preserve">
+    <value>章</value>
+  </data>
   <data name="ChapterMapping.Text" xml:space="preserve">
     <value>章节对应方式</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="TotalHitCount.Text" xml:space="preserve">
     <value>总点击</value>
+  </data>
+  <data name="Volume.Text" xml:space="preserve">
+    <value>卷</value>
   </data>
   <data name="VolumeMapping.Text" xml:space="preserve">
     <value>卷对应方式</value>

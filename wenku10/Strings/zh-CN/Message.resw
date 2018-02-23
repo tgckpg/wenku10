@@ -240,4 +240,7 @@
   <data name="ConfirmDelete" xml:space="preserve">
     <value>您确定想要删除 {0} 吗？</value>
   </data>
+  <data name="ConfirmBuildFTS" xml:space="preserve">
+    <value>全文搜索需要使用额外的容量建立索引（估计为 {0} ），要建立索引吗？</value>
+  </data>
 </root>

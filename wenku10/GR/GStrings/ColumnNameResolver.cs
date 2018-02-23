@@ -27,5 +27,23 @@ namespace GR.GStrings
 
 			return Name;
 		}
+
+		public static string FTSColumns( string Name )
+		{
+			StringResources stx = new StringResBg( "Book" );
+			switch ( Name )
+			{
+				case "Title":
+					return stx.Text( Name );
+				case "VolTitle":
+					return stx.Text( "Volume" );
+				case "EpTitle":
+					return stx.Text( "Chapter" );
+				case "Result":
+					return stx.Text( "Content" );
+			}
+
+			return Name;
+		}
 	}
 }
