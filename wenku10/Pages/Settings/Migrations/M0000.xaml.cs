@@ -240,7 +240,7 @@ namespace wenku10.Pages.Settings.Migrations
 		{
 			string LRoot = "shared/transfers/LVolumes/";
 
-			if ( !Shared.Storage.FileExists( LRoot ) )
+			if ( !Shared.Storage.DirExist( LRoot ) )
 				return;
 
 			string[] Ids = Shared.Storage.ListDirs( LRoot );
@@ -284,6 +284,7 @@ namespace wenku10.Pages.Settings.Migrations
 						Index = vi
 					};
 
+					Vol.Meta[ AppKeys.GLOBAL_VID ] = VolDef.Id;
 					XRegistry ChReg = new XRegistry( "<ch />", BRoot + VolDef.Id + ".vol" );
 					XParameter[] ChDefs = ChReg.Parameters( "cid" );
 
@@ -296,6 +297,8 @@ namespace wenku10.Pages.Settings.Migrations
 							Title = ChDef.GetValue( "name" ),
 							Index = ei
 						};
+
+						Ch.Meta[ AppKeys.GLOBAL_CID ] = ChDef.Id;
 
 						string ChLocation = BRoot + VolDef.Id + "/" + ChDef.Id + ".txt";
 						if ( Shared.Storage.FileExists( ChLocation ) )
