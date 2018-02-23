@@ -92,26 +92,37 @@ namespace wenku10.Pages.Settings.Migrations
 			Mesg( "Backing up your files, this might take a while." );
 			// await Task.Run( () => ZipFile.CreateFromDirectory( ApplicationData.Current.LocalFolder.Path, ZPath ) );
 
-			Mesg( "Creating Database Contexts" );
-			GR.Database.ContextManager.Migrate();
+			try
+			{
+				Mesg( "Creating Database Contexts" );
+				GR.Database.ContextManager.Migrate();
 
-			Mesg( "Theme - ContentReader" );
-			await M0001_ContentReader_Theme();
+				Mesg( "Theme - ContentReader" );
+				await M0001_ContentReader_Theme();
 
-			Mesg( "Books - Type S" );
-			await M0002_Books_TypeS();
+				Mesg( "Books - Type S" );
+				await M0002_Books_TypeS();
 
-			Mesg( "Books - Type W" );
-			await M0003_Books_TypeW();
+				Mesg( "Books - Type W" );
+				await M0003_Books_TypeW();
 
-			Mesg( "Books - Type L" );
-			await M0004_Books_TypeL();
+				Mesg( "Books - Type L" );
+				await M0004_Books_TypeL();
 
-			Mesg( "Reading History" );
-			M0005_ReadingHistory();
+				Mesg( "Reading History" );
+				M0005_ReadingHistory();
 
-			Mesg( "Storage - Favs" );
-			await M0006_LocalBookStorage();
+				Mesg( "Storage - Favs" );
+				await M0006_LocalBookStorage();
+
+				Mesg( "Migration Complete" );
+			}
+			catch( Exception ex )
+			{
+				Mesg( ex.Message );
+			}
+
+			Properties.MIGRATION_0000 = true;
 		}
 
 		private Task M0001_ContentReader_Theme()
@@ -229,6 +240,9 @@ namespace wenku10.Pages.Settings.Migrations
 		{
 			string LRoot = "shared/transfers/LVolumes/";
 
+			if ( !Shared.Storage.FileExists( LRoot ) )
+				return;
+
 			string[] Ids = Shared.Storage.ListDirs( LRoot );
 
 			int l = Ids.Length;
@@ -342,18 +356,38 @@ namespace wenku10.Pages.Settings.Migrations
 			await BkStore.SyncSettings();
 
 			List<Book> Books = new List<Book>();
-			foreach ( FavItem Item in BkStore.GetList<FavItem>() )
+			foreach ( string[] Item in BkStore.GetList() )
 			{
-				BookItem Bk = X.Instance<BookItem>( XProto.BookItemEx, Item.Payload );
-				Bk.Entry.Fav = true;
-				Bk.Title = Item.Name;
+				string Id = Item[ 0 ];
 
-				Bk.Info.LatestSection = Item.Desc.Replace( BookItem.PropertyName( PropType.LatestSection ) + ": ", "" );
-				Bk.Info.LastUpdateDate = Item.Desc2;
+				BookItem Bk = null;
+				if( int.TryParse( Id, out int NOP ) )
+				{
+					Bk = X.Instance<BookItem>( XProto.BookItemEx, Id );
+				}
+				else
+				{
+					if( Id[0] == 'Z' )
+					{
+						string[] sId = Id.Split( '/' );
+						Bk = new BookInstruction( sId[ 0 ].Substring( 1 ), sId[ 1 ] );
+					}
+					else
+					{
+						Bk = new BookInstruction( AppKeys.ZLOCAL, Id );
+					}
+				}
+
+				Bk.Entry.Fav = true;
+				Bk.Title = Item[ 1 ];
+
+				Bk.Info.LastUpdateDate = Item[ 2 ];
+				Bk.Info.LatestSection = Item[ 3 ].Replace( BookItem.PropertyName( PropType.LatestSection ) + ": ", "" );
 
 				Books.Add( Bk.Entry );
 			}
 
+			MesgR( "Saving records" );
 			Shared.BooksDb.SaveBooks( Books );
 		}
 
@@ -434,6 +468,7 @@ namespace wenku10.Pages.Settings.Migrations
 				};
 
 				Vol.Meta[ "ProcId" ] = VolParam.GetValue( "ProcId" );
+				Vol.Meta[ AppKeys.GLOBAL_VID ] = Utils.Md5( Vol.Title );
 
 				XParameter PParam = VolParam.Parameter( "0" );
 				for ( int p = 1; PParam != null; p++ )
@@ -455,6 +490,9 @@ namespace wenku10.Pages.Settings.Migrations
 						Title = ChParam.GetValue( "Title" ),
 						Index = ChParam.GetSaveInt( "Index" )
 					};
+
+					Ch.Meta[ "ProcId" ] = ChParam.GetValue( "ProcId" );
+					Ch.Meta[ AppKeys.GLOBAL_CID ] = Utils.Md5( Ch.Title );
 
 					string MChHash = Utils.Md5( Ch.Title );
 

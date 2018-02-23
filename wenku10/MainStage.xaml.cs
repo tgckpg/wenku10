@@ -34,7 +34,7 @@ namespace wenku10
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			if ( !global::GR.Config.Properties.MIGRATION_0000 )
+			if ( !global::GR.Config.Properties.MIGRATION_0000 || !GR.Resources.Shared.Storage.FileExists( "books.db" ) )
 			{
 				RootFrame.Navigate( typeof( Pages.Settings.Migrations.M0000 ) );
 				return;

@@ -7,7 +7,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.Linq;
 
 namespace GR.Model.Section
 {
@@ -64,7 +63,7 @@ namespace GR.Model.Section
 
 		public void SetViewSource( CollectionViewSource ViewSource )
 		{
-			ViewSource.Source = Volumes.Remap( x => new ChapterGroup( x ) );
+			ViewSource.Source = Volumes.Select( x => new ChapterGroup( x ) );
 
 			VolumeCollections = ViewSource.View.CollectionGroups;
 			NotifyChanged( "VolumeCollections" );
@@ -91,12 +90,12 @@ namespace GR.Model.Section
 			NotifyChanged( "AnchorAvailable" );
 		}
 
-		internal class ChapterGroup : List<Chapter>
+		internal class ChapterGroup : List<ChapterVModel>
 		{
 			public Volume Vol { get; set; }
 
 			public ChapterGroup( Volume V )
-				: base( V.Chapters )
+				: base( V.Chapters.Select( x => new ChapterVModel( x ) ) )
 			{
 				Vol = V;
 			}

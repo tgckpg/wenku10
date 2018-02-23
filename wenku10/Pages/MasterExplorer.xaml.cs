@@ -117,6 +117,7 @@ namespace wenku10.Pages
 				Children = new TreeItem[]
 				{
 					new BookDisplayVS( stx.Text( "AllRecords" ), typeof( BookDisplayData ) ),
+					new BookDisplayVS( stx.Text( "FullTextSearch" ), typeof( FTSDisplayData ) ),
 					new BookSpiderVS( stx.Text( "BookSpider", "AppResources" ) ),
 					new TextDocVS( stx.Text( "LocalDocuments", "AppBar" ) ),
 				}
