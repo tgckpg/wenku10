@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Backup.Text" xml:space="preserve">
+    <value>備份</value>
+  </data>
+  <data name="BackupComplete.Text" xml:space="preserve">
+    <value>備份完成</value>
+  </data>
+  <data name="BooksType.Text" xml:space="preserve">
+    <value>書籍 - {0} 型</value>
+  </data>
   <data name="Complete.Text" xml:space="preserve">
     <value>完成</value>
+  </data>
+  <data name="CompressCache.Text" xml:space="preserve">
+    <value>壓縮緩存…</value>
+  </data>
+  <data name="CreatingDatabase.Text" xml:space="preserve">
+    <value>創建資料庫…</value>
+  </data>
+  <data name="DataBackup.Text" xml:space="preserve">
+    <value>正在備份您的檔案…</value>
   </data>
   <data name="EnableOneDrive.Text" xml:space="preserve">
     <value>利用 OneDrive 能支援自動同步書架、書籤、設定等功能，需要啟用 OneDrive 嗎？</value>
@@ -126,19 +144,61 @@
   <data name="EnableServerSelector.Text" xml:space="preserve">
     <value>分流器可以更快速穩定地載入資訊，需要啟用分流器嗎？</value>
   </data>
+  <data name="ExportBackup.Text" xml:space="preserve">
+    <value>匯出備份</value>
+  </data>
+  <data name="ExtractingFiles.Text" xml:space="preserve">
+    <value>提取文件…</value>
+  </data>
+  <data name="FavRecords.Text" xml:space="preserve">
+    <value>收藏記錄</value>
+  </data>
   <data name="Intro.Text" xml:space="preserve">
     <value>您好，看來這是你第一次啟動這個應用。接下來請回答幾個問題，以初始化設定。</value>
+  </data>
+  <data name="MightTakeAWhile.Text" xml:space="preserve">
+    <value>這可能需要一段時間…</value>
+  </data>
+  <data name="Migrate.Text" xml:space="preserve">
+    <value>遷移</value>
+  </data>
+  <data name="MigrateUseFile.Text" xml:space="preserve">
+    <value>使用備份進行遷移</value>
+  </data>
+  <data name="Migration.Text" xml:space="preserve">
+    <value>遷移</value>
+  </data>
+  <data name="MigrationAborted.Text" xml:space="preserve">
+    <value>遷移終止</value>
+  </data>
+  <data name="MigrationComplete.Text" xml:space="preserve">
+    <value>遷移完成</value>
   </data>
   <data name="Next.Text" xml:space="preserve">
     <value>下一步</value>
   </data>
+  <data name="NobackupWarning.Text" xml:space="preserve">
+    <value>如果您沒有備份，一旦遷移失敗，數據將會遺失。 要忽略這個警告進行遷移嗎？</value>
+  </data>
+  <data name="PleaseMigrate.Text" xml:space="preserve">
+    <value>應用這個版本使用之前，需要遷移</value>
+  </data>
   <data name="Prev.Text" xml:space="preserve">
     <value>上一步</value>
+  </data>
+  <data name="PurgingFiles.Text" xml:space="preserve">
+    <value>清除文件…</value>
+  </data>
+  <data name="SavingRecords.Text" xml:space="preserve">
+    <value>儲存記錄</value>
   </data>
   <data name="Thankyou.Text" xml:space="preserve">
     <value>謝謝您，應用需要重新啟動，設定將會在您下次啟動這個應用時生效，請按完成退出應用。</value>
   </data>
   <data name="Theme.Text" xml:space="preserve">
     <value>請選擇預設的主題</value>
+  </data>
+  <data name="WarnMigrateWithBackup.Text" xml:space="preserve">
+    <value>現有資料將被此備份取代。要繼續嗎？</value>
   </data>
 </root>

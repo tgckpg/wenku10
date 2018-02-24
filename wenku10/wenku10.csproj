@@ -144,6 +144,8 @@
     <Compile Include="GR\DataSources\ZSMDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
+    <Compile Include="GR\MigrationOps\MigrationBackup.cs" />
+    <Compile Include="GR\MigrationOps\NaiveObfustream.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
     <Compile Include="GR\PageExtensions\FTSDataPageExt.cs" />
@@ -869,6 +871,9 @@
       <Project>{cdd6f7c9-c06b-489e-95ff-d226aabb635f}</Project>
       <Name>Tasks</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GR\MigrationOps\M000\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

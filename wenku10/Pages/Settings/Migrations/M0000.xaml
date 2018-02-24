@@ -8,12 +8,23 @@
     mc:Ignorable="d">
 
     <Grid Background="Black">
-        <StackPanel Margin="10">
-            <TextBlock FontSize="29" Text="Migration" Foreground="White"/>
-            <TextBlock Foreground="Gray" Text="Please wait while we are migrating your data ..." TextWrapping="Wrap" />
+        <StackPanel Margin="10" VerticalAlignment="Top">
+            <TextBlock FontSize="29" x:Uid="/InitQuestions/Migration" Foreground="White"/>
+            <TextBlock Foreground="Gray" x:Uid="/InitQuestions/PlaseMigrate" TextWrapping="Wrap" />
+            <StackPanel x:Name="MigrateOps" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button Margin="5" x:Name="BackupBtn" Click="Backup_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
+                    <TextBlock x:Uid="/InitQuestions/Backup" />
+                </Button>
+                <Button Margin="5" x:Name="MigrateBtn" Click="Migrate_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
+                    <TextBlock x:Uid="/InitQuestions/Migrate" />
+                </Button>
+                <Button Margin="5" x:Name="MigrateAltBtn" Click="MigrateUseFile_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
+                    <TextBlock x:Uid="/InitQuestions/MigrateUseFile" />
+                </Button>
+            </StackPanel>
 
-            <TextBlock Margin="10" x:Name="ProgressText" Foreground="White" TextWrapping="Wrap"/>
+            <TextBlock Margin="10,10,10,0" x:Name="ProgressText" Foreground="White" TextWrapping="Wrap"/>
+            <TextBlock Margin="20,0,10,10" x:Name="RProgressText" Foreground="White" TextWrapping="Wrap"/>
         </StackPanel>
-
     </Grid>
 </Page>

@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -20,8 +19,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 
 using GR.Config;
 using GR.Database.Contexts;
@@ -31,10 +32,11 @@ using GR.GSystem;
 using GR.Storage;
 using GR.Model.Book.Spider;
 using GR.Model.ListItem;
-using GR.Model.Loaders;
 using GR.Model.Book;
 using GR.Resources;
 using GR.Settings;
+using GR.CompositeElement;
+using GR.MigrationOps;
 
 namespace wenku10.Pages.Settings.Migrations
 {
@@ -46,76 +48,165 @@ namespace wenku10.Pages.Settings.Migrations
 			SetTemplate();
 		}
 
+		MigrationBackup CurrBakOp = new MigrationBackup( "M000" );
+		DispatcherTimer DTimer;
+
 		private void SetTemplate()
 		{
-			var j = Task.Run( MBackup );
-		}
-
-		private string MesgLog0 = "";
-		private string MesgLog1 = "";
-
-		private void UpdateProgress()
-		{
-			var j = Dispatcher.RunIdleAsync( x => ProgressText.Text = MesgLog0 + MesgLog1 );
+			DTimer = new DispatcherTimer();
+			DTimer.Interval = TimeSpan.FromSeconds( 2 );
+			DTimer.Tick += DTimer_Tick;
 		}
 
 		private void Mesg( string Text )
 		{
-			MesgLog0 += Text + "\n";
-			MesgLog1 = "";
-			UpdateProgress();
+			var j = Dispatcher.RunIdleAsync( x => ProgressText.Text += "\n" + Text );
+			MesgR( "" );
 		}
 
 		private void MesgR( string Text )
 		{
-			MesgLog1 = Text;
-			UpdateProgress();
+			var j = Dispatcher.RunIdleAsync( x => RProgressText.Text = Text );
+		}
+
+		private void Purge( string Location )
+		{
+			MesgR( stx.Text( "PurgingFiles" ) + Location );
+			Shared.Storage.PurgeContents( Location, true );
+		}
+
+		StringResources stx = new StringResBg( "InitQuestions", "Message", "Settings", "NavigationTitles" );
+		public bool BackupSaved = false;
+
+		private void DTimer_Tick( object sender, object e )
+		{
+			MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{0}/{1}: {2}", Utils.AutoByteUnit( CurrBakOp.BytesCopied ), CurrBakOp.BytesTotal, CurrBakOp.CFName ) );
+		}
+
+		private async void Backup_Click( object sender, RoutedEventArgs e )
+		{
+			MigrateOps.IsHitTestVisible = false;
+			await Task.Run( MBackup );
+
+			BackupBtn.IsEnabled = !BackupSaved;
+			MigrateOps.IsHitTestVisible = true;
+		}
+
+		private async void Migrate_Click( object sender, RoutedEventArgs e )
+		{
+			MigrateOps.IsHitTestVisible = false;
+			MigrateOps.Visibility = Visibility.Collapsed;
+			if( await Task.Run( MMigrate ) )
+			{
+				MigrateOps.Visibility = Visibility.Visible;
+				MigrateOps.IsHitTestVisible = true;
+			}
+		}
+
+		private async void MigrateUseFile_Click( object sender, RoutedEventArgs e )
+		{
+			MigrateOps.IsHitTestVisible = false;
+			MigrateOps.Visibility = Visibility.Collapsed;
+			if( await Task.Run( MExtractBackup ) )
+			{
+				MigrateOps.Visibility = Visibility.Visible;
+				MigrateOps.IsHitTestVisible = true;
+			}
 		}
 
 		private async Task MBackup()
 		{
-			Mesg( "Removing Caches ..." );
-			Shared.Storage.PurgeContents( "Cache/", true );
-
-			string ZPath = "";
-			try
+			if ( CurrBakOp.ZBackup != null )
 			{
-				IStorageFile ZM000 = await ApplicationData.Current.TemporaryFolder.GetFileAsync( "M000.zip" );
-				ZPath = ZM000.Path;
-				await ZM000.DeleteAsync();
-			}
-			catch ( FileNotFoundException )
-			{
-				ZPath = Path.Combine( ApplicationData.Current.TemporaryFolder.Path, "M000.zip" );
+				goto SaveBackup;
 			}
 
-			Mesg( "Backing up your files, this might take a while." );
-			// await Task.Run( () => ZipFile.CreateFromDirectory( ApplicationData.Current.LocalFolder.Path, ZPath ) );
+			Mesg( stx.Text( "DataBackup" ) );
+			Worker.UIInvoke( DTimer.Start );
+			await CurrBakOp.Backup();
+			Worker.UIInvoke( DTimer.Stop );
+
+			SaveBackup:
+			Mesg( stx.Text( "ExportBackup" ) );
+
+			await Worker.RunUITaskAsync( async () =>
+			{
+				IStorageFile ISF = await AppStorage.SaveFileAsync( "GR Backup M000", new string[] { ".M000" }, "backup.M000" );
+				if ( ISF != null )
+				{
+					await CurrBakOp.ZBackup.MoveAndReplaceAsync( ISF );
+					Mesg( stx.Text( "BackupComplete" ) );
+					BackupSaved = true;
+				}
+			} );
+		}
+
+		private async Task<bool> MExtractBackup()
+		{
+			if ( !await CurrBakOp.PickRestoreFile() )
+				return true;
+
+			Mesg( stx.Text( "PurgingFiles" ) );
+			Shared.Storage.PurgeContents( "./", false );
+
+			Worker.UIInvoke( DTimer.Start );
+			Mesg( stx.Text( "ExtractingFiles" ) );
+			await CurrBakOp.Restore();
+			Worker.UIInvoke( DTimer.Stop );
+
+			BackupSaved = true;
+			return await MMigrate();
+		}
+
+		private async Task<bool> MMigrate()
+		{
+			if ( !BackupSaved )
+			{
+				bool ContinueWithoutBackup = false;
+
+				await Worker.RunUITaskAsync( () =>
+				{
+					return Popups.ShowDialog( UIAliases.CreateDialog(
+						stx.Text( "NoBackupWarning" )
+						, () => ContinueWithoutBackup = true
+						, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
+					) );
+				} );
+
+				if ( !ContinueWithoutBackup )
+				{
+					Mesg( stx.Text( "MigrationAborted" ) );
+					return true;
+				}
+			}
 
 			try
 			{
-				Mesg( "Creating Database Contexts" );
+				Mesg( stx.Text( "CreatingDatabase" ) );
 				GR.Database.ContextManager.Migrate();
 
-				Mesg( "Theme - ContentReader" );
+				Mesg( stx.Text( "CompressCache" ) );
+				await M0000_Caches();
+
+				Mesg( stx.Text( "Appearance_Theme", "Settings" ) );
 				await M0001_ContentReader_Theme();
 
-				Mesg( "Books - Type S" );
+				Mesg( string.Format( stx.Text( "BooksType" ), "S" ) );
 				await M0002_Books_TypeS();
 
-				Mesg( "Books - Type W" );
+				Mesg( string.Format( stx.Text( "BooksType" ), "W" ) );
 				await M0003_Books_TypeW();
 
-				Mesg( "Books - Type L" );
+				Mesg( string.Format( stx.Text( "BooksType" ), "L" ) );
 				await M0004_Books_TypeL();
 
-				Mesg( "Reading History" );
+				Mesg( stx.Text( "History", "NavigationTitles" ) );
 				M0005_ReadingHistory();
 
-				Mesg( "Storage - Favs" );
+				Mesg( stx.Text( "FavRecords" ) );
 				await M0006_LocalBookStorage();
 
-				Mesg( "Migration Complete" );
+				Mesg( stx.Text( "MigrationComplete" ) );
 			}
 			catch( Exception ex )
 			{
@@ -123,6 +214,21 @@ namespace wenku10.Pages.Settings.Migrations
 			}
 
 			Properties.MIGRATION_0000 = true;
+			return false;
+		}
+
+		private Task M0000_Caches()
+		{
+			string CRoot = "Cache/";
+
+			if ( !Shared.Storage.DirExist( CRoot ) )
+				return Task.Delay( 0 );
+
+			string[] Caches = Shared.Storage.ListFiles( CRoot );
+
+			Caches.ExecEach( x => Shared.ZCacheDb.Write( x, Shared.Storage.GetBytes( CRoot + x ) ) );
+
+			return Task.Run( () => Purge( CRoot ) );
 		}
 
 		private Task M0001_ContentReader_Theme()
@@ -164,37 +270,64 @@ namespace wenku10.Pages.Settings.Migrations
 			List<Book> Entries = new List<Book>();
 			int l = Dirs.Length;
 
-			await Dirs.Where( x => x != AppKeys.ZLOCAL ).ExecEach( async ( ZoneId, i ) =>
+			await Dirs.Where( x => x != AppKeys.ZLOCAL ).ExecEach( async ( ZZId, i ) =>
 			{
 				Book Entry = null;
-				string SRoot = SVolRoot + ZoneId + "/";
 
-				if ( ZoneId[ 0 ] == 'Z' )
+				string SRoot = SVolRoot + ZZId + "/";
+
+				if ( ZZId[ 0 ] == 'Z' )
 				{
+					// ZZId is ZoneId
+					string ZCoverRoot = FileLinks.ROOT_COVER + ZZId;
+					if ( Shared.Storage.DirExist( ZCoverRoot ) )
+						Shared.Storage.MoveDir( ZCoverRoot, FileLinks.ROOT_COVER + ZZId.Substring( 1 ) );
+
+					ZZId = ZZId.Substring( 1 );
+
 					string[] ZItemIds = Shared.Storage.ListDirs( SRoot );
 					int m = ZItemIds.Length;
+
 					await ZItemIds.ExecEach( async ( ZItemId, j ) =>
 					{
-						MesgR( string.Format( "Processing ( ZMode ) ... ( {1} / {2} ): {0}", ZItemId, j + 1, m ) );
+						MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{0}/{1} ( {3} )", ZItemId, j + 1, m, "ZMode" ) );
+						MoveCover( ZZId, ZZId, ZItemId );
+
 						string ZSRoot = SRoot + ZItemId + "/";
-						Entry = await MigrateBookSpider( ZSRoot, ZoneId.Substring( 1 ), ZItemId );
-						Entries.Add( Entry );
+
+						Entry = await MigrateBookSpider( ZSRoot, ZZId, ZItemId );
+						if( Entry != null )
+						{
+							Entries.Add( Entry );
+						}
 					} );
 				}
 				else
 				{
-					MesgR( string.Format( "Processing ( LMode ) ... ( {1} / {2} ): {0}", ZoneId, i + 1, l ) );
-					Entry = await MigrateBookSpider( SRoot, AppKeys.ZLOCAL, ZoneId );
+					// ZZId is ZItemId
+					MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{1}/{2} ( {0} )", ZZId, i + 1, l ) );
+					MoveCover( "", AppKeys.ZLOCAL, ZZId );
+
+					Entry = await MigrateBookSpider( SRoot, AppKeys.ZLOCAL, ZZId );
 
 					if ( Entry != null )
 						Entries.Add( Entry );
 				}
-				MesgR( "Purging files ..." + SRoot );
-				Shared.Storage.PurgeContents( SRoot, true );
+				Purge( SRoot );
 			} );
 
-			MesgR( "Saving records" );
+			MesgR( stx.Text( "SavingRecords" ) );
 			Shared.BooksDb.SaveBooks( Entries.ToArray() );
+		}
+
+		private void MoveCover( string OZoneId, string ZoneId, string ZItemId )
+		{
+			string CoverPath = FileLinks.ROOT_COVER + OZoneId + "/" + ZItemId + ".jpg";
+			if ( Shared.Storage.FileExists( CoverPath ) )
+			{
+				string NCoverPath = FileLinks.ROOT_COVER + ZoneId + "/" + ZItemId + ".cvr";
+				Shared.Storage.MoveFile( CoverPath, NCoverPath );
+			}
 		}
 
 		private async Task M0003_Books_TypeW()
@@ -214,7 +347,7 @@ namespace wenku10.Pages.Settings.Migrations
 
 			await Dirs.ExecEach( async ( Id, i ) =>
 			{
-				MesgR( string.Format( "Processing ... ( {1} / {2} ): {0}", Id, i + 1, l ) );
+				MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{1}/{2} ( {0} )", Id, i + 1, l ) );
 				BookItem Item = X.Instance<BookItem>( XProto.BookItemEx, Id );
 
 				if ( Shared.Storage.FileExists( IntroRoot + Id + ".txt" ) )
@@ -226,14 +359,11 @@ namespace wenku10.Pages.Settings.Migrations
 				Entries.Add( Item.Entry );
 			} );
 
-			MesgR( "Saving records" );
+			MesgR( stx.Text( "SavingRecords" ) );
 			Shared.BooksDb.SaveBooks( Entries.ToArray() );
 
-			Mesg( "Purging IntroRoot" );
-			Shared.Storage.PurgeContents( IntroRoot, true );
-
-			Mesg( "Purging Volume Root" );
-			Shared.Storage.PurgeContents( VRoot, true );
+			Purge( IntroRoot );
+			Purge( VRoot );
 		}
 
 		private async Task M0004_Books_TypeL()
@@ -249,7 +379,7 @@ namespace wenku10.Pages.Settings.Migrations
 			List<Book> Entries = new List<Book>();
 			await Ids.ExecEach( async ( Id, i ) =>
 			{
-				MesgR( string.Format( "Processing ... ( {1} / {2} ): {0}", Id, i + 1, l ) );
+				MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{1}/{2} ( {0} )", Id, i + 1, l ) );
 
 				Book Entry = null;
 				if ( int.TryParse( Id, out int k ) && X.Exists )
@@ -317,11 +447,10 @@ namespace wenku10.Pages.Settings.Migrations
 				Entries.Add( Entry );
 			} );
 
-			MesgR( "Saving records" );
+			MesgR( stx.Text( "SavingRecords" ) );
 			Shared.BooksDb.SaveBooks( Entries.ToArray() );
 
-			Mesg( "Purging Volume Root" );
-			Shared.Storage.PurgeContents( LRoot, true );
+			Purge( LRoot );
 		}
 
 		private void M0005_ReadingHistory()
@@ -386,10 +515,9 @@ namespace wenku10.Pages.Settings.Migrations
 				Books.Add( Bk.Entry );
 			}
 
-			MesgR( "Saving records" );
+			MesgR( stx.Text( "SavingRecords" ) );
 			Shared.BooksDb.SaveBooks( Books );
 		}
-
 
 		private ( string, GSDataType ) ValueType( object Val )
 		{
@@ -524,5 +652,6 @@ namespace wenku10.Pages.Settings.Migrations
 			SBk.PSettings.Save();
 			return Entry;
 		}
+
 	}
 }
