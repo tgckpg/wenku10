@@ -243,4 +243,7 @@
   <data name="ConfirmBuildFTS" xml:space="preserve">
     <value>全文検索の索引には、追加容量を使用する必要があります（推定値 {0} ）。 索引を作成しますか？</value>
   </data>
+  <data name="FTSNeedsRebuild" xml:space="preserve">
+    <value>このアイテムの情報を見つかりません。 索引を再構築してください。</value>
+  </data>
 </root>

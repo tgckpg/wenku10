@@ -202,11 +202,8 @@
     <value>这里还没有人发表过评论，来发表一下吧！</value>
     <comment>NaN</comment>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>共找到</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>个結果</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>共找到 {0} 个結果</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>不支持查找內文</value>
@@ -430,5 +427,8 @@
   </data>
   <data name="IssueDate.Text" xml:space="preserve">
     <value>发行日期</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>搜索結果</value>
   </data>
 </root>

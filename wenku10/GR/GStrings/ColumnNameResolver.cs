@@ -30,7 +30,7 @@ namespace GR.GStrings
 
 		public static string FTSColumns( string Name )
 		{
-			StringResources stx = new StringResBg( "Book" );
+			StringResources stx = new StringResBg( "Book", "AppResources" );
 			switch ( Name )
 			{
 				case "Title":
@@ -40,7 +40,7 @@ namespace GR.GStrings
 				case "EpTitle":
 					return stx.Text( "Chapter" );
 				case "Result":
-					return stx.Text( "Content" );
+					return stx.Text( "Search_Result", "AppResources" );
 			}
 
 			return Name;

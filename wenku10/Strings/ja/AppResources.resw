@@ -201,11 +201,8 @@
   <data name="NoComments.Text" xml:space="preserve">
     <value>誰もここにコメントしていません。コメントをしてみませんか？</value>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>検索結果</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>件</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>検索結果 {0} 件</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>フルテキスト検索をサポートしていません</value>
@@ -429,5 +426,8 @@
   </data>
   <data name="IssueDate.Text" xml:space="preserve">
     <value>発行日</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>検索結果</value>
   </data>
 </root>

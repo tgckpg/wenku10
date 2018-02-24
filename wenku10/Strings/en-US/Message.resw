@@ -243,4 +243,7 @@
   <data name="ConfirmBuildFTS" xml:space="preserve">
     <value>Additional space must be used for FTS index ( estimated {0} ). Build this index?</value>
   </data>
+  <data name="FTSNeedsRebuild" xml:space="preserve">
+    <value>Unable to find info for this item. Please rebuild your index.</value>
+  </data>
 </root>

@@ -201,11 +201,8 @@
   <data name="NoComments.Text" xml:space="preserve">
     <value>No one has commented before. Perhaps you could help make a comment?</value>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>Total</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>Result(s)</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>Total {0} result(s)</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>Does not support content searching</value>
@@ -428,5 +425,8 @@
   </data>
   <data name="IssueDate.Text" xml:space="preserve">
     <value>Issue</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>Search result</value>
   </data>
 </root>

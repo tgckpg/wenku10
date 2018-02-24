@@ -243,4 +243,7 @@
   <data name="ConfirmBuildFTS" xml:space="preserve">
     <value>全文搜尋需要使用額外的容量建立索引（估計為 {0} ），要建立索引嗎？</value>
   </data>
+  <data name="FTSNeedsRebuild" xml:space="preserve">
+    <value>無法找到項目信息。 請重建索引。</value>
+  </data>
 </root>

@@ -43,8 +43,6 @@ namespace GR.PageExtensions
 
 		private FTSViewSource ViewSource;
 
-		private MenuFlyout ContextMenu;
-
 		AppBarButton Rebuild;
 
 		public FTSDataPageExt( FTSViewSource ViewSource )
@@ -60,10 +58,6 @@ namespace GR.PageExtensions
 		protected override void SetTemplate()
 		{
 			InitAppBar();
-
-			StringResources stx = new StringResources( "ContextMenu" );
-			ContextMenu = new MenuFlyout();
-
 			TryBuildIndex();
 		}
 
@@ -94,8 +88,10 @@ namespace GR.PageExtensions
 			if ( DataContext is GRRow<FTSResult> RsRow )
 			{
 				Chapter Ch = Shared.BooksDb.Chapters.Find( RsRow.Source.ChapterId );
-				if( Ch == null )
+				if ( Ch == null )
 				{
+					StringResources stx = new StringResources( "Message" );
+					await Popups.ShowDialog( UIAliases.CreateDialog( string.Format( stx.Str( "FTSNeedsRebuild" ) ) ) );
 					return;
 				}
 
@@ -131,13 +127,5 @@ namespace GR.PageExtensions
 			Rebuild.IsEnabled = true;
 		}
 
-		public override FlyoutBase GetContextMenu( FrameworkElement elem )
-		{
-			if ( elem.DataContext is GRRow<FTSResult> Row )
-			{
-				return ContextMenu;
-			}
-			return null;
-		}
 	}
 }

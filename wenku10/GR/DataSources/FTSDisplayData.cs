@@ -29,6 +29,8 @@ namespace GR.DataSources
 		protected override string ConfigId => "FTS";
 
 		private GRTable<FTSResult> MatchTable;
+		private FTSResult TableHeaderSource;
+
 		public override IGRTable Table => MatchTable;
 
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
@@ -39,7 +41,15 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "EpTitle", Width = 100 },
 		};
 
-		public override string ColumnName( IGRCell CellProp ) => ColumnNameResolver.FTSColumns( CellProp.Property.Name );
+		public override string ColumnName( IGRCell CellProp )
+		{
+			if( CellProp.Property.Name == "Result" )
+			{
+				return TableHeaderSource.Result;
+			}
+
+			return ColumnNameResolver.FTSColumns( CellProp.Property.Name );
+		}
 
 		public bool IsBuilt => Database.ContextManager.ContextExists( typeof( FTSDataContext ) );
 
@@ -57,7 +67,7 @@ namespace GR.DataSources
 				IsLoading = true;
 			}
 
-			StringResources stx = new StringResBg( "LoadingMessage" );
+			StringResources stx = new StringResBg( "LoadingMessage", "AppResources" );
 			Message = stx.Str( "ProgressIndicator_Message" );
 
 			using ( var FTSD = new FTSDataContext() )
@@ -65,6 +75,7 @@ namespace GR.DataSources
 				MatchTable.Items = FTSD.Search( Search ).Select( x => new GRRow<FTSResult>( MatchTable ) { Source = new FTSResult( x.ChapterId, x.Text ) } ).ToArray();
 			}
 
+			TableHeaderSource.Result = string.Format( stx.Text( "Search_N_Result", "AppResources" ), MatchTable.Items.Count() );
 			IsLoading = false;
 		}
 
@@ -75,6 +86,8 @@ namespace GR.DataSources
 				if ( IsLoading ) return;
 				IsLoading = true;
 			}
+
+			MatchTable.Items = null;
 
 			StringResources stx = new StringResBg( "LoadingMessage" );
 			Message = stx.Str( "BuildingIndexes" );
@@ -95,6 +108,8 @@ namespace GR.DataSources
 			} );
 
 			IsLoading = false;
+
+			Reload();
 		}
 
 		public override void StructTable()
@@ -113,6 +128,9 @@ namespace GR.DataSources
 			);
 
 			MatchTable = new GRTable<FTSResult>( PsProps );
+			TableHeaderSource = new FTSResult( -1, ColumnNameResolver.FTSColumns( "Result" ) );
+
+			MatchTable.Source = TableHeaderSource;
 			MatchTable.Cell = ( i, x ) => MatchTable.ColEnabled( i ) ? ColumnName( MatchTable.CellProps[ i ] ) : "";
 		}
 
