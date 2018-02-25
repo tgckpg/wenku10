@@ -40,7 +40,7 @@ namespace GR.PageExtensions
 #pragma warning restore 0067
 
 		public bool NoCommands { get; }
-		public bool MajorNav => false;
+		public bool MajorNav => true;
 
 		public IList<ICommandBarElement> MajorControls { get; private set; }
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }

@@ -544,7 +544,7 @@ namespace wenku10.Pages
 			// Place a thumbnail to Reader history
 			if ( CurrentBook != null )
 			{
-				await GR.History.CreateThumbnail( ContentView, CurrentBook.Id );
+				await GR.History.CreateThumbnail( ContentView, CurrentBook.ZItemId );
 			}
 		}
 

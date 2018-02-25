@@ -208,7 +208,7 @@ namespace wenku10.Pages.BookInfoControls
 				return;
 			}
 
-			IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, true );
+			IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0 );
 			if ( Input.IsReview )
 			{
 				wCache.InitDownload(
@@ -227,7 +227,7 @@ namespace wenku10.Pages.BookInfoControls
 					"POSTREVIEW"
 					, X.Call<XKey[]>(
 						XProto.WRequest, "GetPostReview"
-						, ThisBook.Id, Input.RTitle, Input.RContent
+						, ThisBook.ZItemId, Input.RTitle, Input.RContent
 					)
 					, PostSuccess, PostFailed
 					, false

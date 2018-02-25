@@ -25,8 +25,19 @@ using GR.Model.Interfaces;
 
 namespace wenku10.Pages.Explorer
 {
+	public enum ViewMode { Table, List }
 	public sealed partial class GRTableView : UserControl
 	{
+		public static readonly DependencyProperty ViewModeProperty = DependencyProperty.Register(
+			"ViewMode", typeof( ViewMode ), typeof( GRTableView )
+			, new PropertyMetadata( ViewMode.Table, OnViewModeChanged ) );
+
+		public ViewMode ViewMode
+		{
+			get { return ( ViewMode ) GetValue( ViewModeProperty ); }
+			set { SetValue( ViewModeProperty, value ); }
+		}
+
 		private List<MenuFlyoutItem> ColToggles;
 
 		private volatile bool Locked = false;
@@ -121,14 +132,17 @@ namespace wenku10.Pages.Explorer
 				DataSource.PropertyChanged += SearchTerm_PropertyChanged;
 			}
 
-			try
+			var j = Task.Run( () =>
 			{
-				var j = Task.Run( () => DataSource.Reload() );
-			}
-			catch ( EmptySearchQueryException )
-			{
-				var j = Dispatcher.RunIdleAsync( ( x ) => SearchTerm.Focus( FocusState.Keyboard ) );
-			}
+				try
+				{
+					DataSource.Reload();
+				}
+				catch ( EmptySearchQueryException )
+				{
+					var NOP = Dispatcher.RunIdleAsync( ( x ) => SearchTerm.Focus( FocusState.Keyboard ) );
+				}
+			} );
 		}
 
 		private void SearchTerm_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
@@ -171,7 +185,19 @@ namespace wenku10.Pages.Explorer
 
 		private void ItemList_DoubleTapped( object sender, DoubleTappedRoutedEventArgs e )
 		{
-			IGRRow Row = ( ( FrameworkElement ) e.OriginalSource ).DataContext as IGRRow;
+			if ( ItemList.IsDoubleTapEnabled )
+				_ItemListAction( e.OriginalSource );
+		}
+
+		private void ItemList_Tapped( object sender, TappedRoutedEventArgs e )
+		{
+			if ( ItemList.IsTapEnabled )
+				_ItemListAction( e.OriginalSource );
+		}
+
+		private void _ItemListAction( object Source )
+		{
+			IGRRow Row = ( ( FrameworkElement ) Source ).DataContext as IGRRow;
 			if ( Row == null ) return;
 			OpenedRow = Row;
 			GRTable_ItemAction( Row );
@@ -432,6 +458,47 @@ namespace wenku10.Pages.Explorer
 		private void HZCont_SizeChanged( object sender, SizeChangedEventArgs e )
 		{
 			ItemList.Height = HZCont.ActualHeight;
+			if ( HZCont.HorizontalScrollMode == ScrollMode.Disabled )
+			{
+				ItemList.Width = HZCont.ActualWidth;
+			}
+			else
+			{
+				ItemList.Width = double.NaN;
+			}
 		}
+
+		private void ChangeView()
+		{
+			try
+			{
+				if ( ViewMode == ViewMode.List )
+				{
+					ItemList.Style = null;
+					ItemList.ItemTemplate = ( DataTemplate ) Resources[ "MobileItem" ];
+					ItemList.HeaderTemplate = null;
+					ItemList.IsDoubleTapEnabled = false;
+					ItemList.IsTapEnabled = true;
+					HZCont.HorizontalScrollMode = ScrollMode.Disabled;
+					HZCont.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+				}
+				else if ( ViewMode == ViewMode.Table )
+				{
+					ItemList.Style = ( Style ) Resources[ "DesktopDetailsView" ];
+					ItemList.ItemTemplate = ( DataTemplate ) Resources[ "DskDetailsItem" ];
+					ItemList.HeaderTemplate = ( DataTemplate ) Resources[ "DskDetailsHeader" ];
+					ItemList.IsDoubleTapEnabled = true;
+					ItemList.IsTapEnabled = false;
+					HZCont.HorizontalScrollMode = ScrollMode.Enabled;
+					HZCont.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+				}
+			}
+			catch( Exception )
+			{
+				// Logger.Log
+			}
+		}
+
+		private static void OnViewModeChanged( DependencyObject d, DependencyPropertyChangedEventArgs e ) => ( ( GRTableView ) d ).ChangeView();
 	}
 }

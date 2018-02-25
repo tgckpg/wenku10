@@ -19,13 +19,17 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Logging;
 
 using GR.DataSources;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Section;
+using GR.Effects;
+using GR.CompositeElement;
 
 namespace wenku10.Pages
 {
@@ -36,7 +40,7 @@ namespace wenku10.Pages
 #pragma warning restore 0067
 
 		public bool NoCommands { get; private set; }
-		public bool MajorNav { get; private set; } = true;
+		public bool MajorNav { get; private set; } = false;
 
 		public IList<ICommandBarElement> MajorControls { get; private set; }
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
@@ -61,7 +65,7 @@ namespace wenku10.Pages
 		public void NavigateToViewSource( GRViewSource Payload )
 		{
 			NavTree.Open( Payload );
-			if( NavTree.Contains( Payload ) )
+			if ( NavTree.Contains( Payload ) )
 			{
 				MasterNav.SelectedItem = Payload;
 				OpenView( Payload );
@@ -102,7 +106,7 @@ namespace wenku10.Pages
 		internal void NavigateToZone( ZoneSpider ZS )
 		{
 			ZSViewSource ViewSource = ZoneVS.Children.Where( x => x is ZSViewSource ).Cast<ZSViewSource>().FirstOrDefault( x => x.ZS == ZS );
-			if( ViewSource != null )
+			if ( ViewSource != null )
 			{
 				NavigateToViewSource( ViewSource );
 			}
@@ -161,6 +165,91 @@ namespace wenku10.Pages
 			// Initialize ZoneSpiders
 			ManageZones.ZSMData.StructTable();
 			ManageZones.ZSMData.Reload();
+
+			NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
+			MasterNav.RegisterPropertyChangedCallback( TagProperty, TagChanged );
+			NavXTrans.FillBehavior = FillBehavior.HoldEnd;
+
+			InitMasterNav();
+		}
+
+		private void OnBackRequested( object sender, XBackRequestedEventArgs e )
+		{
+			if ( PreferredState == "Closed" && "Opened" == ( string ) MasterNav.Tag )
+			{
+				MasterNav.Tag = "Closed";
+				e.Handled = true;
+			}
+		}
+
+		TranslateTransform StateTrans;
+		Storyboard NavXTrans = new Storyboard();
+		string PreferredState => ( string ) NavSensor.Tag;
+		string CurrState;
+
+		private void TagChanged( DependencyObject sender, DependencyProperty dp )
+		{
+			ToggleMasterNav( ( string ) MasterNav.GetValue( dp ) );
+		}
+
+		private void ToggleMasterNav( string NState )
+		{
+			if ( CurrState == NState || StateTrans == null )
+				return;
+
+			CurrState = NState;
+
+			if( MainStage.Instance.IsPhone )
+			{
+				NavSensor.Visibility = ( NState == "Opened" ) ? Visibility.Visible : Visibility.Collapsed;
+			}
+			else
+			{
+				NavSensor.Visibility = ( NState == "Opened" ) ? Visibility.Collapsed : Visibility.Visible;
+			}
+
+			double dX = StateTrans.X;
+
+			NavXTrans.Stop();
+			NavXTrans.Children.Clear();
+
+			if ( NState == "Opened" )
+			{
+				SimpleStory.DoubleAnimation( NavXTrans, StateTrans, "X", dX, 0, 500, 0, Easings.EaseOutQuintic );
+			}
+			else
+			{
+				SimpleStory.DoubleAnimation( NavXTrans, StateTrans, "X", dX, -MasterNav.Width + 3, 500, 0, Easings.EaseOutQuintic );
+			}
+
+			NavXTrans.Begin();
+		}
+
+		private void InitMasterNav()
+		{
+			StateTrans = ( TranslateTransform ) MasterNav.RenderTransform;
+			StateTrans.X = ( PreferredState == "Closed" ) ? -MasterNav.Width : 0;
+
+			if ( MainStage.Instance.IsPhone )
+			{
+				NavSensor.Tapped += ( s, e ) => MasterNav.Tag = "Closed";
+				NavSensor.HorizontalAlignment = HorizontalAlignment.Stretch;
+				NavSensor.Width = double.NaN;
+
+				AppBarButton ToggleNav = UIAliases.CreateAppBarBtn( Symbol.OpenPane, "Toggle Pane" );
+				ToggleNav.Click += ( s, e ) => MasterNav.Tag = ( "Opened" == ( string ) MasterNav.Tag ) ? "Closed" : "Opened";
+				MajorControls = new ICommandBarElement[] { ToggleNav };
+				ControlChanged?.Invoke( this );
+			}
+			else
+			{
+				MasterNav.PointerExited += ( s, e ) => MasterNav.Tag = PreferredState;
+				NavSensor.PointerEntered += ( s, e ) => MasterNav.Tag = "Opened";
+				NavSensor.HorizontalAlignment = HorizontalAlignment.Left;
+				NavSensor.Width = 80;
+			}
+
+			ToggleMasterNav( PreferredState );
 		}
 
 		private void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
@@ -179,6 +268,12 @@ namespace wenku10.Pages
 
 		private async void OpenView( GRViewSource ViewSource )
 		{
+			if ( PreferredState != ( string ) MasterNav.Tag )
+			{
+				MasterNav.Tag = PreferredState;
+				await Task.Delay( 250 );
+			}
+
 			await ExplorerView.View( ViewSource );
 			LoadingMessage.DataContext = ViewSource;
 			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
@@ -225,14 +320,26 @@ namespace wenku10.Pages
 				_MajorControls = MajorControls;
 				_Major2ndControls = Major2ndControls;
 				_MinorControls = MinorControls;
-				_NoCommands = NoCommands;
-				_MajorNav = MajorNav;
 
 				MajorControls = ExtCmd.MajorControls;
 				Major2ndControls = ExtCmd.Major2ndControls;
 				MinorControls = ExtCmd.MinorControls;
-				NoCommands = ExtCmd.NoCommands;
-				MajorNav = ExtCmd.MajorNav;
+
+				if( ExtCmd.MajorNav )
+				{
+					if( MajorControls.Any() )
+					{
+						MajorControls = MajorControls
+							.Concat( new ICommandBarElement[] { new AppBarSeparator() } )
+							.Concat( _MajorControls )
+							.ToArray();
+					}
+					else
+					{
+						MajorControls = _MajorControls;
+					}
+				}
+
 				ExtCmd.ControlChanged += ExtCmd_ControlChanged;
 			}
 
@@ -244,6 +351,5 @@ namespace wenku10.Pages
 		{
 			ControlChanged?.Invoke( this );
 		}
-
 	}
 }

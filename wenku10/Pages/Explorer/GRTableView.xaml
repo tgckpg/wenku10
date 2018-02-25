@@ -9,6 +9,7 @@
     xmlns:e="using:GR.Effects"
     xmlns:g="using:GR.Converters"
     xmlns:grt="using:GR.Data"
+    xmlns:ms="using:Microsoft.Phone.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -18,31 +19,6 @@
             <n:DataVisConverter x:Key="DataVisConverter" />
             <g:TransStateConverter x:Key="TransStateConverter" />
         </Grid.Resources>
-
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <!-- width >=0 -->
-                        <AdaptiveTrigger MinWindowWidth="0" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource MobileItem}" />
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <!-- width >=800 -->
-                        <AdaptiveTrigger MinWindowWidth="800" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="ItemList.Style" Value="{StaticResource DesktopDetailsView}" />
-                        <Setter Target="ItemList.ItemTemplate" Value="{StaticResource DskDetailsItem}" />
-                        <Setter Target="ItemList.HeaderTemplate" Value="{StaticResource DskDetailsHeader}" />
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -58,7 +34,9 @@
                         QuerySubmitted="SearchBox_QuerySubmitted" />
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-            <Button x:Name="TableSettings" Click="TableSettings_Click" Style="{StaticResource ThemeButton}" Margin="0,10,10,10">
+            <Button x:Name="TableSettings" Click="TableSettings_Click"
+                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                    Style="{StaticResource ThemeButton}" Margin="0,10,10,10">
                 <SymbolIcon Symbol="List" />
             </Button>
         </StackPanel>
@@ -74,7 +52,7 @@
                       ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                       ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsHorizontalScrollChainingEnabled="False"
                       ItemContainerStyle="{StaticResource BareListItem}"
-                      IsDoubleTapEnabled="True" DoubleTapped="ItemList_DoubleTapped"
+                      Tapped="ItemList_Tapped" DoubleTapped="ItemList_DoubleTapped"
                       ItemsSource="{Binding Items}"
                       IsItemClickEnabled="True" />
         </ScrollViewer>
@@ -247,9 +225,40 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" >
-                    <TextBlock Foreground="White" Text="{x:Bind C00, Mode=OneWay}" />
-                    <TextBlock Foreground="White" Text="{x:Bind C01, Mode=OneWay}" />
+                <StackPanel Grid.Column="0" Margin="10,5">
+                    <TextBlock TextWrapping="Wrap"
+                               Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               FontSize="20"
+                               VerticalAlignment="Center" FontFamily="{x:Bind F00, Mode=OneWay}" Text="{x:Bind C00, Mode=OneWay}" />
+                    <ms:WrapPanel Margin="10,5">
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F01, Mode=OneWay}" Text="{x:Bind C01, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F02, Mode=OneWay}" Text="{x:Bind C02, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F03, Mode=OneWay}" Text="{x:Bind C03, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F04, Mode=OneWay}" Text="{x:Bind C04, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F05, Mode=OneWay}" Text="{x:Bind C05, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F06, Mode=OneWay}" Text="{x:Bind C06, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F07, Mode=OneWay}" Text="{x:Bind C07, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F08, Mode=OneWay}" Text="{x:Bind C08, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F09, Mode=OneWay}" Text="{x:Bind C09, Mode=OneWay}" />
+                    </ms:WrapPanel>
                 </StackPanel>
             </Grid>
         </DataTemplate>

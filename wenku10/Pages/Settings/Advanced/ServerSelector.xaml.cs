@@ -66,7 +66,7 @@ namespace wenku10.Pages.Settings.Advanced
 		{
 			try
 			{
-				IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false );
+				IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0 );
 				wc.GET(
 					new Uri( X.Const<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )
 					, GotServerList, global::GR.GSystem.Utils.DoNothing, true );

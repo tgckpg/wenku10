@@ -2,7 +2,7 @@
     x:Class="wenku10.Pages.MasterExplorer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:wenku10.Pages"
+    xmlns:local="using:wenku10.Page"
     xmlns:ex="using:wenku10.Pages.Explorer"
     xmlns:gl="using:GR.Model.ListItem"
     xmlns:n="using:Net.Astropenguin.UI.Converters"
@@ -14,26 +14,70 @@
     <Page.Resources>
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
         <v:TransStateConverter x:Key="TransStateConverter" />
+        <v:ObjectColorConverter x:Key="ObjectColorConverter" F0="#FFFF9D13" F1="#FFE8127A" F2="#FF2031FF" F3="#FF12E88F" F4="#FFFFFE20" />
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=0 -->
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ExplorerView.(Grid.Column)" Value="0" />
+                        <Setter Target="ExplorerView.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="ExplorerView.ViewMode" Value="List" />
+                        <Setter Target="NavSensor.Tag" Value="Closed" />
+                        <Setter Target="MasterNav.Tag" Value="Closed" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ExplorerView.(Grid.Column)" Value="1" />
+                        <Setter Target="ExplorerView.(Grid.ColumnSpan)" Value="0" />
+                        <Setter Target="ExplorerView.ViewMode" Value="Table" />
+                        <Setter Target="NavSensor.Tag" Value="Opened" />
+                        <Setter Target="MasterNav.Tag" Value="Opened" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListView x:Name="MasterNav"
+        <ex:GRTableView x:Name="ExplorerView" Grid.Column="0" Grid.ColumnSpan="2" ViewMode="Table" />
+        <Rectangle x:Name="NavSensor" Grid.ColumnSpan="2" Fill="Transparent" Visibility="Collapsed" />
+        <ListView x:Name="MasterNav" Background="{StaticResource MajorBackgroundBrush}"
                   IsItemClickEnabled="True" ItemClick="MasterNav_ItemClick"
-                  Grid.Column="0" Width="200">
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  Width="230" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+            <ListView.RenderTransform>
+                <TranslateTransform X="0" />
+            </ListView.RenderTransform>
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="gl:TreeItem">
-                    <TextBlock Text="{x:Bind ItemTitle}"
-                               TextWrapping="Wrap"
-                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                               Margin="{x:Bind TreeLevel, Converter={StaticResource TreeMarginConverter}}" />
+                    <Grid Margin="{x:Bind TreeLevel, Converter={StaticResource TreeMarginConverter}}" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Bind ItemTitle}"
+                                   TextWrapping="Wrap" Margin="10"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                        <Rectangle Grid.Column="1" Width="3" Margin="0,1"
+                                   Fill="{x:Bind Self, Converter={StaticResource ObjectColorConverter}}"
+                                   VerticalAlignment="Stretch"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ex:GRTableView x:Name="ExplorerView" Grid.Column="1" />
         <!-- Loading Message -->
         <Grid x:Name="LoadingMessage"
               Grid.Row="1" Grid.ColumnSpan="2"
