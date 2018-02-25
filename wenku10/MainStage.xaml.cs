@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
 
+using GR.Config;
+
 namespace wenku10
 {
 	public sealed partial class MainStage : Page
@@ -34,14 +36,15 @@ namespace wenku10
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			if ( !global::GR.Config.Properties.MIGRATION_0000 || !GR.Resources.Shared.Storage.FileExists( "books.db" ) )
+			if ( !Properties.MIGRATION_0000 && !Properties.FIRST_TIME_RUN )
 			{
 				RootFrame.Navigate( typeof( Pages.Settings.Migrations.M0000 ) );
 				return;
 			}
 
-			if ( global::GR.Config.Properties.FIRST_TIME_RUN )
+			if ( Properties.FIRST_TIME_RUN )
 			{
+				Properties.MIGRATION_0000 = true;
 				RootFrame.Navigate( typeof( Pages.Settings.FirstTimeSettings ) );
 				return;
 			}

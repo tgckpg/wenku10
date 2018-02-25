@@ -10,7 +10,7 @@
     <Grid Background="Black">
         <StackPanel Margin="10" VerticalAlignment="Top">
             <TextBlock FontSize="29" x:Uid="/InitQuestions/Migration" Foreground="White"/>
-            <TextBlock Foreground="Gray" x:Uid="/InitQuestions/PlaseMigrate" TextWrapping="Wrap" />
+            <TextBlock Foreground="Gray" x:Uid="/InitQuestions/PleaseMigrate" TextWrapping="Wrap" />
             <StackPanel x:Name="MigrateOps" Orientation="Horizontal" VerticalAlignment="Top">
                 <Button Margin="5" x:Name="BackupBtn" Click="Backup_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
                     <TextBlock x:Uid="/InitQuestions/Backup" />
@@ -18,8 +18,8 @@
                 <Button Margin="5" x:Name="MigrateBtn" Click="Migrate_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
                     <TextBlock x:Uid="/InitQuestions/Migrate" />
                 </Button>
-                <Button Margin="5" x:Name="MigrateAltBtn" Click="MigrateUseFile_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
-                    <TextBlock x:Uid="/InitQuestions/MigrateUseFile" />
+                <Button Margin="5" x:Name="MigrateAltBtn" Click="MigrateUserFile_Click" IsEnabled="{Binding ElementName=MigrateOps, Path=IsHitTestVisible}">
+                    <TextBlock x:Uid="/InitQuestions/MigrateUserFile" />
                 </Button>
             </StackPanel>
 

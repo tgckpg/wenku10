@@ -203,27 +203,9 @@ namespace GR.GSystem
 				Index = Index == 0 ? 1 : 0;
 
 			InitModeInsts( Index );
-			if ( Index == 0 )
-			{
-				ActionEvent.Normal();
-				Properties.SMODE = Index;
-
-				MasterCommands = SHCommands;
-				M2ndCommands = SH2ndCommands;
-
-				// ControlFrame.Instance.SetHomePage( PageId.SG_SH, () => new SuperGiants( new SHSLActiveItem( "featured: 1", null ) ) );
-				ControlFrame.Instance.SetHomePage( PageId.MASTER_EXPLORER, () => new MasterExplorer() );
-			}
-			else
-			{
-				ActionEvent.Secret();
-				Properties.SMODE = Index;
-
-				M2ndCommands = w82ndCommands;
-
-				// ControlFrame.Instance.SetHomePage( PageId.W_BOOKSHELF, () => new WBookshelf() );
-				// ControlFrame.Instance.SetHomePage( PageId.SG_W, () => new SuperGiants( X.Instance<ILoader<ActiveItem>>( XProto.StaffPicks ) ) );
-			}
+			MasterCommands = new ICommandBarElement[ 0 ];
+			M2ndCommands = new ICommandBarElement[ 0 ];
+			ControlFrame.Instance.SetHomePage( PageId.MASTER_EXPLORER, () => new MasterExplorer() );
 		}
 
 		public void Set2ndCommands( IList<ICommandBarElement> Commands )

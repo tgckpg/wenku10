@@ -162,7 +162,7 @@
   <data name="Migrate.Text" xml:space="preserve">
     <value>Migrate</value>
   </data>
-  <data name="MigrateUseFile.Text" xml:space="preserve">
+  <data name="MigrateUserFile.Text" xml:space="preserve">
     <value>Use backup to migrate</value>
   </data>
   <data name="Migration.Text" xml:space="preserve">
@@ -184,7 +184,7 @@
     <value>Migration is required before using the current version of this app</value>
   </data>
   <data name="Prev.Text" xml:space="preserve">
-    <value>Prevous</value>
+    <value>Previous</value>
   </data>
   <data name="PurgingFiles.Text" xml:space="preserve">
     <value>Purging files...</value>

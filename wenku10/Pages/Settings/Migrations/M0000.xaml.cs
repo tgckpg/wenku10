@@ -53,6 +53,7 @@ namespace wenku10.Pages.Settings.Migrations
 
 		private void SetTemplate()
 		{
+			Bootstrap.LogInstance.Stop();
 			DTimer = new DispatcherTimer();
 			DTimer.Interval = TimeSpan.FromSeconds( 2 );
 			DTimer.Tick += DTimer_Tick;
@@ -103,7 +104,7 @@ namespace wenku10.Pages.Settings.Migrations
 			}
 		}
 
-		private async void MigrateUseFile_Click( object sender, RoutedEventArgs e )
+		private async void MigrateUserFile_Click( object sender, RoutedEventArgs e )
 		{
 			MigrateOps.IsHitTestVisible = false;
 			MigrateOps.Visibility = Visibility.Collapsed;

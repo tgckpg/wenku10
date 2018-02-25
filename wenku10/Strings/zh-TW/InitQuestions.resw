@@ -133,7 +133,7 @@
     <value>壓縮緩存…</value>
   </data>
   <data name="CreatingDatabase.Text" xml:space="preserve">
-    <value>創建資料庫…</value>
+    <value>建立資料庫…</value>
   </data>
   <data name="DataBackup.Text" xml:space="preserve">
     <value>正在備份您的檔案…</value>
@@ -162,7 +162,7 @@
   <data name="Migrate.Text" xml:space="preserve">
     <value>遷移</value>
   </data>
-  <data name="MigrateUseFile.Text" xml:space="preserve">
+  <data name="MigrateUserFile.Text" xml:space="preserve">
     <value>使用備份進行遷移</value>
   </data>
   <data name="Migration.Text" xml:space="preserve">
