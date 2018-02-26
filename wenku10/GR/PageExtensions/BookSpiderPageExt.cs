@@ -90,7 +90,11 @@ namespace GR.PageExtensions
 			AppBarButton ImportSpider = UIAliases.CreateAppBarBtn( SegoeMDL2.OpenFile, stx.Text( "ImportSpider" ) );
 			ImportSpider.Click += OpenSpider;
 
+			SecondaryIconButton SpiderEditor = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Edit, stx.Text( "SpiderEdit", "ContextMenu" ) );
+			SpiderEditor.Click += ( s, e ) => ControlFrame.Instance.NavigateTo( PageId.PROC_PANEL, () => new ProcPanelWrapper( null ) );
+
 			MajorControls = new ICommandBarElement[] { ImportSpider };
+			Major2ndControls = new ICommandBarElement[] { SpiderEditor };
 		}
 
 		private void Edit_Click( object sender, RoutedEventArgs e )

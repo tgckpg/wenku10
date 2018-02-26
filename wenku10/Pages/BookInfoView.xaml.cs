@@ -477,9 +477,6 @@ namespace wenku10.Pages
 
 		private async void VoteButton_Click( object sender, RoutedEventArgs e )
 		{
-			bool LoggedIn = await ControlFrame.Instance.CommandMgr.WAuthenticate();
-			if ( !LoggedIn ) return;
-
 			bool Voted = await ThisBook.XCall<Task<bool>>( "Vote" );
 			if( Voted )
 			{

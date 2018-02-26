@@ -1,190 +1,52 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Text;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
-using GR.Config;
-using GR.Database.Contexts;
-using GR.Database.Models;
-using GR.Ext;
-using GR.GSystem;
-using GR.Storage;
-using GR.Model.Book.Spider;
-using GR.Model.ListItem;
-using GR.Model.Book;
-using GR.Resources;
-using GR.Settings;
-using GR.CompositeElement;
-using GR.MigrationOps;
-
-namespace wenku10.Pages.Settings.Migrations
+namespace GR.MigrationOps
 {
-	public sealed partial class M0000 : Page
+	using Config;
+	using Database.Contexts;
+	using Database.Models;
+	using Ext;
+	using GSystem;
+	using Storage;
+	using Model.Book.Spider;
+	using Model.ListItem;
+	using Model.Book;
+	using Resources;
+	using Settings;
+
+	sealed class M0000 : IMigrationOp
 	{
-		public M0000()
-		{
-			this.InitializeComponent();
-			SetTemplate();
-		}
+		public Action<string> Mesg { get; set; }
+		public Action<string> MesgR { get; set; }
 
-		MigrationBackup CurrBakOp = new MigrationBackup( "M000" );
-		DispatcherTimer DTimer;
-
-		private void SetTemplate()
-		{
-			Bootstrap.LogInstance.Stop();
-			DTimer = new DispatcherTimer();
-			DTimer.Interval = TimeSpan.FromSeconds( 2 );
-			DTimer.Tick += DTimer_Tick;
-		}
-
-		private void Mesg( string Text )
-		{
-			var j = Dispatcher.RunIdleAsync( x => ProgressText.Text += "\n" + Text );
-			MesgR( "" );
-		}
-
-		private void MesgR( string Text )
-		{
-			var j = Dispatcher.RunIdleAsync( x => RProgressText.Text = Text );
-		}
-
-		private void Purge( string Location )
-		{
-			MesgR( stx.Text( "PurgingFiles" ) + Location );
-			Shared.Storage.PurgeContents( Location, true );
-		}
+		public bool ShouldMigrate { get; set; }
 
 		StringResources stx = new StringResBg( "InitQuestions", "Message", "Settings", "NavigationTitles" );
-		public bool BackupSaved = false;
 
-		private void DTimer_Tick( object sender, object e )
+		public M0000()
 		{
-			MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{0}/{1}: {2}", Utils.AutoByteUnit( CurrBakOp.BytesCopied ), CurrBakOp.BytesTotal, CurrBakOp.CFName ) );
+			ShouldMigrate = !Shared.Storage.FileExists( "books.db" );
 		}
 
-		private async void Backup_Click( object sender, RoutedEventArgs e )
+		public async Task Up()
 		{
-			MigrateOps.IsHitTestVisible = false;
-			await Task.Run( MBackup );
-
-			BackupBtn.IsEnabled = !BackupSaved;
-			MigrateOps.IsHitTestVisible = true;
-		}
-
-		private async void Migrate_Click( object sender, RoutedEventArgs e )
-		{
-			MigrateOps.IsHitTestVisible = false;
-			MigrateOps.Visibility = Visibility.Collapsed;
-			if( await Task.Run( MMigrate ) )
-			{
-				MigrateOps.Visibility = Visibility.Visible;
-				MigrateOps.IsHitTestVisible = true;
-			}
-		}
-
-		private async void MigrateUserFile_Click( object sender, RoutedEventArgs e )
-		{
-			MigrateOps.IsHitTestVisible = false;
-			MigrateOps.Visibility = Visibility.Collapsed;
-			if( await Task.Run( MExtractBackup ) )
-			{
-				MigrateOps.Visibility = Visibility.Visible;
-				MigrateOps.IsHitTestVisible = true;
-			}
-		}
-
-		private async Task MBackup()
-		{
-			if ( CurrBakOp.ZBackup != null )
-			{
-				goto SaveBackup;
-			}
-
-			Mesg( stx.Text( "DataBackup" ) );
-			Worker.UIInvoke( DTimer.Start );
-			await CurrBakOp.Backup();
-			Worker.UIInvoke( DTimer.Stop );
-
-			SaveBackup:
-			Mesg( stx.Text( "ExportBackup" ) );
-
-			await Worker.RunUITaskAsync( async () =>
-			{
-				IStorageFile ISF = await AppStorage.SaveFileAsync( "GR Backup M000", new string[] { ".M000" }, "backup.M000" );
-				if ( ISF != null )
-				{
-					await CurrBakOp.ZBackup.MoveAndReplaceAsync( ISF );
-					Mesg( stx.Text( "BackupComplete" ) );
-					BackupSaved = true;
-				}
-			} );
-		}
-
-		private async Task<bool> MExtractBackup()
-		{
-			if ( !await CurrBakOp.PickRestoreFile() )
-				return true;
-
-			Mesg( stx.Text( "PurgingFiles" ) );
-			Shared.Storage.PurgeContents( "./", false );
-
-			Worker.UIInvoke( DTimer.Start );
-			Mesg( stx.Text( "ExtractingFiles" ) );
-			await CurrBakOp.Restore();
-			Worker.UIInvoke( DTimer.Stop );
-
-			BackupSaved = true;
-			return await MMigrate();
-		}
-
-		private async Task<bool> MMigrate()
-		{
-			if ( !BackupSaved )
-			{
-				bool ContinueWithoutBackup = false;
-
-				await Worker.RunUITaskAsync( () =>
-				{
-					return Popups.ShowDialog( UIAliases.CreateDialog(
-						stx.Text( "NoBackupWarning" )
-						, () => ContinueWithoutBackup = true
-						, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
-					) );
-				} );
-
-				if ( !ContinueWithoutBackup )
-				{
-					Mesg( stx.Text( "MigrationAborted" ) );
-					return true;
-				}
-			}
-
 			try
 			{
 				Mesg( stx.Text( "CreatingDatabase" ) );
-				GR.Database.ContextManager.Migrate();
+				Database.ContextManager.Migrate();
 
 				Mesg( stx.Text( "CompressCache" ) );
 				await M0000_Caches();
@@ -213,9 +75,12 @@ namespace wenku10.Pages.Settings.Migrations
 			{
 				Mesg( ex.Message );
 			}
+		}
 
-			Properties.MIGRATION_0000 = true;
-			return false;
+		private void Purge( string Location )
+		{
+			MesgR( stx.Text( "PurgingFiles" ) + Location );
+			Shared.Storage.PurgeContents( Location, true );
 		}
 
 		private Task M0000_Caches()

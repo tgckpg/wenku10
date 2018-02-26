@@ -13,14 +13,18 @@ using Net.Astropenguin.Loaders;
 using wenku10.Pages;
 using wenku10.Pages.Dialogs;
 using wenku10.Pages.Sharers;
+using wenku10.SHHub;
 
 namespace GR.PageExtensions
 {
 	using CompositeElement;
 	using Data;
 	using DataSources;
+	using Effects;
+	using Ext;
 	using Model.Interfaces;
 	using Model.ListItem.Sharers;
+	using Model.Section.SharersHub;
 	using Resources;
 
 	sealed class ONSPageExt : PageExtension, ICmdControls
@@ -38,6 +42,9 @@ namespace GR.PageExtensions
 
 		private ONSViewSource ViewSource;
 		private AppBarButtonEx ActivyBtn;
+
+		private SHMember MInstance;
+		private SecondaryIconButton LoginBtn;
 
 		public ONSPageExt( ONSViewSource ViewSource )
 		{
@@ -58,13 +65,15 @@ namespace GR.PageExtensions
 				{
 					ControlFrame.Instance.NavigateTo( PageId.SCRIPT_DETAILS, () => new ScriptDetails( HSI ) );
 				}
-
 			}
 		}
 
 		protected override void SetTemplate()
 		{
 			InitAppBar();
+			MInstance = X.Singleton<SHMember>( XProto.SHMember );
+			MInstance.OnStatusChanged += SHMember_OnStatusChanged;
+			SHMember_OnStatusChanged( MInstance, MInstance.Status );
 		}
 
 		public override void Unload()
@@ -92,6 +101,9 @@ namespace GR.PageExtensions
 
 			MajorControls = new ICommandBarElement[] { ActivyBtn, UploadBtn };
 
+			LoginBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronRight, stx.Text( "Login" ) );
+			LoginBtn.Click += ( s, e ) => SHLoginOrInfo();
+
 #if DEBUG || TESTING
 			StringResources sts = new StringResources( "Settings" );
 			SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
@@ -114,9 +126,9 @@ namespace GR.PageExtensions
 				catch ( Exception ) { }
 			};
 
-			Major2ndControls = new ICommandBarElement[] { MAuthBtn, ChangeServer };
+			Major2ndControls = new ICommandBarElement[] { LoginBtn, MAuthBtn, ChangeServer };
 #else
-			Major2ndControls = new ICommandBarElement[] { UploadBtn, MAuthBtn };
+			Major2ndControls = new ICommandBarElement[] { LoginBtn, UploadBtn, MAuthBtn };
 #endif
 		}
 
@@ -133,15 +145,48 @@ namespace GR.PageExtensions
 
 		private async void ToggleActivities( object sender, RoutedEventArgs e )
 		{
-			if ( !( await ControlFrame.Instance.CommandMgr.Authenticate() ) ) return;
+			if ( !( await SHMember.Authenticate() ) )
+				return;
 
 			/*
-			if ( Member.Activities.Count == 0 )
+			<Grid x:Name="ActivyList"
+				  Grid.RowSpan="2"
+				  Visibility="Collapsed"
+				  MaxWidth="400"
+				  VerticalAlignment="Top" HorizontalAlignment="Right">
+				<Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
+						 Margin="0,0,5,0"
+						 Fill="{StaticResource MinorBrush}" />
+				<ListView Margin="0,15,0,0" Padding="10"
+						  IsItemClickEnabled="True" ItemClick="Activities_ItemClick"
+						  ItemContainerStyle="{StaticResource BareListItem}"
+						  ItemsSource="{Binding Activities}"
+						  Background="{StaticResource MinorBrush}">
+					<ListView.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Margin="10,5">
+								<TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+										   TextTrimming="CharacterEllipsis"
+										   Text="{Binding Name}" />
+								<TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+										   TextAlignment="Right" Opacity="0.8"
+										   Visibility="{Binding TimeStamp, Converter={StaticResource DataVisConverter}}"
+										   Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" />
+							</StackPanel>
+						</DataTemplate>
+					</ListView.ItemTemplate>
+				</ListView>
+			</Grid>
+			*/
+
+			if ( MInstance.Activities.Count == 0 )
 			{
-				UpdateActivities();
+				await new MyRequests().Get();
+				await new MyInbox().Get();
 			}
 			else
 			{
+				/*
 				if ( TransitionDisplay.GetState( ActivyList ) == TransitionState.Active )
 				{
 					TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
@@ -150,8 +195,42 @@ namespace GR.PageExtensions
 				{
 					TransitionDisplay.SetState( ActivyList, TransitionState.Active );
 				}
+				*/
 			}
-			*/
 		}
+
+		private void SHMember_OnStatusChanged( object sender, MemberStatus args )
+		{
+			StringResources stx = new StringResBg( "AppResources", "Settings" );
+			if ( args == MemberStatus.LOGGED_IN )
+			{
+				LoginBtn.Label = stx.Text( "Account", "Settings" );
+				LoginBtn.Glyph = SegoeMDL2.Accounts;
+			}
+			else if( args == MemberStatus.RE_LOGIN_NEEDED )
+			{
+				var j = SHMember.Authenticate();
+			}
+			else
+			{
+				LoginBtn.Label = stx.Text( "Login" );
+				LoginBtn.Glyph = SegoeMDL2.ChevronRight;
+			}
+		}
+
+		private async void SHLoginOrInfo()
+		{
+			if ( MInstance.WillLogin ) return;
+			if ( MInstance.IsLoggedIn )
+			{
+				ControlFrame.Instance.NavigateTo( PageId.SH_USER_INFO, () => new UserInfo() );
+			}
+			else
+			{
+				Login LoginDialog = new Login( MInstance );
+				await Popups.ShowDialog( LoginDialog );
+			}
+		}
+
 	}
 }

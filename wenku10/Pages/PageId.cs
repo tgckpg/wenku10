@@ -11,7 +11,6 @@ namespace wenku10.Pages
 		public const string
 			BOOK_INFO_VIEW = "BookInfoView"
 			, MASTER_EXPLORER = "MasterExplorer"
-			, ONLINE_SCRIPTS_VIEW = "OnlineScriptsView"
 			, MANAGE_PINS = "ManagePins"
 			, PROC_PANEL = "ProceduresPanel"
 			, CONTENT_READER_H = "ContentReaderHorz"

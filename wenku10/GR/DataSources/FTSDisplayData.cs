@@ -36,9 +36,9 @@ namespace GR.DataSources
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Title", Width = 200 },
-			new ColumnConfig() { Name = "Result", Width = 400 },
 			new ColumnConfig() { Name = "VolTitle", Width = 100 },
 			new ColumnConfig() { Name = "EpTitle", Width = 100 },
+			new ColumnConfig() { Name = "Result", Width = 400 },
 		};
 
 		public override string ColumnName( IGRCell CellProp )

@@ -36,18 +36,21 @@ namespace wenku10
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			if ( !Properties.MIGRATION_0000 && !Properties.FIRST_TIME_RUN )
+			if ( new GR.MigrationOps.MigrationManager().ShouldMigrate )
 			{
-				RootFrame.Navigate( typeof( Pages.Settings.Migrations.M0000 ) );
+				RootFrame.Navigate( typeof( Pages.Settings.Migrations ) );
 				return;
 			}
 
 			if ( Properties.FIRST_TIME_RUN )
 			{
-				Properties.MIGRATION_0000 = true;
 				RootFrame.Navigate( typeof( Pages.Settings.FirstTimeSettings ) );
 				return;
 			}
+
+#if DEBUG
+			GR.Database.ContextManager.Migrate();
+#endif
 
 			RootFrame.Navigate( typeof( Pages.ControlFrame ) );
 		}

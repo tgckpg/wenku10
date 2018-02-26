@@ -14,12 +14,12 @@ using wenku10;
 using wenku10.Pages;
 using wenku10.ShHub;
 using wenku10.Pages.Dialogs;
-using wenku10.Pages.Sharers;
 
 namespace GR.GSystem
 {
 	using CompositeElement;
 	using Config;
+	using DataSources;
 	using Ext;
 	using Resources;
 
@@ -28,13 +28,8 @@ namespace GR.GSystem
 		private IObservableVector<ICommandBarElement> CommandList;
 		private IObservableVector<ICommandBarElement> SecondCmdList;
 
-		private ICommandBarElement[] MasterCommands;
-		private ICommandBarElement[] M2ndCommands;
-
-		private ICommandBarElement[] SHCommands;
-		private ICommandBarElement[] SH2ndCommands;
-
-		private ICommandBarElement[] w82ndCommands;
+		private ICommandBarElement[] MasterCommands = new ICommandBarElement[ 0 ];
+		private ICommandBarElement[] M2ndCommands = new ICommandBarElement[ 0 ];
 
 		private ICommandBarElement[] CommonCommands;
 		private ICommandBarElement[] SystemCommands;
@@ -43,9 +38,6 @@ namespace GR.GSystem
 
 		SecretSwipeButton AboutBtn;
 
-		private int InitMode = 0;
-
-		private List<int> ModeInit;
 		private MesgListerner SHListener;
 
 		public MasterCommandManager( IObservableVector<ICommandBarElement> CommandList, IObservableVector<ICommandBarElement> SecondCmdList )
@@ -55,7 +47,6 @@ namespace GR.GSystem
 
 			SHListener = new MesgListerner();
 
-			ModeInit = new List<int>();
 			DefaultCmds();
 		}
 
@@ -67,37 +58,15 @@ namespace GR.GSystem
 			InitCommands();
 		}
 
-		private void InitModeInsts( int Mode )
-		{
-			lock ( ModeInit )
-			{
-				if ( ModeInit.Contains( Mode ) ) return;
-				ModeInit.Add( Mode );
-			}
-
-			// XXX: Should init based on application state
-			new Bootstrap().Level2();
-
-			if ( Mode == 0 )
-			{
-				CreateSHCommands();
-				SHMember = X.Singleton<IMember>( XProto.SHMember );
-				SHMember.OnStatusChanged += SHMember_OnStatusChanged;
-			}
-			else
-			{
-				WMember = X.Singleton<IMember>( XProto.Member );
-				WMember.OnStatusChanged += WMember_OnStatusChanged;
-
-				CreateWCommands();
-			}
-		}
-
 		private void CreateCommonCommands()
 		{
 			SecondaryIconButton HistoryBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.History, stx.Text( "History", "NavigationTitles" ) );
 			// Goto Explorer, Auto Select History
-			// HistoryBtn.Click += CreateCmdHandler( PageId.HISTORY, () => new wenku10.Pages.History() );
+			HistoryBtn.Click += ( s, e ) => ControlFrame.Instance.NavigateTo(
+				PageId.MASTER_EXPLORER,
+				() => new MasterExplorer(),
+				P => ( ( MasterExplorer ) P ).NavigateToDataSource( typeof( HistoryData ) )
+			);
 
 			SecondaryIconButton ManagePinsBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Pinned, stx.Text( "ManagePins", "NavigationTitles" ) );
 			ManagePinsBtn.Click += CreateCmdHandler( PageId.MANAGE_PINS, () => new ManagePins() );
@@ -121,12 +90,11 @@ namespace GR.GSystem
 			AboutBtn = new SecretSwipeButton( SegoeMDL2.Info )
 			{
 				Label = stx.Text( "About", "AppBar" ),
-				Label2 = Properties.SMODE == 0 ? "wenku8" : "Grimoire",
+				Label2 = "(ﾟ∀ﾟ)",
 				Glyph2 = SegoeMDL2.Accept
 			};
 
 			AboutBtn.PendingClick += CreateCmdHandler( PageId.ABOUT, () => new About() );
-			AboutBtn.OnIndexUpdate += ( s, i ) => SwapCommands( i );
 			AboutBtn.CanSwipe = X.Exists;
 
 			Btns.Add( SettingsBtn );
@@ -145,38 +113,16 @@ namespace GR.GSystem
 			SystemCommands = Btns.ToArray();
 		}
 
-		private void CreateSHCommands()
-		{
-			SHLoginBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronRight, stx.Text( "Login" ) );
-			SHLoginBtn.Click += CreateCmdHandler( SHLoginBtn_Click );
-
-			SecondaryIconButton SpiderEditor = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Edit, stx.Text( "SpiderEdit", "ContextMenu" ) );
-			SpiderEditor.Click += CreateCmdHandler( PageId.PROC_PANEL, () => new ProcPanelWrapper( null ) );
-
-			SHCommands = new ICommandBarElement[] {};
-			SH2ndCommands = new ICommandBarElement[] { SHLoginBtn, SpiderEditor };
-		}
-
-		private void CreateWCommands()
-		{
-			WLoginBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.ChevronRight, stx.Text( "Login" ) );
-			WLoginBtn.Click += CreateCmdHandler( WLoginBtn_Click );
-
-			SecondaryIconButton SearchBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Search, stx.Text( "Search", "AppBar" ) );
-			// TODO: Auto Goto Search
-
-			w82ndCommands = new ICommandBarElement[] { WLoginBtn, SearchBtn };
-		}
-
 		private void InitCommands()
 		{
 			CommandList.Clear();
 
-			InitMode = Properties.SMODE;
-			SwapCommands( 0 );
+			new Bootstrap().Level2();
 
 			foreach ( ICommandBarElement Btn in MasterCommands )
 				CommandList.Add( Btn );
+
+			ControlFrame.Instance.SetHomePage( PageId.MASTER_EXPLORER, () => new MasterExplorer() );
 		}
 
 		private RoutedEventHandler CreateCmdHandler( string Name, Func<Page> ViewFunc )
@@ -195,17 +141,6 @@ namespace GR.GSystem
 				ToggleButtons( ( AppBarToggleButton ) s );
 				Handler( s, e );
 			};
-		}
-
-		private void SwapCommands( int Index )
-		{
-			if( InitMode == 1 )
-				Index = Index == 0 ? 1 : 0;
-
-			InitModeInsts( Index );
-			MasterCommands = new ICommandBarElement[ 0 ];
-			M2ndCommands = new ICommandBarElement[ 0 ];
-			ControlFrame.Instance.SetHomePage( PageId.MASTER_EXPLORER, () => new MasterExplorer() );
 		}
 
 		public void Set2ndCommands( IList<ICommandBarElement> Commands )
@@ -255,109 +190,6 @@ namespace GR.GSystem
 			foreach ( AppBarToggleButton Btn in MasterCommands.Where( x => x != s ) ) Btn.IsChecked = false;
 			s.IsChecked = true;
 		}
-
-		#region SHLoginBtn
-		private IMember SHMember;
-		private SecondaryIconButton SHLoginBtn;
-
-		private void SHLoginBtn_Click( object sender, RoutedEventArgs e ) { SHLoginOrInfo(); }
-
-		private void SHMember_OnStatusChanged( object sender, MemberStatus args )
-		{
-			if ( args == MemberStatus.LOGGED_IN )
-			{
-				SHLoginBtn.Label = stx.Text( "Account", "Settings" );
-				SHLoginBtn.Glyph = SegoeMDL2.Accounts;
-			}
-			else if( args == MemberStatus.RE_LOGIN_NEEDED )
-			{
-				var j = Authenticate();
-			}
-			else
-			{
-				SHLoginBtn.Label = stx.Text( "Login" );
-				SHLoginBtn.Glyph = SegoeMDL2.ChevronRight;
-			}
-		}
-
-		public async Task<bool> Authenticate()
-		{
-			if ( !SHMember.IsLoggedIn )
-			{
-				Login LoginDialog = new Login( SHMember );
-				await Popups.ShowDialog( LoginDialog );
-				return !LoginDialog.Canceled;
-			}
-
-			return true;
-		}
-
-		public void SHLogout() { SHMember.Logout(); }
-		private async void SHLoginOrInfo()
-		{
-			if ( SHMember.WillLogin ) return;
-			if ( SHMember.IsLoggedIn )
-			{
-				ControlFrame.Instance.NavigateTo( PageId.SH_USER_INFO, () => new UserInfo() );
-			}
-			else
-			{
-				Login LoginDialog = new Login( SHMember );
-				await Popups.ShowDialog( LoginDialog );
-			}
-		}
-		#endregion
-
-		#region WLogin
-		private IMember WMember;
-		private SecondaryIconButton WLoginBtn;
-
-		private void WLoginBtn_Click( object sender, RoutedEventArgs e ) { WLoginOrInfo(); }
-		private void WMember_OnStatusChanged( object sender, MemberStatus args )
-		{
-			if ( args == MemberStatus.LOGGED_IN )
-			{
-				WLoginBtn.Label = stx.Text( "Account", "Settings" );
-				WLoginBtn.Glyph = SegoeMDL2.Accounts;
-			}
-			else if( args == MemberStatus.RE_LOGIN_NEEDED )
-			{
-				var j = WAuthenticate();
-			}
-			else
-			{
-				WLoginBtn.Label = stx.Text( "Login" );
-				WLoginBtn.Glyph = SegoeMDL2.ChevronRight;
-			}
-		}
-
-		public async Task<bool> WAuthenticate()
-		{
-			if ( !WMember.IsLoggedIn )
-			{
-				Login LoginDialog = new Login( WMember );
-				await Popups.ShowDialog( LoginDialog );
-				return !LoginDialog.Canceled;
-			}
-
-			return true;
-		}
-
-		public void WLogout() { WMember.Logout(); }
-		private async void WLoginOrInfo()
-		{
-			if ( WMember.WillLogin ) return;
-			if ( WMember.IsLoggedIn )
-			{
-				ControlFrame.Instance.NavigateTo( PageId.W_USER_INFO, () => new WUserInfo() );
-			}
-			else
-			{
-				Login LoginDialog = new Login( WMember );
-				await Popups.ShowDialog( LoginDialog );
-			}
-		}
-		#endregion
 
 	}
 }

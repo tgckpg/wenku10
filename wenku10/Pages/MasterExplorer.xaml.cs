@@ -24,12 +24,12 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
+using GR.CompositeElement;
 using GR.DataSources;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Section;
 using GR.Effects;
-using GR.CompositeElement;
 
 namespace wenku10.Pages
 {
@@ -72,9 +72,9 @@ namespace wenku10.Pages
 			}
 		}
 
-		public void NavigateToViewSource( Type TViewSource, Action<GRViewSource> VSAction )
+		public void NavigateToDataSource( Type TDataSource, Action<GRViewSource> VSAction = null )
 		{
-			GRViewSource VS = SearchViewSource( NavTree, TViewSource );
+			GRViewSource VS = SearchDataSource( NavTree, TDataSource );
 			if ( VS != null )
 			{
 				NavigateToViewSource( VS );
@@ -82,17 +82,17 @@ namespace wenku10.Pages
 			}
 		}
 
-		private GRViewSource SearchViewSource( IEnumerable<TreeItem> NTree, Type TViewSource )
+		private GRViewSource SearchDataSource( IEnumerable<TreeItem> NTree, Type TDataSource )
 		{
 			foreach ( TreeItem Nav in NTree )
 			{
-				if ( Nav.GetType() == TViewSource && Nav is GRViewSource GVS )
+				if ( Nav is GRViewSource GVS && GVS.DataSourceType == TDataSource )
 				{
 					return GVS;
 				}
 				else if ( Nav.Children.Any() )
 				{
-					GRViewSource K = SearchViewSource( Nav.Children, TViewSource );
+					GRViewSource K = SearchDataSource( Nav.Children, TDataSource );
 					if ( K != null )
 					{
 						return K;
@@ -281,9 +281,6 @@ namespace wenku10.Pages
 
 		private PageExtension PageExt;
 
-		private bool _NoCommands;
-		private bool _MajorNav;
-
 		private IList<ICommandBarElement> _MajorControls;
 		private IList<ICommandBarElement> _Major2ndControls;
 		private IList<ICommandBarElement> _MinorControls;
@@ -298,8 +295,6 @@ namespace wenku10.Pages
 					MajorControls = _MajorControls;
 					Major2ndControls = _Major2ndControls;
 					MinorControls = _MinorControls;
-					NoCommands = _NoCommands;
-					MajorNav = _MajorNav;
 
 					OExt.ControlChanged -= ExtCmd_ControlChanged;
 				}
@@ -325,19 +320,37 @@ namespace wenku10.Pages
 				Major2ndControls = ExtCmd.Major2ndControls;
 				MinorControls = ExtCmd.MinorControls;
 
-				if( ExtCmd.MajorNav )
+				if ( ExtCmd.MajorNav )
 				{
-					if( MajorControls.Any() )
+					if ( MajorControls != null && MajorControls.Any() )
 					{
-						MajorControls = MajorControls
-							.Concat( new ICommandBarElement[] { new AppBarSeparator() } )
-							.Concat( _MajorControls )
-							.ToArray();
+						if ( _MajorControls != null && _MajorControls.Any() )
+						{
+							MajorControls = MajorControls
+								.Concat( new ICommandBarElement[] { new AppBarSeparator() } )
+								.Concat( _MajorControls )
+								.ToArray();
+						}
 					}
 					else
 					{
 						MajorControls = _MajorControls;
 					}
+				}
+
+				if ( Major2ndControls != null && Major2ndControls.Any() )
+				{
+					if ( _Major2ndControls != null && _Major2ndControls.Any() )
+					{
+						Major2ndControls = Major2ndControls
+							.Concat( new ICommandBarElement[] { new AppBarSeparator() } )
+							.Concat( _Major2ndControls )
+							.ToArray();
+					}
+				}
+				else
+				{
+					Major2ndControls = _Major2ndControls;
 				}
 
 				ExtCmd.ControlChanged += ExtCmd_ControlChanged;

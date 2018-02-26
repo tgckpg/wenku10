@@ -144,7 +144,10 @@
     <Compile Include="GR\DataSources\ZSMDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
-    <Compile Include="GR\MigrationOps\MigrationBackup.cs" />
+    <Compile Include="GR\MigrationOps\IMigrationOp.cs" />
+    <Compile Include="GR\MigrationOps\M0000.cs" />
+    <Compile Include="GR\MigrationOps\MigrationManager.cs" />
+    <Compile Include="GR\MigrationOps\BackupAndRestoreOp.cs" />
     <Compile Include="GR\MigrationOps\NaiveObfustream.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
@@ -194,9 +197,6 @@
     <Compile Include="Pages\Dialogs\ValueHelpInput.xaml.cs">
       <DependentUpon>ValueHelpInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\OnlineScriptsView.xaml.cs">
-      <DependentUpon>OnlineScriptsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageId.cs" />
     <Compile Include="Pages\ManagePins.xaml.cs">
       <DependentUpon>ManagePins.xaml</DependentUpon>
@@ -204,8 +204,8 @@
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\Migrations\M0000.xaml.cs">
-      <DependentUpon>M0000.xaml</DependentUpon>
+    <Compile Include="Pages\Settings\Migrations.xaml.cs">
+      <DependentUpon>Migrations.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TOCPageBase.cs" />
     <Compile Include="Pages\TOCViewHorz.xaml.cs">
@@ -457,7 +457,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Settings\Migrations\M0000.xaml">
+    <Page Include="Pages\Settings\Migrations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -574,10 +574,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ControlFrame.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\OnlineScriptsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -872,9 +868,7 @@
       <Name>Tasks</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GR\MigrationOps\M000\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

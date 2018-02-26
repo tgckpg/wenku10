@@ -71,7 +71,7 @@ namespace wenku10.Pages
 
 				if ( Yes )
 				{
-					ControlFrame.Instance.CommandMgr.WLogout();
+					X.Singleton<IMember>( XProto.Member ).Logout();
 					ControlFrame.Instance.BackStack.Remove( PageId.W_USER_INFO );
 					ControlFrame.Instance.GoBack();
 				}

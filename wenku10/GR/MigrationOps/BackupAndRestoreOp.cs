@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage;
 
+using Net.Astropenguin.Helpers;
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 
 namespace GR.MigrationOps
 {
-	using GR.CompositeElement;
+	using CompositeElement;
 	using GSystem;
-	using Net.Astropenguin.Helpers;
-	using Net.Astropenguin.IO;
-	using Net.Astropenguin.Loaders;
 	using Resources;
 
-	class MigrationBackup
+	class BackupAndRestoreOp
 	{
 		public string BytesTotal = "";
 		public string CFName;
@@ -32,17 +32,24 @@ namespace GR.MigrationOps
 
 		public IStorageFile ZBackup { get; private set; }
 
-		public MigrationBackup( string SN )
+		public string BackupType => "GR Backup " + SN;
+		public string ExtType => "." + SN;
+		public string BackupName => "Backup" + ExtType;
+
+		public BackupAndRestoreOp( string SN )
 		{
 			this.SN = SN;
 			BakFileName = "backup." + SN;
 
 			switch ( SN )
 			{
-				case "M000": OfsIV = 0b10101101; break;
-				case "M001": OfsIV = 0b01001001; break;
-				case "M002": OfsIV = 0b11011101; break;
-				case "M003": OfsIV = 0b11000110; break;
+				case "M0000": OfsIV = 0b10101101; break;
+				case "M0001": OfsIV = 0b01001001; break;
+				case "M0002": OfsIV = 0b11011101; break;
+				case "M0003": OfsIV = 0b11000110; break;
+
+				default:
+					throw new InvalidOperationException();
 			}
 		}
 

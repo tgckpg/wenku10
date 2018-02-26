@@ -57,8 +57,8 @@ namespace wenku10.ShHub
 						ControlFrame.Instance.NavigateTo(
 							PageId.MASTER_EXPLORER, () => new MasterExplorer()
 							//  Open ZoneSpider Manager
-							, P => ( ( MasterExplorer ) P ).NavigateToViewSource(
-								typeof( ZSManagerVS )
+							, P => ( ( MasterExplorer ) P ).NavigateToDataSource(
+								typeof( ZSMDisplayData )
 								, async ( ZSVS ) =>
 								{
 									// Using the manager, import this script
@@ -257,8 +257,10 @@ namespace wenku10.ShHub
 			{
 				ControlFrame.Instance.NavigateTo(
 					PageId.MASTER_EXPLORER, () => new MasterExplorer()
-					, P => ( ( MasterExplorer ) P ).NavigateToViewSource( typeof( BookSpiderVS )
-					, VS => ( ( BookSpiderVS ) VS ).Process( Book.ZoneId, Book.ZItemId ) )
+					, P => ( ( MasterExplorer ) P ).NavigateToDataSource(
+						typeof( BookSpiderDisplayData )
+						, VS => ( ( BookSpiderVS ) VS ).Process( Book.ZoneId, Book.ZItemId )
+					)
 				);
 			}
 		}
