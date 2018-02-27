@@ -258,4 +258,7 @@
   <data name="RebuildIndex.Text" xml:space="preserve">
     <value>Rebuild Index</value>
   </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>Backup and Restore</value>
+  </data>
 </root>

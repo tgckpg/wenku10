@@ -25,6 +25,9 @@ namespace GR.MigrationOps
 		public string CFName;
 		public ulong BytesCopied = 0;
 
+		private static readonly char[] BOM = { 'G', 'R', 'M' };
+
+		private UInt16 Ver = 0;
 		private string BakFileName;
 		private string SN;
 
@@ -39,15 +42,16 @@ namespace GR.MigrationOps
 		public BackupAndRestoreOp( string SN )
 		{
 			this.SN = SN;
+			Ver = UInt16.Parse( SN.Substring( 1 ) );
+
 			BakFileName = "backup." + SN;
 
-			switch ( SN )
+			switch ( Ver )
 			{
-				case "M0000": OfsIV = 0b10101101; break;
-				case "M0001": OfsIV = 0b01001001; break;
-				case "M0002": OfsIV = 0b11011101; break;
-				case "M0003": OfsIV = 0b11000110; break;
-
+				case 0: OfsIV = 0b10101101; break;
+				case 1: OfsIV = 0b01001001; break;
+				case 2: OfsIV = 0b11011101; break;
+				case 3: OfsIV = 0b11000110; break;
 				default:
 					throw new InvalidOperationException();
 			}
@@ -67,21 +71,27 @@ namespace GR.MigrationOps
 			BytesCopied = 0;
 
 			using ( Stream FileStream = File.OpenWrite( ZM000 ) )
-			using ( Stream Ofs = new NaiveObfustream( FileStream, OfsIV ) )
-			using ( ZipArchive ZArch = new ZipArchive( Ofs, ZipArchiveMode.Create ) )
 			{
-				foreach ( FileInfo F in AllFiles )
+				BinaryWriter MetaWriter = new BinaryWriter( FileStream );
+				MetaWriter.Write( BOM );
+				MetaWriter.Write( Ver );
+
+				using ( Stream Ofs = new NaiveObfustream( FileStream, OfsIV ) )
+				using ( ZipArchive ZArch = new ZipArchive( Ofs, ZipArchiveMode.Create ) )
 				{
-					CFName = F.Name;
-					ZipArchiveEntry ZEntry = ZArch.CreateEntry( F.FullName.Substring( MLocalState.Length + 1 ) );
-
-					ZEntry.LastWriteTime = F.LastWriteTime;
-
-					using ( Stream RStream = File.OpenRead( F.FullName ) )
-					using ( Stream ZStream = ZEntry.Open() )
+					foreach ( FileInfo F in AllFiles )
 					{
-						RStream.CopyTo( ZStream );
-						BytesCopied += ( ulong ) F.Length;
+						CFName = F.Name;
+						ZipArchiveEntry ZEntry = ZArch.CreateEntry( F.FullName.Substring( MLocalState.Length + 1 ) );
+
+						ZEntry.LastWriteTime = F.LastWriteTime;
+
+						using ( Stream RStream = File.OpenRead( F.FullName ) )
+						using ( Stream ZStream = ZEntry.Open() )
+						{
+							RStream.CopyTo( ZStream );
+							BytesCopied += ( ulong ) F.Length;
+						}
 					}
 				}
 			}
@@ -111,26 +121,49 @@ namespace GR.MigrationOps
 			return UseThisFile;
 		}
 
-		public async Task Restore()
+		public async Task<bool> Restore()
 		{
 			if ( ZBackup == null )
-				return;
+				return false;
 
-			using ( Stream ZStream = await ZBackup.OpenStreamForReadAsync() )
-			using ( Stream Ofs = new NaiveObfustream( ZStream, OfsIV ) )
-			using ( ZipArchive ZArch = new ZipArchive( Ofs, ZipArchiveMode.Read ) )
+			try
 			{
-				BytesTotal = Utils.AutoByteUnit( ( ulong ) ZArch.Entries.Sum( n => n.Length ) );
-				BytesCopied = 0;
-
-				ZArch.Entries.ExecEach( Entry =>
+				using ( Stream FStream = await ZBackup.OpenStreamForReadAsync() )
 				{
-					Shared.Storage.CreateDirs( Path.GetDirectoryName( Entry.FullName ) );
-					Entry.ExtractToFile( Path.Combine( ApplicationData.Current.LocalFolder.Path, Entry.FullName ) );
-					BytesCopied += ( ulong ) Entry.Length;
-					CFName = Entry.Name;
-				} );
+					BinaryReader MetaReader = new BinaryReader( FStream );
+					if( !BOM.SequenceEqual( MetaReader.ReadChars( BOM.Length )))
+					{
+						throw new InvalidDataException( "BOM header mismatched" );
+					}
+
+					UInt16 MVer = MetaReader.ReadUInt16();
+					if( MVer != Ver )
+					{
+						throw new InvalidOperationException( "Version mismatched" );
+					}
+
+					using ( Stream Ofs = new NaiveObfustream( FStream, OfsIV ) )
+					using ( ZipArchive ZArch = new ZipArchive( Ofs, ZipArchiveMode.Read ) )
+					{
+						BytesTotal = Utils.AutoByteUnit( ( ulong ) ZArch.Entries.Sum( n => n.Length ) );
+						BytesCopied = 0;
+
+						ZArch.Entries.ExecEach( Entry =>
+						{
+							Shared.Storage.CreateDirs( Path.GetDirectoryName( Entry.FullName ) );
+							Entry.ExtractToFile( Path.Combine( ApplicationData.Current.LocalFolder.Path, Entry.FullName ) );
+							BytesCopied += ( ulong ) Entry.Length;
+							CFName = Entry.Name;
+						} );
+					}
+				}
 			}
+			catch( Exception )
+			{
+				return false;
+			}
+
+			return true;
 		}
 	}
 }

@@ -258,4 +258,7 @@
   <data name="RebuildIndex.Text" xml:space="preserve">
     <value>重建索引</value>
   </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>備份與還原</value>
+  </data>
 </root>

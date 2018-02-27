@@ -189,6 +189,9 @@
   <data name="PurgingFiles.Text" xml:space="preserve">
     <value>Purging files...</value>
   </data>
+  <data name="RestoreBackup.Text" xml:space="preserve">
+    <value>Restore backup</value>
+  </data>
   <data name="SavingRecords.Text" xml:space="preserve">
     <value>Saving records...</value>
   </data>

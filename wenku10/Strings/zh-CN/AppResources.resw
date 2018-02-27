@@ -431,4 +431,7 @@
   <data name="Search_Result.Text" xml:space="preserve">
     <value>搜索結果</value>
   </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>备份与还原</value>
+  </data>
 </root>

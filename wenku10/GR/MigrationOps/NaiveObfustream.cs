@@ -15,21 +15,38 @@ namespace GR.MigrationOps
 		Stream Source;
 
 		private byte IV;
+		private long InitialPos;
 
 		public NaiveObfustream( Stream SourceStream, byte IV )
 		{
 			this.IV = IV;
 			Source = SourceStream;
+			InitialPos = Source.Position;
 		}
 
 		public override bool CanRead => Source.CanRead;
 		public override bool CanSeek => Source.CanSeek;
 		public override bool CanWrite => Source.CanWrite;
-		public override long Length => Source.Length;
-		public override long Position { get => Source.Position; set => Source.Position = value; }
 		public override void Flush() => Source.Flush();
-		public override long Seek( long offset, SeekOrigin origin ) => Source.Seek( offset, origin );
-		public override void SetLength( long value ) => Source.SetLength( value);
+
+		public override long Length => Source.Length - InitialPos;
+
+		public override long Position
+		{
+			get => Source.Position - InitialPos;
+			set => Source.Position = value + InitialPos;
+		}
+
+		public override long Seek( long offset, SeekOrigin origin )
+		{
+			if( origin == SeekOrigin.Begin )
+			{
+				return Source.Seek( offset + InitialPos, origin );
+			}
+			return Source.Seek( offset, origin );
+		}
+
+		public override void SetLength( long value ) => Source.SetLength( value + InitialPos );
 
 		public override int Read( byte[] buffer, int offset, int count )
 		{

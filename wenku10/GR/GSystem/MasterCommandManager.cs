@@ -87,6 +87,9 @@ namespace GR.GSystem
 			SecondaryIconButton SettingsBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Settings, stx.Text( "Settings", "AppBar" ) );
 			SettingsBtn.Click += CreateCmdHandler( PageId.MAIN_SETTINGS, () => new global::wenku10.Pages.Settings.MainSettings() );
 
+			SecondaryIconButton BackupBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.UpdateRestore, stx.Text( "BackupAndRestore", "AppBar" ) );
+			BackupBtn.Click += ( s, e ) => MainStage.Instance.RootFrame.Navigate( typeof( global::wenku10.Pages.Settings.BackupAndRestore ) );
+
 			AboutBtn = new SecretSwipeButton( SegoeMDL2.Info )
 			{
 				Label = stx.Text( "About", "AppBar" ),
@@ -97,6 +100,7 @@ namespace GR.GSystem
 			AboutBtn.PendingClick += CreateCmdHandler( PageId.ABOUT, () => new About() );
 			AboutBtn.CanSwipe = X.Exists;
 
+			Btns.Add( BackupBtn );
 			Btns.Add( SettingsBtn );
 			Btns.Add( AboutBtn );
 

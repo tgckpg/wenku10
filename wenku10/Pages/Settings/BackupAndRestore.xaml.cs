@@ -22,11 +22,11 @@ using GR.MigrationOps;
 
 namespace wenku10.Pages.Settings
 {
-	public sealed partial class Migrations : Page
+	public sealed partial class BackupAndRestore : Page
 	{
 		MigrationManager MigrationMgr;
 
-		public Migrations()
+		public BackupAndRestore()
 		{
 			this.InitializeComponent();
 			SetTemplate();

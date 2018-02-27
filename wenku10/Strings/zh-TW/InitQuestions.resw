@@ -189,6 +189,9 @@
   <data name="PurgingFiles.Text" xml:space="preserve">
     <value>清除文件…</value>
   </data>
+  <data name="RestoreBackup.Text" xml:space="preserve">
+    <value>還原備份</value>
+  </data>
   <data name="SavingRecords.Text" xml:space="preserve">
     <value>儲存記錄</value>
   </data>

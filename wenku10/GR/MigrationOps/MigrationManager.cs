@@ -23,7 +23,7 @@ namespace GR.MigrationOps
 		Type[] Mops = new Type[] { typeof( M0000 ) };
 		private string NextMop;
 
-		public bool ShouldMigrate;
+		public bool ShouldMigrate { get; set; }
 
 		public string Mesg { get; set; }
 		public string MesgR { get; set; }
@@ -121,12 +121,17 @@ namespace GR.MigrationOps
 
 			Worker.UIInvoke( DTimer.Start );
 			MWriteLine( stx.Text( "ExtractingFiles" ) );
-			await CurrBakOp.Restore();
+			bool RestoreSuccess = await CurrBakOp.Restore();
 			Worker.UIInvoke( DTimer.Stop );
 
-			CanBackup = false;
-			CanRestore = true;
-			CanMigrate = true;
+			if( RestoreSuccess )
+			{
+				await Migrate();
+			}
+			else
+			{
+				MWriteLine( "Restore failed" );
+			}
 		}
 
 		public async Task Migrate()

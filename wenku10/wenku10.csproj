@@ -204,8 +204,8 @@
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\Migrations.xaml.cs">
-      <DependentUpon>Migrations.xaml</DependentUpon>
+    <Compile Include="Pages\Settings\BackupAndRestore.xaml.cs">
+      <DependentUpon>BackupAndRestore.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TOCPageBase.cs" />
     <Compile Include="Pages\TOCViewHorz.xaml.cs">
@@ -457,7 +457,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Settings\Migrations.xaml">
+    <Page Include="Pages\Settings\BackupAndRestore.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

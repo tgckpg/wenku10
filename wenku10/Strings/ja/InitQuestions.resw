@@ -189,6 +189,9 @@
   <data name="PurgingFiles.Text" xml:space="preserve">
     <value>ファイルの削除…</value>
   </data>
+  <data name="RestoreBackup.Text" xml:space="preserve">
+    <value>バックアップを復元</value>
+  </data>
   <data name="SavingRecords.Text" xml:space="preserve">
     <value>レコードを保存中</value>
   </data>

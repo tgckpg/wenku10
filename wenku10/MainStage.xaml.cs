@@ -38,7 +38,7 @@ namespace wenku10
 
 			if ( new GR.MigrationOps.MigrationManager().ShouldMigrate )
 			{
-				RootFrame.Navigate( typeof( Pages.Settings.Migrations ) );
+				RootFrame.Navigate( typeof( Pages.Settings.BackupAndRestore ) );
 				return;
 			}
 

@@ -259,4 +259,7 @@
     <value>索引を再構築する</value>
     <comment>Rebuild Index</comment>
   </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>バックアップと復元</value>
+  </data>
 </root>
