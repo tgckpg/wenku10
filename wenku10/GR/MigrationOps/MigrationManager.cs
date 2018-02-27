@@ -175,6 +175,7 @@ namespace GR.MigrationOps
 
 				if( Mop.ShouldMigrate )
 				{
+					MWriteLine( string.Format( stx.Text( "MPhase" ), M.Name ) );
 					await Mop.Up();
 				}
 			}

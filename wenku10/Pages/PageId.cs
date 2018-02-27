@@ -21,7 +21,6 @@ namespace wenku10.Pages
 			, ABOUT = "About"
 
 			, W_COMMENT = "WComment"
-			, W_USER_INFO = "WUserInfo"
 			, W_DEATHBLOW = "WDeathblow"
 
 			, SG_W = "SuperGiants-W"

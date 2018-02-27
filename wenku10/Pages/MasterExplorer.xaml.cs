@@ -268,13 +268,27 @@ namespace wenku10.Pages
 
 		private async void OpenView( GRViewSource ViewSource )
 		{
+			int AnimaInt = 0;
 			if ( PreferredState != ( string ) MasterNav.Tag )
 			{
 				MasterNav.Tag = PreferredState;
-				await Task.Delay( 250 );
+				AnimaInt = 250;
+			}
+
+			if ( TransitionDisplay.GetState( ExplorerView ) == TransitionState.Active )
+			{
+				TransitionDisplay.SetState( ExplorerView, TransitionState.Inactive );
+				AnimaInt = 350;
+			}
+
+			if ( 0 < AnimaInt )
+			{
+				await Task.Delay( AnimaInt );
 			}
 
 			await ExplorerView.View( ViewSource );
+
+			TransitionDisplay.SetState( ExplorerView, TransitionState.Active );
 			LoadingMessage.DataContext = ViewSource;
 			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
 		}

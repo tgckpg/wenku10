@@ -330,9 +330,6 @@
     <Compile Include="Pages\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WUserInfo.xaml.cs">
-      <DependentUpon>WUserInfo.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\ContentReaderVert.xaml.cs">
       <DependentUpon>ContentReaderVert.xaml</DependentUpon>
     </Compile>
@@ -466,10 +463,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\WDeathblow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WUserInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

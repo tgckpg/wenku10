@@ -237,40 +237,25 @@ namespace wenku10.Pages.BookInfoControls
 
 		private void PostSuccess( DRequestCompletedEventArgs e, string id )
 		{
-			CloseFrame( ReviewsFrame );
-			if ( SubListView.Content == null )
+			Worker.UIInvoke( () =>
 			{
-				var j = ReloadComments();
-			}
-			else
-			{
-				var j = ( ( ReplyList ) SubListView.Content ).OpenReview( CurrentReview );
-			}
+				CloseFrame( ReviewsFrame );
+				if ( SubListView.Content == null )
+				{
+					var j = ReloadComments();
+				}
+				else
+				{
+					var j = ( ( ReplyList ) SubListView.Content ).OpenReview( CurrentReview );
+				}
 
-			SetControls( ReloadBtn, AddBtn );
+				SetControls( ReloadBtn, AddBtn );
+			} );
 		}
 
-		private async void PostFailed( string arg1, string arg2, Exception ex )
+		private void PostFailed( string arg1, string arg2, Exception ex )
 		{
-			if ( ex.XTest( XProto.WException ) )
-			{
-				if ( ex.XProp<Enum>( "WCode" ).Equals( X.Const<Enum>( XProto.WCode, "LOGON_REQUIRED" ) ) )
-				{
-					// Prompt login
-					Dialogs.Login Login = new Dialogs.Login( X.Singleton<IMember>( XProto.Member ) );
-					await Popups.ShowDialog( Login );
-
-					// Auto submit if possible
-					if ( Login.Canceled )
-					{
-						SubmitBtn.IsEnabled = true;
-					}
-					else
-					{
-						SubmitReview();
-					}
-				}
-			}
+			Worker.UIInvoke( () => SubmitBtn.IsEnabled = true );
 		}
 
 		private void WriteReview( object sender, RoutedEventArgs e )

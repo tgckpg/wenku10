@@ -52,7 +52,10 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ex:GRTableView x:Name="ExplorerView" Grid.Column="0" Grid.ColumnSpan="2" ViewMode="Table" />
+        <ex:GRTableView x:Name="ExplorerView"
+                        e:TransitionDisplay.Mode="A01_X_30_0"
+                        e:TransitionDisplay.State="Inactive"
+                        Grid.Column="0" Grid.ColumnSpan="2" ViewMode="Table" />
         <Rectangle x:Name="NavSensor" Grid.ColumnSpan="2" Fill="Transparent" Visibility="Collapsed" />
         <ListView x:Name="MasterNav" Background="{StaticResource MajorBackgroundBrush}"
                   IsItemClickEnabled="True" ItemClick="MasterNav_ItemClick"

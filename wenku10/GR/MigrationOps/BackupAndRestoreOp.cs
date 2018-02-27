@@ -68,7 +68,7 @@ namespace GR.MigrationOps
 
 			FileInfo[] AllFiles = new DirectoryInfo( MLocalState )
 				.GetFiles( "*", SearchOption.AllDirectories )
-				.Where( x => !( x.DirectoryName.Contains( "EBWin" ) || x.Name == "ftsdata.db" ) )
+				.Where( x => x.Name != "ftsdata.db" )
 				.ToArray();
 
 			BytesTotal = Utils.AutoByteUnit( ( ulong ) AllFiles.Sum( x => x.Length ) );

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -14,23 +15,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
-using libtaotu.Crawler;
 using libtaotu.Controls;
 using libtaotu.Models.Procedure;
 using libtaotu.Pages;
 
 using GR.Taotu;
-using GR.Model.Book;
 using GR.Model.Book.Spider;
-using System.Threading.Tasks;
 
 namespace wenku10.Pages.Dialogs.Taotu
 {
@@ -155,7 +151,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 			IStorageFile PreviewFile = await AppStorage.MkTemp();
 			await PreviewFile.WriteString(
-				string.Join( "\n<<<<<<<<<<<<<<\n", Payload.Remap( x => x.PlainTextInfo ) ) );
+				string.Join( "\n<<<<<<<<<<<<<<\n", Payload.Select( x => x.PlainTextInfo ) ) );
 
 			var j = Dispatcher.RunIdleAsync(
 				x => Frame.Navigate( typeof( DirectTextViewer ), PreviewFile )
