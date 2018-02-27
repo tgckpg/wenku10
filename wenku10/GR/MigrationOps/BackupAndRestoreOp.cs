@@ -27,9 +27,26 @@ namespace GR.MigrationOps
 
 		private static readonly char[] BOM = { 'G', 'R', 'M' };
 
-		private UInt16 Ver = 0;
-		private string BakFileName;
-		private string SN;
+		private UInt16 _Ver;
+		private UInt16 Ver
+		{
+			get => _Ver;
+			set
+			{
+				switch ( value )
+				{
+					case 0: OfsIV = 0b10101101; break;
+					case 1: OfsIV = 0b01001001; break;
+					case 2: OfsIV = 0b11011101; break;
+					case 3: OfsIV = 0b11000110; break;
+					default:
+						throw new InvalidOperationException( "Unknow IV: " + value );
+				}
+				_Ver = value;
+			}
+		}
+
+		public string SN => string.Format( "M{0:0000}", _Ver );
 
 		private byte OfsIV;
 
@@ -41,30 +58,17 @@ namespace GR.MigrationOps
 
 		public BackupAndRestoreOp( string SN )
 		{
-			this.SN = SN;
 			Ver = UInt16.Parse( SN.Substring( 1 ) );
-
-			BakFileName = "backup." + SN;
-
-			switch ( Ver )
-			{
-				case 0: OfsIV = 0b10101101; break;
-				case 1: OfsIV = 0b01001001; break;
-				case 2: OfsIV = 0b11011101; break;
-				case 3: OfsIV = 0b11000110; break;
-				default:
-					throw new InvalidOperationException();
-			}
 		}
 
 		public async Task Backup()
 		{
-			string ZM000 = Path.GetFullPath( Path.Combine( ApplicationData.Current.TemporaryFolder.Path, BakFileName ) );
+			string ZM000 = Path.GetFullPath( Path.Combine( ApplicationData.Current.TemporaryFolder.Path, BackupName ) );
 			string MLocalState = Path.GetFullPath( ApplicationData.Current.LocalFolder.Path );
 
 			FileInfo[] AllFiles = new DirectoryInfo( MLocalState )
 				.GetFiles( "*", SearchOption.AllDirectories )
-				.Where( x => !x.DirectoryName.Contains( "EBWin" ) )
+				.Where( x => !( x.DirectoryName.Contains( "EBWin" ) || x.Name == "ftsdata.db" ) )
 				.ToArray();
 
 			BytesTotal = Utils.AutoByteUnit( ( ulong ) AllFiles.Sum( x => x.Length ) );
@@ -96,17 +100,17 @@ namespace GR.MigrationOps
 				}
 			}
 
-			ZBackup = await ApplicationData.Current.TemporaryFolder.GetFileAsync( BakFileName );
+			ZBackup = await ApplicationData.Current.TemporaryFolder.GetFileAsync( BackupName );
 		}
 
 
-		public async Task<bool> PickRestoreFile()
+		public async Task<bool> PickRestoreFile( string[] Mops )
 		{
 			bool UseThisFile = false;
 
 			await Worker.RunUITaskAsync( async () =>
 			{
-				ZBackup = await AppStorage.OpenFileAsync( "." + SN );
+				ZBackup = await AppStorage.OpenFileAsync( Mops.Select( x => "." + x ) );
 				if ( ZBackup != null )
 				{
 					StringResources stx = new StringResources( "InitQuestions", "Message" );
@@ -136,11 +140,7 @@ namespace GR.MigrationOps
 						throw new InvalidDataException( "BOM header mismatched" );
 					}
 
-					UInt16 MVer = MetaReader.ReadUInt16();
-					if( MVer != Ver )
-					{
-						throw new InvalidOperationException( "Version mismatched" );
-					}
+					Ver = MetaReader.ReadUInt16();
 
 					using ( Stream Ofs = new NaiveObfustream( FStream, OfsIV ) )
 					using ( ZipArchive ZArch = new ZipArchive( Ofs, ZipArchiveMode.Read ) )
@@ -158,7 +158,7 @@ namespace GR.MigrationOps
 					}
 				}
 			}
-			catch( Exception )
+			catch( InvalidDataException )
 			{
 				return false;
 			}

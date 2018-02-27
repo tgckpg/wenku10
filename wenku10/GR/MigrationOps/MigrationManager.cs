@@ -21,7 +21,8 @@ namespace GR.MigrationOps
 	class MigrationManager : ActiveData
 	{
 		Type[] Mops = new Type[] { typeof( M0000 ) };
-		private string NextMop;
+
+		private string[] SupportedMops;
 
 		public bool ShouldMigrate { get; set; }
 
@@ -47,8 +48,6 @@ namespace GR.MigrationOps
 
 		public MigrationManager()
 		{
-			NextMop = string.Format( "M{0:0000}", int.Parse( Mops.Last().Name.Substring( 1 ) ) + 1 );
-
 			DTimer = new DispatcherTimer();
 			DTimer.Interval = TimeSpan.FromSeconds( 2 );
 			DTimer.Tick += DTimer_Tick;
@@ -70,9 +69,18 @@ namespace GR.MigrationOps
 				}
 			}
 
-			if( CurrBakOp == null)
+			SupportedMops = new string[ Mops.Length + 1 ];
+
+			for ( int i = 0; i < Mops.Length; i++ )
 			{
-				CurrBakOp = new BackupAndRestoreOp( NextMop );
+				SupportedMops[ i ] = Mops[ i ].Name;
+			}
+
+			SupportedMops[ Mops.Length ] = string.Format( "M{0:0000}", int.Parse( Mops.Last().Name.Substring( 1 ) ) + 1 );
+
+			if ( CurrBakOp == null )
+			{
+				CurrBakOp = new BackupAndRestoreOp( SupportedMops.Last() );
 				CanBackup = true;
 				CanRestore = true;
 			}
@@ -111,7 +119,7 @@ namespace GR.MigrationOps
 
 		public async Task Restore()
 		{
-			if ( !await CurrBakOp.PickRestoreFile() )
+			if ( !await CurrBakOp.PickRestoreFile( SupportedMops ) )
 				return;
 
 			CanBackup = CanMigrate = CanRestore = false;
@@ -126,6 +134,7 @@ namespace GR.MigrationOps
 
 			if( RestoreSuccess )
 			{
+				MWrite( stx.Text( "Complete" ) );
 				await Migrate();
 			}
 			else
@@ -189,7 +198,7 @@ namespace GR.MigrationOps
 
 		private void DTimer_Tick( object sender, object e )
 		{
-			MWrite( stx.Text( "MightTakeAWhile" ) + string.Format( "{0}/{1}: {2}", Utils.AutoByteUnit( CurrBakOp.BytesCopied ), CurrBakOp.BytesTotal, CurrBakOp.CFName ) );
+			MWrite( stx.Text( "MightTakeAWhile" ) + string.Format( "{3} - {0}/{1}: {2}", Utils.AutoByteUnit( CurrBakOp.BytesCopied ), CurrBakOp.BytesTotal, CurrBakOp.CFName, CurrBakOp.SN ) );
 		}
 	}
 }
