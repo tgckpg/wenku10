@@ -33,7 +33,7 @@ using GR.Effects;
 
 namespace wenku10.Pages
 {
-	public sealed partial class MasterExplorer : Page, ICmdControls, INavPage
+	public sealed partial class MasterExplorer : Page, ICmdControls, INavPage, IAnimaPage
 	{
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
@@ -199,7 +199,7 @@ namespace wenku10.Pages
 
 			CurrState = NState;
 
-			if( MainStage.Instance.IsPhone )
+			if ( MainStage.Instance.IsPhone )
 			{
 				NavSensor.Visibility = ( NState == "Opened" ) ? Visibility.Visible : Visibility.Collapsed;
 			}
@@ -316,7 +316,7 @@ namespace wenku10.Pages
 				PageExt = null;
 			}
 
-			if( Ext == null )
+			if ( Ext == null )
 			{
 				ControlChanged?.Invoke( this );
 				return;
@@ -378,5 +378,29 @@ namespace wenku10.Pages
 		{
 			ControlChanged?.Invoke( this );
 		}
+
+		Storyboard AnimaStory = new Storyboard();
+		public async Task EnterAnima()
+		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
+
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1, 350 );
+
+			AnimaStory.Begin();
+			await Task.Delay( 500 );
+		}
+
+		public async Task ExitAnima()
+		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
+
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
+
+			AnimaStory.Begin();
+			await Task.Delay( 500 );
+		}
+
 	}
 }

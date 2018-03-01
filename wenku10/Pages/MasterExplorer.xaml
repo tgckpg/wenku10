@@ -18,6 +18,9 @@
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RenderTransform>
+            <TranslateTransform X="0" />
+        </Grid.RenderTransform>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>

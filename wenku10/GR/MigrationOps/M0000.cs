@@ -260,7 +260,7 @@ namespace GR.MigrationOps
 					Entry = Item.Entry;
 				}
 
-				await Shared.BooksDb.LoadCollection( Entry, x => x.Volumes, x => x.Index );
+				await Shared.BooksDb.LoadCollectionAsync( Entry, x => x.Volumes, x => x.Index );
 				Entry.Volumes.Clear();
 
 				string BRoot = LRoot + Id + "/";
@@ -443,7 +443,7 @@ namespace GR.MigrationOps
 			BkInst.Info.LongDescription = MetaParam.GetValue( "Intro" );
 
 			Book Entry = BkInst.Entry;
-			await Shared.BooksDb.LoadCollection( Entry, x => x.Volumes, x => x.Index );
+			await Shared.BooksDb.LoadCollectionAsync( Entry, x => x.Volumes, x => x.Index );
 			Entry.Volumes.Clear();
 
 			XRegistry TOCDefs = new XRegistry( "<metadata />", SRoot + "/" + "toc.txt" );
@@ -515,6 +515,12 @@ namespace GR.MigrationOps
 			}
 
 			SpiderBook SBk = await SpiderBook.CreateSAsync( ZoneId, ZItemId, MetaDefs.Parameter( "Procedures" ) );
+
+			// Preserve the process state
+			XParameter ProcState = MetaDefs.Parameter( "ProcessState" );
+			if ( ProcState != null )
+				SBk.PSettings.SetParameter( ProcState );
+
 			SBk.PSettings.Save();
 			return Entry;
 		}

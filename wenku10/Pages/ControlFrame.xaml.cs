@@ -300,7 +300,7 @@ namespace wenku10.Pages
 
 			// Keep going back if previous page == current page
 			// This happens when pages in backstack got removed
-			while ( P.Value == View.Content )
+			while ( P.Value == View.Content && BackStack.CanGoBack )
 				P = BackStack.Back();
 
 			View.Tag = P.Name;
@@ -321,7 +321,7 @@ namespace wenku10.Pages
 
 			if ( !Override && SubView.Content is IAnimaPage )
 			{
-				await ( ( IAnimaPage ) View.Content ).ExitAnima();
+				await ( ( IAnimaPage ) SubView.Content ).ExitAnima();
 				TransitionDisplay.SetState( SubView, TransitionState.Hidden );
 			}
 			else
@@ -330,7 +330,7 @@ namespace wenku10.Pages
 				await Task.Delay( 350 );
 			}
 
-			UnsubEvents( ( Page ) View.Content );
+			UnsubEvents( ( Page ) SubView.Content );
 			( SubView.Content as INavPage )?.SoftClose();
 		}
 

@@ -65,7 +65,7 @@ namespace GR.PageExtensions
 		{
 			if ( !ViewSource.FTSData.IsBuilt )
 			{
-				string EstSize = Utils.AutoByteUnit( ( ulong ) ( 3.77 * Shared.Storage.FileSize( "books.db" ) ) );
+				string EstSize = Utils.AutoByteUnit( ( ulong ) ( 3.77 * ( await Shared.Storage.FileSize( "books.db" ) ) ) );
 
 				bool BuildIndex = false;
 
@@ -98,10 +98,10 @@ namespace GR.PageExtensions
 				Ch.Book = Shared.BooksDb.QueryBook( x => x.Id == Ch.BookId ).FirstOrDefault();
 
 				// Chapter is hard-linked to Volume. So we can load it confidently
-				await Shared.BooksDb.LoadCollection( Ch.Book, x => x.Volumes, x => x.Index );
+				await Shared.BooksDb.LoadCollectionAsync( Ch.Book, x => x.Volumes, x => x.Index );
 				foreach( Volume V in Ch.Book.Volumes )
 				{
-					await Shared.BooksDb.LoadCollection( V, x => x.Chapters, x => x.Index );
+					await Shared.BooksDb.LoadCollectionAsync( V, x => x.Chapters, x => x.Index );
 				}
 
 				BookItem BkItem = ItemProcessor.GetBookItem( Ch.Book );

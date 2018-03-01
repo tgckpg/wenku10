@@ -44,7 +44,7 @@ namespace GR.Model.Loaders
 
 			if ( b.Volumes == null )
 			{
-				b.Entry.Volumes = await Shared.BooksDb.LoadCollection( b.Entry, x => x.Volumes, x => x.Index );
+				b.Entry.Volumes = await Shared.BooksDb.LoadCollectionAsync( b.Entry, x => x.Volumes, x => x.Index );
 			}
 
 			if ( b.IsLocal() || ( useCache && !b.NeedUpdate && b.Volumes.Any() ) )
@@ -53,7 +53,7 @@ namespace GR.Model.Loaders
 				{
 					if ( Vol.Chapters == null )
 					{
-						Vol.Chapters = await Shared.BooksDb.LoadCollection( Vol, x => x.Chapters, x => x.Index );
+						Vol.Chapters = await Shared.BooksDb.LoadCollectionAsync( Vol, x => x.Chapters, x => x.Index );
 					}
 				}
 
@@ -61,7 +61,7 @@ namespace GR.Model.Loaders
 			}
 			else if ( b.IsSpider() )
 			{
-				LoadInst( ( BookInstruction ) b );
+				Task.Run( () => LoadInst( ( BookInstruction ) b ) );
 			}
 			else if ( b.IsEx() )
 			{
@@ -99,8 +99,38 @@ namespace GR.Model.Loaders
 
 			if ( Vols.Any() )
 			{
-				b.Entry.Volumes.Clear();
-				b.Entry.Volumes.AddRange( Vols );
+				List<Volume> NewVolumes = new List<Volume>();
+				Vols.ExecEach( Vol =>
+				{
+					string VID = Vol.Meta[ AppKeys.GLOBAL_VID ];
+					Volume NVol = b.Entry.Volumes.FirstOrDefault( x => x.Meta[ AppKeys.GLOBAL_VID ] == VID ) ?? Vol;
+					if ( NVol != Vol )
+					{
+						NVol.Title = Vol.Title;
+						NVol.Index = Vol.Index;
+						NVol.Json_Meta = Vol.Json_Meta;
+					}
+
+					Shared.BooksDb.LoadCollection( NVol, x => x.Chapters, x => x.Index );
+
+					List<Chapter> NewChapters = new List<Chapter>();
+					Vol.Chapters.ExecEach( Ch =>
+					{
+						string CID = Ch.Meta[ AppKeys.GLOBAL_CID ];
+						Chapter NCh = NVol.Chapters.FirstOrDefault( x => x.Meta[ AppKeys.GLOBAL_CID ] == CID ) ?? Ch;
+						if ( NCh != Ch )
+						{
+							NCh.Title = Ch.Title;
+							NCh.Index = Ch.Index;
+							NCh.Json_Meta = Ch.Json_Meta;
+						}
+						NewChapters.Add( NCh );
+					} );
+
+					NewVolumes.Add( NVol );
+				} );
+
+				b.Entry.Volumes = NewVolumes;
 				b.SaveInfo();
 			}
 			else

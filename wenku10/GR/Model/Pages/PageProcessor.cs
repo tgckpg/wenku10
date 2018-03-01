@@ -50,7 +50,7 @@ namespace GR.Model.Pages
 			else if ( Item is BookBannerItem )
 			{
 				BookBannerItem BItem = ( BookBannerItem ) Item;
-				Book Bk = Shared.BooksDb.Books.Find( BItem.BookId );
+				Book Bk = Shared.BooksDb.QueryBook( BItem.BookId );
 
 				return new NameValue<Func<Page>>(
 					PageId.BOOK_INFO_VIEW

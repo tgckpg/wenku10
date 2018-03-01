@@ -256,15 +256,9 @@ namespace GR.Settings.Layout
 							List<string> ImagePaths = new List<string>();
 							if ( Book != null )
 							{
-								foreach ( Volume V in Book.GetVolumes() )
+								foreach ( ChapterImage C in Shared.BooksDb.GetBookImages( Book.Id ) )
 								{
-									foreach ( Chapter C in V.Chapters )
-									{
-										if ( C.Image != null )
-										{
-											ImagePaths.AddRange( C.Image.Urls );
-										}
-									}
+									ImagePaths.AddRange( C.Urls );
 								}
 							}
 
