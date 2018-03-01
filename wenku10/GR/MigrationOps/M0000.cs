@@ -145,11 +145,22 @@ namespace GR.MigrationOps
 				if ( ZZId[ 0 ] == 'Z' )
 				{
 					// ZZId is ZoneId
+					string NZId = ZZId.Substring( 1 );
 					string ZCoverRoot = FileLinks.ROOT_COVER + ZZId;
 					if ( Shared.Storage.DirExist( ZCoverRoot ) )
-						Shared.Storage.MoveDir( ZCoverRoot, FileLinks.ROOT_COVER + ZZId.Substring( 1 ) );
+						Shared.Storage.MoveDir( ZCoverRoot, FileLinks.ROOT_COVER + NZId );
 
-					ZZId = ZZId.Substring( 1 );
+					string ZRThumbRoot = FileLinks.ROOT_READER_THUMBS + ZZId;
+					if ( Shared.Storage.DirExist( ZRThumbRoot ) )
+						Shared.Storage.MoveDir( ZRThumbRoot, FileLinks.ROOT_READER_THUMBS + NZId );
+
+					string ZRAnchorRoot = FileLinks.ROOT_ANCHORS + ZZId;
+					if ( Shared.Storage.DirExist( ZRAnchorRoot ) )
+						Shared.Storage.MoveDir( ZRAnchorRoot, FileLinks.ROOT_ANCHORS + NZId );
+
+					string ZTileRoot = "shared/ShellContent/" + ZZId;
+					if ( Shared.Storage.DirExist( ZTileRoot ) )
+						Shared.Storage.MoveDir( ZTileRoot, FileLinks.ROOT_TILE + NZId );
 
 					string[] ZItemIds = Shared.Storage.ListDirs( SRoot );
 					int m = ZItemIds.Length;
@@ -157,11 +168,11 @@ namespace GR.MigrationOps
 					await ZItemIds.ExecEach( async ( ZItemId, j ) =>
 					{
 						MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{0}/{1} ( {3} )", ZItemId, j + 1, m, "ZMode" ) );
-						MoveCover( ZZId, ZZId, ZItemId );
+						MigrateFiles( NZId, NZId, ZItemId );
 
 						string ZSRoot = SRoot + ZItemId + "/";
 
-						Entry = await MigrateBookSpider( ZSRoot, ZZId, ZItemId );
+						Entry = await MigrateBookSpider( ZSRoot, NZId, ZItemId );
 						if( Entry != null )
 						{
 							Entries.Add( Entry );
@@ -172,7 +183,7 @@ namespace GR.MigrationOps
 				{
 					// ZZId is ZItemId
 					MesgR( stx.Text( "MightTakeAWhile" ) + string.Format( "{1}/{2} ( {0} )", ZZId, i + 1, l ) );
-					MoveCover( "", AppKeys.ZLOCAL, ZZId );
+					MigrateFiles( "", AppKeys.ZLOCAL, ZZId );
 
 					Entry = await MigrateBookSpider( SRoot, AppKeys.ZLOCAL, ZZId );
 
@@ -186,13 +197,34 @@ namespace GR.MigrationOps
 			Shared.BooksDb.SaveBooks( Entries.ToArray() );
 		}
 
-		private void MoveCover( string OZoneId, string ZoneId, string ZItemId )
+		private void MigrateFiles( string OZoneId, string ZoneId, string ZItemId )
 		{
 			string CoverPath = FileLinks.ROOT_COVER + OZoneId + "/" + ZItemId + ".jpg";
 			if ( Shared.Storage.FileExists( CoverPath ) )
 			{
 				string NCoverPath = FileLinks.ROOT_COVER + ZoneId + "/" + ZItemId + ".cvr";
 				Shared.Storage.MoveFile( CoverPath, NCoverPath );
+			}
+
+			string ThumbPath = FileLinks.ROOT_READER_THUMBS + OZoneId + "/" + ZItemId;
+			if ( Shared.Storage.FileExists( ThumbPath ) )
+			{
+				string NThumbPath = FileLinks.ROOT_READER_THUMBS + ZoneId + "/" + ZItemId;
+				Shared.Storage.MoveFile( ThumbPath, NThumbPath );
+			}
+
+			string AnchorPath = FileLinks.ROOT_ANCHORS + OZoneId + "/" + ZItemId + ".xml";
+			if ( Shared.Storage.FileExists( AnchorPath ) )
+			{
+				string NAnchorPath = FileLinks.ROOT_ANCHORS + ZoneId + "/" + ZItemId + ".xml";
+				Shared.Storage.MoveFile( AnchorPath, NAnchorPath );
+			}
+
+			string TilePath = "shared/ShellContent/" + OZoneId + "/" + ZItemId + ".tile";
+			if ( Shared.Storage.FileExists( TilePath ) )
+			{
+				string NTilePath = FileLinks.ROOT_TILE + ZoneId + "/" + ZItemId + ".tile";
+				Shared.Storage.MoveFile( TilePath, NTilePath );
 			}
 		}
 

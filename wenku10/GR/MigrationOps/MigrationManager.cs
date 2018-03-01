@@ -167,6 +167,7 @@ namespace GR.MigrationOps
 
 			CanBackup = CanMigrate = CanRestore = false;
 
+			await Shared.Storage.InitializeAsync();
 			foreach( Type M in Mops )
 			{
 				IMigrationOp Mop = ( IMigrationOp ) Activator.CreateInstance( M );
