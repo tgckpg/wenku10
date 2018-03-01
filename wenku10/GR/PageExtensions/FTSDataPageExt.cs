@@ -20,11 +20,12 @@ namespace GR.PageExtensions
 	using Data;
 	using Database.Models;
 	using DataSources;
-	using GR.Model.Pages;
 	using GSystem;
 	using Model.Book;
 	using Model.Interfaces;
+	using Model.Pages;
 	using Resources;
+	using Settings;
 
 	sealed class FTSDataPageExt : PageExtension, ICmdControls
 	{
@@ -65,7 +66,7 @@ namespace GR.PageExtensions
 		{
 			if ( !ViewSource.FTSData.IsBuilt )
 			{
-				string EstSize = Utils.AutoByteUnit( ( ulong ) ( 3.77 * ( await Shared.Storage.FileSize( "books.db" ) ) ) );
+				string EstSize = Utils.AutoByteUnit( ( ulong ) ( 3.77 * ( await Shared.Storage.FileSize( FileLinks.DB_BOOKS ) ) ) );
 
 				bool BuildIndex = false;
 

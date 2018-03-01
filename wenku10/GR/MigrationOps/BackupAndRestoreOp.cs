@@ -18,6 +18,7 @@ namespace GR.MigrationOps
 	using CompositeElement;
 	using GSystem;
 	using Resources;
+	using Settings;
 
 	class BackupAndRestoreOp
 	{
@@ -68,7 +69,7 @@ namespace GR.MigrationOps
 
 			FileInfo[] AllFiles = new DirectoryInfo( MLocalState )
 				.GetFiles( "*", SearchOption.AllDirectories )
-				.Where( x => x.Name != "ftsdata.db" )
+				.Where( x => x.Name != FileLinks.DB_FTS_DATA )
 				.ToArray();
 
 			BytesTotal = Utils.AutoByteUnit( ( ulong ) AllFiles.Sum( x => x.Length ) );

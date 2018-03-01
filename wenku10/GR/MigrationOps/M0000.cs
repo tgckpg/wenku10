@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Text;
 
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
@@ -38,7 +37,7 @@ namespace GR.MigrationOps
 
 		public M0000()
 		{
-			ShouldMigrate = !Shared.Storage.FileExists( "books.db" );
+			ShouldMigrate = !Shared.Storage.FileExists( FileLinks.DB_BOOKS );
 		}
 
 		public async Task Up()

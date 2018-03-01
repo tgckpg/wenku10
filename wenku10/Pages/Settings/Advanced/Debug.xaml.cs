@@ -110,7 +110,7 @@ namespace wenku10.Pages.Settings.Advanced
 
 			if ( Shared.Storage.FileExists( Location ) )
 			{
-				Bootstrap.LogInstance.Stop();
+				Bootstrap.LogInstance?.Stop();
 
 				using ( Stream s = Shared.Storage.GetStream( Location ) )
 				using ( Stream ts = await ISF.OpenStreamForWriteAsync() )
@@ -118,7 +118,7 @@ namespace wenku10.Pages.Settings.Advanced
 					await s.CopyToAsync( ts );
 				}
 
-				Bootstrap.LogInstance.Start();
+				Bootstrap.LogInstance?.Start();
 			}
 
 			await ControlFrame.Instance.CloseSubView();
@@ -137,9 +137,9 @@ namespace wenku10.Pages.Settings.Advanced
 
 			if ( Shared.Storage.FileExists( Location ) )
 			{
-				Bootstrap.LogInstance.Stop();
+				Bootstrap.LogInstance?.Stop();
 				Shared.Storage.DeleteFile( Location );
-				Bootstrap.LogInstance.Start();
+				Bootstrap.LogInstance?.Start();
 			}
 
 			ActionBlocked = false;

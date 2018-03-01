@@ -16,7 +16,9 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
+using GR.GSystem;
 using GR.Resources;
+using GR.Settings;
 
 namespace wenku10.Pages.Settings.Data
 {
@@ -32,22 +34,24 @@ namespace wenku10.Pages.Settings.Data
 		{
 			StringResources stx = new StringResources( "LoadingMessage" );
 			CoverSize.Text = stx.Str( "Calculating" );
-			CalculateCoverSize();
 			TextContentSize.Text = stx.Str( "Calculating" );
+			CalculateCoverSize();
 			CalculateTextSize();
 		}
 
 		private async void CalculateCoverSize()
 		{
 			StringResources stx = new StringResources( "Settings" );
+			(int nFolders, int nFiles, ulong nSize) = await Shared.Storage.Stat( FileLinks.ROOT_COVER );
 			CoverSize.Text = stx.Text( "Data_CacheUsed" )
-				+ ": " + await Task.Run( () => global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.CoverSize() ) );
+				+ string.Format( ": {0} folders, {1} files, {2}", nFolders, nFiles, Utils.AutoByteUnit( nSize ) );
 		}
 
-		private void CalculateTextSize()
+		private async void CalculateTextSize()
 		{
 			StringResources stx = new StringResources( "Settings" );
-			TextContentSize.Text = stx.Text( "Data_CacheUsed" ) + "NotImplemented";
+			TextContentSize.Text = stx.Text( "Data_CacheUsed" )
+				+ ": " + Utils.AutoByteUnit( await Shared.Storage.FileSize( FileLinks.DB_BOOKS ) );
 		}
 
 		private void Button_Click_1( object sender, RoutedEventArgs e )
@@ -58,6 +62,7 @@ namespace wenku10.Pages.Settings.Data
 
 		private void Button_Click_2( object sender, RoutedEventArgs e )
 		{
+			GR.Database.ContextManager.ClearBookTexts();
 			SetTemplate();
 		}
 

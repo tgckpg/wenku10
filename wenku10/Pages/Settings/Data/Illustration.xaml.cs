@@ -16,7 +16,9 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Loaders;
 
 using GR.Config;
+using GR.GSystem;
 using GR.Resources;
+using GR.Settings;
 
 namespace wenku10.Pages.Settings.Data
 {
@@ -36,16 +38,19 @@ namespace wenku10.Pages.Settings.Data
 			UpdateFields();
 		}
 
-		void SaveLocation_SelectionChanged( object sender, SelectionChangedEventArgs e )
+		private void SaveLocation_SelectionChanged( object sender, SelectionChangedEventArgs e )
 		{
 			Properties.DATA_IMAGE_SAVE_TO_MEDIA_LIBRARY = IsSaveToMediaLibrary();
 		}
 
-		void UpdateFields()
+		private async void UpdateFields()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = new StringResources( "Settings", "LoadingMessage" );
+			illus_Size.Text = stx.Str( "Calculating", "LoadingMessage" );
+
+			(int nFolders, int nFiles, ulong nSize) = await Shared.Storage.Stat( FileLinks.ROOT_IMAGE );
 			illus_Size.Text = stx.Text( "Data_CacheUsed" )
-				+ ": " + global::GR.GSystem.Utils.AutoByteUnit( Shared.Storage.ImageSize() );
+				+ string.Format( ": {0} folders, {1} files, {2}", nFolders, nFiles, Utils.AutoByteUnit( nSize ) );
 		}
 
 		void SaveLocation_Loaded( object sender, RoutedEventArgs e )
