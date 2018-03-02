@@ -60,7 +60,7 @@
                         e:TransitionDisplay.State="Inactive"
                         Grid.Column="0" Grid.ColumnSpan="2" ViewMode="Table" />
         <Rectangle x:Name="NavSensor" Grid.ColumnSpan="2" Fill="Transparent" Visibility="Collapsed" />
-        <ListView x:Name="MasterNav" Background="{StaticResource MajorBackgroundBrush}"
+        <ListView x:Name="MasterNav" Background="{StaticResource MinorBackgroundBrush}"
                   IsItemClickEnabled="True" ItemClick="MasterNav_ItemClick"
                   ItemContainerStyle="{StaticResource BareListItem}"
                   Width="230" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">

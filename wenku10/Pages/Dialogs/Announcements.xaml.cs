@@ -15,13 +15,16 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
+using GR.Config;
+using GR.GSystem;
 using GR.Model.ListItem;
+using GAnnouncements = GR.Model.Topics.Announcements;
 
 namespace wenku10.Pages.Dialogs
 {
 	public sealed partial class Announcements : ContentDialog
 	{
-		private global::GR.Model.Topics.Announcements AS;
+		private GAnnouncements AS;
 
 		public Announcements()
 		{
@@ -31,8 +34,8 @@ namespace wenku10.Pages.Dialogs
 			PrimaryButtonText = stx.Str( "AllRead" );
 			SecondaryButtonText = stx.Str( "OK" );
 
-			FullVersion.Text = global::GR.Config.AppSettings.Version;
-			version.Text = global::GR.GSystem.Bootstrap.Version;
+			FullVersion.Text = AppSettings.Version;
+			version.Text = Bootstrap.Version;
 
 			SetTemplate();
 		}
@@ -45,7 +48,7 @@ namespace wenku10.Pages.Dialogs
 
 		private void SetTemplate()
 		{
-			AS = new global::GR.Model.Topics.Announcements();
+			AS = new GAnnouncements();
 			MainList.ItemsSource = AS.Topics;
 		}
 
