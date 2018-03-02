@@ -15,7 +15,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.Services.Store.Engagement;
 
 using Net.Astropenguin.Helpers;

@@ -374,6 +374,11 @@ namespace wenku10.Pages
 			bool BookChanged = ( CurrentBook.Id != C.BookId );
 			if ( BookChanged )
 			{
+				if ( CurrentBook.Entry.TextLayout != C.Book.TextLayout )
+				{
+					PageProcessor.NavigateToReader( ItemProcessor.GetBookItem( C.Book ), C );
+					return;
+				}
 				CurrentBook = ToBook ?? throw new ArgumentException( "ToBook cannot be null while changing chapter accross book" );
 			}
 
@@ -403,7 +408,7 @@ namespace wenku10.Pages
 				// Refresh the TOC if Book has changed
 				if ( BookChanged )
 				{
-					ContentPane.SelectSection( ContentPane.Nav.First() );
+					Worker.UIInvoke( () => ContentPane.SelectSection( ContentPane.Nav.First() ) );
 				}
 
 				// Fire up Episode stepper, used for stepping next episode
