@@ -32,9 +32,9 @@ namespace wenku10.Pages
 			LayoutRoot.Navigate( typeof( ProceduresPanel ), Param );
 		}
 
-		public void SoftOpen() { }
+		public void SoftOpen( bool NavForward ) { }
 
-		public void SoftClose()
+		public void SoftClose( bool NavForward )
 		{
 			( ( ProceduresPanel ) LayoutRoot.Content ).Dispose();
 		}

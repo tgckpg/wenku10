@@ -65,8 +65,8 @@ namespace wenku10.Pages.BookInfoControls
 			SetTemplate( Book );
 		}
 
-		public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( ClosePages ); }
-		public void SoftClose() { NavigationHandler.OnNavigatedBack -= ClosePages; }
+		public void SoftOpen( bool NavForward ) { NavigationHandler.InsertHandlerOnNavigatedBack( ClosePages ); }
+		public void SoftClose( bool NavForward ) { NavigationHandler.OnNavigatedBack -= ClosePages; }
 
 		private async void OpenComment( object sender, ItemClickEventArgs e )
 		{

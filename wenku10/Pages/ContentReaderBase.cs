@@ -131,7 +131,7 @@ namespace wenku10.Pages
 			ContentPane = null;
 		}
 
-		public void SoftOpen()
+		public void SoftOpen( bool NavForward )
 		{
 			if ( MainStage.Instance.IsPhone && !App.ViewControl.IsFullScreen )
 			{
@@ -141,7 +141,7 @@ namespace wenku10.Pages
 			KbControls.ShowHelp();
 		}
 
-		public void SoftClose()
+		public void SoftClose( bool NavForward )
 		{
 			if ( MainStage.Instance.IsPhone && App.ViewControl.IsFullScreen )
 			{

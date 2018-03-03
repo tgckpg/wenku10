@@ -30,11 +30,21 @@ using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Section;
 using GR.Effects;
+using Net.Astropenguin.Linq;
 
 namespace wenku10.Pages
 {
-	public sealed partial class MasterExplorer : Page, ICmdControls, INavPage, IAnimaPage
+	public sealed partial class MasterExplorer : Page, ICmdControls, INavPage, IAnimaPage, IBackStackInterceptor
 	{
+		private enum NavigationType : byte { VIEW_SOURCE = 1, PAGE = 2 }
+		private enum NavState : byte { OPENED = 1, CLOSED = 2 }
+
+		private struct BackStackHistroy
+		{
+			public NavigationType NavType;
+			public GRViewSource ViewSource;
+		}
+
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
 #pragma warning restore 0067
@@ -46,8 +56,18 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
+		public bool CanGoBack => ( PreferredState == NavState.CLOSED && NavState.CLOSED == MasterState ) || VSHistory.Any();
+		public Action<object> Update_CanGoBack { get; set; }
+
+		NavState PreferredState => ( NavState ) Convert.ToByte( NavSensor.Tag );
+		NavState MasterState => ( NavState ) Convert.ToByte( MasterNav.Tag );
+		NavState CurrState;
+
 		private TreeList NavTree;
 		private TreeItem ZoneVS;
+
+		private Stack<BackStackHistroy> VSHistory;
+		private BackStackHistroy BHBuffer;
 
 		public MasterExplorer()
 		{
@@ -55,20 +75,37 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		public void SoftOpen()
+		public void SoftOpen( bool NavForward )
 		{
+			if( !NavForward && VSHistory.Any() )
+			{
+				BHBuffer = VSHistory.Pop();
+			}
+
 			ExplorerView.Refresh();
 		}
 
-		public void SoftClose() { }
+		public void SoftClose( bool NavForward )
+		{
+			if ( NavForward )
+			{
+				VSHistory.Push( BHBuffer );
+				BHBuffer = new BackStackHistroy() { NavType = NavigationType.PAGE, ViewSource = BHBuffer.ViewSource };
+			}
+		}
 
-		public void NavigateToViewSource( GRViewSource Payload )
+		public void NavigateToViewSource( GRViewSource Payload ) => NavigateToViewSource( Payload, true );
+
+		private void NavigateToViewSource( GRViewSource Payload, bool AddToQueue )
 		{
 			NavTree.Open( Payload );
 			if ( NavTree.Contains( Payload ) )
 			{
 				MasterNav.SelectedItem = Payload;
 				OpenView( Payload );
+
+				if ( AddToQueue )
+					AddVSQueue( Payload );
 			}
 		}
 
@@ -115,6 +152,7 @@ namespace wenku10.Pages
 		private void SetTemplate()
 		{
 			StringResources stx = new StringResources( "NavigationTitles", "AppBar", "AppResources" );
+			VSHistory = new Stack<BackStackHistroy>();
 
 			TreeItem MyLibrary = new TreeItem( stx.Text( "MyLibrary" ) )
 			{
@@ -166,46 +204,71 @@ namespace wenku10.Pages
 			ManageZones.ZSMData.StructTable();
 			ManageZones.ZSMData.Reload();
 
-			NavigationHandler.InsertHandlerOnNavigatedBack( OnBackRequested );
 			MasterNav.RegisterPropertyChangedCallback( TagProperty, TagChanged );
 			NavXTrans.FillBehavior = FillBehavior.HoldEnd;
 
 			InitMasterNav();
 		}
 
-		private void OnBackRequested( object sender, XBackRequestedEventArgs e )
+		public async Task<bool> GoBack()
 		{
-			if ( PreferredState == "Closed" && "Opened" == ( string ) MasterNav.Tag )
+			await Task.Delay( 0 );
+
+			if ( PreferredState == NavState.CLOSED && NavState.OPENED == MasterState )
 			{
-				MasterNav.Tag = "Closed";
-				e.Handled = true;
+				MasterNav.Tag = NavState.CLOSED;
+				return true;
 			}
+
+			if ( VSHistory.Any() )
+			{
+				BackStackHistroy BH = VSHistory.Pop();
+
+				while ( VSHistory.Any() && BH.ViewSource == BHBuffer.ViewSource )
+					BH = VSHistory.Pop();
+
+				BHBuffer = BH;
+
+				if ( BH.NavType == NavigationType.VIEW_SOURCE )
+				{
+					NavigateToViewSource( BH.ViewSource, false );
+					return true;
+				}
+				else if( BH.NavType == NavigationType.PAGE && VSHistory.Any() )
+				{
+					// Peek the previous VS
+					BH = VSHistory.Peek();
+					NavigateToViewSource( BH.ViewSource, false );
+				}
+			}
+
+			return false;
 		}
 
 		TranslateTransform StateTrans;
 		Storyboard NavXTrans = new Storyboard();
-		string PreferredState => ( string ) NavSensor.Tag;
-		string CurrState;
 
 		private void TagChanged( DependencyObject sender, DependencyProperty dp )
 		{
-			ToggleMasterNav( ( string ) MasterNav.GetValue( dp ) );
+			ToggleMasterNav( MasterState );
 		}
 
-		private void ToggleMasterNav( string NState )
+		private void ToggleMasterNav( NavState NState )
 		{
 			if ( CurrState == NState || StateTrans == null )
 				return;
 
 			CurrState = NState;
 
+			bool StateOpened = ( NState == NavState.OPENED );
+
 			if ( MainStage.Instance.IsPhone )
 			{
-				NavSensor.Visibility = ( NState == "Opened" ) ? Visibility.Visible : Visibility.Collapsed;
+				NavSensor.Visibility = StateOpened ? Visibility.Visible : Visibility.Collapsed;
 			}
 			else
 			{
-				NavSensor.Visibility = ( NState == "Opened" ) ? Visibility.Collapsed : Visibility.Visible;
+				NavSensor.Visibility = StateOpened ? Visibility.Collapsed : Visibility.Visible;
 			}
 
 			double dX = StateTrans.X;
@@ -213,7 +276,7 @@ namespace wenku10.Pages
 			NavXTrans.Stop();
 			NavXTrans.Children.Clear();
 
-			if ( NState == "Opened" )
+			if ( StateOpened )
 			{
 				SimpleStory.DoubleAnimation( NavXTrans, StateTrans, "X", dX, 0, 500, 0, Easings.EaseOutQuintic );
 			}
@@ -228,23 +291,23 @@ namespace wenku10.Pages
 		private void InitMasterNav()
 		{
 			StateTrans = ( TranslateTransform ) MasterNav.RenderTransform;
-			StateTrans.X = ( PreferredState == "Closed" ) ? -MasterNav.Width : 0;
+			StateTrans.X = ( PreferredState == NavState.CLOSED ) ? -MasterNav.Width : 0;
 
 			if ( MainStage.Instance.IsPhone )
 			{
-				NavSensor.Tapped += ( s, e ) => MasterNav.Tag = "Closed";
+				NavSensor.Tapped += ( s, e ) => MasterNav.Tag = NavState.CLOSED;
 				NavSensor.HorizontalAlignment = HorizontalAlignment.Stretch;
 				NavSensor.Width = double.NaN;
 
 				AppBarButton ToggleNav = UIAliases.CreateAppBarBtn( Symbol.OpenPane, "Toggle Pane" );
-				ToggleNav.Click += ( s, e ) => MasterNav.Tag = ( "Opened" == ( string ) MasterNav.Tag ) ? "Closed" : "Opened";
+				ToggleNav.Click += ( s, e ) => MasterNav.Tag = ( NavState.OPENED == MasterState ) ? NavState.CLOSED : NavState.OPENED;
 				MajorControls = new ICommandBarElement[] { ToggleNav };
 				ControlChanged?.Invoke( this );
 			}
 			else
 			{
 				MasterNav.PointerExited += ( s, e ) => MasterNav.Tag = PreferredState;
-				NavSensor.PointerEntered += ( s, e ) => MasterNav.Tag = "Opened";
+				NavSensor.PointerEntered += ( s, e ) => MasterNav.Tag = NavState.OPENED;
 				NavSensor.HorizontalAlignment = HorizontalAlignment.Left;
 				NavSensor.Width = 80;
 			}
@@ -258,6 +321,7 @@ namespace wenku10.Pages
 			if ( Nav is GRViewSource ViewSource )
 			{
 				OpenView( ViewSource );
+				AddVSQueue( ViewSource );
 			}
 
 			if ( Nav.Children.Any() )
@@ -269,7 +333,7 @@ namespace wenku10.Pages
 		private async void OpenView( GRViewSource ViewSource )
 		{
 			int AnimaInt = 0;
-			if ( PreferredState != ( string ) MasterNav.Tag )
+			if ( PreferredState != MasterState )
 			{
 				MasterNav.Tag = PreferredState;
 				AnimaInt = 250;
@@ -291,6 +355,9 @@ namespace wenku10.Pages
 			TransitionDisplay.SetState( ExplorerView, TransitionState.Active );
 			LoadingMessage.DataContext = ViewSource;
 			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
+
+			NavTree.Where( x => x != ViewSource ).ExecEach( x => x.IsActive = false );
+			ViewSource.IsActive = true;
 		}
 
 		private PageExtension PageExt;
@@ -377,6 +444,17 @@ namespace wenku10.Pages
 		private void ExtCmd_ControlChanged( object sender )
 		{
 			ControlChanged?.Invoke( this );
+		}
+
+		private void AddVSQueue( GRViewSource Payload )
+		{
+			BackStackHistroy BSH = new BackStackHistroy() { ViewSource = Payload, NavType = NavigationType.VIEW_SOURCE };
+			if ( !( default( BackStackHistroy ).Equals( BHBuffer ) || BSH.Equals( BHBuffer ) ) )
+			{
+				VSHistory.Push( BHBuffer );
+				Update_CanGoBack?.Invoke( this );
+			}
+			BHBuffer = BSH;
 		}
 
 		Storyboard AnimaStory = new Storyboard();

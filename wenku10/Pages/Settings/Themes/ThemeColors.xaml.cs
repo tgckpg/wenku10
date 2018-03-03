@@ -60,8 +60,8 @@ namespace wenku10.Pages.Settings.Themes
 			}
 		}
 
-		public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( CloseThemesetFrame ); }
-		public void SoftClose() { NavigationHandler.OnNavigatedBack -= CloseThemesetFrame; }
+		public void SoftOpen( bool NavForward ) { NavigationHandler.InsertHandlerOnNavigatedBack( CloseThemesetFrame ); }
+		public void SoftClose( bool NavForward ) { NavigationHandler.OnNavigatedBack -= CloseThemesetFrame; }
 
 		private void CloseThemesetFrame( object sender, XBackRequestedEventArgs e )
 		{

@@ -173,8 +173,11 @@ namespace wenku10.Pages
 				if ( View.Content is IAnimaPage )
 					await ( ( IAnimaPage ) View.Content ).ExitAnima();
 
+				if ( View.Content is IBackStackInterceptor )
+					( ( IBackStackInterceptor ) View.Content ).Update_CanGoBack = null;
+
 				UnsubEvents( ( Page ) View.Content );
-				( View.Content as INavPage )?.SoftClose();
+				( View.Content as INavPage )?.SoftClose( true );
 
 				if ( !PageId.NonStackables.Contains( View.Tag ) )
 					BackStack.Add( ( string ) View.Tag, ( Page ) View.Content );
@@ -201,7 +204,7 @@ namespace wenku10.Pages
 
 			View.Content = P;
 
-			( P as INavPage )?.SoftOpen();
+			( P as INavPage )?.SoftOpen( true );
 			await View.Dispatcher.RunIdleAsync( x =>
 			{
 				View.Opacity = 1;
@@ -247,12 +250,12 @@ namespace wenku10.Pages
 				TransitionDisplay.SetState( SubView, TransitionState.Inactive );
 				await Task.Delay( 350 );
 
-				( SubView.Content as INavPage )?.SoftClose();
+				( SubView.Content as INavPage )?.SoftClose( true );
 			}
 
 			SubView.Content = Target();
 
-			( SubView.Content as INavPage )?.SoftOpen();
+			( SubView.Content as INavPage )?.SoftOpen( true );
 			SetControls( SubView.Content, true );
 
 			TransitionDisplay.SetState( SubView, TransitionState.Active );
@@ -294,7 +297,7 @@ namespace wenku10.Pages
 				await ( ( IAnimaPage ) View.Content ).ExitAnima();
 
 			UnsubEvents( ( Page ) View.Content );
-			( View.Content as INavPage )?.SoftClose();
+			( View.Content as INavPage )?.SoftClose( false );
 
 			NameValue<Page> P = BackStack.Back();
 
@@ -306,7 +309,7 @@ namespace wenku10.Pages
 			View.Tag = P.Name;
 			View.Content = P.Value;
 
-			( P.Value as INavPage )?.SoftOpen();
+			( P.Value as INavPage )?.SoftOpen( false );
 			( P.Value as IAnimaPage )?.EnterAnima();
 			SetControls( View.Content, true );
 
@@ -331,7 +334,7 @@ namespace wenku10.Pages
 			}
 
 			UnsubEvents( ( Page ) SubView.Content );
-			( SubView.Content as INavPage )?.SoftClose();
+			( SubView.Content as INavPage )?.SoftClose( false );
 		}
 
 		private void SetControls( object CPage, bool RegEvent )
@@ -440,8 +443,53 @@ namespace wenku10.Pages
 		private void SetBackButton( bool Visible )
 		{
 			// Each time a navigation event occurs, update the Back button's visibility
-			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ( Visible || BackStack.CanGoBack )
+			NavigationHandler.OnNavigatedBack -= BSInterceptorBack;
+
+			if ( TryGetInterceptor( out IBackStackInterceptor Interceptor ) )
+			{
+				NavigationHandler.InsertHandlerOnNavigatedBack( BSInterceptorBack );
+				Interceptor.Update_CanGoBack = Update_ViewBackButton;
+			}
+
+			Update_ViewBackButton( InSubView ? SubView : View );
+		}
+
+		private bool TryGetInterceptor( out IBackStackInterceptor Interceptor )
+		{
+			Interceptor = null;
+
+			if ( InSubView && SubView.Content is IBackStackInterceptor )
+			{
+				Interceptor = ( IBackStackInterceptor ) SubView.Content;
+			}
+			else if ( View.Content is IBackStackInterceptor )
+			{
+				Interceptor = ( IBackStackInterceptor ) View.Content;
+			}
+
+			return Interceptor != null;
+		}
+
+		private void Update_ViewBackButton( object sender )
+		{
+			bool CanGoBack = InSubView || BackStack.CanGoBack;
+
+			if ( !CanGoBack && TryGetInterceptor( out IBackStackInterceptor Interceptor ) )
+			{
+				CanGoBack = Interceptor.CanGoBack;
+			}
+
+			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = CanGoBack
 				? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+		}
+
+		private async void BSInterceptorBack( object sender, XBackRequestedEventArgs e )
+		{
+			if ( TryGetInterceptor( out IBackStackInterceptor Interceptor ) )
+			{
+				e.Handled = await Interceptor.GoBack();
+				Update_ViewBackButton( Interceptor );
+			}
 		}
 
 		private void PreventBack( object sender, XBackRequestedEventArgs e )

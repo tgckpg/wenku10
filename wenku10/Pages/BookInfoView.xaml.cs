@@ -91,13 +91,13 @@ namespace wenku10.Pages
 			OpenBook( Book );
 		}
 
-		public void SoftOpen()
+		public void SoftOpen( bool NavForward )
 		{
 			LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 			SyncAnchors();
 		}
 
-		public void SoftClose() { }
+		public void SoftClose( bool NavForward ) { }
 
 		private void SetTemplate()
 		{

@@ -14,7 +14,7 @@
     <Page.Resources>
         <v:TreeMarginConverter x:Key="TreeMarginConverter" />
         <v:TransStateConverter x:Key="TransStateConverter" />
-        <v:ObjectColorConverter x:Key="ObjectColorConverter" F0="#FFFF9D13" F1="#FFE8127A" F2="#FF2031FF" F3="#FF12E88F" F4="#FFFFFE20" />
+        <v:ObjectColorConverter x:Key="ObjectColorConverter" F0="#FFFF9D13" F1="#FFE8127A" F2="#FF2031FF" F3="#FF12E88F" F4="#FFFFFE20" BF="{StaticResource MinorBackgroundBrush}" />
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
@@ -32,8 +32,8 @@
                         <Setter Target="ExplorerView.(Grid.Column)" Value="0" />
                         <Setter Target="ExplorerView.(Grid.ColumnSpan)" Value="2" />
                         <Setter Target="ExplorerView.ViewMode" Value="List" />
-                        <Setter Target="NavSensor.Tag" Value="Closed" />
-                        <Setter Target="MasterNav.Tag" Value="Closed" />
+                        <Setter Target="NavSensor.Tag" Value="2" /> <!-- Closed -->
+                        <Setter Target="MasterNav.Tag" Value="2" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -45,8 +45,8 @@
                         <Setter Target="ExplorerView.(Grid.Column)" Value="1" />
                         <Setter Target="ExplorerView.(Grid.ColumnSpan)" Value="0" />
                         <Setter Target="ExplorerView.ViewMode" Value="Table" />
-                        <Setter Target="NavSensor.Tag" Value="Opened" />
-                        <Setter Target="MasterNav.Tag" Value="Opened" />
+                        <Setter Target="NavSensor.Tag" Value="1" /> <!-- Opened -->
+                        <Setter Target="MasterNav.Tag" Value="1" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -78,7 +78,7 @@
                                    TextWrapping="Wrap" Margin="10"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                         <Rectangle Grid.Column="1" Width="3" Margin="0,1"
-                                   Fill="{x:Bind Self, Converter={StaticResource ObjectColorConverter}}"
+                                   Fill="{x:Bind Self, Mode=OneWay, Converter={StaticResource ObjectColorConverter}}"
                                    VerticalAlignment="Stretch"/>
                     </Grid>
                 </DataTemplate>
