@@ -152,6 +152,7 @@
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
     <Compile Include="GR\PageExtensions\FTSDataPageExt.cs" />
+    <Compile Include="GR\PageExtensions\HighlightsHomePageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
     <Compile Include="GR\PageExtensions\TextDocPageExt.cs" />
     <Compile Include="GR\PageExtensions\ZSMPageExt.cs" />
@@ -169,6 +170,9 @@
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
     <Compile Include="GR\Model\Topics\HyperBannerItem.cs" />
+    <Compile Include="Pages\Explorer\Highlights.xaml.cs">
+      <DependentUpon>Highlights.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MasterExplorer.xaml.cs">
       <DependentUpon>MasterExplorer.xaml</DependentUpon>
     </Compile>
@@ -260,9 +264,6 @@
     <Compile Include="Pages\Sharers\UserInfo.xaml.cs">
       <DependentUpon>UserInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SuperGiants.xaml.cs">
-      <DependentUpon>SuperGiants.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Scenes\ISceneExitable.cs" />
     <Compile Include="Scenes\PFScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
@@ -270,7 +271,6 @@
     <Compile Include="Scenes\FireFlies.cs" />
     <Compile Include="Scenes\Fireworks.cs" />
     <Compile Include="Scenes\Glitter.cs" />
-    <Compile Include="Scenes\TheOrb.cs" />
     <Compile Include="Scenes\Texture.cs" />
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
@@ -435,6 +435,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Dialogs\ValueHelpInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Highlights.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -647,10 +651,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Sharers\UserInfo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\SuperGiants.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -217,4 +217,7 @@
   <data name="FullTextSearch.Text" xml:space="preserve">
     <value>Full text search</value>
   </data>
+  <data name="StaffPicks.Text" xml:space="preserve">
+    <value>Highlights</value>
+  </data>
 </root>

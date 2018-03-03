@@ -23,9 +23,6 @@ namespace wenku10.Pages
 			, W_COMMENT = "WComment"
 			, W_DEATHBLOW = "WDeathblow"
 
-			, SG_W = "SuperGiants-W"
-			, SG_SH = "SuperGiants-SH"
-
 			, MONO_REDIRECTOR = "MonoRedirector"
 
 			, NULL = "Null"

@@ -80,7 +80,7 @@
     <UserControl.Resources>
         <g:ColumnVisConverter x:Key="ColumnVisConverter" />
         <Style x:Key="ColumnButton" TargetType="Button">
-            <Setter Property="BorderThickness" Value="1,0,1,0" />
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">

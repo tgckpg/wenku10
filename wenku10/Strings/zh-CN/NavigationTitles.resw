@@ -217,4 +217,7 @@
   <data name="FullTextSearch.Text" xml:space="preserve">
     <value>全文搜索</value>
   </data>
+  <data name="StaffPicks.Text" xml:space="preserve">
+    <value>文库精选</value>
+  </data>
 </root>

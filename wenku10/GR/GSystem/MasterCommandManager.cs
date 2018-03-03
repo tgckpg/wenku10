@@ -18,7 +18,6 @@ using wenku10.Pages.Dialogs;
 namespace GR.GSystem
 {
 	using CompositeElement;
-	using Config;
 	using DataSources;
 	using Ext;
 	using Resources;
@@ -101,6 +100,7 @@ namespace GR.GSystem
 			AboutBtn.CanSwipe = X.Exists;
 
 			Btns.Add( BackupBtn );
+			Btns.Add( new AppBarSeparator() );
 			Btns.Add( SettingsBtn );
 			Btns.Add( AboutBtn );
 

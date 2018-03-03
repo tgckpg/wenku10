@@ -76,12 +76,8 @@ namespace GR.Model.Topics
 
 			Stage = new CanvasStage( CanvasElem );
 
-			// TheOrb LoadingTrails = new TheOrb( PStack, i % 2 == 0 );
 			FireFliesScene = new FireFlies( PStack );
 			Stage.Add( FireFliesScene );
-			// Stage.Add( LoadingTrails );
-
-			// var j = Stage.Remove( typeof( TheOrb ) );
 
 			UpdateGrid();
 		}
@@ -169,7 +165,12 @@ namespace GR.Model.Topics
 		public void Dispose()
 		{
 			Stage?.Dispose();
-			CanvasElem?.RemoveFromVisualTree();
+			if( CanvasElem != null )
+			{
+				CanvasElem.Paused = true;
+				CanvasElem.RemoveFromVisualTree();
+				CanvasElem = null;
+			}
 		}
 
 	}

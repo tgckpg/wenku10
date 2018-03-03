@@ -210,9 +210,6 @@
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>文庫暫沒有收錄此作品</value>
   </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>文庫精選</value>
-  </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>統計</value>
   </data>

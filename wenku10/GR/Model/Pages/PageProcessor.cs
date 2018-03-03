@@ -21,12 +21,10 @@ namespace GR.Model.Pages
 	using Book.Spider;
 	using CompositeElement;
 	using Database.Models;
-	using Ext;
 	using ListItem;
 	using ListItem.Sharers;
 	using Loaders;
 	using Model.Section;
-	using Resources;
 	using Storage;
 
 	sealed class PageProcessor
@@ -50,12 +48,7 @@ namespace GR.Model.Pages
 			else if ( Item is BookBannerItem )
 			{
 				BookBannerItem BItem = ( BookBannerItem ) Item;
-				Book Bk = Shared.BooksDb.QueryBook( BItem.BookId );
-
-				return new NameValue<Func<Page>>(
-					PageId.BOOK_INFO_VIEW
-					, () => new BookInfoView( X.Instance<BookItem>( XProto.BookItemEx, Bk.ZItemId ) )
-				);
+				return new NameValue<Func<Page>>( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BItem.BkItem ) );
 			}
 
 			return new NameValue<Func<Page>>( PageId.NULL, () => null );

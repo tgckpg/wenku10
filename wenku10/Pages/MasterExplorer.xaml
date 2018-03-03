@@ -29,9 +29,10 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="ExplorerView.(Grid.Column)" Value="0" />
-                        <Setter Target="ExplorerView.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="MainElements.(Grid.Column)" Value="0" />
+                        <Setter Target="MainElements.(Grid.ColumnSpan)" Value="2" />
                         <Setter Target="ExplorerView.ViewMode" Value="List" />
+                        <Setter Target="GHighlights.ViewMode" Value="V" />
                         <Setter Target="NavSensor.Tag" Value="2" /> <!-- Closed -->
                         <Setter Target="MasterNav.Tag" Value="2" />
                     </VisualState.Setters>
@@ -42,9 +43,10 @@
                         <AdaptiveTrigger MinWindowWidth="800" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="ExplorerView.(Grid.Column)" Value="1" />
-                        <Setter Target="ExplorerView.(Grid.ColumnSpan)" Value="0" />
+                        <Setter Target="MainElements.(Grid.Column)" Value="1" />
+                        <Setter Target="MainElements.(Grid.ColumnSpan)" Value="0" />
                         <Setter Target="ExplorerView.ViewMode" Value="Table" />
+                        <Setter Target="GHighlights.ViewMode" Value="H" />
                         <Setter Target="NavSensor.Tag" Value="1" /> <!-- Opened -->
                         <Setter Target="MasterNav.Tag" Value="1" />
                     </VisualState.Setters>
@@ -55,10 +57,14 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ex:GRTableView x:Name="ExplorerView"
-                        e:TransitionDisplay.Mode="A01_X_30_0"
-                        e:TransitionDisplay.State="Inactive"
-                        Grid.Column="0" Grid.ColumnSpan="2" ViewMode="Table" />
+        <Grid x:Name="MainElements" Grid.Column="0" Grid.ColumnSpan="2" >
+            <ex:GRTableView x:Name="ExplorerView"
+                            Visibility="Collapsed"
+                            e:TransitionDisplay.Mode="A01_X_30_0"
+                            e:TransitionDisplay.State="Inactive"
+                            ViewMode="Table" />
+            <ex:Highlights x:Name="GHighlights" Visibility="Collapsed" />
+        </Grid>
         <Rectangle x:Name="NavSensor" Grid.ColumnSpan="2" Fill="Transparent" Visibility="Collapsed" />
         <ListView x:Name="MasterNav" Background="{StaticResource MinorBackgroundBrush}"
                   IsItemClickEnabled="True" ItemClick="MasterNav_ItemClick"
@@ -90,6 +96,7 @@
               BorderThickness="1" BorderBrush="{StaticResource MinorBrush}"
               Background="{StaticResource MajorBackgroundBrush}"
               VerticalAlignment="Center" HorizontalAlignment="Center"
+              Visibility="Collapsed"
               e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
               e:TransitionDisplay.Mode="A01_Y_N30_0" >
             <Grid.ColumnDefinitions>

@@ -83,25 +83,28 @@ namespace GR.DataSources
 			StringResBg stx = new StringResBg( "AppResources" );
 			Message = stx.Text( "Loading" );
 
-			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );
-
-			if ( Filter != null )
+			BkTable.Items = Shared.BooksDb.SafeRun( Db =>
 			{
-				Books = Filter( Books );
-			}
+				IQueryable<Book> Books = QuerySet( Db.Books.AsQueryable() );
 
-			if ( !string.IsNullOrEmpty( Search ) )
-			{
-				Books = Books.Where( x => x.Title.Contains( Search ) );
-			}
+				if ( Filter != null )
+				{
+					Books = Filter( Books );
+				}
 
-			Books = Books.Include( x => x.Info );
+				if ( !string.IsNullOrEmpty( Search ) )
+				{
+					Books = Books.Where( x => x.Title.Contains( Search ) );
+				}
 
-			BkTable.Items = Books.Remap( x =>
-			{
-				BookDisplay Bk = new BookDisplay( x );
-				ZoneNameResolver.Instance.Resolve( Bk.Entry.ZoneId, n => Bk.Zone = n );
-				return new GRRow<BookDisplay>( BkTable ) { Source = Bk };
+				Books = Books.Include( x => x.Info );
+
+				return Books.Remap( x =>
+				{
+					BookDisplay Bk = new BookDisplay( x );
+					ZoneNameResolver.Instance.Resolve( Bk.Entry.ZoneId, n => Bk.Zone = n );
+					return new GRRow<BookDisplay>( BkTable ) { Source = Bk };
+				} );
 			} );
 
 			IsLoading = false;

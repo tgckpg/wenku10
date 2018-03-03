@@ -318,10 +318,22 @@ namespace wenku10.Pages
 		private void MasterNav_ItemClick( object sender, ItemClickEventArgs e )
 		{
 			TreeItem Nav = ( TreeItem ) e.ClickedItem;
-			if ( Nav is GRViewSource ViewSource )
+
+			NavTree.Where( x => x != Nav ).ExecEach( x => x.IsActive = false );
+
+			if ( !Nav.IsActive )
 			{
-				OpenView( ViewSource );
-				AddVSQueue( ViewSource );
+				if ( Nav is GRViewSource ViewSource )
+				{
+					Nav.IsActive = true;
+					OpenView( ViewSource );
+					AddVSQueue( ViewSource );
+				}
+				else if ( Nav is GRHighlights HS )
+				{
+					Nav.IsActive = true;
+					OpenHighlights( HS );
+				}
 			}
 
 			if ( Nav.Children.Any() )
@@ -332,7 +344,37 @@ namespace wenku10.Pages
 
 		private async void OpenView( GRViewSource ViewSource )
 		{
-			int AnimaInt = 0;
+			if ( CloseAllViews( out int AnimaInt ) )
+			{
+				await Task.Delay( AnimaInt );
+			}
+
+			await ExplorerView.View( ViewSource );
+
+			TransitionDisplay.SetState( ExplorerView, TransitionState.Active );
+			LoadingMessage.DataContext = ViewSource;
+			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
+		}
+
+		private async void OpenHighlights( GRHighlights ViewSource )
+		{
+			if ( CloseAllViews( out int AnimaInt ) )
+			{
+				await Task.Delay( AnimaInt );
+			}
+
+			GHighlights.View( ViewSource.Loader );
+
+			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
+
+			GHighlights.Visibility = Visibility.Visible;
+			await GHighlights.EnterAnima();
+		}
+
+		private bool CloseAllViews( out int AnimaInt )
+		{
+			AnimaInt = 0;
+
 			if ( PreferredState != MasterState )
 			{
 				MasterNav.Tag = PreferredState;
@@ -345,19 +387,19 @@ namespace wenku10.Pages
 				AnimaInt = 350;
 			}
 
-			if ( 0 < AnimaInt )
+			if ( GHighlights.Visibility == Visibility.Visible )
 			{
-				await Task.Delay( AnimaInt );
+				Worker.UIInvoke( async () =>
+				{
+					await GHighlights.ExitAnima();
+					GHighlights.Dispose();
+					GHighlights.Visibility = Visibility.Collapsed;
+				} );
+
+				AnimaInt = 900;
 			}
 
-			await ExplorerView.View( ViewSource );
-
-			TransitionDisplay.SetState( ExplorerView, TransitionState.Active );
-			LoadingMessage.DataContext = ViewSource;
-			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
-
-			NavTree.Where( x => x != ViewSource ).ExecEach( x => x.IsActive = false );
-			ViewSource.IsActive = true;
+			return 0 < AnimaInt;
 		}
 
 		private PageExtension PageExt;
@@ -466,7 +508,15 @@ namespace wenku10.Pages
 			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1, 350 );
 
 			AnimaStory.Begin();
-			await Task.Delay( 500 );
+
+			if ( GHighlights.Visibility == Visibility.Visible )
+			{
+				await GHighlights.EnterAnima();
+			}
+			else
+			{
+				await Task.Delay( 500 );
+			}
 		}
 
 		public async Task ExitAnima()
@@ -474,10 +524,19 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
 
-			AnimaStory.Begin();
-			await Task.Delay( 500 );
+			if ( GHighlights.Visibility == Visibility.Visible )
+			{
+				SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 600, Easings.EaseInCubic );
+				AnimaStory.Begin();
+				await GHighlights.ExitAnima();
+			}
+			else
+			{
+				SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
+				AnimaStory.Begin();
+				await Task.Delay( 500 );
+			}
 		}
 
 	}

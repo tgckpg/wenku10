@@ -310,7 +310,10 @@ namespace wenku10.Pages
 			View.Content = P.Value;
 
 			( P.Value as INavPage )?.SoftOpen( false );
-			( P.Value as IAnimaPage )?.EnterAnima();
+			if ( P.Value is IAnimaPage AnimaPage )
+			{
+				await AnimaPage.EnterAnima();
+			}
 			SetControls( View.Content, true );
 
 			Navigating = false;
@@ -458,9 +461,12 @@ namespace wenku10.Pages
 		{
 			Interceptor = null;
 
-			if ( InSubView && SubView.Content is IBackStackInterceptor )
+			if ( InSubView )
 			{
-				Interceptor = ( IBackStackInterceptor ) SubView.Content;
+				if ( SubView.Content is IBackStackInterceptor )
+				{
+					Interceptor = ( IBackStackInterceptor ) SubView.Content;
+				}
 			}
 			else if ( View.Content is IBackStackInterceptor )
 			{

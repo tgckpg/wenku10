@@ -210,9 +210,6 @@
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>Not yet have this article</value>
   </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>Staff Picks</value>
-  </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>Statistics</value>
   </data>

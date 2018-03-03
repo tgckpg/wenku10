@@ -212,9 +212,6 @@
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>文库暂没有收录此作品</value>
   </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>文库精选</value>
-  </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>统计</value>
   </data>
