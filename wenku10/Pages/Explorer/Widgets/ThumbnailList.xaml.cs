@@ -13,6 +13,11 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Messaging;
+
+using GR.Model.Section;
+using GR.Settings;
+
 namespace wenku10.Pages.Explorer.Widgets
 {
 	public sealed partial class ThumbnailList : UserControl
@@ -58,5 +63,12 @@ namespace wenku10.Pages.Explorer.Widgets
 		private static void OnUpdateTitle( DependencyObject d, DependencyPropertyChangedEventArgs e ) => ( ( ThumbnailList ) d ).TitleUpdate();
 		private void TitleUpdate() => NameText.Text = Title;
 
+		private void ShowMore_Click( object sender, RoutedEventArgs e )
+		{
+			if ( DataContext is WidgetView WV )
+			{
+				MessageBus.SendUI( GetType(), AppKeys.OPEN_VIEWSOURCE, WV.ViewSource );
+			}
+		}
 	}
 }

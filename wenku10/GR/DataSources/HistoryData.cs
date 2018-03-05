@@ -12,7 +12,8 @@ namespace GR.DataSources
 
 	sealed class HistoryData : BookDisplayData
 	{
-		protected override string ConfigId => "Hisotry";
+		public override string ConfigId => "Hisotry";
+
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Title", Width = 390 },

@@ -25,7 +25,7 @@ namespace GR.DataSources
 	{
 		private readonly string ID = typeof( BookSpiderDisplayData ).Name;
 
-		protected override string ConfigId => "NPSpider";
+		public override string ConfigId => "NPSpider";
 
 		private GRTable<IBookProcess> PsTable;
 		public override IGRTable Table => PsTable;

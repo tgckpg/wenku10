@@ -7,29 +7,31 @@ using System.Threading.Tasks;
 namespace GR.Model.Section
 {
 	using Data;
+	using Database.Models;
 	using DataSources;
+	using Model.Interfaces;
 
 	sealed class WidgetView
 	{
-		public string Name { get; set; }
+		public string Name => Conf.Name ?? ViewSource.ItemTitle;
 
-		private GRViewSource ViewSource;
+		public GRViewSource ViewSource { get; private set; }
+
 		public GRDataSource DataSource => ViewSource?.DataSource;
+		public IGSWidget VSWidget => ( IGSWidget ) ViewSource;
 		public IGRTable Table => DataSource?.Table;
 
-		public string TemplateName { get; private set; }
+		public string ConfigId { get; set; }
+		public WidgetConfig Conf { get; private set; }
+
+		public string TemplateName => Conf.Template;
 
 		public WidgetView( GRViewSource ViewSource )
 		{
+			if ( !( ViewSource is IGSWidget ) )
+				throw new ArgumentException( "ViewSource must implement IGSWidget interface" );
+
 			this.ViewSource = ViewSource;
-			Name = ViewSource.ItemTitle;
-
-			TemplateName = "HorzThumbnailList";
-
-			if ( ViewSource.DataSourceType == typeof( HistoryData ) )
-			{
-				TemplateName = "Banner";
-			}
 		}
 
 		public async Task ConfigureAsync()
@@ -43,6 +45,15 @@ namespace GR.Model.Section
 			catch ( EmptySearchQueryException )
 			{
 			}
+
+			Conf = VSWidget.DefaultWidgetConfig();
+
+			if( Conf == null )
+			{
+				Conf = new WidgetConfig() { Enable = false, Template = "HorzThumbnailList" };
+			}
+
 		}
+
 	}
 }

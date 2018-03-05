@@ -28,7 +28,7 @@ namespace GR.DataSources
 		public GRTable<IMetaSpider> ZSTable { get; private set; }
 		public override IGRTable Table => ZSTable;
 
-		protected override string ConfigId => "ZSManager";
+		public override string ConfigId => "ZSManager";
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Name", Width = 355 },

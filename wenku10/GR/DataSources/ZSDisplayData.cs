@@ -23,7 +23,8 @@ namespace GR.DataSources
 	/// </summary>
 	sealed class ZSDisplayData : BookDisplayData
 	{
-		protected override string ConfigId => "ZS-" + ZS.ZoneId;
+		public override string ConfigId => "ZS-" + ZS.ZoneId;
+
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Title", Width = 200 },

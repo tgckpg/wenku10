@@ -25,7 +25,7 @@ namespace GR.DataSources
 		public override IGRTable Table => HSTable;
 		public override string SearchExample => "zone: <Zone> type: <Type> tags: <Tag>";
 
-		protected override string ConfigId => "ONS";
+		public override string ConfigId => "ONS";
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
 			new ColumnConfig() { Name = "Name", Width = 200 },

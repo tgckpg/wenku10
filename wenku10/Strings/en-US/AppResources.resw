@@ -426,4 +426,7 @@
   <data name="Search_Result.Text" xml:space="preserve">
     <value>Search result</value>
   </data>
+  <data name="ShowMore.Text" xml:space="preserve">
+    <value>Show more</value>
+  </data>
 </root>

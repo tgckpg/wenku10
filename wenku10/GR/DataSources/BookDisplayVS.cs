@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GR.DataSources
 {
-	using GR.Data;
+	using Data;
+	using Database.Models;
 	using Model.Interfaces;
 	using PageExtensions;
 
@@ -22,5 +23,21 @@ namespace GR.DataSources
 		{
 			DataSourceType = DataType;
 		}
+
+		public WidgetConfig DefaultWidgetConfig()
+		{
+			if ( DataSourceType == typeof( HistoryData ) )
+			{
+				return new WidgetConfig()
+				{
+					Name = ItemTitle,
+					Enable = true,
+					Template = "Banner"
+				};
+			}
+
+			return null;
+		}
+
 	}
 }

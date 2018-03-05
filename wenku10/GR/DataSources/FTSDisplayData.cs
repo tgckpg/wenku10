@@ -26,7 +26,7 @@ namespace GR.DataSources
 	{
 		private readonly string ID = typeof( FTSDisplayData ).Name;
 
-		protected override string ConfigId => "FTS";
+		public override string ConfigId => "FTS";
 
 		private GRTable<FTSResult> MatchTable;
 		private FTSResult TableHeaderSource;

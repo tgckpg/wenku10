@@ -21,7 +21,7 @@ namespace GR.DataSources
 
 	class BookDisplayData : GRDataSource
 	{
-		protected override string ConfigId => "Library";
+		public override string ConfigId => "Library";
 
 		public override IGRTable Table => BkTable;
 

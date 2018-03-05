@@ -22,7 +22,7 @@ namespace GR.DataSources
 	{
 		private readonly string ID = typeof( TextDocDisplayData ).Name;
 
-		protected override string ConfigId => "TextDoc";
+		public override string ConfigId => "TextDoc";
 
 		private GRTable<IBookProcess> PsTable;
 		public override IGRTable Table => PsTable;

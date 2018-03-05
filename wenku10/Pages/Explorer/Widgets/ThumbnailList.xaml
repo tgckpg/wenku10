@@ -14,13 +14,27 @@
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock x:Name="NameText" FontSize="25" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+        <TextBlock x:Name="NameText"
+                   Grid.Row="0" Grid.Column="0"
+                   FontSize="25" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+
+        <Button Grid.Row="0" Grid.Column="1"
+                HorizontalAlignment="Right"
+                Style="{StaticResource ThemeButton}">
+            <SymbolIcon Symbol="Setting" Margin="10" />
+        </Button>
+
         <ListView x:Name="MainItems"
-                  Grid.Row="1" Height="170"
+                  Grid.Row="1" Grid.ColumnSpan="2" Height="170"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                   ScrollViewer.HorizontalScrollMode="Disabled"
                   Style="{StaticResource VerticalListView}"
@@ -32,7 +46,8 @@
             </ListView.ItemContainerTransitions>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Width="120" Margin="10" DataContext="{Binding Source, Converter={StaticResource WIBConverter}}">
+                    <Grid Width="120" Margin="10" DataContext="{Binding Source, Converter={StaticResource WIBConverter}}"
+                          ToolTipService.ToolTip="{Binding Title}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
@@ -43,12 +58,21 @@
                         <TextBlock Grid.Row="1"
                                    FontSize="20"
                                    Text="{Binding Title}"
-                                   ToolTipService.ToolTip="{Binding Title}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                    TextTrimming="CharacterEllipsis" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <Button Grid.Row="2" Grid.Column="1"
+                Click="ShowMore_Click"
+                HorizontalAlignment="Right"
+                Style="{StaticResource ThemeButton}">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Uid="/AppResources/ShowMore" VerticalAlignment="Center" Margin="5" />
+                <FontIcon Glyph="&#xEA37;" Margin="5" />
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>

@@ -15,7 +15,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using GR.Converters;
 using GR.DataSources;
 using GR.Model.Interfaces;
 using GR.Model.Section;
@@ -44,7 +43,10 @@ namespace wenku10.Pages.Explorer
 			{
 				WidgetView WView = new WidgetView( GVS );
 				await WView.ConfigureAsync();
-				Widgets.Add( WView );
+				if ( WView.Conf.Enable )
+				{
+					Widgets.Add( WView );
+				}
 			}
 
 			MainContents.ItemsSource = Widgets;
