@@ -19,19 +19,20 @@ using GR.DataSources;
 
 namespace wenku10.Pages.Dialogs
 {
-    public sealed partial class AddWidget : ContentDialog
-    {
+	public sealed partial class AddWidget : ContentDialog
+	{
 		private IEnumerable<GRViewSource> AvailableWidgets;
 		public GRViewSource SelectedWidget { get; private set; }
 		public string WidgetName { get; private set; }
 		public string WidgetTemplate { get; private set; }
+		public string SearchKey { get; private set; }
 
-        public AddWidget( IEnumerable<GRViewSource> AvailableWidgets )
-        {
+		public AddWidget( IEnumerable<GRViewSource> AvailableWidgets )
+		{
 			this.AvailableWidgets = AvailableWidgets;
-            this.InitializeComponent();
+			this.InitializeComponent();
 			SetTemplate();
-        }
+		}
 
 		private void SetTemplate()
 		{
@@ -50,23 +51,30 @@ namespace wenku10.Pages.Dialogs
 			};
 		}
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
+		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
 			SelectedWidget = ( GRViewSource ) WidgetList.SelectedItem;
 			WidgetName = NewName.Text;
 			WidgetTemplate = WidgetTemplateList.SelectedValue as string ?? "ThumbnailList";
-        }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
-        }
+			if ( SelectedWidget.DataSource.Searchable )
+			{
+				SearchKey = QueryStr.Text.Trim();
+			}
+		}
+
+		private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		{
+		}
 
 		private void WidgetList_SelectionChanged( object sender, SelectionChangedEventArgs e )
 		{
-			if( WidgetList.SelectedItem is GRViewSource GVS )
+			if ( WidgetList.SelectedItem is GRViewSource GVS )
 			{
 				NewName.PlaceholderText = GVS.ItemTitle;
+				QKeyword.Visibility = GVS.DataSource.Searchable ? Visibility.Visible : Visibility.Collapsed;
 			}
 		}
+
 	}
 }

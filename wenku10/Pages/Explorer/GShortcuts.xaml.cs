@@ -45,18 +45,22 @@ namespace wenku10.Pages.Explorer
 			{
 				WidgetView WView = new WidgetView( GVS );
 				await WView.ConfigureAsync();
-				if ( WView.Conf.Enable )
-				{
-					Widgets.Add( WView );
-				}
+				AddWidget( WView );
 			}
 
 			MainContents.ItemsSource = Widgets;
 		}
 
-		public async void AddWidget( WidgetView WView )
+		public void AddWidget( WidgetView WView )
 		{
-			Widgets.Add( WView );
+			if ( WView.Conf.Enable )
+			{
+				Widgets.Add( WView );
+				if ( WView.DataSource.Searchable && WView.Conf.Query != WView.DataSource.Search )
+				{
+					WView.DataSource.Search = WView.Conf.Query;
+				}
+			}
 		}
 
 		public void RegisterWidgets( IEnumerable<GRViewSource> GVSs )

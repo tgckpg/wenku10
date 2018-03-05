@@ -68,6 +68,7 @@
         <Button Grid.Row="2" Grid.Column="1"
                 Click="ShowMore_Click"
                 HorizontalAlignment="Right"
+                Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                 Style="{StaticResource ThemeButton}">
             <StackPanel Orientation="Horizontal" Margin="5">
                 <TextBlock x:Uid="/AppResources/ShowMore" VerticalAlignment="Center" Margin="5" />

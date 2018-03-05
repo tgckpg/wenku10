@@ -57,6 +57,7 @@ namespace GR.PageExtensions
 				}
 
 				WView.Conf.Template = AddWidgetDialog.WidgetTemplate;
+				WView.Conf.Query = AddWidgetDialog.SearchKey;
 				WView.Conf.TargetType = WView.DataSource.ConfigId;
 				WView.Conf.Enable = true;
 

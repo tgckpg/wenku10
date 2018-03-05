@@ -26,5 +26,11 @@
                    Margin="5"
                    Foreground="{StaticResource MajorBrush}" />
         <TextBox x:Name="NewName" Margin="5" />
+        <StackPanel x:Name="QKeyword" Visibility="Collapsed">
+            <TextBlock x:Uid="/AppResources/Desc_InputKey" Text="Name"
+                       Margin="5"
+                       Foreground="{StaticResource MajorBrush}" />
+            <TextBox x:Name="QueryStr" Margin="5" />
+        </StackPanel>
     </StackPanel>
 </ContentDialog>
