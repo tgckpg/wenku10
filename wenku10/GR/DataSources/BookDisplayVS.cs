@@ -10,7 +10,7 @@ namespace GR.DataSources
 	using Model.Interfaces;
 	using PageExtensions;
 
-	sealed class BookDisplayVS : GRViewSource, IExtViewSource
+	sealed class BookDisplayVS : GRViewSource, IExtViewSource, IGSWidget
 	{
 		private BookDisplayPageExt _Extension;
 		public PageExtension Extension => _Extension ?? ( _Extension = new BookDisplayPageExt() );

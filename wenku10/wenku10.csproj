@@ -127,6 +127,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
+    <Compile Include="GR\Converters\WIConverters.cs" />
     <Compile Include="GR\DataSources\FTSDisplayData.cs" />
     <Compile Include="GR\DataSources\FTSViewSource.cs" />
     <Compile Include="GR\GStrings\ColumnNameResolver.cs" />
@@ -172,6 +173,9 @@
     <Compile Include="GR\Model\Topics\HyperBannerItem.cs" />
     <Compile Include="Pages\Explorer\Highlights.xaml.cs">
       <DependentUpon>Highlights.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\GShortcuts.xaml.cs">
+      <DependentUpon>GShortcuts.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MasterExplorer.xaml.cs">
       <DependentUpon>MasterExplorer.xaml</DependentUpon>
@@ -439,6 +443,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Explorer\Highlights.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\GShortcuts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -15,7 +15,7 @@
         <v:TransStateConverter x:Key="TransStateConverter" />
         <v:PanePosConverter x:Key="PanePosConverter" />
         <v:ParallaxConverter x:Key="ParallaxConverter" />
-        <v:HistoryThumbConverter x:Key="HistoryThumbConverter" />
+        <v:LocalImageConverter x:Key="LocalImageConverter" />
     </Page.Resources>
 
     <Grid x:Name="LayoutRoot">
@@ -100,7 +100,7 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Image Source="{Binding Payload, Converter={StaticResource HistoryThumbConverter}}" />
+                            <Image Source="{Binding Payload, Converter={StaticResource LocalImageConverter}}" />
                             <TextBlock Grid.Row="1"
                                        FontSize="20" Text="{Binding Name}"
                                        Foreground="{Binding ElementName=HistoryThumbs, Path=Foreground}"

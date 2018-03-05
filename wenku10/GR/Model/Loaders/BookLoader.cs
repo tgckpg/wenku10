@@ -154,12 +154,17 @@ namespace GR.Model.Loaders
 			var j = LoadCoverAsync( B, Cache );
 		}
 
+		private static AsyncLocks<Database.Models.Book, bool> CoverProcess = new AsyncLocks<Database.Models.Book, bool>();
 		public async Task<bool> LoadCoverAsync( BookItem B, bool Cache )
 		{
 			if ( Cache && B.CoverExist )
 				return true;
 
-			TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
+			if ( !CoverProcess.AcquireLock( B.Entry, out var QToken ) )
+			{
+				goto AwaitToken;
+			}
+
 			if ( B.IsEx() )
 			{
 				X.Instance<IRuntimeCache>( XProto.WRuntimeCache ).InitDownload(
@@ -167,13 +172,13 @@ namespace GR.Model.Loaders
 					, ( e, id ) =>
 					{
 						B.SaveCover( e.ResponseBytes );
-						TCS.TrySetResult( true );
+						QToken.TrySetResult( true );
 					}
-					, ( c, i, ex ) => TCS.TrySetResult( false )
+					, ( c, i, ex ) => QToken.TrySetResult( false )
 					, false
 				);
 
-				return await TCS.Task;
+				goto AwaitToken;
 			}
 
 			if ( string.IsNullOrEmpty( B.Info.CoverSrcUrl ) )
@@ -182,13 +187,12 @@ namespace GR.Model.Loaders
 				string ThumbUrl = await new BingService( B ).GetImage();
 				if ( string.IsNullOrEmpty( ThumbUrl ) )
 				{
-					return false;
+					QToken.TrySetResult( false );
+					goto AwaitToken;
 				}
 
 				B.Info.CoverSrcUrl = ThumbUrl;
 			}
-
-			TaskCompletionSource<int> Awaitable = new TaskCompletionSource<int>();
 
 			// Set the referer, as it is required by some site such as fanfiction.net
 			new RuntimeCache( a =>
@@ -205,12 +209,13 @@ namespace GR.Model.Loaders
 			, ( e, id ) =>
 			{
 				B.SaveCover( e.ResponseBytes );
-				TCS.TrySetResult( true );
+				QToken.TrySetResult( true );
 			}
-			, ( c, i, ex ) => TCS.TrySetResult( false )
+			, ( c, i, ex ) => QToken.TrySetResult( false )
 			, false );
 
-			return await TCS.Task;
+			AwaitToken:
+			return await QToken.Task;
 		}
 
 		private void OnComplete( BookItem b )

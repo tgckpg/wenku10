@@ -96,19 +96,6 @@ namespace wenku10.Pages
 
 		public void NavigateToViewSource( GRViewSource Payload ) => NavigateToViewSource( Payload, true );
 
-		private void NavigateToViewSource( GRViewSource Payload, bool AddToQueue )
-		{
-			NavTree.Open( Payload );
-			if ( NavTree.Contains( Payload ) )
-			{
-				MasterNav.SelectedItem = Payload;
-				OpenView( Payload );
-
-				if ( AddToQueue )
-					AddVSQueue( Payload );
-			}
-		}
-
 		public void NavigateToDataSource( Type TDataSource, Action<GRViewSource> VSAction = null )
 		{
 			GRViewSource VS = SearchDataSource( NavTree, TDataSource );
@@ -208,6 +195,23 @@ namespace wenku10.Pages
 			NavXTrans.FillBehavior = FillBehavior.HoldEnd;
 
 			InitMasterNav();
+
+			Explorer.GShortcuts GSS = new Explorer.GShortcuts();
+			MainElements.Children.Add( GSS );
+
+			List<GRViewSource> GVS = new List<GRViewSource>();
+			GetAllVS( NavTree, GVS );
+			GSS.RegisterWidgets( GVS );
+		}
+
+		private void GetAllVS( IEnumerable<TreeItem> Items, List<GRViewSource> GVS )
+		{
+			GVS.AddRange( Items.Where( x =>
+			{
+				if ( x.Children.Any() )
+					GetAllVS( x.Children, GVS );
+				return x is IGSWidget;
+			} ).Cast<GRViewSource>() );
 		}
 
 		public async Task<bool> GoBack()
@@ -319,6 +323,26 @@ namespace wenku10.Pages
 		{
 			TreeItem Nav = ( TreeItem ) e.ClickedItem;
 
+			OpenTreeItem( Nav, true );
+
+			if ( Nav.Children.Any() )
+			{
+				NavTree.Toggle( Nav );
+			}
+		}
+
+		private void NavigateToViewSource( GRViewSource Payload, bool AddToQueue )
+		{
+			NavTree.Open( Payload );
+			if ( NavTree.Contains( Payload ) )
+			{
+				MasterNav.SelectedItem = Payload;
+				OpenTreeItem( Payload, AddToQueue );
+			}
+		}
+
+		private void OpenTreeItem( TreeItem Nav, bool AddToQueue )
+		{
 			NavTree.Where( x => x != Nav ).ExecEach( x => x.IsActive = false );
 
 			if ( !Nav.IsActive )
@@ -327,18 +351,14 @@ namespace wenku10.Pages
 				{
 					Nav.IsActive = true;
 					OpenView( ViewSource );
-					AddVSQueue( ViewSource );
+					if ( AddToQueue )
+						AddVSQueue( ViewSource );
 				}
 				else if ( Nav is GRHighlights HS )
 				{
 					Nav.IsActive = true;
 					OpenHighlights( HS );
 				}
-			}
-
-			if ( Nav.Children.Any() )
-			{
-				NavTree.Toggle( Nav );
 			}
 		}
 

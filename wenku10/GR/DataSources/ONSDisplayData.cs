@@ -59,7 +59,7 @@ namespace GR.DataSources
 			}
 		}
 
-		public override async void Reload()
+		public override void Reload()
 		{
 			IsLoading = true;
 
@@ -70,8 +70,8 @@ namespace GR.DataSources
 
 			SHSearchLoader SHLoader = new SHSearchLoader( Search, AccessTokens );
 
-			IList<HubScriptItem> FirstPage = await SHLoader.NextPage();
-			Observables<HubScriptItem, GRRow<HSDisplay>> OHS = new Observables<HubScriptItem, GRRow<HSDisplay>>( FirstPage.Remap( ToGRRow ) );
+			Observables<HubScriptItem, GRRow<HSDisplay>> OHS = new Observables<HubScriptItem, GRRow<HSDisplay>>();
+			OHS.ConnectLoader( SHLoader, x => x.Remap( ToGRRow ) );
 
 			OHS.LoadEnd += ( s, e ) => IsLoading = false;
 			OHS.LoadStart += ( s, e ) => IsLoading = true;

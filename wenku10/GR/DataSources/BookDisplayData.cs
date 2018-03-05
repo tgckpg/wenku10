@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
@@ -14,6 +15,7 @@ namespace GR.DataSources
 	using Data;
 	using Database.Models;
 	using GStrings;
+	using Model.Loaders;
 	using Model.Book;
 	using Resources;
 
@@ -83,31 +85,41 @@ namespace GR.DataSources
 			StringResBg stx = new StringResBg( "AppResources" );
 			Message = stx.Text( "Loading" );
 
-			BkTable.Items = Shared.BooksDb.SafeRun( Db =>
+			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );
+
+			if ( Filter != null )
 			{
-				IQueryable<Book> Books = QuerySet( Db.Books.AsQueryable() );
+				Books = Filter( Books );
+			}
 
-				if ( Filter != null )
-				{
-					Books = Filter( Books );
-				}
+			if ( !string.IsNullOrEmpty( Search ) )
+			{
+				Books = Books.Where( x => x.Title.Contains( Search ) );
+			}
 
-				if ( !string.IsNullOrEmpty( Search ) )
-				{
-					Books = Books.Where( x => x.Title.Contains( Search ) );
-				}
+			Books = Books.Include( x => x.Info );
 
-				Books = Books.Include( x => x.Info );
+			QueryLoader<Book> BLoader = new QueryLoader<Book>( Books, Shared.BooksDb );
+			Observables<Book, GRRow<BookDisplay>> ItemsObservable = new Observables<Book, GRRow<BookDisplay>>();
+			ItemsObservable.ConnectLoader( BLoader, x => x.Remap( ToGRRow ) );
 
-				return Books.Remap( x =>
-				{
-					BookDisplay Bk = new BookDisplay( x );
-					ZoneNameResolver.Instance.Resolve( Bk.Entry.ZoneId, n => Bk.Zone = n );
-					return new GRRow<BookDisplay>( BkTable ) { Source = Bk };
-				} );
-			} );
+			ItemsObservable.LoadEnd += ( s, e ) => IsLoading = false;
+			ItemsObservable.LoadStart += ( s, e ) =>
+			{
+				Message = string.Format( "{0} {1} / {2}", stx.Text( "Loading" ), BLoader.CurrentPage, BLoader.NTotal );
+				IsLoading = true;
+			};
+
+			BkTable.Items = ItemsObservable;
 
 			IsLoading = false;
+		}
+
+		private GRRow<BookDisplay> ToGRRow( Book x )
+		{
+			BookDisplay Bk = new BookDisplay( x );
+			ZoneNameResolver.Instance.Resolve( Bk.Entry.ZoneId, n => Bk.Zone = n );
+			return new GRRow<BookDisplay>( BkTable ) { Source = Bk };
 		}
 
 		virtual protected void SortExp( int ColIndex, int Order )
