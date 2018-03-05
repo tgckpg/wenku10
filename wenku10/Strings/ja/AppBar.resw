@@ -262,4 +262,7 @@
   <data name="BackupAndRestore.Text" xml:space="preserve">
     <value>バックアップと復元</value>
   </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>ウィジェットを追加する</value>
+  </data>
 </root>

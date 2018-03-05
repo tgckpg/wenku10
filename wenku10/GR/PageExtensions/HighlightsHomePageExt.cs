@@ -32,7 +32,7 @@ namespace GR.PageExtensions
 	using Resources;
 	using Settings;
 
-	sealed class HighlightsHomePageExt : PageExtension, ICmdControls
+	class HighlightsHomePageExt : PageExtension, ICmdControls
 	{
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
@@ -41,9 +41,9 @@ namespace GR.PageExtensions
 		public bool NoCommands { get; }
 		public bool MajorNav { get { return true; } }
 
-		public IList<ICommandBarElement> MajorControls { get; private set; }
-		public IList<ICommandBarElement> Major2ndControls { get; private set; }
-		public IList<ICommandBarElement> MinorControls { get; private set; }
+		public IList<ICommandBarElement> MajorControls { get; protected set; }
+		public IList<ICommandBarElement> Major2ndControls { get; protected set; }
+		public IList<ICommandBarElement> MinorControls { get; protected set; }
 
 		AppBarButton FeedbackBtn;
 		AppBarButton NewsBtn;

@@ -52,7 +52,6 @@ namespace GR.Model.Section
 			{
 				Conf = new WidgetConfig() { Enable = false, Template = "HorzThumbnailList" };
 			}
-
 		}
 
 	}

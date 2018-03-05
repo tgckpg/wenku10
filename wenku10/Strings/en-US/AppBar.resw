@@ -261,4 +261,7 @@
   <data name="BackupAndRestore.Text" xml:space="preserve">
     <value>Backup and Restore</value>
   </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>Add widget</value>
+  </data>
 </root>

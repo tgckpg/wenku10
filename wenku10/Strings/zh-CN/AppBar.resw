@@ -259,4 +259,7 @@
     <value>重建索引</value>
     <comment>Rebuild Index</comment>
   </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>添加小部件</value>
+  </data>
 </root>

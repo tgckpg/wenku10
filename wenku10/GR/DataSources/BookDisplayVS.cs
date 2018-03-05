@@ -31,6 +31,7 @@ namespace GR.DataSources
 				return new WidgetConfig()
 				{
 					Name = ItemTitle,
+					TargetType = DataSource.ConfigId,
 					Enable = true,
 					Template = "Banner"
 				};

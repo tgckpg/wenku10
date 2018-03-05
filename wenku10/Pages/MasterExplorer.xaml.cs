@@ -19,18 +19,16 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
-using Net.Astropenguin.Logging;
 
 using GR.CompositeElement;
 using GR.DataSources;
+using GR.Effects;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
 using GR.Model.Section;
-using GR.Effects;
-using Net.Astropenguin.Linq;
 
 namespace wenku10.Pages
 {
@@ -77,7 +75,7 @@ namespace wenku10.Pages
 
 		public void SoftOpen( bool NavForward )
 		{
-			if( !NavForward && VSHistory.Any() )
+			if ( !NavForward && VSHistory.Any() )
 			{
 				BHBuffer = VSHistory.Pop();
 			}
@@ -154,7 +152,7 @@ namespace wenku10.Pages
 
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
-				new GRHome( stx.Text( "Home" ) ),
+				new GRHome( stx.Text( "Home" ), GRShortcuts ),
 				MyLibrary,
 				new BookDisplayVS( stx.Text( "History" ), typeof( HistoryData ) ),
 				new ONSViewSource( stx.Text( "OnlineScriptDir", "AppBar" ), typeof( ONSDisplayData ) ),
@@ -197,17 +195,20 @@ namespace wenku10.Pages
 
 			InitMasterNav();
 
-			List<GRViewSource> GVS = new List<GRViewSource>();
-			GetAllVS( NavTree, GVS );
-			GRShortcuts.RegisterWidgets( GVS );
+			// Get all available widgets
+			List<GRViewSource> GWidgets = new List<GRViewSource>();
+			ScanWidgets( NavTree, GWidgets );
+			GRShortcuts.RegisterWidgets( GWidgets );
+
+			OpenHome( ( GRHome ) Nav[ 0 ] );
 		}
 
-		private void GetAllVS( IEnumerable<TreeItem> Items, List<GRViewSource> GVS )
+		private void ScanWidgets( IEnumerable<TreeItem> Items, List<GRViewSource> GVS )
 		{
 			GVS.AddRange( Items.Where( x =>
 			{
 				if ( x.Children.Any() )
-					GetAllVS( x.Children, GVS );
+					ScanWidgets( x.Children, GVS );
 				return x is IGSWidget;
 			} ).Cast<GRViewSource>() );
 		}
@@ -236,7 +237,7 @@ namespace wenku10.Pages
 					NavigateToViewSource( BH.ViewSource, false );
 					return true;
 				}
-				else if( BH.NavType == NavigationType.PAGE && VSHistory.Any() )
+				else if ( BH.NavType == NavigationType.PAGE && VSHistory.Any() )
 				{
 					// Peek the previous VS
 					BH = VSHistory.Peek();
@@ -357,9 +358,9 @@ namespace wenku10.Pages
 					Nav.IsActive = true;
 					OpenHighlights( HS );
 				}
-				else if( Nav is GRHome GH )
+				else if ( Nav is GRHome GH )
 				{
-					OpenHome();
+					OpenHome( GH );
 				}
 			}
 		}
@@ -393,7 +394,7 @@ namespace wenku10.Pages
 			await GHighlights.EnterAnima();
 		}
 
-		private async void OpenHome()
+		private async void OpenHome( GRHome GRH )
 		{
 			if ( CloseAllViews( out int AnimaInt ) )
 			{
@@ -401,6 +402,8 @@ namespace wenku10.Pages
 			}
 
 			GRShortcuts.LoadWidgets();
+
+			ViewSourceCommand( ( GRH as IExtViewSource )?.Extension );
 
 			GRShortcuts.Visibility = Visibility.Visible;
 			await GRShortcuts.EnterAnima();
@@ -570,7 +573,6 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-
 			if ( GHighlights.Visibility == Visibility.Visible )
 			{
 				SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350, 600, Easings.EaseInCubic );
@@ -585,6 +587,18 @@ namespace wenku10.Pages
 			}
 		}
 
-		private class GRHome : TreeItem { public GRHome( string Name ) : base( Name ) { } }
+		private class GRHome : TreeItem, IExtViewSource
+		{
+			private PageExtension _Extension;
+			private Explorer.GShortcuts GRShortcuts;
+
+			public PageExtension Extension => _Extension ?? ( _Extension = new GR.PageExtensions.WidgetsHomePageExt( GRShortcuts ) );
+
+			public GRHome( string Name, Explorer.GShortcuts GRShortcuts )
+				: base( Name )
+			{
+				this.GRShortcuts = GRShortcuts;
+			}
+		}
 	}
 }

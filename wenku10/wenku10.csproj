@@ -157,9 +157,13 @@
     <Compile Include="GR\PageExtensions\HighlightsHomePageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
     <Compile Include="GR\PageExtensions\TextDocPageExt.cs" />
+    <Compile Include="GR\PageExtensions\WidgetHomePageExt.cs" />
     <Compile Include="GR\PageExtensions\ZSMPageExt.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\AddWidget.xaml.cs">
+      <DependentUpon>AddWidget.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Dialogs\ContentReader\ExitOptions.xaml.cs">
       <DependentUpon>ExitOptions.xaml</DependentUpon>
@@ -429,6 +433,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\AddWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -46,16 +46,13 @@ namespace wenku10.Pages.Dialogs
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = new StringResources( "Message", "AppBar", "AppResources" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );
+			Title = stx.Text( "Bookmark", "AppBar" );
 
-			stx = new StringResources( "AppBar" );
-			Title = stx.Text( "Bookmark" );
-
-			stx = new StringResources( "AppResources" );
-			BookmarkName.PlaceholderText = stx.Text( "DefaultToParagraph" );
+			BookmarkName.PlaceholderText = stx.Text( "DefaultToParagraph", "AppResources" );
 
 			ColorGrid.ItemsSource = PresetColors;
 		}

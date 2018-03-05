@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,9 +22,10 @@ using GR.Model.Section;
 
 namespace wenku10.Pages.Explorer
 {
-	public sealed partial class GShortcuts : Page, IAnimaPage, IDisposable
+	sealed partial class GShortcuts : Page, IAnimaPage, IDisposable
 	{
-		private IEnumerable<GRViewSource> AvailableWidgets;
+		public IEnumerable<GRViewSource> AvailableWidgets { get; private set; }
+		ObservableCollection<WidgetView> Widgets;
 
 		public GShortcuts()
 		{
@@ -34,11 +36,11 @@ namespace wenku10.Pages.Explorer
 		private void SetTemplate()
 		{
 			MainContents.ItemTemplateSelector = new TemplateSel() { Resources = Resources };
+			Widgets = new ObservableCollection<WidgetView>();
 		}
 
 		public async void LoadWidgets()
 		{
-			List<WidgetView> Widgets = new List<WidgetView>();
 			foreach ( GRViewSource GVS in AvailableWidgets )
 			{
 				WidgetView WView = new WidgetView( GVS );
@@ -52,6 +54,11 @@ namespace wenku10.Pages.Explorer
 			MainContents.ItemsSource = Widgets;
 		}
 
+		public async void AddWidget( WidgetView WView )
+		{
+			Widgets.Add( WView );
+		}
+
 		public void RegisterWidgets( IEnumerable<GRViewSource> GVSs )
 		{
 			AvailableWidgets = GVSs;
@@ -60,6 +67,7 @@ namespace wenku10.Pages.Explorer
 		public void Dispose()
 		{
 			MainContents.ItemsSource = null;
+			Widgets.Clear();
 		}
 
 		public async Task ExitAnima()

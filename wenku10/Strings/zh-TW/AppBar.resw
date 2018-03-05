@@ -261,4 +261,7 @@
   <data name="BackupAndRestore.Text" xml:space="preserve">
     <value>備份與還原</value>
   </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>新增小工具</value>
+  </data>
 </root>
