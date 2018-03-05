@@ -220,4 +220,7 @@
   <data name="StaffPicks.Text" xml:space="preserve">
     <value>Highlights</value>
   </data>
+  <data name="Home.Text" xml:space="preserve">
+    <value>Home</value>
+  </data>
 </root>

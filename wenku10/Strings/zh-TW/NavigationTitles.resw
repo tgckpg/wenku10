@@ -220,4 +220,7 @@
   <data name="StaffPicks.Text" xml:space="preserve">
     <value>文庫精選</value>
   </data>
+  <data name="Home.Text" xml:space="preserve">
+    <value>首頁</value>
+  </data>
 </root>

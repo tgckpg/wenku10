@@ -217,4 +217,7 @@
   <data name="StaffPicks.Text" xml:space="preserve">
     <value>ハイライト</value>
   </data>
+  <data name="Home.Text" xml:space="preserve">
+    <value>ホーム</value>
+  </data>
 </root>

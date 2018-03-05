@@ -28,7 +28,7 @@ namespace wenku10.Pages.Explorer
 {
 	using Scenes;
 
-	public sealed partial class Highlights : UserControl, IAnimaPage,  IDisposable
+	public sealed partial class Highlights : UserControl, IAnimaPage, IDisposable
 	{
 		public static readonly DependencyProperty ViewModeProperty = DependencyProperty.Register(
 			"ViewMode", typeof( string ), typeof( Highlights )

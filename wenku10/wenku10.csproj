@@ -150,6 +150,7 @@
     <Compile Include="GR\MigrationOps\MigrationManager.cs" />
     <Compile Include="GR\MigrationOps\BackupAndRestoreOp.cs" />
     <Compile Include="GR\MigrationOps\NaiveObfustream.cs" />
+    <Compile Include="GR\Model\Section\WidgetView.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
     <Compile Include="GR\PageExtensions\FTSDataPageExt.cs" />
@@ -176,6 +177,12 @@
     </Compile>
     <Compile Include="Pages\Explorer\GShortcuts.xaml.cs">
       <DependentUpon>GShortcuts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\Widgets\MainBanner.xaml.cs">
+      <DependentUpon>MainBanner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\Widgets\ThumbnailList.xaml.cs">
+      <DependentUpon>ThumbnailList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\MasterExplorer.xaml.cs">
       <DependentUpon>MasterExplorer.xaml</DependentUpon>
@@ -326,7 +333,6 @@
     <Compile Include="GR\Model\Loaders\VolumeLoader.cs" />
     <Compile Include="GR\Model\Pages\ContentReader\ESContext.cs" />
     <Compile Include="GR\Model\Pages\ContentReader\AssistContext.cs" />
-    <Compile Include="GR\Model\Section\LoginStatus.cs" />
     <Compile Include="GR\Model\Section\NavPaneSection.cs" />
     <Compile Include="GR\Model\Section\ReaderView.cs" />
     <Compile Include="GR\Model\Section\TOCPane.cs" />
@@ -447,6 +453,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Explorer\GShortcuts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Widgets\MainBanner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Widgets\ThumbnailList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

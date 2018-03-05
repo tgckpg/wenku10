@@ -140,7 +140,7 @@ namespace GR.Settings.Layout
 
 			BgContext b = new BgContext( LayoutSettings, Section );
 
-			return SectionBgs[ Section ] = b; ;
+			return SectionBgs[ Section ] = b;
 		}
 
 		/// <summary>

@@ -154,6 +154,7 @@ namespace wenku10.Pages
 
 			List<TreeItem> Nav = new List<TreeItem>()
 			{
+				new GRHome( stx.Text( "Home" ) ),
 				MyLibrary,
 				new BookDisplayVS( stx.Text( "History" ), typeof( HistoryData ) ),
 				new ONSViewSource( stx.Text( "OnlineScriptDir", "AppBar" ), typeof( ONSDisplayData ) ),
@@ -196,12 +197,9 @@ namespace wenku10.Pages
 
 			InitMasterNav();
 
-			Explorer.GShortcuts GSS = new Explorer.GShortcuts();
-			MainElements.Children.Add( GSS );
-
 			List<GRViewSource> GVS = new List<GRViewSource>();
 			GetAllVS( NavTree, GVS );
-			GSS.RegisterWidgets( GVS );
+			GRShortcuts.RegisterWidgets( GVS );
 		}
 
 		private void GetAllVS( IEnumerable<TreeItem> Items, List<GRViewSource> GVS )
@@ -359,6 +357,10 @@ namespace wenku10.Pages
 					Nav.IsActive = true;
 					OpenHighlights( HS );
 				}
+				else if( Nav is GRHome GH )
+				{
+					OpenHome();
+				}
 			}
 		}
 
@@ -391,6 +393,19 @@ namespace wenku10.Pages
 			await GHighlights.EnterAnima();
 		}
 
+		private async void OpenHome()
+		{
+			if ( CloseAllViews( out int AnimaInt ) )
+			{
+				await Task.Delay( AnimaInt );
+			}
+
+			GRShortcuts.LoadWidgets();
+
+			GRShortcuts.Visibility = Visibility.Visible;
+			await GRShortcuts.EnterAnima();
+		}
+
 		private bool CloseAllViews( out int AnimaInt )
 		{
 			AnimaInt = 0;
@@ -405,6 +420,17 @@ namespace wenku10.Pages
 			{
 				TransitionDisplay.SetState( ExplorerView, TransitionState.Inactive );
 				AnimaInt = 350;
+			}
+
+			if ( GRShortcuts.Visibility == Visibility.Visible )
+			{
+				Worker.UIInvoke( async () =>
+				{
+					await GRShortcuts.ExitAnima();
+					GRShortcuts.Dispose();
+					GRShortcuts.Visibility = Visibility.Collapsed;
+				} );
+				AnimaInt = 550;
 			}
 
 			if ( GHighlights.Visibility == Visibility.Visible )
@@ -559,5 +585,6 @@ namespace wenku10.Pages
 			}
 		}
 
+		private class GRHome : TreeItem { public GRHome( string Name ) : base( Name ) { } }
 	}
 }

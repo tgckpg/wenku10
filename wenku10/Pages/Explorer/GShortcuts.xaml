@@ -3,34 +3,28 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Explorer"
-    xmlns:v="using:GR.Converters"
+    xmlns:ex="using:wenku10.Pages.Explorer.Widgets"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
-        <ScrollViewer>
-            <StackPanel x:Name="MainContents" Margin="10"/>
+        <ScrollViewer x:Name="MainSV">
+            <ItemsControl x:Name="MainContents">
+                <ItemsControl.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="100" />
+                    </TransitionCollection>
+                </ItemsControl.ItemContainerTransitions>
+            </ItemsControl>
         </ScrollViewer>
     </Grid>
     <Page.Resources>
-        <v:WIBConverter x:Name="WIBConverter" />
-        <DataTemplate x:Key="HThumbnails">
-            <Grid Width="120" Margin="10" DataContext="{Binding Source, Converter={StaticResource WIBConverter}}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Image Width="120" Height="120"
-                       Stretch="UniformToFill"
-                       Source="{Binding Cover}" />
-                <TextBlock Grid.Row="1"
-                           FontSize="20"
-                           Text="{Binding Title}"
-                           ToolTipService.ToolTip="{Binding Title}"
-                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                           TextTrimming="CharacterEllipsis" />
-            </Grid>
+        <DataTemplate x:Key="HorzThumbnailList">
+            <ex:ThumbnailList Margin="10" Title="{Binding Name}" ItemsSource="{Binding Table.Items}" />
+        </DataTemplate>
+        <DataTemplate x:Key="Banner">
+            <ex:MainBanner Title="{Binding Name}" ItemsSource="{Binding Table.Items}" RefSV="{Binding ElementName=MainSV}"/>
         </DataTemplate>
     </Page.Resources>
 </Page>

@@ -64,6 +64,7 @@
                             e:TransitionDisplay.State="Inactive"
                             ViewMode="Table" />
             <ex:Highlights x:Name="GHighlights" Visibility="Collapsed" />
+            <ex:GShortcuts x:Name="GRShortcuts" Visibility="Collapsed" />
         </Grid>
         <Rectangle x:Name="NavSensor" Grid.ColumnSpan="2" Fill="Transparent" Visibility="Collapsed" />
         <ListView x:Name="MasterNav" Background="{StaticResource MinorBackgroundBrush}"

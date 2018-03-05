@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -11,17 +12,20 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.Loaders;
-
+using GR.Converters;
 using GR.DataSources;
-using Net.Astropenguin.Helpers;
+using GR.Model.Interfaces;
+using GR.Model.Section;
 
 namespace wenku10.Pages.Explorer
 {
-	public sealed partial class GShortcuts : Page
+	public sealed partial class GShortcuts : Page, IAnimaPage, IDisposable
 	{
+		private IEnumerable<GRViewSource> AvailableWidgets;
+
 		public GShortcuts()
 		{
 			this.InitializeComponent();
@@ -30,48 +34,54 @@ namespace wenku10.Pages.Explorer
 
 		private void SetTemplate()
 		{
+			MainContents.ItemTemplateSelector = new TemplateSel() { Resources = Resources };
 		}
 
-		public void LoadWidgets( IEnumerable<GRViewSource> GVSs )
+		public async void LoadWidgets()
 		{
-			foreach( GRViewSource GVS in GVSs )
+			List<WidgetView> Widgets = new List<WidgetView>();
+			foreach ( GRViewSource GVS in AvailableWidgets )
 			{
-				CreateWidget( GVS.ItemTitle, "HThumbnails", GVS.DataSource );
+				WidgetView WView = new WidgetView( GVS );
+				await WView.ConfigureAsync();
+				Widgets.Add( WView );
 			}
+
+			MainContents.ItemsSource = Widgets;
 		}
 
 		public void RegisterWidgets( IEnumerable<GRViewSource> GVSs )
 		{
-			LoadWidgets( GVSs );
+			AvailableWidgets = GVSs;
 		}
 
-		private void CreateWidget( string Name, string ItemTemplate, GRDataSource DataSource )
+		public void Dispose()
 		{
-			try
-			{
-				DataSource.StructTable();
-				DataSource.Reload();
-			}
-			catch ( EmptySearchQueryException )
-			{
-				return;
-			}
-
-			TextBlock HeaderText = new TextBlock() { Text = Name, FontSize = 25 };
-			ListView DataList = new ListView();
-
-			DataList.ItemTemplate = ( DataTemplate ) Resources[ ItemTemplate ];
-			DataList.Style = ( Style ) Application.Current.Resources[ "VerticalListView" ];
-			DataList.ItemContainerStyle = ( Style ) Application.Current.Resources[ "ListItemNoSelect" ];
-
-			ScrollViewer.SetHorizontalScrollMode( DataList, ScrollMode.Disabled );
-			ScrollViewer.SetHorizontalScrollBarVisibility( DataList, ScrollBarVisibility.Hidden );
-			Binding TableItems = new Binding() { Path = new PropertyPath( "Items" ), Source = DataSource.Table };
-			BindingOperations.SetBinding( DataList, ItemsControl.ItemsSourceProperty, TableItems );
-
-			MainContents.Children.Add( HeaderText );
-			MainContents.Children.Add( DataList );
+			MainContents.ItemsSource = null;
 		}
 
+		public async Task ExitAnima()
+		{
+		}
+
+		public async Task EnterAnima()
+		{
+		}
+
+		private class TemplateSel: DataTemplateSelector
+		{
+			public ResourceDictionary Resources { get; set; }
+
+			protected override DataTemplate SelectTemplateCore( object Item, DependencyObject container )
+			{
+				if ( Item is WidgetView WItem )
+				{
+					return ( DataTemplate ) Resources[ WItem.TemplateName ];
+				}
+
+				return null;
+			}
+
+		}
 	}
 }
