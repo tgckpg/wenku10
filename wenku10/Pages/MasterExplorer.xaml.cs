@@ -80,7 +80,14 @@ namespace wenku10.Pages
 				BHBuffer = VSHistory.Pop();
 			}
 
-			ExplorerView.Refresh();
+			if( GRShortcuts.Visibility == Visibility.Visible )
+			{
+				GRShortcuts.LoadWidgets();
+			}
+			else
+			{
+				ExplorerView.Refresh();
+			}
 		}
 
 		public void SoftClose( bool NavForward )

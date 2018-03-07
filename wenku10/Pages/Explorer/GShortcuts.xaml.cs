@@ -53,6 +53,7 @@ namespace wenku10.Pages.Explorer
 				WCs = Db.WidgetConfigs.OrderBy( x => x.Id ).ToList().Select( x => x.Conf ).ToArray();
 			}
 
+			Widgets.Clear();
 			MainContents.ItemsSource = Widgets;
 
 			if ( WCs.Any() )
