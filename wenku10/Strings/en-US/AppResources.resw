@@ -201,20 +201,14 @@
   <data name="NoComments.Text" xml:space="preserve">
     <value>No one has commented before. Perhaps you could help make a comment?</value>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>Total</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>Result(s)</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>Total {0} result(s)</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>Does not support content searching</value>
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>Not yet have this article</value>
-  </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>Staff Picks</value>
   </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>Statistics</value>
@@ -255,8 +249,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>Press again to exit</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>Click To Read</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>Read</value>
   </data>
   <data name="Size.Text" xml:space="preserve">
     <value>Size</value>
@@ -381,8 +375,8 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>Book</value>
   </data>
-  <data name="PleaseClick.Text" xml:space="preserve">
-    <value>Please Click</value>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>Unprocessed item</value>
   </data>
   <data name="ZoneSpider.Text" xml:space="preserve">
     <value>Zone Spider</value>
@@ -416,5 +410,23 @@
   </data>
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 characters ( #wenku10 )</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>Record exist</value>
+  </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Search_By_Id.Text" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="IssueDate.Text" xml:space="preserve">
+    <value>Issue</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>Search result</value>
+  </data>
+  <data name="ShowMore.Text" xml:space="preserve">
+    <value>Show more</value>
   </data>
 </root>

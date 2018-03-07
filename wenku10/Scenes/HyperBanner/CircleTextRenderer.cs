@@ -81,17 +81,17 @@ namespace wenku10.Scenes
 
 		public void DrawStrikethrough( Vector2 point, float strikethroughWidth, float strikethroughThickness, float strikethroughOffset, CanvasTextDirection textDirection, object brush, CanvasTextMeasuringMode textMeasuringMode, string localeName, CanvasGlyphOrientation glyphOrientation )
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void DrawUnderline( Vector2 point, float underlineWidth, float underlineThickness, float underlineOffset, float runHeight, CanvasTextDirection textDirection, object brush, CanvasTextMeasuringMode textMeasuringMode, string localeName, CanvasGlyphOrientation glyphOrientation )
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		public void DrawInlineObject( Vector2 point, ICanvasTextInlineObject inlineObject, bool isSideways, bool isRightToLeft, object brush, CanvasGlyphOrientation glyphOrientation )
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 	}
 }

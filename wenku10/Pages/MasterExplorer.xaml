@@ -1,0 +1,116 @@
+﻿<Page
+    x:Class="wenku10.Pages.MasterExplorer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Page"
+    xmlns:ex="using:wenku10.Pages.Explorer"
+    xmlns:gl="using:GR.Model.ListItem"
+    xmlns:n="using:Net.Astropenguin.UI.Converters"
+    xmlns:v="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:TreeMarginConverter x:Key="TreeMarginConverter" />
+        <v:TransStateConverter x:Key="TransStateConverter" />
+        <v:ObjectColorConverter x:Key="ObjectColorConverter" F0="#FFFF9D13" F1="#FFE8127A" F2="#FF2031FF" F3="#FF12E88F" F4="#FFFFFE20" BF="{StaticResource MinorBackgroundBrush}" />
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RenderTransform>
+            <TranslateTransform X="0" />
+        </Grid.RenderTransform>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=0 -->
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainElements.(Grid.Column)" Value="0" />
+                        <Setter Target="MainElements.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="ExplorerView.ViewMode" Value="List" />
+                        <Setter Target="GHighlights.ViewMode" Value="V" />
+                        <Setter Target="NavSensor.Tag" Value="2" /> <!-- Closed -->
+                        <Setter Target="MasterNav.Tag" Value="2" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <!-- width >=800 -->
+                        <AdaptiveTrigger MinWindowWidth="800" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="MainElements.(Grid.Column)" Value="1" />
+                        <Setter Target="MainElements.(Grid.ColumnSpan)" Value="0" />
+                        <Setter Target="ExplorerView.ViewMode" Value="Table" />
+                        <Setter Target="GHighlights.ViewMode" Value="H" />
+                        <Setter Target="NavSensor.Tag" Value="1" /> <!-- Opened -->
+                        <Setter Target="MasterNav.Tag" Value="1" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="MainElements" Grid.Column="0" Grid.ColumnSpan="2" >
+            <ex:GRTableView x:Name="ExplorerView"
+                            Visibility="Collapsed"
+                            e:TransitionDisplay.Mode="A01_X_30_0"
+                            e:TransitionDisplay.State="Inactive"
+                            ViewMode="Table" />
+            <ex:Highlights x:Name="GHighlights" Visibility="Collapsed" />
+            <ex:GShortcuts x:Name="GRShortcuts" Visibility="Collapsed" />
+        </Grid>
+        <Rectangle x:Name="NavSensor" Grid.ColumnSpan="2" Fill="Transparent" Visibility="Collapsed" />
+        <ListView x:Name="MasterNav" Background="{StaticResource MinorBackgroundBrush}"
+                  IsItemClickEnabled="True" ItemClick="MasterNav_ItemClick"
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  Width="230" MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}">
+            <ListView.RenderTransform>
+                <TranslateTransform X="0" />
+            </ListView.RenderTransform>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="gl:TreeItem">
+                    <Grid Margin="{x:Bind TreeLevel, Converter={StaticResource TreeMarginConverter}}" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{x:Bind ItemTitle}"
+                                   TextWrapping="Wrap" Margin="10"
+                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                        <Rectangle Grid.Column="1" Width="3" Margin="0,1"
+                                   Fill="{x:Bind Self, Mode=OneWay, Converter={StaticResource ObjectColorConverter}}"
+                                   VerticalAlignment="Stretch"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!-- Loading Message -->
+        <Border x:Name="LoadingMessage"
+                Grid.ColumnSpan="2"
+                Background="Transparent" Visibility="Collapsed"
+                e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+                e:TransitionDisplay.Mode="A01_Y_N30_0" 
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid BorderThickness="1" BorderBrush="{StaticResource MinorBrush}"
+                  Background="{StaticResource MajorBackgroundBrush}"
+                  VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ProgressRing Grid.Column="0" Margin="20"
+                              IsActive="{Binding IsLoading}" Foreground="{StaticResource MajorBrush}" />
+                <TextBlock Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
+                           MaxLines="1" TextTrimming="CharacterEllipsis"
+                           Text="{Binding Message}" Foreground="{StaticResource MajorBrush}" />
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

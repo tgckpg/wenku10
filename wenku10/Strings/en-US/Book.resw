@@ -120,23 +120,29 @@
   <data name="Author.Text" xml:space="preserve">
     <value>Author</value>
   </data>
+  <data name="Chapter.Text" xml:space="preserve">
+    <value>Chapter</value>
+  </data>
   <data name="ChapterMapping.Text" xml:space="preserve">
     <value>Chapter Mapping</value>
   </data>
   <data name="Cover.Text" xml:space="preserve">
     <value>Cover</value>
   </data>
-  <data name="DailyHitsCount.Text" xml:space="preserve">
+  <data name="DailyHitCount.Text" xml:space="preserve">
     <value>Daily Hits</value>
-  </data>
-  <data name="Date.Text" xml:space="preserve">
-    <value>Date</value>
   </data>
   <data name="FavCount.Text" xml:space="preserve">
     <value>Fav Count</value>
   </data>
   <data name="Intro.Text" xml:space="preserve">
     <value>Intro</value>
+  </data>
+  <data name="LastAccess.Text" xml:space="preserve">
+    <value>Last Access</value>
+  </data>
+  <data name="LastUpdateDate.Text" xml:space="preserve">
+    <value>Last Update Date</value>
   </data>
   <data name="LatestSection.Text" xml:space="preserve">
     <value>Latest Section</value>
@@ -146,6 +152,9 @@
   </data>
   <data name="Others.Text" xml:space="preserve">
     <value>Others</value>
+  </data>
+  <data name="PostingDate.Text" xml:space="preserve">
+    <value>Posting Date</value>
   </data>
   <data name="Press.Text" xml:space="preserve">
     <value>Press</value>
@@ -165,8 +174,11 @@
   <data name="Title.Text" xml:space="preserve">
     <value>Title</value>
   </data>
-  <data name="TotalHitsCount.Text" xml:space="preserve">
+  <data name="TotalHitCount.Text" xml:space="preserve">
     <value>Total Hits</value>
+  </data>
+  <data name="Volume.Text" xml:space="preserve">
+    <value>Volume</value>
   </data>
   <data name="VolumeMapping.Text" xml:space="preserve">
     <value>Volume Mapping</value>

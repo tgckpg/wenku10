@@ -120,23 +120,29 @@
   <data name="Author.Text" xml:space="preserve">
     <value>作者</value>
   </data>
+  <data name="Chapter.Text" xml:space="preserve">
+    <value>章</value>
+  </data>
   <data name="ChapterMapping.Text" xml:space="preserve">
     <value>章節對應方式</value>
   </data>
   <data name="Cover.Text" xml:space="preserve">
     <value>封面</value>
   </data>
-  <data name="DailyHitsCount.Text" xml:space="preserve">
+  <data name="DailyHitCount.Text" xml:space="preserve">
     <value>今日點擊</value>
-  </data>
-  <data name="Date.Text" xml:space="preserve">
-    <value>日期</value>
   </data>
   <data name="FavCount.Text" xml:space="preserve">
     <value>收藏數</value>
   </data>
   <data name="Intro.Text" xml:space="preserve">
     <value>簡介</value>
+  </data>
+  <data name="LastAccess.Text" xml:space="preserve">
+    <value>最後存取</value>
+  </data>
+  <data name="LastUpdateDate.Text" xml:space="preserve">
+    <value>最後更新日期</value>
   </data>
   <data name="LatestSection.Text" xml:space="preserve">
     <value>最後更新</value>
@@ -146,6 +152,9 @@
   </data>
   <data name="Others.Text" xml:space="preserve">
     <value>其它</value>
+  </data>
+  <data name="PostingDate.Text" xml:space="preserve">
+    <value>發布日期</value>
   </data>
   <data name="Press.Text" xml:space="preserve">
     <value>文庫</value>
@@ -165,8 +174,11 @@
   <data name="Title.Text" xml:space="preserve">
     <value>書名</value>
   </data>
-  <data name="TotalHitsCount.Text" xml:space="preserve">
+  <data name="TotalHitCount.Text" xml:space="preserve">
     <value>總點擊</value>
+  </data>
+  <data name="Volume.Text" xml:space="preserve">
+    <value>卷</value>
   </data>
   <data name="VolumeMapping.Text" xml:space="preserve">
     <value>卷對應方式</value>

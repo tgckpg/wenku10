@@ -3,11 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.Dialogs.Taotu"
-    xmlns:e="using:wenku8.Effects"
-    xmlns:n="using:wenku8.Converters"
+    xmlns:e="using:GR.Effects"
+    xmlns:n="using:GR.Converters"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:xi="using:wenku8.ThemeIcons"
+    xmlns:xi="using:GR.ThemeIcons"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -44,6 +44,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -67,9 +68,17 @@
 
             <TextBox Margin="3"
                      Grid.Row="1" Grid.Column="0"
+                     Grid.ColumnSpan="2"
                      x:Uid="/AppResources/Banner"
                      LostFocus="SetBanner"
                      Text="{Binding BannerPath}"/>
+
+            <TextBox Margin="3"
+                     Grid.Row="2" Grid.Column="0"
+                     Grid.ColumnSpan="2"
+                     x:Uid="/AppResources/Name"
+                     LostFocus="SetZoneName"
+                     Text="{Binding ZoneName}"/>
 
             <!-- Test Button -->
             <Button Style="{StaticResource IconButton}"
@@ -91,14 +100,14 @@
                 </Grid>
             </Button>
 
-            <TextBox Grid.Column="0" Grid.Row="2"
+            <TextBox Grid.Column="0" Grid.Row="3"
                      x:Uid="/libtaotu/Resources/Pattern"
                      PlaceholderText="Pattern" Margin="3"
                      Text="{Binding ItemPattern}"
                      FontFamily="Lucida Console"
                      LostFocus="SetPattern"/>
 
-            <TextBox Grid.Column="1" Grid.Row="2"
+            <TextBox Grid.Column="1" Grid.Row="3"
                      x:Uid="/libtaotu/Resources/Param"
                      PlaceholderText="Param ->" Margin="3"
                      Text="{Binding ItemParam}"
@@ -106,7 +115,7 @@
                      LostFocus="SetFormat"/>
 
             <!-- Subprocess -->
-            <Button Grid.Column="2" Grid.Row="2"
+            <Button Grid.Column="2" Grid.Row="3"
                     x:Uid="/libtaotu/Resources/SubProcs"
                     Margin="3" Style="{StaticResource IconButton}"
                     Click="Subprocess">
@@ -118,19 +127,19 @@
             </Button>
 
             <!-- Book Spider -->
-            <TextBlock Grid.Column="0" Grid.Row="3"
+            <TextBlock Grid.Column="0" Grid.Row="4"
                        Margin="3" VerticalAlignment="Center"
                        Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                        x:Uid="/AppResources/BookSpider"
                        Text="BookSpider" />
-            <Button Grid.Column="1" Grid.Row="3"
+            <Button Grid.Column="1" Grid.Row="4"
                     HorizontalAlignment="Right"
                     Width="30" Height="30"
                     Click="ImportBookSpider"
                     Margin="3" Style="{StaticResource IconButton}" >
                     <i:IconLogin AutoScale="True" Direction="Rotate270" Foreground="{StaticResource SubtleBrush}"/>
             </Button>
-            <Button Grid.Column="2" Grid.Row="3"
+            <Button Grid.Column="2" Grid.Row="4"
                     x:Uid="/libtaotu/Resources/SubProcs"
                     Margin="3" Style="{StaticResource IconButton}"
                     Click="SpiderProcess">

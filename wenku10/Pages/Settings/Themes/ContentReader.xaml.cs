@@ -22,13 +22,13 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 
-using wenku8.Config;
-using wenku8.Model.Section;
-using wenku8.Model.Text;
-using wenku8.Model.Pages.ContentReader;
-using wenku8.Settings.Theme;
+using GR.Config;
+using GR.Model.Section;
+using GR.Model.Text;
+using GR.Model.Pages.ContentReader;
+using GR.Settings.Theme;
 
-using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
 
 namespace wenku10.Pages.Settings.Themes
 {

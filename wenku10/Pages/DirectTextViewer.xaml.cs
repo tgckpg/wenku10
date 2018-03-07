@@ -20,9 +20,9 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.Model.Interfaces;
-using wenku8.CompositeElement;
-using wenku8.Resources;
+using GR.Model.Interfaces;
+using GR.CompositeElement;
+using GR.Resources;
 
 namespace wenku10.Pages
 {

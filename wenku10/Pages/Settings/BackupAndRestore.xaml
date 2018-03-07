@@ -1,0 +1,41 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.BackupAndRestore"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <v:DataVisConverter x:Name="DataVisConverter" />
+    </Page.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="Black">
+        <StackPanel Margin="10" VerticalAlignment="Top">
+            <StackPanel x:Name="MMigrate" Visibility="{Binding ShouldMigrate, Converter={StaticResource DataVisConverter}}">
+                <TextBlock FontSize="29" x:Uid="/InitQuestions/Migration" Foreground="White"/>
+                <TextBlock Foreground="Gray" x:Uid="/InitQuestions/PleaseMigrate" TextWrapping="Wrap" />
+            </StackPanel>
+            <StackPanel x:Name="MBackupAndRestore" Visibility="{Binding ShouldMigrate, Converter={StaticResource DataVisConverter}, ConverterParameter=1}">
+                <TextBlock FontSize="29" x:Uid="/AppBar/BackupAndRestore" Foreground="White"/>
+            </StackPanel>
+            <StackPanel x:Name="MigControls" Orientation="Horizontal" VerticalAlignment="Top">
+                <Button Margin="5" x:Name="BackupBtn" Click="Backup_Click" IsEnabled="{Binding CanBackup}">
+                    <TextBlock x:Uid="/InitQuestions/Backup" />
+                </Button>
+                <Button Margin="5" x:Name="MigrateBtn" Click="Migrate_Click" IsEnabled="{Binding CanMigrate}">
+                    <TextBlock x:Uid="/InitQuestions/Migrate" />
+                </Button>
+                <Button Margin="5" x:Name="MigrateAltBtn" Click="Restore_Click" IsEnabled="{Binding CanRestore}">
+                    <Grid>
+                        <TextBlock x:Uid="/InitQuestions/RestoreBackup" Visibility="{Binding ShouldMigrate, Converter={StaticResource DataVisConverter}, ConverterParameter=1}" />
+                        <TextBlock x:Uid="/InitQuestions/MigrateUserFile" Visibility="{Binding ShouldMigrate, Converter={StaticResource DataVisConverter}}"/>
+                    </Grid>
+                </Button>
+            </StackPanel>
+
+            <TextBlock Margin="10,10,10,0" x:Name="ProgressText" Text="{Binding Mesg}" Foreground="White" TextWrapping="Wrap"/>
+            <TextBlock Margin="20,0,10,10" x:Name="RProgressText" Text="{Binding MesgR}" Foreground="White" TextWrapping="Wrap"/>
+        </StackPanel>
+    </Grid>
+</Page>

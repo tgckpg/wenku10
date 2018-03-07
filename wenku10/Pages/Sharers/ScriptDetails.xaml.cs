@@ -22,22 +22,22 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.CompositeElement;
-using wenku8.Model.Comments;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.Pages;
-using wenku8.Model.REST;
-using wenku8.Resources;
-using wenku8.Settings;
+using GR.AdvDM;
+using GR.Effects;
+using GR.Ext;
+using GR.CompositeElement;
+using GR.Model.Comments;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.ListItem.Sharers;
+using GR.Model.Pages;
+using GR.Model.REST;
+using GR.Resources;
+using GR.Settings;
 
-using AESManager = wenku8.System.AESManager;
-using TokenManager = wenku8.System.TokenManager;
-using CryptAES = wenku8.System.CryptAES;
+using AESManager = GR.GSystem.AESManager;
+using TokenManager = GR.GSystem.TokenManager;
+using CryptAES = GR.GSystem.CryptAES;
 
 namespace wenku10.Pages.Sharers
 {

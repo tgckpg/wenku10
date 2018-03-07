@@ -15,13 +15,13 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
 
-using wenku8.Effects;
-using wenku8.Effects.Stage;
-using wenku8.Resources;
+using GR.Effects;
+using GR.Effects.Stage;
+using GR.Resources;
 
 namespace wenku10.Scenes
 {
-	using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+	using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
 
 	sealed partial class HyperBanner
 	{

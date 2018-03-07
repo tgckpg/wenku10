@@ -23,16 +23,14 @@
 
                 <ResourceDictionary Source="/Themes/ListViewItems/CommentListItem.xaml" />
                 <ResourceDictionary Source="/Themes/ListViewItems/ListViewItems.xaml" />
-                <ResourceDictionary Source="/Themes/ListViewItems/LSBookItem.xaml" />
-                <ResourceDictionary Source="/Themes/ListViewItems/ProcStateItem.xaml" />
 
                 <ResourceDictionary Source="/Themes/ScrollContentDialog.xaml" />
                 <ResourceDictionary Source="/Themes/VerticalListView.xaml" />
                 <ResourceDictionary Source="/Themes/Pages/MainPage.xaml" />
                 <ResourceDictionary Source="/Themes/Pages/TOC.xaml" />
 
-                <ResourceDictionary Source="/libwenku8/Themes/PassiveSplitView.xaml" />
-                <ResourceDictionary Source="/libwenku8/Themes/TitleStepper.xaml" />
+                <ResourceDictionary Source="/GR/Themes/PassiveSplitView.xaml" />
+                <ResourceDictionary Source="/GR/Themes/TitleStepper.xaml" />
                 <ResourceDictionary Source="/libtaotu/Themes/Button.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -16,25 +16,26 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.Section;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Storage;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Database.Models;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
+using GR.Model.Interfaces;
+using GR.Model.ListItem.Sharers;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Resources;
+using GR.Settings;
+using GR.Storage;
 
-using TokenManager = wenku8.System.TokenManager;
+using TokenManager = GR.GSystem.TokenManager;
 using WComments = wenku10.Pages.BookInfoControls.Comments;
 
 namespace wenku10.Pages
@@ -57,7 +58,7 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-		private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
+		private global::GR.Settings.Layout.BookInfoView LayoutSettings;
 
 		AppBarButton FavBtn;
 		AppBarButton BrowserBtn;
@@ -90,17 +91,17 @@ namespace wenku10.Pages
 			OpenBook( Book );
 		}
 
-		public void SoftOpen()
+		public void SoftOpen( bool NavForward )
 		{
 			LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
 			SyncAnchors();
 		}
 
-		public void SoftClose() { }
+		public void SoftClose( bool NavForward ) { }
 
 		private void SetTemplate()
 		{
-			LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
+			LayoutSettings = new global::GR.Settings.Layout.BookInfoView();
 
 			Indicators.RenderTransform = new TranslateTransform();
 			HeaderPanel.RenderTransform = new TranslateTransform();
@@ -153,11 +154,14 @@ namespace wenku10.Pages
 
 			BookLoading = true;
 
-			if ( Book.IsEx() ) Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+			if ( Book.IsEx() )
+				Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+
 			BookLoader BL = new BookLoader( BookLoadComplete );
 
 			BL.Load( Book, true );
 			BL.LoadIntro( Book, true );
+			BL.LoadCover( Book, true );
 
 			SyncAnchors();
 			SetContext();
@@ -186,7 +190,7 @@ namespace wenku10.Pages
 						= BingCoverBtn.IsEnabled
 						= BingExists;
 
-					bool CanBing = BingExists || string.IsNullOrEmpty( Book.CoverSrcUrl );
+					bool CanBing = BingExists || string.IsNullOrEmpty( Book.Info.CoverSrcUrl );
 
 					UsingBing.Foreground = new SolidColorBrush(
 						BingExists
@@ -223,9 +227,6 @@ namespace wenku10.Pages
 
 		private void SetContext()
 		{
-#if DEBUG
-			if ( ThisBook == null ) ThisBook = BookItem.DummyBook();
-#endif
 			ToggleFav();
 			ToggleAppBar();
 
@@ -240,7 +241,7 @@ namespace wenku10.Pages
 			else
 			{
 				CommentBtn.IsEnabled = !ThisBook.IsLocal();
-				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.OriginalUrl );
+				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.Info.OriginalUrl );
 				LayoutRoot.DataContext = ThisBook;
 				InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
 			}
@@ -277,12 +278,12 @@ namespace wenku10.Pages
 
 		private void BrowserBtn_Click( object sender, RoutedEventArgs e )
 		{
-			var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
+			var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.Info.OriginalUrl ) );
 		}
 
 		private void TOCBtn_Click( object sender, RoutedEventArgs e )
 		{
-			ControlFrame.Instance.SubNavigateTo( this, () => LayoutSettings.HorizontalTOC ? new TOCViewHorz( ThisBook ) : ( Page ) new TOCViewVert( ThisBook ) );
+			PageProcessor.NavigateToTOC( this, ThisBook );
 		}
 
 		private void ReloadBtn_Click( object sender, RoutedEventArgs e )
@@ -312,7 +313,7 @@ namespace wenku10.Pages
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
 			}
 
-			if ( !await wenku8.Model.Twitter.AuthData.Authenticate() ) return;
+			if ( !await GR.Model.Twitter.AuthData.Authenticate() ) return;
 
 			ControlFrame.Instance.SubNavigateTo( this, () => new TwitterCommentView( ThisBook ) );
 
@@ -323,8 +324,8 @@ namespace wenku10.Pages
 		{
 			HSBtn.IsEnabled = false;
 
-			string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
-			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );
+			string Token = ( string ) new TokenManager().GetAuthById( ThisBook.ZItemId )?.Value;
+			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.ZItemId, Token );
 
 			if ( HSI == null )
 			{
@@ -352,7 +353,7 @@ namespace wenku10.Pages
 			await ControlFrame.Instance.CloseSubView();
 			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( Id, AccessToken );
 
-			if ( ThisBook.Id != Id )
+			if ( ThisBook.ZItemId != Id )
 			{
 				ThisBook.Update( await ItemProcessor.GetBookFromId( Id ) );
 			}
@@ -362,25 +363,21 @@ namespace wenku10.Pages
 
 		private void SearchAuthor( object sender, RoutedEventArgs e )
 		{
-			ControlFrame.Instance.NavigateTo(
-				PageId.W_SEARCH, () => new WSearch()
-				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.AuthorRaw ) );
+			MessageBus.Send( GetType(), AppKeys.SEARCH_AUTHOR, ThisBook.Entry );
 		}
 
 		private void AddOrRemoveFav( object sender, RoutedEventArgs e )
 		{
-			BookStorage BS = new BookStorage();
 			if ( ThisBook.IsFav )
 			{
-				BS.RemoveBook( ThisBook.Id );
 				ThisBook.IsFav = false;
 			}
 			else
 			{
-				BS.SaveBook( ThisBook.Id, ThisBook.Title, ThisBook.RecentUpdateRaw, ThisBook.LatestSection );
 				ThisBook.IsFav = true;
 			}
 
+			ThisBook.SaveInfo();
 			ToggleFav();
 		}
 
@@ -430,7 +427,7 @@ namespace wenku10.Pages
 				PinManager PM = new PinManager();
 				PM.RegPin( ThisBook, TileId, true );
 
-				SpiderBook SpDef = await SpiderBook.CreateAsyncSpider( ThisBook.Id );
+				SpiderBook SpDef = await SpiderBook.CreateSAsync( ThisBook.ZItemId );
 				await PageProcessor.RegLiveSpider( SpDef, ( BookInstruction ) ThisBook, TileId );
 			}
 		}
@@ -447,12 +444,12 @@ namespace wenku10.Pages
 
 			if( ThisBook.IsFav )
 			{
-				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.UnFavorite;
+				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
 				FavBtn.Label = stx.Str( "FavOut" );
 			}
 			else
 			{
-				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
+				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.OutlineStar;
 				FavBtn.Label = stx.Str( "FavIn" );
 			}
 		}
@@ -467,8 +464,7 @@ namespace wenku10.Pages
 
 			if( TryAutoAnchor )
 			{
-				ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, TryAutoAnchor.Out ) );
+				PageProcessor.NavigateToReader( ThisBook, TryAutoAnchor.Out );
 			}
 			else
 			{
@@ -481,9 +477,6 @@ namespace wenku10.Pages
 
 		private async void VoteButton_Click( object sender, RoutedEventArgs e )
 		{
-			bool LoggedIn = await ControlFrame.Instance.CommandMgr.WAuthenticate();
-			if ( !LoggedIn ) return;
-
 			bool Voted = await ThisBook.XCall<Task<bool>>( "Vote" );
 			if( Voted )
 			{
@@ -544,8 +537,8 @@ namespace wenku10.Pages
 
 		private void BingReloadCover()
 		{
-			BookLoader BL = new BookLoader( BookLoadComplete );
-			ThisBook.CoverSrcUrl = null;
+			BookLoader BL = new BookLoader();
+			ThisBook.Info.CoverSrcUrl = null;
 			BL.LoadCover( ThisBook, false );
 		}
 

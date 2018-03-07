@@ -3,11 +3,10 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
-    xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:s="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:s="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -45,7 +44,7 @@
                             FontSize="20"
                             RightTapped="TOCShowVolumeAction"
                             FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                            Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
+                            Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
                         />
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -79,7 +78,7 @@
                                 </i:IconStar>
                             </Border>
                             <p:VerticalStack
-                                Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
+                                Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
                                 HorizontalAlignment="Center"
                                 Foreground="{StaticResource RelativeShadesBrush}"
                                 FontSize="20"

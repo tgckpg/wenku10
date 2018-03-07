@@ -9,14 +9,15 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.Ext;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Model.REST;
-using wenku8.Model.Section.SharersHub;
-using wenku8.System;
+using GR.AdvDM;
+using GR.Ext;
+using GR.Resources;
+using GR.Settings;
+using GR.Model.REST;
+using GR.Model.Section.SharersHub;
+using GR.GSystem;
 
 namespace wenku10.SHHub
 {
@@ -60,6 +61,19 @@ namespace wenku10.SHHub
 
 			XParameter MemberAuth = AuthReg.Parameter( "member-auth" );
 			if ( MemberAuth != null ) RestoreAuth( MemberAuth );
+		}
+
+		public static Task<bool> Authenticate()
+		{
+			IMember MInstance = X.Singleton<IMember>( XProto.SHMember );
+			if ( !MInstance.IsLoggedIn )
+			{
+				TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
+				MessageBus.SendUI( typeof( SHMember ), AppKeys.PROMPT_LOGIN, new Tuple<IMember, Action>( MInstance, () => TCS.SetResult( MInstance.IsLoggedIn ) ) );
+				return TCS.Task;
+			}
+
+			return Task.Run( () => true );
 		}
 
 		public async Task<bool> Register()

@@ -1,6 +1,6 @@
 ﻿using Windows.UI.Xaml.Controls;
 
-using wenku8.Model.Book;
+using GR.Model.Book;
 
 namespace wenku10.Pages
 {

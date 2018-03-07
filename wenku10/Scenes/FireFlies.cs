@@ -11,11 +11,11 @@ using Windows.UI.Xaml;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
-using wenku8.Effects;
-using wenku8.Effects.P2DFlow;
-using wenku8.Effects.P2DFlow.ForceFields;
-using wenku8.Effects.P2DFlow.Reapers;
-using wenku8.Effects.P2DFlow.Spawners;
+using GR.Effects;
+using GR.Effects.P2DFlow;
+using GR.Effects.P2DFlow.ForceFields;
+using GR.Effects.P2DFlow.Reapers;
+using GR.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
@@ -126,7 +126,7 @@ namespace wenku10.Scenes
 
 		private void SetColor()
 		{
-			Color C = wenku8.Resources.LayoutSettings.MajorColor;
+			Color C = GR.Resources.LayoutSettings.MajorColor;
 			ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
 		}
 

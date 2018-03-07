@@ -16,8 +16,8 @@ using Microsoft.Graphics.Canvas.Text;
 
 using Net.Astropenguin.Linq;
 
-using wenku8.Effects;
-using wenku8.Model.ListItem;
+using GR.Effects;
+using GR.Model.ListItem;
 
 namespace wenku10.Scenes
 {
@@ -50,7 +50,7 @@ namespace wenku10.Scenes
 
 		private Rect FillRect;
 
-		private BookInfoItem BindItem;
+		private BookBannerItem BindItem;
 
 		private CanvasBitmap CoverBmp;
 		private ICanvasBrush CoverBrush;
@@ -64,9 +64,15 @@ namespace wenku10.Scenes
 			RingText = Context.Name;
 			// RingText = "The quick Brown Fox Jumps Over the Lazy dog";
 
-			if ( Context is BookInfoItem )
+			if ( Context is BookBannerItem )
 			{
-				BindItem = ( BookInfoItem ) Context;
+				BindItem = ( BookBannerItem ) Context;
+
+				if( BindItem.BannerExist )
+				{
+					CoverUri = BindItem.UriSource;
+				}
+
 				BindItem.PropertyChanged += BindItem_PropertyChanged;
 			}
 		}
@@ -90,9 +96,9 @@ namespace wenku10.Scenes
 
 		private void BindItem_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
 		{
-			if ( e.PropertyName == "Banner" )
+			if ( e.PropertyName == "BannerExist" )
 			{
-				CoverUri = ( ( BitmapImage ) BindItem.Banner ).UriSource;
+				CoverUri = BindItem.UriSource;
 				var j = ReloadCover();
 			}
 		}

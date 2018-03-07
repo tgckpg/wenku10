@@ -3,13 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
-    xmlns:c="using:wenku8.CompositeElement"
-    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:c="using:GR.CompositeElement"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:xi="using:wenku8.ThemeIcons"
-    xmlns:s="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:s="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:ms="using:Microsoft.Phone.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -99,7 +97,7 @@
                 <c:SplashRipple x:Name="SplashCover"
                                 Grid.RowSpan="4"
                                 HorizontalAlignment="Center" VerticalAlignment="Top"
-                                Source="{Binding CoverExistsPath}" />
+                                Source="{Binding CoverSourcePath}" />
 
                 <Grid x:Name="Indicators" Margin="0,15"
                         VerticalAlignment="Top">
@@ -208,8 +206,8 @@
                                Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                     <TextBlock Margin="5,0"
                                TextWrapping="Wrap"
-                               Text="{Binding RecentUpdate}"
-                               Visibility="{Binding RecentUpdate, Converter={StaticResource DataVisConverter}}"
+                               Text="{Binding LastUpdateDate}"
+                               Visibility="{Binding LastUpdateDate, Converter={StaticResource DataVisConverter}}"
                                Foreground="{StaticResource SubtleBrush}" />
                 </StackPanel>
 
@@ -244,9 +242,9 @@
                                    Visibility="{Binding TotalHitCount, Converter={StaticResource DataVisConverter}}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                         <TextBlock TextWrapping="Wrap"
-                                   ToolTipService.ToolTip="{Binding TodayHitCount}"
-                                   Text="{Binding TodayHitCount, Converter={StaticResource NumberSimplifier}}"
-                                   Visibility="{Binding TodayHitCount, Converter={StaticResource DataVisConverter}}"
+                                   ToolTipService.ToolTip="{Binding DailyHitCount}"
+                                   Text="{Binding DailyHitCount, Converter={StaticResource NumberSimplifier}}"
+                                   Visibility="{Binding DailyHitCount, Converter={StaticResource DataVisConverter}}"
                                    Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
                         <Grid x:Name="PushGrid"
                               Visibility="{Binding PushCount, Converter={StaticResource DataVisConverter}}">

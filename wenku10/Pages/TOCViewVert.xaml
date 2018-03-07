@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:s="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:s="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -43,7 +43,7 @@
                                 <TextBlock Margin="10"
                                            Foreground="{StaticResource RelativeShadesBrush}"
                                            FontSize="20" TextWrapping="Wrap"
-                                           Text="{Binding ChapterTitle}" />
+                                           Text="{Binding Title}" />
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -57,7 +57,7 @@
 										FontSize="20" TextWrapping="Wrap"
 										RightTapped="TOCShowVolumeAction"
 										FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-										Text="{Binding Vol.VolumeTitle}"
+										Text="{Binding Vol.Title}"
 									/>
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
@@ -74,7 +74,7 @@
 								Margin="10"
 								Foreground="{StaticResource RelativeShadesBrush}"
 								FontSize="20" TextWrapping="Wrap"
-								Text="{Binding Group.Vol.VolumeTitle}"
+								Text="{Binding Group.Vol.Title}"
 							/>
                         </DataTemplate>
                     </ListView.ItemTemplate>

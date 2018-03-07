@@ -205,4 +205,25 @@
 - 自动钉到开始页：自动将遗失的磁贴钉回开始页
 - 询问该怎么做：询问用户该怎么做</value>
   </data>
+  <data name="MyLibrary.Text" xml:space="preserve">
+    <value>数据库</value>
+  </data>
+  <data name="AllRecords.Text" xml:space="preserve">
+    <value>所有记录</value>
+  </data>
+  <data name="Zones.Text" xml:space="preserve">
+    <value>区域</value>
+  </data>
+  <data name="FullTextSearch.Text" xml:space="preserve">
+    <value>全文搜索</value>
+  </data>
+  <data name="StaffPicks.Text" xml:space="preserve">
+    <value>文库精选</value>
+  </data>
+  <data name="Home.Text" xml:space="preserve">
+    <value>主页</value>
+  </data>
+  <data name="CurrentlyReading.Text" xml:space="preserve">
+    <value>正在看</value>
+  </data>
 </root>

@@ -19,11 +19,11 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.System;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Resources;
+using GR.Settings;
+using GR.GSystem;
 
 namespace wenku10.Pages.Settings.Advanced
 {
@@ -110,7 +110,7 @@ namespace wenku10.Pages.Settings.Advanced
 
 			if ( Shared.Storage.FileExists( Location ) )
 			{
-				Bootstrap.LogInstance.Stop();
+				Bootstrap.LogInstance?.Stop();
 
 				using ( Stream s = Shared.Storage.GetStream( Location ) )
 				using ( Stream ts = await ISF.OpenStreamForWriteAsync() )
@@ -118,7 +118,7 @@ namespace wenku10.Pages.Settings.Advanced
 					await s.CopyToAsync( ts );
 				}
 
-				Bootstrap.LogInstance.Start();
+				Bootstrap.LogInstance?.Start();
 			}
 
 			await ControlFrame.Instance.CloseSubView();
@@ -137,9 +137,9 @@ namespace wenku10.Pages.Settings.Advanced
 
 			if ( Shared.Storage.FileExists( Location ) )
 			{
-				Bootstrap.LogInstance.Stop();
+				Bootstrap.LogInstance?.Stop();
 				Shared.Storage.DeleteFile( Location );
-				Bootstrap.LogInstance.Start();
+				Bootstrap.LogInstance?.Start();
 			}
 
 			ActionBlocked = false;

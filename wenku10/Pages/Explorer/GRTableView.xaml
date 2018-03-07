@@ -1,0 +1,560 @@
+﻿<UserControl
+    x:Class="wenku10.Pages.Explorer.GRTableView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Explorer"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:n="using:Net.Astropenguin.UI.Converters"
+    xmlns:e="using:GR.Effects"
+    xmlns:g="using:GR.Converters"
+    xmlns:grt="using:GR.Data"
+    xmlns:ms="using:Microsoft.Phone.Controls"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.Resources>
+            <n:DataVisConverter x:Key="DataVisConverter" />
+            <g:TransStateConverter x:Key="TransStateConverter" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <AutoSuggestBox x:Name="SearchTerm" QueryIcon="Find"
+                        IsEnabled="{Binding Searchable}"
+                        Grid.Row="0" Grid.Column="0" Margin="10"
+                        QuerySubmitted="SearchBox_QuerySubmitted" />
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+            <Button x:Name="TableSettings" Click="TableSettings_Click"
+                    Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                    Style="{StaticResource ThemeButton}" Margin="0,10,10,10">
+                <SymbolIcon Symbol="List" />
+            </Button>
+        </StackPanel>
+
+        <ScrollViewer x:Name="HZCont" SizeChanged="HZCont_SizeChanged"
+                      VerticalAlignment="Stretch"
+                      VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Hidden"
+                      IsVerticalRailEnabled="False" IsVerticalScrollChainingEnabled="False"
+                      HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Auto"
+                      Grid.Row="1" Grid.ColumnSpan="2" >
+            <ListView x:Name="ItemList"
+                      ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsHorizontalScrollChainingEnabled="False"
+                      ItemContainerStyle="{StaticResource BareListItem}"
+                      Tapped="ItemList_Tapped" DoubleTapped="ItemList_DoubleTapped"
+                      ItemsSource="{Binding Items}"
+                      IsItemClickEnabled="True" />
+        </ScrollViewer>
+
+        <!-- Loading Message -->
+        <Grid x:Name="LoadingMessage"
+              Grid.Row="1" Grid.ColumnSpan="2"
+              Background="{StaticResource MinorBrush}"
+              VerticalAlignment="Bottom" HorizontalAlignment="Center"
+              e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+              e:TransitionDisplay.Mode="A01_Y_30_30" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ProgressRing Grid.Column="0" Margin="10"
+                          IsActive="{Binding IsLoading}" Foreground="{StaticResource RelativeMajorBrush}" />
+            <TextBlock Grid.Column="1" Margin="0,0,10,0" VerticalAlignment="Center"
+                       MaxLines="1" TextTrimming="CharacterEllipsis"
+                       Visibility="{Binding Message, Converter={StaticResource DataVisConverter}}"
+                       Text="{Binding Message}" Foreground="{StaticResource RelativeMajorBrush}" />
+        </Grid>
+    </Grid>
+
+    <UserControl.Resources>
+        <g:ColumnVisConverter x:Key="ColumnVisConverter" />
+        <Style x:Key="ColumnButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0,0,1,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="RootGrid" Background="{StaticResource MajorBackgroundBrush}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Shades20}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MajorBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Shades20}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource MinorBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource Shades30}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw"
+                                              Padding="0"
+                                              Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              Content="{TemplateBinding Content}"
+                                              BorderThickness="{TemplateBinding BorderThickness}"
+                                              BorderBrush="{TemplateBinding BorderBrush}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="ListView" x:Key="DesktopDetailsView">
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="TabNavigation" Value="Once" />
+            <Setter Property="IsSwipeEnabled" Value="True" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False" />
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled" />
+            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True" />
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
+            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True" />
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="ItemContainerTransitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition />
+                        <ContentThemeTransition />
+                        <ReorderThemeTransition />
+                        <EntranceThemeTransition IsStaggeringEnabled="False" />
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <ItemsStackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListView">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" 
+                            Background="{TemplateBinding Background}" 
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <ContentControl Content="{TemplateBinding Header}"
+                                                HorizontalContentAlignment="Stretch"
+                                                ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                ContentTransitions="{TemplateBinding HeaderTransitions}"/>
+
+                                <ScrollViewer x:Name="ScrollViewer" Grid.Row="1"
+                                                TabNavigation="{TemplateBinding TabNavigation}"
+                                                HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                                HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                                IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}"
+                                                VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                                IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}"
+                                                IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+                                                IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                                                ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}"
+                                                IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                                                BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}"
+                                                AutomationProperties.AccessibilityView="Raw">
+                                    <ItemsPresenter 
+                                                Footer="{TemplateBinding Footer}"
+                                                FooterTemplate="{TemplateBinding FooterTemplate}"
+                                                FooterTransitions="{TemplateBinding FooterTransitions}"
+                                                Padding="{TemplateBinding Padding}" />
+                                </ScrollViewer>
+
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <DataTemplate x:Key="MobileItem" x:DataType="grt:IGRRow">
+            <Grid RightTapped="ShowContextMenu">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="10,5">
+                    <TextBlock TextWrapping="Wrap"
+                               Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               FontSize="20"
+                               VerticalAlignment="Center" FontFamily="{x:Bind F00, Mode=OneWay}" Text="{x:Bind C00, Mode=OneWay}" />
+                    <ms:WrapPanel Margin="10,5">
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F01, Mode=OneWay}" Text="{x:Bind C01, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F02, Mode=OneWay}" Text="{x:Bind C02, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F03, Mode=OneWay}" Text="{x:Bind C03, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F04, Mode=OneWay}" Text="{x:Bind C04, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F05, Mode=OneWay}" Text="{x:Bind C05, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F06, Mode=OneWay}" Text="{x:Bind C06, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F07, Mode=OneWay}" Text="{x:Bind C07, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F08, Mode=OneWay}" Text="{x:Bind C08, Mode=OneWay}" />
+                        <TextBlock Margin="8,2" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"
+                                   Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                                   VerticalAlignment="Center" FontFamily="{x:Bind F09, Mode=OneWay}" Text="{x:Bind C09, Mode=OneWay}" />
+                    </ms:WrapPanel>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DskDetailsItem" x:DataType="grt:IGRRow">
+            <Grid RightTapped="ShowContextMenu">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind Table.H00, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H01, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H02, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H03, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H04, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H05, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H06, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H07, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H08, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind Table.H09, Mode=OneWay}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Rectangle x:Name="Sensor" Grid.ColumnSpan="10"
+                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent" />
+                <TextBlock Grid.Row="0" Grid.Column="0" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C00, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F00, Mode=OneWay}" Text="{x:Bind C00, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="1" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C01, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F01, Mode=OneWay}" Text="{x:Bind C01, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C02, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F02, Mode=OneWay}" Text="{x:Bind C02, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="3" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C03, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F03, Mode=OneWay}" Text="{x:Bind C03, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="4" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C04, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F04, Mode=OneWay}" Text="{x:Bind C04, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="5" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C05, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F05, Mode=OneWay}" Text="{x:Bind C05, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="6" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C06, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F06, Mode=OneWay}" Text="{x:Bind C06, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="7" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C07, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F07, Mode=OneWay}" Text="{x:Bind C07, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="8" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C08, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F08, Mode=OneWay}" Text="{x:Bind C08, Mode=OneWay}" />
+                <TextBlock Grid.Row="0" Grid.Column="9" MaxLines="1"
+                           Margin="10,5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{x:Bind C09, Mode=OneWay}"
+                           Visibility="{x:Bind Table.H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}" Foreground="{StaticResource SubtleBrush}"
+                           VerticalAlignment="Center" FontFamily="{x:Bind F09, Mode=OneWay}" Text="{x:Bind C09, Mode=OneWay}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="DskDetailsHeader" x:DataType="grt:IGRTable">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{x:Bind H00, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H01, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H02, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H03, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H04, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H05, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H06, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H07, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H08, Mode=OneWay}" />
+                    <ColumnDefinition Width="{x:Bind H09, Mode=OneWay}" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="0" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S00 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="1" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S01 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="2" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S02 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="3" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S03 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="4" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S04 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="5" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S05 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="6" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S06 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="7" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S07 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="8" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S08 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                        ManipulationMode="TranslateX" ManipulationStarted="Column_DragStart" ManipulationCompleted="Column_DragEnd" ManipulationDelta="Column_Drag"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Click="SortByColumn_Click" Tag="9" Style="{StaticResource ColumnButton}">
+                    <Grid>
+                        <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S09 ), Mode=OneWay}"/>
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09, Mode=OneWay}" />
+                    </Grid>
+                </Button>
+                <Rectangle Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="0" />
+                <Rectangle Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="0" />
+                <Rectangle Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="1" />
+                <Rectangle Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="1" />
+                <Rectangle Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="2" />
+                <Rectangle Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="2" />
+                <Rectangle Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="3" />
+                <Rectangle Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="3" />
+                <Rectangle Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="4" />
+                <Rectangle Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="4" />
+                <Rectangle Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="5" />
+                <Rectangle Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="5" />
+                <Rectangle Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="6" />
+                <Rectangle Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="6" />
+                <Rectangle Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="7" />
+                <Rectangle Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="7" />
+                <Rectangle Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="8" />
+                <Rectangle Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="8" />
+                <Rectangle Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="9" />
+                <Rectangle Grid.Row="0" Grid.Column="10" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
+                           HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                           PointerEntered="Rezise_Enter" PointerExited="Rezise_Exit"
+                           ManipulationMode="TranslateX" ManipulationDelta="Resize_Drag"
+                           ManipulationStarted="Rezise_DragStart" ManipulationCompleted="Resize_DragEnd"
+                           Fill="Transparent" Width="5" Tag="9" />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+</UserControl>

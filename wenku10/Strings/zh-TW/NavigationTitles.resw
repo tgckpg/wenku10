@@ -205,4 +205,25 @@
 - 自動釘到開始頁：自動將遺失的磚釘回開始頁
 - 詢問該怎麼做：詢問用戶該怎麼做</value>
   </data>
+  <data name="MyLibrary.Text" xml:space="preserve">
+    <value>資料庫</value>
+  </data>
+  <data name="AllRecords.Text" xml:space="preserve">
+    <value>所有記錄</value>
+  </data>
+  <data name="Zones.Text" xml:space="preserve">
+    <value>區域</value>
+  </data>
+  <data name="FullTextSearch.Text" xml:space="preserve">
+    <value>全文搜尋</value>
+  </data>
+  <data name="StaffPicks.Text" xml:space="preserve">
+    <value>文庫精選</value>
+  </data>
+  <data name="Home.Text" xml:space="preserve">
+    <value>首頁</value>
+  </data>
+  <data name="CurrentlyReading.Text" xml:space="preserve">
+    <value>正在閲讀</value>
+  </data>
 </root>

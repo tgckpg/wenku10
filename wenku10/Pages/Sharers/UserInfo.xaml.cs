@@ -17,11 +17,12 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Model.Interfaces;
-using wenku8.Model.REST;
-using wenku8.Resources;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Ext;
+using GR.Model.Interfaces;
+using GR.Model.REST;
+using GR.Resources;
 
 namespace wenku10.Pages.Sharers
 {
@@ -95,7 +96,7 @@ namespace wenku10.Pages.Sharers
 
 				if ( Yes )
 				{
-					ControlFrame.Instance.CommandMgr.SHLogout();
+					X.Singleton<IMember>( XProto.SHMember ).Logout();
 					ControlFrame.Instance.GoBack();
 					ControlFrame.Instance.BackStack.Remove( PageId.SH_USER_INFO );
 				}

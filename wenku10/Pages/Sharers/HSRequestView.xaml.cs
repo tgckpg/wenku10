@@ -19,24 +19,24 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Comments;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.REST;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Storage;
+using GR.AdvDM;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Comments;
+using GR.Model.Interfaces;
+using GR.Model.ListItem.Sharers;
+using GR.Model.REST;
+using GR.Resources;
+using GR.Settings;
+using GR.Storage;
 
-using CryptAES = wenku8.System.CryptAES;
-using CryptRSA = wenku8.System.CryptRSA;
+using CryptAES = GR.GSystem.CryptAES;
+using CryptRSA = GR.GSystem.CryptRSA;
 
 namespace wenku10.Pages.Sharers
 {
 	using Dialogs.Sharers;
-	using wenku8.CompositeElement;
+	using GR.CompositeElement;
 	using SHTarget = SharersRequest.SHTarget;
 
 	sealed partial class HSRequestView : Page, ICmdControls
@@ -83,7 +83,7 @@ namespace wenku10.Pages.Sharers
 			this.ReqTarget = ReqTarget;
 			this.AccessToken = AccessToken;
 
-			XGrant.SetParameter( BindItem.Id, BookStorage.TimeKey );
+			XGrant.SetParameter( BindItem.Id, CustomAnchor.TimeKey );
 			ShowRequest( ReqTarget );
 		}
 

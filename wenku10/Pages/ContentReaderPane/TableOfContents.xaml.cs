@@ -15,9 +15,9 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Logging;
 
-using wenku8.Model.Book;
-using wenku8.Model.ListItem;
-using wenku8.Model.Section;
+using GR.Database.Models;
+using GR.Model.ListItem;
+using GR.Model.Section;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -28,7 +28,7 @@ namespace wenku10.Pages.ContentReaderPane
 	{
 		public static readonly string ID = typeof( TableOfContents ).Name;
 
-		private ContentReader Reader;
+		private ContentReaderBase Reader;
 
 		private TOCPane TOC;
 
@@ -37,7 +37,7 @@ namespace wenku10.Pages.ContentReaderPane
 			InitializeComponent();
 		}
 
-		public TableOfContents( ContentReader MainReader )
+		public TableOfContents( ContentReaderBase MainReader )
 			:this()
 		{
 			Reader = MainReader;
@@ -51,14 +51,13 @@ namespace wenku10.Pages.ContentReaderPane
 			TOC = new TOCPane( Reader.CurrentBook.GetVolumes() );
 
 			TOCContext.DataContext = TOC;
-			TOCList.SelectedItem = TOC.GetItem( Reader.CurrentChapter );
-			TOCList.Loaded += TOCListLoaded;
-			TOCList.SelectionChanged += TOCList_SelectionChanged;
+
+			TOCList.SelectedItem = TOC.OpenChapter( Reader.CurrentChapter );
 		}
 
 		public void UpdateDisplay()
 		{
-			TOCList.SelectedItem = TOC.GetItem( Reader.CurrentChapter );
+			TOCList.SelectedItem = TOC.OpenChapter( Reader.CurrentChapter );
 		}
 
 		protected override void OnNavigatedTo( NavigationEventArgs e )
@@ -95,16 +94,24 @@ namespace wenku10.Pages.ContentReaderPane
 			TOCList.ScrollIntoView( TOCList.SelectedItem );
 		}
 
-		private void TOCList_SelectionChanged( object sender, SelectionChangedEventArgs e )
+		private void SearchSet_ItemClick( object sender, ItemClickEventArgs e )
 		{
-			if ( e.AddedItems.Count() < 1 ) return;
-
-			Reader.OpenBook( ( e.AddedItems[ 0 ] as TOCItem ).GetChapter() );
+			if ( e.ClickedItem is TOCItem Item )
+			{
+				if ( Item.Ch == null )
+				{
+					TOC.SearchSet.Toggle( Item );
+				}
+				else
+				{
+					Reader.OpenBook( Item.Ch );
+				}
+			}
 		}
 
 		private void TextBox_TextChanging( TextBox sender, TextBoxTextChangingEventArgs args )
 		{
-			TOC.SearchTerm = sender.Text.Trim();
+			TOC.SearchSet.Filter( sender.Text.Trim() );
 		}
 	}
 }

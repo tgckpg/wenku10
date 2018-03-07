@@ -10,58 +10,6 @@
 
     <Grid Background="{StaticResource MajorBackgroundBrush}">
         <Pivot>
-            <!-- Main Page -->
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock x:Uid="/Settings/Appearance_Layout_MainPage"
-                               Text="MainPage" />
-                </PivotItem.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel x:Name="SectionListContext">
-                        <ComboBox x:Name="SectionChoices" Grid.Row="0"
-                                  ItemsSource="{Binding SectionList}"
-                                  DisplayMemberPath="Name"
-                                  SelectedValuePath="Payload"
-                                  SelectionChanged="SectionList_SelectionChanged">
-                            <ComboBox.Header>
-                                <TextBlock x:Uid="/Settings/Layout_MainPage_CSec_Choice"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="Custom Section Choice" />
-                            </ComboBox.Header>
-                        </ComboBox>
-                    </StackPanel>
-                </Grid>
-            </PivotItem>
-            <!-- Navigation Pages -->
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock x:Uid="/Settings/Appearance_Layout_NavPages"
-                               Text="NavigationPages" />
-                </PivotItem.Header>
-                <StackPanel>
-                    <ToggleSwitch x:Name="TogNAlign" Toggled="Toggled_NAlign">
-                        <ToggleSwitch.Header>
-                            <TextBlock Foreground="{StaticResource MinorBrush}"
-                                       x:Uid="/Settings/Layout_Alignment"
-                                       Text="Aligment" />
-                        </ToggleSwitch.Header>
-                        <ToggleSwitch.OnContent>
-                            <TextBlock x:Uid="/Settings/Layout_Aligment_Horizontal"
-                                       Foreground="{StaticResource MajorBrush}"
-                                       Text="Enable" />
-                        </ToggleSwitch.OnContent>
-                        <ToggleSwitch.OffContent>
-                            <TextBlock x:Uid="/Settings/Layout_Aligment_Vertical"
-                                       Foreground="{StaticResource MinorBrush}"
-                                       Text="Disabled" />
-                        </ToggleSwitch.OffContent>
-                    </ToggleSwitch>
-                </StackPanel>
-            </PivotItem>
             <!-- Table of Contents -->
             <PivotItem>
                 <PivotItem.Header>

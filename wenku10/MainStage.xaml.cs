@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
 
+using GR.Config;
+
 namespace wenku10
 {
 	public sealed partial class MainStage : Page
@@ -34,11 +36,22 @@ namespace wenku10
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			if ( global::wenku8.Config.Properties.FIRST_TIME_RUN )
+			if ( Properties.FIRST_TIME_RUN )
 			{
+				GR.Database.ContextManager.Migrate();
 				RootFrame.Navigate( typeof( Pages.Settings.FirstTimeSettings ) );
 				return;
 			}
+
+			if ( new GR.MigrationOps.MigrationManager().ShouldMigrate )
+			{
+				RootFrame.Navigate( typeof( Pages.Settings.BackupAndRestore ) );
+				return;
+			}
+
+#if DEBUG
+			GR.Database.ContextManager.Migrate();
+#endif
 
 			RootFrame.Navigate( typeof( Pages.ControlFrame ) );
 		}
@@ -70,7 +83,7 @@ namespace wenku10
 			SystemNavigationManager.GetForCurrentView().BackRequested += NavigationHandler.MasterNavigationHandler;
 
 			// Initialize the Controls
-			App.ViewControl = new global::wenku8.System.ViewControl();
+			App.ViewControl = new global::GR.GSystem.ViewControl();
 			App.KeyboardControl = new KeyboardControl( Window.Current.CoreWindow );
 
 			// Full Screen Ctrl + F
@@ -85,16 +98,8 @@ namespace wenku10
 			App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Back );
 		}
 
-		private static readonly Type[] SpecialElement = new Type[]
-		{
-			typeof( TextBox ), typeof( RichEditBox ), typeof( PasswordBox )
-		};
-
 		private void Escape( KeyCombinationEventArgs e )
 		{
-			object o = FocusManager.GetFocusedElement();
-			if ( o != null && SpecialElement.Contains( o.GetType() ) ) return;
-
 			// Always Close the dialog first
 			if ( Net.Astropenguin.Helpers.Popups.CloseDialog() ) return;
 

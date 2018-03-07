@@ -16,14 +16,14 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Logging.Handler;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.ListItem;
-using wenku8.Model.Pages;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Storage;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Model.Book.Spider;
+using GR.Model.ListItem;
+using GR.Model.Pages;
+using GR.Resources;
+using GR.Settings;
+using GR.Storage;
 
 namespace Tasks
 {
@@ -62,7 +62,7 @@ namespace Tasks
 				XRegistry.AStorage = Shared.Storage;
 			}
 
-			Shared.TC = new wenku8.Model.TradChinese();
+			Shared.TC = new GR.Model.TradChinese();
 
 			XReg = new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS );
 		}
@@ -81,7 +81,7 @@ namespace Tasks
 			ResTaotu.AddProcType( ProcType.EXTRACT, typeof( TasksExtractor ) );
 			ResTaotu.AddProcType( ProcType.MARK, typeof( TasksMarker ) );
 			ResTaotu.AddProcType( ProcType.LIST, typeof( TasksListLoader ) );
-			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( wenku8.Taotu.TongWenTang ) );
+			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( GR.Taotu.TongWenTang ) );
 			ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
 		}
 
@@ -117,6 +117,7 @@ namespace Tasks
 			}
 			finally
 			{
+				ActiveTask = "";
 				Deferral.Complete();
 			}
 		}
@@ -241,7 +242,7 @@ namespace Tasks
 		{
 			try
 			{
-				XReg.SetParameter( TASK_START, BookStorage.TimeKey );
+				XReg.SetParameter( TASK_START, CustomAnchor.TimeKey );
 				XReg.Save();
 
 				IEnumerable<XParameter> Updates;
@@ -280,41 +281,48 @@ namespace Tasks
 					{
 						UpdateParam.SetValue( new XKey[] {
 							new XKey( AppKeys.SYS_EXCEPTION, "App Tile is missing" )
-							, BookStorage.TimeKey
+							, CustomAnchor.TimeKey
 						} );
 						XReg.SetParameter( UpdateParam );
 						continue;
 					}
 
-					SpiderBook SBook = await SpiderBook.CreateAsyncSpider( UpdateParam.Id );
+					string[] Keys = UpdateParam.Id.Split( '.' );
+
+					if( Keys.Length != 3 )
+					{
+						XReg.RemoveParameter( UpdateParam.Id );
+						continue;
+					}
+
+					SpiderBook SBook = await SpiderBook.CreateSAsync( Keys[ 0 ], Keys[ 2 ], null );
 					if ( !SBook.CanProcess )
 					{
 						XReg.RemoveParameter( UpdateParam.Id );
 						continue;
 					}
 
+					SBook.MarkUnprocessed();
+
+					string OHash = null, NHash = null;
+					SBook.GetBook()?.Entry.Meta.TryGetValue( "TOCHash", out OHash );
+
 					await ItemProcessor.ProcessLocal( SBook );
+
 					if ( SBook.ProcessSuccess )
 					{
-						BookInstruction Book = SBook.GetBook();
+						BookInstruction NBook = SBook.GetBook();
+						NBook?.Entry.Meta.TryGetValue( "TOCHash", out NHash );
 
-						if ( Book.Packed == true )
+						if ( NBook.Packed == true && ( NBook.NeedUpdate || OHash != NHash ) )
 						{
-							string OHash = Shared.Storage.GetString( Book.TOCDatePath );
-							await Book.SaveTOC( Book.GetVolumes().Cast<SVolume>() );
-							string NHash = wenku8.System.Utils.Md5( Shared.Storage.GetBytes( Book.TOCPath ).AsBuffer() );
-
-							if ( OHash != NHash )
-							{
-								Shared.Storage.WriteString( Book.TOCDatePath, NHash );
-								await LiveTileService.UpdateTile( CanvasDevice, Book, TileId );
-							}
+							await LiveTileService.UpdateTile( CanvasDevice, NBook, TileId );
 						}
 
 						UpdateParam.SetValue( new XKey[] {
 							new XKey( AppKeys.SYS_EXCEPTION, false )
 							, new XKey( AppKeys.BTASK_RETRY, 0 )
-							, BookStorage.TimeKey
+							, CustomAnchor.TimeKey
 						} );
 					}
 					else
@@ -326,7 +334,7 @@ namespace Tasks
 						{
 							new XKey( AppKeys.SYS_EXCEPTION, true )
 							, new XKey( AppKeys.BTASK_RETRY, NRetries + 1 )
-							, BookStorage.TimeKey
+							, CustomAnchor.TimeKey
 						} );
 					}
 
@@ -334,7 +342,7 @@ namespace Tasks
 					XReg.Save();
 				}
 
-				XReg.SetParameter( TASK_END, BookStorage.TimeKey );
+				XReg.SetParameter( TASK_END, CustomAnchor.TimeKey );
 				XReg.Save();
 			}
 			catch ( Exception ex )

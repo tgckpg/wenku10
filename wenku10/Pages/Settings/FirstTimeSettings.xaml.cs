@@ -15,8 +15,8 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Logging;
 
-using wenku8.Config;
-using wenku8.Storage;
+using GR.Config;
+using GR.Storage;
 
 namespace wenku10.Pages.Settings
 {
@@ -117,10 +117,10 @@ namespace wenku10.Pages.Settings
 
 		private void SetTheme()
 		{
-			global::wenku8.Settings.Theme.ThemeSet T;
+			global::GR.Settings.Theme.ThemeSet T;
 			if( ThemeToggle.IsOn )
 			{
-				T = global::wenku8.System.ThemeManager.DefaultDark();
+				T = global::GR.GSystem.ThemeManager.DefaultDark();
 				T.GreyShades();
 
 				Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 255, 20, 20, 20 );
@@ -131,7 +131,7 @@ namespace wenku10.Pages.Settings
 			}
 			else
 			{
-				T = global::wenku8.System.ThemeManager.DefaultLight();
+				T = global::GR.GSystem.ThemeManager.DefaultLight();
 				T.BlackShades();
 
 				Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 180, 0, 0, 0 );

@@ -18,9 +18,9 @@ using Windows.UI.Xaml.Shapes;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Config;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
+using GR.Config;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -37,10 +37,8 @@ namespace wenku10.Pages.Settings.Themes
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		private global::wenku8.Settings.Layout.BookInfoView Conf_BookInfoView;
-		private global::wenku8.Settings.Layout.MainPage Conf_MainPage;
-		private global::wenku8.Settings.Layout.NavList Conf_NavList;
-		private global::wenku8.Settings.Layout.ContentReader Conf_ContentReader;
+		private global::GR.Settings.Layout.BookInfoView Conf_BookInfoView;
+		private global::GR.Settings.Layout.ContentReader Conf_ContentReader;
 
 		private bool TemplateSet = false;
 		public Layout()
@@ -52,17 +50,11 @@ namespace wenku10.Pages.Settings.Themes
 
 		public void SetTemplate()
 		{
-			// MainPage
-			CustomSection();
-
-			// NavList
-			Conf_NavList = new global::wenku8.Settings.Layout.NavList();
-
 			// ContentReader
-			Conf_ContentReader = new global::wenku8.Settings.Layout.ContentReader();
+			Conf_ContentReader = new global::GR.Settings.Layout.ContentReader();
 
 			// BookInfoView
-			Conf_BookInfoView = new global::wenku8.Settings.Layout.BookInfoView();
+			Conf_BookInfoView = new global::GR.Settings.Layout.BookInfoView();
 			LayoutToggles();
 
 			TemplateSet = true;
@@ -72,7 +64,6 @@ namespace wenku10.Pages.Settings.Themes
 		{
 			TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
 			TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
-			TogNAlign.IsOn = Conf_NavList.IsHorizontal;
 			TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
 			TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
 
@@ -80,33 +71,6 @@ namespace wenku10.Pages.Settings.Themes
 			TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
 			TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
 		}
-
-		// NavList
-		private void Toggled_NAlign( object sender, RoutedEventArgs e )
-		{
-			Conf_NavList.IsHorizontal = TogNAlign.IsOn;
-		}
-
-		#region MainPage
-		private void CustomSection()
-		{
-			Conf_MainPage = new global::wenku8.Settings.Layout.MainPage();
-			SectionListContext.DataContext = Conf_MainPage;
-			SectionChoices.SelectedValue = Conf_MainPage.SelectedSection.Desc2;
-		}
-
-		private void SectionList_SelectionChanged( object sender, SelectionChangedEventArgs e )
-		{
-			if ( e.AddedItems.Count() == 0 ) return;
-
-			if ( Conf_MainPage.ChangeCustSection( ( ActiveItem ) e.AddedItems[ 0 ] ) )
-			{
-				ControlFrame.Instance.BackStack.Remove( PageId.W_NAV_SEL );
-				ControlFrame.Instance.CommandMgr.UpdateCustBtn();
-				ControlChanged?.Invoke( this );
-			}
-		}
-		#endregion
 
 		#region BookInfoView
 		private void Toggled_BFlow( object sender, RoutedEventArgs e )

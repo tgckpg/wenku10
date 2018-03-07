@@ -11,26 +11,29 @@ using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.Ext;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.ListItem;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.REST;
-using wenku8.Storage;
-using wenku8.Resources;
-using wenku8.Settings;
+using GR.AdvDM;
+using GR.Ext;
+using GR.CompositeElement;
+using GR.DataSources;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
+using GR.Model.ListItem;
+using GR.Model.ListItem.Sharers;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Model.REST;
+using GR.Model.Section;
+using GR.Storage;
+using GR.Resources;
+using GR.Settings;
 
-using StatusType = wenku8.Model.REST.SharersRequest.StatusType;
-using SHTarget = wenku8.Model.REST.SharersRequest.SHTarget;
+using StatusType = GR.Model.REST.SharersRequest.StatusType;
+using SHTarget = GR.Model.REST.SharersRequest.SHTarget;
 
 namespace wenku10.ShHub
 {
 	using Pages;
+	using Pages.Dialogs;
 	using Pages.Sharers;
 
 	sealed class MesgListerner
@@ -39,7 +42,7 @@ namespace wenku10.ShHub
 
 		public MesgListerner()
 		{
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
 
 		private async void MessageBus_OnDelivery( Message Mesg )
@@ -52,9 +55,22 @@ namespace wenku10.ShHub
 					if ( ( HSI.Scope & SpiderScope.ZONE ) != 0 )
 					{
 						ControlFrame.Instance.NavigateTo(
-							PageId.ZONE_SPIDER_VIEW
-							, () => new ZoneSpidersView()
-							, View => ( ( ZoneSpidersView ) View ).OpenZone( HSI ) );
+							PageId.MASTER_EXPLORER, () => new MasterExplorer()
+							//  Open ZoneSpider Manager
+							, P => ( ( MasterExplorer ) P ).NavigateToDataSource(
+								typeof( ZSMDisplayData )
+								, async ( ZSVS ) =>
+								{
+									// Using the manager, import this script
+									ZSMDisplayData DisplayData = ( ( ZSManagerVS ) ZSVS ).ZSMData;
+									if ( await DisplayData.OpenFile( HSI.ScriptFile ) )
+									{
+										// Open the imported script
+										ZoneSpider ZSpider = DisplayData.ZSTable.Items.Select( x => ( ZoneSpider ) x.Source ).FirstOrDefault( x => x.ZoneId == HSI.Id );
+										( ( MasterExplorer ) P ).NavigateToZone( ZSpider );
+									}
+								}
+							) );
 						break;
 					}
 
@@ -99,7 +115,7 @@ namespace wenku10.ShHub
 					break;
 
 				case AppKeys.HS_NO_VOLDATA:
-					ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).Id, StatusType.HS_NO_VOLDATA );
+					ConfirmErrorReport( ( ( BookInstruction ) Mesg.Payload ).ZItemId, StatusType.HS_NO_VOLDATA );
 					break;
 
 				case AppKeys.EX_DEATHBLOW:
@@ -110,7 +126,7 @@ namespace wenku10.ShHub
 					await Popups.ShowDialog( UIAliases.CreateDialog(
 						stx.Str( "ConfirmDeathblow" )
 						, () => UseDeathblow = true
-						, stx.Str( "Yes" ), stx.Str( "No")
+						, stx.Str( "Yes" ), stx.Str( "No" )
 					) );
 
 					if( UseDeathblow )
@@ -123,6 +139,24 @@ namespace wenku10.ShHub
 
 				case AppKeys.PM_CHECK_TILES:
 					CheckTiles();
+					break;
+
+				case AppKeys.OPEN_VIEWSOURCE:
+					ControlFrame.Instance.NavigateTo( PageId.MASTER_EXPLORER, () => new MasterExplorer(), P => ( ( MasterExplorer ) P ).NavigateToViewSource( ( GRViewSource ) Mesg.Payload ) );
+					break;
+
+				case AppKeys.OPEN_ZONE:
+					ControlFrame.Instance.NavigateTo( PageId.MASTER_EXPLORER, () => new MasterExplorer(), P => ( ( MasterExplorer ) P ).NavigateToZone( ( ZoneSpider ) Mesg.Payload ) );
+					break;
+
+				case AppKeys.PROMPT_LOGIN:
+					(IMember Member, Action DialogClosed) = ( Tuple<IMember, Action> ) Mesg.Payload;
+					if ( !Member.IsLoggedIn )
+					{
+						Login LoginDialog = new Login( Member );
+						await Popups.ShowDialog( LoginDialog );
+					}
+					DialogClosed();
 					break;
 			}
 		}
@@ -190,7 +224,7 @@ namespace wenku10.ShHub
 			if ( !PinErrored )
 			{
 				PinErrored = true;
-				wenku8.System.ActionCenter.Instance.ShowError( "PM_SourceMissing" );
+				GR.GSystem.ActionCenter.Instance.ShowError( "PM_SourceMissing" );
 			}
 		}
 
@@ -222,8 +256,11 @@ namespace wenku10.ShHub
 			if ( Parse )
 			{
 				ControlFrame.Instance.NavigateTo(
-					PageId.BOOK_SPIDER_VIEW, () => new BookSpidersView()
-					, ( View ) => ( ( BookSpidersView ) View ).Parse( Book )
+					PageId.MASTER_EXPLORER, () => new MasterExplorer()
+					, P => ( ( MasterExplorer ) P ).NavigateToDataSource(
+						typeof( BookSpiderDisplayData )
+						, VS => ( ( BookSpiderVS ) VS ).Process( Book.ZoneId, Book.ZItemId )
+					)
 				);
 			}
 		}
@@ -271,7 +308,7 @@ namespace wenku10.ShHub
 					, Shared.ShRequest.Search( "uuid: " + Id, 0, 1 )
 					// Pass the uuid instead of the query id
 					, ( re, q ) => MessageBus.Send( GetType(), AppKeys.HS_REPORT_SUCCESS, new Tuple<string, DRequestCompletedEventArgs>( Id, re ) )
-					, wenku8.System.Utils.DoNothing
+					, GR.GSystem.Utils.DoNothing
 					, true
 				);
 			}

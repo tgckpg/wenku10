@@ -21,13 +21,13 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Book;
-using wenku8.Model.Comments;
-using wenku8.Model.Interfaces;
-using wenku8.Model.Loaders;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Book;
+using GR.Model.Comments;
+using GR.Model.Interfaces;
+using GR.Model.Loaders;
 
 namespace wenku10.Pages.BookInfoControls
 {
@@ -65,8 +65,8 @@ namespace wenku10.Pages.BookInfoControls
 			SetTemplate( Book );
 		}
 
-		public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( ClosePages ); }
-		public void SoftClose() { NavigationHandler.OnNavigatedBack -= ClosePages; }
+		public void SoftOpen( bool NavForward ) { NavigationHandler.InsertHandlerOnNavigatedBack( ClosePages ); }
+		public void SoftClose( bool NavForward ) { NavigationHandler.OnNavigatedBack -= ClosePages; }
 
 		private async void OpenComment( object sender, ItemClickEventArgs e )
 		{
@@ -140,8 +140,8 @@ namespace wenku10.Pages.BookInfoControls
 		private async Task ReloadComments()
 		{
 			CommentLoader CL = new CommentLoader(
-				ThisBook.Id
-				, X.Call<XKey[]>( XProto.WRequest, "GetComments", ThisBook.Id )
+				ThisBook.ZItemId
+				, X.Call<XKey[]>( XProto.WRequest, "GetComments", ThisBook.ZItemId )
 				, new CommentLoader.CommentXMLParser( GetReviews )
 			);
 
@@ -208,7 +208,7 @@ namespace wenku10.Pages.BookInfoControls
 				return;
 			}
 
-			IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, true );
+			IRuntimeCache wCache = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0 );
 			if ( Input.IsReview )
 			{
 				wCache.InitDownload(
@@ -227,7 +227,7 @@ namespace wenku10.Pages.BookInfoControls
 					"POSTREVIEW"
 					, X.Call<XKey[]>(
 						XProto.WRequest, "GetPostReview"
-						, ThisBook.Id, Input.RTitle, Input.RContent
+						, ThisBook.ZItemId, Input.RTitle, Input.RContent
 					)
 					, PostSuccess, PostFailed
 					, false
@@ -237,40 +237,25 @@ namespace wenku10.Pages.BookInfoControls
 
 		private void PostSuccess( DRequestCompletedEventArgs e, string id )
 		{
-			CloseFrame( ReviewsFrame );
-			if ( SubListView.Content == null )
+			Worker.UIInvoke( () =>
 			{
-				var j = ReloadComments();
-			}
-			else
-			{
-				var j = ( ( ReplyList ) SubListView.Content ).OpenReview( CurrentReview );
-			}
+				CloseFrame( ReviewsFrame );
+				if ( SubListView.Content == null )
+				{
+					var j = ReloadComments();
+				}
+				else
+				{
+					var j = ( ( ReplyList ) SubListView.Content ).OpenReview( CurrentReview );
+				}
 
-			SetControls( ReloadBtn, AddBtn );
+				SetControls( ReloadBtn, AddBtn );
+			} );
 		}
 
-		private async void PostFailed( string arg1, string arg2, Exception ex )
+		private void PostFailed( string arg1, string arg2, Exception ex )
 		{
-			if ( ex.XTest( XProto.WException ) )
-			{
-				if ( ex.XProp<Enum>( "WCode" ).Equals( X.Const<Enum>( XProto.WCode, "LOGON_REQUIRED" ) ) )
-				{
-					// Prompt login
-					Dialogs.Login Login = new Dialogs.Login( X.Singleton<IMember>( XProto.Member ) );
-					await Popups.ShowDialog( Login );
-
-					// Auto submit if possible
-					if ( Login.Canceled )
-					{
-						SubmitBtn.IsEnabled = true;
-					}
-					else
-					{
-						SubmitReview();
-					}
-				}
-			}
+			Worker.UIInvoke( () => SubmitBtn.IsEnabled = true );
 		}
 
 		private void WriteReview( object sender, RoutedEventArgs e )

@@ -202,4 +202,25 @@
 - 自動的に固定する：タイルが欠落している場合、スタートに戻る
 - 何をすべきか：何をすべきか尋ねる</value>
   </data>
+  <data name="MyLibrary.Text" xml:space="preserve">
+    <value>コレクション</value>
+  </data>
+  <data name="AllRecords.Text" xml:space="preserve">
+    <value>すべてのレコード</value>
+  </data>
+  <data name="Zones.Text" xml:space="preserve">
+    <value>領域</value>
+  </data>
+  <data name="FullTextSearch.Text" xml:space="preserve">
+    <value>全文検索</value>
+  </data>
+  <data name="StaffPicks.Text" xml:space="preserve">
+    <value>ハイライト</value>
+  </data>
+  <data name="Home.Text" xml:space="preserve">
+    <value>ホーム</value>
+  </data>
+  <data name="CurrentlyReading.Text" xml:space="preserve">
+    <value>現在読んでいる</value>
+  </data>
 </root>

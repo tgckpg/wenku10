@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -14,23 +15,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
-using libtaotu.Crawler;
 using libtaotu.Controls;
 using libtaotu.Models.Procedure;
 using libtaotu.Pages;
 
-using wenku8.Taotu;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using System.Threading.Tasks;
+using GR.Taotu;
+using GR.Model.Book.Spider;
 
 namespace wenku10.Pages.Dialogs.Taotu
 {
@@ -51,15 +47,13 @@ namespace wenku10.Pages.Dialogs.Taotu
 			StringResources stx = new StringResources( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
 
 		public void Dispose()
 		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 		}
-
-		~EditProcListLoader() { Dispose(); }
 
 		public EditProcListLoader( WenkuListLoader EditTarget )
 			: this()
@@ -94,6 +88,12 @@ namespace wenku10.Pages.Dialogs.Taotu
 		{
 			TextBox Input = sender as TextBox;
 			EditTarget.BannerPath = Input.Text;
+		}
+
+		private void SetZoneName( object sender, RoutedEventArgs e )
+		{
+			TextBox Input = sender as TextBox;
+			EditTarget.ZoneName = Input.Text;
 		}
 
 		private void Subprocess( object sender, RoutedEventArgs e )
@@ -151,7 +151,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 			IStorageFile PreviewFile = await AppStorage.MkTemp();
 			await PreviewFile.WriteString(
-				string.Join( "\n<<<<<<<<<<<<<<\n", Payload.Remap( x => x.PlainTextInfo ) ) );
+				string.Join( "\n<<<<<<<<<<<<<<\n", Payload.Select( x => x.PlainTextInfo ) ) );
 
 			var j = Dispatcher.RunIdleAsync(
 				x => Frame.Navigate( typeof( DirectTextViewer ), PreviewFile )

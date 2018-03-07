@@ -19,11 +19,11 @@ using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Effects;
-using wenku8.Model;
+using GR.Effects;
+using GR.Model;
 
-using EBDictManager = wenku8.System.EBDictManager;
-using WParagraph = wenku8.Model.Text.Paragraph;
+using EBDictManager = GR.GSystem.EBDictManager;
+using WParagraph = GR.Model.Text.Paragraph;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -32,7 +32,7 @@ namespace wenku10.Pages.Dialogs
 		private EBDictionary Dict;
 		private DispatcherTimer Longed;
 
-		private wenku8.System.KeyboardController RegKey;
+		private GR.GSystem.KeyboardController RegKey;
 
 		private int VI = 0;
 		private int VJ = 0;
@@ -62,7 +62,7 @@ namespace wenku10.Pages.Dialogs
 		{
 			Closed += EBDictSearch_Closed;
 
-			RegKey = new wenku8.System.KeyboardController( "SearchWords" );
+			RegKey = new GR.GSystem.KeyboardController( "SearchWords" );
 			RegKey.AddCombo( "Move1stEndToRight", Right1, VirtualKey.L );
 			RegKey.AddCombo( "Move1stEndToLeft", Left1, VirtualKey.H );
 			RegKey.AddCombo( "Move2ndEndToRight", Right2, VirtualKey.Shift, VirtualKey.L );

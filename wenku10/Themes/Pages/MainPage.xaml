@@ -1,9 +1,9 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:wenku8.Resources"
-    xmlns:c="using:wenku8.CompositeElement"
-    xmlns:Converters="using:wenku8.Converters">
+    xmlns:local="using:GR.Resources"
+    xmlns:c="using:GR.CompositeElement"
+    xmlns:Converters="using:GR.Converters">
 
     <Style TargetType="c:StateBubble">
         <Setter Property="Foreground" Value="RoyalBlue" />

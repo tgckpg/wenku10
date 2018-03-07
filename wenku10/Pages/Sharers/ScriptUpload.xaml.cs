@@ -21,21 +21,22 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.REST;
-using wenku8.Resources;
-using CryptAES = wenku8.System.CryptAES;
-using AESManager = wenku8.System.AESManager;
-using TokenManager = wenku8.System.TokenManager;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.ListItem.Sharers;
+using GR.Model.REST;
+using GR.Resources;
+using GR.Settings;
+using CryptAES = GR.GSystem.CryptAES;
+using AESManager = GR.GSystem.AESManager;
+using TokenManager = GR.GSystem.TokenManager;
 
 namespace wenku10.Pages.Sharers
 {
-	sealed partial class ScriptUpload : Page, ICmdControls, INavPage
+	sealed partial class ScriptUpload : Page, ICmdControls
 	{
 		public static readonly string ID = typeof( ScriptUpload ).Name;
 
@@ -102,7 +103,7 @@ namespace wenku10.Pages.Sharers
 				= AccessTokens.IsEnabled
 				= false;
 
-			PredefineFile( HSI.Id );
+			PredefineFile( AppKeys.ZLOCAL, HSI.Id );
 
 			this.OnExit = OnExit;
 		}
@@ -119,36 +120,17 @@ namespace wenku10.Pages.Sharers
 			LockedFile = true;
 			BindBook = Book;
 
-			PredefineFile( Book.Id );
+			NameInput.PlaceholderText = Book.Title;
+			DescInput.Text = Book.Intro;
+			ZoneInput.Text = Book.Info.Press;
+
+			PredefineFile( Book.ZoneId, Book.ZItemId );
 			this.OnExit = OnExit;
 		}
 
-		public void SoftOpen() { if ( BindBook != null ) BindBook.PropertyChanged += Book_PropertyChanged; }
-		public void SoftClose() { if ( BindBook != null ) BindBook.PropertyChanged -= Book_PropertyChanged; }
-
-		private void Book_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
+		private async void PredefineFile( string ZoneId, string ZItemId )
 		{
-			BookItem B = ( BookItem ) sender;
-			switch ( e.PropertyName )
-			{
-				case "Title":
-					NameInput.PlaceholderText = B.Title;
-					if ( string.IsNullOrEmpty( NameInput.Text ) ) NameInput.Text = B.Title;
-					break;
-				case "Intro":
-					DescInput.PlaceholderText = B.Intro;
-					if ( string.IsNullOrEmpty( DescInput.Text ) ) DescInput.Text = B.Intro;
-					break;
-				case "Press":
-					ZoneInput.PlaceholderText = B.PressRaw;
-					if ( string.IsNullOrEmpty( ZoneInput.Text ) ) ZoneInput.Text = B.PressRaw;
-					break;
-			}
-		}
-
-		private async void PredefineFile( string Id )
-		{
-			SelectedBook = await SpiderBook.CreateAsyncSpider( Id );
+			SelectedBook = await SpiderBook.CreateSAsync( ZoneId, ZItemId, null );
 			FileName.Text = SelectedBook.MetaLocation;
 		}
 
@@ -268,18 +250,18 @@ namespace wenku10.Pages.Sharers
 				ReservedId = await ReserveId( Token.Value );
 			}
 
-			string Id = ReservedId;
 			string Name = NameInput.Text.Trim();
 			if ( string.IsNullOrEmpty( Name ) )
 				Name = NameInput.PlaceholderText;
 
-			string Desc = DescInput.Text.Trim();
+			string Id = ReservedId;
 			if ( string.IsNullOrEmpty( Id ) )
 			{
 				Message.Text = "Failed to reserve id";
 				return;
 			}
 
+			string Desc = DescInput.Text.Trim();
 			string Zone = ZoneInput.Text;
 			string[] Types = TypesInput.Text.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );
 			string[] Tags = TagsInput.Text.Split( new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries );

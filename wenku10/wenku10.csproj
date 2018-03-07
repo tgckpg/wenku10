@@ -104,6 +104,7 @@
     </Content>
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\circle.dds" />
+    <Content Include="Assets\grbk.png" />
     <Content Include="Assets\NewContent155x155-200.png" />
     <Content Include="Assets\OpacityChecker.png" />
     <Content Include="Assets\glitter.dds" />
@@ -125,19 +126,81 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GR\Converters\ColumnVisConverter.cs" />
+    <Compile Include="GR\Converters\WIConverters.cs" />
+    <Compile Include="GR\DataSources\FTSDisplayData.cs" />
+    <Compile Include="GR\DataSources\FTSViewSource.cs" />
+    <Compile Include="GR\GStrings\ColumnNameResolver.cs" />
+    <Compile Include="GR\DataSources\BookDisplayVS.cs" />
+    <Compile Include="GR\DataSources\BookDisplayData.cs" />
+    <Compile Include="GR\DataSources\BookSpiderVS.cs" />
+    <Compile Include="GR\DataSources\HistoryData.cs" />
+    <Compile Include="GR\DataSources\BookSpiderDisplayData.cs" />
+    <Compile Include="GR\DataSources\ONSDisplayData.cs" />
+    <Compile Include="GR\DataSources\ONSViewSource.cs" />
+    <Compile Include="GR\DataSources\TextDocDisplayData.cs" />
+    <Compile Include="GR\DataSources\TextDocVS.cs" />
+    <Compile Include="GR\DataSources\ZSDisplayData.cs" />
+    <Compile Include="GR\DataSources\ZSManagerVS.cs" />
+    <Compile Include="GR\DataSources\ZSMDisplayData.cs" />
+    <Compile Include="GR\DataSources\ZSViewSource.cs" />
+    <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
+    <Compile Include="GR\GSystem\PageExtOperations.cs" />
+    <Compile Include="GR\MigrationOps\IMigrationOp.cs" />
+    <Compile Include="GR\MigrationOps\M0000.cs" />
+    <Compile Include="GR\MigrationOps\MigrationManager.cs" />
+    <Compile Include="GR\MigrationOps\BackupAndRestoreOp.cs" />
+    <Compile Include="GR\MigrationOps\NaiveObfustream.cs" />
+    <Compile Include="GR\Model\Section\WidgetView.cs" />
+    <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
+    <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
+    <Compile Include="GR\PageExtensions\FTSDataPageExt.cs" />
+    <Compile Include="GR\PageExtensions\HighlightsHomePageExt.cs" />
+    <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
+    <Compile Include="GR\PageExtensions\TextDocPageExt.cs" />
+    <Compile Include="GR\PageExtensions\WidgetHomePageExt.cs" />
+    <Compile Include="GR\PageExtensions\ZSMPageExt.cs" />
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Dialogs\AddWidget.xaml.cs">
+      <DependentUpon>AddWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Dialogs\ContentReader\ExitOptions.xaml.cs">
+      <DependentUpon>ExitOptions.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderHorz.xaml.cs">
+      <DependentUpon>ContentReaderHorz.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ContentReaderBase.cs" />
     <Compile Include="Pages\Dialogs\KeyboardCtrlHelp.xaml.cs">
       <DependentUpon>KeyboardCtrlHelp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wenku8\Model\Topics\HyperBannerItem.cs" />
+    <Compile Include="GR\Model\Topics\HyperBannerItem.cs" />
+    <Compile Include="Pages\Explorer\Highlights.xaml.cs">
+      <DependentUpon>Highlights.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\GShortcuts.xaml.cs">
+      <DependentUpon>GShortcuts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\Widgets\MainBanner.xaml.cs">
+      <DependentUpon>MainBanner.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\Widgets\ThumbnailList.xaml.cs">
+      <DependentUpon>ThumbnailList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\Widgets\TitleListHorz.xaml.cs">
+      <DependentUpon>TitleListHorz.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MasterExplorer.xaml.cs">
+      <DependentUpon>MasterExplorer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Explorer\GRTableView.xaml.cs">
+      <DependentUpon>GRTableView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MonoRedirector.cs" />
     <Compile Include="Pages\BookInfoView.xaml.cs">
       <DependentUpon>BookInfoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\BookSpidersView.xaml.cs">
-      <DependentUpon>BookSpidersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Dialogs\NameValueInput.xaml.cs">
       <DependentUpon>NameValueInput.xaml</DependentUpon>
@@ -157,18 +220,15 @@
     <Compile Include="Pages\Dialogs\ValueHelpInput.xaml.cs">
       <DependentUpon>ValueHelpInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\LocalDocumentsView.xaml.cs">
-      <DependentUpon>LocalDocumentsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\OnlineScriptsView.xaml.cs">
-      <DependentUpon>OnlineScriptsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\PageId.cs" />
     <Compile Include="Pages\ManagePins.xaml.cs">
       <DependentUpon>ManagePins.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\BackupAndRestore.xaml.cs">
+      <DependentUpon>BackupAndRestore.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TOCPageBase.cs" />
     <Compile Include="Pages\TOCViewHorz.xaml.cs">
@@ -180,17 +240,8 @@
     <Compile Include="Pages\TwitterCommentView.xaml.cs">
       <DependentUpon>TwitterCommentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WBookshelf.xaml.cs">
-      <DependentUpon>WBookshelf.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\WDeathblow.xaml.cs">
       <DependentUpon>WDeathblow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\WNavSelections.xaml.cs">
-      <DependentUpon>WNavSelections.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ZoneSpidersView.xaml.cs">
-      <DependentUpon>ZoneSpidersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Scenes\HyperBanner\CircleTextRenderer.cs" />
     <Compile Include="Scenes\HyperBanner\HyperBanner.cs" />
@@ -199,23 +250,21 @@
     <Compile Include="Scenes\HyperBanner\ParaBg.cs" />
     <Compile Include="Scenes\HyperBanner\RippleEx.cs" />
     <Compile Include="ShHub\MesgListerner.cs" />
-    <Compile Include="wenku8\CompositeElement\AttachedDictAction.cs" />
-    <Compile Include="wenku8\CompositeElement\CRDirToggle.cs" />
-    <Compile Include="wenku8\Converters\CurrDevConverter.cs" />
-    <Compile Include="wenku8\Converters\ParaTemplateSelector.cs" />
-    <Compile Include="wenku8\Converters\PinTemplateSelector.cs" />
-    <Compile Include="wenku8\Model\Loaders\ContentIllusLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\TwitterLoader.cs" />
-    <Compile Include="wenku8\Model\Pages\PageProcessor.cs" />
-    <Compile Include="wenku8\Model\Section\DocumentList.cs" />
-    <Compile Include="wenku8\Model\Section\LocalListBase.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub\Activities.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub\MyInbox.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub\MyRequests.cs" />
-    <Compile Include="wenku8\Model\Twitter\AuthData.cs" />
-    <Compile Include="wenku8\Model\Twitter\TSExtended.cs" />
-    <Compile Include="wenku8\System\KeyboardController.cs" />
-    <Compile Include="wenku8\System\MasterCommandManager.cs" />
+    <Compile Include="GR\CompositeElement\AttachedDictAction.cs" />
+    <Compile Include="GR\CompositeElement\CRDirToggle.cs" />
+    <Compile Include="GR\Converters\CurrDevConverter.cs" />
+    <Compile Include="GR\Converters\ParaTemplateSelector.cs" />
+    <Compile Include="GR\Converters\PinTemplateSelector.cs" />
+    <Compile Include="GR\Model\Loaders\ContentIllusLoader.cs" />
+    <Compile Include="GR\Model\Loaders\TwitterLoader.cs" />
+    <Compile Include="GR\Model\Pages\PageProcessor.cs" />
+    <Compile Include="GR\Model\Section\SharersHub\Activities.cs" />
+    <Compile Include="GR\Model\Section\SharersHub\MyInbox.cs" />
+    <Compile Include="GR\Model\Section\SharersHub\MyRequests.cs" />
+    <Compile Include="GR\Model\Twitter\AuthData.cs" />
+    <Compile Include="GR\Model\Twitter\TSExtended.cs" />
+    <Compile Include="GR\GSystem\KeyboardController.cs" />
+    <Compile Include="GR\GSystem\MasterCommandManager.cs" />
     <Compile Include="Pages\Sharers\HSCommentView.xaml.cs">
       <DependentUpon>HSCommentView.xaml</DependentUpon>
     </Compile>
@@ -234,9 +283,6 @@
     <Compile Include="Pages\Sharers\UserInfo.xaml.cs">
       <DependentUpon>UserInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\SuperGiants.xaml.cs">
-      <DependentUpon>SuperGiants.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Scenes\ISceneExitable.cs" />
     <Compile Include="Scenes\PFScene.cs" />
     <Compile Include="Scenes\IScene.cs" />
@@ -244,26 +290,22 @@
     <Compile Include="Scenes\FireFlies.cs" />
     <Compile Include="Scenes\Fireworks.cs" />
     <Compile Include="Scenes\Glitter.cs" />
-    <Compile Include="Scenes\TheOrb.cs" />
     <Compile Include="Scenes\Texture.cs" />
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wenku8\CompositeElement\ProcStateItem.cs" />
-    <Compile Include="wenku8\CompositeElement\LSBookItem.cs" />
-    <Compile Include="wenku8\Converters\HubStatusConverter.cs" />
-    <Compile Include="wenku8\Converters\PhoneVAlignConverter.cs" />
-    <Compile Include="wenku8\Model\Loaders\ZSFeedbackLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\HSLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\SHSearchLoader.cs" />
-    <Compile Include="wenku8\Model\Section\SharersHub.cs" />
-    <Compile Include="wenku8\Model\Section\ZoneList.cs" />
-    <Compile Include="wenku8\Model\Section\ZoneSpider.cs" />
-    <Compile Include="wenku8\System\ActionEvent.cs" />
-    <Compile Include="wenku8\System\Migration.cs" />
-    <Compile Include="wenku8\Taotu\WenkuListLoader.cs" />
-    <Compile Include="wenku8\ThemeIcons.cs" />
+    <Compile Include="GR\Converters\HubStatusConverter.cs" />
+    <Compile Include="GR\Converters\PhoneVAlignConverter.cs" />
+    <Compile Include="GR\Model\Loaders\ZSFeedbackLoader.cs" />
+    <Compile Include="GR\Model\Loaders\HSLoader.cs" />
+    <Compile Include="GR\Model\Loaders\SHSearchLoader.cs" />
+    <Compile Include="GR\Model\Section\SharersHub.cs" />
+    <Compile Include="GR\Model\Section\ZoneSpider.cs" />
+    <Compile Include="GR\GSystem\ActionEvent.cs" />
+    <Compile Include="GR\GSystem\Migration.cs" />
+    <Compile Include="GR\Taotu\WenkuListLoader.cs" />
+    <Compile Include="GR\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>
     </Compile>
@@ -291,39 +333,26 @@
     <Compile Include="Pages\Settings\Data\EBWin.xaml.cs">
       <DependentUpon>EBWin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="wenku8\Model\Loaders\AutoCache.cs" />
-    <Compile Include="wenku8\Model\Loaders\BookLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\ChapterLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\CommentLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\NewsLoader.cs" />
-    <Compile Include="wenku8\Model\Loaders\VolumeLoader.cs" />
-    <Compile Include="wenku8\Model\Pages\ContentReader\ESContext.cs" />
-    <Compile Include="wenku8\Model\Pages\ContentReader\AssistContext.cs" />
-    <Compile Include="wenku8\Model\Section\CategorizedSection.cs" />
-    <Compile Include="wenku8\Model\Section\BookSpiderList.cs" />
-    <Compile Include="wenku8\Model\Section\SearchSections.cs" />
-    <Compile Include="wenku8\Model\Section\LoginStatus.cs" />
-    <Compile Include="wenku8\Model\Section\NavPaneSection.cs" />
-    <Compile Include="wenku8\Model\Section\ReaderView.cs" />
-    <Compile Include="wenku8\Model\Section\TOCPane.cs" />
-    <Compile Include="wenku8\Model\Section\TOCSection.cs" />
+    <Compile Include="GR\Model\Loaders\AutoCache.cs" />
+    <Compile Include="GR\Model\Loaders\BookLoader.cs" />
+    <Compile Include="GR\Model\Loaders\ChapterLoader.cs" />
+    <Compile Include="GR\Model\Loaders\CommentLoader.cs" />
+    <Compile Include="GR\Model\Loaders\NewsLoader.cs" />
+    <Compile Include="GR\Model\Loaders\VolumeLoader.cs" />
+    <Compile Include="GR\Model\Pages\ContentReader\ESContext.cs" />
+    <Compile Include="GR\Model\Pages\ContentReader\AssistContext.cs" />
+    <Compile Include="GR\Model\Section\NavPaneSection.cs" />
+    <Compile Include="GR\Model\Section\ReaderView.cs" />
+    <Compile Include="GR\Model\Section\TOCPane.cs" />
+    <Compile Include="GR\Model\Section\TOCSection.cs" />
     <Compile Include="Pages\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WUserInfo.xaml.cs">
-      <DependentUpon>WUserInfo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ContentReader.xaml.cs">
-      <DependentUpon>ContentReader.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\ContentReader-VESwipe.xaml.cs">
-      <DependentUpon>ContentReader.xaml</DependentUpon>
+    <Compile Include="Pages\ContentReaderVert.xaml.cs">
+      <DependentUpon>ContentReaderVert.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReaderPane\BookmarkList.xaml.cs">
       <DependentUpon>BookmarkList.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\WCateList.xaml.cs">
-      <DependentUpon>WCateList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ContentReaderPane\ImageList.xaml.cs">
       <DependentUpon>ImageList.xaml</DependentUpon>
@@ -352,23 +381,14 @@
     <Compile Include="Pages\Dialogs\Rename.xaml.cs">
       <DependentUpon>Rename.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\History.xaml.cs">
-      <DependentUpon>History.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\ImageView.xaml.cs">
       <DependentUpon>ImageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\BookInfoControls\ReplyList.xaml.cs">
       <DependentUpon>ReplyList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\WNavList.xaml.cs">
-      <DependentUpon>WNavList.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\ReviewsInput.xaml.cs">
       <DependentUpon>ReviewsInput.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\WSearch.xaml.cs">
-      <DependentUpon>WSearch.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\Advanced\Debug.xaml.cs">
       <DependentUpon>Debug.xaml</DependentUpon>
@@ -404,15 +424,13 @@
       <DependentUpon>ThemeColors.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="wenku8\Model\Topics\PressList.cs" />
-    <Compile Include="wenku8\Settings\Layout\BookInfoView.cs" />
-    <Compile Include="wenku8\Settings\Layout\ContentReader.cs" />
-    <Compile Include="wenku8\Settings\Layout\MainPage.cs" />
-    <Compile Include="wenku8\Settings\Layout\NavList.cs" />
-    <Compile Include="wenku8\System\Bootstrap.cs" />
-    <Compile Include="wenku8\System\UnitTest.cs" />
-    <Compile Include="wenku8\Taotu\WenkuMarker.cs" />
-    <Compile Include="wenku8\Taotu\WenkuExtractor.cs" />
+    <Compile Include="GR\Model\Topics\PressList.cs" />
+    <Compile Include="GR\Settings\Layout\BookInfoView.cs" />
+    <Compile Include="GR\Settings\Layout\ContentReader.cs" />
+    <Compile Include="GR\GSystem\Bootstrap.cs" />
+    <Compile Include="GR\GSystem\UnitTest.cs" />
+    <Compile Include="GR\Taotu\WenkuMarker.cs" />
+    <Compile Include="GR\Taotu\WenkuExtractor.cs" />
     <Compile Include="Microsoft.Phone.Controls\WrapPanel.cs" />
     <Page Include="MainStage.xaml">
       <SubType>Designer</SubType>
@@ -422,11 +440,51 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Dialogs\AddWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Dialogs\ContentReader\ExitOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ContentReaderHorz.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Pages\Dialogs\KeyboardCtrlHelp.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Dialogs\ValueHelpInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Highlights.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\GShortcuts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Widgets\MainBanner.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Widgets\ThumbnailList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Widgets\TitleListHorz.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MasterExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\GRTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -438,19 +496,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\Settings\BackupAndRestore.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\TwitterCommentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\WDeathblow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WNavSelections.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WUserInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -462,19 +516,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\BookSpidersView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ContentReader.xaml">
+    <Page Include="Pages\ContentReaderVert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ContentReaderPane\BookmarkList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WCateList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -554,10 +600,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\History.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\ImageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -566,27 +608,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\LocalDocumentsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\ControlFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\WNavList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\OnlineScriptsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\ReviewsInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WSearch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -666,23 +692,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\SuperGiants.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\TOCViewHorz.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\TOCViewVert.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\WBookshelf.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\ZoneSpidersView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -724,14 +738,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\ListViewItems\CommentListItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ListViewItems\ProcStateItem.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Themes\ListViewItems\LSBookItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -848,7 +854,7 @@
       <Version>1.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.4.0</Version>
+      <Version>5.4.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Services">
       <Version>1.1.0</Version>
@@ -880,9 +886,9 @@
       <Project>{119b84b1-d42b-460c-8f72-4fae1e2614f1}</Project>
       <Name>libtaotu</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libs\libwenku8\libwenku8.csproj">
+    <ProjectReference Include="..\libs\GR\GR.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
-      <Name>libwenku8</Name>
+      <Name>GR</Name>
     </ProjectReference>
     <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
       <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>
@@ -893,6 +899,7 @@
       <Name>Tasks</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

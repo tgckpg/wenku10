@@ -20,22 +20,23 @@ using Net.Astropenguin.Controls;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Resources;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Database.Models;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Resources;
 
 namespace wenku10.Pages.ContentReaderPane
 {
 	sealed partial class ImageList : Page
 	{
-		private ContentReader ReaderPage;
-		public ImageList( ContentReader R )
+		private ContentReaderBase ReaderPage;
+		public ImageList( ContentReaderBase R )
 		{
 			this.InitializeComponent();
 
@@ -46,7 +47,7 @@ namespace wenku10.Pages.ContentReaderPane
 		private async void SetTemplate()
 		{
 			Chapter C = ReaderPage.CurrentChapter;
-			if ( !C.HasIllustrations )
+			if ( C.Image == null )
 			{
 				AsyncTryOut<Chapter> ASC;
 				if ( ASC = await TryFoundIllustration() )
@@ -62,17 +63,11 @@ namespace wenku10.Pages.ContentReaderPane
 
 			ChapterList.Visibility = Visibility.Collapsed;
 
-			string[] ImagePaths = Shared.Storage.GetString( C.IllustrationPath )
-				.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries );
-
-			int l = ImagePaths.Length;
-
 			List<MViewUpdate> MViews = new List<MViewUpdate>();
 
-			for ( int i = 0; i < l; i++ )
+			foreach( string url in C.Image.Urls )
 			{
 				// Retrive URL
-				string url = ImagePaths[ i ];
 				MViewUpdate MView = new MViewUpdate() { SrcUrl = url };
 				ContentIllusLoader.Instance.RegisterImage( MView );
 				MViews.Add( MView );
@@ -102,28 +97,15 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()
 		{
-			VolumesInfo VF = new VolumesInfo( ReaderPage.CurrentBook );
-			EpisodeStepper ES = new EpisodeStepper( VF );
+			Volume V = ReaderPage.CurrentChapter.Volume;
+			ChapterImage CImage = Shared.BooksDb.ChapterImages.FirstOrDefault( x => V.Chapters.Contains( x.Chapter ) );
 
-			ES.SetCurrentPosition( ReaderPage.CurrentChapter, true );
-
-			List<Chapter> Chs = new List<Chapter>();
-
-			bool NeedDownload = false;
-
-			string Vid = ReaderPage.CurrentChapter.vid;
-			while ( ES.Vid == Vid )
+			if ( CImage != null )
 			{
-				Chapter Ch = ES.Chapter;
-				Chs.Add( Ch );
-
-				if ( !Ch.IsCached ) NeedDownload = true;
-				if( Ch.HasIllustrations )
-				{
-					return new AsyncTryOut<Chapter>( true, Ch );
-				}
-				if ( !ES.StepNext() ) break;
+				return new AsyncTryOut<Chapter>( true, CImage.Chapter );
 			}
+
+			bool NeedDownload = Shared.BooksDb.Chapters.Any( x => x.Volume == V && x.Content == null );
 
 			if ( !NeedDownload )
 			{
@@ -147,48 +129,18 @@ namespace wenku10.Pages.ContentReaderPane
 				return new AsyncTryOut<Chapter>();
 			}
 
-			// Really, this desperate?
-			TaskCompletionSource<AsyncTryOut<Chapter>> TCSChapter = new TaskCompletionSource<AsyncTryOut<Chapter>>();
-			Volume V = ReaderPage.CurrentBook.GetVolumes().First( x => x.vid == ReaderPage.CurrentChapter.vid );
-			ChapterList.ItemsSource = V.ChapterList;
+			ChapterList.ItemsSource = V.Chapters.Select( x => new ChapterVModel( x ) );
+			await AutoCache.DownloadVolumeAsync( ReaderPage.CurrentBook, V );
 
-			WRuntimeTransfer.DCycleCompleteHandler CycleComp = null;
+			Chapter ImageChapter = V.Chapters.FirstOrDefault( x => x.Image != null );
 
-			CycleComp = delegate ( object sender, DCycleCompleteArgs e )
+			if ( ImageChapter == null )
 			{
-				App.RuntimeTransfer.OnCycleComplete -= CycleComp;
-				bool AllSet = V.ChapterList.All( x => x.IsCached );
-
-				Chapter C = V.ChapterList.FirstOrDefault( x => x.HasIllustrations );
-
-				if ( C == null )
-				{
-					if ( AllSet ) Worker.UIInvoke( () => Message.Text = "No Illustration available" );
-					TCSChapter.TrySetResult( new AsyncTryOut<Chapter>() );
-					return;
-				}
-
-				TCSChapter.TrySetResult( new AsyncTryOut<Chapter>( true, C ) );
-			};
-
-			if ( ReaderPage.CurrentBook.IsSpider() )
-			{
-				foreach( SChapter C in V.ChapterList.Cast<SChapter>() )
-				{
-					await new ChapterLoader().LoadAsync( C );
-					C.UpdateStatus();
-				}
-
-				// Fire the event myself
-				CycleComp( this, new DCycleCompleteArgs() );
-			}
-			else
-			{
-				App.RuntimeTransfer.OnCycleComplete += CycleComp;
-				AutoCache.DownloadVolume( ReaderPage.CurrentBook, V );
+				Worker.UIInvoke( () => Message.Text = "No Illustration available" );
+				return new AsyncTryOut<Chapter>();
 			}
 
-			return await TCSChapter.Task;
+			return new AsyncTryOut<Chapter>( true, ImageChapter );
 		}
 
 		private class MViewUpdate : ActiveData, IIllusUpdate

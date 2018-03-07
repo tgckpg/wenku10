@@ -16,9 +16,9 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.Resources;
-using wenku8.Model.REST;
+using GR.AdvDM;
+using GR.Resources;
+using GR.Model.REST;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {

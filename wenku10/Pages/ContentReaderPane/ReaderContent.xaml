@@ -5,9 +5,9 @@
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:c="using:wenku8.CompositeElement"
-    xmlns:v="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:t="using:GR.Model.Text"
+    xmlns:v="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -64,7 +64,7 @@
             </FlyoutBase.AttachedFlyout>
 
             <ListView.Resources>
-                <DataTemplate x:Name="Horizontal">
+                <DataTemplate x:Name="Horizontal" x:DataType="t:Paragraph">
                     <Grid FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}"
                           RightTapped="Grid_RightTapped">
                         <Grid.RowDefinitions>
@@ -72,64 +72,64 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
-                        <Rectangle Fill="{Binding AnchorColor}" />
+                        <Rectangle Fill="{x:Bind AnchorColor}" />
                         <p:VerticalStack
                             Grid.Row="1"
-                            Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
+                            Text="{x:Bind Text, Converter={StaticResource VDisplayConverter}}"
                             HorizontalAlignment="Center"
-                            Foreground="{Binding FontColor}"
-                            FontSize="{Binding FontSize}"
-                            FontWeight="{Binding FontWeight}"
-                            LineHeight="{Binding LineHeight}"
-                            Padding="{Binding ParagraphSpacing}"
+                            Foreground="{x:Bind FontColor, Mode=OneWay}"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                            LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                            Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                         />
                     </Grid>
                 </DataTemplate>
-                <DataTemplate x:Name="Vertical">
+                <DataTemplate x:Name="Vertical" x:DataType="t:Paragraph">
                     <Grid RightTapped="Grid_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Background="{Binding AnchorColor}" />
+                        <Rectangle Fill="{x:Bind AnchorColor, Mode=OneWay}" />
                         <TextBlock
                             Grid.Column="1"
-                            Text="{Binding Text}"
+                            Text="{x:Bind Text}"
                             TextWrapping="Wrap"
-                            Foreground="{Binding FontColor}"
-                            FontSize="{Binding FontSize}"
-                            FontWeight="{Binding FontWeight}"
-                            LineHeight="{Binding LineHeight}"
-                            Padding="{Binding ParagraphSpacing}"
+                            Foreground="{x:Bind FontColor, Mode=OneWay}"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                            LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                            Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                         />
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Name="IllusEmbed">
                     <Image Source="{Binding Illus}" />
                 </DataTemplate>
-                <DataTemplate x:Name="IllusIconH">
+                <DataTemplate x:Name="IllusIconH" x:DataType="t:Paragraph">
                     <TextBlock
                         Margin="0,10,0,20"
                         FontFamily="Segoe MDL2 Assets"
-                        Text="{Binding Text}"
-                        Foreground="{Binding FontColor}"
-                        FontSize="{Binding FontSize}"
-                        FontWeight="{Binding FontWeight}"
-                        LineHeight="{Binding LineHeight}"
-                        Padding="{Binding ParagraphSpacing}"
+                        Text="{x:Bind Text}"
+                        Foreground="{x:Bind FontColor, Mode=OneWay}"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                        LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                        Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                     />
                 </DataTemplate>
-                <DataTemplate x:Name="IllusIconV">
+                <DataTemplate x:Name="IllusIconV" x:DataType="t:Paragraph">
                     <TextBlock
                         Margin="10,0,20,0"
                         FontFamily="Segoe MDL2 Assets"
-                        Text="{Binding Text}"
-                        Foreground="{Binding FontColor}"
-                        FontSize="{Binding FontSize}"
-                        FontWeight="{Binding FontWeight}"
-                        LineHeight="{Binding LineHeight}"
-                        Padding="{Binding ParagraphSpacing}"
+                        Text="{x:Bind Text}"
+                        Foreground="{x:Bind FontColor, Mode=OneWay}"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                        LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                        Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                     />
                 </DataTemplate>
             </ListView.Resources>

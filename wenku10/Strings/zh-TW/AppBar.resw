@@ -255,4 +255,13 @@
   <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
     <value>移除記錄</value>
   </data>
+  <data name="RebuildIndex.Text" xml:space="preserve">
+    <value>重建索引</value>
+  </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>備份與還原</value>
+  </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>新增小工具</value>
+  </data>
 </root>
