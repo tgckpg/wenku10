@@ -188,6 +188,9 @@
     <Compile Include="Pages\Explorer\Widgets\ThumbnailList.xaml.cs">
       <DependentUpon>ThumbnailList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Explorer\Widgets\TitleListHorz.xaml.cs">
+      <DependentUpon>TitleListHorz.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\MasterExplorer.xaml.cs">
       <DependentUpon>MasterExplorer.xaml</DependentUpon>
     </Compile>
@@ -469,6 +472,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Explorer\Widgets\ThumbnailList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Explorer\Widgets\TitleListHorz.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

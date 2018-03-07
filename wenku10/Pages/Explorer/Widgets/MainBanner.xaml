@@ -15,7 +15,7 @@
         <s:TransStateConverter x:Key="TransStateConverter" />
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Height="350" p:Clip.ToBounds="True">
+    <Grid x:Name="LayoutRoot" Height="350" p:Clip.ToBounds="True" Tapped="LayoutRoot_Tapped">
         <!-- Background from data context -->
         <Grid x:Name="InfoBgGrid"
               Margin="-100, -100, -100, -100">

@@ -26,7 +26,7 @@ namespace GR.DataSources
 		public override Action<IGRRow> ItemAction => RowAction;
 
 		private BookDisplayPageExt _Extension;
-		public PageExtension Extension => _Extension ?? ( _Extension = new BookDisplayPageExt() );
+		public PageExtension Extension => _Extension ?? ( _Extension = new BookDisplayPageExt( DataSourceType.Name + "." + ZS.ZoneId ) );
 
 		public ZSViewSource( string Name, ZoneSpider ZS )
 			: base( Name )

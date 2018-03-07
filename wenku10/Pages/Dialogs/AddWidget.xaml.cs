@@ -46,7 +46,8 @@ namespace wenku10.Pages.Dialogs
 			WidgetTemplateList.ItemsSource = new Dictionary<string, string>()
 			{
 				{ "Banner", "Banner" },
-				{ "ThumbnailList - Horizontal", "HorzThumbnailList" }
+				{ "ThumbnailList - Horizontal", "HorzThumbnailList" },
+				{ "TitleList - Horizontal", "TitleListHorz" }
 			};
 		}
 

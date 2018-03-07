@@ -43,10 +43,34 @@
                 <Button Grid.Row="0" Grid.Column="1"
                         Flyout="{StaticResource WidgetSettings}"
                         HorizontalAlignment="Right"
+                        Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                         Style="{StaticResource ThemeButton}">
                     <SymbolIcon Symbol="Setting" Margin="10" />
                 </Button>
                 <ex:ThumbnailList Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Table.Items}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="TitleListHorz">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Name}"
+                           Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                           FontSize="25" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                <Button Grid.Row="0" Grid.Column="1"
+                        Flyout="{StaticResource WidgetSettings}"
+                        HorizontalAlignment="Right"
+                        Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                        Style="{StaticResource ThemeButton}">
+                    <SymbolIcon Symbol="Setting" Margin="10" />
+                </Button>
+                <ex:TitleListHorz Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Table.Items}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="Banner">
@@ -76,7 +100,14 @@
         </DataTemplate>
         <DataTemplate x:Key="NoSuchWidget">
             <Grid Height="100" Background="{StaticResource Shades90}">
-                <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button Grid.Row="0" Grid.Column="1" Margin="10"
+                        VerticalAlignment="Top" HorizontalAlignment="Right"
+                        Foreground="{StaticResource RelativeShadesBrush}"
+                        Flyout="{StaticResource WidgetSettings}"
+                        Style="{StaticResource ThemeButton}">
+                    <SymbolIcon Symbol="Setting" Margin="10" />
+                </Button>
+                <TextBlock Foreground="{StaticResource RelativeShadesBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Run Text="Error: Widget not found, " />
                     <Run Text="{Binding TemplateName}" />
                 </TextBlock>

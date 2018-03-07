@@ -18,10 +18,10 @@ using GR.Model.Section;
 
 namespace wenku10.Pages.Explorer.Widgets
 {
-	public sealed partial class ThumbnailList : UserControl
+	public sealed partial class TitleListHorz : UserControl
 	{
 		public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(
-			"ItemsSource", typeof( object ), typeof( ThumbnailList )
+			"ItemsSource", typeof( object ), typeof( TitleListHorz )
 			, new PropertyMetadata( null, OnUpdateItemsSource ) );
 
 		public object ItemsSource
@@ -30,14 +30,14 @@ namespace wenku10.Pages.Explorer.Widgets
 			set { SetValue( ItemsSourceProperty, value ); }
 		}
 
-		public ThumbnailList()
+		public TitleListHorz()
 		{
 			this.InitializeComponent();
 		}
 
 		private static void OnUpdateItemsSource( DependencyObject d, DependencyPropertyChangedEventArgs e )
 		{
-			( ( ThumbnailList ) d ).SourceUpdate();
+			( ( TitleListHorz ) d ).SourceUpdate();
 		}
 
 		private void SourceUpdate()

@@ -16,7 +16,7 @@ namespace GR.DataSources
 	sealed class BookDisplayVS : GRViewSource, IExtViewSource, IGSWidget
 	{
 		private BookDisplayPageExt _Extension;
-		public PageExtension Extension => _Extension ?? ( _Extension = new BookDisplayPageExt() );
+		public PageExtension Extension => _Extension ?? ( _Extension = new BookDisplayPageExt( DataSourceType.Name ) );
 
 		public override Action<IGRRow> ItemAction => ( ( BookDisplayPageExt ) Extension ).OpenItem;
 

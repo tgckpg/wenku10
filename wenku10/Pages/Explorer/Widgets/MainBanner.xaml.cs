@@ -20,6 +20,7 @@ using GR.Data;
 using GR.Database.Models;
 using GR.Model.Book;
 using GR.Model.Pages;
+using GR.Model.Section;
 
 using static GR.Settings.Layout.BookInfoView;
 
@@ -57,6 +58,8 @@ namespace wenku10.Pages.Explorer.Widgets
 			( ( MainBanner ) d ).SourceUpdate();
 		}
 
+		private IGRRow BindRow;
+
 		private async void SourceUpdate()
 		{
 			Book Bk = null;
@@ -81,6 +84,7 @@ namespace wenku10.Pages.Explorer.Widgets
 				if ( Item is IGRRow GRow && GRow.CellData is BookDisplay BkDisplay )
 				{
 					Bk = BkDisplay.Entry;
+					BindRow = GRow;
 				}
 			}
 
@@ -113,5 +117,12 @@ namespace wenku10.Pages.Explorer.Widgets
 			BindingOperations.SetBinding( BgGridTransform, TranslateTransform.YProperty, VScroll );
 		}
 
+		private void LayoutRoot_Tapped( object sender, TappedRoutedEventArgs e )
+		{
+			if( DataContext is WidgetView WV && BindRow != null )
+			{
+				WV.ViewSource.ItemAction( BindRow );
+			}
+		}
 	}
 }

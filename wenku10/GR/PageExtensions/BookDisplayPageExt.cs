@@ -47,6 +47,17 @@ namespace GR.PageExtensions
 
 		NameValue<string> DefaultAction;
 
+		private string ConfigId = "BkPageExt.Default";
+
+		public BookDisplayPageExt( string ConfigId )
+		{
+			this.ConfigId = "BkPageExt.Default." + ConfigId;
+
+			// Default action must be defined for widget view
+			DefaultAction = new NameValue<string>( "", "" );
+			DefaultAction.Value = GetDefault();
+		}
+
 		public override void Unload()
 		{
 		}
@@ -105,10 +116,7 @@ namespace GR.PageExtensions
 			ContextMenu.Items.Add( ChangeDefault );
 			ContextMenu.Items.Add( BrowserBtn );
 
-			DefaultAction = new NameValue<string>( "", "" );
 			DefaultAction.PropertyChanged += DefaultAction_PropertyChanged;
-
-			DefaultAction.Value = GetDefault();
 		}
 
 		public override FlyoutBase GetContextMenu( FrameworkElement elem )
@@ -243,27 +251,31 @@ namespace GR.PageExtensions
 
 		private void OpenInfo( object DataContext )
 		{
-			if( DataContext is GRRow<BookDisplay> BkRow )
+			if ( TryGetBookItem( DataContext, out BookItem BkItem ) )
 			{
-				BookItem BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
 				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
 			}
 		}
 
 		private void OpenTOC( object DataContext )
 		{
-			if( DataContext is GRRow<BookDisplay> BkRow )
+			if ( TryGetBookItem( DataContext, out BookItem BkItem ) )
 			{
-				BookItem BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
-				PageProcessor.NavigateToTOC( Page, BkItem );
+				if ( Page == null )
+				{
+					OpenInfo( DataContext );
+				}
+				else
+				{
+					PageProcessor.NavigateToTOC( Page, BkItem );
+				}
 			}
 		}
 
 		private async void OpenReader( object DataContext )
 		{
-			if ( DataContext is GRRow<BookDisplay> BkRow )
+			if ( TryGetBookItem( DataContext, out BookItem BkItem ) )
 			{
-				BookItem BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
 				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( BkItem );
 				if ( TryAutoAnchor )
 				{
@@ -273,9 +285,24 @@ namespace GR.PageExtensions
 				{
 					StringResources stx = new StringResources( "Message" );
 					await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
-					PageProcessor.NavigateToTOC( Page, BkItem );
+					OpenTOC( BkItem );
 				}
 			}
+		}
+
+		private bool TryGetBookItem( object DataContext, out BookItem BkItem )
+		{
+			BkItem = null;
+			if ( DataContext is GRRow<BookDisplay> BkRow )
+			{
+				BkItem = ItemProcessor.GetBookItem( BkRow.Source.Entry );
+			}
+			else if ( DataContext is BookItem )
+			{
+				BkItem = ( BookItem ) DataContext;
+			}
+
+			return BkItem != null;
 		}
 
 		private void SetDefault( string ActionName )
@@ -285,7 +312,6 @@ namespace GR.PageExtensions
 
 			using ( SettingsContext Settings = new SettingsContext() )
 			{
-				string ConfigId = "DeAct-BookDisplay";
 				GRSystem Config = Settings.System.Find( ConfigId );
 
 				// Set the default configs
@@ -312,7 +338,6 @@ namespace GR.PageExtensions
 		{
 			using ( SettingsContext Settings = new SettingsContext() )
 			{
-				string ConfigId = "DeAct-BookDisplay";
 				GRSystem Config = Settings.System.Find( ConfigId );
 
 				// Set the default configs
