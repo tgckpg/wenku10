@@ -13,10 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.Messaging;
-
 using GR.Model.Section;
-using GR.Settings;
 
 namespace wenku10.Pages.Explorer.Widgets
 {
@@ -30,16 +27,6 @@ namespace wenku10.Pages.Explorer.Widgets
 		{
 			get { return ( object ) GetValue( ItemsSourceProperty ); }
 			set { SetValue( ItemsSourceProperty, value ); }
-		}
-
-		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-			"Title", typeof( string ), typeof( ThumbnailList )
-			, new PropertyMetadata( null, OnUpdateTitle ) );
-
-		public string Title
-		{
-			get { return ( string ) GetValue( TitleProperty ); }
-			set { SetValue( TitleProperty, value ); }
 		}
 
 		public ThumbnailList()
@@ -60,14 +47,11 @@ namespace wenku10.Pages.Explorer.Widgets
 			}
 		}
 
-		private static void OnUpdateTitle( DependencyObject d, DependencyPropertyChangedEventArgs e ) => ( ( ThumbnailList ) d ).TitleUpdate();
-		private void TitleUpdate() => NameText.Text = Title;
-
 		private void ShowMore_Click( object sender, RoutedEventArgs e )
 		{
 			if ( DataContext is WidgetView WV )
 			{
-				MessageBus.SendUI( GetType(), AppKeys.OPEN_VIEWSOURCE, WV.ViewSource );
+				WV.OpenViewSource();
 			}
 		}
 	}

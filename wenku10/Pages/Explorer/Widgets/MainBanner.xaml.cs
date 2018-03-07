@@ -37,16 +37,6 @@ namespace wenku10.Pages.Explorer.Widgets
 			set { SetValue( ItemsSourceProperty, value ); }
 		}
 
-		public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(
-			"Title", typeof( string ), typeof( MainBanner )
-			, new PropertyMetadata( null, OnUpdateTitle ) );
-
-		public string Title
-		{
-			get { return ( string ) GetValue( TitleProperty ); }
-			set { SetValue( TitleProperty, value ); }
-		}
-
 		public static readonly DependencyProperty RefSVProperty = DependencyProperty.Register(
 			"RefSV", typeof( ScrollViewer ), typeof( MainBanner )
 			, new PropertyMetadata( null, OnUpdateRefSV ) );
@@ -108,9 +98,6 @@ namespace wenku10.Pages.Explorer.Widgets
 			InfoBgGrid.DataContext = ItemContext;
 			TitleText.Text = Bk.Title;
 		}
-
-		private static void OnUpdateTitle( DependencyObject d, DependencyPropertyChangedEventArgs e ) => ( ( MainBanner ) d ).TitleUpdate();
-		private void TitleUpdate() => NameText.Text = Title;
 
 		private static void OnUpdateRefSV( DependencyObject d, DependencyPropertyChangedEventArgs e ) => ( ( MainBanner ) d ).RefSVUpdate();
 		public void RefSVUpdate()

@@ -16,16 +16,15 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Loaders;
 
 using GR.DataSources;
+using GR.Model.Section;
+using Windows.UI;
 
 namespace wenku10.Pages.Dialogs
 {
-	public sealed partial class AddWidget : ContentDialog
+	sealed partial class AddWidget : ContentDialog
 	{
 		private IEnumerable<GRViewSource> AvailableWidgets;
-		public GRViewSource SelectedWidget { get; private set; }
-		public string WidgetName { get; private set; }
-		public string WidgetTemplate { get; private set; }
-		public string SearchKey { get; private set; }
+		public WidgetView SelectedWidget { get; private set; }
 
 		public AddWidget( IEnumerable<GRViewSource> AvailableWidgets )
 		{
@@ -51,16 +50,37 @@ namespace wenku10.Pages.Dialogs
 			};
 		}
 
-		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
+		private async void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs e )
 		{
-			SelectedWidget = ( GRViewSource ) WidgetList.SelectedItem;
-			WidgetName = NewName.Text;
-			WidgetTemplate = WidgetTemplateList.SelectedValue as string ?? "ThumbnailList";
+			e.Cancel = true;
 
-			if ( SelectedWidget.DataSource.Searchable )
+			GRViewSource GVS = ( GRViewSource ) WidgetList.SelectedItem;
+			WidgetView SW = new WidgetView( GVS );
+
+			await SW.ConfigureAsync();
+
+			string NName = NewName.Text.Trim();
+			string NQuery = QueryStr.Text.Trim();
+
+			SW.Conf.Enable = true;
+			SW.Conf.Name = string.IsNullOrEmpty( NName ) ? GVS.ItemTitle : NName;
+			SW.Conf.Template = WidgetTemplateList.SelectedValue as string ?? "HorzThumbnailList";
+
+			if ( SW.DataSource.Searchable )
 			{
-				SearchKey = QueryStr.Text.Trim();
+				if ( SW.SearchRequired && string.IsNullOrEmpty( NQuery ) )
+				{
+					QueryStr.BorderBrush = new SolidColorBrush( Colors.Red );
+					QueryStr.BorderThickness = new Thickness( 1 );
+					return;
+				}
+
+				SW.Conf.Query = NQuery;
+				SW.DataSource.Search = NQuery;
 			}
+
+			SelectedWidget = SW;
+			this.Hide();
 		}
 
 		private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )

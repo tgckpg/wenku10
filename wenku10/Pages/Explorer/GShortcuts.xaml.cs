@@ -16,7 +16,13 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Linq;
+
+using GR.Database.Contexts;
+using GR.Database.Models;
 using GR.DataSources;
+using GR.Effects;
 using GR.Model.Interfaces;
 using GR.Model.Section;
 
@@ -41,25 +47,79 @@ namespace wenku10.Pages.Explorer
 
 		public async void LoadWidgets()
 		{
-			foreach ( GRViewSource GVS in AvailableWidgets )
+			WidgetConfig[] WCs;
+			using ( SettingsContext Db = new SettingsContext() )
 			{
-				WidgetView WView = new WidgetView( GVS );
-				await WView.ConfigureAsync();
-				AddWidget( WView );
+				WCs = Db.WidgetConfigs.OrderBy( x => x.Id ).ToList().Select( x => x.Conf ).ToArray();
 			}
 
 			MainContents.ItemsSource = Widgets;
+
+			if ( WCs.Any() )
+			{
+				foreach ( WidgetConfig WC in WCs )
+				{
+					GRViewSource GVS = AvailableWidgets.FirstOrDefault( x => x.DataSource.ConfigId == WC.TargetType );
+					if ( GVS != null )
+					{
+						WidgetView WView = new WidgetView( GVS );
+						await WView.ConfigureAsync( WC );
+						_AddWidget( WView );
+					}
+				}
+			}
+			else
+			{
+				foreach ( GRViewSource GVS in AvailableWidgets )
+				{
+					WidgetView WView = new WidgetView( GVS );
+					await WView.ConfigureAsync();
+					_AddWidget( WView );
+				}
+			}
 		}
 
 		public void AddWidget( WidgetView WView )
 		{
+			if ( _AddWidget( WView ) )
+			{
+				SaveConfigs();
+			}
+		}
+
+		private bool _AddWidget( WidgetView WView )
+		{
 			if ( WView.Conf.Enable )
 			{
 				Widgets.Add( WView );
-				if ( WView.DataSource.Searchable && WView.Conf.Query != WView.DataSource.Search )
+				return true;
+			}
+			return false;
+		}
+
+		private void SaveConfigs()
+		{
+			using ( SettingsContext Db = new SettingsContext() )
+			{
+				int l = Widgets.Count;
+				Db.WidgetConfigs.RemoveRange( Db.WidgetConfigs.Where( x => l < x.Id ) );
+
+				Widgets.ExecEach( ( x, i ) =>
 				{
-					WView.DataSource.Search = WView.Conf.Query;
-				}
+					GRWidgetConfig WConf = Db.WidgetConfigs.Find( i + 1 );
+					if ( WConf == null )
+					{
+						WConf = new GRWidgetConfig() { Id = i + 1, Conf = x.Conf };
+						Db.WidgetConfigs.Add( WConf );
+					}
+					else
+					{
+						WConf.Conf = x.Conf;
+						Db.WidgetConfigs.Update( WConf );
+					}
+				} );
+
+				Db.SaveChanges();
 			}
 		}
 
@@ -74,15 +134,29 @@ namespace wenku10.Pages.Explorer
 			Widgets.Clear();
 		}
 
+		Storyboard AnimaStory = new Storyboard();
 		public async Task ExitAnima()
 		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
+
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 1, 0, 350 );
+			AnimaStory.Begin();
+			await Task.Delay( 500 );
 		}
 
 		public async Task EnterAnima()
 		{
+			AnimaStory.Stop();
+			AnimaStory.Children.Clear();
+
+			SimpleStory.DoubleAnimation( AnimaStory, LayoutRoot, "Opacity", 0, 1, 350 );
+
+			AnimaStory.Begin();
+			await Task.Delay( 500 );
 		}
 
-		private class TemplateSel: DataTemplateSelector
+		private class TemplateSel : DataTemplateSelector
 		{
 			public ResourceDictionary Resources { get; set; }
 
@@ -90,12 +164,68 @@ namespace wenku10.Pages.Explorer
 			{
 				if ( Item is WidgetView WItem )
 				{
-					return ( DataTemplate ) Resources[ WItem.TemplateName ];
+					string Name = WItem.TemplateName;
+					if ( !Resources.ContainsKey( Name ) )
+						Name = "NoSuchWidget";
+
+					return ( DataTemplate ) Resources[ Name ];
 				}
 
 				return null;
 			}
-
 		}
+
+		private async void WidgetRename_Click( object sender, RoutedEventArgs e )
+		{
+			FrameworkElement Elem = ( FrameworkElement ) sender;
+			if ( Elem.DataContext is WidgetView WV )
+			{
+				string OName = WV.Name;
+				Dialogs.Rename RenameDialog = new Dialogs.Rename( WV );
+				await Popups.ShowDialog( RenameDialog );
+
+				if( OName != WV.Name )
+					SaveConfigs();
+			}
+		}
+
+		private void DeleteWidget_Click( object sender, RoutedEventArgs e )
+		{
+			FrameworkElement Elem = ( FrameworkElement ) sender;
+			if ( Elem.DataContext is WidgetView WV )
+			{
+				Widgets.Remove( WV );
+				SaveConfigs();
+			}
+		}
+
+		private void MoveUpWidget_Click( object sender, RoutedEventArgs e )
+		{
+			FrameworkElement Elem = ( FrameworkElement ) sender;
+			if ( Elem.DataContext is WidgetView WV )
+			{
+				int i = Widgets.IndexOf( WV );
+				if ( 0 < i )
+				{
+					Widgets.Move( i, i - 1 );
+					SaveConfigs();
+				}
+			}
+		}
+
+		private void MoveDownWidget_Click( object sender, RoutedEventArgs e )
+		{
+			FrameworkElement Elem = ( FrameworkElement ) sender;
+			if ( Elem.DataContext is WidgetView WV )
+			{
+				int i = Widgets.IndexOf( WV );
+				if ( i < ( Widgets.Count - 1 ) )
+				{
+					Widgets.Move( i, i + 1 );
+					SaveConfigs();
+				}
+			}
+		}
+
 	}
 }

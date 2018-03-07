@@ -240,4 +240,10 @@
   <data name="ChangeDefault.Text" xml:space="preserve">
     <value>Change default</value>
   </data>
+  <data name="MoveDown.Text" xml:space="preserve">
+    <value>Move down</value>
+  </data>
+  <data name="MoveUp.Text" xml:space="preserve">
+    <value>Move up</value>
+  </data>
 </root>

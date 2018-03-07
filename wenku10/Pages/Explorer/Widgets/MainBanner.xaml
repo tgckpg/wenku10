@@ -30,14 +30,7 @@
                    e:TransitionDisplay.Mode="A01"
                    e:TransitionDisplay.State="{Binding BGState2, Converter={StaticResource TransStateConverter}}"/>
         </Grid>
-
         <Rectangle Fill="{StaticResource Shades90}" />
-
-        <TextBlock x:Name="NameText"
-                   HorizontalAlignment="Left" VerticalAlignment="Top"
-                   FontSize="25" Margin="10"
-                   Foreground="{StaticResource RelativeShadesBrush}" />
-
         <TextBlock x:Name="TitleText"
                    HorizontalAlignment="Right" VerticalAlignment="Bottom"
                    FontSize="20" Margin="20"

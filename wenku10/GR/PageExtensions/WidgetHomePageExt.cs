@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 using Net.Astropenguin.Helpers;
@@ -41,27 +42,14 @@ namespace GR.PageExtensions
 			MajorControls = MajorControls.Concat( new ICommandBarElement[] { AddWidgetBtn } ).ToArray();
 		}
 
-		private async void AddWidgetBtn_Click( object sender, Windows.UI.Xaml.RoutedEventArgs e )
+		private async void AddWidgetBtn_Click( object sender, RoutedEventArgs e )
 		{
 			AddWidget AddWidgetDialog = new AddWidget( GRShortcuts.AvailableWidgets );
 			await Popups.ShowDialog( AddWidgetDialog );
 
 			if( AddWidgetDialog.SelectedWidget != null )
 			{
-				WidgetView WView = new WidgetView( AddWidgetDialog.SelectedWidget );
-				await WView.ConfigureAsync();
-
-				if ( !string.IsNullOrEmpty( AddWidgetDialog.WidgetName ) )
-				{
-					WView.Conf.Name = AddWidgetDialog.WidgetName;
-				}
-
-				WView.Conf.Template = AddWidgetDialog.WidgetTemplate;
-				WView.Conf.Query = AddWidgetDialog.SearchKey;
-				WView.Conf.TargetType = WView.DataSource.ConfigId;
-				WView.Conf.Enable = true;
-
-				GRShortcuts.AddWidget( WView );
+				GRShortcuts.AddWidget( AddWidgetDialog.SelectedWidget );
 			}
 		}
 

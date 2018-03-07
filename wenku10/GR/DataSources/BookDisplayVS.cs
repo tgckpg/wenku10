@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.Loaders;
+
 namespace GR.DataSources
 {
 	using Data;
@@ -28,9 +30,10 @@ namespace GR.DataSources
 		{
 			if ( DataSourceType == typeof( HistoryData ) )
 			{
+				StringResBg stx = new StringResBg( "NavigationTitles" );
 				return new WidgetConfig()
 				{
-					Name = ItemTitle,
+					Name = stx.Text( "CurrentlyReading" ),
 					TargetType = DataSource.ConfigId,
 					Enable = true,
 					Template = "Banner"

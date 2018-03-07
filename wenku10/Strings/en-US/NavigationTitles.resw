@@ -197,7 +197,7 @@
     <comment>postdate</comment>
   </data>
   <data name="ManagePins.Text" xml:space="preserve">
-    <value>Manage Pinned Tiles</value>
+    <value>Manage pinned tiles</value>
   </data>
   <data name="Desc_ManagePins.Text" xml:space="preserve">
     <value>Can view pinned tile records. The "Pin Policy" ( default is No Action ) can controls what action to take when dealing with missing tiles. You can also enable OneDrive to view records across devices.
@@ -222,5 +222,8 @@
   </data>
   <data name="Home.Text" xml:space="preserve">
     <value>Home</value>
+  </data>
+  <data name="CurrentlyReading.Text" xml:space="preserve">
+    <value>Currently reading</value>
   </data>
 </root>

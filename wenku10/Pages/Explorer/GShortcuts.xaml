@@ -13,18 +13,74 @@
             <ItemsControl x:Name="MainContents">
                 <ItemsControl.ItemContainerTransitions>
                     <TransitionCollection>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="100" />
+                        <AddDeleteThemeTransition />
+                        <ReorderThemeTransition />
                     </TransitionCollection>
                 </ItemsControl.ItemContainerTransitions>
             </ItemsControl>
         </ScrollViewer>
     </Grid>
     <Page.Resources>
+        <MenuFlyout x:Name="WidgetSettings">
+            <MenuFlyoutItem x:Uid="/ContextMenu/Rename" Click="WidgetRename_Click" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/MoveUp" Click="MoveUpWidget_Click" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/MoveDown" Click="MoveDownWidget_Click" />
+            <MenuFlyoutItem x:Uid="/ContextMenu/Delete" Click="DeleteWidget_Click" />
+        </MenuFlyout>
         <DataTemplate x:Key="HorzThumbnailList">
-            <ex:ThumbnailList Margin="10" Title="{Binding Name}" ItemsSource="{Binding Table.Items}" />
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Name}"
+                           Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                           FontSize="25" Foreground="{StaticResource RelativeMajorBackgroundBrush}"/>
+                <Button Grid.Row="0" Grid.Column="1"
+                        Flyout="{StaticResource WidgetSettings}"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource ThemeButton}">
+                    <SymbolIcon Symbol="Setting" Margin="10" />
+                </Button>
+                <ex:ThumbnailList Grid.Row="1" Grid.ColumnSpan="2" ItemsSource="{Binding Table.Items}" />
+            </Grid>
         </DataTemplate>
         <DataTemplate x:Key="Banner">
-            <ex:MainBanner Title="{Binding Name}" ItemsSource="{Binding Table.Items}" RefSV="{Binding ElementName=MainSV}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ex:MainBanner Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"
+                               ItemsSource="{Binding Table.Items}" RefSV="{Binding ElementName=MainSV}"/>
+                <TextBlock Text="{Binding Name}"
+                           Grid.Row="0" Grid.Column="0" Margin="10"
+                           FontSize="25" VerticalAlignment="Top"
+                           Foreground="{StaticResource RelativeShadesBrush}" />
+                <Button Grid.Row="0" Grid.Column="1" Margin="10"
+                        VerticalAlignment="Top"
+                        Foreground="{StaticResource RelativeShadesBrush}"
+                        Flyout="{StaticResource WidgetSettings}"
+                        Style="{StaticResource ThemeButton}">
+                    <SymbolIcon Symbol="Setting" Margin="10" />
+                </Button>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="NoSuchWidget">
+            <Grid Height="100" Background="{StaticResource Shades90}">
+                <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Run Text="Error: Widget not found, " />
+                    <Run Text="{Binding TemplateName}" />
+                </TextBlock>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 </Page>

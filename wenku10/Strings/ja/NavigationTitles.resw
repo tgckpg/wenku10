@@ -220,4 +220,7 @@
   <data name="Home.Text" xml:space="preserve">
     <value>ホーム</value>
   </data>
+  <data name="CurrentlyReading.Text" xml:space="preserve">
+    <value>現在読んでいる</value>
+  </data>
 </root>

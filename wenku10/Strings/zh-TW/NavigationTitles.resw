@@ -223,4 +223,7 @@
   <data name="Home.Text" xml:space="preserve">
     <value>首頁</value>
   </data>
+  <data name="CurrentlyReading.Text" xml:space="preserve">
+    <value>正在閲讀</value>
+  </data>
 </root>

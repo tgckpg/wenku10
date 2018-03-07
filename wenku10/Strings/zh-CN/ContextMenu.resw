@@ -240,4 +240,10 @@
   <data name="ChangeDefault.Text" xml:space="preserve">
     <value>更改默应</value>
   </data>
+  <data name="MoveDown.Text" xml:space="preserve">
+    <value>下移</value>
+  </data>
+  <data name="MoveUp.Text" xml:space="preserve">
+    <value>上移</value>
+  </data>
 </root>

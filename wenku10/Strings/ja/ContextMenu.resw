@@ -240,4 +240,10 @@
   <data name="ChangeDefault.Text" xml:space="preserve">
     <value>プリセットを変更</value>
   </data>
+  <data name="MoveDown.Text" xml:space="preserve">
+    <value>下へ移動</value>
+  </data>
+  <data name="MoveUp.Text" xml:space="preserve">
+    <value>上へ移動</value>
+  </data>
 </root>
