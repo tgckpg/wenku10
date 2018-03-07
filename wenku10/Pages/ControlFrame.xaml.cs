@@ -74,7 +74,6 @@ namespace wenku10.Pages
 				{
 					NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
 				}
-
 			}
 		}
 

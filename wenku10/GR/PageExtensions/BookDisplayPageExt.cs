@@ -20,6 +20,7 @@ namespace GR.PageExtensions
 	using Data;
 	using Database.Contexts;
 	using Database.Models;
+	using GSystem;
 	using Model.Book;
 	using Model.Book.Spider;
 	using Model.ListItem;
@@ -276,7 +277,7 @@ namespace GR.PageExtensions
 		{
 			if ( TryGetBookItem( DataContext, out BookItem BkItem ) )
 			{
-				AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( BkItem );
+				AsyncTryOut<Chapter> TryAutoAnchor = await PageExtOperations.Run( PageProcessor.TryGetAutoAnchor( BkItem ) );
 				if ( TryAutoAnchor )
 				{
 					PageProcessor.NavigateToReader( BkItem, TryAutoAnchor.Out );

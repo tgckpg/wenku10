@@ -145,6 +145,7 @@
     <Compile Include="GR\DataSources\ZSMDisplayData.cs" />
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
+    <Compile Include="GR\GSystem\PageExtOperations.cs" />
     <Compile Include="GR\MigrationOps\IMigrationOp.cs" />
     <Compile Include="GR\MigrationOps\M0000.cs" />
     <Compile Include="GR\MigrationOps\MigrationManager.cs" />

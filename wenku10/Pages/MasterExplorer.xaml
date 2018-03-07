@@ -92,23 +92,25 @@
             </ListView.ItemTemplate>
         </ListView>
         <!-- Loading Message -->
-        <Grid x:Name="LoadingMessage"
-              Grid.Row="1" Grid.ColumnSpan="2"
-              BorderThickness="1" BorderBrush="{StaticResource MinorBrush}"
-              Background="{StaticResource MajorBackgroundBrush}"
-              VerticalAlignment="Center" HorizontalAlignment="Center"
-              Visibility="Collapsed"
-              e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
-              e:TransitionDisplay.Mode="A01_Y_N30_0" >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <ProgressRing Grid.Column="0" Margin="20"
-                          IsActive="{Binding IsLoading}" Foreground="{StaticResource MajorBrush}" />
-            <TextBlock Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
-                       MaxLines="1" TextTrimming="CharacterEllipsis"
-                       Text="{Binding Message}" Foreground="{StaticResource MajorBrush}" />
-        </Grid>
+        <Border x:Name="LoadingMessage"
+                Grid.ColumnSpan="2"
+                Background="Transparent" Visibility="Collapsed"
+                e:TransitionDisplay.State="{Binding IsLoading, Converter={StaticResource TransStateConverter}}"
+                e:TransitionDisplay.Mode="A01_Y_N30_0" 
+                VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid BorderThickness="1" BorderBrush="{StaticResource MinorBrush}"
+                  Background="{StaticResource MajorBackgroundBrush}"
+                  VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ProgressRing Grid.Column="0" Margin="20"
+                              IsActive="{Binding IsLoading}" Foreground="{StaticResource MajorBrush}" />
+                <TextBlock Grid.Column="1" Margin="0,0,20,0" VerticalAlignment="Center"
+                           MaxLines="1" TextTrimming="CharacterEllipsis"
+                           Text="{Binding Message}" Foreground="{StaticResource MajorBrush}" />
+            </Grid>
+        </Border>
     </Grid>
 </Page>

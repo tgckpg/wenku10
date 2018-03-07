@@ -404,6 +404,7 @@ namespace wenku10.Pages
 			GRShortcuts.LoadWidgets();
 
 			ViewSourceCommand( ( GRH as IExtViewSource )?.Extension );
+			LoadingMessage.DataContext = new GR.GSystem.PageExtOperations();
 
 			GRShortcuts.Visibility = Visibility.Visible;
 			await GRShortcuts.EnterAnima();
