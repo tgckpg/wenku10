@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Logging;
 
 using wenku10;
 using wenku10.Pages;
@@ -97,7 +98,8 @@ namespace GR.GSystem
 			};
 
 			AboutBtn.PendingClick += CreateCmdHandler( PageId.ABOUT, () => new About() );
-			AboutBtn.CanSwipe = X.Exists;
+			AboutBtn.CanSwipe = true;
+			AboutBtn.OnIndexUpdate += ( s, i ) => Logger.Log( AboutBtn.Label2, i.ToString(), LogType.DEBUG );
 
 			Btns.Add( BackupBtn );
 			Btns.Add( new AppBarSeparator() );

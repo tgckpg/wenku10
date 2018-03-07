@@ -220,7 +220,7 @@
             </Setter>
         </Style>
         <DataTemplate x:Key="MobileItem" x:DataType="grt:IGRRow">
-            <Grid>
+            <Grid RightTapped="ShowContextMenu">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
