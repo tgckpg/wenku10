@@ -22,6 +22,7 @@ using GR.Data;
 using GR.DataSources;
 using GR.Effects;
 using GR.Model.Interfaces;
+using GR.CompositeElement;
 
 namespace wenku10.Pages.Explorer
 {
@@ -109,14 +110,10 @@ namespace wenku10.Pages.Explorer
 				{
 					IGRCell CellProp = Table.CellProps[ i ];
 
-					MenuFlyoutItem Item = new MenuFlyoutItem()
-					{
-						Icon = new SymbolIcon( Symbol.Accept ),
-						Text = DataSource.ColumnName( CellProp ),
-						Tag = CellProp
-					};
+					CompatMenuFlyoutItem Item = UIAliases.CreateMenuFlyoutItem( DataSource.ColumnName( CellProp ), new SymbolIcon( Symbol.Accept ) );
 
-					Item.Icon.Opacity = Table.ColEnabled( i ) ? 1 : 0;
+					Item.Tag = CellProp;
+					Item.Icon2.Opacity = Table.ColEnabled( i ) ? 1 : 0;
 					Item.Click += ToggleCol_Click;
 
 					ColToggles.Add( Item );
@@ -155,8 +152,8 @@ namespace wenku10.Pages.Explorer
 
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
 		{
-			MenuFlyoutItem Item = ( MenuFlyoutItem ) sender;
-			Item.Icon.Opacity = Table.ToggleCol( ( IGRCell ) Item.Tag ) ? 1 : 0;
+			CompatMenuFlyoutItem Item = ( CompatMenuFlyoutItem ) sender;
+			Item.Icon2.Opacity = Table.ToggleCol( ( IGRCell ) Item.Tag ) ? 1 : 0;
 			var j = DataSource.SaveConfig();
 		}
 

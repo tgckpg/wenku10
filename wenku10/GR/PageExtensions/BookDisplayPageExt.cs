@@ -38,9 +38,9 @@ namespace GR.PageExtensions
 		MenuFlyoutItem GotoTOC;
 		MenuFlyoutItem GotoReader;
 		MenuFlyoutItem GotoInfo;
-		MenuFlyoutItem DefaultTOC;
-		MenuFlyoutItem DefaultReader;
-		MenuFlyoutItem DefaultInfo;
+		CompatMenuFlyoutItem DefaultTOC;
+		CompatMenuFlyoutItem DefaultReader;
+		CompatMenuFlyoutItem DefaultInfo;
 		MenuFlyoutItem BrowserBtn;
 
 		MenuFlyoutSubItem ChangeDefault;
@@ -83,13 +83,13 @@ namespace GR.PageExtensions
 			GotoInfo = new MenuFlyoutItem() { Text = stx.Text( "BookInfoView" ) };
 			GotoInfo.Click += GotoInfo_Click;
 
-			DefaultTOC = new MenuFlyoutItem() { Text = stx.Text( "TOC" ), Icon = new SymbolIcon( Symbol.Accept ) };
+			DefaultTOC = UIAliases.CreateMenuFlyoutItem( stx.Text( "TOC" ), new SymbolIcon( Symbol.Accept ) );
 			DefaultTOC.Click += DefaultTOC_Click;
 
-			DefaultReader = new MenuFlyoutItem() { Text = stx.Str( "Kb_For_ContentReader", "Resources" ), Icon = new SymbolIcon( Symbol.Accept ) };
+			DefaultReader = UIAliases.CreateMenuFlyoutItem( stx.Str( "Kb_For_ContentReader", "Resources" ), new SymbolIcon( Symbol.Accept ) );
 			DefaultReader.Click += DefaultReader_Click;
 
-			DefaultInfo = new MenuFlyoutItem() { Text = stx.Text( "BookInfoView" ), Icon = new SymbolIcon( Symbol.Accept ) };
+			DefaultInfo = UIAliases.CreateMenuFlyoutItem( stx.Text( "BookInfoView" ), new SymbolIcon( Symbol.Accept ) );
 			DefaultInfo.Click += DefaultInfo_Click;
 
 			BrowserBtn = new MenuFlyoutItem() { Text = stx.Text( "OpenInBrowser" ) };
@@ -219,23 +219,23 @@ namespace GR.PageExtensions
 		{
 			if( e.PropertyName == "Value" )
 			{
-				DefaultInfo.Icon.Opacity = 0;
-				DefaultReader.Icon.Opacity = 0;
-				DefaultTOC.Icon.Opacity = 0;
+				DefaultInfo.Icon2.Opacity = 0;
+				DefaultReader.Icon2.Opacity = 0;
+				DefaultTOC.Icon2.Opacity = 0;
 
 				StringResources stx = new StringResources( "AppBar", "Resources", "ContextMenu" );
 				switch ( DefaultAction.Value )
 				{
 					case "TOC":
-						DefaultTOC.Icon.Opacity = 1;
+						DefaultTOC.Icon2.Opacity = 1;
 						OpenDefault.Text = stx.Text( "Open", "ContextMenu" ) + " (" + stx.Text( "TOC" ) + ")";
 						break;
 					case "Info":
-						DefaultInfo.Icon.Opacity = 1;
+						DefaultInfo.Icon2.Opacity = 1;
 						OpenDefault.Text = stx.Text( "Open", "ContextMenu" ) + " (" + stx.Text( "BookInfoView" ) + ")";
 						break;
 					case "Reader":
-						DefaultReader.Icon.Opacity = 1;
+						DefaultReader.Icon2.Opacity = 1;
 						OpenDefault.Text = stx.Text( "Open", "ContextMenu" ) + " (" + stx.Str( "Kb_For_ContentReader", "Resources" ) + ")";
 						break;
 				}
