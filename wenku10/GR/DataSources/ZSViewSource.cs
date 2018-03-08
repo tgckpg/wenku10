@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Messaging;
 
 namespace GR.DataSources
 {
 	using Data;
+	using GSystem;
 	using Model.Book;
 	using Model.Book.Spider;
 	using Model.Interfaces;
@@ -39,15 +41,17 @@ namespace GR.DataSources
 		{
 			if ( e.PropertyName == "Desc" )
 			{
-				Message = ( ( SpiderBook ) sender ).Desc;
+				MessageBus.Send( GetType(), ( ( SpiderBook ) sender ).Desc );
 			}
 		}
 
 		private async void RowAction( IGRRow _Row )
 		{
-			if ( IsLoading )
-				return;
+			await PageExtOperations.Run( _RowAction( _Row ) );
+		}
 
+		private async Task<bool> _RowAction( IGRRow _Row )
+		{
 			GRRow<BookDisplay> Row = ( GRRow<BookDisplay> ) _Row;
 
 			BookInstruction Payload = ( BookInstruction ) Row.Source.Payload;
@@ -59,8 +63,6 @@ namespace GR.DataSources
 				// Reload the BookDisplay as Entry might changed from SaveInfo
 				Row.Source = new BookDisplay( Payload.Entry );
 			}
-
-			IsLoading = true;
 
 			SpiderBook Item = await SpiderBook.CreateSAsync( Row.Source.Entry.ZoneId, Row.Source.Entry.ZItemId, Payload?.BookSpiderDef );
 			Item.PropertyChanged += Item_PropertyChanged;
@@ -78,7 +80,8 @@ namespace GR.DataSources
 
 			( ( BookDisplayPageExt ) Extension ).OpenItem( _Row );
 
-			IsLoading = false;
+			return true;
 		}
+
 	}
 }

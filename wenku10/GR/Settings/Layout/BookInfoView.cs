@@ -237,7 +237,10 @@ namespace GR.Settings.Layout
 						ApplyImage( null );
 						break;
 					case "Custom":
-						IStorageFolder ISD = await AppStorage.FutureAccessList.GetFolderAsync( value );
+						IStorageFolder ISD = null;
+						try { ISD = await AppStorage.FutureAccessList.GetFolderAsync( value ); }
+						catch ( Exception ) { }
+
 						if ( ISD == null ) return;
 
 						// Randomly pick an image

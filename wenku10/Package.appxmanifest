@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="60674Astropenguin.wenku8testingchannel" Publisher="CN=BB32EA9D-2E19-470F-862B-F9D5F1D815F3" Version="2.2.0.0" />
+  <Identity Name="60674Astropenguin.wenku8testingchannel" Publisher="CN=BB32EA9D-2E19-470F-862B-F9D5F1D815F3" Version="2.2.1.0" />
   <mp:PhoneIdentity PhoneProductId="905bb15d-47cc-41c0-b0fc-6377fdb03ff8" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>wenku8 testing channel</DisplayName>
@@ -25,11 +25,6 @@
         </uap:InitialRotationPreference>
       </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.BackgroundProcessor">
-          <BackgroundTasks>
-            <Task Type="timer" />
-          </BackgroundTasks>
-        </Extension>
         <uap:Extension Category="windows.fileTypeAssociation">
           <uap:FileTypeAssociation Name="grbk">
             <uap:DisplayName>GR Book</uap:DisplayName>
@@ -39,6 +34,11 @@
             </uap:SupportedFileTypes>
           </uap:FileTypeAssociation>
         </uap:Extension>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.BackgroundProcessor">
+          <BackgroundTasks>
+            <Task Type="timer" />
+          </BackgroundTasks>
+        </Extension>
       </Extensions>
     </Application>
   </Applications>

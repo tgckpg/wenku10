@@ -143,6 +143,8 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
+			LoadingMessage.DataContext = new GR.GSystem.PageExtOperations();
+
 			StringResources stx = new StringResources( "NavigationTitles", "AppBar", "AppResources" );
 			VSHistory = new Stack<BackStackHistroy>();
 
@@ -382,7 +384,6 @@ namespace wenku10.Pages
 			await ExplorerView.View( ViewSource );
 
 			TransitionDisplay.SetState( ExplorerView, TransitionState.Active );
-			LoadingMessage.DataContext = ViewSource;
 			ViewSourceCommand( ( ViewSource as IExtViewSource )?.Extension );
 		}
 
@@ -411,7 +412,6 @@ namespace wenku10.Pages
 			GRShortcuts.LoadWidgets();
 
 			ViewSourceCommand( ( GRH as IExtViewSource )?.Extension );
-			LoadingMessage.DataContext = new GR.GSystem.PageExtOperations();
 
 			GRShortcuts.Visibility = Visibility.Visible;
 			await GRShortcuts.EnterAnima();

@@ -17,6 +17,7 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
 using wenku10.Pages;
 
@@ -26,6 +27,7 @@ namespace GR.PageExtensions
 	using CompositeElement;
 	using Data;
 	using DataSources;
+	using GSystem;
 	using Model.ListItem;
 	using Model.Pages;
 	using Model.Interfaces;
@@ -195,26 +197,26 @@ namespace GR.PageExtensions
 
 			if ( UrlBox.Canceled ) return;
 
-			ViewSource.IsLoading = true;
+			TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
 
 			RuntimeCache rCache = new RuntimeCache();
-			ViewSource.Message = string.Format( "{0}. {1}", Context.Id, Context.Title );
-			ViewSource.Message = stx.Text( "Active" );
+			MessageBus.Send( GetType(), string.Format( "{0}. {1}", Context.Id, Context.Title ) );
 
 			rCache.GET( Context.Url, ( DArgs, url ) =>
 			{
 				SaveTemp( DArgs, Context );
 
-				ViewSource.Message = null;
-				ViewSource.IsLoading = false;
+				TCS.SetResult( true );
 			}
 			, ( id, url, ex ) =>
 			{
 				Logger.Log( ID, ex.Message, LogType.WARNING );
 
-				ViewSource.Message = "Cannot download: " + id;
-				ViewSource.IsLoading = false;
+				MessageBus.Send( GetType(), "Cannot download: " + id );
+				TCS.SetResult( true );
 			}, false );
+
+			await PageExtOperations.Run( TCS.Task );
 		}
 
 		private async void SaveTemp( DRequestCompletedEventArgs e, DownloadBookContext Context )
