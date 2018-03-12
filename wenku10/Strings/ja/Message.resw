@@ -246,4 +246,7 @@
   <data name="FTSNeedsRebuild" xml:space="preserve">
     <value>このアイテムの情報を見つかりません。 索引を再構築してください。</value>
   </data>
+  <data name="RestartToRestore" xml:space="preserve">
+    <value>一部のファイルは現在使用中です。 復元モードに再起動しますか？</value>
+  </data>
 </root>

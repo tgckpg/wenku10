@@ -246,4 +246,7 @@
   <data name="FTSNeedsRebuild" xml:space="preserve">
     <value>Unable to find info for this item. Please rebuild your index.</value>
   </data>
+  <data name="RestartToRestore" xml:space="preserve">
+    <value>Some files are currently in use. Restart into restore mode?</value>
+  </data>
 </root>

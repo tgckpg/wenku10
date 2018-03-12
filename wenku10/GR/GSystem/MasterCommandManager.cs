@@ -88,7 +88,7 @@ namespace GR.GSystem
 			SettingsBtn.Click += CreateCmdHandler( PageId.MAIN_SETTINGS, () => new global::wenku10.Pages.Settings.MainSettings() );
 
 			SecondaryIconButton BackupBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.UpdateRestore, stx.Text( "BackupAndRestore", "AppBar" ) );
-			BackupBtn.Click += ( s, e ) => MainStage.Instance.RootFrame.Navigate( typeof( global::wenku10.Pages.Settings.BackupAndRestore ) );
+			BackupBtn.Click += BackupBtn_Click;
 
 			AboutBtn = new SecretSwipeButton( SegoeMDL2.Info )
 			{
@@ -195,6 +195,25 @@ namespace GR.GSystem
 		{
 			foreach ( AppBarToggleButton Btn in MasterCommands.Where( x => x != s ) ) Btn.IsChecked = false;
 			s.IsChecked = true;
+		}
+
+		private async void BackupBtn_Click( object sender, RoutedEventArgs e )
+		{
+			StringResources stx = new StringResources( "Message" );
+
+			bool ConfirmRestore = false;
+
+			await Popups.ShowDialog( UIAliases.CreateDialog(
+				stx.Str( "RestartToRestore" )
+				, () => ConfirmRestore = true
+				, stx.Str( "Yes" ), stx.Str( "No" ) )
+			);
+
+			if( ConfirmRestore )
+			{
+				Config.Properties.RESTORE_MODE = true;
+				Windows.ApplicationModel.Core.CoreApplication.Exit();
+			}
 		}
 
 	}

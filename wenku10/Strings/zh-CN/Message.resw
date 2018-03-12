@@ -246,4 +246,7 @@
   <data name="FTSNeedsRebuild" xml:space="preserve">
     <value>无法找到项目信息。 请重建索引。</value>
   </data>
+  <data name="RestartToRestore" xml:space="preserve">
+    <value>一些文件当前正在使用中。 重新启动到恢复模式？</value>
+  </data>
 </root>

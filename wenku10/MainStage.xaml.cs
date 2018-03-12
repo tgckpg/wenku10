@@ -49,6 +49,13 @@ namespace wenku10
 				return;
 			}
 
+			if ( Properties.RESTORE_MODE )
+			{
+				Properties.RESTORE_MODE = false;
+				RootFrame.Navigate( typeof( Pages.Settings.BackupAndRestore ) );
+				return;
+			}
+
 #if DEBUG
 			GR.Database.ContextManager.Migrate();
 #endif
