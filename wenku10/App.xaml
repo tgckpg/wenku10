@@ -28,6 +28,7 @@
                 <ResourceDictionary Source="/Themes/VerticalListView.xaml" />
                 <ResourceDictionary Source="/Themes/Pages/MainPage.xaml" />
                 <ResourceDictionary Source="/Themes/Pages/TOC.xaml" />
+                <ResourceDictionary Source="/Themes/ActivityList.xaml" />
 
                 <ResourceDictionary Source="/GR/Themes/PassiveSplitView.xaml" />
                 <ResourceDictionary Source="/GR/Themes/TitleStepper.xaml" />

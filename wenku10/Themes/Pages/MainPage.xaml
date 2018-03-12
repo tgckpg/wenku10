@@ -5,11 +5,11 @@
     xmlns:c="using:GR.CompositeElement"
     xmlns:Converters="using:GR.Converters">
 
-    <Style TargetType="c:StateBubble">
+    <Style TargetType="c:ActivityList">
         <Setter Property="Foreground" Value="RoyalBlue" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="c:StateBubble">
+                <ControlTemplate TargetType="c:ActivityList">
                     <Border>
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ControlStates">

@@ -57,6 +57,8 @@ namespace wenku10.Pages
 		public bool CanGoBack => ( PreferredState == NavState.CLOSED && NavState.CLOSED == MasterState ) || VSHistory.Any();
 		public Action<object> Update_CanGoBack { get; set; }
 
+		public Grid MainContainer => MainElements;
+
 		NavState PreferredState => ( NavState ) Convert.ToByte( NavSensor.Tag );
 		NavState MasterState => ( NavState ) Convert.ToByte( MasterNav.Tag );
 		NavState CurrState;

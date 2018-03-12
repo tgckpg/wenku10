@@ -26,6 +26,7 @@ namespace GR.PageExtensions
 	using Model.ListItem.Sharers;
 	using Model.Section.SharersHub;
 	using Resources;
+	using Windows.UI.Xaml.Data;
 
 	sealed class ONSPageExt : PageExtension, ICmdControls
 	{
@@ -41,7 +42,9 @@ namespace GR.PageExtensions
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
 		private ONSViewSource ViewSource;
+
 		private AppBarButtonEx ActivyBtn;
+		private ActivityList ActivyList;
 
 		private SHMember MInstance;
 		private SecondaryIconButton LoginBtn;
@@ -73,6 +76,21 @@ namespace GR.PageExtensions
 			InitAppBar();
 			MInstance = X.Singleton<SHMember>( XProto.SHMember );
 			MInstance.OnStatusChanged += SHMember_OnStatusChanged;
+
+			ActivyList = new ActivityList();
+			ActivyList.ItemsSource = MInstance.Activities;
+			ActivyList.ItemClick = CheckActivity;
+			TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
+
+			// Set binding to Count icon in Activity button
+			Binding CountBinding = new Binding() { Path = new PropertyPath( "Count" ), Source = MInstance.Activities };
+			BindingOperations.SetBinding( ActivyBtn, AppBarButtonEx.CountProperty, CountBinding );
+
+			if( Page is MasterExplorer Expl )
+			{
+				Expl.MainContainer.Children.Add( ActivyList );
+			}
+
 			SHMember_OnStatusChanged( MInstance, MInstance.Status );
 		}
 
@@ -148,45 +166,20 @@ namespace GR.PageExtensions
 			if ( !( await SHMember.Authenticate() ) )
 				return;
 
-			/*
-			<Grid x:Name="ActivyList"
-				  Grid.RowSpan="2"
-				  Visibility="Collapsed"
-				  MaxWidth="400"
-				  VerticalAlignment="Top" HorizontalAlignment="Right">
-				<Polygon Points="15,0 30,15 0,15" HorizontalAlignment="Right"
-						 Margin="0,0,5,0"
-						 Fill="{StaticResource MinorBrush}" />
-				<ListView Margin="0,15,0,0" Padding="10"
-						  IsItemClickEnabled="True" ItemClick="Activities_ItemClick"
-						  ItemContainerStyle="{StaticResource BareListItem}"
-						  ItemsSource="{Binding Activities}"
-						  Background="{StaticResource MinorBrush}">
-					<ListView.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Margin="10,5">
-								<TextBlock Foreground="{StaticResource RelativeMajorBrush}"
-										   TextTrimming="CharacterEllipsis"
-										   Text="{Binding Name}" />
-								<TextBlock Foreground="{StaticResource RelativeMajorBrush}"
-										   TextAlignment="Right" Opacity="0.8"
-										   Visibility="{Binding TimeStamp, Converter={StaticResource DataVisConverter}}"
-										   Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" />
-							</StackPanel>
-						</DataTemplate>
-					</ListView.ItemTemplate>
-				</ListView>
-			</Grid>
-			*/
-
 			if ( MInstance.Activities.Count == 0 )
 			{
+				ActivyBtn.IsEnabled = false;
 				await new MyRequests().Get();
 				await new MyInbox().Get();
+				ActivyBtn.IsEnabled = true;
 			}
-			else
+
+			// We'll have to set the target button here
+			// Because activity list needs the button in the visual tree to work
+			ActivyList.TargetBtn = ActivyBtn;
+
+			if ( 0 < MInstance.Activities.Count )
 			{
-				/*
 				if ( TransitionDisplay.GetState( ActivyList ) == TransitionState.Active )
 				{
 					TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
@@ -195,8 +188,13 @@ namespace GR.PageExtensions
 				{
 					TransitionDisplay.SetState( ActivyList, TransitionState.Active );
 				}
-				*/
 			}
+		}
+
+		private void CheckActivity( object sender, ItemClickEventArgs e )
+		{
+			TransitionDisplay.SetState( ActivyList, TransitionState.Inactive );
+			MInstance.Activities.CheckActivity( ( Activity ) e.ClickedItem );
 		}
 
 		private void SHMember_OnStatusChanged( object sender, MemberStatus args )

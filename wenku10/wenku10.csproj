@@ -126,6 +126,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GR\CompositeElement\ActivityList.cs" />
     <Compile Include="GR\Converters\ColumnVisConverter.cs" />
     <Compile Include="GR\Converters\WIConverters.cs" />
     <Compile Include="GR\DataSources\FTSDisplayData.cs" />
@@ -691,6 +692,11 @@
     <Page Include="Pages\TOCViewVert.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\ActivityList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\Pages\TOC.xaml">
       <Generator>MSBuild:Compile</Generator>

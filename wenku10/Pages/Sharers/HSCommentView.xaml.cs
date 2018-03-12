@@ -294,12 +294,11 @@ namespace wenku10.Pages.Sharers
 
 		private void NewComment( string Label )
 		{
-			TransitionDisplay.SetState( CommentEditor, TransitionState.Active );
+			IsEditorOpened = true;
 			CommentModeLabel.Text = Label;
 
 			if( BindItem.ForceEncryption && Crypt == null )
 			{
-				IsEditorOpened = false;
 				DisplayControls( DiscardBtn );
 
 				StringResources stx = new StringResources();
@@ -307,7 +306,6 @@ namespace wenku10.Pages.Sharers
 			}
 			else
 			{
-				IsEditorOpened = true;
 				DisplayControls( DiscardBtn, SubmitBtn );
 				CommentError.Text = "";
 			}
