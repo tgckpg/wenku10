@@ -250,6 +250,7 @@ namespace wenku10.Pages.BookInfoControls
 				}
 
 				SetControls( ReloadBtn, AddBtn );
+				SubmitBtn.IsEnabled = true;
 			} );
 		}
 

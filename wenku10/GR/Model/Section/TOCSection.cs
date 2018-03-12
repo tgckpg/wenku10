@@ -13,6 +13,7 @@ namespace GR.Model.Section
 	using Config;
 	using Database.Models;
 	using Model.Book;
+	using Resources;
 	using Settings;
 	using Storage;
 
@@ -57,7 +58,7 @@ namespace GR.Model.Section
 
 		public void SelectVolume( Volume v )
 		{
-			Chapters = v.Chapters.Select( x => new ChapterVModel( x ) ).ToArray();
+			Chapters = Shared.BooksDb.SafeRun( Db => v.Chapters.Select( x => new ChapterVModel( x ) ).ToArray() );
 			NotifyChanged( "Chapters" );
 		}
 

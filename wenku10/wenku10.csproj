@@ -165,9 +165,6 @@
     <Compile Include="Pages\Dialogs\AddWidget.xaml.cs">
       <DependentUpon>AddWidget.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Dialogs\ContentReader\ExitOptions.xaml.cs">
-      <DependentUpon>ExitOptions.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Pages\ContentReaderHorz.xaml.cs">
       <DependentUpon>ContentReaderHorz.xaml</DependentUpon>
     </Compile>
@@ -440,10 +437,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Dialogs\AddWidget.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\Dialogs\ContentReader\ExitOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
