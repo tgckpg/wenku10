@@ -14,12 +14,11 @@ using Net.Astropenguin.Loaders;
 
 namespace GR.MigrationOps
 {
-	using Config;
-	using Database.Contexts;
 	using Database.Models;
 	using Ext;
 	using GSystem;
 	using Model.Book.Spider;
+	using Model.Interfaces;
 	using Model.ListItem;
 	using Model.Book;
 	using Resources;
@@ -50,9 +49,6 @@ namespace GR.MigrationOps
 				Mesg( stx.Text( "CompressCache" ) );
 				await M0000_Caches();
 
-				Mesg( stx.Text( "Appearance_Theme", "Settings" ) );
-				await M0001_ContentReader_Theme();
-
 				Mesg( string.Format( stx.Text( "BooksType" ), "S" ) );
 				await M0002_Books_TypeS();
 
@@ -68,7 +64,7 @@ namespace GR.MigrationOps
 				Mesg( stx.Text( "FavRecords" ) );
 				await M0006_LocalBookStorage();
 
-				Mesg( stx.Text( "MigrationComplete" ) );
+				Mesg( stx.Text( "MigrationComplete" ) + " - M0000" );
 			}
 			catch( Exception ex )
 			{
@@ -94,37 +90,6 @@ namespace GR.MigrationOps
 			Caches.ExecEach( x => Shared.ZCacheDb.Write( x, Shared.Storage.GetBytes( CRoot + x ) ) );
 
 			return Task.Run( () => Purge( CRoot ) );
-		}
-
-		private Task M0001_ContentReader_Theme()
-		{
-			Type ParamType = typeof( Parameters );
-			Type PropType = typeof( Properties );
-
-			using ( SettingsContext Context = new SettingsContext() )
-			{
-				IEnumerable<FieldInfo> FInfo = ParamType.GetFields();
-				foreach ( FieldInfo Info in FInfo )
-				{
-					string ParamName = Info.Name;
-					string ParamValue = ( string ) Info.GetValue( null );
-					(string DValue, GSDataType DType) = ValueType( PropType.GetProperty( ParamName ).GetValue( null ) );
-
-					if ( ParamName.Contains( "CONTENTREADER" ) )
-					{
-						ParamValue = ParamValue.Replace( "Appearance_", "" ).Replace( "ContentReader_", "" );
-						InsertOrUpdate( Context.ContentReader, new ContentReader() { Key = ParamValue, Type = DType, Value = DValue } );
-					}
-					else if( ParamName.Contains( "THEME" ) )
-					{
-						ParamValue = ParamValue.Replace( "Appearance_", "" ).Replace( "Theme_", "" ).Replace( "Appearence_", "" );
-						InsertOrUpdate( Context.Theme, new Theme() { Key = ParamValue, Type = DType, Value = DValue } );
-					}
-				}
-
-				return Context.SaveChangesAsync();
-			}
-
 		}
 
 		private async Task M0002_Books_TypeS()

@@ -9,18 +9,18 @@ using Windows.UI.Xaml;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
 namespace GR.MigrationOps
 {
 	using CompositeElement;
 	using GSystem;
+	using Model.Interfaces;
 	using Resources;
 
 	class MigrationManager : ActiveData
 	{
-		Type[] Mops = new Type[] { typeof( M0000 ) };
+		Type[] Mops = new Type[] { typeof( M0000 ), typeof( M0001 ) };
 
 		private string[] SupportedMops;
 
