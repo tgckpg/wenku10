@@ -16,7 +16,7 @@ namespace GR.Model.Pages.ContentReader
 		{
 			get
 			{
-				return new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_ASSISTBG );
+				return new SolidColorBrush( GRConfig.ContentReader.BgColorAssist );
 			}
 		}
 

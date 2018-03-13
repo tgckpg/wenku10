@@ -67,9 +67,9 @@ namespace wenku10.Pages.Settings.Themes
 			TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
 			TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
 
-			TogPageClick.IsOn = !Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
-			TogDoubleTap.IsOn = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
-			TogEmbedIllus.IsOn = Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS;
+			TogPageClick.IsOn = !GRConfig.ContentReader.ReadingAnchor;
+			TogDoubleTap.IsOn = GRConfig.ContentReader.DoubleTap;
+			TogEmbedIllus.IsOn = GRConfig.ContentReader.EmbedIllus;
 		}
 
 		#region BookInfoView
@@ -97,14 +97,14 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void Toggled_EmbedIllus( object sender, RoutedEventArgs e )
 		{
-			Properties.APPEARANCE_CONTENTREADER_EMBED_ILLUS = TogEmbedIllus.IsOn;
+			GRConfig.ContentReader.EmbedIllus = TogEmbedIllus.IsOn;
 		}
 
 		private async void Toggled_PageClick( object sender, RoutedEventArgs e )
 		{
 			if ( !TemplateSet ) return;
 
-			if ( TogPageClick.IsOn && Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR )
+			if ( TogPageClick.IsOn && GRConfig.ContentReader.ReadingAnchor )
 			{
 				StringResources stx = new StringResources( "Settings" );
 				MessageDialog Msg = new MessageDialog( stx.Text( "Layout_ContentReader_UsePageClick_Warning" ), stx.Text( "Layout_ContentReader_UsePageClick" ) );
@@ -119,11 +119,11 @@ namespace wenku10.Pages.Settings.Themes
 				await Popups.ShowDialog( Msg );
 			}
 
-			Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = !TogPageClick.IsOn;
+			GRConfig.ContentReader.ReadingAnchor = !TogPageClick.IsOn;
 
 			if ( TogPageClick.IsOn )
 			{
-				Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn = false;
+				GRConfig.ContentReader.DoubleTap = TogDoubleTap.IsOn = false;
 			}
 		}
 
@@ -131,11 +131,11 @@ namespace wenku10.Pages.Settings.Themes
 		{
 			if ( !TemplateSet ) return;
 
-			Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = TogDoubleTap.IsOn;
+			GRConfig.ContentReader.DoubleTap = TogDoubleTap.IsOn;
 
 			if ( TogDoubleTap.IsOn )
 			{
-				Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR = true;
+				GRConfig.ContentReader.ReadingAnchor = true;
 				TogPageClick.IsOn = false;
 			}
 		}

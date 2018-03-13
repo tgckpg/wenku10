@@ -70,8 +70,8 @@ namespace wenku10.Pages
 
 		public bool UseInertia
 		{
-			get { return Properties.CONTENTREADER_USEINERTIA; }
-			set { Properties.CONTENTREADER_USEINERTIA = value; }
+			get => GRConfig.ContentReader.UseInertia;
+			set => GRConfig.ContentReader.UseInertia = value;
 		}
 
 		protected bool OrientationRedraw = false;
@@ -426,10 +426,11 @@ namespace wenku10.Pages
 					ContentView?.Dispose();
 
 					// Set Predefined BlockHeight if available
-					if ( 0 < Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+					double BlockHeight = GRConfig.ContentReader.BlockHeight;
+					if ( 0 < BlockHeight )
 					{
-						VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( Properties.APPEARANCE_CONTENTREADER_FONTSIZE );
-						LogaTable.Override( Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT );
+						VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( GRConfig.ContentReader.FontSize );
+						LogaTable.Override( BlockHeight );
 					}
 
 					ContentView = new ReaderContent( this, Anchor );
@@ -719,7 +720,7 @@ namespace wenku10.Pages
 				Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
 			};
 
-			_MainSplitView.FlowDirection = Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT
+			_MainSplitView.FlowDirection = GRConfig.ContentReader.LeftContext
 				? FlowDirection.LeftToRight
 				: FlowDirection.RightToLeft;
 
@@ -733,13 +734,13 @@ namespace wenku10.Pages
 			{
 				if ( _MainSplitView.FlowDirection == FlowDirection.LeftToRight )
 				{
-					Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT = false;
+					GRConfig.ContentReader.LeftContext = false;
 					RectInd.HorizontalAlignment = HorizontalAlignment.Right;
 					_MainSplitView.FlowDirection = FlowDirection.RightToLeft;
 				}
 				else
 				{
-					Properties.APPEARANCE_CONTENTREADER_LEFTCONTEXT = true;
+					GRConfig.ContentReader.LeftContext = true;
 					RectInd.HorizontalAlignment = HorizontalAlignment.Left;
 					_MainSplitView.FlowDirection = FlowDirection.LeftToRight;
 				}
@@ -887,7 +888,6 @@ namespace wenku10.Pages
 			if ( ClockTicker == null ) return;
 			ClockTicker.Stop();
 
-			( _Clock.DataContext as ESContext ).Dispose();
 			_UpperBack.DataContext
 				= _LowerBack.DataContext
 				= null;

@@ -51,7 +51,7 @@ namespace wenku10.Pages.Settings
 			OneDriveToggle.IsOn = Properties.ENABLE_ONEDRIVE;
 
 			// Phone should disable double tap
-			Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP = !MainStage.Instance.IsPhone;
+			GRConfig.ContentReader.DoubleTap = !MainStage.Instance.IsPhone;
 		}
 
 		private void Prev( object sender, RoutedEventArgs e ) { Prev(); }
@@ -118,27 +118,27 @@ namespace wenku10.Pages.Settings
 		private void SetTheme()
 		{
 			global::GR.Settings.Theme.ThemeSet T;
-			if( ThemeToggle.IsOn )
+			if ( ThemeToggle.IsOn )
 			{
 				T = global::GR.GSystem.ThemeManager.DefaultDark();
 				T.GreyShades();
 
-				Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 255, 20, 20, 20 );
-				Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = Windows.UI.Color.FromArgb( 255, 45, 77, 59 );
-				Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = Windows.UI.Color.FromArgb( 255, 138, 41, 0 );
-				Properties.APPEARANCE_CONTENTREADER_NAVBG = Windows.UI.Color.FromArgb( 255, 50, 50, 50 );
-				Properties.APPEARANCE_CONTENTREADER_ASSISTBG = Windows.UI.Color.FromArgb( 23, 0, 0, 0 );
+				GRConfig.ContentReader.BackgroundColor = Windows.UI.Color.FromArgb( 255, 20, 20, 20 );
+				GRConfig.ContentReader.FontColor = Windows.UI.Color.FromArgb( 255, 45, 77, 59 );
+				GRConfig.ContentReader.TapBrushColor = Windows.UI.Color.FromArgb( 255, 138, 41, 0 );
+				GRConfig.ContentReader.BgColorNav = Windows.UI.Color.FromArgb( 255, 50, 50, 50 );
+				GRConfig.ContentReader.BgColorAssist = Windows.UI.Color.FromArgb( 23, 0, 0, 0 );
 			}
 			else
 			{
 				T = global::GR.GSystem.ThemeManager.DefaultLight();
 				T.BlackShades();
 
-				Properties.APPEARANCE_CONTENTREADER_BACKGROUND = Windows.UI.Color.FromArgb( 180, 0, 0, 0 );
-				Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = Windows.UI.Color.FromArgb( 255, 98, 167, 130 );
-				Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = Windows.UI.Color.FromArgb( 255, 255, 88, 9 );
-				Properties.APPEARANCE_CONTENTREADER_NAVBG = Windows.UI.Color.FromArgb( 255, 81, 94, 108 );
-				Properties.APPEARANCE_CONTENTREADER_ASSISTBG = Windows.UI.Color.FromArgb( 23, 0, 0, 0 );
+				GRConfig.ContentReader.BackgroundColor = Windows.UI.Color.FromArgb( 180, 0, 0, 0 );
+				GRConfig.ContentReader.FontColor = Windows.UI.Color.FromArgb( 255, 98, 167, 130 );
+				GRConfig.ContentReader.TapBrushColor = Windows.UI.Color.FromArgb( 255, 255, 88, 9 );
+				GRConfig.ContentReader.BgColorNav = Windows.UI.Color.FromArgb( 255, 81, 94, 108 );
+				GRConfig.ContentReader.BgColorAssist = Windows.UI.Color.FromArgb( 23, 0, 0, 0 );
 			}
 
 			T.Apply();

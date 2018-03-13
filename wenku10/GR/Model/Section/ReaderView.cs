@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
+using Net.Astropenguin.Messaging;
 
 namespace GR.Model.Section
 {
@@ -25,9 +27,9 @@ namespace GR.Model.Section
 
 	class ReaderView : ActiveData, IDisposable
 	{
-		public bool AutoBookmark = Properties.CONTENTREADER_AUTOBOOKMARK;
-		public bool AutoAnchor = Properties.APPEARANCE_CONTENTREADER_ENABLEREADINGANCHOR;
-		public bool DoubleTap = Properties.APPEARANCE_CONTENTREADER_ENABLEDOUBLETAP;
+		public bool AutoBookmark = GRConfig.ContentReader.AutoBookmark;
+		public bool AutoAnchor = GRConfig.ContentReader.ReadingAnchor;
+		public bool DoubleTap = GRConfig.ContentReader.DoubleTap;
 		public bool UsePageClick { get { return !AutoAnchor; } }
 		public bool UseDoubleTap { get { return DoubleTap; } }
 
@@ -35,11 +37,13 @@ namespace GR.Model.Section
 
 		public Converters.ParaTemplateSelector TemplateSelector { get; set; }
 
+		private static SolidColorBrush TapBrush = new SolidColorBrush( GRConfig.ContentReader.TapBrushColor );
+
 		public Brush BackgroundBrush
 		{
 			get
 			{
-				return new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
+				return new SolidColorBrush( GRConfig.ContentReader.BackgroundColor );
 			}
 		}
 
@@ -49,10 +53,10 @@ namespace GR.Model.Section
 			get { return Selected; }
 			private set
 			{
-				if( Selected != null ) Selected.FontColor = null;
+				if ( Selected != null ) Selected.FontColor = null;
 
-				if( value != null )
-					value.FontColor = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR );
+				if ( value != null )
+					value.FontColor = TapBrush;
 
 				NotifyChanged( "SelectedIndex" );
 				Selected = value;
@@ -89,7 +93,7 @@ namespace GR.Model.Section
 		{
 			Settings = new Settings.Layout.ContentReader();
 
-			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
 			InitParams();
 		}
 
@@ -107,8 +111,6 @@ namespace GR.Model.Section
 		{
 			try
 			{
-				AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
-				foreach ( Paragraph P in Data ) P.Dispose();
 				CL = null;
 				Data = null;
 			}
@@ -177,14 +179,14 @@ namespace GR.Model.Section
 
 			Volume[] Vols = CL.CurrentBook.GetVolumes();
 
-			foreach( Volume Vol in Vols )
+			foreach ( Volume Vol in Vols )
 			{
 				Items.Add( new BookmarkListItem( Vol ) );
 				foreach ( Chapter C in Vol.Chapters )
 				{
 					IEnumerable<XParameter> Params = Anchors.GetCustomAncs( C.Meta[ AppKeys.GLOBAL_CID ] );
 					if ( Params == null ) continue;
-					foreach( XParameter Param in Params )
+					foreach ( XParameter Param in Params )
 					{
 						Items.Add( new BookmarkListItem( Vol, Param ) );
 					}
@@ -198,7 +200,7 @@ namespace GR.Model.Section
 		{
 			int index = flyoutTargetItem.AnchorIndex;
 			Anchors.RemoveCustomAnc( flyoutTargetItem.GetChapter().Meta[ AppKeys.GLOBAL_CID ], index );
-			if( index < Data.Count() )
+			if ( index < Data.Count() )
 			{
 				Data[ index ].AnchorColor = null;
 			}
@@ -210,7 +212,7 @@ namespace GR.Model.Section
 		/// </summary>
 		public Paragraph GetAutoAnchor()
 		{
-			if( Data != null )
+			if ( Data != null )
 			{
 				int index = -1;
 				if ( AutoAnchor )
@@ -218,7 +220,7 @@ namespace GR.Model.Section
 					index = Anchors.GetAutoChAnc( BindChapter.Meta[ AppKeys.GLOBAL_CID ] );
 				}
 
-				if( AutoAnchorOvd != -1 )
+				if ( AutoAnchorOvd != -1 )
 				{
 					index = AutoAnchorOvd;
 					AutoAnchorOvd = -1;
@@ -241,7 +243,7 @@ namespace GR.Model.Section
 		public void SelectAndAnchor( Paragraph P )
 		{
 			SelectedData = P;
-			if( AutoAnchor )
+			if ( AutoAnchor )
 			{
 				Anchors.SaveAutoChAnc( BindChapter.Meta[ AppKeys.GLOBAL_CID ], Data.IndexOf( P ) );
 			}
@@ -260,7 +262,7 @@ namespace GR.Model.Section
 			CL.CurrentBook.Entry.LastAccess = DateTime.Now;
 			CL.CurrentBook.SaveInfo();
 
-			if( AutoBookmark )
+			if ( AutoBookmark )
 			{
 				Anchors.SaveAutoVolAnc( BindChapter.Meta[ AppKeys.GLOBAL_CID ] );
 			}
@@ -283,10 +285,10 @@ namespace GR.Model.Section
 			IEnumerable<XParameter> ThisAnchors = Anchors.GetCustomAncs( cid );
 			if ( ThisAnchors == null ) return;
 			int l = data.Count();
-			foreach( XParameter Anchors in ThisAnchors )
+			foreach ( XParameter Anchors in ThisAnchors )
 			{
 				int Index = int.Parse( Anchors.GetValue( AppKeys.LBS_INDEX ) );
-				if( Index < l )
+				if ( Index < l )
 				{
 					Data[ Index ].AnchorColor = new SolidColorBrush(
 						ThemeManager.StringColor( Anchors.GetValue( AppKeys.LBS_COLOR ) )
@@ -295,13 +297,19 @@ namespace GR.Model.Section
 			}
 		}
 
-		private void AppSettings_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
+		private void CRConfigChanged( Message Mesg )
 		{
-			switch( e.PropertyName )
+			if ( Mesg.TargetType == typeof( Config.Scopes.ContentReader ) )
 			{
-				case Parameters.APPEARANCE_CONTENTREADER_BACKGROUND:
-					NotifyChanged( "BackgroundBrush" );
-					break;
+				switch ( Mesg.Content )
+				{
+					case "BackgroundColor":
+						NotifyChanged( "BackgroundBrush" );
+						break;
+					case "TapBrushColor":
+						TapBrush = new SolidColorBrush( ( Color ) Mesg.Payload );
+						break;
+				}
 			}
 		}
 

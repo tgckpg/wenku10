@@ -318,7 +318,7 @@ namespace GR.PageExtensions
 				// Set the default configs
 				if ( Config == null )
 				{
-					Config = new GRSystem() { Key = ConfigId };
+					Config = new GRSystem() { Key = ConfigId, Type = GSDataType.STRING };
 					Config.Value = ActionName;
 
 					Settings.System.Add( Config );

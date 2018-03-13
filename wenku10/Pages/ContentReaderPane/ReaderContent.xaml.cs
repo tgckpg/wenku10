@@ -29,6 +29,7 @@ using GR.Model.Text;
 using GR.Resources;
 
 using BookItem = GR.Model.Book.BookItem;
+using Net.Astropenguin.Messaging;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -67,7 +68,6 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			try
 			{
-				AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
 				Reader.PropertyChanged -= ScrollToParagraph;
 				Reader.Dispose();
 				Reader = null;
@@ -96,12 +96,15 @@ namespace wenku10.Pages.ContentReaderPane
 
 			MasterGrid.DataContext = Reader;
 			Reader.PropertyChanged += ScrollToParagraph;
-			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
 		}
 
-		private void AppSettings_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void CRConfigChanged( Message Mesg )
 		{
-			if( e.PropertyName == Parameters.APPEARANCE_CONTENTREADER_SCROLLBAR ) UpdateScrollBar();
+			if ( Mesg.TargetType == typeof( GR.Config.Scopes.ContentReader ) && Mesg.Content == "ScrollBarColor" )
+			{
+				UpdateScrollBar();
+			}
 		}
 
 		internal void Load( bool Reload = false )
@@ -219,7 +222,7 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			VScrollBar.Foreground
 			   = HScrollBar.Foreground
-			   = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_SCROLLBAR );
+			   = new SolidColorBrush( GRConfig.ContentReader.ScrollBarColor );
 		}
 
 		internal void ToggleInertia()

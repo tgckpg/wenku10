@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Windows.UI;
 using Windows.UI.Xaml.Media;
 
 using Net.Astropenguin.DataModel;
@@ -10,12 +11,13 @@ namespace GR.Model.Section
 {
 	using Config;
 	using ListItem;
+	using Net.Astropenguin.Messaging;
 
 	class NavPaneSection : ActiveData
 	{
 		public object Context { get; private set; }
 
-		private Brush bbrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
+		private Brush bbrush = new SolidColorBrush( GRConfig.ContentReader.BgColorNav );
 		private ContentReaderBase Reader;
 
 		public IList<PaneNavButton> Nav { get; private set; }
@@ -35,19 +37,14 @@ namespace GR.Model.Section
 			Reader = ReaderPage;
 			Nav = NavButtons;
 			SelectSection( NavButtons[ 0 ] );
-			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
 		}
 
-		~NavPaneSection()
+		private void CRConfigChanged( Message Mesg )
 		{
-			AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
-		}
-
-		private void AppSettings_PropertyChanged( object sender, global::System.ComponentModel.PropertyChangedEventArgs e )
-		{
-			if( e.PropertyName == Parameters.APPEARANCE_CONTENTREADER_NAVBG )
+			if ( Mesg.TargetType == typeof( Config.Scopes.ContentReader ) && Mesg.Content == "BgColorNav" )
 			{
-				BackgroundBrush = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_NAVBG );
+				BackgroundBrush = new SolidColorBrush( ( Color ) Mesg.Payload );
 			}
 		}
 
