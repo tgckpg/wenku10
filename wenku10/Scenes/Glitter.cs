@@ -30,7 +30,7 @@ namespace wenku10.Scenes
 
 		public Glitter()
 		{
-			Color C = Properties.APPEARENCE_THEME_HORIZONTAL_RIBBON_COLOR;
+			Color C = GRConfig.Theme.RibbonColorHorz;
 			ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
 
 			PFSim.Create( MainStage.Instance.IsPhone ? 25 : 50 );

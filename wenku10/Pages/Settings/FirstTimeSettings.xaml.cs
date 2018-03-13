@@ -48,7 +48,7 @@ namespace wenku10.Pages.Settings
 
 		private void SetTemplate()
 		{
-			OneDriveToggle.IsOn = Properties.ENABLE_ONEDRIVE;
+			OneDriveToggle.IsOn = GRConfig.System.EnableOneDrive;
 
 			// Phone should disable double tap
 			GRConfig.ContentReader.DoubleTap = !MainStage.Instance.IsPhone;
@@ -105,7 +105,7 @@ namespace wenku10.Pages.Settings
 
 		private async void OneDrive( object sender, RoutedEventArgs e )
 		{
-			if( Properties.ENABLE_ONEDRIVE = OneDriveToggle.IsOn )
+			if( GRConfig.System.EnableOneDrive = OneDriveToggle.IsOn )
 			{
 				await OneDriveSync.Instance.Authenticate();
 			}

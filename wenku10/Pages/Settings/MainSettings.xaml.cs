@@ -168,7 +168,7 @@ namespace wenku10.Pages.Settings
 						, new ActionItem( stx.Text( "Data_Illustration"), stx.Text( "Desc_Data_Illustration" ), typeof( Data.Illustration ) )
 						, new ActionItem( stx.Text( "Data_Preload"), stx.Text( "Desc_Data_Preload" ), typeof( Data.Preload ) )
 						, new ActionItem( stx.Text( "EBWin"), stx.Text( "Desc_EBWin_Short" ), typeof( Data.EBWin ) )
-						, OneDriveButton = new ActionItem( "OneDrive", Properties.ENABLE_ONEDRIVE ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
+						, OneDriveButton = new ActionItem( "OneDrive", GRConfig.System.EnableOneDrive ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
 						// , new ActionItem( stx.Text( "Data_Connection"), stx.Text( "Desc_Data_Connection" ), typeof( Data.Cache ) )
 					}
 					, ItemAction = PopupSettings
@@ -270,21 +270,21 @@ namespace wenku10.Pages.Settings
 			if( P.GetType() == typeof( bool ) )
 			{
 				StringResources sts = new StringResources( "Settings" );
-				if ( !Properties.ENABLE_ONEDRIVE )
+				if ( !GRConfig.System.EnableOneDrive )
 				{
 					StringResources stx = new StringResources( "InitQuestions" );
 					StringResources stm = new StringResources( "Message" );
 					MessageDialog Msg = new MessageDialog( stx.Text( "EnableOneDrive" ), "OneDrive" );
 					Msg.Commands.Add(
-						new UICommand( stm.Str( "Yes" ), ( x ) => Properties.ENABLE_ONEDRIVE = true )
+						new UICommand( stm.Str( "Yes" ), ( x ) => GRConfig.System.EnableOneDrive = true )
 					);
 					Msg.Commands.Add(
-						new UICommand( stm.Str( "No" ), ( x ) => Properties.ENABLE_ONEDRIVE = false )
+						new UICommand( stm.Str( "No" ), ( x ) => GRConfig.System.EnableOneDrive = false )
 					);
 
 					await Popups.ShowDialog( Msg );
 
-					if ( Properties.ENABLE_ONEDRIVE )
+					if ( GRConfig.System.EnableOneDrive )
 					{
 						await global::GR.Storage.OneDriveSync.Instance.Authenticate();
 					}
@@ -293,7 +293,7 @@ namespace wenku10.Pages.Settings
 				}
 				else
 				{
-					Properties.ENABLE_ONEDRIVE = false;
+					GRConfig.System.EnableOneDrive = false;
 					await global::GR.Storage.OneDriveSync.Instance.UnAuthenticate();
 					OneDriveButton.Desc = sts.Text( "Disabled" );
 				}

@@ -42,7 +42,7 @@ namespace GR.Model.Section
 			CurrentBook = b;
 			Volumes = b.GetVolumes();
 
-			if ( Properties.MISC_CHUNK_SINGLE_VOL )
+			if ( GRConfig.System.ChunkSingleVol )
 				VirtualizeVolumes();
 
 			SetAutoAnchor();

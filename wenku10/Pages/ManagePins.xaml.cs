@@ -105,7 +105,7 @@ namespace wenku10.Pages
 			PinPolicyBtn.Click += RotatePolicy;
 			UpdatePinPolicy( stx );
 
-			if ( Properties.ENABLE_ONEDRIVE )
+			if ( GRConfig.System.EnableOneDrive )
 			{
 				AppBarButtonEx OneDriveButton = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "Sync" ) );
 				ButtonOperation SyncOp = new ButtonOperation( OneDriveButton );

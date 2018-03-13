@@ -655,10 +655,8 @@ namespace wenku10.Pages
 			OriIndicator = new Rectangle
 			{
 				Width = 35,
-				Height = 35
-				,
-				Stroke = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
-				,
+				Height = 35,
+				Stroke = new SolidColorBrush( GRConfig.Theme.RelColorShades ),
 				StrokeThickness = 2
 			};
 
@@ -717,7 +715,7 @@ namespace wenku10.Pages
 			{
 				Width = 20,
 				Height = 40,
-				Fill = new SolidColorBrush( Properties.APPEARENCE_THEME_RELATIVE_SHADES_COLOR )
+				Fill = new SolidColorBrush( GRConfig.Theme.RelColorShades )
 			};
 
 			_MainSplitView.FlowDirection = GRConfig.ContentReader.LeftContext

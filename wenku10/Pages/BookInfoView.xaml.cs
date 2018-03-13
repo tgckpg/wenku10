@@ -192,11 +192,7 @@ namespace wenku10.Pages
 
 					bool CanBing = BingExists || string.IsNullOrEmpty( Book.Info.CoverSrcUrl );
 
-					UsingBing.Foreground = new SolidColorBrush(
-						BingExists
-						? Properties.APPEARENCE_THEME_MINOR_COLOR
-						: Properties.APPEARENCE_THEME_SUBTLE_TEXT_COLOR );
-
+					UsingBing.Foreground = new SolidColorBrush( BingExists ? GRConfig.Theme.ColorMinor : GRConfig.Theme.SubtleColor );
 					UsingBing.IsEnabled = CanBing;
 				}
 

@@ -67,7 +67,7 @@ namespace wenku10.Pages
 			StringResources stx = new StringResources( "AppBar" );
 			List<ICommandBarElement> Btns = new List<ICommandBarElement>();
 
-			if ( Properties.ENABLE_ONEDRIVE )
+			if ( GRConfig.System.EnableOneDrive )
 			{
 				AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "SyncBookmarks" ) );
 				ButtonOperation SyncOp = new ButtonOperation( OneDriveBtn );

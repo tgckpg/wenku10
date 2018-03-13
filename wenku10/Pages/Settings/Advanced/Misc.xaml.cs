@@ -25,8 +25,8 @@ namespace wenku10.Pages.Settings.Advanced
 		public Misc()
 		{
 			this.InitializeComponent();
-			SyntaxPatchToggle.IsOn = Properties.MISC_TEXT_PATCH_SYNTAX;
-			ChunkVolsToggle.IsOn = Properties.MISC_CHUNK_SINGLE_VOL;
+			SyntaxPatchToggle.IsOn = GRConfig.System.ChunkSingleVol;
+			ChunkVolsToggle.IsOn = GRConfig.System.PatchSyntax;
 #if DEBUG
 			BgTaskInterval.Minimum = 15;
 #else
@@ -40,12 +40,12 @@ namespace wenku10.Pages.Settings.Advanced
 		private void ToggleSynPatch( object sender, RoutedEventArgs e )
 		{
 			Manipulation.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
-			Properties.MISC_TEXT_PATCH_SYNTAX = SyntaxPatchToggle.IsOn;
+			GRConfig.System.PatchSyntax = SyntaxPatchToggle.IsOn;
 		}
 
 		private void ToggleChunkVols( object sender, RoutedEventArgs e )
 		{
-			Properties.MISC_CHUNK_SINGLE_VOL = ChunkVolsToggle.IsOn;
+			GRConfig.System.ChunkSingleVol = ChunkVolsToggle.IsOn;
 		}
 
 		private void BgTaskInterval_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
@@ -67,8 +67,7 @@ namespace wenku10.Pages.Settings.Advanced
 
 		private void UpdateBgTaskSlider( object sender, TextChangedEventArgs e )
 		{
-			int Val;
-			if ( int.TryParse( BgTaskIntvlInput.Text, out Val ) )
+			if ( int.TryParse( BgTaskIntvlInput.Text, out int Val ) )
 			{
 				BgTaskInterval.Value = Val;
 			}

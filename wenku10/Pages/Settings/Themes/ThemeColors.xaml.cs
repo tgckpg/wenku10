@@ -111,7 +111,7 @@ namespace wenku10.Pages.Settings.Themes
 
 			List<ICommandBarElement> Btns = new List<ICommandBarElement>();
 
-			if ( Properties.ENABLE_ONEDRIVE )
+			if ( GRConfig.System.EnableOneDrive )
 			{
 				AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "Sync" ) );
 
