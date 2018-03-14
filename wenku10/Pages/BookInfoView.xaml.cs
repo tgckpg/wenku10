@@ -31,6 +31,7 @@ using GR.Model.ListItem.Sharers;
 using GR.Model.ListItem;
 using GR.Model.Loaders;
 using GR.Model.Pages;
+using GR.Model.Section;
 using GR.Resources;
 using GR.Settings;
 using GR.Storage;
@@ -58,8 +59,6 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get ; private set; }
 
-		private global::GR.Settings.Layout.BookInfoView LayoutSettings;
-
 		AppBarButton FavBtn;
 		AppBarButton BrowserBtn;
 		AppBarButton TOCBtn;
@@ -67,6 +66,7 @@ namespace wenku10.Pages
 		AppBarButton CommentBtn;
 		AppBarButton AuthorBtn;
 
+		BgContext InfoBgContext;
 		Storyboard CacheStateStory;
 
 		private volatile bool BookLoading = false;
@@ -93,7 +93,7 @@ namespace wenku10.Pages
 
 		public void SoftOpen( bool NavForward )
 		{
-			LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
+			InfoBgContext?.Reload();
 			SyncAnchors();
 		}
 
@@ -101,12 +101,13 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
-			LayoutSettings = new global::GR.Settings.Layout.BookInfoView();
-
 			Indicators.RenderTransform = new TranslateTransform();
 			HeaderPanel.RenderTransform = new TranslateTransform();
 			StatusPanel.RenderTransform = new TranslateTransform();
 			IntroText.RenderTransform = new TranslateTransform();
+
+			InfoBgContext = new BgContext( GRConfig.BookInfoView.BgContext );
+			InfoBgContext.ApplyBackgrounds();
 
 			InitAppBar();
 
@@ -239,7 +240,7 @@ namespace wenku10.Pages
 				CommentBtn.IsEnabled = !ThisBook.IsLocal();
 				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.Info.OriginalUrl );
 				LayoutRoot.DataContext = ThisBook;
-				InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
+				InfoBgGrid.DataContext = InfoBgContext;
 			}
 		}
 
@@ -264,7 +265,7 @@ namespace wenku10.Pages
 
 			}
 
-			LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
+			InfoBgContext.SetBackground( Argv[ 0 ] );
 		}
 
 		private void FlyoutBase_Click( object sender, RoutedEventArgs e )
@@ -302,9 +303,9 @@ namespace wenku10.Pages
 		{
 			CommentBtn.IsEnabled = false;
 
-			if ( !LayoutSettings.TwitterConfirmed )
+			if ( !GRConfig.System.TwitterConfirmed )
 			{
-				LayoutSettings.TwitterConfirmed = true;
+				GRConfig.System.TwitterConfirmed = true;
 				StringResources stx = new StringResources( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
 			}

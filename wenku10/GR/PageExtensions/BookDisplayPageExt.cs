@@ -254,7 +254,7 @@ namespace GR.PageExtensions
 		{
 			if ( TryGetBookItem( DataContext, out BookItem BkItem ) )
 			{
-				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BkItem ) );
+				ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new wenku10.Pages.BookInfoView( BkItem ) );
 			}
 		}
 

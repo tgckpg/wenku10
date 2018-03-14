@@ -46,11 +46,11 @@ namespace GR.Model.Pages.ContentReader
 
 		private void GRConfigChanged( Message Mesg )
 		{
-			if ( Mesg.TargetType == typeof( Config.Scopes.ContentReader.Conf_Clock ) )
+			if ( Mesg.TargetType == typeof( Config.Scopes.Conf_ContentReader.Conf_Clock ) )
 			{
 				UpdateClock( Mesg.Content, Mesg.Payload );
 			}
-			else if ( Mesg.TargetType == typeof( Config.Scopes.ContentReader.Conf_EpStepper ) )
+			else if ( Mesg.TargetType == typeof( Config.Scopes.Conf_ContentReader.Conf_EpStepper ) )
 			{
 				UpdateEpStepper( Mesg.Content, Mesg.Payload );
 			}

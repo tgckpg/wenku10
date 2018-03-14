@@ -10,58 +10,6 @@
 
     <Grid Background="{StaticResource MajorBackgroundBrush}">
         <Pivot>
-            <!-- Table of Contents -->
-            <PivotItem>
-                <PivotItem.Header>
-                    <TextBlock x:Uid="/AppBar/TOC"
-                               Text="Table of Contents" />
-                </PivotItem.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <StackPanel>
-                        <!-- Toggle FlowDirection -->
-                        <ToggleSwitch x:Name="TogBInFlo" Toggled="Toggled_BFlow">
-                            <ToggleSwitch.Header>
-                                <TextBlock Foreground="{StaticResource MinorBrush}"
-                                           x:Uid="/Settings/Layout_FlowDirection"
-                                           Text="FlowDirection" />
-                            </ToggleSwitch.Header>
-                            <ToggleSwitch.OnContent>
-                                <TextBlock x:Uid="/Settings/Layout_FlowRight"
-                                           Foreground="{StaticResource MajorBrush}"
-                                           Text="RightToLeft" />
-                            </ToggleSwitch.OnContent>
-                            <ToggleSwitch.OffContent>
-                                <TextBlock x:Uid="/Settings/Layout_FlowLeft"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="LeftToRight" />
-                            </ToggleSwitch.OffContent>
-                        </ToggleSwitch>
-                        <!-- Toggle Aligment of Table of Contents -->
-                        <ToggleSwitch x:Name="TogTOCAlign" Toggled="Toggled_TOCAlign" Tag="HorizontalTOC">
-                            <ToggleSwitch.Header>
-                                <TextBlock x:Uid="/Settings/Layout_Alignment"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="TOC Alignment" />
-                            </ToggleSwitch.Header>
-                            <ToggleSwitch.OnContent>
-                                <TextBlock x:Uid="/Settings/Layout_Aligment_Horizontal"
-                                           Foreground="{StaticResource MajorBrush}"
-                                           Text="Enabled" />
-                            </ToggleSwitch.OnContent>
-                            <ToggleSwitch.OffContent>
-                                <TextBlock x:Uid="/Settings/Layout_Aligment_Vertical"
-                                           Foreground="{StaticResource MinorBrush}"
-                                           Text="Disabled" />
-                            </ToggleSwitch.OffContent>
-                        </ToggleSwitch>
-                    </StackPanel>
-                </Grid>
-            </PivotItem>
             <!-- Content Reader -->
             <PivotItem>
                 <PivotItem.Header>

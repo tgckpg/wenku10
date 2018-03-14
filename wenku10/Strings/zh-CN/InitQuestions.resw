@@ -207,4 +207,7 @@
   <data name="WarnMigrateWithBackup.Text" xml:space="preserve">
     <value>现有数据将被此备份取代。要继续吗？</value>
   </data>
+  <data name="MigrateDatabase.Text" xml:space="preserve">
+    <value>迁移数据库…</value>
+  </data>
 </root>

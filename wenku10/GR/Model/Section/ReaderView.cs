@@ -27,25 +27,17 @@ namespace GR.Model.Section
 
 	class ReaderView : ActiveData, IDisposable
 	{
-		public bool AutoBookmark = GRConfig.ContentReader.AutoBookmark;
-		public bool AutoAnchor = GRConfig.ContentReader.ReadingAnchor;
-		public bool DoubleTap = GRConfig.ContentReader.DoubleTap;
-		public bool UsePageClick { get { return !AutoAnchor; } }
-		public bool UseDoubleTap { get { return DoubleTap; } }
+		private bool AutoBookmark = GRConfig.ContentReader.AutoBookmark;
+		private bool AutoAnchor = GRConfig.ContentReader.ReadingAnchor;
+		private bool DoubleTap = GRConfig.ContentReader.DoubleTap;
 
-		public Settings.Layout.ContentReader Settings { get; set; }
+		public bool UsePageClick => !AutoAnchor;
+		public bool UseDoubleTap => DoubleTap;
 
 		public Converters.ParaTemplateSelector TemplateSelector { get; set; }
 
 		private static SolidColorBrush TapBrush = new SolidColorBrush( GRConfig.ContentReader.TapBrushColor );
-
-		public Brush BackgroundBrush
-		{
-			get
-			{
-				return new SolidColorBrush( GRConfig.ContentReader.BackgroundColor );
-			}
-		}
+		public Brush BackgroundBrush => new SolidColorBrush( GRConfig.ContentReader.BackgroundColor );
 
 		public IList<Paragraph> Data { get; private set; }
 		public Paragraph SelectedData
@@ -68,10 +60,7 @@ namespace GR.Model.Section
 			get { return Selected == null ? 0 : Data.IndexOf( SelectedData ); }
 		}
 
-		public IEnumerable<ActiveData> CustomAnchors
-		{
-			get { return GetAnchors(); }
-		}
+		public IEnumerable<ActiveData> CustomAnchors => GetAnchors();
 
 		public FlowDirection FlowDir { get; private set; }
 		public Thickness Margin { get; private set; }
@@ -91,8 +80,6 @@ namespace GR.Model.Section
 		/// </summary>
 		public ReaderView()
 		{
-			Settings = new Settings.Layout.ContentReader();
-
 			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
 			InitParams();
 		}
@@ -121,7 +108,7 @@ namespace GR.Model.Section
 
 		private void InitParams()
 		{
-			SetLayout( Settings.IsHorizontal, Settings.IsRightToLeft );
+			SetLayout( GRConfig.ContentReader.IsHorizontal, GRConfig.ContentReader.IsRightToLeft );
 		}
 
 		private void OverrideParams( BookItem B )
@@ -299,7 +286,7 @@ namespace GR.Model.Section
 
 		private void CRConfigChanged( Message Mesg )
 		{
-			if ( Mesg.TargetType == typeof( Config.Scopes.ContentReader ) )
+			if ( Mesg.TargetType == typeof( Config.Scopes.Conf_ContentReader ) )
 			{
 				switch ( Mesg.Content )
 				{

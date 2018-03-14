@@ -42,7 +42,7 @@ namespace GR.Model.Section
 
 		private void CRConfigChanged( Message Mesg )
 		{
-			if ( Mesg.TargetType == typeof( Config.Scopes.ContentReader ) && Mesg.Content == "BgColorNav" )
+			if ( Mesg.TargetType == typeof( Config.Scopes.Conf_ContentReader ) && Mesg.Content == "BgColorNav" )
 			{
 				BackgroundBrush = new SolidColorBrush( ( Color ) Mesg.Payload );
 			}

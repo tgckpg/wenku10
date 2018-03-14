@@ -41,7 +41,6 @@ namespace wenku10.Pages
 		protected AppBarButton JumpMarkBtn;
 
 		protected TOCSection TOCData;
-		protected global::GR.Settings.Layout.BookInfoView LayoutSettings;
 
 		protected BookItem ThisBook;
 		protected Volume RightClickedVolume;
@@ -57,10 +56,7 @@ namespace wenku10.Pages
 			InitAppBar();
 		}
 
-		virtual protected void SetTemplate()
-		{
-			LayoutSettings = new global::GR.Settings.Layout.BookInfoView();
-		}
+		virtual protected void SetTemplate() { }
 
 		protected void InitAppBar()
 		{

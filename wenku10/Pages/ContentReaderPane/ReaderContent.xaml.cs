@@ -101,7 +101,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private void CRConfigChanged( Message Mesg )
 		{
-			if ( Mesg.TargetType == typeof( GR.Config.Scopes.ContentReader ) && Mesg.Content == "ScrollBarColor" )
+			if ( Mesg.TargetType == typeof( GR.Config.Scopes.Conf_ContentReader ) && Mesg.Content == "ScrollBarColor" )
 			{
 				UpdateScrollBar();
 			}
@@ -313,15 +313,15 @@ namespace wenku10.Pages.ContentReaderPane
 				Point P = e.GetPosition( MasterGrid );
 				if ( IsHorz )
 				{
-					double HW = 0.5 * global::GR.Resources.LayoutSettings.ScreenWidth;
-					if ( Reader.Settings.IsRightToLeft )
+					double HW = 0.5 * LayoutSettings.ScreenWidth;
+					if ( GRConfig.ContentReader.IsRightToLeft )
 						if ( P.X < HW ) ScrollMore( true ); else ScrollLess( true );
 					else
 						if ( HW < P.X ) ScrollMore( true ); else ScrollLess( true );
 				}
 				else
 				{
-					double HS = 0.5 * global::GR.Resources.LayoutSettings.ScreenHeight;
+					double HS = 0.5 * LayoutSettings.ScreenHeight;
 					if ( P.Y < HS ) ScrollLess( true ); else ScrollMore( true );
 				}
 			}

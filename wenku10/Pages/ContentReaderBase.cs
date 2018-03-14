@@ -44,8 +44,6 @@ using GR.Model.ListItem;
 using GR.Model.Section;
 using GR.Resources;
 
-using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
-
 namespace wenku10.Pages
 {
 	using ContentReaderPane;
@@ -472,7 +470,7 @@ namespace wenku10.Pages
 		{
 			if ( _ContentBg.DataContext == null )
 			{
-				_ContentBg.DataContext = ContentView.Reader.Settings.GetBgContext();
+				_ContentBg.DataContext = new BgContext( GRConfig.ContentReader.BgContext );
 			}
 
 			( ( BgContext ) _ContentBg.DataContext ).Reload();

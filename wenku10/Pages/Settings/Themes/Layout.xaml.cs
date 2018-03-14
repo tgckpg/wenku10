@@ -37,66 +37,43 @@ namespace wenku10.Pages.Settings.Themes
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		private global::GR.Settings.Layout.BookInfoView Conf_BookInfoView;
-		private global::GR.Settings.Layout.ContentReader Conf_ContentReader;
-
 		private bool TemplateSet = false;
 		public Layout()
 		{
 			this.InitializeComponent();
-
 			SetTemplate();
 		}
 
 		public void SetTemplate()
 		{
-			// ContentReader
-			Conf_ContentReader = new global::GR.Settings.Layout.ContentReader();
-
-			// BookInfoView
-			Conf_BookInfoView = new global::GR.Settings.Layout.BookInfoView();
 			LayoutToggles();
-
 			TemplateSet = true;
 		}
 
 		private void LayoutToggles()
 		{
-			TogBInFlo.IsOn = Conf_BookInfoView.IsRightToLeft;
-			TogTOCAlign.IsOn = Conf_BookInfoView.HorizontalTOC;
-			TogCAlign.IsOn = Conf_ContentReader.IsHorizontal;
-			TogContFlo.IsOn = Conf_ContentReader.IsRightToLeft;
-
 			TogPageClick.IsOn = !GRConfig.ContentReader.ReadingAnchor;
 			TogDoubleTap.IsOn = GRConfig.ContentReader.DoubleTap;
 			TogEmbedIllus.IsOn = GRConfig.ContentReader.EmbedIllus;
+			TogCAlign.IsOn = GRConfig.ContentReader.IsHorizontal;
+			TogContFlo.IsOn = GRConfig.ContentReader.IsRightToLeft;
 		}
 
-		#region BookInfoView
-		private void Toggled_BFlow( object sender, RoutedEventArgs e )
-		{
-			Conf_BookInfoView.IsRightToLeft = ( ( ToggleSwitch ) sender ).IsOn;
-		}
-
-		private void Toggled_TOCAlign( object sender, RoutedEventArgs e )
-		{
-			Conf_BookInfoView.HorizontalTOC = TogTOCAlign.IsOn;
-		}
-		#endregion
-
-		#region ContentReader
 		private void Toggled_CAlign( object sender, RoutedEventArgs e )
 		{
-			Conf_ContentReader.IsHorizontal = TogCAlign.IsOn;
+			if ( !TemplateSet ) return;
+			GRConfig.ContentReader.IsHorizontal = TogCAlign.IsOn;
 		}
 
 		private void Toggled_CFlow( object sender, RoutedEventArgs e )
 		{
-			Conf_ContentReader.IsRightToLeft = TogContFlo.IsOn;
+			if ( !TemplateSet ) return;
+			GRConfig.ContentReader.IsRightToLeft = TogContFlo.IsOn;
 		}
 
 		private void Toggled_EmbedIllus( object sender, RoutedEventArgs e )
 		{
+			if ( !TemplateSet ) return;
 			GRConfig.ContentReader.EmbedIllus = TogEmbedIllus.IsOn;
 		}
 
@@ -139,6 +116,6 @@ namespace wenku10.Pages.Settings.Themes
 				TogPageClick.IsOn = false;
 			}
 		}
-		#endregion
+
 	}
 }

@@ -39,6 +39,9 @@ namespace GR.MigrationOps
 		{
 			try
 			{
+				Mesg( stx.Text( "MigrateDatabase" ) );
+				Database.ContextManager.Migrate();
+
 				using ( var Context = new SettingsContext() )
 				{
 					Context.Theme.RemoveRange( Context.Theme.ToArray() );
@@ -137,6 +140,14 @@ namespace GR.MigrationOps
 					}
 				}
 			} );
+		}
+
+		private void MigrateContentReaderLayout()
+		{
+			string LAYOUT_CONTREADER = "Layout_ContentReader.xml";
+			string LAYOUT_BOOKINFOVIEW = "Layout_BookInfoView.xml";
+			string LAYOUT_STAFFPICKS = "Layout_StaffPicks.xml";
+
 		}
 
 		private Color GetColorFromByte( object obj )

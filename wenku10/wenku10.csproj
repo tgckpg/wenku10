@@ -422,8 +422,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GR\Model\Topics\PressList.cs" />
-    <Compile Include="GR\Settings\Layout\BookInfoView.cs" />
-    <Compile Include="GR\Settings\Layout\ContentReader.cs" />
+    <Compile Include="GR\Model\Section\BgContext.cs" />
     <Compile Include="GR\GSystem\Bootstrap.cs" />
     <Compile Include="GR\GSystem\UnitTest.cs" />
     <Compile Include="GR\Taotu\WenkuMarker.cs" />

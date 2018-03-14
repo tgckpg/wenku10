@@ -48,7 +48,7 @@ namespace GR.Model.Pages
 			else if ( Item is BookBannerItem )
 			{
 				BookBannerItem BItem = ( BookBannerItem ) Item;
-				return new NameValue<Func<Page>>( PageId.BOOK_INFO_VIEW, () => new BookInfoView( BItem.BkItem ) );
+				return new NameValue<Func<Page>>( PageId.BOOK_INFO_VIEW, () => new wenku10.Pages.BookInfoView( BItem.BkItem ) );
 			}
 
 			return new NameValue<Func<Page>>( PageId.NULL, () => null );

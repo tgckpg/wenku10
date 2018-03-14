@@ -9,6 +9,7 @@
     PrimaryButtonText="OK"
     SecondaryButtonText="Cancel"
     Background="{StaticResource MajorBackgroundBrush}"
+    Style="{StaticResource ScrollContentDialog}"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick">
     <ContentDialog.Title>
         <TextBlock x:Name="TitleText" Foreground="{StaticResource RelativeMajorBackgroundBrush}"

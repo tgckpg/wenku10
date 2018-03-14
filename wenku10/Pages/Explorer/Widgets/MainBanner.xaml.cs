@@ -16,13 +16,13 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.IO;
 
 using GR.Converters;
+using GR.Config;
+using GR.Config.Scopes;
 using GR.Data;
 using GR.Database.Models;
 using GR.Model.Book;
 using GR.Model.Pages;
 using GR.Model.Section;
-
-using static GR.Settings.Layout.BookInfoView;
 
 namespace wenku10.Pages.Explorer.Widgets
 {
@@ -60,6 +60,12 @@ namespace wenku10.Pages.Explorer.Widgets
 
 		private IGRRow BindRow;
 
+		private class MainBgContext : IConf_BgContext
+		{
+			public string BgType { get => "Preset"; set { } }
+			public string BgValue { get; set; }
+		}
+
 		private async void SourceUpdate()
 		{
 			Book Bk = null;
@@ -91,13 +97,12 @@ namespace wenku10.Pages.Explorer.Widgets
 			if ( Bk == null )
 				return;
 
-			XRegistry XReg = new XRegistry( "<nop />", null );
-			BgContext ItemContext = new BgContext( XReg, "CONTENT_READER" )
+			BgContext ItemContext = new BgContext( new MainBgContext() )
 			{
 				Book = ItemProcessor.GetBookItem( Bk )
 			};
 
-			ItemContext.SetBackground( "Preset" );
+			ItemContext.ApplyBackgrounds();
 
 			InfoBgGrid.DataContext = ItemContext;
 			TitleText.Text = Bk.Title;

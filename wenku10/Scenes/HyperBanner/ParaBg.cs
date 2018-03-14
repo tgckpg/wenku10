@@ -18,11 +18,10 @@ using Microsoft.Graphics.Canvas.Geometry;
 using GR.Effects;
 using GR.Effects.Stage;
 using GR.Resources;
+using GR.Model.Section;
 
 namespace wenku10.Scenes
 {
-	using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
-
 	sealed partial class HyperBanner
 	{
 		private Rect StageRect;

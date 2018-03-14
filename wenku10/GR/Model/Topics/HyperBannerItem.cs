@@ -6,19 +6,16 @@ using Windows.UI.Xaml.Controls;
 
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
-using Net.Astropenguin.IO;
-
 using wenku10.Scenes;
 
 namespace GR.Model.Topics
 {
+	using Config.Scopes;
 	using Effects;
 	using Effects.P2DFlow;
 	using ListItem;
+	using Model.Section;
 	using Pages;
-	using Settings;
-
-	using BgContext = Settings.Layout.BookInfoView.BgContext;
 
 	sealed class HyperBannerItem : ActiveItem, IDisposable
 	{
@@ -82,16 +79,20 @@ namespace GR.Model.Topics
 			UpdateGrid();
 		}
 
+		private class HyperBgContext : IConf_BgContext
+		{
+			public string BgType { get => "Preset"; set { } }
+			public string BgValue { get; set; }
+		}
+
 		public async void SetBanner( ScrollViewer LayoutRoot )
 		{
-			XRegistry SSettings = new XRegistry( "<sp />", FileLinks.ROOT_SETTING + FileLinks.LAYOUT_STAFFPICKS );
-
 			// Set the bg context
-			BgContext ItemContext = new BgContext( SSettings, "STAFF_PICKS" )
+			BgContext ItemContext = new BgContext( new HyperBgContext() )
 			{
 				Book = await ItemProcessor.GetBookFromId( Source.Payload )
 			};
-			ItemContext.SetBackground( "Preset" );
+			ItemContext.ApplyBackgrounds();
 
 			await Stage.Remove( typeof( HyperBanner ) );
 

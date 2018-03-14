@@ -22,6 +22,7 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
 using GR.CompositeElement;
+using GR.Config;
 using GR.Effects;
 using GR.Model.Interfaces;
 using GR.Model.ListItem;
@@ -137,9 +138,7 @@ namespace wenku10.Pages
 
 		private async void TestTwitter()
 		{
-			GR.Settings.Layout.BookInfoView InfoView = new GR.Settings.Layout.BookInfoView();
-
-			if( InfoView.TwitterConfirmed )
+			if( GRConfig.System.TwitterConfirmed )
 			{
 				TwitterBtn.IsEnabled = false;
 

@@ -28,8 +28,6 @@ using GR.Model.Text;
 using GR.Model.Pages.ContentReader;
 using GR.Settings.Theme;
 
-using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
-
 namespace wenku10.Pages.Settings.Themes
 {
 	public sealed partial class ContentReader : Page
@@ -61,7 +59,7 @@ namespace wenku10.Pages.Settings.Themes
 			ContentGrid.DataContext = ReaderContext;
 			ContextGrid.DataContext = new ESContext();
 
-			RBgContext = ReaderContext.Settings.GetBgContext();
+			RBgContext = new BgContext( GRConfig.ContentReader.BgContext );
 			ContentBg.DataContext = RBgContext;
 
 			RBgContext.ApplyBackgrounds();
@@ -241,7 +239,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void SetLayoutAware()
 		{
-			if ( ReaderContext.Settings.IsHorizontal )
+			if ( GRConfig.ContentReader.IsHorizontal )
 			{
 				Grid.SetRowSpan( ContentGrid, 1 );
 				Grid.SetColumnSpan( ContentGrid, 2 );
@@ -421,7 +419,8 @@ namespace wenku10.Pages.Settings.Themes
 			if ( ReaderContext == null ) return;
 
 			BgChoice.SelectedIndex = Array.IndexOf(
-				new string[] { "None", "Custom", "Preset", "System" }, RBgContext.BgType
+				new string[] { "None", "Custom", "Preset", "System" }
+				, GRConfig.ContentReader.BgContext.BgType
 			);
 		}
 

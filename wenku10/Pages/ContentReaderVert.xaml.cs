@@ -24,27 +24,10 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
-using Net.Astropenguin.Controls;
-using Net.Astropenguin.Helpers;
-using Net.Astropenguin.Loaders;
-using Net.Astropenguin.Logging;
-using Net.Astropenguin.UI;
-using Net.Astropenguin.UI.Icons;
-
-using GR.CompositeElement;
-using GR.Config;
 using GR.Database.Models;
 using GR.Effects;
 using GR.Model.Interfaces;
-using GR.Model.Loaders;
 using GR.Model.Book;
-using GR.Model.Pages;
-using GR.Model.Pages.ContentReader;
-using GR.Model.ListItem;
-using GR.Model.Section;
-using GR.Resources;
-
-using BgContext = GR.Settings.Layout.BookInfoView.BgContext;
 
 namespace wenku10.Pages
 {
