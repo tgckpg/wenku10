@@ -7,6 +7,7 @@ using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.Storage;
 
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
 namespace GR.MigrationOps
@@ -14,6 +15,8 @@ namespace GR.MigrationOps
 	using Config;
 	using Database.Contexts;
 	using Model.Interfaces;
+	using Resources;
+	using Settings;
 	using Settings.Theme;
 
 	sealed class M0001 : IMigrationOp
@@ -57,6 +60,9 @@ namespace GR.MigrationOps
 					await MOp( this );
 				}
 
+				Mesg( stx.Text( "Appearance_Layout", "Settings" ) );
+				MigrateContentReaderLayout();
+
 				Mesg( stx.Text( "MigrationComplete" ) + " - M0001" );
 			}
 			catch ( Exception ex )
@@ -91,6 +97,7 @@ namespace GR.MigrationOps
 					[ "Appearance_ContentReader_BlockHeight" ] = x => GRConfig.ContentReader.BlockHeight = ( double ) x,
 					[ "Appearance_ContentReader_FontColor" ] = x => GRConfig.ContentReader.FontColor = GetColorFromByte( x ),
 					[ "Appearance_ContentReader_Clock_Arc_Hand_Color" ] = x => GRConfig.ContentReader.Clock.ARColor = GetColorFromByte( x ),
+					[ "Appearance_ContentReader_Clock_Hour_Hand_Color" ] = x => GRConfig.ContentReader.Clock.HHColor = GetColorFromByte( x ),
 					[ "Appearance_ContentReader_Clock_Hour_Hand_Color" ] = x => GRConfig.ContentReader.Clock.HHColor = GetColorFromByte( x ),
 					[ "Appearance_ContentReader_Clock_Minute_Hand_Color" ] = x => GRConfig.ContentReader.Clock.MHColor = GetColorFromByte( x ),
 					[ "Appearance_ContentReader_Clock_Scales_Color" ] = x => GRConfig.ContentReader.Clock.SColor = GetColorFromByte( x ),
@@ -144,10 +151,41 @@ namespace GR.MigrationOps
 
 		private void MigrateContentReaderLayout()
 		{
-			string LAYOUT_CONTREADER = "Layout_ContentReader.xml";
-			string LAYOUT_BOOKINFOVIEW = "Layout_BookInfoView.xml";
-			string LAYOUT_STAFFPICKS = "Layout_StaffPicks.xml";
+			Shared.Storage.DeleteFile( FileLinks.ROOT_SETTING + "Layout_MainPage.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_SETTING + "Layout_NavLPage.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_SETTING + "Layout_StaffPicks.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_SETTING + "Deathblow.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_SETTING + "ReadingHistory.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_SETTING + "LocalBookStorage.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_WTEXT + "SpecialTopics.xml" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_WTEXT + "SpecialTopics.lat" );
+			Shared.Storage.DeleteFile( FileLinks.ROOT_WTEXT + "presslist.xml" );
 
+			XRegistry XReg = new XRegistry( "<xml />", FileLinks.ROOT_SETTING + "Layout_BookInfoView.xml" );
+
+			GRConfig.System.TwitterConfirmed = XReg.Parameter( "TwitterConfirmed" )?.GetBool( "val", false ) == true;
+
+			XParameter BgConf = XReg.Parameter( "INFO_VIEW" );
+			if( BgConf != null )
+			{
+				GRConfig.BookInfoView.BgContext.BgType = BgConf.GetValue( "type" );
+				GRConfig.BookInfoView.BgContext.BgValue = BgConf.GetValue( "value" );
+			}
+
+			Shared.Storage.DeleteFile( XReg.Location );
+
+			XReg = new XRegistry( "<xml />", FileLinks.ROOT_SETTING + "Layout_ContentReader.xml" );
+			GRConfig.ContentReader.IsRightToLeft = XReg.Parameter( "IsRightToLeft" )?.GetBool( "enable", false ) == true;
+			GRConfig.ContentReader.IsHorizontal = XReg.Parameter( "IsHorizontal" )?.GetBool( "enable", false ) == true;
+
+			BgConf = XReg.Parameter( "CONTENT_READER" );
+			if( BgConf != null )
+			{
+				GRConfig.BookInfoView.BgContext.BgType = BgConf.GetValue( "type" );
+				GRConfig.BookInfoView.BgContext.BgValue = BgConf.GetValue( "value" );
+			}
+
+			Shared.Storage.DeleteFile( XReg.Location );
 		}
 
 		private Color GetColorFromByte( object obj )
