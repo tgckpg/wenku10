@@ -113,6 +113,7 @@
     <Content Include="Assets\Samples\bookcoversample.png" />
     <Content Include="Assets\Samples\Empty150.png" />
     <Content Include="Assets\twitter.png" />
+    <None Include="Package.xml" />
     <Content Include="Strings\badwords.txt" />
     <None Include="wenku10_TemporaryKey.pfx" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
