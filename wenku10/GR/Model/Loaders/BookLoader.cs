@@ -72,6 +72,11 @@ namespace GR.Model.Loaders
 
 		private async void LoadInstruction( BookInstruction B, bool useCache )
 		{
+			if ( !BookInstruction.OpLocks.AcquireLock( B.GID, out AsyncLocks<string, bool>.QueueToken QT ) )
+			{
+				await QT.Task;
+			}
+
 			SpiderBook SBook = await SpiderBook.CreateSAsync( B.ZoneId, B.ZItemId, B.BookSpiderDef );
 
 			if ( Shared.Storage.FileExists( SBook.MetaLocation ) )
@@ -112,6 +117,7 @@ namespace GR.Model.Loaders
 				}
 			}
 
+			QT.TrySetResult( true );
 			OnComplete( B );
 		}
 

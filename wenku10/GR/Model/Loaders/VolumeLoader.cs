@@ -61,7 +61,7 @@ namespace GR.Model.Loaders
 			}
 			else if ( b.IsSpider() )
 			{
-				Task.Run( () => LoadInst( ( BookInstruction ) b ) );
+				var j = Task.Run( () => LoadInst( ( BookInstruction ) b ) );
 			}
 			else if ( b.IsEx() )
 			{
@@ -86,6 +86,11 @@ namespace GR.Model.Loaders
 
 		private async void LoadInst( BookInstruction b )
 		{
+			if ( !BookInstruction.OpLocks.AcquireLock( b.GID, out AsyncLocks<string, bool>.QueueToken QT ) )
+			{
+				await QT.Task;
+			}
+
 			foreach ( VolInstruction VInst in b.GetVolInsts() )
 			{
 				Shared.LoadMessage( "SubProcessRun", VInst.Title );
@@ -138,6 +143,7 @@ namespace GR.Model.Loaders
 				MessageBus.SendUI( GetType(), AppKeys.HS_NO_VOLDATA, b );
 			}
 
+			QT.TrySetResult( true );
 			OnComplete( b );
 		}
 
