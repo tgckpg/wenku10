@@ -60,6 +60,7 @@ namespace wenku10
 			GR.Database.ContextManager.Migrate();
 #endif
 
+			Background = new SolidColorBrush( GRConfig.Theme.BgColorMajor );
 			RootFrame.Navigate( typeof( Pages.ControlFrame ) );
 		}
 
