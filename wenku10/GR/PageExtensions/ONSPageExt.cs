@@ -26,6 +26,7 @@ namespace GR.PageExtensions
 	using Model.ListItem.Sharers;
 	using Model.Section.SharersHub;
 	using Resources;
+	using System.ComponentModel;
 	using Windows.UI.Xaml.Data;
 
 	sealed class ONSPageExt : PageExtension, ICmdControls
@@ -75,7 +76,7 @@ namespace GR.PageExtensions
 		{
 			InitAppBar();
 			MInstance = X.Singleton<SHMember>( XProto.SHMember );
-			MInstance.OnStatusChanged += SHMember_OnStatusChanged;
+			MInstance.PropertyChanged += ( s, e ) => UpdateLoginButton();
 
 			ActivyList = new ActivityList();
 			ActivyList.ItemsSource = MInstance.Activities;
@@ -91,7 +92,7 @@ namespace GR.PageExtensions
 				Expl.MainContainer.Children.Add( ActivyList );
 			}
 
-			SHMember_OnStatusChanged( MInstance, MInstance.Status );
+			UpdateLoginButton();
 		}
 
 		public override void Unload()
@@ -163,7 +164,7 @@ namespace GR.PageExtensions
 
 		private async void ToggleActivities( object sender, RoutedEventArgs e )
 		{
-			if ( !( await SHMember.Authenticate() ) )
+			if ( !( await MInstance.Authenticate() ) )
 				return;
 
 			if ( MInstance.Activities.Count == 0 )
@@ -197,17 +198,14 @@ namespace GR.PageExtensions
 			MInstance.Activities.CheckActivity( ( Activity ) e.ClickedItem );
 		}
 
-		private void SHMember_OnStatusChanged( object sender, MemberStatus args )
+		private void UpdateLoginButton()
 		{
 			StringResources stx = new StringResBg( "AppResources", "Settings" );
-			if ( args == MemberStatus.LOGGED_IN )
+
+			if ( MInstance.IsLoggedIn )
 			{
 				LoginBtn.Label = stx.Text( "Account", "Settings" );
 				LoginBtn.Glyph = SegoeMDL2.Accounts;
-			}
-			else if( args == MemberStatus.RE_LOGIN_NEEDED )
-			{
-				var j = SHMember.Authenticate();
 			}
 			else
 			{
@@ -218,7 +216,6 @@ namespace GR.PageExtensions
 
 		private async void SHLoginOrInfo()
 		{
-			if ( MInstance.WillLogin ) return;
 			if ( MInstance.IsLoggedIn )
 			{
 				ControlFrame.Instance.NavigateTo( PageId.SH_USER_INFO, () => new UserInfo() );

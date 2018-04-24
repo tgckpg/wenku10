@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Windows.Data.Json;
 using Windows.Foundation;
 
+using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
@@ -12,6 +13,7 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
 using GR.AdvDM;
+using GR.Config.Scopes;
 using GR.Ext;
 using GR.Resources;
 using GR.Settings;
@@ -21,59 +23,108 @@ using GR.GSystem;
 
 namespace wenku10.SHHub
 {
-	sealed class SHMember : IMember
+	class ONSSystem
+	{
+		public static ONSConfig Config => new ONSConfig();
+	}
+
+	class ONSConfig : Conf_System
+	{
+		protected override string ScopeId => "ONS";
+
+		public string AuthToken
+		{
+			get => GetValue<string>( "AuthToken", null );
+			set => SetValue( "AuthToken", value );
+		}
+	}
+
+	sealed class SHMember : ActiveData, IMember
 	{
 		public static readonly string ID = typeof( SHMember ).Name;
 
 		private RuntimeCache RCache = new RuntimeCache();
 
-		public event TypedEventHandler<object, MemberStatus> OnStatusChanged;
-
-		public bool CanRegister { get { return true; } }
-		public bool IsLoggedIn { get; private set; }
-		public bool WillLogin { get; private set; }
+		public bool CanRegister => true;
 		public string Id { get; private set; }
 
-		public MemberStatus Status { get; set; }
+		private bool _IsLoggedIn;
+		public bool IsLoggedIn
+		{
+			get => _IsLoggedIn;
+			private set
+			{
+				if ( _IsLoggedIn == value )
+					return;
 
-		public string CurrentAccount { get; set; }
-		public string CurrentPassword { get; set; }
+				_IsLoggedIn = value;
+				NotifyChanged( "IsLoggedIn" );
+			}
+		}
 
 		public Activities Activities { get; private set; }
 
-		private LoginInfo Remember;
-		private LoginInfo LastAuth;
-
-		public string ServerMessage
-		{
-			get; private set;
-		}
-
-		private XRegistry AuthReg;
+		public string ServerMessage { get; private set; }
 
 		public SHMember()
 		{
-			WillLogin = false;
-
-			AuthReg = new XRegistry( "<SHAuth />", FileLinks.ROOT_SETTING + FileLinks.SH_AUTH_REG );
-
-			this.Activities = new Activities();
-
-			XParameter MemberAuth = AuthReg.Parameter( "member-auth" );
-			if ( MemberAuth != null ) RestoreAuth( MemberAuth );
+			Activities = new Activities();
 		}
 
-		public static Task<bool> Authenticate()
+		public async Task<bool> Authenticate()
 		{
-			IMember MInstance = X.Singleton<IMember>( XProto.SHMember );
-			if ( !MInstance.IsLoggedIn )
+			if ( IsLoggedIn )
 			{
-				TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
-				MessageBus.SendUI( typeof( SHMember ), AppKeys.PROMPT_LOGIN, new Tuple<IMember, Action>( MInstance, () => TCS.SetResult( MInstance.IsLoggedIn ) ) );
-				return TCS.Task;
+				return true;
 			}
 
-			return Task.Run( () => true );
+			if ( RestoreAuth() && await ValidateSession() )
+			{
+				return true;
+			}
+
+			TaskCompletionSource<bool> TCS = new TaskCompletionSource<bool>();
+			MessageBus.SendUI( typeof( SHMember ), AppKeys.PROMPT_LOGIN, new Tuple<IMember, Action>( this, () => TCS.SetResult( IsLoggedIn ) ) );
+			return await TCS.Task;
+		}
+
+		public async Task<bool> Authenticate( string Account, string Password, bool Remember )
+		{
+			TaskCompletionSource<bool> LoginRequest = new TaskCompletionSource<bool>();
+			RCache.POST(
+				Shared.ShRequest.Server
+				, Shared.ShRequest.Login( Account, Password )
+				, ( e, id ) =>
+				{
+					if ( e.ResponseHeaders.Contains( "Set-Cookie" ) )
+					{
+						SaveAuth( e.Cookies );
+					}
+
+					try
+					{
+						JsonStatus.Parse( e.ResponseString );
+					}
+					catch ( Exception ex )
+					{
+						ServerMessage = ex.Message;
+					}
+
+					LoginRequest.TrySetResult( true );
+				}
+				, Utils.DoNothing 
+				, false
+			);
+
+			await LoginRequest.Task;
+			await ValidateSession();
+
+			if ( IsLoggedIn && Remember )
+			{
+				await CredentialVault.Protect( this, Account, Password );
+			}
+
+			return IsLoggedIn;
 		}
 
 		public async Task<bool> Register()
@@ -86,32 +137,10 @@ namespace wenku10.SHHub
 			return true;
 		}
 
-		public async void Login( string Account, string Password, bool Remember = false )
-		{
-			if ( WillLogin ) return;
-			WillLogin = true;
-
-			CurrentAccount = Account;
-
-			if ( Remember )
-				this.Remember = await CredentialVault.Protect( this, Account, Password );
-
-			RCache.POST(
-				Shared.ShRequest.Server
-				, Shared.ShRequest.Login( Account, Password )
-				, LoginResponse, LoginFailed
-				, false
-			);
-		}
-
 		public void Logout()
 		{
 			IsLoggedIn = false;
-			Remember = null;
-			LastAuth = null;
 			new CredentialVault().Remove( this );
-
-			UpdateStatus( MemberStatus.LOGGED_OUT );
 
 			RCache.POST(
 				Shared.ShRequest.Server
@@ -121,148 +150,71 @@ namespace wenku10.SHHub
 			);
 		}
 
-		private void UpdateStatus( MemberStatus Status )
+		private async Task<bool> ValidateSession()
 		{
-			this.Status = Status;
-			if ( OnStatusChanged != null )
-			{
-				Worker.UIInvoke( () => OnStatusChanged( this, Status ) );
-			}
-		}
+			TaskCompletionSource<bool> IsValid = new TaskCompletionSource<bool>();
 
-		private void LoginResponse( DRequestCompletedEventArgs e, string id )
-		{
-			WillLogin = false;
-			if ( e.ResponseHeaders.Contains( "Set-Cookie" ) )
-			{
-				SaveAuth( e.Cookies );
-				return;
-			}
-
-			try
-			{
-				JsonStatus.Parse( e.ResponseString );
-			}
-			catch( Exception ex )
-			{
-				ServerMessage = ex.Message;
-			}
-
-			if( LastAuth != null )
-			{
-				LastAuth = null;
-				new CredentialVault().Remove( this );
-				UpdateStatus( MemberStatus.RE_LOGIN_NEEDED );
-				return;
-			}
-
-			UpdateStatus( MemberStatus.LOGGED_OUT );
-		}
-
-		private void LoginFailed( string CachedData, string id, Exception ex )
-		{
-			WillLogin = false;
-			UpdateStatus( IsLoggedIn ? MemberStatus.LOGGED_IN : MemberStatus.LOGGED_OUT );
-		}
-
-		private void ValidateSession()
-		{
 			RCache.POST(
 				Shared.ShRequest.Server
 				, Shared.ShRequest.SessionValid()
-				, CheckResponse, ClearAuth
-				, false
-			);
-		}
-
-		private async void CheckResponse( DRequestCompletedEventArgs e, string QueryId )
-		{
-			try
-			{
-				JsonObject JObj = JsonStatus.Parse( e.ResponseString );
-				Id = JObj.GetNamedString( "data" );
-
-				IsLoggedIn = true;
-
-				UpdateStatus( MemberStatus.LOGGED_IN );
-			}
-			catch ( Exception ex )
-			{
-				IsLoggedIn = false;
-				Logger.Log( ID, ex.Message, LogType.DEBUG );
-			}
-
-			if ( IsLoggedIn )
-			{
-				if ( Remember != null )
-					new CredentialVault().Store( Remember );
-			}
-			else
-			{
-				ClearAuth();
-
-				if ( LastAuth == null )
+				, ( e, id ) =>
 				{
-					LastAuth = await new CredentialVault().Retrieve( this );
-					if ( !string.IsNullOrEmpty( LastAuth.Account ) )
+					try
 					{
-						CurrentAccount = LastAuth.Account;
-						CurrentPassword = LastAuth.Password;
-						Login( LastAuth.Account, LastAuth.Password, false );
-						return;
+						JsonObject JObj = JsonStatus.Parse( e.ResponseString );
+						Id = JObj.GetNamedString( "data" );
+
+						IsValid.TrySetResult( true );
+					}
+					catch ( Exception ex )
+					{
+						IsValid.TrySetResult( false );
+						Logger.Log( ID, ex.Message, LogType.DEBUG );
 					}
 				}
+				, ClearAuth
+				, false
+			);
 
-				UpdateStatus( MemberStatus.RE_LOGIN_NEEDED );
-			}
+			IsLoggedIn = await IsValid.Task;
+			return IsLoggedIn;
 		}
 
-		private void RestoreAuth( XParameter MAuth )
+		private bool RestoreAuth()
 		{
+			string[] Cookie = ONSSystem.Config.AuthToken?.Split( '\n' );
+
+			if ( Cookie == null )
+				return false;
+
 			try
 			{
-				Cookie MCookie = new Cookie(
-					MAuth.GetValue( "name" )
-					, MAuth.GetValue( "domain" )
-					, MAuth.GetValue( "path" )
-				);
-				MCookie.Value = MAuth.GetValue( "value" );
+				Cookie MCookie = new Cookie( Cookie[ 0 ], Cookie[ 1 ], Cookie[ 2 ] );
 				WHttpRequest.Cookies.Add( Shared.ShRequest.Server, MCookie );
-
-				CurrentAccount = MAuth.GetValue( "account" );
+				return true;
 			}
 			catch ( Exception ex )
 			{
 				Logger.Log( ID, ex.Message, LogType.WARNING );
+				ONSSystem.Config.AuthToken = null;
 			}
 
-			ValidateSession();
+			return false;
 		}
 
-		private void SaveAuth( CookieCollection Cookies )
+		private bool SaveAuth( CookieCollection Cookies )
 		{
 			foreach ( Cookie cookie in Cookies )
 			{
 				if ( cookie.Name == "sid" )
 				{
 					Logger.Log( ID, string.Format( "Set-Cookie: {0}=...", cookie.Name ), LogType.DEBUG );
-
-					XParameter MAuth = new XParameter( "member-auth" );
-					MAuth.SetValue( new XKey[] {
-						new XKey( "name", cookie.Name )
-						, new XKey( "domain" , cookie.Domain )
-						, new XKey( "path", cookie.Path )
-						, new XKey( "value" , cookie.Value )
-						, new XKey( "account", CurrentAccount )
-					} );
-
-					AuthReg.SetParameter( MAuth );
-					AuthReg.Save();
-					break;
+					ONSSystem.Config.AuthToken = string.Format( "{0}\n{1}\n{2}", cookie.Name, cookie.Value, cookie.Path );
+					return true;
 				}
 			}
 
-			ValidateSession();
+			return false;
 		}
 
 		private void ClearAuth( string arg1, string arg2, Exception arg3 ) { ClearAuth(); }
@@ -270,9 +222,8 @@ namespace wenku10.SHHub
 		private void ClearAuth()
 		{
 			WHttpRequest.Cookies = new CookieContainer();
-
-			AuthReg.RemoveParameter( "member-auth" );
-			AuthReg.Save();
+			ONSSystem.Config.AuthToken = null;
 		}
+
 	}
 }
