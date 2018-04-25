@@ -20,7 +20,7 @@
     <PackageCertificateKeyFile>wenku10_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>AD68EB4EF5E2E712CD410D6697180CE86EA77279</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>E717B21C4753A894BE2A2A36973CC74C9A8FB377</PackageCertificateThumbprint>
     <AppxBundle>Always</AppxBundle>
     <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
   </PropertyGroup>
