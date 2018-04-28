@@ -62,12 +62,10 @@ namespace Tasks
 				XRegistry.AStorage = Shared.Storage;
 			}
 
-			Shared.TC = new GR.Model.TradChinese();
-
 			XReg = new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS );
 		}
 
-		private void Init()
+		private async Task Init()
 		{
 			Worker.BackgroundOnly = true;
 
@@ -83,6 +81,9 @@ namespace Tasks
 			ResTaotu.AddProcType( ProcType.LIST, typeof( TasksListLoader ) );
 			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( GR.Taotu.TongWenTang ) );
 			ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
+
+			Shared.Conv = new GR.Model.Text.TranslationAPI();
+			await Shared.Conv.InitContextTranslator();
 		}
 
 		public async void Run( IBackgroundTaskInstance taskInstance )
@@ -109,7 +110,7 @@ namespace Tasks
 			{
 				Retrying = ( taskInstance.Task.Name == TASK_RETRY );
 
-				Init();
+				await Init();
 				using ( CanvasDevice = Image.CreateCanvasDevice() )
 				{
 					await UpdateSpiders();

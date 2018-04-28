@@ -138,9 +138,8 @@ namespace GR.PageExtensions
 
 				try
 				{
-					new Uri( VH.Value );
-					Config.Properties.SERVER_OSD_URI = VH.Value;
-					Shared.ShRequest.UpdateServer();
+					Shared.ShRequest.Server = new Uri( VH.Value );
+					ONSSystem.Config.ServiceUri = VH.Value;
 				}
 				catch ( Exception ) { }
 			};

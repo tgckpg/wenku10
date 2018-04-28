@@ -102,6 +102,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\SegoeUIExt.ttf" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\circle.dds" />
     <Content Include="Assets\grbk.png" />
@@ -132,6 +133,8 @@
     <Compile Include="GR\Converters\WIConverters.cs" />
     <Compile Include="GR\DataSources\FTSDisplayData.cs" />
     <Compile Include="GR\DataSources\FTSViewSource.cs" />
+    <Compile Include="GR\DataSources\ConvViewSource.cs" />
+    <Compile Include="GR\DataSources\ConvDataSource.cs" />
     <Compile Include="GR\GStrings\ColumnNameResolver.cs" />
     <Compile Include="GR\DataSources\BookDisplayVS.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />
@@ -155,6 +158,7 @@
     <Compile Include="GR\Model\Section\WidgetView.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />
+    <Compile Include="GR\PageExtensions\ConvPageExt.cs" />
     <Compile Include="GR\PageExtensions\FTSDataPageExt.cs" />
     <Compile Include="GR\PageExtensions\HighlightsHomePageExt.cs" />
     <Compile Include="GR\PageExtensions\ONSPageExt.cs" />
@@ -225,6 +229,9 @@
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\Advanced\TRTableEditor.xaml.cs">
+      <DependentUpon>TRTableEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Settings\BackupAndRestore.xaml.cs">
       <DependentUpon>BackupAndRestore.xaml</DependentUpon>
     </Compile>
@@ -289,6 +296,7 @@
     <Compile Include="Scenes\Fireworks.cs" />
     <Compile Include="Scenes\Glitter.cs" />
     <Compile Include="Scenes\Texture.cs" />
+    <Compile Include="ShHub\ONSSystem.cs" />
     <Compile Include="ShHub\SHMember.cs" />
     <Compile Include="Pages\Dialogs\Sharers\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
@@ -301,7 +309,6 @@
     <Compile Include="GR\Model\Section\SharersHub.cs" />
     <Compile Include="GR\Model\Section\ZoneSpider.cs" />
     <Compile Include="GR\GSystem\ActionEvent.cs" />
-    <Compile Include="GR\GSystem\Migration.cs" />
     <Compile Include="GR\Taotu\WenkuListLoader.cs" />
     <Compile Include="GR\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
@@ -486,6 +493,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Advanced\TRTableEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -887,6 +898,10 @@
     <ProjectReference Include="..\libs\GR\GR.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>
       <Name>GR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\libs\libtranslate\libtranslate.vcxproj">
+      <Project>{6c187966-ffb6-4022-b80a-c966d099f14c}</Project>
+      <Name>libtranslate</Name>
     </ProjectReference>
     <ProjectReference Include="..\libs\wenku8-protocol\wenku8-protocol.csproj">
       <Project>{9542b1bb-f868-4627-afab-7a99ed0ec7ca}</Project>

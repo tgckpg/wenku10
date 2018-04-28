@@ -13,8 +13,8 @@ using static libtaotu.Pages.ProceduresPanel;
 
 namespace GR.DataSources
 {
-	using GR.Data;
-	using GR.Database.Models;
+	using Data;
+	using Database.Models;
 	using Model.Book;
 	using Model.Section;
 

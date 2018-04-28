@@ -194,6 +194,7 @@ namespace wenku10.Pages.Settings
 					{
 						new ActionItem( stx.Text( "Advanced_Server"), stx.Text( "Desc_Advanced_Server" ), typeof( Advanced.ServerSelector ) )
 						, new ActionItem( stx.Text( "Advanced_Misc"), stx.Text( "Desc_Advanced_Misc" ), typeof( Advanced.Misc ) )
+						, new ActionItem( stx.Text( "Translation_Table"), stx.Text( "Desc_Translation_Table" ), typeof( Advanced.TRTableEditor ) )
 #if DEBUG || TESTING 
 						, new ActionItem( stx.Text( "Advanced_Debug"), stx.Text( "Desc_Advanced_Debug" ), typeof( Advanced.Debug ) )
 #endif

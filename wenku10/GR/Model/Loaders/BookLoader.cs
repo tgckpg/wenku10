@@ -145,12 +145,12 @@ namespace GR.Model.Loaders
 
 		private void SaveIntro( DRequestCompletedEventArgs e, string id )
 		{
-			CurrentBook.Intro = Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) );
+			CurrentBook.Intro = Shared.Conv.Chinese.Translate( e.ResponseString );
 		}
 
 		private void PreloadBookInfo( DRequestCompletedEventArgs e, string id )
 		{
-			CurrentBook.XCall( "ParseXml", Shared.TC.Translate( e.ResponseString ) );
+			CurrentBook.XCall( "ParseXml", Shared.Conv.Chinese.Translate( e.ResponseString ) );
 			CurrentBook.SaveInfo();
 			OnComplete( CurrentBook );
 		}

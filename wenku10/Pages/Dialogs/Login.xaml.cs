@@ -77,7 +77,6 @@ namespace wenku10.Pages.Dialogs
 
 		private void ContentDialog_SecondaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )
 		{
-			args.Cancel = true;
 		}
 
 		private void OnKeyDown( object sender, KeyRoutedEventArgs e )

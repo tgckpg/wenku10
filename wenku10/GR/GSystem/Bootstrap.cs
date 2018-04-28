@@ -6,6 +6,8 @@ using libtaotu.Models.Procedure;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Logging.Handler;
 
+using wenku10.SHHub;
+
 namespace GR.GSystem
 {
 	using AdvDM;
@@ -42,9 +44,6 @@ namespace GR.GSystem
 			// 1. Setting is the first to initialize
 			AppSettingsInit();
 			Logger.Log( ID, "Application Settings Initilizated", LogType.INFO );
-			// 2. Migrate
-			Logger.Log( ID, "Migration", LogType.INFO );
-			await new Migration().Migrate();
 
 			ActionCenter.Init();
 			Logger.Log( ID, "ActionCenter Init", LogType.INFO );
@@ -58,14 +57,19 @@ namespace GR.GSystem
 				Logger.Log( ID, "Shared.Storage Initilizated", LogType.INFO );
 			}
 
-			// Traditional Chinese translation preference
-			Resources.Shared.TC = new Model.TradChinese();
-
 			// SHRequest Init
-			Resources.Shared.ShRequest = new SharersRequest( Version, new string[] { "2.2.0t", "1.5.0b", "1.1.0p" } );
+			Resources.Shared.ShRequest = new SharersRequest(
+				ONSSystem.Config.ServiceUri
+				, Version
+				, new string[] { "2.2.0t", "1.5.0b", "1.1.0p" } );
 
 			// Connection Mode
 			WHttpRequest.UA = string.Format( AppKeys.UA, Version );
+
+			// Traslation API
+			Resources.Shared.Conv = new Model.Text.TranslationAPI();
+			await Resources.Shared.Conv.InitContextTranslator();
+			await Resources.Shared.Conv.InitUITranslators();
 
 			WCacheMode.Initialize();
 			Logger.Log( ID, "WCacheMode Initilizated", LogType.INFO );

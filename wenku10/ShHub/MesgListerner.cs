@@ -30,7 +30,7 @@ using GR.Settings;
 using StatusType = GR.Model.REST.SharersRequest.StatusType;
 using SHTarget = GR.Model.REST.SharersRequest.SHTarget;
 
-namespace wenku10.ShHub
+namespace wenku10.SHHub
 {
 	using Pages;
 	using Pages.Dialogs;

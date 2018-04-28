@@ -164,9 +164,9 @@ namespace GR.PageExtensions
 
 			if ( PTargets.Any() )
 			{
-				if ( await Shared.TC.ConfirmTranslate( "__ALL__", "All" ) )
+				if ( await Shared.Conv.ConfirmTranslate( "__ALL__", "All" ) )
 				{
-					Shared.TC.SetPrefs( PTargets );
+					Shared.Conv.SetPrefs( PTargets );
 				}
 
 				foreach ( LocalBook b in PTargets )

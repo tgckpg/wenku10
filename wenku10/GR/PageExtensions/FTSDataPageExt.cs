@@ -29,8 +29,6 @@ namespace GR.PageExtensions
 
 	sealed class FTSDataPageExt : PageExtension, ICmdControls
 	{
-		public readonly string ID = typeof( TextDocPageExt ).Name;
-
 #pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
 #pragma warning restore 0067

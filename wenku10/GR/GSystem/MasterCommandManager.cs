@@ -13,7 +13,7 @@ using Net.Astropenguin.Logging;
 
 using wenku10;
 using wenku10.Pages;
-using wenku10.ShHub;
+using wenku10.SHHub;
 using wenku10.Pages.Dialogs;
 
 namespace GR.GSystem

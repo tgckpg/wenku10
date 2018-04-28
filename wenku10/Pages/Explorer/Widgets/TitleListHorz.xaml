@@ -37,6 +37,7 @@
                     <p:VerticalStack
                         DataContext="{Binding Source, Converter={StaticResource WIBConverter}}"
                         Margin="0" FontSize="20"
+                        FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                         MaxLines="1" Trim="True"
                         ToolTipService.ToolTip="{Binding Title}"
                         Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"

@@ -72,7 +72,7 @@ namespace GR.Model.Loaders
 						, X.Call<XKey[]>( XProto.WRequest, "GetBookContent", CurrentBook.ZItemId, C.Meta[ AppKeys.GLOBAL_CID ] )
 						, async ( DRequestCompletedEventArgs e, string path ) =>
 						{
-							await new ContentParser().ParseAsync( Shared.TC.Translate( e.ResponseString ), C );
+							await new ContentParser().ParseAsync( Shared.Conv.Chinese.Translate( e.ResponseString ), C );
 							OnComplete( C );
 
 							X.Instance<IDeathblow>( XProto.Deathblow, CurrentBook ).Check( e.ResponseBytes );

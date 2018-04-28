@@ -570,4 +570,10 @@
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value>The password will be stored in this device. It is recommended you does not use the same password for other accounts.</value>
   </data>
+  <data name="Desc_Translation_Table.Text" xml:space="preserve">
+    <value>Defines content string replacements</value>
+  </data>
+  <data name="Translation_Table.Text" xml:space="preserve">
+    <value>Translation table</value>
+  </data>
 </root>

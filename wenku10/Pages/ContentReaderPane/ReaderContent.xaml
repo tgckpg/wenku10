@@ -78,6 +78,7 @@
                             Text="{x:Bind Text, Converter={StaticResource VDisplayConverter}}"
                             HorizontalAlignment="Center"
                             Foreground="{x:Bind FontColor, Mode=OneWay}"
+                            FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                             FontSize="{x:Bind FontSize, Mode=OneWay}"
                             FontWeight="{x:Bind FontWeight, Mode=OneWay}"
                             LineHeight="{x:Bind LineHeight, Mode=OneWay}"

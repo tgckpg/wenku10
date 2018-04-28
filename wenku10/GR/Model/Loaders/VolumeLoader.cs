@@ -72,7 +72,7 @@ namespace GR.Model.Loaders
 					, X.Call<XKey[]>( XProto.WRequest, "GetBookTOC", b.ZItemId )
 					, ( DRequestCompletedEventArgs e, string id ) =>
 					{
-						b.XCall( "ParseVolume", Manipulation.PatchSyntax( Shared.TC.Translate( e.ResponseString ) ) );
+						b.XCall( "ParseVolume", Shared.Conv.Chinese.Translate( e.ResponseString ) );
 						OnComplete( b );
 					}
 					, ( string RequestURI, string id, Exception ex ) =>

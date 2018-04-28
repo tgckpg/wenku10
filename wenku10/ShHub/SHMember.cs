@@ -13,7 +13,6 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
 using GR.AdvDM;
-using GR.Config.Scopes;
 using GR.Ext;
 using GR.Resources;
 using GR.Settings;
@@ -23,22 +22,6 @@ using GR.GSystem;
 
 namespace wenku10.SHHub
 {
-	class ONSSystem
-	{
-		public static ONSConfig Config => new ONSConfig();
-	}
-
-	class ONSConfig : Conf_System
-	{
-		protected override string ScopeId => "ONS";
-
-		public string AuthToken
-		{
-			get => GetValue<string>( "AuthToken", null );
-			set => SetValue( "AuthToken", value );
-		}
-	}
-
 	sealed class SHMember : ActiveData, IMember
 	{
 		public static readonly string ID = typeof( SHMember ).Name;

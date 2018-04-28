@@ -39,7 +39,7 @@ namespace wenku10.Pages.Settings.Advanced
 
 		private void ToggleSynPatch( object sender, RoutedEventArgs e )
 		{
-			Manipulation.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
+			GR.Resources.Shared.Conv.DoSyntaxPatch = SyntaxPatchToggle.IsOn;
 			GRConfig.System.PatchSyntax = SyntaxPatchToggle.IsOn;
 		}
 

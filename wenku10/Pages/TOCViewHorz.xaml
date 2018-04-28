@@ -42,6 +42,7 @@
                             HorizontalAlignment="Center"
                             Foreground="{StaticResource RelativeShadesBrush}"
                             FontSize="20"
+                            FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                             RightTapped="TOCShowVolumeAction"
                             FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
                             Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
@@ -79,6 +80,7 @@
                             </Border>
                             <p:VerticalStack
                                 Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
+                                FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                                 HorizontalAlignment="Center"
                                 Foreground="{StaticResource RelativeShadesBrush}"
                                 FontSize="20"

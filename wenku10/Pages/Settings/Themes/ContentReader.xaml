@@ -277,11 +277,12 @@
                                Foreground="{Binding ESDBrush}"/>
 
                     <p:VerticalStack x:Name="XTitleStepper"
-                                     Grid.Row="4"
+                                     Grid.Row="4" Margin="10"
                                      Trim="True" MaxLines="1"
                                      Foreground="{Binding ESSBrush}"
                                      HorizontalAlignment="Center"
-                                     Margin="10" FontSize="20" />
+                                     FontSize="20"
+                                     FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext" />
 
                 </Grid>
 
@@ -353,6 +354,7 @@
                                     HorizontalAlignment="Center"
                                     Foreground="{Binding FontColor}"
                                     FontSize="{Binding FontSize}"
+                                    FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                                     FontWeight="{Binding FontWeight}"
                                     LineHeight="{Binding LineHeight}"
                                     Padding="{Binding ParagraphSpacing}"
