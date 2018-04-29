@@ -5,11 +5,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
+using Net.Astropenguin.DataModel;
+using Net.Astropenguin.Linq;
+
 namespace GR.DataSources
 {
 	using Data;
 	using Database.Models;
 	using Model.ListItem;
+	using Model.Loaders;
 	using Resources;
 	using Settings;
 
@@ -29,7 +33,7 @@ namespace GR.DataSources
 		private GRTable<NameValue<string>> ConvTable;
 
 		private string TableName;
-		private List<GRRow<NameValue<string>>> SourceData;
+		private List<NameValue<string>> SourceData;
 
 		public ConvDisplayData( string TableName )
 		{
@@ -58,7 +62,7 @@ namespace GR.DataSources
 					SourceData = Shared.Storage.GetString( Local ).Split( '\n' ).Select( x =>
 					{
 						string[] s = x.Split( ',' );
-						return new GRRow<NameValue<string>>( ConvTable ) { Source = new NameValue<string>( s[ 0 ], s[ 1 ] ) };
+						return new NameValue<string>( s[ 0 ], s[ 1 ] );
 					} ).ToList();
 				}
 
@@ -68,6 +72,7 @@ namespace GR.DataSources
 				}
 			}
 
+			LargeList<NameValue<string>> Results = null;
 			if ( !string.IsNullOrEmpty( Search ) )
 			{
 				if ( Search[ 0 ] == '^' )
@@ -75,7 +80,7 @@ namespace GR.DataSources
 					string HSearch = Search.Substring( 1 );
 					if ( !string.IsNullOrEmpty( HSearch ) )
 					{
-						ConvTable.Items = SourceData.Where( x => x.Source.Name.IndexOf( HSearch ) == 0 || x.Source.Value.IndexOf( HSearch ) == 0 );
+						Results = new LargeList<NameValue<string>>( SourceData.Where( x => x.Name.IndexOf( HSearch ) == 0 || x.Value.IndexOf( HSearch ) == 0 ) );
 					}
 				}
 				else if ( Search[ Search.Length - 1 ] == '$' )
@@ -84,37 +89,51 @@ namespace GR.DataSources
 					if ( !string.IsNullOrEmpty( RSearch ) )
 					{
 						int RLen = RSearch.Length;
-						ConvTable.Items = SourceData.Where( x =>
+						Results = new LargeList<NameValue<string>>( SourceData.Where( x =>
 						{
-							int RIndex = x.Source.Name.Length - RLen;
-							if ( 0 < RIndex && x.Source.Name.IndexOf( RSearch ) == RIndex )
+							int RIndex = x.Name.Length - RLen;
+							if ( 0 < RIndex && x.Name.IndexOf( RSearch ) == RIndex )
 							{
 								return true;
 							}
 
-							RIndex = x.Source.Value.Length - RLen;
-							if ( 0 < RIndex && x.Source.Value.IndexOf( RSearch ) == RIndex )
+							RIndex = x.Value.Length - RLen;
+							if ( 0 < RIndex && x.Value.IndexOf( RSearch ) == RIndex )
 							{
 								return true;
 							}
 							return false;
-						} );
+						} ) );
 					}
 				}
 				else
 				{
-					ConvTable.Items = SourceData.Where( x => x.Source.Name.Contains( Search ) || x.Source.Value.Contains( Search ) );
+					Results = new LargeList<NameValue<string>>( SourceData.Where( x => x.Name.Contains( Search ) || x.Value.Contains( Search ) ) );
 				}
 			}
 			else
 			{
-				ConvTable.Items = SourceData;
+				Results = new LargeList<NameValue<string>>( SourceData );
 			}
+
+			Observables<NameValue<string>, GRRow<NameValue<string>>> ItemsObservable = new Observables<NameValue<string>, GRRow<NameValue<string>>>();
+
+			if ( Results != null )
+			{
+				ItemsObservable.ConnectLoader( Results, x => x.Remap( ToGRRow ) );
+			}
+
+			ConvTable.Items = ItemsObservable;
+		}
+
+		private GRRow<NameValue<string>> ToGRRow( NameValue<string> x )
+		{
+			return new GRRow<NameValue<string>>( ConvTable ) { Source = x };
 		}
 
 		public override string ColumnName( IGRCell CellProp )
 		{
-			switch( CellProp.Property.Name )
+			switch ( CellProp.Property.Name )
 			{
 				case "Name":
 					return "Pattern";

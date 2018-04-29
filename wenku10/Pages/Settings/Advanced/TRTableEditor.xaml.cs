@@ -14,10 +14,11 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using GR.DataSources;
+using GR.Model.Interfaces;
 
 namespace wenku10.Pages.Settings.Advanced
 {
-	public sealed partial class TRTableEditor : Page
+	public sealed partial class TRTableEditor : Page, INavPage
 	{
 		public TRTableEditor()
 		{
@@ -25,9 +26,21 @@ namespace wenku10.Pages.Settings.Advanced
 			SetTemplate();
 		}
 
+		private ConvViewSource CurrentVS;
+
+		public void SoftClose( bool NavForward )
+		{
+			LayoutRoot.Children.Remove( TableView );
+		}
+
+		public void SoftOpen( bool NavForward )
+		{
+		}
+
 		private async void SetTemplate()
 		{
-			await TableView.View( new ConvViewSource( "ntw_ps2t" ) );
+			CurrentVS = new ConvViewSource( "ntw_ps2t" );
+			await TableView.View( CurrentVS );
 		}
 
 	}

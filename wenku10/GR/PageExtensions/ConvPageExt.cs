@@ -23,8 +23,6 @@ namespace GR.PageExtensions
 	{
 		private ConvViewSource ViewSource;
 
-		AppBarButton Rebuild;
-
 		public ConvPageExt( ConvViewSource ViewSource )
 			: base()
 		{
