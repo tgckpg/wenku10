@@ -249,4 +249,10 @@
   <data name="RestartToRestore" xml:space="preserve">
     <value>一部のファイルは現在使用中です。 復元モードに再起動しますか？</value>
   </data>
+  <data name="ConfirmReset" xml:space="preserve">
+    <value>リセットしますか？</value>
+  </data>
+  <data name="ConfirmResetConvTable" xml:space="preserve">
+    <value>サーバーから変換テーブルをリロードしますか？</value>
+  </data>
 </root>

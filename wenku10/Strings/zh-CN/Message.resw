@@ -249,4 +249,10 @@
   <data name="RestartToRestore" xml:space="preserve">
     <value>一些文件当前正在使用中。 重新启动到恢复模式？</value>
   </data>
+  <data name="ConfirmReset" xml:space="preserve">
+    <value>确认重置</value>
+  </data>
+  <data name="ConfirmResetConvTable" xml:space="preserve">
+    <value>要从服务器重新加载翻译表吗？</value>
+  </data>
 </root>

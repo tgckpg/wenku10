@@ -578,4 +578,7 @@
   <data name="Desc_Conv_Table.Text" xml:space="preserve">
     <value>定义内容字符串替换</value>
   </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>直书</value>
+  </data>
 </root>

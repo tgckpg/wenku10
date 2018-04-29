@@ -584,4 +584,7 @@
   <data name="Desc_Conv_Table.Text" xml:space="preserve">
     <value>コンテンツ文字列の置換を定義する</value>
   </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>縦書</value>
+  </data>
 </root>

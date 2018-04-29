@@ -15,7 +15,6 @@ namespace GR.Model.Loaders
 	using Book.Spider;
 	using ListItem;
 	using Resources;
-	using Text;
 
 	sealed class BookLoader
 	{
@@ -59,7 +58,13 @@ namespace GR.Model.Loaders
 					X.Instance<IRuntimeCache>( XProto.WRuntimeCache )
 						.InitDownload(
 							BookId, X.Call<XKey[]>( XProto.WRequest, "DoBookAction", Mode, BookId )
-							, PreloadBookInfo
+							, ( e, id ) =>
+							{
+								CurrentBook.XCall( "ParseXml", e.ResponseString );
+								CurrentBook.LastCache = DateTime.Now;
+								CurrentBook.SaveInfo();
+								OnComplete( CurrentBook );
+							}
 							, ( cache, id, ex ) =>
 							{
 								b.Info.Flags.Remove( Mode );
@@ -146,13 +151,6 @@ namespace GR.Model.Loaders
 		private void SaveIntro( DRequestCompletedEventArgs e, string id )
 		{
 			CurrentBook.Intro = Shared.Conv.Chinese.Translate( e.ResponseString );
-		}
-
-		private void PreloadBookInfo( DRequestCompletedEventArgs e, string id )
-		{
-			CurrentBook.XCall( "ParseXml", Shared.Conv.Chinese.Translate( e.ResponseString ) );
-			CurrentBook.SaveInfo();
-			OnComplete( CurrentBook );
 		}
 
 		public void LoadCover( BookItem B, bool Cache )

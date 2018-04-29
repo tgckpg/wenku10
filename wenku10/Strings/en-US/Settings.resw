@@ -585,4 +585,7 @@
   <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
     <value>Hans → Hant Words</value>
   </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>Vertial Text</value>
+  </data>
 </root>

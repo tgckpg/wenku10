@@ -41,6 +41,7 @@ namespace GR.PageExtensions
 
 		AppBarButton SaveBtn;
 		AppBarButton AddBtn;
+		AppBarButton ResetBtn;
 
 		MenuFlyout ContextMenu;
 		MenuFlyoutItem EditBtn;
@@ -75,7 +76,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = new StringResources( "AppBar", "Settings" );
 			SaveBtn = UIAliases.CreateAppBarBtn( Symbol.Save, stx.Str( "Save" ) );
 			SaveBtn.IsEnabled = false;
 			SaveBtn.Click += SaveBtn_Click;
@@ -83,7 +84,11 @@ namespace GR.PageExtensions
 			AddBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Str( "Add" ) );
 			AddBtn.Click += AddBtn_Click;
 
+			ResetBtn = UIAliases.CreateAppBarBtn( Symbol.Refresh, stx.Text( "Advanced_Server_Reset", "Settings" ) );
+			ResetBtn.Click += ResetBtn_Click;
+
 			MajorControls = new ICommandBarElement[] { AddBtn, SaveBtn };
+			MinorControls = new ICommandBarElement[] { ResetBtn };
 		}
 
 		public override FlyoutBase GetContextMenu( FrameworkElement elem )
@@ -147,6 +152,24 @@ namespace GR.PageExtensions
 		{
 			SaveBtn.IsEnabled = false;
 			ViewSource.ConvDataSource.SaveTable();
+		}
+
+		private async void ResetBtn_Click( object sender, RoutedEventArgs e )
+		{
+			bool Reset = false;
+			StringResources stx = new StringResources( "Message" );
+
+			await Popups.ShowDialog( UIAliases.CreateDialog(
+				stx.Str( "ConfirmResetConvTable" ), stx.Str( "ConfirmReset" )
+				, () => Reset = true
+				, stx.Str( "Yes" ), stx.Str( "No" )
+			) );
+
+			if ( Reset )
+			{
+				SaveBtn.IsEnabled = false;
+				ViewSource.ConvDataSource.ResetSource();
+			}
 		}
 
 	}

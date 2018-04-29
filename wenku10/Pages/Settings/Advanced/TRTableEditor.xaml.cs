@@ -72,6 +72,8 @@ namespace wenku10.Pages.Settings.Advanced
 				Tables.Add( new NameValue<string>( stx.Text( "Conv_Custom" ), "synpatch" ) );
 			}
 
+			Tables.Add( new NameValue<string>( stx.Text( "Conv_Vertical" ), "vertical" ) );
+
 			TableTypes.ItemsSource = Tables;
 
 			if ( Tables.Any() )
@@ -94,6 +96,7 @@ namespace wenku10.Pages.Settings.Advanced
 			if ( PageExt != null )
 			{
 				MajorControls = new ICommandBarElement[ 0 ];
+				MinorControls = new ICommandBarElement[ 0 ];
 
 				PageExt.ControlChanged -= PageExt_ControlChanged;
 				PageExt.Unload();
@@ -106,6 +109,7 @@ namespace wenku10.Pages.Settings.Advanced
 
 			PageExt.Initialize( this );
 			MajorControls = PageExt.MajorControls;
+			MinorControls = PageExt.MinorControls;
 
 			PageExt.ControlChanged += PageExt_ControlChanged;
 			PageExt_ControlChanged( PageExt );

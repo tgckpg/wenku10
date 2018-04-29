@@ -481,7 +481,7 @@
     <value>增加豁免</value>
   </data>
   <data name="Advanced_Server_Reset.Text" xml:space="preserve">
-    <value>重置</value>
+    <value>重設</value>
   </data>
   <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
     <value>修正誤用了的符號</value>
@@ -584,5 +584,8 @@
   </data>
   <data name="Desc_Conv_Table.Text" xml:space="preserve">
     <value>定義內文字串轉換</value>
+  </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>直書</value>
   </data>
 </root>

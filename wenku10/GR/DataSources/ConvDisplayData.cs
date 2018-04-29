@@ -149,6 +149,25 @@ namespace GR.DataSources
 			}
 		}
 
+		public async void ResetSource()
+		{
+			IsLoading = true;
+			TRTable TableLoader = new TRTable();
+			byte[] Data = await TableLoader.Download( TableName );
+
+			if ( Data.Any() )
+			{
+				await Task.Run( () => Shared.Storage.WriteBytes( Local, Data ) );
+
+				ConvTable.Items = null;
+				SourceData = null;
+
+				Reload();
+			}
+
+			IsLoading = false;
+		}
+
 		public void SaveTable()
 		{
 			Task.Run( () =>

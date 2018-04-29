@@ -249,4 +249,10 @@
   <data name="RestartToRestore" xml:space="preserve">
     <value>Some files are currently in use. Restart into restore mode?</value>
   </data>
+  <data name="ConfirmReset" xml:space="preserve">
+    <value>Confirm reset</value>
+  </data>
+  <data name="ConfirmResetConvTable" xml:space="preserve">
+    <value>Reload the translation table from server?</value>
+  </data>
 </root>
