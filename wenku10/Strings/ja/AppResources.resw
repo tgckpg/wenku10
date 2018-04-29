@@ -430,4 +430,10 @@
   <data name="ShowMore.Text" xml:space="preserve">
     <value>もっと見る</value>
   </data>
+  <data name="KV_Key.Text" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="KV_Value.Text" xml:space="preserve">
+    <value>値</value>
+  </data>
 </root>

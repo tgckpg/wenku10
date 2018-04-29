@@ -134,7 +134,7 @@
     <Compile Include="GR\DataSources\FTSDisplayData.cs" />
     <Compile Include="GR\DataSources\FTSViewSource.cs" />
     <Compile Include="GR\DataSources\ConvViewSource.cs" />
-    <Compile Include="GR\DataSources\ConvDataSource.cs" />
+    <Compile Include="GR\DataSources\ConvDisplayData.cs" />
     <Compile Include="GR\GStrings\ColumnNameResolver.cs" />
     <Compile Include="GR\DataSources\BookDisplayVS.cs" />
     <Compile Include="GR\DataSources\BookDisplayData.cs" />

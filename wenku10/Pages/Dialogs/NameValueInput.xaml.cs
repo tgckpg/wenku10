@@ -41,6 +41,9 @@ namespace wenku10.Pages.Dialogs
 			TitleText.Text = Title;
 			NameLbl.Text = NameLabel;
 			ValueLbl.Text = ValueLabel;
+
+			NameInput.Text = Target.Name;
+			ValueInput.Text = Target.Value;
 		}
 
 		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )

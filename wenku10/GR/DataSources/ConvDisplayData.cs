@@ -12,6 +12,7 @@ namespace GR.DataSources
 {
 	using Data;
 	using Database.Models;
+	using GStrings;
 	using Model.ListItem;
 	using Model.Loaders;
 	using Resources;
@@ -33,12 +34,16 @@ namespace GR.DataSources
 		private GRTable<NameValue<string>> ConvTable;
 
 		private string TableName;
+		private string Local;
 		private List<NameValue<string>> SourceData;
 
 		public ConvDisplayData( string TableName )
 		{
 			this.TableName = TableName;
+			Local = FileLinks.ROOT_WTEXT + "tr-" + TableName;
 		}
+
+		public override string ColumnName( IGRCell CellProp ) => ColumnNameResolver.TSTColumns( CellProp.Property.Name );
 
 		public override void StructTable()
 		{
@@ -54,7 +59,6 @@ namespace GR.DataSources
 
 		public override void Reload()
 		{
-			string Local = FileLinks.ROOT_WTEXT + "tr-" + TableName;
 			if ( SourceData == null )
 			{
 				if ( Shared.Storage.FileExists( Local ) )
@@ -126,22 +130,36 @@ namespace GR.DataSources
 			ConvTable.Items = ItemsObservable;
 		}
 
+		public void Remove( GRRow<NameValue<string>> Row )
+		{
+			( ( Observables<NameValue<string>, GRRow<NameValue<string>>> ) ConvTable.Items ).Remove( Row );
+			SourceData.Remove( Row.Source );
+		}
+
+		public void AddItem( NameValue<string> Item )
+		{
+			SourceData.Add( Item );
+			if ( string.IsNullOrEmpty( Search ) )
+			{
+				Search = "^" + Item.Name;
+			}
+			else
+			{
+				Reload();
+			}
+		}
+
+		public void SaveTable()
+		{
+			Task.Run( () =>
+			{
+				Shared.Storage.WriteString( Local, string.Join( "\n", SourceData.Select( x => x.Name + "," + x.Value ) ) );
+			} );
+		}
+
 		private GRRow<NameValue<string>> ToGRRow( NameValue<string> x )
 		{
 			return new GRRow<NameValue<string>>( ConvTable ) { Source = x };
-		}
-
-		public override string ColumnName( IGRCell CellProp )
-		{
-			switch ( CellProp.Property.Name )
-			{
-				case "Name":
-					return "Pattern";
-				case "Value":
-					return "Replace";
-				default:
-					return CellProp.Property.Name;
-			}
 		}
 
 		protected override void ConfigureSort( string PropertyName, int Order ) { /* Not Supported */  }

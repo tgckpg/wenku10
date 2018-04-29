@@ -426,4 +426,10 @@
   <data name="ShowMore.Text" xml:space="preserve">
     <value>顯示更多</value>
   </data>
+  <data name="KV_Key.Text" xml:space="preserve">
+    <value>索引鍵</value>
+  </data>
+  <data name="KV_Value.Text" xml:space="preserve">
+    <value>值</value>
+  </data>
 </root>

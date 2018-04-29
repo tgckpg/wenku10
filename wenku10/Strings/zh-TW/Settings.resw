@@ -570,4 +570,19 @@
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value>密碼將存儲在此設備上。 建議您不要在其他帳戶使用相同的密碼。</value>
   </data>
+  <data name="Conv_Custom.Text" xml:space="preserve">
+    <value>自定義</value>
+  </data>
+  <data name="Conv_NTW_ps2t.Text" xml:space="preserve">
+    <value>简 → 繁 短語</value>
+  </data>
+  <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
+    <value>简 → 繁 單詞</value>
+  </data>
+  <data name="Conv_Table.Text" xml:space="preserve">
+    <value>翻譯表</value>
+  </data>
+  <data name="Desc_Conv_Table.Text" xml:space="preserve">
+    <value>定義內文字串轉換</value>
+  </data>
 </root>

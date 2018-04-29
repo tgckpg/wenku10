@@ -429,4 +429,10 @@
   <data name="ShowMore.Text" xml:space="preserve">
     <value>Show more</value>
   </data>
+  <data name="KV_Key.Text" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="KV_Value.Text" xml:space="preserve">
+    <value>Value</value>
+  </data>
 </root>

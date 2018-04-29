@@ -13,20 +13,37 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Loaders;
+
 using GR.DataSources;
 using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.PageExtensions;
+using GR.Resources;
 
 namespace wenku10.Pages.Settings.Advanced
 {
-	public sealed partial class TRTableEditor : Page, INavPage
+	public sealed partial class TRTableEditor : Page, INavPage, ICmdControls
 	{
+#pragma warning disable 0067
+		public event ControlChangedEvent ControlChanged;
+#pragma warning restore 0067
+
+		public bool NoCommands { get; }
+		public bool MajorNav => false;
+
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get; private set; }
+
 		public TRTableEditor()
 		{
 			this.InitializeComponent();
 			SetTemplate();
 		}
 
-		private ConvViewSource CurrentVS;
+		private List<NameValue<string>> Tables;
+		private Dictionary<string, ConvViewSource> ViewSources;
 
 		public void SoftClose( bool NavForward )
 		{
@@ -37,10 +54,71 @@ namespace wenku10.Pages.Settings.Advanced
 		{
 		}
 
-		private async void SetTemplate()
+		private void SetTemplate()
 		{
-			CurrentVS = new ConvViewSource( "ntw_ps2t" );
-			await TableView.View( CurrentVS );
+			Tables = new List<NameValue<string>>();
+			ViewSources = new Dictionary<string, ConvViewSource>();
+
+			StringResources stx = new StringResources( "Settings" );
+
+			if ( Shared.Conv.DoTraditional )
+			{
+				Tables.Add( new NameValue<string>( stx.Text( "Conv_NTW_ws2t" ), "ntw_ws2t" ) );
+				Tables.Add( new NameValue<string>( stx.Text( "Conv_NTW_ps2t" ), "ntw_ps2t" ) );
+			}
+
+			if( Shared.Conv.DoSyntaxPatch )
+			{
+				Tables.Add( new NameValue<string>( stx.Text( "Conv_Custom" ), "synpatch" ) );
+			}
+
+			TableTypes.ItemsSource = Tables;
+
+			if ( Tables.Any() )
+			{
+				TableTypes.SelectedIndex = 0;
+				SwitchVS( Tables.First().Value );
+			}
+		}
+
+		private ConvPageExt PageExt;
+
+		private async void SwitchVS( string Name )
+		{
+			if ( !ViewSources.TryGetValue( Name, out ConvViewSource VS ) )
+			{
+				VS = new ConvViewSource( Name );
+				ViewSources[ Name ] = VS;
+			}
+
+			if ( PageExt != null )
+			{
+				MajorControls = new ICommandBarElement[ 0 ];
+
+				PageExt.ControlChanged -= PageExt_ControlChanged;
+				PageExt.Unload();
+				PageExt = null;
+			}
+
+			await TableView.View( VS );
+
+			PageExt = ( ConvPageExt ) VS.Extension;
+
+			PageExt.Initialize( this );
+			MajorControls = PageExt.MajorControls;
+
+			PageExt.ControlChanged += PageExt_ControlChanged;
+			PageExt_ControlChanged( PageExt );
+		}
+
+		private void PageExt_ControlChanged( object sender )
+		{
+			ControlChanged?.Invoke( this );
+		}
+
+		private void TableTypes_SelectionChanged( object sender, SelectionChangedEventArgs e )
+		{
+			SwitchVS( ( ( NameValue<string> ) e.AddedItems.First() ).Value );
 		}
 
 	}

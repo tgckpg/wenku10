@@ -569,4 +569,19 @@
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value> パスワードはこのデバイスに保存されます。 他のアカウントに同じパスワードを使用しないことをお勧めします。</value>
   </data>
+  <data name="Conv_Custom.Text" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="Conv_NTW_ps2t.Text" xml:space="preserve">
+    <value>簡体字 → 繁体字 フレーズ</value>
+  </data>
+  <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
+    <value>簡体字 → 繁体字 単語</value>
+  </data>
+  <data name="Conv_Table.Text" xml:space="preserve">
+    <value>翻訳テーブル</value>
+  </data>
+  <data name="Desc_Conv_Table.Text" xml:space="preserve">
+    <value>コンテンツ文字列の置換を定義する</value>
+  </data>
 </root>

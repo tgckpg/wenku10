@@ -9,7 +9,26 @@
     mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-        <ex:GRTableView x:Name="TableView" ViewMode="Table" />
+        <ListView x:Name="TableTypes" Margin="10"
+                  ItemContainerStyle="{StaticResource BareListItem}"
+                  SelectionChanged="TableTypes_SelectionChanged"
+                  Style="{StaticResource VerticalListView}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="10">
+                        <TextBlock Text="{Binding Name}" Foreground="{StaticResource RelativeMajorBackgroundBrush}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ex:GRTableView x:Name="TableView"
+                        Grid.Row="1" Margin="10"
+                        ViewMode="Table" />
     </Grid>
 </Page>

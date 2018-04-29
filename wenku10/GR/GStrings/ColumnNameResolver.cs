@@ -45,5 +45,19 @@ namespace GR.GStrings
 
 			return Name;
 		}
+
+		public static string TSTColumns( string Name )
+		{
+			StringResources stx = new StringResBg();
+			switch ( Name )
+			{
+				case "Name":
+					return stx.Text( "KV_Key" );
+				case "Value":
+					return stx.Text( "KV_Value" );
+			}
+
+			return Name;
+		}
 	}
 }
