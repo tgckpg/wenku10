@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 using GR.Config;
@@ -52,6 +53,8 @@ namespace wenku10.Pages.Settings
 
 			// Phone should disable double tap
 			GRConfig.ContentReader.DoubleTap = !MainStage.Instance.IsPhone;
+
+			CheckAppHealth();
 		}
 
 		private void Prev( object sender, RoutedEventArgs e ) { Prev(); }
@@ -142,6 +145,28 @@ namespace wenku10.Pages.Settings
 			}
 
 			T.Apply();
+		}
+
+		private void CheckAppHealth()
+		{
+			StatusMessage.Text = "";
+			var Table = new GR.Model.Loaders.TRTable();
+
+			StringResources stx = new StringResources( "InitQuestions" );
+			if ( !( Table.Validate( "ntw_pw2t" ) && Table.Validate( "ntw_ps2t" ) ) )
+			{
+				StatusMessage.Text += stx.Text( "Failure_NTW" );
+			}
+
+			if ( !Table.Validate( "vertical" ) )
+			{
+				StatusMessage.Text += "\n" + stx.Text( "Failure_Vertical" );
+			}
+
+			if ( !Table.Validate( "synpatch" ) )
+			{
+				StatusMessage.Text += "\n" + stx.Text( "Failure_Synpatch" );
+			}
 		}
 
 		private void MainView_SelectionChanged( object sender, SelectionChangedEventArgs e )

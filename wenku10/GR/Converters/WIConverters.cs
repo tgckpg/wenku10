@@ -10,8 +10,6 @@ namespace GR.Converters
 	using Model.Book;
 	using Model.Loaders;
 	using Model.Pages;
-	using Resources;
-	using Settings;
 
 	sealed public class WIBConverter : IValueConverter
 	{

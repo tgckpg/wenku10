@@ -253,6 +253,6 @@
     <value>確認重設</value>
   </data>
   <data name="ConfirmResetConvTable" xml:space="preserve">
-    <value>要從伺服器中重新轉入翻譯表嗎？</value>
+    <value>要從伺服器中重新載入翻譯表嗎？</value>
   </data>
 </root>

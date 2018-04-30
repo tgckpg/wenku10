@@ -77,11 +77,14 @@
                     <PivotItem.Header>
                         <TextBlock Foreground="White" Text="All Done!" />
                     </PivotItem.Header>
-                    <TextBlock Foreground="White"
-                               x:Uid="/InitQuestions/Thankyou"
-                               TextWrapping="Wrap"
-                               FontSize="23"
-                               Text="Thankyou Message" />
+                    <StackPanel>
+                        <TextBlock Foreground="White"
+                                   x:Uid="/InitQuestions/Thankyou"
+                                   TextWrapping="Wrap"
+                                   FontSize="23"
+                                   Text="Thankyou Message" />
+                        <TextBlock Foreground="White" x:Name="StatusMessage" TextWrapping="Wrap"/>
+                    </StackPanel>
                 </PivotItem>
             </Pivot.Items>
         </Pivot>

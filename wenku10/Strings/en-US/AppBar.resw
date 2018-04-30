@@ -264,4 +264,7 @@
   <data name="AddWidget.Text" xml:space="preserve">
     <value>Add widget</value>
   </data>
+  <data name="Import.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
 </root>

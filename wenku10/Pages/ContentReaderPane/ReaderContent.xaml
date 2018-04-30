@@ -78,7 +78,7 @@
                         <Rectangle Fill="{x:Bind AnchorColor}" />
                         <p:VerticalStack
                             Grid.Row="1"
-                            Text="{x:Bind Text}"
+                            Text="{x:Bind Display}"
                             HorizontalAlignment="Center"
                             Foreground="{x:Bind FontColor, Mode=OneWay}"
                             FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
@@ -99,7 +99,7 @@
                         <Rectangle Fill="{x:Bind AnchorColor, Mode=OneWay}" />
                         <TextBlock
                             Grid.Column="1"
-                            Text="{x:Bind Text}"
+                            Text="{x:Bind Display}"
                             TextWrapping="Wrap"
                             Foreground="{x:Bind FontColor, Mode=OneWay}"
                             FontSize="{x:Bind FontSize, Mode=OneWay}"
@@ -116,7 +116,7 @@
                     <TextBlock
                         Margin="0,10,0,20"
                         FontFamily="Segoe MDL2 Assets"
-                        Text="{x:Bind Text}"
+                        Text="{x:Bind Display}"
                         Foreground="{x:Bind FontColor, Mode=OneWay}"
                         FontSize="{x:Bind FontSize, Mode=OneWay}"
                         FontWeight="{x:Bind FontWeight, Mode=OneWay}"
@@ -128,7 +128,7 @@
                     <TextBlock
                         Margin="10,0,20,0"
                         FontFamily="Segoe MDL2 Assets"
-                        Text="{x:Bind Text}"
+                        Text="{x:Bind Display}"
                         Foreground="{x:Bind FontColor, Mode=OneWay}"
                         FontSize="{x:Bind FontSize, Mode=OneWay}"
                         FontWeight="{x:Bind FontWeight, Mode=OneWay}"

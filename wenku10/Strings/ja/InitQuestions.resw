@@ -211,4 +211,13 @@
   <data name="MigrateDatabase.Text" xml:space="preserve">
     <value>データベースの移行…</value>
   </data>
+  <data name="Failure_NTW.Text" xml:space="preserve">
+    <value>警告：新同文堂 変換テーブルをダウンロードできません。これは 簡体字 → 繁体字 中国語 変換プロセスに影響します。テーブルをリロードするには、設定 &gt; 詳細 &gt; 翻訳テーブルを選択してください。</value>
+  </data>
+  <data name="Failure_Vertical.Text" xml:space="preserve">
+    <value>警告：縦書きテキストの変換テーブルをダウンロードできません。縦書きのテキストのレンダリングに影響します。テーブルを再読み込みするには、設定 &gt; 詳細 &gt; 翻訳テーブルを選択してください。</value>
+  </data>
+  <data name="Failure_Synpatch.Text" xml:space="preserve">
+    <value>警告：構文 - パッチ変換テーブルをダウンロードできません。これは、テキスト構文のパッチ適用に影響します。テーブルをリロードするには、設定 &gt; 詳細 &gt; 翻訳テーブルを選択してください。</value>
+  </data>
 </root>

@@ -73,7 +73,7 @@ namespace GR.DataSources
 
 				if ( Shared.Storage.FileExists( Local ) )
 				{
-					Lines = Shared.Storage.GetString( Local ).Split( '\n' );
+					Lines = Shared.Storage.GetString( Local ).Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries );
 				}
 				else if ( PhaseTable != null )
 				{
@@ -83,17 +83,19 @@ namespace GR.DataSources
 					}
 					else
 					{
-						Lines = Encoding.UTF8.GetString( PhaseTable.Table ).Split( '\n' );
+						Lines = Encoding.UTF8.GetString( PhaseTable.Table ).Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries );
 					}
 				}
 
 				if ( Lines.Any() )
 				{
-					SourceData = Lines.Select( x =>
-					{
-						string[] s = x.Split( ',' );
-						return new NameValue<string>( s[ 0 ], s[ 1 ] );
-					} ).ToList();
+					SourceData = Lines
+						.Where( x => x.Contains( ',' ) )
+						.Select( x =>
+						{
+							string[] s = x.Split( new char[] { ',' }, 2, StringSplitOptions.RemoveEmptyEntries );
+							return new NameValue<string>( s[ 0 ], s[ 1 ] );
+						} ).ToList();
 				}
 
 				if ( SourceData == null )
@@ -173,6 +175,28 @@ namespace GR.DataSources
 			{
 				Reload();
 			}
+		}
+
+		public async void ImportTable( string Lines )
+		{
+			await Task.Run( () =>
+			{
+				if ( SourceData == null )
+				{
+					SourceData = new List<NameValue<string>>();
+				}
+
+				Lines
+					.Split( new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries )
+					.Where( x => x.Contains( ',' ) )
+					.ExecEach( x =>
+					{
+						string[] k = x.Split( new char[] { ',' }, 2, StringSplitOptions.RemoveEmptyEntries );
+						SourceData.Add( new NameValue<string>( k[ 0 ], k[ 1 ] ) );
+					} );
+			} );
+
+			Reload();
 		}
 
 		public async void ResetSource()

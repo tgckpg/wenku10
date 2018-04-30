@@ -264,4 +264,7 @@
   <data name="AddWidget.Text" xml:space="preserve">
     <value>新增小工具</value>
   </data>
+  <data name="Import.Text" xml:space="preserve">
+    <value>滙入</value>
+  </data>
 </root>

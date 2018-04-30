@@ -151,6 +151,7 @@
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
     <Compile Include="GR\MigrationOps\M0000.cs" />
+    <Compile Include="GR\MigrationOps\M0002.cs" />
     <Compile Include="GR\MigrationOps\M0001.cs" />
     <Compile Include="GR\MigrationOps\MigrationManager.cs" />
     <Compile Include="GR\MigrationOps\BackupAndRestoreOp.cs" />

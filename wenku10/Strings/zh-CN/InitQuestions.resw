@@ -210,4 +210,13 @@
   <data name="MigrateDatabase.Text" xml:space="preserve">
     <value>迁移数据库…</value>
   </data>
+  <data name="Failure_NTW.Text" xml:space="preserve">
+    <value>警告：无法下载新同文堂翻译表，这会影响简 → 繁翻译过程。 要重新加载表格，请到设置 &gt; 高级 &gt; 翻译表。</value>
+  </data>
+  <data name="Failure_Synpatch.Text" xml:space="preserve">
+    <value>警告：无法下载直书文本翻译表，这会影响直书文本渲染。 要重新加载表格，请到设置 &gt; 高级 &gt; 翻译表。</value>
+  </data>
+  <data name="Failure_Vertical.Text" xml:space="preserve">
+    <value>警告：无法下载误用字符翻译表，这将影响误用字符修正功能。 要重新加载表格，请到设置 &gt; 高级 &gt; 翻译表。</value>
+  </data>
 </root>

@@ -20,7 +20,7 @@ namespace GR.MigrationOps
 
 	class MigrationManager : ActiveData
 	{
-		Type[] Mops = new Type[] { typeof( M0000 ), typeof( M0001 ) };
+		Type[] Mops = new Type[] { typeof( M0000 ), typeof( M0001 ), typeof( M0002 ) };
 
 		private string[] SupportedMops;
 

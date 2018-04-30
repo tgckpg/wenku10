@@ -387,7 +387,7 @@
     <value>文章蜘蛛是用“蜘蛛编辑器”制作的脚本，这些脚本可以从“共享脚本目录”上下载，制作这些文件通常需要基本的 Html / RegEx 的知识（不需要懂得编程）。说明请到 设定 - &gt; 说明 - &gt; wiki 上取得</value>
   </data>
   <data name="Desc_LocalDocuments.Text" xml:space="preserve">
-    <value>本地文件是拥有特定格式的纯文字文件，您可以点更多 - &gt;打开网址/打开目录中汇入这些文件。文件格式定义请到</value>
+    <value>本地文件是拥有特定格式的纯文字文件，您可以点更多 - &gt;打开网址/打开目录中导入这些文件。文件格式定义请到</value>
   </data>
   <data name="Desc_ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛可以自动制作网站的「文章蜘蛛」，同样也是从「蜘蛛编辑器」中制作。这些脚本也可以在「共享脚本目录」中取得。制作这些文件需要更全面的 Html / RegEx 以及 基本的编辑知识。</value>

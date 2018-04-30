@@ -262,4 +262,7 @@
   <data name="AddWidget.Text" xml:space="preserve">
     <value>添加小部件</value>
   </data>
+  <data name="Import.Text" xml:space="preserve">
+    <value>导入</value>
+  </data>
 </root>

@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.Storage;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
 using wenku10.Pages.Dialogs;
@@ -42,6 +43,7 @@ namespace GR.PageExtensions
 		AppBarButton SaveBtn;
 		AppBarButton AddBtn;
 		AppBarButton ResetBtn;
+		AppBarButton ImportBtn;
 
 		MenuFlyout ContextMenu;
 		MenuFlyoutItem EditBtn;
@@ -72,11 +74,22 @@ namespace GR.PageExtensions
 
 			await Popups.ShowDialog( NVInput );
 
-			if( !NVInput.Canceled )
+			if ( !NVInput.Canceled )
 			{
 				ViewSource.ConvDataSource.AddItem( NewItem );
 				ToggleSaveBtn( true );
 			}
+		}
+
+		public async void ImportTable()
+		{
+			IStorageFile ISF = await AppStorage.OpenFileAsync( ".txt" );
+
+			if ( ISF == null )
+				return;
+
+			ViewSource.ConvDataSource.ImportTable( await ISF.ReadString() );
+			ToggleSaveBtn( true );
 		}
 
 		protected override void SetTemplate()
@@ -109,8 +122,11 @@ namespace GR.PageExtensions
 			ResetBtn = UIAliases.CreateAppBarBtn( Symbol.Refresh, stx.Text( "Advanced_Server_Reset", "Settings" ) );
 			ResetBtn.Click += ResetBtn_Click;
 
+			ImportBtn = UIAliases.CreateAppBarBtn( Symbol.OpenFile, stx.Text( "Import" ) );
+			ImportBtn.Click += ImportBtn_Click;
+
 			MajorControls = new ICommandBarElement[] { AddBtn, SaveBtn };
-			MinorControls = new ICommandBarElement[] { ResetBtn };
+			MinorControls = new ICommandBarElement[] { ResetBtn, ImportBtn };
 
 			ToggleSaveBtn = ( x ) => SaveBtn.IsEnabled = x;
 		}
@@ -181,6 +197,8 @@ namespace GR.PageExtensions
 				ViewSource.ConvDataSource.ResetSource();
 			}
 		}
+
+		private void ImportBtn_Click( object sender, RoutedEventArgs e ) => ImportTable();
 
 	}
 }

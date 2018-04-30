@@ -265,4 +265,7 @@
   <data name="AddWidget.Text" xml:space="preserve">
     <value>ウィジェットを追加する</value>
   </data>
+  <data name="Import.Text" xml:space="preserve">
+    <value>インポート</value>
+  </data>
 </root>

@@ -210,4 +210,13 @@
   <data name="MigrateDatabase.Text" xml:space="preserve">
     <value>Migrating database contexts...</value>
   </data>
+  <data name="Failure_NTW.Text" xml:space="preserve">
+    <value>WARNING: Unable to download New-TongwenTang translation table, this will affect Hans -&gt; Hant translation process. To reload the table, please go to Settings &gt; Advanced &gt; Translation Table.</value>
+  </data>
+  <data name="Failure_Synpatch.Text" xml:space="preserve">
+    <value>WARNING: Unable to download syntax-patch translation table, this will affect text syntax patching. To reload the table, please go to Settings &gt; Advanced &gt; Translation Table.</value>
+  </data>
+  <data name="Failure_Vertical.Text" xml:space="preserve">
+    <value>WARNING: Unable to download vertical-text translation table, this will affect vertical text rendering. To reload the table, please go to Settings &gt; Advanced &gt; Translation Table.</value>
+  </data>
 </root>
