@@ -12,18 +12,21 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <v:VDisplayConverter x:Key="VDisplayConverter" />
         <v:ContentStyleConverter x:Key="ContentStyleConverter" />
         <MenuFlyout x:Key="ParagraphFlyout" Placement="Bottom">
-            <MenuFlyoutItem x:Uid="/ContextMenu/Copy" Text="Copy" Click="ContextCopyClicked" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
-            <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
-            <MenuFlyoutSubItem x:Uid="/ContextMenu/Locate" Text="Position">
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/Copy" Text="Copy" Click="ContextCopyClicked" />
+            <MenuFlyoutSeparator />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
+            <MenuFlyoutSeparator />
+            <MenuFlyoutSubItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/Locate" Text="Position">
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoTop" Text="Goto Top" Click="GoTop" />
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoCurrent" Text="Goto Current" Click="GoCurrent" />
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoBottom" Text="Goto Bottom" Click="GoBottom" />
             </MenuFlyoutSubItem>
+            <MenuFlyoutSeparator />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/Settings/Conv_Table_Local" Text="Translation table" Click="ShowConvPhases" />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
         </MenuFlyout>
 
         <ItemsPanelTemplate x:Key="HPanel">
@@ -75,7 +78,7 @@
                         <Rectangle Fill="{x:Bind AnchorColor}" />
                         <p:VerticalStack
                             Grid.Row="1"
-                            Text="{x:Bind Text, Converter={StaticResource VDisplayConverter}}"
+                            Text="{x:Bind Text}"
                             HorizontalAlignment="Center"
                             Foreground="{x:Bind FontColor, Mode=OneWay}"
                             FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"

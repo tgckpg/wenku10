@@ -155,9 +155,6 @@
                             <Rectangle Fill="{Binding AssistBG}" Width="{Binding W}" Height="{Binding H}" VerticalAlignment="{Binding VATop}" HorizontalAlignment="{Binding HALeft}" />
                             <Rectangle Fill="{Binding AssistBG}" Width="{Binding W}" Height="{Binding H}" VerticalAlignment="{Binding VABottom}" HorizontalAlignment="{Binding HARight}" />
                         </Grid>
-                        <p:StateControl x:Name="Overlay">
-                            <Frame x:Name="OverlayFrame" FlowDirection="LeftToRight" />
-                        </p:StateControl>
                     </Grid>
                 </c:PassiveSplitView.Content>
             </c:PassiveSplitView>
@@ -184,6 +181,10 @@
                            Foreground="White"/>
             </Grid>
         </Grid>
+
+        <p:StateControl x:Name="Overlay">
+            <Frame x:Name="OverlayFrame" />
+        </p:StateControl>
 
         <c:TipMask x:Name="RenderMask"
                    Foreground="{StaticResource RelativeShadesBrush}"

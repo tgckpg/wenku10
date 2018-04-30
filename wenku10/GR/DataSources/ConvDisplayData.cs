@@ -27,20 +27,28 @@ namespace GR.DataSources
 
 		protected override ColumnConfig[] DefaultColumns => new ColumnConfig[]
 		{
-			new ColumnConfig() { Name = "Name", Width = 260 },
-			new ColumnConfig() { Name = "Value", Width = 260 },
+			new ColumnConfig() { Name = "Name", Width = 200 },
+			new ColumnConfig() { Name = "Value", Width = 200 },
 		};
 
 		private GRTable<NameValue<string>> ConvTable;
 
 		private string TableName;
 		private string Local;
+
+		public CustomConv PhaseTable { get; private set; }
 		private List<NameValue<string>> SourceData;
 
 		public ConvDisplayData( string TableName )
 		{
 			this.TableName = TableName;
 			Local = FileLinks.ROOT_WTEXT + "tr-" + TableName;
+		}
+
+		public ConvDisplayData( string TableName, CustomConv Phase )
+		{
+			this.TableName = TableName;
+			PhaseTable = Phase;
 		}
 
 		public override string ColumnName( IGRCell CellProp ) => ColumnNameResolver.TSTColumns( CellProp.Property.Name );
@@ -61,9 +69,27 @@ namespace GR.DataSources
 		{
 			if ( SourceData == null )
 			{
+				string[] Lines = new string[ 0 ];
+
 				if ( Shared.Storage.FileExists( Local ) )
 				{
-					SourceData = Shared.Storage.GetString( Local ).Split( '\n' ).Select( x =>
+					Lines = Shared.Storage.GetString( Local ).Split( '\n' );
+				}
+				else if ( PhaseTable != null )
+				{
+					if ( PhaseTable.Table == null )
+					{
+						SourceData = new List<NameValue<string>>();
+					}
+					else
+					{
+						Lines = Encoding.UTF8.GetString( PhaseTable.Table ).Split( '\n' );
+					}
+				}
+
+				if ( Lines.Any() )
+				{
+					SourceData = Lines.Select( x =>
 					{
 						string[] s = x.Split( ',' );
 						return new NameValue<string>( s[ 0 ], s[ 1 ] );
@@ -172,7 +198,14 @@ namespace GR.DataSources
 		{
 			Task.Run( () =>
 			{
-				Shared.Storage.WriteString( Local, string.Join( "\n", SourceData.Select( x => x.Name + "," + x.Value ) ) );
+				if ( PhaseTable == null )
+				{
+					Shared.Storage.WriteString( Local, string.Join( "\n", SourceData.Select( x => x.Name + "," + x.Value ) ) );
+				}
+				else
+				{
+					PhaseTable.Table = Encoding.UTF8.GetBytes( string.Join( "\n", SourceData.Select( x => x.Name + "," + x.Value ) ) );
+				}
 			} );
 		}
 

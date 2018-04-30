@@ -20,16 +20,17 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Messaging;
 
 using GR.Config;
 using GR.Database.Models;
 using GR.Effects;
+using GR.Model.Loaders;
 using GR.Model.Section;
 using GR.Model.Text;
 using GR.Resources;
 
 using BookItem = GR.Model.Book.BookItem;
-using Net.Astropenguin.Messaging;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -59,8 +60,8 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			this.InitializeComponent();
 			this.Container = Container;
-			IsHorz = ( Container is ContentReaderHorz );
 
+			IsHorz = ( Container is ContentReaderHorz );
 			SetTemplate( Anchor );
 		}
 
@@ -82,9 +83,11 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void SetTemplate( int Anchor )
 		{
-
 			if ( Reader != null )
 				Reader.PropertyChanged -= ScrollToParagraph;
+
+			Paragraph.Translator = new libtranslate.Translator();
+			InitPhaseConverter();
 
 			Reader = new ReaderView( CurrentBook, CurrentChapter );
 			Reader.ApplyCustomAnchor( Anchor );
@@ -97,6 +100,18 @@ namespace wenku10.Pages.ContentReaderPane
 			MasterGrid.DataContext = Reader;
 			Reader.PropertyChanged += ScrollToParagraph;
 			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
+		}
+
+		private async void InitPhaseConverter()
+		{
+			List<CustomConv> Phases = await Shared.BooksDb.LoadCollectionAsync( CurrentBook.Entry, x => x.ConvPhases, x => x.Phase );
+			Phases.ForEach( x => Paragraph.Translator.AddTable( x.Table ) );
+
+			if ( IsHorz )
+			{
+				TRTable Table = new TRTable();
+				Paragraph.Translator.AddTable( await Table.Get( "vertical" ) );
+			}
 		}
 
 		private void CRConfigChanged( Message Mesg )
@@ -302,6 +317,11 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( BookmarkIn.Canceled ) return;
 
 			Reader.SetCustomAnchor( BookmarkIn.AnchorName, P );
+		}
+
+		private void ShowConvPhases( object sender, RoutedEventArgs e )
+		{
+			Container.OverNavigate( typeof( Settings.Advanced.LocalTableEditor ), CurrentBook );
 		}
 
 		private void MasterGrid_Tapped( object sender, TappedRoutedEventArgs e )

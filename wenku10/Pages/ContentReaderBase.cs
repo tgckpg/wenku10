@@ -792,12 +792,18 @@ namespace wenku10.Pages
 			if ( _Overlay.State == ControlState.Reovia )
 			{
 				_Overlay.State = ControlState.Foreatii;
-				Settings.Themes.ContentReader Settings = _OverlayFrame.Content as Settings.Themes.ContentReader;
 				_MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
 				_FocusHelper.DataContext = new AssistContext();
 
 				// If the overlay frame content is settings, and the settings is changed
-				if ( Settings != null && Settings.NeedRedraw ) Redraw();
+				if ( _OverlayFrame.Content is Settings.Themes.ContentReader Settings && Settings.NeedRedraw )
+				{
+					Redraw();
+				}
+				else if( _OverlayFrame.Content is Settings.Advanced.LocalTableEditor TableEditor && TableEditor.NeedRedraw )
+				{
+					Redraw();
+				}
 
 				e.Handled = true;
 				return;

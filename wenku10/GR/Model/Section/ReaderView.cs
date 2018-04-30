@@ -55,12 +55,8 @@ namespace GR.Model.Section
 			}
 		}
 
-		public int SelectedIndex
-		{
-			get { return Selected == null ? 0 : Data.IndexOf( SelectedData ); }
-		}
-
 		public IEnumerable<ActiveData> CustomAnchors => GetAnchors();
+		public int SelectedIndex => Selected == null ? 0 : Data.IndexOf( SelectedData );
 
 		public FlowDirection FlowDir { get; private set; }
 		public Thickness Margin { get; private set; }
@@ -88,9 +84,9 @@ namespace GR.Model.Section
 			: this()
 		{
 			BindChapter = C;
+
 			Anchors = new AutoAnchor( B );
 			CL = new ChapterLoader( B, SetContent );
-
 			OverrideParams( B );
 		}
 

@@ -229,6 +229,9 @@
     <Compile Include="Pages\ProcPanelWrapper.xaml.cs">
       <DependentUpon>ProcPanelWrapper.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\Advanced\LocalTableEditor.xaml.cs">
+      <DependentUpon>LocalTableEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\Settings\Advanced\TRTableEditor.xaml.cs">
       <DependentUpon>TRTableEditor.xaml</DependentUpon>
     </Compile>
@@ -493,6 +496,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcPanelWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\Advanced\LocalTableEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

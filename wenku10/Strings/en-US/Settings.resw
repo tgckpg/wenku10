@@ -588,4 +588,10 @@
   <data name="Conv_Vertical.Text" xml:space="preserve">
     <value>Vertial Text</value>
   </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>Phase {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>Translation table ( Local )</value>
+  </data>
 </root>

@@ -159,7 +159,7 @@
   <data name="Reply.Text" xml:space="preserve">
     <value>返事</value>
   </data>
-  <data name="Save" xml:space="preserve">
+  <data name="Save.Text" xml:space="preserve">
     <value>セーブ</value>
   </data>
   <data name="Search.Text" xml:space="preserve">

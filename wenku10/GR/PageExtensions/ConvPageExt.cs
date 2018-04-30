@@ -47,6 +47,8 @@ namespace GR.PageExtensions
 		MenuFlyoutItem EditBtn;
 		MenuFlyoutItem DeleteBtn;
 
+		public Action<bool> ToggleSaveBtn;
+
 		public ConvPageExt( ConvViewSource ViewSource )
 			: base()
 		{
@@ -55,6 +57,26 @@ namespace GR.PageExtensions
 
 		public override void Unload()
 		{
+		}
+
+		public async void AddItem()
+		{
+			StringResources stx = new StringResources( "AppBar" );
+			NameValue<string> NewItem = new NameValue<string>( "", "" );
+			NameValueInput NVInput = new NameValueInput(
+				NewItem
+				, stx.Text( "Add" )
+				, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 0 ] )
+				, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 1 ] )
+			);
+
+			await Popups.ShowDialog( NVInput );
+
+			if( !NVInput.Canceled )
+			{
+				ViewSource.ConvDataSource.AddItem( NewItem );
+				ToggleSaveBtn( true );
+			}
 		}
 
 		protected override void SetTemplate()
@@ -89,6 +111,8 @@ namespace GR.PageExtensions
 
 			MajorControls = new ICommandBarElement[] { AddBtn, SaveBtn };
 			MinorControls = new ICommandBarElement[] { ResetBtn };
+
+			ToggleSaveBtn = ( x ) => SaveBtn.IsEnabled = x;
 		}
 
 		public override FlyoutBase GetContextMenu( FrameworkElement elem )
@@ -114,7 +138,10 @@ namespace GR.PageExtensions
 				);
 
 				await Popups.ShowDialog( NVInput );
-				SaveBtn.IsEnabled = !NVInput.Canceled;
+				if ( !NVInput.Canceled )
+				{
+					ToggleSaveBtn( true );
+				}
 			}
 		}
 
@@ -125,32 +152,15 @@ namespace GR.PageExtensions
 			if ( DataContext is GRRow<NameValue<string>> Row )
 			{
 				ViewSource.ConvDataSource.Remove( Row );
-				SaveBtn.IsEnabled = true;
+				ToggleSaveBtn( true );
 			}
 		}
 
-		private async void AddBtn_Click( object sender, RoutedEventArgs e )
-		{
-			NameValue<string> NewItem = new NameValue<string>( "", "" );
-			NameValueInput NVInput = new NameValueInput(
-				NewItem
-				, AddBtn.Label
-				, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 0 ] )
-				, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 1 ] )
-			);
-
-			await Popups.ShowDialog( NVInput );
-
-			if( !NVInput.Canceled )
-			{
-				SaveBtn.IsEnabled = true;
-				ViewSource.ConvDataSource.AddItem( NewItem );
-			}
-		}
+		private void AddBtn_Click( object sender, RoutedEventArgs e ) => AddItem();
 
 		private void SaveBtn_Click( object sender, RoutedEventArgs e )
 		{
-			SaveBtn.IsEnabled = false;
+			ToggleSaveBtn( false );
 			ViewSource.ConvDataSource.SaveTable();
 		}
 
@@ -167,7 +177,7 @@ namespace GR.PageExtensions
 
 			if ( Reset )
 			{
-				SaveBtn.IsEnabled = false;
+				ToggleSaveBtn( false );
 				ViewSource.ConvDataSource.ResetSource();
 			}
 		}

@@ -170,6 +170,8 @@ namespace wenku10.Pages.Explorer
 
 		private void SearchBox_QuerySubmitted( AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args )
 		{
+			if ( DataSource == null ) return;
+
 			try
 			{
 				DataSource.Search = args.QueryText;

@@ -581,4 +581,10 @@
   <data name="Conv_Vertical.Text" xml:space="preserve">
     <value>直书</value>
   </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>阶段 {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>翻译表（本地）</value>
+  </data>
 </root>

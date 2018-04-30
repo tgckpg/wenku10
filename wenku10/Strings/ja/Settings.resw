@@ -587,4 +587,10 @@
   <data name="Conv_Vertical.Text" xml:space="preserve">
     <value>縦書</value>
   </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>フェーズ {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>翻訳テーブル（ローカル）</value>
+  </data>
 </root>
