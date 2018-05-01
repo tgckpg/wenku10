@@ -100,41 +100,53 @@ namespace wenku10
 				return;
 			}
 
-			Frame rootFrame = Window.Current.Content as Frame;
-
-			// Do not repeat app initialization when the Window already has content,
-			// just ensure that the window is active
-			if ( rootFrame == null )
-			{
-				// Create a Frame to act as the navigation context and navigate to the first page
-				rootFrame = new Frame();
-
-				rootFrame.NavigationFailed += OnNavigationFailed;
-
-				if ( e.PreviousExecutionState == ApplicationExecutionState.Terminated )
-				{
-					//TODO: Load state from previously suspended application
-				}
-
-				// Place the frame in the current Window
-				Window.Current.Content = rootFrame;
-			}
+			Frame RootFrame = ActivateRootFrame();
 
 			if ( MainStage.Instance == null )
 			{
-				// When the navigation stack isn't restored navigate to the first page,
-				// configuring the new page by passing required information as a navigation
-				// parameter
 				Pages.ControlFrame.LaunchArgs = e.Arguments;
-				rootFrame.Navigate( typeof( MainStage ) );
+				RootFrame.Navigate( typeof( MainStage ) );
 			}
 			else if ( !string.IsNullOrEmpty( e.Arguments ) )
 			{
 				MessageBus.SendUI( GetType(), AppKeys.SYS_2ND_TILE_LAUNCH, e.Arguments );
 			}
 
-			// Ensure the current window is active
 			Window.Current.Activate();
+		}
+
+		protected override void OnFileActivated( FileActivatedEventArgs e )
+		{
+			Frame RootFrame = ActivateRootFrame();
+
+			if ( MainStage.Instance == null )
+			{
+				Pages.ControlFrame.LaunchArgs = e;
+				RootFrame.Navigate( typeof( MainStage ) );
+			}
+			else
+			{
+				MessageBus.SendUI( GetType(), AppKeys.SYS_FILE_LAUNCH, e );
+			}
+
+			Window.Current.Activate();
+		}
+
+		private Frame ActivateRootFrame()
+		{
+			Frame RootFrame = Window.Current.Content as Frame;
+
+			if ( RootFrame == null )
+			{
+				RootFrame = new Frame();
+
+				RootFrame.NavigationFailed += OnNavigationFailed;
+
+				// Place the frame in the current Window
+				Window.Current.Content = RootFrame;
+			}
+
+			return RootFrame;
 		}
 
 		/// <summary>

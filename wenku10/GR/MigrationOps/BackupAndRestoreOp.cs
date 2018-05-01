@@ -34,14 +34,18 @@ namespace GR.MigrationOps
 			get => _Ver;
 			set
 			{
-				switch ( value )
+				switch ( value % 10 )
 				{
 					case 0: OfsIV = 0b10101101; break;
 					case 1: OfsIV = 0b01001001; break;
 					case 2: OfsIV = 0b11011101; break;
 					case 3: OfsIV = 0b11000110; break;
-					default:
-						throw new InvalidOperationException( "Unknow IV: " + value );
+					case 4: OfsIV = 0b01000010; break;
+					case 5: OfsIV = 0b11010110; break;
+					case 6: OfsIV = 0b11100111; break;
+					case 7: OfsIV = 0b01010010; break;
+					case 8: OfsIV = 0b11000100; break;
+					case 9: OfsIV = 0b01010101; break;
 				}
 				_Ver = value;
 			}

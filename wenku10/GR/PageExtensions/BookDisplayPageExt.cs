@@ -4,12 +4,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
 using wenku10.Pages;
@@ -41,6 +43,7 @@ namespace GR.PageExtensions
 		CompatMenuFlyoutItem DefaultTOC;
 		CompatMenuFlyoutItem DefaultReader;
 		CompatMenuFlyoutItem DefaultInfo;
+		MenuFlyoutItem ExportXRBKBtn;
 		MenuFlyoutItem BrowserBtn;
 
 		MenuFlyoutSubItem ChangeDefault;
@@ -95,6 +98,9 @@ namespace GR.PageExtensions
 			BrowserBtn = new MenuFlyoutItem() { Text = stx.Text( "OpenInBrowser" ) };
 			BrowserBtn.Click += BrowserBtn_Click;
 
+			ExportXRBKBtn = new MenuFlyoutItem() { Text = "Export XRBK" };
+			ExportXRBKBtn.Click += ExportXRBKBtn_Click;
+
 			OpenWith = new MenuFlyoutSubItem() { Text = stx.Text( "OpenWith", "ContextMenu" ) };
 			OpenWith.Items.Add( GotoTOC );
 			OpenWith.Items.Add( GotoReader );
@@ -106,6 +112,7 @@ namespace GR.PageExtensions
 			ContextMenu = new MenuFlyout();
 			ContextMenu.Items.Add( OpenDefault );
 			ContextMenu.Items.Add( Edit );
+			ContextMenu.Items.Add( ExportXRBKBtn );
 			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
 			ContextMenu.Items.Add( PinToStart );
 			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
@@ -187,6 +194,11 @@ namespace GR.PageExtensions
 					}
 				}
 			}
+		}
+
+		private void ExportXRBKBtn_Click( object sender, RoutedEventArgs e )
+		{
+			ExportXRBK( ( ( FrameworkElement ) sender ).DataContext );
 		}
 
 		private void OpenDefault_Click( object sender, RoutedEventArgs e )
@@ -287,6 +299,18 @@ namespace GR.PageExtensions
 					StringResources stx = new StringResources( "Message" );
 					await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
 					OpenTOC( BkItem );
+				}
+			}
+		}
+
+		private async void ExportXRBK( object DataContext )
+		{
+			if ( TryGetBookItem( DataContext, out BookItem BkItem ) )
+			{
+				IStorageFile ISF = await AppStorage.SaveFileAsync( "GR Book ( XRBK )", new string[] { ".xrbk" }, BkItem.Title );
+				if ( ISF != null )
+				{
+					await Resources.Image.WriteXRBK( BkItem, ISF );
 				}
 			}
 		}

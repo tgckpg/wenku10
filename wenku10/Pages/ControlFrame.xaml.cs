@@ -1,8 +1,8 @@
-﻿using Microsoft.Services.Store.Engagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -36,7 +36,7 @@ namespace wenku10.Pages
 		private bool InSubView { get { return TransitionDisplay.GetState( SubView ) == TransitionState.Active; } }
 
 		public static ControlFrame Instance { get; private set; }
-		public static volatile string LaunchArgs;
+		public static volatile object LaunchArgs;
 
 		private volatile bool Navigating = false;
 
@@ -61,19 +61,30 @@ namespace wenku10.Pages
 		private async void MessageBus_OnDelivery( Message Mesg )
 		{
 			// Handles secondary tile launch on App opened
-			if ( Mesg.Content == AppKeys.SYS_2ND_TILE_LAUNCH )
+			switch ( Mesg.Content )
 			{
-				if ( Navigating )
-				{
-					ActionBlocked();
-					return;
-				}
+				case AppKeys.SYS_2ND_TILE_LAUNCH:
+					if ( Navigating )
+					{
+						ActionBlocked();
+						return;
+					}
 
-				BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
-				if ( Book != null )
-				{
-					NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
-				}
+					BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
+					if ( Book != null )
+					{
+						NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
+					}
+					break;
+				case AppKeys.SYS_FILE_LAUNCH:
+					if( Navigating )
+					{
+						ActionBlocked();
+						return;
+					}
+
+					System.Diagnostics.Debugger.Break();
+					break;
 			}
 		}
 
@@ -100,13 +111,18 @@ namespace wenku10.Pages
 		public async void SetHomePage( string Id, Func<Page> FPage, Action<Page> PageAct = null )
 		{
 			// Handles secondary tile launch when App closed
-			if ( !string.IsNullOrEmpty( LaunchArgs ) )
+			if ( LaunchArgs is string TileQStr && !string.IsNullOrEmpty( TileQStr ) )
 			{
 				Id = PageId.BOOK_INFO_VIEW;
-				BookItem Book = await ItemProcessor.GetBookFromTileCmd( LaunchArgs );
+				BookItem Book = await ItemProcessor.GetBookFromTileCmd( TileQStr );
 				FPage = () => new BookInfoView( Book );
 
 				LaunchArgs = null;
+			}
+			else if ( LaunchArgs is FileActivatedEventArgs FileArgs )
+			{
+				var j = GR.Resources.Image.ReadXRBK( FileArgs.Files.First() as Windows.Storage.IStorageFile );
+				System.Diagnostics.Debugger.Break();
 			}
 
 			MajorCmdBar.IsOpen = false;
