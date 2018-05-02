@@ -255,4 +255,7 @@
   <data name="ConfirmResetConvTable" xml:space="preserve">
     <value>要從伺服器中重新載入翻譯表嗎？</value>
   </data>
+  <data name="NoAndNever" xml:space="preserve">
+    <value>否，不要再問</value>
+  </data>
 </root>

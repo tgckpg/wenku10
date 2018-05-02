@@ -255,4 +255,7 @@
   <data name="ConfirmResetConvTable" xml:space="preserve">
     <value>Reload the translation table from server?</value>
   </data>
+  <data name="NoAndNever" xml:space="preserve">
+    <value>No, do not ask again</value>
+  </data>
 </root>

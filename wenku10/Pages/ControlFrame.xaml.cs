@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Activation;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -40,6 +39,8 @@ namespace wenku10.Pages
 
 		private volatile bool Navigating = false;
 
+		private BgTaskContext _BgTaskContext;
+
 		public ControlFrame()
 		{
 			Instance = this;
@@ -55,6 +56,8 @@ namespace wenku10.Pages
 			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
 
+			BgTaskBadge.DataContext = ( _BgTaskContext = new BgTaskContext() );
+
 			ApplyControlSet();
 		}
 
@@ -64,26 +67,27 @@ namespace wenku10.Pages
 			switch ( Mesg.Content )
 			{
 				case AppKeys.SYS_2ND_TILE_LAUNCH:
+				case AppKeys.SYS_FILE_LAUNCH:
 					if ( Navigating )
 					{
 						ActionBlocked();
 						return;
 					}
 
-					BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
+					BookItem Book;
+					if ( Mesg.Payload is string )
+					{
+						Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
+					}
+					else
+					{
+						Book = await ItemProcessor.OpenXRBK( Mesg.Payload );
+					}
+
 					if ( Book != null )
 					{
 						NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
 					}
-					break;
-				case AppKeys.SYS_FILE_LAUNCH:
-					if( Navigating )
-					{
-						ActionBlocked();
-						return;
-					}
-
-					System.Diagnostics.Debugger.Break();
 					break;
 			}
 		}
@@ -119,10 +123,14 @@ namespace wenku10.Pages
 
 				LaunchArgs = null;
 			}
-			else if ( LaunchArgs is FileActivatedEventArgs FileArgs )
+			else
 			{
-				var j = GR.Resources.Image.ReadXRBK( FileArgs.Files.First() as Windows.Storage.IStorageFile );
-				System.Diagnostics.Debugger.Break();
+				BookItem Book = await ItemProcessor.OpenXRBK( LaunchArgs );
+				if ( Book != null )
+				{
+					LaunchArgs = null;
+					FPage = () => new BookInfoView( Book );
+				}
 			}
 
 			MajorCmdBar.IsOpen = false;
@@ -544,6 +552,17 @@ namespace wenku10.Pages
 			TransitionDisplay.SetState( MajorCmdBar, TransitionState.Active );
 			TransitionDisplay.SetState( MinorCmdBar, TransitionState.Active );
 			TransitionDisplay.SetState( MainStage.Instance.BadgeBlock, TransitionState.Inactive );
+		}
+
+		public class BgTaskContext : Net.Astropenguin.DataModel.ActiveData
+		{
+			public bool IsLoading { get; set; }
+			public string Mesg { get; set; }
+
+			public void Notify()
+			{
+				NotifyChanged( "IsLoading", "Mesg" );
+			}
 		}
 
 	}

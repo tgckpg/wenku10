@@ -43,7 +43,8 @@ namespace GR.PageExtensions
 		CompatMenuFlyoutItem DefaultTOC;
 		CompatMenuFlyoutItem DefaultReader;
 		CompatMenuFlyoutItem DefaultInfo;
-		MenuFlyoutItem ExportXRBKBtn;
+		MenuFlyoutSubItem ExportBtn;
+		MenuFlyoutItem XRBKBtn;
 		MenuFlyoutItem BrowserBtn;
 
 		MenuFlyoutSubItem ChangeDefault;
@@ -98,8 +99,11 @@ namespace GR.PageExtensions
 			BrowserBtn = new MenuFlyoutItem() { Text = stx.Text( "OpenInBrowser" ) };
 			BrowserBtn.Click += BrowserBtn_Click;
 
-			ExportXRBKBtn = new MenuFlyoutItem() { Text = "Export XRBK" };
-			ExportXRBKBtn.Click += ExportXRBKBtn_Click;
+			XRBKBtn = new MenuFlyoutItem() { Text = "XRBK" };
+			XRBKBtn.Click += ExportXRBKBtn_Click;
+
+			ExportBtn = new MenuFlyoutSubItem() { Text = stx.Text( "Export" ) };
+			ExportBtn.Items.Add( XRBKBtn );
 
 			OpenWith = new MenuFlyoutSubItem() { Text = stx.Text( "OpenWith", "ContextMenu" ) };
 			OpenWith.Items.Add( GotoTOC );
@@ -112,9 +116,9 @@ namespace GR.PageExtensions
 			ContextMenu = new MenuFlyout();
 			ContextMenu.Items.Add( OpenDefault );
 			ContextMenu.Items.Add( Edit );
-			ContextMenu.Items.Add( ExportXRBKBtn );
 			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
 			ContextMenu.Items.Add( PinToStart );
+			ContextMenu.Items.Add( ExportBtn );
 			ContextMenu.Items.Add( new MenuFlyoutSeparator() );
 			ContextMenu.Items.Add( OpenWith );
 			ChangeDefault = new MenuFlyoutSubItem() { Text = stx.Text( "ChangeDefault", "ContextMenu" ) };
@@ -310,7 +314,7 @@ namespace GR.PageExtensions
 				IStorageFile ISF = await AppStorage.SaveFileAsync( "GR Book ( XRBK )", new string[] { ".xrbk" }, BkItem.Title );
 				if ( ISF != null )
 				{
-					await Resources.Image.WriteXRBK( BkItem, ISF );
+					await ItemProcessor.WriteXRBK( BkItem, ISF );
 				}
 			}
 		}
