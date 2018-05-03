@@ -84,7 +84,7 @@ namespace GR.PageExtensions
 		{
 			InitAppBar();
 
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 			ContextMenu = new MenuFlyout();
 
 			Reanalyze = new MenuFlyoutItem() { Text = stx.Text( "Reanalyze" ) };
@@ -102,7 +102,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			AppBarButton OpenFolder = UIAliases.CreateAppBarBtn( SegoeMDL2.OpenLocal, stx.Text( "OpenFolder" ) );
 			OpenFolder.Click += ( s, e ) => ViewSource.BSData.OpenDirectory();
@@ -118,7 +118,7 @@ namespace GR.PageExtensions
 
 		private async void ProcessAll( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "AppBar", "AdvDM", "AppResources" );
+			StringResources stx = StringResources.Load( "AppBar", "AdvDM", "AppResources" );
 
 			if ( Processing )
 			{
@@ -185,7 +185,7 @@ namespace GR.PageExtensions
 
 		private async void OpenUrl_Click( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "AdvDM" );
+			StringResources stx = StringResources.Load( "AdvDM" );
 
 			DownloadBookContext Context = new DownloadBookContext();
 			wenku10.Pages.Dialogs.Rename UrlBox = new wenku10.Pages.Dialogs.Rename( Context, stx.Text( "Download_Location" ) )

@@ -12,7 +12,7 @@ namespace GR.Converters
 {
 	public class HubStatusConverter : IValueConverter
 	{
-		private StringResources stx = new StringResources( "Error" );
+		private StringResources stx = StringResources.Load( "Error" );
 
 		public object Convert( object value, Type targetType, object parameter, string language )
 		{

@@ -235,7 +235,7 @@ namespace wenku10.Pages.Settings.Advanced
 		private async void ShowCommand( Hyperlink sender, HyperlinkClickEventArgs args )
 		{
 			Logger.Log( ID, AppSettings.FamilyName, LogType.DEBUG );
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			await Popups.ShowDialog(
 				new Dialogs.Rename(
 					new CommandCopy() { Name = "CheckNetIsolation LoopbackExempt -a -n=" + AppSettings.FamilyName }

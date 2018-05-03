@@ -119,7 +119,7 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "ContextMenu", "AppResources" );
+			StringResources stx = StringResources.Load( "AppBar", "ContextMenu", "AppResources" );
 
 			// Major Controls
 			FavBtn = UIAliases.CreateAppBarBtn( Symbol.Favorite, "" );
@@ -253,7 +253,7 @@ namespace wenku10.Pages
 			{
 				bool No = true;
 
-				StringResources stx = new StringResources( "Message", "ContextMenu" );
+				StringResources stx = StringResources.Load( "Message", "ContextMenu" );
 
 				MessageDialog MsgBox = new MessageDialog( stx.Str( "BInfoView_PresetBg_Mesg" ), stx.Text( "PresetBackground", "ContextMenu" ) );
 				MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { No = false; } ) );
@@ -306,7 +306,7 @@ namespace wenku10.Pages
 			if ( !GRConfig.System.TwitterConfirmed )
 			{
 				GRConfig.System.TwitterConfirmed = true;
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
 			}
 
@@ -380,7 +380,7 @@ namespace wenku10.Pages
 
 		private void ToggleAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources", "ContextMenu" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources", "ContextMenu" );
 
 			if ( ThisBook.IsEx() )
 			{
@@ -431,7 +431,7 @@ namespace wenku10.Pages
 
 		private void ToggleFav()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			if( ThisBook == null )
 			{
 				FavBtn.IsEnabled = false;
@@ -465,7 +465,7 @@ namespace wenku10.Pages
 			}
 			else
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
 			}
 
@@ -496,7 +496,7 @@ namespace wenku10.Pages
 			BingService BingSrv = new BingService( ThisBook );
 			string Keyword = BingSrv.GetKeyword();
 
-			StringResources stx = new StringResources( "ContextMenu", "AppResources", "Settings", "Tips" );
+			StringResources stx = StringResources.Load( "ContextMenu", "AppResources", "Settings", "Tips" );
 			ValueHelpInput NVInput = new ValueHelpInput(
 				BingSrv.DefaultKeyword, stx.Text( "ChangeKeyword" )
 				, stx.Text( "Desc_InputKey", "AppResources" )
@@ -541,7 +541,7 @@ namespace wenku10.Pages
 
 		private async void SetSubsKey( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "ContextMenu", "AppResources", "Tips" );
+			StringResources stx = StringResources.Load( "ContextMenu", "AppResources", "Tips" );
 			ValueHelpInput NVInput = new ValueHelpInput(
 				stx.Text( "UseDefault", "AppResources" )
 				, stx.Text( "SetSubsKey" )

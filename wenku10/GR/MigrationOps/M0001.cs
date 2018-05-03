@@ -36,7 +36,7 @@ namespace GR.MigrationOps
 
 		private IPropertySet Settings => ApplicationData.Current.LocalSettings.Values;
 
-		StringResources stx = new StringResBg( "InitQuestions", "Message", "Settings", "NavigationTitles" );
+		StringResources stx = StringResources.Load( "InitQuestions", "Message", "Settings", "NavigationTitles" );
 
 		public async Task Up()
 		{

@@ -82,7 +82,7 @@ namespace GR.DataSources
 				IsLoading = true;
 			}
 
-			StringResBg stx = new StringResBg( "AppResources" );
+			StringResources stx = StringResources.Load( "AppResources" );
 			Message = stx.Text( "Loading" );
 
 			IQueryable<Book> Books = QuerySet( Shared.BooksDb.Books.AsQueryable() );

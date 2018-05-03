@@ -124,7 +124,7 @@ namespace wenku10.Pages.Sharers
 		{
 			if ( DownloadBtn == null )
 			{
-				StringResources stx = new StringResources( "AppResources", "AppBar" );
+				StringResources stx = StringResources.Load( "AppResources", "AppBar" );
 
 				DownloadBtn = UIAliases.CreateAppBarBtn( Symbol.Download, stx.Text( "Download", "AppBar" ) );
 				DownloadBtn.Click += ( s, e ) => Download();
@@ -226,7 +226,7 @@ namespace wenku10.Pages.Sharers
 
 		private async void Delete( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			MessageDialog MsgBox = new MessageDialog( stx.Str( "ConfirmScriptRemove" ) );
 
 			bool DoDelete = false;

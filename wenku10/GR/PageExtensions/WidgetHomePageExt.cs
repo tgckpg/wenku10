@@ -35,7 +35,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			AddWidgetBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Text( "AddWidget" ) );
 			AddWidgetBtn.Click += AddWidgetBtn_Click;
 

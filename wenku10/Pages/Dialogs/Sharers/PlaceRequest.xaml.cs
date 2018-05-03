@@ -41,7 +41,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 		{
 			this.InitializeComponent();
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );
@@ -81,7 +81,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 
 			if ( Keys.SelectedItem == null )
 			{
-				StringResources stx = new StringResources();
+				StringResources stx = StringResources.Load();
 				ServerMessage.Text = "Please Select a key";
 				return;
 			}

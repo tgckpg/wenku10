@@ -83,7 +83,7 @@ namespace wenku10.Pages.Settings.Themes
 
 			if ( TogPageClick.IsOn && GRConfig.ContentReader.ReadingAnchor )
 			{
-				StringResources stx = new StringResources( "Settings" );
+				StringResources stx = StringResources.Load( "Settings" );
 				MessageDialog Msg = new MessageDialog( stx.Text( "Layout_ContentReader_UsePageClick_Warning" ), stx.Text( "Layout_ContentReader_UsePageClick" ) );
 
 				Msg.Commands.Add(

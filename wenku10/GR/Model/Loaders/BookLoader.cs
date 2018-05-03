@@ -144,7 +144,7 @@ namespace GR.Model.Loaders
 
 		private void IntroFailed( string arg1, string arg2, Exception arg3 )
 		{
-			StringResBg stx = new StringResBg( "Error" );
+			StringResources stx = StringResources.Load( "Error" );
 			CurrentBook.IntroError( stx.Str( "Download" ) );
 		}
 

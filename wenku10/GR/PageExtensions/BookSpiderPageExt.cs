@@ -63,7 +63,7 @@ namespace GR.PageExtensions
 		{
 			InitAppBar();
 
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 			ContextMenu = new MenuFlyout();
 
 			Reanalyze = new MenuFlyoutItem() { Text = stx.Text( "Reanalyze" ) };
@@ -85,7 +85,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 
 			AppBarButton ImportSpider = UIAliases.CreateAppBarBtn( SegoeMDL2.OpenFile, stx.Text( "ImportSpider" ) );
 			ImportSpider.Click += OpenSpider;

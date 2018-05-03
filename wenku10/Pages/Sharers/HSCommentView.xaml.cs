@@ -122,7 +122,7 @@ namespace wenku10.Pages.Sharers
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources" );
 
 			AddBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Str( "AddComment" ) );
 			AddBtn.Click += ( sender, e ) =>
@@ -285,7 +285,7 @@ namespace wenku10.Pages.Sharers
 		private void NewReply( object sender, RoutedEventArgs e )
 		{
 			HSComment HSC = ( HSComment ) ( ( FrameworkElement ) sender ).DataContext;
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			CCTarget = SHTarget.COMMENT;
 			CCId = HSC.Id;
@@ -301,7 +301,7 @@ namespace wenku10.Pages.Sharers
 			{
 				DisplayControls( DiscardBtn );
 
-				StringResources stx = new StringResources();
+				StringResources stx = StringResources.Load();
 				CommentError.Text = stx.Text( "CommentsEncrypted" );
 			}
 			else
@@ -375,7 +375,7 @@ namespace wenku10.Pages.Sharers
 
 			if ( !string.IsNullOrEmpty( Data ) )
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				MessageDialog ConfirmDialog = new MessageDialog( "Are you sure you want to discard your message?" );
 
 				bool No = true;

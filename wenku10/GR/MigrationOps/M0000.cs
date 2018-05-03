@@ -32,7 +32,7 @@ namespace GR.MigrationOps
 
 		public bool ShouldMigrate { get; set; }
 
-		StringResources stx = new StringResBg( "InitQuestions", "Message", "Settings", "NavigationTitles" );
+		StringResources stx = StringResources.Load( "InitQuestions", "Message", "Settings", "NavigationTitles" );
 
 		public M0000()
 		{

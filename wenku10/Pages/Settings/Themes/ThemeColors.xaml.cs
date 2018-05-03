@@ -107,7 +107,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			List<ICommandBarElement> Btns = new List<ICommandBarElement>();
 
@@ -167,7 +167,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void ThemePresets()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			PresetThemeColors = new ObservableCollection<ThemeSet>(
 				Manager.GetThemes()
 			);
@@ -263,7 +263,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void ThemeCopy( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			PresetThemeColors.Add(
 				Manager.CopyTheme(
 					SelectedTheme

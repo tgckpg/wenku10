@@ -37,8 +37,8 @@ namespace GR.Model.Pages
 
 		public volatile int CurrWork;
 
-		private StringResBg _stx;
-		private StringResBg Stx => _stx ?? ( _stx = new StringResBg( "LoadingMessage" ) );
+		private StringResources _stx;
+		private StringResources Stx => _stx ?? ( _stx = StringResources.Load( "LoadingMessage" ) );
 
 		public Task<T> RunAsync<IN, T>( Func<IN, Task<T>> Work, IN Args )
 		{

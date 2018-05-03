@@ -69,7 +69,7 @@ namespace GR.PageExtensions
 
 		protected override void SetTemplate()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources", "ContextMenu", "Resources" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources", "ContextMenu", "Resources" );
 
 			OpenDefault = new MenuFlyoutItem() { Text = "Open", FontWeight = FontWeights.Bold };
 			OpenDefault.Click += OpenDefault_Click;
@@ -239,7 +239,7 @@ namespace GR.PageExtensions
 				DefaultReader.Icon2.Opacity = 0;
 				DefaultTOC.Icon2.Opacity = 0;
 
-				StringResources stx = new StringResources( "AppBar", "Resources", "ContextMenu" );
+				StringResources stx = StringResources.Load( "AppBar", "Resources", "ContextMenu" );
 				switch ( DefaultAction.Value )
 				{
 					case "TOC":
@@ -300,7 +300,7 @@ namespace GR.PageExtensions
 				}
 				else
 				{
-					StringResources stx = new StringResources( "Message" );
+					StringResources stx = StringResources.Load( "Message" );
 					await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
 					OpenTOC( BkItem );
 				}

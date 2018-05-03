@@ -63,7 +63,7 @@ namespace GR.PageExtensions
 
 		public async void AddItem()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			NameValue<string> NewItem = new NameValue<string>( "", "" );
 			NameValueInput NVInput = new NameValueInput(
 				NewItem
@@ -96,7 +96,7 @@ namespace GR.PageExtensions
 		{
 			InitAppBar();
 
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 
 			ContextMenu = new MenuFlyout();
 
@@ -111,7 +111,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "Settings" );
+			StringResources stx = StringResources.Load( "AppBar", "Settings" );
 			SaveBtn = UIAliases.CreateAppBarBtn( Symbol.Save, stx.Str( "Save" ) );
 			SaveBtn.IsEnabled = false;
 			SaveBtn.Click += SaveBtn_Click;
@@ -183,7 +183,7 @@ namespace GR.PageExtensions
 		private async void ResetBtn_Click( object sender, RoutedEventArgs e )
 		{
 			bool Reset = false;
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			await Popups.ShowDialog( UIAliases.CreateDialog(
 				stx.Str( "ConfirmResetConvTable" ), stx.Str( "ConfirmReset" )

@@ -43,7 +43,7 @@ namespace GR.MigrationOps
 
 		BackupAndRestoreOp CurrBakOp;
 
-		StringResources stx = new StringResBg( "InitQuestions", "Message", "Settings", "NavigationTitles" );
+		StringResources stx = StringResources.Load( "InitQuestions", "Message", "Settings", "NavigationTitles" );
 		DispatcherTimer DTimer;
 
 		public MigrationManager()

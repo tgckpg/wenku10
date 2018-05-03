@@ -35,7 +35,7 @@ namespace wenku10.Pages.Dialogs
 			this.InitializeComponent();
 			this.Member = Member;
 
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			PrimaryButtonText = stx.Text( "Login" );
 			SecondaryButtonText = stx.Text( "Button_Back" );
 

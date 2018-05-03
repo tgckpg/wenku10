@@ -64,7 +64,7 @@ namespace wenku10.Pages.Settings.Themes
 
 			RBgContext.ApplyBackgrounds();
 
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 
 			ExpContent = new Paragraph[]
 			{

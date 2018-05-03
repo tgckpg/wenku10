@@ -58,7 +58,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 		}
 
@@ -131,7 +131,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 			StorageFile TempFile = await AppStorage.MkTemp();
 
-			StringResources stx = new StringResources( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 
 			foreach ( ProcConvoy Konvoi in Convoys )
 			{

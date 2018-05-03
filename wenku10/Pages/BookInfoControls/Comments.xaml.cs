@@ -111,7 +111,7 @@ namespace wenku10.Pages.BookInfoControls
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources" );
 			AddBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Str( "AddComment" ) );
 			AddBtn.Click += WriteReview;
 

@@ -45,7 +45,7 @@ namespace wenku10.Pages.Settings.Data
 
 		private async void UpdateFields()
 		{
-			StringResources stx = new StringResources( "Settings", "LoadingMessage" );
+			StringResources stx = StringResources.Load( "Settings", "LoadingMessage" );
 			illus_Size.Text = stx.Str( "Calculating", "LoadingMessage" );
 
 			(int nFolders, int nFiles, ulong nSize) = await Shared.Storage.Stat( FileLinks.ROOT_IMAGE );

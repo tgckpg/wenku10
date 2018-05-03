@@ -89,7 +89,7 @@ namespace GR.Model.Pages
 		{
 			if ( !SBook.HasChakra )
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 
 				bool Confirmed = false;
 
@@ -105,7 +105,7 @@ namespace GR.Model.Pages
 
 		public static async Task<AsyncTryOut<Chapter>> TryGetAutoAnchor( BookItem Book, bool Sync = true )
 		{
-			StringResources stx = new StringResources( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			if ( Sync )
 			{
 				MessageBus.SendUI( typeof( PageProcessor ), stx.Str( "SyncingAnchors" ), Book.ZItemId );

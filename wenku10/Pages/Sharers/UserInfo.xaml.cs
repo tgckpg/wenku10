@@ -83,7 +83,7 @@ namespace wenku10.Pages.Sharers
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "Settings", "Message", "ContextMenu" );
+			StringResources stx = StringResources.Load( "Settings", "Message", "ContextMenu" );
 			AppBarButton LogoutBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.ChevronLeft, stx.Text( "Account_Logout" ) );
 			LogoutBtn.Click += async ( s, e ) =>
 			{

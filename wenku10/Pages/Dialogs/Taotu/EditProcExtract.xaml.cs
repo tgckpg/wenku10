@@ -50,7 +50,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 
 			MessageBus.Subscribe( this, MessageBus_OnDelivery );

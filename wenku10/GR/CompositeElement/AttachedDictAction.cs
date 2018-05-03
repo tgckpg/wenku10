@@ -54,7 +54,7 @@ namespace GR.CompositeElement
 		{
 			MenuFlyout Menu = new MenuFlyout();
 			MenuFlyoutItem DictAction = new MenuFlyoutItem();
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 			DictAction.Text = stx.Text( "Search_Dict" );
 
 			DictAction.Click += ( s, e ) =>

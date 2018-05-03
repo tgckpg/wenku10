@@ -849,7 +849,7 @@ namespace wenku10.Pages
 
 		private void OpenMask()
 		{
-			StringResources stx = new StringResources( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			_RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
 			_RenderMask.State = ControlState.Reovia;
 		}

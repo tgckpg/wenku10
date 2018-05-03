@@ -12,7 +12,7 @@ namespace GR.GStrings
 	{
 		public static string IBookProcess( string Name )
 		{
-			StringResources stx = new StringResBg( "AppResources", "NavigationTitles" );
+			StringResources stx = StringResources.Load( "AppResources", "NavigationTitles" );
 			switch ( Name )
 			{
 				case "Name":
@@ -30,7 +30,7 @@ namespace GR.GStrings
 
 		public static string FTSColumns( string Name )
 		{
-			StringResources stx = new StringResBg( "Book", "AppResources" );
+			StringResources stx = StringResources.Load( "Book", "AppResources" );
 			switch ( Name )
 			{
 				case "Title":
@@ -48,7 +48,7 @@ namespace GR.GStrings
 
 		public static string TSTColumns( string Name )
 		{
-			StringResources stx = new StringResBg();
+			StringResources stx = StringResources.Load();
 			switch ( Name )
 			{
 				case "Name":

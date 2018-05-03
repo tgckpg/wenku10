@@ -70,7 +70,7 @@ namespace wenku10.Pages.Sharers
 
 		private async void SetTemplate()
 		{
-			StringResources stx = new StringResources( "AppResources", "ContextMenu", "WMessage", "LoadingMessage", "AppBar" );
+			StringResources stx = StringResources.Load( "AppResources", "ContextMenu", "WMessage", "LoadingMessage", "AppBar" );
 
 			InitAppBar( stx );
 
@@ -187,7 +187,7 @@ namespace wenku10.Pages.Sharers
 
 			if ( !DoDelete )
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				MessageDialog MsgBox = new MessageDialog( SelectedItem.DeleteMessage );
 
 				MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { DoDelete = true; } ) );
@@ -266,7 +266,7 @@ namespace wenku10.Pages.Sharers
 		private async void ImportKey( object sender, RoutedEventArgs e )
 		{
 			NameValue<string> NV = new NameValue<string>( "", "" );
-			StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+			StringResources stx = StringResources.Load( "AppResources", "ContextMenu" );
 			Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
 				NV, stx.Text( "New" ) + stx.Text( "Secret" )
 				, stx.Text( "Name" ), stx.Text( "Secret" )
@@ -324,7 +324,7 @@ namespace wenku10.Pages.Sharers
 		{
 			NameValue<string> NV = new NameValue<string>( "", "" );
 
-			StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+			StringResources stx = StringResources.Load( "AppResources", "ContextMenu" );
 			Dialogs.NameValueInput NVInput = new Dialogs.NameValueInput(
 				NV, stx.Text( "New" ) + stx.Text( "AccessTokens", "ContextMenu" )
 				, stx.Text( "Name" ), stx.Text( "AccessTokens", "ContextMenu" )
@@ -362,7 +362,7 @@ namespace wenku10.Pages.Sharers
 			{
 				get
 				{
-					StringResources stx = new StringResources( "Message" );
+					StringResources stx = StringResources.Load( "Message" );
 					return stx.Str( "DeleteEffective" + AuthType.ToString() );
 				}
 			}

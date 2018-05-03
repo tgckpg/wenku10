@@ -46,7 +46,7 @@ namespace GR.DataSources
 				IsLoading = true;
 			}
 
-			StringResources stx = new StringResBg( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			Message = stx.Str( "ProgressIndicator_Message" );
 
 			PsTable.Items = _Items;

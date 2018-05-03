@@ -34,7 +34,7 @@ namespace GR.GSystem
 		private ICommandBarElement[] CommonCommands;
 		private ICommandBarElement[] SystemCommands;
 
-		private StringResources stx = new StringResources( "AppResources", "Settings", "ContextMenu", "AppBar", "NavigationTitles" );
+		private StringResources stx = StringResources.Load( "AppResources", "Settings", "ContextMenu", "AppBar", "NavigationTitles" );
 
 		SecretSwipeButton AboutBtn;
 
@@ -199,7 +199,7 @@ namespace GR.GSystem
 
 		private async void BackupBtn_Click( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			bool ConfirmRestore = false;
 

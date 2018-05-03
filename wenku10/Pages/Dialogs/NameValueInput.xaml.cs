@@ -34,7 +34,7 @@ namespace wenku10.Pages.Dialogs
 			Canceled = true;
 			Target = Item;
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( BtnLeft );
 			SecondaryButtonText = stx.Str( BtnRight );
 

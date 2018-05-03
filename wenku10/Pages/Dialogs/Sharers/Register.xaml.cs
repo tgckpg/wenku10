@@ -30,7 +30,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 		{
 			this.InitializeComponent();
 
-			StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+			StringResources stx = StringResources.Load( "AppResources", "ContextMenu" );
 			PrimaryButtonText = stx.Text( "Register", "ContextMenu" );
 			SecondaryButtonText = stx.Text( "Button_Back");
 		}
@@ -79,7 +79,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 			}
 			else if( Passwd != PasswdV )
 			{
-				StringResources stx = new StringResources( "Error" );
+				StringResources stx = StringResources.Load( "Error" );
 				ServerMessage.Text = stx.Str( "PasswordMismatch" );
 				Password.Focus( FocusState.Keyboard );
 			}
@@ -146,7 +146,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 
 		private void IndicateLoad()
 		{
-			StringResources stx = new StringResources( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			LoadingRing.IsActive = true;
 			LoadingRing.Visibility = Visibility.Visible;
 			ServerMessage.Text = stx.Text( "ProgressIndicator_PleaseWait" );

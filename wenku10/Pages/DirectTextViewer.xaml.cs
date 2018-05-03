@@ -59,7 +59,7 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			AppBarButton ExportBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Export, stx.Text( "Export" ) );
 			ExportBtn.Click += ExportBtn_Click;

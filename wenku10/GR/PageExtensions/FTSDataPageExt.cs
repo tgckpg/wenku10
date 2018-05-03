@@ -68,7 +68,7 @@ namespace GR.PageExtensions
 
 				bool BuildIndex = false;
 
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					string.Format( stx.Str( "ConfirmBuildFTS" ), EstSize )
 					, () => BuildIndex = true
@@ -89,7 +89,7 @@ namespace GR.PageExtensions
 				Chapter Ch = Shared.BooksDb.Chapters.Find( RsRow.Source.ChapterId );
 				if ( Ch == null )
 				{
-					StringResources stx = new StringResources( "Message" );
+					StringResources stx = StringResources.Load( "Message" );
 					await Popups.ShowDialog( UIAliases.CreateDialog( string.Format( stx.Str( "FTSNeedsRebuild" ) ) ) );
 					return;
 				}
@@ -111,7 +111,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			Rebuild = UIAliases.CreateAppBarBtn( SegoeMDL2.ResetDrive, stx.Text( "RebuildIndex" ) );
 			Rebuild.Click += Rebuild_Click;

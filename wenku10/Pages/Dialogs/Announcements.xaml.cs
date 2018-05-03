@@ -30,7 +30,7 @@ namespace wenku10.Pages.Dialogs
 		{
 			this.InitializeComponent();
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "AllRead" );
 			SecondaryButtonText = stx.Str( "OK" );
 

@@ -94,7 +94,7 @@ namespace wenku10.Pages.Sharers
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 
 			PlaceBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Text( "PlaceRequest" ) );
 			PlaceBtn.Click += ( sender, e ) => PlaceRequest();
@@ -104,7 +104,7 @@ namespace wenku10.Pages.Sharers
 
 		public async void PlaceRequest()
 		{
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 
 			PlaceRequest RequestBox = new PlaceRequest(
 				ReqTarget, BindItem

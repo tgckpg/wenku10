@@ -146,7 +146,7 @@ namespace wenku10.Pages.Sharers
 			Keys.DataContext = AESMgr;
 			AccessTokens.DataContext = TokMgr;
 
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			FileName.Text = stx.Text( "PickAFile" );
 
 			Scopes = new KeyValuePair<string, SpiderScope>[]
@@ -160,7 +160,7 @@ namespace wenku10.Pages.Sharers
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			UploadBtn = UIAliases.CreateAppBarBtnEx( Symbol.Send, stx.Text( "SubmitScript" ) );
 			UploadBtn.Click += Upload;
 
@@ -236,7 +236,7 @@ namespace wenku10.Pages.Sharers
 			}
 			catch ( ValidationError ex )
 			{
-				StringResources stx = new StringResources( "Error" );
+				StringResources stx = StringResources.Load( "Error" );
 
 				Message.Text = stx.Str( ex.Message );
 				MarkNotUpload();
@@ -322,7 +322,7 @@ namespace wenku10.Pages.Sharers
 				SelectedBook = await SpiderBook.ImportFile( await ISF.ReadString(), false );
 				if ( !SelectedBook.CanProcess )
 				{
-					StringResources stx = new StringResources( "ERROR" );
+					StringResources stx = StringResources.Load( "ERROR" );
 					throw new InvalidDataException( stx.Str( "HS_INVALID" ) );
 				}
 

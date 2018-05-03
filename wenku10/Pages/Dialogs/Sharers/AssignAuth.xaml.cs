@@ -36,7 +36,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 			Canceled = true;
 			AuthMgr = Mgr;
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );

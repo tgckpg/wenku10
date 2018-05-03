@@ -115,7 +115,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 			NeedDownload = false;
 
-			StringResources stm = new StringResources( "Message" );
+			StringResources stm = StringResources.Load( "Message" );
 
 			await Popups.ShowDialog( UIAliases.CreateDialog(
 				 "Not enough information to see if there were any illustrations within this volume. Download this volume?"

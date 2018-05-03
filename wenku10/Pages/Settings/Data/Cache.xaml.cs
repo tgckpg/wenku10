@@ -37,13 +37,13 @@ namespace wenku10.Pages.Settings.Data
 
 		private async void UpdateZCache()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			CacheLimit.Text = stx.Text( "Data_CacheUsed" ) + " " + Utils.AutoByteUnit( await Shared.Storage.FileSize( FileLinks.DB_ZCACHE ) );
 		}
 
 		private async void UpdateFTSData()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			if ( Shared.Storage.FileExists( FileLinks.DB_FTS_DATA ) )
 			{
 				FTSSize.Text = stx.Text( "Data_CacheUsed" ) + " " + Utils.AutoByteUnit( await Shared.Storage.FileSize( FileLinks.DB_FTS_DATA ) );

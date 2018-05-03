@@ -60,7 +60,7 @@ namespace wenku10.Pages
 
 		protected void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			List<ICommandBarElement> Btns = new List<ICommandBarElement>();
 
 			if ( GRConfig.System.EnableOneDrive )
@@ -142,7 +142,7 @@ namespace wenku10.Pages
 
 		protected async void DownloadVolume( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "Message", "ContextMenu" );
+			StringResources stx = StringResources.Load( "Message", "ContextMenu" );
 
 			bool Confirmed = false;
 

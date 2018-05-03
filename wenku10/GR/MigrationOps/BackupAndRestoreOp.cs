@@ -118,7 +118,7 @@ namespace GR.MigrationOps
 				ZBackup = await AppStorage.OpenFileAsync( Mops.Select( x => "." + x ) );
 				if ( ZBackup != null )
 				{
-					StringResources stx = new StringResources( "InitQuestions", "Message" );
+					StringResources stx = StringResources.Load( "InitQuestions", "Message" );
 					await Popups.ShowDialog( UIAliases.CreateDialog(
 						stx.Text( "WarnMigrateWithBackup" )
 						, () => UseThisFile = true

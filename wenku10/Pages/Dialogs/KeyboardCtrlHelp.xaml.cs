@@ -26,7 +26,7 @@ namespace wenku10.Pages.Dialogs
 		public KeyboardCtrlHelp( string Name, Dictionary<string, List<string>> Descs )
 			:this()
 		{
-			StringResources stx = new StringResources( "Resources" );
+			StringResources stx = StringResources.Load( "Resources" );
 
 			TitleText.Text = stx.Str( "Kb_For_" + Name ) + " - " + stx.Str( "KeyboardControls" );
 

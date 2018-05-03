@@ -60,7 +60,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "NavigationTitles" );
+			StringResources stx = StringResources.Load( "NavigationTitles" );
 
 			if ( StoreServicesFeedbackLauncher.IsSupported() )
 			{

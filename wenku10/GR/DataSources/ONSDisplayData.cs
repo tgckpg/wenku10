@@ -63,7 +63,7 @@ namespace GR.DataSources
 		{
 			IsLoading = true;
 
-			StringResources stx = new StringResBg( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			Message = stx.Str( "ProgressIndicator_Message" );
 
 			IEnumerable<string> AccessTokens = new TokenManager().AuthList.Remap( x => ( string ) x.Value );

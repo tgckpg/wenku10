@@ -101,7 +101,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppResources", "ContextMenu" );
+			StringResources stx = StringResources.Load( "AppResources", "ContextMenu" );
 
 			ActivyBtn = new AppBarButtonEx()
 			{
@@ -124,7 +124,7 @@ namespace GR.PageExtensions
 			LoginBtn.Click += ( s, e ) => SHLoginOrInfo();
 
 #if DEBUG || TESTING
-			StringResources sts = new StringResources( "Settings" );
+			StringResources sts = StringResources.Load( "Settings" );
 			SecondaryIconButton ChangeServer = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.DirectAccess, sts.Text( "Advanced_Server" ) );
 			ChangeServer.Click += async ( s, e ) =>
 			{
@@ -199,7 +199,7 @@ namespace GR.PageExtensions
 
 		private void UpdateLoginButton()
 		{
-			StringResources stx = new StringResBg( "AppResources", "Settings" );
+			StringResources stx = StringResources.Load( "AppResources", "Settings" );
 
 			if ( MInstance.IsLoggedIn )
 			{

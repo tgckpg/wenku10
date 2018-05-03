@@ -94,7 +94,7 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources", "Settings" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources", "Settings" );
 
 			AddBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Str( "AddComment" ) );
 			AddBtn.Click += OpenInputBox;
@@ -162,7 +162,7 @@ namespace wenku10.Pages
 			{
 				bool Discard = false;
 
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					stx.Str( "ConfirmDiscard" )
 					, () => Discard = true
@@ -220,7 +220,7 @@ namespace wenku10.Pages
 			if ( TweetInput.FocusState == FocusState.Keyboard )
 			{
 				bool Continue = false;
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					stx.Str( "ConfirmSubmit" )
 					, () => Continue = true
@@ -244,7 +244,7 @@ namespace wenku10.Pages
 			if ( !( TweetContent.Contains( "#wenku10" ) && TweetContent.Contains( Keywords.Text ) ) )
 			{
 				bool Continue = false;
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					string.Format( stx.Str( "Desc_OSTweet" ), Keywords.Text, "#wenku10" )
 					, stx.Str( "OSTweet" )

@@ -147,7 +147,7 @@ namespace wenku10.Pages
 		{
 			LoadingMessage.DataContext = new GR.GSystem.PageExtOperations();
 
-			StringResources stx = new StringResources( "NavigationTitles", "AppBar", "AppResources" );
+			StringResources stx = StringResources.Load( "NavigationTitles", "AppBar", "AppResources" );
 			VSHistory = new Stack<BackStackHistroy>();
 
 			TreeItem MyLibrary = new TreeItem( stx.Text( "MyLibrary" ) )

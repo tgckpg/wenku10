@@ -32,7 +32,7 @@ namespace wenku10.Pages.Settings.Data
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			CoverSize.Text = stx.Str( "Calculating" );
 			TextContentSize.Text = stx.Str( "Calculating" );
 			CalculateCoverSize();
@@ -41,7 +41,7 @@ namespace wenku10.Pages.Settings.Data
 
 		private async void CalculateCoverSize()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			(int nFolders, int nFiles, ulong nSize) = await Shared.Storage.Stat( FileLinks.ROOT_COVER );
 			CoverSize.Text = stx.Text( "Data_CacheUsed" )
 				+ string.Format( ": {0} folders, {1} files, {2}", nFolders, nFiles, Utils.AutoByteUnit( nSize ) );
@@ -49,7 +49,7 @@ namespace wenku10.Pages.Settings.Data
 
 		private async void CalculateTextSize()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			TextContentSize.Text = stx.Text( "Data_CacheUsed" )
 				+ ": " + Utils.AutoByteUnit( await Shared.Storage.FileSize( FileLinks.DB_BOOKS ) );
 		}

@@ -59,7 +59,7 @@ namespace wenku10.Pages.Settings.Advanced
 			Tables = new List<NameValue<string>>();
 			ViewSources = new Dictionary<string, ConvViewSource>();
 
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 
 			if ( Shared.Conv.DoTraditional )
 			{

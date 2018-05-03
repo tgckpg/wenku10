@@ -74,7 +74,7 @@ namespace wenku10.Pages
 			if ( !await AuthData.Authenticate() ) goto TweetEnd;
 
 			string TweetText = "";
-			StringResources stx = new StringResources( "Error", "AppResources" );
+			StringResources stx = StringResources.Load( "Error", "AppResources" );
 
 			TweetStart:
 

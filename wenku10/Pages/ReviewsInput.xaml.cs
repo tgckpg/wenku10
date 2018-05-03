@@ -39,7 +39,7 @@ namespace wenku10.Pages
 
 			if( global::GR.Config.Properties.REVIEWS_SIGN == null )
 			{
-				StringResources stx = new StringResources( "Settings" );
+				StringResources stx = StringResources.Load( "Settings" );
 				global::GR.Config.Properties.REVIEWS_SIGN
 					= stx.Text( "Account_Reviews_Post_Sign_Default" );
 			}
@@ -52,7 +52,7 @@ namespace wenku10.Pages
 		{
 			IsReview = false;
 
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			Title.Text = stx.Str( "AddComment" );
 		}
 
@@ -61,7 +61,7 @@ namespace wenku10.Pages
 		{
 			IsReview = true;
 
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			Title.Text = stx.Text( "Reply" );
 			TitleSection.Visibility = Visibility.Collapsed;
 		}
@@ -81,7 +81,7 @@ namespace wenku10.Pages
 			if ( !await SS.Passed( Title ) ) return false;
 
 			string Msg;
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 
 			if( !IsReview && Title.Length < MinTitleLimit )
 			{
@@ -127,7 +127,7 @@ namespace wenku10.Pages
 		{
 			if ( BTitle == null ) return;
 
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			switch ( STopicType.SelectedIndex )
 			{
 				case 0:
@@ -161,7 +161,7 @@ namespace wenku10.Pages
 
 		private string GetPrefix()
 		{
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			switch ( STopicType.SelectedIndex )
 			{
 				case 1:

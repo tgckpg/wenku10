@@ -35,7 +35,7 @@ namespace wenku10.Pages.Dialogs
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Message", "AppBar" );
+			StringResources stx = StringResources.Load( "Message", "AppBar" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );

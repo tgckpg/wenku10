@@ -108,7 +108,7 @@ namespace wenku10.Pages.Settings
 		{
 			LayoutRoot.RenderTransform = new TranslateTransform();
 
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 
 			string CurrentLang = Properties.LANGUAGE;
 			SettingsSection LangSection = new SettingsSection()
@@ -236,7 +236,7 @@ namespace wenku10.Pages.Settings
 
 		public async Task<bool> ConfirmRestart( string CaptionRes )
 		{
-			StringResources stx = new StringResources( "Message", "Settings" );
+			StringResources stx = StringResources.Load( "Message", "Settings" );
 
 			bool Restart = false;
 
@@ -270,11 +270,11 @@ namespace wenku10.Pages.Settings
 		{
 			if( P.GetType() == typeof( bool ) )
 			{
-				StringResources sts = new StringResources( "Settings" );
+				StringResources sts = StringResources.Load( "Settings" );
 				if ( !GRConfig.System.EnableOneDrive )
 				{
-					StringResources stx = new StringResources( "InitQuestions" );
-					StringResources stm = new StringResources( "Message" );
+					StringResources stx = StringResources.Load( "InitQuestions" );
+					StringResources stm = StringResources.Load( "Message" );
 					MessageDialog Msg = new MessageDialog( stx.Text( "EnableOneDrive" ), "OneDrive" );
 					Msg.Commands.Add(
 						new UICommand( stm.Str( "Yes" ), ( x ) => GRConfig.System.EnableOneDrive = true )

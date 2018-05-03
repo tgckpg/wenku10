@@ -98,7 +98,7 @@ namespace GR.Model.Section.SharersHub
 				{
 					Member.Activities.Add( () =>
 					{
-						StringResources stx = new StringResources();
+						StringResources stx = StringResources.Load();
 						return string.Format( stx.Text( "GrantsReceived" ), NGrants, NScripts );
 					}, () => MessageBus.SendUI( typeof( MyRequests ), AppKeys.SH_SHOW_GRANTS ) );
 				}

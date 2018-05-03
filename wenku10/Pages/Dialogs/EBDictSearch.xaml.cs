@@ -46,7 +46,7 @@ namespace wenku10.Pages.Dialogs
 		{
 			this.InitializeComponent();
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 		}
 
@@ -86,7 +86,7 @@ namespace wenku10.Pages.Dialogs
 
 			if ( string.IsNullOrEmpty( ParaText.Text ) )
 			{
-				StringResources stx = new StringResources();
+				StringResources stx = StringResources.Load();
 				CurrentWord.PlaceholderText = stx.Text( "Desc_InputKey" );
 			}
 		}

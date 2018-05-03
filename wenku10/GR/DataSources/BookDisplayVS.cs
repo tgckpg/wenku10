@@ -30,7 +30,7 @@ namespace GR.DataSources
 		{
 			if ( DataSourceType == typeof( HistoryData ) )
 			{
-				StringResBg stx = new StringResBg( "NavigationTitles" );
+				StringResources stx = StringResources.Load( "NavigationTitles" );
 				return new WidgetConfig()
 				{
 					Name = stx.Text( "CurrentlyReading" ),

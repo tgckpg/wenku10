@@ -88,7 +88,7 @@ namespace wenku10.SHHub
 					break;
 
 				case AppKeys.HS_DECRYPT_FAIL:
-					StringResources stx = new StringResources( "Message", "ContextMenu" );
+					StringResources stx = StringResources.Load( "Message", "ContextMenu" );
 
 					bool Place = false;
 
@@ -119,7 +119,7 @@ namespace wenku10.SHHub
 					break;
 
 				case AppKeys.EX_DEATHBLOW:
-					stx = new StringResources( "Message", "ContextMenu" );
+					stx = StringResources.Load( "Message", "ContextMenu" );
 
 					bool UseDeathblow = false;
 
@@ -179,7 +179,7 @@ namespace wenku10.SHHub
 				{
 					case PinPolicy.ASK:
 						bool RemoveRecord = true;
-						StringResources stx = new StringResources( "Message", "AppBar", "ContextMenu" );
+						StringResources stx = StringResources.Load( "Message", "AppBar", "ContextMenu" );
 						await Popups.ShowDialog( UIAliases.CreateDialog(
 							string.Format( stx.Str( "MissingPins" ), MissingPins.Length )
 							, () => RemoveRecord = false
@@ -243,7 +243,7 @@ namespace wenku10.SHHub
 
 		private async void ConfirmScriptParse( SpiderBook Book )
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			MessageDialog MsgBox = new MessageDialog( stx.Str( "ConfirmScriptParse" ) );
 
 			bool Parse = false;
@@ -267,7 +267,7 @@ namespace wenku10.SHHub
 
 		private async void ConfirmErrorReport( string Id, StatusType ErrorType )
 		{
-			StringResources stx = new StringResources( "Message", "Error" );
+			StringResources stx = StringResources.Load( "Message", "Error" );
 			MessageDialog MsgBox = new MessageDialog(
 				string.Format( stx.Str( "ReportError" ), stx.Str( ErrorType.ToString(), "Error" ) )
 			);

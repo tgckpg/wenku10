@@ -152,7 +152,7 @@ namespace wenku10.Pages.Settings
 			StatusMessage.Text = "";
 			var Table = new GR.Model.Loaders.TRTable();
 
-			StringResources stx = new StringResources( "InitQuestions" );
+			StringResources stx = StringResources.Load( "InitQuestions" );
 			if ( !( Table.Validate( "ntw_pw2t" ) && Table.Validate( "ntw_ps2t" ) ) )
 			{
 				StatusMessage.Text += stx.Text( "Failure_NTW" );

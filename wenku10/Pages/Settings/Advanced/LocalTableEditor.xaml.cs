@@ -77,7 +77,7 @@ namespace wenku10.Pages.Settings.Advanced
 
 		private NameValue<ConvViewSource> GetPhaseVS( int i, CustomConv Phase )
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 
 			string Id = "Custom." + CurrentBook.GID;
 			string Name = string.Format( stx.Text( "Conv_Phase" ), i );
@@ -130,7 +130,7 @@ namespace wenku10.Pages.Settings.Advanced
 			SaveBtn.IsEnabled = true;
 			Tables.RemoveAt( Phases.SelectedIndex );
 
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			Tables.ExecEach( ( x, i ) =>
 			{
 				x.Name = string.Format( stx.Text( "Conv_Phase" ), i );

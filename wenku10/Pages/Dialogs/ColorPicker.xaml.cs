@@ -41,7 +41,7 @@ namespace wenku10.Pages.Dialogs
 
 		private void SetTemplate( ColorItem BindColor )
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );

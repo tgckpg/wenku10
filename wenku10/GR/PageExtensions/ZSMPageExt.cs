@@ -65,7 +65,7 @@ namespace GR.PageExtensions
 		{
 			InitAppBar();
 
-			StringResources stx = new StringResources( "ContextMenu" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
 			ContextMenu = new MenuFlyout();
 
 			Edit = new MenuFlyoutItem() { Text = stx.Text( "Edit" ) };
@@ -87,7 +87,7 @@ namespace GR.PageExtensions
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			AppBarButton OpenFile = UIAliases.CreateAppBarBtn( SegoeMDL2.OpenFile, stx.Text( "OpenZone" ) );
 			OpenFile.Click += OpenFile_Click;
 

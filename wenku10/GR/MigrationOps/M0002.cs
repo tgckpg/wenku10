@@ -34,7 +34,7 @@ namespace GR.MigrationOps
 
 		private IPropertySet Settings => ApplicationData.Current.LocalSettings.Values;
 
-		StringResources stx = new StringResBg( "InitQuestions", "AdvDM" );
+		StringResources stx = StringResources.Load( "InitQuestions", "AdvDM" );
 
 		public async Task Up()
 		{
