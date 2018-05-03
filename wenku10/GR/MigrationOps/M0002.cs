@@ -48,8 +48,8 @@ namespace GR.MigrationOps
 
 				TRTable Table = new TRTable();
 
-				Mesg( stx.Text( "Active", "AdvDM" ) + " ntw_pw2t" );
-				if ( !( await Table.Get( "ntw_pw2t" ) ).Any() )
+				Mesg( stx.Text( "Active", "AdvDM" ) + " ntw_ws2t" );
+				if ( !( await Table.Get( "ntw_ws2t" ) ).Any() )
 				{
 					Mesg( stx.Text( "Failure_NTW" ) );
 				}

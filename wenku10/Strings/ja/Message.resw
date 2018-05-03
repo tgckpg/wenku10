@@ -258,4 +258,7 @@
   <data name="NoAndNever" xml:space="preserve">
     <value>いいえ、二度と質問しないで</value>
   </data>
+  <data name="ConfirmReplace" xml:space="preserve">
+    <value>このアイテムはデータベースに存在します。 その内容を置き換えますか？</value>
+  </data>
 </root>

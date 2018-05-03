@@ -258,4 +258,7 @@
   <data name="NoAndNever" xml:space="preserve">
     <value>否，不要再問</value>
   </data>
+  <data name="ConfirmReplace" xml:space="preserve">
+    <value>該項目存在於資料庫中。 要取代其內容嗎？</value>
+  </data>
 </root>
