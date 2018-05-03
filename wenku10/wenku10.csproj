@@ -155,6 +155,7 @@
     <Compile Include="GR\MigrationOps\MigrationManager.cs" />
     <Compile Include="GR\MigrationOps\BackupAndRestoreOp.cs" />
     <Compile Include="GR\MigrationOps\NaiveObfustream.cs" />
+    <Compile Include="GR\Model\Pages\BgTaskContext.cs" />
     <Compile Include="GR\Model\Section\WidgetView.cs" />
     <Compile Include="GR\PageExtensions\BookDisplayPageExt.cs" />
     <Compile Include="GR\PageExtensions\BookSpiderPageExt.cs" />

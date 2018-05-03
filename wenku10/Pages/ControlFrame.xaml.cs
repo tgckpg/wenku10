@@ -74,14 +74,15 @@ namespace wenku10.Pages
 						return;
 					}
 
-					BookItem Book;
+					BookItem Book = null;
+
 					if ( Mesg.Payload is string )
 					{
 						Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
 					}
-					else
+					else if ( ItemProcessor.RequestOpenXRBK( Mesg.Payload, out var ISF ) )
 					{
-						Book = await ItemProcessor.OpenXRBK( Mesg.Payload );
+						Book = await _BgTaskContext.RunAsync( ItemProcessor.OpenXRBK, ISF );
 					}
 
 					if ( Book != null )
@@ -123,13 +124,21 @@ namespace wenku10.Pages
 
 				LaunchArgs = null;
 			}
-			else
+			else if ( ItemProcessor.RequestOpenXRBK( LaunchArgs, out var ISF ) )
 			{
-				BookItem Book = await ItemProcessor.OpenXRBK( LaunchArgs );
-				if ( Book != null )
+				try
 				{
-					LaunchArgs = null;
-					FPage = () => new BookInfoView( Book );
+					BookItem Book = await _BgTaskContext.RunAsync( ItemProcessor.OpenXRBK, ISF );
+
+					if ( Book != null )
+					{
+						LaunchArgs = null;
+						FPage = () => new BookInfoView( Book );
+					}
+				}
+				catch ( InvalidOperationException )
+				{
+					ActionBlocked();
 				}
 			}
 
@@ -552,17 +561,6 @@ namespace wenku10.Pages
 			TransitionDisplay.SetState( MajorCmdBar, TransitionState.Active );
 			TransitionDisplay.SetState( MinorCmdBar, TransitionState.Active );
 			TransitionDisplay.SetState( MainStage.Instance.BadgeBlock, TransitionState.Inactive );
-		}
-
-		public class BgTaskContext : Net.Astropenguin.DataModel.ActiveData
-		{
-			public bool IsLoading { get; set; }
-			public string Mesg { get; set; }
-
-			public void Notify()
-			{
-				NotifyChanged( "IsLoading", "Mesg" );
-			}
 		}
 
 	}
