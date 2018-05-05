@@ -24,6 +24,7 @@
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoCurrent" Text="Goto Current" Click="GoCurrent" />
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoBottom" Text="Goto Bottom" Click="GoBottom" />
             </MenuFlyoutSubItem>
+            <MenuFlyoutSubItem x:Name="AccelerMenu" FlowDirection="LeftToRight" x:Uid="/ContextMenu/AccelerScroll" Text="AccelerScroll" />
             <MenuFlyoutSeparator />
             <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/Settings/Conv_Table_Local" Text="Translation table" Click="ShowConvPhases" />
             <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />

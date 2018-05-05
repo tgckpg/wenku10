@@ -147,20 +147,5 @@ namespace wenku10.Scenes
 
 		private void DrawNothing( CanvasDrawingSession ds ) { }
 
-		private void CubicTween( ref float a, float b, float dx = 0.5f, float dy = 0.5f )
-		{
-			a = dx * a + dy * b;
-		}
-
-		private Color CubicTween( Color a, Color b, float dx = 0.5f, float dy = 0.5f )
-		{
-			return new Color()
-			{
-				A = ( byte ) ( dx * a.A + dy * b.A )
-				, R = ( byte ) ( dx * a.R + dy * b.R )
-				, G = ( byte ) ( dx * a.G + dy * b.G )
-				, B = ( byte ) ( dx * a.B + dy * b.B )
-			};
-		}
 	}
 }

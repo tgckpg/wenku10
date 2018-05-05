@@ -20,11 +20,14 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 
 using GR.Config;
+using GR.CompositeElement;
 using GR.Database.Models;
 using GR.Effects;
+using GR.GSystem;
 using GR.Model.Loaders;
 using GR.Model.Section;
 using GR.Model.Text;
@@ -46,6 +49,9 @@ namespace wenku10.Pages.ContentReaderPane
 		private Chapter CurrentChapter { get { return Container.CurrentChapter; } }
 		private Paragraph SelectedParagraph;
 
+		private AccelerScroll ACScroll;
+		ScrollViewer AccelerSV;
+
 		private volatile bool HoldOneMore = false;
 		private volatile int UndoingJump = 0;
 
@@ -55,6 +61,10 @@ namespace wenku10.Pages.ContentReaderPane
 
 		ScrollBar VScrollBar;
 		ScrollBar HScrollBar;
+
+		CompatMenuFlyoutItem EnableAcceler;
+		CompatMenuFlyoutItem DisableAcceler;
+		MenuFlyoutItem CallibrateAcceler;
 
 		public ReaderContent( ContentReaderBase Container, int Anchor )
 		{
@@ -69,6 +79,8 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			try
 			{
+				ACScroll.StopReading();
+
 				Reader.PropertyChanged -= ScrollToParagraph;
 				Reader.Dispose();
 				Reader = null;
@@ -81,7 +93,7 @@ namespace wenku10.Pages.ContentReaderPane
 			catch ( Exception ) { }
 		}
 
-		internal void SetTemplate( int Anchor )
+		private void SetTemplate( int Anchor )
 		{
 			if ( Reader != null )
 				Reader.PropertyChanged -= ScrollToParagraph;
@@ -100,6 +112,8 @@ namespace wenku10.Pages.ContentReaderPane
 			MasterGrid.DataContext = Reader;
 			Reader.PropertyChanged += ScrollToParagraph;
 			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
+
+			SetAccelerScroll();
 		}
 
 		private async void InitPhaseConverter()
@@ -156,14 +170,82 @@ namespace wenku10.Pages.ContentReaderPane
 			double d = 50;
 			if ( IsHorz )
 			{
-				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenWidth;
+				if ( IsPage ) d = LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset + d, null, null );
 			}
 			else
 			{
-				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenHeight;
+				if ( IsPage ) d = LayoutSettings.ScreenHeight;
 				SV.ChangeView( null, SV.VerticalOffset + d, null );
 			}
+		}
+
+		private void SetAccelerScroll()
+		{
+			ACScroll = new AccelerScroll();
+
+			StringResources stx = StringResources.Load( "Settings" );
+			EnableAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );
+			EnableAcceler.Click += ( s, e ) => EnableAccelerScroll();
+
+			DisableAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Disabled" ), new SymbolIcon( Symbol.Accept ) );
+			DisableAcceler.Click += ( s, e ) => DisableAccelerScroll();
+
+			CallibrateAcceler = new MenuFlyoutItem() { Text = stx.Text( "Callibrate" ) };
+			CallibrateAcceler.Click += CallibrateAcceler_Click;
+
+			AccelerMenu.Items.Add( EnableAcceler );
+			AccelerMenu.Items.Add( DisableAcceler );
+
+			if ( GRConfig.ContentReader.UseAccelerScroll )
+			{
+				EnableAccelerScroll();
+			}
+			else
+			{
+				DisableAccelerScroll();
+			}
+
+			float x = 0;
+
+			void SC( float v )
+			{
+				x += v;
+				float c = ( float ) AccelerSV.HorizontalOffset;
+				Easings.ParamTween( ref c, c - x, 0.80f, 0.20f );
+				Easings.ParamTween( ref x, 0, 0.85f, 0.15f );
+				AccelerSV.ChangeView( c, null, null, true );
+			}
+
+			ACScroll.Delta = v =>
+			{
+				if ( AccelerSV != null )
+				{
+					ACScroll.Delta = SC;
+				}
+			};
+		}
+
+		private void CallibrateAcceler_Click( object sender, RoutedEventArgs e )
+		{
+		}
+
+		private void DisableAccelerScroll()
+		{
+			EnableAcceler.Icon2.Opacity = 0;
+			DisableAcceler.Icon2.Opacity = 1;
+			CallibrateAcceler.IsEnabled = false;
+			GRConfig.ContentReader.UseAccelerScroll = false;
+			ACScroll.StopReading();
+		}
+
+		private void EnableAccelerScroll()
+		{
+			EnableAcceler.Icon2.Opacity = 1;
+			DisableAcceler.Icon2.Opacity = 0;
+			CallibrateAcceler.IsEnabled = true;
+			GRConfig.ContentReader.UseAccelerScroll = true;
+			ACScroll.StartReading();
 		}
 
 		internal void ScrollLess( bool IsPage = false )
@@ -172,12 +254,12 @@ namespace wenku10.Pages.ContentReaderPane
 			double d = 50;
 			if ( IsHorz )
 			{
-				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenWidth;
+				if ( IsPage ) d = LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset - d, null, null );
 			}
 			else
 			{
-				if ( IsPage ) d = global::GR.Resources.LayoutSettings.ScreenHeight;
+				if ( IsPage ) d = LayoutSettings.ScreenHeight;
 				SV.ChangeView( null, SV.VerticalOffset - d, null );
 			}
 		}
@@ -219,6 +301,8 @@ namespace wenku10.Pages.ContentReaderPane
 			ToggleInertia();
 
 			ContentGrid.IsSynchronizedWithCurrentItem = false;
+
+			AccelerSV = ContentGrid.ChildAt<ScrollViewer>( 1 );
 
 			// Reader may not be available as ContentGrid.OnLoad is faster then SetTemplate
 			if ( !( Reader == null || Reader.SelectedData == null ) )

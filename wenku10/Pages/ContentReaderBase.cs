@@ -228,6 +228,7 @@ namespace wenku10.Pages
 			Window.Current.SizeChanged += Current_SizeChanged;
 
 			if ( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
+
 		}
 
 		private void InitAppBar()

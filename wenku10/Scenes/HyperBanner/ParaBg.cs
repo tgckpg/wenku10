@@ -93,10 +93,10 @@ namespace wenku10.Scenes
 
 		private void DrawIdleBg( CanvasDrawingSession ds )
 		{
-			CubicTween( ref BgY_c, BgY_t, 0.85f, 0.15f );
+			Easings.ParamTween( ref BgY_c, BgY_t, 0.85f, 0.15f );
 			BgFillRect.Y = BgY_c;
 
-			CubicTween( ref BgR_c, BgR_t, 0.75f, 0.25f );
+			Easings.ParamTween( ref BgR_c, BgR_t, 0.75f, 0.25f );
 			if ( BgR_c < 0 )
 			{
 				ds.DrawImage( BgBmp, StageRect, BgFillRect );
