@@ -239,6 +239,9 @@
     <Compile Include="Pages\Settings\BackupAndRestore.xaml.cs">
       <DependentUpon>BackupAndRestore.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Settings\CallibrateAcceler.xaml.cs">
+      <DependentUpon>CallibrateAcceler.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TOCPageBase.cs" />
     <Compile Include="Pages\TOCViewHorz.xaml.cs">
       <DependentUpon>TOCViewHorz.xaml</DependentUpon>
@@ -252,6 +255,7 @@
     <Compile Include="Pages\WDeathblow.xaml.cs">
       <DependentUpon>WDeathblow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Scenes\AccelerTest.cs" />
     <Compile Include="Scenes\HyperBanner\CircleTextRenderer.cs" />
     <Compile Include="Scenes\HyperBanner\HyperBanner.cs" />
     <Compile Include="Scenes\ImageUtils.cs" />
@@ -509,6 +513,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\Settings\BackupAndRestore.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Settings\CallibrateAcceler.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

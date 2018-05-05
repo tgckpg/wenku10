@@ -181,7 +181,7 @@ namespace wenku10.Scenes
 			{
 				lock ( Scenes )
 				{
-					foreach ( IScene S in TxScenes )
+					foreach ( IScene S in Scenes )
 					{
 						S.UpdateAssets( StageSize );
 					}

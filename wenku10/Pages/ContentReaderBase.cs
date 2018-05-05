@@ -805,6 +805,10 @@ namespace wenku10.Pages
 				{
 					Redraw();
 				}
+				else if( _OverlayFrame.Content is Settings.CallibrateAcceler Callibrator )
+				{
+					Callibrator.EndCallibration();
+				}
 
 				e.Handled = true;
 				return;

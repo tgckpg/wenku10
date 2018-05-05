@@ -246,4 +246,7 @@
   <data name="MoveUp.Text" xml:space="preserve">
     <value>上移</value>
   </data>
+  <data name="AccelerScroll.Text" xml:space="preserve">
+    <value>重力滚动</value>
+  </data>
 </root>

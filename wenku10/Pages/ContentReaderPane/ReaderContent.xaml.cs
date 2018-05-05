@@ -62,8 +62,7 @@ namespace wenku10.Pages.ContentReaderPane
 		ScrollBar VScrollBar;
 		ScrollBar HScrollBar;
 
-		CompatMenuFlyoutItem EnableAcceler;
-		CompatMenuFlyoutItem DisableAcceler;
+		CompatMenuFlyoutItem ToggleAcceler;
 		MenuFlyoutItem CallibrateAcceler;
 
 		public ReaderContent( ContentReaderBase Container, int Anchor )
@@ -183,41 +182,46 @@ namespace wenku10.Pages.ContentReaderPane
 		private void SetAccelerScroll()
 		{
 			ACScroll = new AccelerScroll();
+			ACScroll.StopRange = GRConfig.ContentReader.AccelerScroll.StopRange;
 
 			StringResources stx = StringResources.Load( "Settings" );
-			EnableAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );
-			EnableAcceler.Click += ( s, e ) => EnableAccelerScroll();
-
-			DisableAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Disabled" ), new SymbolIcon( Symbol.Accept ) );
-			DisableAcceler.Click += ( s, e ) => DisableAccelerScroll();
+			ToggleAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );
+			ToggleAcceler.Click += ( s, e ) => ToggleAccelerScroll();
 
 			CallibrateAcceler = new MenuFlyoutItem() { Text = stx.Text( "Callibrate" ) };
 			CallibrateAcceler.Click += CallibrateAcceler_Click;
 
-			AccelerMenu.Items.Add( EnableAcceler );
-			AccelerMenu.Items.Add( DisableAcceler );
+			AccelerMenu.Items.Add( ToggleAcceler );
+			AccelerMenu.Items.Add( CallibrateAcceler );
 
-			if ( GRConfig.ContentReader.UseAccelerScroll )
+			ToggleAccelerScroll( GRConfig.ContentReader.AccelerScroll.Enable );
+			UpdateAccelerDelta();
+		}
+
+		internal void UpdateAccelerDelta()
+		{
+			float v = 0;
+
+			void SC( float a )
 			{
-				EnableAccelerScroll();
-			}
-			else
-			{
-				DisableAccelerScroll();
+				if ( a != 0 )
+				{
+					// We want a low acceleration time to the terminal velocity
+					// so we'll need to scale it up and clamp it down
+					v += ( 25.0f * a ).Clamp( -2.5f, 2.5f );
+				}
+
+				if ( v != 0 )
+				{
+					float d = ( float ) AccelerSV.HorizontalOffset;
+					var j = Dispatcher.RunAsync( CoreDispatcherPriority.High, () => AccelerSV.ChangeView( d - v, null, null, true ) );
+
+					// friction
+					Easings.ParamTween( ref v, 0, 0.85f, 0.15f );
+				}
 			}
 
-			float x = 0;
-
-			void SC( float v )
-			{
-				x += v;
-				float c = ( float ) AccelerSV.HorizontalOffset;
-				Easings.ParamTween( ref c, c - x, 0.80f, 0.20f );
-				Easings.ParamTween( ref x, 0, 0.85f, 0.15f );
-				AccelerSV.ChangeView( c, null, null, true );
-			}
-
-			ACScroll.Delta = v =>
+			ACScroll.Delta = iv =>
 			{
 				if ( AccelerSV != null )
 				{
@@ -228,24 +232,35 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private void CallibrateAcceler_Click( object sender, RoutedEventArgs e )
 		{
+			Container.OverNavigate( typeof( Settings.CallibrateAcceler ), ACScroll );
 		}
 
-		private void DisableAccelerScroll()
+		private void ToggleAccelerScroll( bool? State = null )
 		{
-			EnableAcceler.Icon2.Opacity = 0;
-			DisableAcceler.Icon2.Opacity = 1;
-			CallibrateAcceler.IsEnabled = false;
-			GRConfig.ContentReader.UseAccelerScroll = false;
-			ACScroll.StopReading();
-		}
+			bool RState = false;
+			if ( State == null )
+			{
+				// Start toggling
+				RState = ToggleAcceler.Icon2.Opacity == 0;
+				GRConfig.ContentReader.AccelerScroll.Enable = RState;
+			}
+			else
+			{
+				RState = ( bool ) State;
+			}
 
-		private void EnableAccelerScroll()
-		{
-			EnableAcceler.Icon2.Opacity = 1;
-			DisableAcceler.Icon2.Opacity = 0;
-			CallibrateAcceler.IsEnabled = true;
-			GRConfig.ContentReader.UseAccelerScroll = true;
-			ACScroll.StartReading();
+			if ( RState )
+			{
+				ToggleAcceler.Icon2.Opacity = 1;
+				CallibrateAcceler.IsEnabled = true;
+				ACScroll.StartReading();
+			}
+			else
+			{
+				ToggleAcceler.Icon2.Opacity = 0;
+				CallibrateAcceler.IsEnabled = false;
+				ACScroll.StopReading();
+			}
 		}
 
 		internal void ScrollLess( bool IsPage = false )
@@ -539,37 +554,37 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( 100 < ZoomTrigger )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReaderVert.ManiState.DOWN );
+				CRSlide( ContentReaderBase.ManiState.DOWN );
 			}
 			else if ( ZoomTrigger < -100 )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReaderVert.ManiState.UP );
+				CRSlide( ContentReaderBase.ManiState.UP );
 			}
 			else if ( ZoomTrigger == 0 )
 			{
-				CRSlide( ContentReaderVert.ManiState.NORMAL );
+				CRSlide( ContentReaderBase.ManiState.NORMAL );
 			}
 		}
 
-		private void CRSlide( ContentReaderVert.ManiState State )
+		private void CRSlide( ContentReaderBase.ManiState State )
 		{
 			if ( State == Container.CurrManiState ) return;
 
 			switch ( State )
 			{
-				case ContentReaderVert.ManiState.NORMAL:
+				case ContentReaderBase.ManiState.NORMAL:
 					Container.ReaderSlideBack();
 					break;
-				case ContentReaderVert.ManiState.UP:
-					if ( Container.CurrManiState == ContentReaderVert.ManiState.DOWN )
-						goto case ContentReaderVert.ManiState.NORMAL;
+				case ContentReaderBase.ManiState.UP:
+					if ( Container.CurrManiState == ContentReaderBase.ManiState.DOWN )
+						goto case ContentReaderBase.ManiState.NORMAL;
 
 					Container.ReaderSlideUp();
 					break;
-				case ContentReaderVert.ManiState.DOWN:
-					if ( Container.CurrManiState == ContentReaderVert.ManiState.UP )
-						goto case ContentReaderVert.ManiState.NORMAL;
+				case ContentReaderBase.ManiState.DOWN:
+					if ( Container.CurrManiState == ContentReaderBase.ManiState.UP )
+						goto case ContentReaderBase.ManiState.NORMAL;
 
 					Container.ReaderSlideDown();
 					break;

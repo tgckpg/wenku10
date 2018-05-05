@@ -265,4 +265,7 @@
   <data name="Import.Text" xml:space="preserve">
     <value>导入</value>
   </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>备份与还原</value>
+  </data>
 </root>

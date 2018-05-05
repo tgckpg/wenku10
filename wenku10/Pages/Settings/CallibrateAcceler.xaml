@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.CallibrateAcceler"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource Shades60}">
+        <canvas:CanvasAnimatedControl x:Name="Stage" IsHitTestVisible="False" UseSharedDevice="True" />
+
+        <StackPanel Margin="5"
+                    Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                    MaxWidth="400"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Slider x:Name="AccelerReadings" Visibility="Collapsed"
+                    StepFrequency="0.01" Minimum="-1" Maximum="1"
+                    Margin="5">
+                <Slider.Header>
+                    <TextBlock x:Uid="/Settings/Tilt" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="Tilt" />
+                </Slider.Header>
+            </Slider>
+
+            <Slider x:Name="StopRange"
+                    ValueChanged="StopRange_ValueChanged"
+                    PointerCaptureLost="StopRange_PointerCaptureLost"
+                    StepFrequency="0.01" Minimum="0" Maximum="1"
+                    Margin="5">
+                <Slider.Header>
+                    <TextBlock x:Uid="/Settings/StopRange" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="Stop Range" />
+                </Slider.Header>
+            </Slider>
+        </StackPanel>
+    </Grid>
+</Page>

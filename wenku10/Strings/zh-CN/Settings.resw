@@ -587,4 +587,13 @@
   <data name="Conv_Table_Local.Text" xml:space="preserve">
     <value>翻译表（本地）</value>
   </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>校准</value>
+  </data>
+  <data name="StopRange.Text" xml:space="preserve">
+    <value>停止范围</value>
+  </data>
+  <data name="Tilt.Text" xml:space="preserve">
+    <value>倾斜率</value>
+  </data>
 </root>

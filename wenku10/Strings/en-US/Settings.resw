@@ -594,4 +594,13 @@
   <data name="Conv_Table_Local.Text" xml:space="preserve">
     <value>Translation table ( Local )</value>
   </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>Callibrate</value>
+  </data>
+  <data name="StopRange.Text" xml:space="preserve">
+    <value>Stop range</value>
+  </data>
+  <data name="Tilt.Text" xml:space="preserve">
+    <value>Tilt</value>
+  </data>
 </root>

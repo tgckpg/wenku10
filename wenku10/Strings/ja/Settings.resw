@@ -593,4 +593,13 @@
   <data name="Conv_Table_Local.Text" xml:space="preserve">
     <value>翻訳テーブル（ローカル）</value>
   </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>較正</value>
+  </data>
+  <data name="StopRange.Text" xml:space="preserve">
+    <value>停止範囲</value>
+  </data>
+  <data name="Tilt.Text" xml:space="preserve">
+    <value>傾斜率</value>
+  </data>
 </root>
