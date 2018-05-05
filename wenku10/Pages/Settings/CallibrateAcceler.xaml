@@ -11,7 +11,7 @@
     <Grid Background="{StaticResource Shades60}">
         <canvas:CanvasAnimatedControl x:Name="Stage" IsHitTestVisible="False" UseSharedDevice="True" />
 
-        <StackPanel Margin="5"
+        <StackPanel Margin="5,5,5,45"
                     Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                     MaxWidth="400"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">
@@ -19,18 +19,38 @@
                     StepFrequency="0.01" Minimum="-1" Maximum="1"
                     Margin="5">
                 <Slider.Header>
-                    <TextBlock x:Uid="/Settings/Tilt" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                    <TextBlock x:Uid="/Settings/AccelerScroll_Tilt" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                Text="Tilt" />
                 </Slider.Header>
             </Slider>
 
+            <Slider x:Name="AccelerMultiplier"
+                    ValueChanged="AccelerMultiplier_ValueChanged"
+                    PointerCaptureLost="AccelerMultiplier_PointerCaptureLost"
+                    StepFrequency="0.01" Minimum="0" Maximum="3"
+                    Margin="5">
+                <Slider.Header>
+                    <TextBlock x:Uid="/Settings/AccelerScroll_AMultiplier" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="Acceleration multiplier" />
+                </Slider.Header>
+            </Slider>
+            <Slider x:Name="TerminalVelocity"
+                    ValueChanged="TerminalVelocity_ValueChanged"
+                    PointerCaptureLost="TerminalVelocity_PointerCaptureLost"
+                    StepFrequency="0.01" Minimum="0" Maximum="100"
+                    Margin="5">
+                <Slider.Header>
+                    <TextBlock x:Uid="/Settings/AccelerScroll_TerminalVelocity" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="Terminal velocity" />
+                </Slider.Header>
+            </Slider>
             <Slider x:Name="StopRange"
                     ValueChanged="StopRange_ValueChanged"
                     PointerCaptureLost="StopRange_PointerCaptureLost"
                     StepFrequency="0.01" Minimum="0" Maximum="1"
                     Margin="5">
                 <Slider.Header>
-                    <TextBlock x:Uid="/Settings/StopRange" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                    <TextBlock x:Uid="/Settings/AccelerScroll_StopRange" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                Text="Stop Range" />
                 </Slider.Header>
             </Slider>

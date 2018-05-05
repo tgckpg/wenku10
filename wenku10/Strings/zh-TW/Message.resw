@@ -261,4 +261,7 @@
   <data name="ConfirmReplace" xml:space="preserve">
     <value>該項目存在於資料庫中。 要取代其內容嗎？</value>
   </data>
+  <data name="EnableAccelerScroll" xml:space="preserve">
+    <value>這個裝置似乎有一個加速計。 要啟用引力捲動嗎？（您可以透過段落選單停用它）</value>
+  </data>
 </root>

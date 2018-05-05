@@ -261,4 +261,7 @@
   <data name="ConfirmReplace" xml:space="preserve">
     <value>このアイテムはデータベースに存在します。 その内容を置き換えますか？</value>
   </data>
+  <data name="EnableAccelerScroll" xml:space="preserve">
+    <value>このデバイスには加速度計が搭載されていたようです。 重力スクロールを有効にしますか？（段落メニューで無効にすることができます）</value>
+  </data>
 </root>

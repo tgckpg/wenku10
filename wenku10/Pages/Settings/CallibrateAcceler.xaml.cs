@@ -49,6 +49,8 @@ namespace wenku10.Pages.Settings
 				ACS.Delta = a => ODelta( AccTest.Accelerate( a ) );
 
 				StopRange.Value = ACS.StopRange;
+				TerminalVelocity.Value = ACS.TerminalVelocity;
+				AccelerMultiplier.Value = ACS.AccelerMultiplier;
 				AccTest.Accelerate( 0 );
 				AccTest.StopRange( ACS.StopRange );
 
@@ -103,5 +105,26 @@ namespace wenku10.Pages.Settings
 			GRConfig.ContentReader.AccelerScroll.StopRange = ACS.StopRange;
 		}
 
+		private void AccelerMultiplier_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
+		{
+			ACS.AccelerMultiplier = ( float ) AccelerMultiplier.Value;
+		}
+
+		private void AccelerMultiplier_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
+		{
+			ACS.AccelerMultiplier = ( float ) AccelerMultiplier.Value;
+			GRConfig.ContentReader.AccelerScroll.AccelerMultiplier = ACS.AccelerMultiplier;
+		}
+
+		private void TerminalVelocity_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
+		{
+			ACS.TerminalVelocity = ( float ) TerminalVelocity.Value;
+		}
+
+		private void TerminalVelocity_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
+		{
+			ACS.TerminalVelocity = ( float ) TerminalVelocity.Value;
+			GRConfig.ContentReader.AccelerScroll.TerminalVelocity = ACS.TerminalVelocity;
+		}
 	}
 }

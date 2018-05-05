@@ -597,10 +597,16 @@
   <data name="Callibrate.Text" xml:space="preserve">
     <value>Callibrate</value>
   </data>
-  <data name="StopRange.Text" xml:space="preserve">
+  <data name="AccelerScroll_StopRange.Text" xml:space="preserve">
     <value>Stop range</value>
   </data>
-  <data name="Tilt.Text" xml:space="preserve">
+  <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
     <value>Tilt</value>
+  </data>
+  <data name="AccelerScroll_AMultiplier.Text" xml:space="preserve">
+    <value>Acceleration multiplier</value>
+  </data>
+  <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
+    <value>Terminal velocity</value>
   </data>
 </root>

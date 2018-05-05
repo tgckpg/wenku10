@@ -179,12 +179,14 @@ namespace wenku10.Pages.ContentReaderPane
 			}
 		}
 
-		private void SetAccelerScroll()
+		private async void SetAccelerScroll()
 		{
 			ACScroll = new AccelerScroll();
 			ACScroll.StopRange = GRConfig.ContentReader.AccelerScroll.StopRange;
+			ACScroll.AccelerMultiplier = GRConfig.ContentReader.AccelerScroll.AccelerMultiplier;
+			ACScroll.TerminalVelocity = GRConfig.ContentReader.AccelerScroll.TerminalVelocity;
 
-			StringResources stx = StringResources.Load( "Settings" );
+			StringResources stx = StringResources.Load( "Settings", "Message" );
 			ToggleAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );
 			ToggleAcceler.Click += ( s, e ) => ToggleAccelerScroll();
 
@@ -193,6 +195,20 @@ namespace wenku10.Pages.ContentReaderPane
 
 			AccelerMenu.Items.Add( ToggleAcceler );
 			AccelerMenu.Items.Add( CallibrateAcceler );
+
+			if ( ACScroll.Available && !GRConfig.ContentReader.AccelerScroll.Asked )
+			{
+				bool EnableAccel = false;
+
+				await Popups.ShowDialog( UIAliases.CreateDialog(
+					stx.Str( "EnableAccelerScroll", "Message" )
+					, () => EnableAccel = true
+					, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
+				) );
+
+				GRConfig.ContentReader.AccelerScroll.Asked = true;
+				GRConfig.ContentReader.AccelerScroll.Enable = EnableAccel;
+			}
 
 			ToggleAccelerScroll( GRConfig.ContentReader.AccelerScroll.Enable );
 			UpdateAccelerDelta();
@@ -204,20 +220,23 @@ namespace wenku10.Pages.ContentReaderPane
 
 			void SC( float a )
 			{
-				if ( a != 0 )
+				if ( a == 0 )
+				{
+					// Apply friction when stopped
+					Easings.ParamTween( ref v, 0, 0.90f, 0.10f );
+				}
+				else
 				{
 					// We want a low acceleration time to the terminal velocity
 					// so we'll need to scale it up and clamp it down
-					v += ( 25.0f * a ).Clamp( -2.5f, 2.5f );
+					v += ( ACScroll.AccelerMultiplier * a );
+					v = v.Clamp( -ACScroll.TerminalVelocity, ACScroll.TerminalVelocity );
 				}
 
-				if ( v != 0 )
+				if ( 0.0001 < Math.Abs( v ) )
 				{
 					float d = ( float ) AccelerSV.HorizontalOffset;
 					var j = Dispatcher.RunAsync( CoreDispatcherPriority.High, () => AccelerSV.ChangeView( d - v, null, null, true ) );
-
-					// friction
-					Easings.ParamTween( ref v, 0, 0.85f, 0.15f );
 				}
 			}
 

@@ -261,4 +261,7 @@
   <data name="ConfirmReplace" xml:space="preserve">
     <value>This item exists in database. Replace its contents?</value>
   </data>
+  <data name="EnableAccelerScroll" xml:space="preserve">
+    <value>This device seemed to have an accelerometer. Enable Gravity scrolling? ( You can disable it via paragraph menu )</value>
+  </data>
 </root>
