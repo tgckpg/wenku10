@@ -188,7 +188,7 @@ namespace GR.Model.Loaders
 			if ( string.IsNullOrEmpty( B.Info.CoverSrcUrl ) )
 			{
 				// Use bing service
-				string ThumbUrl = await new BingService( B ).GetImage();
+				string ThumbUrl = await ImageService.GetProvider( B ).GetImage();
 				if ( string.IsNullOrEmpty( ThumbUrl ) )
 				{
 					QToken.TrySetResult( false );

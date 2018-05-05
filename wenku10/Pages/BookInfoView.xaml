@@ -102,29 +102,32 @@
                 <Grid x:Name="Indicators" Margin="0,15"
                         VerticalAlignment="Top">
                     <Grid.Resources>
-                        <!-- Bing Context Menu -->
-                        <MenuFlyout x:Key="BingCoverFlyout">
-                            <MenuFlyoutItem x:Uid="/AppResources/MSCognitiveSrv" Text="MS Cognitive Service" IsEnabled="False" />
-                            <MenuFlyoutSubItem x:Name="BingCoverBtn" x:Uid="/Book/Cover" Margin="10,0,0,0" Text="Covers" >
+                        <!-- Image Context Menu -->
+                        <MenuFlyout x:Key="ImageCoverFlyout">
+                            <MenuFlyoutSubItem x:Uid="/AppResources/ImageService" Text="Image Service">
+                                <MenuFlyoutItem Text="Google Custom Search"/>
+                                <MenuFlyoutItem x:Uid="/AppResources/MSCognitiveSrv" Text="MS Cognitive Service" IsEnabled="False" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutSubItem x:Name="ImageCoverBtn" x:Uid="/Book/Cover" Margin="10,0,0,0" Text="Covers" >
                                 <MenuFlyoutItem x:Uid="/ContextMenu/NextImage" Click="ChangeCover" Tag="1" />
                                 <MenuFlyoutItem x:Uid="/ContextMenu/PrevImage" Click="ChangeCover" Tag="-1" />
                                 <MenuFlyoutItem x:Uid="/ContextMenu/FirstImage" Click="ChangeCover" Tag="0" />
                             </MenuFlyoutSubItem>
                             <MenuFlyoutItem Margin="10,0,0,0" x:Uid="/ContextMenu/ChangeKeyword" Click="ChangeKeyword" />
-                            <MenuFlyoutItem x:Name="BingBrowserBtn" Margin="10,0,0,0" x:Uid="/AppBar/OpenInBrowser" Click="OpenBingResult" />
+                            <MenuFlyoutItem x:Name="ImageBrowserBtn" Margin="10,0,0,0" x:Uid="/AppBar/OpenInBrowser" Click="OpenImageResult" />
                             <MenuFlyoutItem Margin="10,0,0,0" x:Uid="/ContextMenu/SetSubsKey" Click="SetSubsKey" />
                         </MenuFlyout>
                     </Grid.Resources>
 
-                    <!-- Indicate whether the Cover image is provided by Bing -->
-                    <Button x:Name="UsingBing" Margin="5,0,0,0"
+                    <!-- Indicate whether the Cover image is provided by Image -->
+                    <Button x:Name="UseImageSearch" Margin="5,0,0,0"
                             HorizontalAlignment="Left"
                             Click="FlyoutBase_Click" IsEnabled="False"
                             Style="{StaticResource ThemeButton}"
-                            FlyoutBase.AttachedFlyout="{StaticResource BingCoverFlyout}"
+                            FlyoutBase.AttachedFlyout="{StaticResource ImageCoverFlyout}"
                             e:TransitionDisplay.Mode="A01_Y_N30_0"
                             e:TransitionDisplay.State="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource TransStateConverter}}">
-                        <i:IconBing />
+                        <i:IconImage />
                     </Button>
 
                     <!-- Age Indicator -->

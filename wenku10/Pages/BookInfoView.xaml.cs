@@ -185,16 +185,17 @@ namespace wenku10.Pages
 			{
 				if ( Book.IsSpider() )
 				{
-					bool BingExists = new BingService( Book ).Exists();
+					IImageService ImgService = ImageService.GetProvider( Book );
+					bool ServiceExists = ImgService.Exists();
 
-					BingBrowserBtn.IsEnabled
-						= BingCoverBtn.IsEnabled
-						= BingExists;
+					ImageBrowserBtn.IsEnabled
+						= ImageCoverBtn.IsEnabled
+						= ServiceExists;
 
-					bool CanBing = BingExists || string.IsNullOrEmpty( Book.Info.CoverSrcUrl );
+					bool ServiceAvail = ServiceExists || string.IsNullOrEmpty( Book.Info.CoverSrcUrl );
 
-					UsingBing.Foreground = new SolidColorBrush( BingExists ? GRConfig.Theme.ColorMinor : GRConfig.Theme.SubtleColor );
-					UsingBing.IsEnabled = CanBing;
+					UseImageSearch.Foreground = new SolidColorBrush( ServiceExists ? GRConfig.Theme.ColorMinor : GRConfig.Theme.SubtleColor );
+					UseImageSearch.IsEnabled = ServiceAvail;
 				}
 
 				CacheStateStory.Stop();
@@ -481,10 +482,10 @@ namespace wenku10.Pages
 			}
 		}
 
-		#region Bing Service
-		private void OpenBingResult( object sender, RoutedEventArgs e )
+		#region Image Service
+		private void OpenImageResult( object sender, RoutedEventArgs e )
 		{
-			string Url = new BingService( ThisBook ).GetSearchQuery();
+			string Url = ImageService.GetProvider( ThisBook ).GetSearchQuery();
 			if ( !string.IsNullOrEmpty( Url ) )
 			{
 				var j = Windows.System.Launcher.LaunchUriAsync( new Uri( Url ) );
@@ -493,12 +494,12 @@ namespace wenku10.Pages
 
 		private async void ChangeKeyword( object sender, RoutedEventArgs e )
 		{
-			BingService BingSrv = new BingService( ThisBook );
-			string Keyword = BingSrv.GetKeyword();
+			IImageService ImageSrv = ImageService.GetProvider( ThisBook );
+			string Keyword = ImageSrv.GetKeyword();
 
 			StringResources stx = StringResources.Load( "ContextMenu", "AppResources", "Settings", "Tips" );
 			ValueHelpInput NVInput = new ValueHelpInput(
-				BingSrv.DefaultKeyword, stx.Text( "ChangeKeyword" )
+				ImageSrv.DefaultKeyword, stx.Text( "ChangeKeyword" )
 				, stx.Text( "Desc_InputKey", "AppResources" )
 				, stx.Text( "Help", "Settings" )
 			);
@@ -519,20 +520,20 @@ namespace wenku10.Pages
 			if ( NVInput.Canceled ) return;
 
 			Keyword = NVInput.Value;
-			BingSrv.SetKeyword( Keyword );
+			ImageSrv.SetKeyword( Keyword );
 
-			BingReloadCover();
+			ImageReloadCover();
 		}
 
 		private void ChangeCover( object sender, RoutedEventArgs e )
 		{
 			int Offset = int.Parse( ( ( FrameworkElement ) sender ).Tag.ToString() );
-			new BingService( ThisBook ).SetOffset( Offset );
+			ImageService.GetProvider( ThisBook ).SetOffset( Offset );
 
-			BingReloadCover();
+			ImageReloadCover();
 		}
 
-		private void BingReloadCover()
+		private void ImageReloadCover()
 		{
 			BookLoader BL = new BookLoader();
 			ThisBook.Info.CoverSrcUrl = null;
@@ -561,7 +562,7 @@ namespace wenku10.Pages
 			if ( NVInput.Canceled ) return;
 
 			Properties.MISC_COGNITIVE_API_KEY = NVInput.Value;
-			BingService.SetApiKey( NVInput.Value );
+			ImageService.GetProvider( ThisBook ).SetApiKey( NVInput.Value );
 		}
 		#endregion
 
