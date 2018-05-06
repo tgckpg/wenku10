@@ -562,8 +562,10 @@ namespace wenku10.Pages
 
 		public void RollOutLeftPane()
 		{
-			// Config is open, do not roll out the pane
-			if ( _Overlay.State == ControlState.Reovia && _OverlayFrame.Content is Settings.Themes.ContentReader ) return;
+			// Overlay frame is active, do not roll out the pane
+			if ( _Overlay.State == ControlState.Reovia )
+				return;
+
 			ContentView.UserStartReading = false;
 			_MainSplitView.OpenPane();
 		}
@@ -574,9 +576,7 @@ namespace wenku10.Pages
 			Sections.Add( new PaneNavButton( new IconTOC() { AutoScale = true }, typeof( TableOfContents ) ) );
 			Sections.Add( new PaneNavButton( new IconBookmark() { AutoScale = true }, typeof( BookmarkList ) ) );
 			Sections.Add( new PaneNavButton( new IconImage() { AutoScale = true }, typeof( ImageList ) ) );
-
 			Sections.Add( new PaneNavButton( new IconReload() { AutoScale = true }, Reload ) );
-
 			Sections.Add( InertiaButton() );
 
 			if ( MainStage.Instance.IsPhone )
@@ -628,7 +628,7 @@ namespace wenku10.Pages
 		{
 			PaneNavButton FullScreenButton = null;
 
-			Action ToggleFIcon = () =>
+			void ToggleFIcon()
 			{
 				ToggleFullScreen();
 				if ( App.ViewControl.IsFullScreen )
@@ -639,7 +639,7 @@ namespace wenku10.Pages
 				{
 					FullScreenButton.UpdateIcon( new IconExpand() { AutoScale = true } );
 				}
-			};
+			}
 
 			FullScreenButton = App.ViewControl.IsFullScreen
 				? new PaneNavButton( new IconRetract() { AutoScale = true }, ToggleFIcon )

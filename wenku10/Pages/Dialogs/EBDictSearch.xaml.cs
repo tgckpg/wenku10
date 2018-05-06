@@ -123,7 +123,7 @@ namespace wenku10.Pages.Dialogs
 		{
 			e.Handled = true;
 			if ( InSearchBox ) return;
-			ScrollViewer SV = Results.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = Results.Child_0<ScrollViewer>( 1 );
 			SV.ChangeView( null, SV.VerticalOffset + 50, null );
 		}
 
@@ -131,7 +131,7 @@ namespace wenku10.Pages.Dialogs
 		{
 			e.Handled = true;
 			if ( InSearchBox ) return;
-			ScrollViewer SV = Results.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = Results.Child_0<ScrollViewer>( 1 );
 			SV.ChangeView( null, SV.VerticalOffset - 50, null );
 		}
 

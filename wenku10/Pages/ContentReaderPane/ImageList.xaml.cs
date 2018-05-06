@@ -19,10 +19,9 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
-using Net.Astropenguin.Messaging;
 
-using GR.AdvDM;
 using GR.CompositeElement;
 using GR.Database.Models;
 using GR.Model.Book;
@@ -92,7 +91,10 @@ namespace wenku10.Pages.ContentReaderPane
 
 			NavigationHandler.InsertHandlerOnNavigatedBack( ViewImage );
 
-			ReaderPage.OverNavigate( typeof( ImageView ), Img.ImgThumb );
+			IEnumerable<MViewUpdate> Imgs = MainView.ItemsSource as IEnumerable<MViewUpdate>;
+
+			Tuple<IList<ImageThumb>, ImageThumb> Params = new Tuple<IList<ImageThumb>, ImageThumb>( Imgs.Remap( x => x.ImgThumb ), Img.ImgThumb );
+			ReaderPage.OverNavigate( typeof( ImageView ), Params );
 		}
 
 		private async Task<AsyncTryOut<Chapter>> TryFoundIllustration()

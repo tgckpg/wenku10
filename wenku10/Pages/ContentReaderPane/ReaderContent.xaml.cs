@@ -165,7 +165,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void ScrollMore( bool IsPage = false )
 		{
-			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = ContentGrid.Child_0<ScrollViewer>( 1 );
 			double d = 50;
 			if ( IsHorz )
 			{
@@ -285,7 +285,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void ScrollLess( bool IsPage = false )
 		{
-			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = ContentGrid.Child_0<ScrollViewer>( 1 );
 			double d = 50;
 			if ( IsHorz )
 			{
@@ -337,7 +337,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 			ContentGrid.IsSynchronizedWithCurrentItem = false;
 
-			AccelerSV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			AccelerSV = ContentGrid.Child_0<ScrollViewer>( 1 );
 
 			// Reader may not be available as ContentGrid.OnLoad is faster then SetTemplate
 			if ( !( Reader == null || Reader.SelectedData == null ) )
@@ -361,7 +361,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void ToggleInertia()
 		{
-			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = ContentGrid.Child_0<ScrollViewer>( 1 );
 			if ( SV != null )
 			{
 				SV.HorizontalSnapPointsType = SnapPointsType.None;

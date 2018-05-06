@@ -7,16 +7,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
+    <Grid Background="Black">
         <ProgressRing x:Name="LoadingRing"
                       Width="40" Height="40"
                       HorizontalAlignment="Center" VerticalAlignment="Center"
                       IsActive="True" />
-        <ScrollViewer Background="Black"
-                      HorizontalScrollMode="Auto"
-                      VerticalScrollMode="Auto"
-                      ZoomMode="Enabled">
-            <Image x:Name="MainImage" />
-        </ScrollViewer>
+        <FlipView x:Name="ImagesView" SelectionChanged="ImagesView_SelectionChanged">
+            <FlipView.ItemTemplate>
+                <DataTemplate>
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                  HorizontalScrollMode="Auto" VerticalScrollMode="Auto"
+                                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                  ZoomMode="Enabled">
+                        <Image Source="{Binding FullSizeImage}"
+                               ScrollViewer.BringIntoViewOnFocusChange="False"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </ScrollViewer>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
     </Grid>
 </Page>
