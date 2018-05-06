@@ -313,7 +313,9 @@ namespace wenku10.Pages
 				NavSensor.HorizontalAlignment = HorizontalAlignment.Stretch;
 				NavSensor.Width = double.NaN;
 
-				AppBarButton ToggleNav = UIAliases.CreateAppBarBtn( Symbol.OpenPane, "Toggle Pane" );
+				StringResources stx = StringResources.Load( "AppBar" );
+
+				AppBarButton ToggleNav = UIAliases.CreateAppBarBtn( Symbol.OpenPane, stx.Text( "TogglePane" ) );
 				ToggleNav.Click += ( s, e ) => MasterNav.Tag = ( NavState.OPENED == MasterState ) ? NavState.CLOSED : NavState.OPENED;
 				MajorControls = new ICommandBarElement[] { ToggleNav };
 				ControlChanged?.Invoke( this );

@@ -267,4 +267,7 @@
   <data name="Import.Text" xml:space="preserve">
     <value>滙入</value>
   </data>
+  <data name="TogglePane.Text" xml:space="preserve">
+    <value>切替面板</value>
+  </data>
 </root>

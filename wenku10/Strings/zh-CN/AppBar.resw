@@ -268,4 +268,7 @@
   <data name="BackupAndRestore.Text" xml:space="preserve">
     <value>备份与还原</value>
   </data>
+  <data name="TogglePane.Text" xml:space="preserve">
+    <value>切换窗格</value>
+  </data>
 </root>

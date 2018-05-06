@@ -268,4 +268,7 @@
   <data name="Import.Text" xml:space="preserve">
     <value>インポート</value>
   </data>
+  <data name="TogglePane.Text" xml:space="preserve">
+    <value>パネルを切り替える</value>
+  </data>
 </root>

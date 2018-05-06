@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 
 using GR.Data;
@@ -464,6 +465,7 @@ namespace wenku10.Pages.Explorer
 			else
 			{
 				ItemList.Width = double.NaN;
+				BindVScrollBarPosition();
 			}
 		}
 
@@ -499,5 +501,67 @@ namespace wenku10.Pages.Explorer
 		}
 
 		private static void OnViewModeChanged( DependencyObject d, DependencyPropertyChangedEventArgs e ) => ( ( GRTableView ) d ).ChangeView();
+
+		#region Hotfix: Vertical ScrollBar for ItemList should sticky to the right
+		private NegateOffsetConv OffsetNegator;
+		private ScrollContentPresenter HZPresenter;
+		private TranslateTransform VSTranslate;
+		private Binding VSOffsetBinding;
+
+		private void BindVScrollBarPosition()
+		{
+			if ( VSOffsetBinding != null )
+			{
+				UpdateVSPosBindng();
+				return;
+			}
+
+			HZPresenter = HZCont.ChildAt<ScrollContentPresenter>( 0, 0, 0 );
+
+			OffsetNegator = new NegateOffsetConv();
+			OffsetNegator.Negate = HZPresenter.ActualWidth - HZPresenter.ExtentWidth;
+
+			VSTranslate = new TranslateTransform();
+			VSTranslate.X = OffsetNegator.Negate;
+
+			ScrollBar VScrollBar = ItemList.ChildAt<ScrollBar>( 0, 0, 1, 0, 0, 2 );
+			VScrollBar.RenderTransform = VSTranslate;
+
+			VSOffsetBinding = new Binding() { Path = new PropertyPath( "HorizontalOffset" ), Source = HZCont, Converter = OffsetNegator };
+
+			// Handles columns update
+			ItemList.SizeChanged += ( s, e ) => UpdateVSPosBindng();
+
+			// Update the binding for first-time load
+			ItemList.ContainerContentChanging += ItemList_ContainerContentChanging;
+		}
+
+		private void UpdateVSPosBindng()
+		{
+			OffsetNegator.Negate = HZPresenter.ActualWidth - HZPresenter.ExtentWidth;
+			VSTranslate.X = OffsetNegator.Negate + HZCont.HorizontalOffset;
+
+			BindingOperations.SetBinding( VSTranslate, TranslateTransform.XProperty, VSOffsetBinding );
+		}
+
+		private void ItemList_ContainerContentChanging( ListViewBase sender, ContainerContentChangingEventArgs args )
+		{
+			ItemList.ContainerContentChanging -= ItemList_ContainerContentChanging;
+			UpdateVSPosBindng();
+		}
+
+		private class NegateOffsetConv: IValueConverter
+		{
+			public double Negate = 0;
+
+			public object Convert( object value, Type targetType, object parameter, string language )
+			{
+				if( value is double offset ) return Negate + offset;
+				return value;
+			}
+
+			public object ConvertBack( object value, Type targetType, object parameter, string language ) => throw new NotSupportedException();
+		}
+		#endregion
 	}
 }

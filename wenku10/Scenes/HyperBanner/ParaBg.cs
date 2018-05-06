@@ -116,9 +116,9 @@ namespace wenku10.Scenes
 
 		private async void ReloadBackground()
 		{
-			if ( ResCreator == null || BackgroundUri == null || StageSize.IsZero() ) return;
+			if ( ResCreator == null || StageSize.IsZero() ) return;
 
-			if ( BackgroundUri.Scheme == "ms-appx" )
+			if ( BackgroundUri == null || BackgroundUri.Scheme == "ms-appx" )
 			{
 				BgBmp = new RandomStripe( Seed ).DrawBitmap( ResCreator, ( int ) LayoutSettings.DisplayWidth, ( int ) LayoutSettings.DisplayHeight );
 			}
