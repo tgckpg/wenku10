@@ -44,13 +44,23 @@
                                Text="Terminal velocity" />
                 </Slider.Header>
             </Slider>
-            <Slider x:Name="StopRange"
-                    ValueChanged="StopRange_ValueChanged"
-                    PointerCaptureLost="StopRange_PointerCaptureLost"
+            <Slider x:Name="BrakeOffset"
+                    ValueChanged="Brake_ValueChanged"
+                    PointerCaptureLost="BrakeOffset_PointerCaptureLost"
+                    StepFrequency="0.01" Minimum="-1" Maximum="1"
+                    Margin="5">
+                <Slider.Header>
+                    <TextBlock x:Uid="/Settings/AccelerScroll_BrakeOffset" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="Stop range offset" />
+                </Slider.Header>
+            </Slider>
+            <Slider x:Name="Brake"
+                    ValueChanged="Brake_ValueChanged"
+                    PointerCaptureLost="Brake_PointerCaptureLost"
                     StepFrequency="0.01" Minimum="0" Maximum="1"
                     Margin="5">
                 <Slider.Header>
-                    <TextBlock x:Uid="/Settings/AccelerScroll_StopRange" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                    <TextBlock x:Uid="/Settings/AccelerScroll_Brake" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                                Text="Stop Range" />
                 </Slider.Header>
             </Slider>

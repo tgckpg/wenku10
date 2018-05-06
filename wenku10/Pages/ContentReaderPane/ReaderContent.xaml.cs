@@ -182,9 +182,10 @@ namespace wenku10.Pages.ContentReaderPane
 		private async void SetAccelerScroll()
 		{
 			ACScroll = new AccelerScroll();
-			ACScroll.StopRange = GRConfig.ContentReader.AccelerScroll.StopRange;
+			ACScroll.Brake = GRConfig.ContentReader.AccelerScroll.Brake;
 			ACScroll.AccelerMultiplier = GRConfig.ContentReader.AccelerScroll.AccelerMultiplier;
 			ACScroll.TerminalVelocity = GRConfig.ContentReader.AccelerScroll.TerminalVelocity;
+			ACScroll.BrakeOffset = GRConfig.ContentReader.AccelerScroll.BrakeOffset;
 
 			StringResources stx = StringResources.Load( "Settings", "Message" );
 			ToggleAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );

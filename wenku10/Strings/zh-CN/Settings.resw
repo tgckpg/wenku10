@@ -590,8 +590,8 @@
   <data name="Callibrate.Text" xml:space="preserve">
     <value>校准</value>
   </data>
-  <data name="AccelerScroll_StopRange.Text" xml:space="preserve">
-    <value>停止范围</value>
+  <data name="AccelerScroll_Brake.Text" xml:space="preserve">
+    <value>制动范围</value>
   </data>
   <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
     <value>倾斜率</value>
@@ -601,5 +601,8 @@
   </data>
   <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
     <value>终端速度</value>
+  </data>
+  <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
+    <value>制动偏置</value>
   </data>
 </root>

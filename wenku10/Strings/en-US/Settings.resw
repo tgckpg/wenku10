@@ -404,9 +404,6 @@
   <data name="Account_Reviews_Post_Sign_Default.Text" xml:space="preserve">
     <value>- Sent from Grimoire Reaper ( wenku10 )</value>
   </data>
-  <data name=" Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
-    <value>Font weight</value>
-  </data>
   <data name="Others.Text" xml:space="preserve">
     <value>Others</value>
   </data>
@@ -597,8 +594,8 @@
   <data name="Callibrate.Text" xml:space="preserve">
     <value>Callibrate</value>
   </data>
-  <data name="AccelerScroll_StopRange.Text" xml:space="preserve">
-    <value>Stop range</value>
+  <data name="AccelerScroll_Brake.Text" xml:space="preserve">
+    <value>Brake</value>
   </data>
   <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
     <value>Tilt</value>
@@ -608,5 +605,8 @@
   </data>
   <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
     <value>Terminal velocity</value>
+  </data>
+  <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
+    <value>Brake offset</value>
   </data>
 </root>

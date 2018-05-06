@@ -48,17 +48,19 @@ namespace wenku10.Pages.Settings
 				ODelta = ACS.Delta;
 				ACS.Delta = a => ODelta( AccTest.Accelerate( a ) );
 
-				StopRange.Value = ACS.StopRange;
+				Brake.Value = ACS.Brake;
 				TerminalVelocity.Value = ACS.TerminalVelocity;
+				BrakeOffset.Value = ACS.BrakeOffset;
 				AccelerMultiplier.Value = ACS.AccelerMultiplier;
 				AccTest.Accelerate( 0 );
-				AccTest.StopRange( ACS.StopRange );
+				AccTest.Brake( ACS.BrakeOffset, ACS.Brake );
 
 				ACS.StartCallibrate();
 
 				// Update by slider
 				if ( !ACS.Available )
 				{
+					AccelerReadings.Value = ACS.BrakeOffset + 0.5 * Brake.Value;
 					AccelerReadings.Visibility = Visibility.Visible;
 					Stage.Draw += Stage_Draw;
 				}
@@ -93,16 +95,16 @@ namespace wenku10.Pages.Settings
 			CvsStage.Add( AccTest );
 		}
 
-		private void StopRange_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
+		private void Brake_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
 		{
-			AccTest.StopRange( ( float ) StopRange.Value );
+			AccTest.Brake( ( float ) BrakeOffset.Value, ( float ) Brake.Value );
 		}
 
-		private void StopRange_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
+		private void Brake_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
-			ACS.StopRange = ( float ) StopRange.Value;
-			AccTest.StopRange( ACS.StopRange );
-			GRConfig.ContentReader.AccelerScroll.StopRange = ACS.StopRange;
+			ACS.Brake = ( float ) Brake.Value;
+			AccTest.Brake( ACS.BrakeOffset, ACS.Brake );
+			GRConfig.ContentReader.AccelerScroll.Brake = ACS.Brake;
 		}
 
 		private void AccelerMultiplier_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
@@ -126,5 +128,12 @@ namespace wenku10.Pages.Settings
 			ACS.TerminalVelocity = ( float ) TerminalVelocity.Value;
 			GRConfig.ContentReader.AccelerScroll.TerminalVelocity = ACS.TerminalVelocity;
 		}
+
+		private void BrakeOffset_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
+		{
+			ACS.BrakeOffset = ( float ) BrakeOffset.Value;
+			GRConfig.ContentReader.AccelerScroll.BrakeOffset = ACS.BrakeOffset;
+		}
+
 	}
 }
