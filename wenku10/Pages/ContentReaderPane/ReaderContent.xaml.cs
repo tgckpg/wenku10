@@ -49,7 +49,7 @@ namespace wenku10.Pages.ContentReaderPane
 		private Chapter CurrentChapter { get { return Container.CurrentChapter; } }
 		private Paragraph SelectedParagraph;
 
-		private AccelerScroll ACScroll;
+		public AccelerScroll ACScroll { get; private set; }
 		ScrollViewer AccelerSV;
 
 		private volatile bool HoldOneMore = false;

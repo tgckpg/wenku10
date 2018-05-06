@@ -79,8 +79,6 @@ namespace wenku10.Pages
 		protected bool NeedRedraw = false;
 		protected bool Disposed = false;
 
-		protected ApplicationViewOrientation? Orientation;
-
 		protected EpisodeStepper ES;
 
 		protected NavPaneSection ContentPane;
@@ -102,6 +100,9 @@ namespace wenku10.Pages
 		protected PassiveSplitView _MainSplitView;
 		protected StateControl _Overlay;
 		protected TipMask _RenderMask;
+
+		private ApplicationViewOrientation? Orientation { get; set; }
+		private ApplicationViewOrientation? LastAwareOri;
 
 		Rectangle OriIndicator;
 
@@ -281,7 +282,6 @@ namespace wenku10.Pages
 			LastAwareOri = Orientation;
 		}
 
-		private ApplicationViewOrientation? LastAwareOri;
 		private void TriggerHorzLayoutAware( Size Old, Size New )
 		{
 			// if ContentView is not present
@@ -296,6 +296,8 @@ namespace wenku10.Pages
 				UpdatePane = ( Old.Height != New.Height );
 				LocalRedraw = ( OrientationRedraw && UpdatePane );
 			}
+
+			ContentView.ACScroll.UpdateOrientation( DisplayInformation.GetForCurrentView().CurrentOrientation );
 
 			if ( UpdatePane && _MainSplitView.State != PaneStates.Closed )
 			{
