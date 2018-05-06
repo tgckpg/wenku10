@@ -48,16 +48,16 @@ namespace wenku10.Pages
 	{
 		private static readonly string ID = typeof( BookInfoView ).Name;
 
-		#pragma warning disable 0067
+#pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
-		#pragma warning restore 0067
+#pragma warning restore 0067
 
 		public bool NoCommands { get; }
 		public bool MajorNav { get; }
 
 		public IList<ICommandBarElement> MajorControls { get; private set; }
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
-		public IList<ICommandBarElement> MinorControls { get ; private set; }
+		public IList<ICommandBarElement> MinorControls { get; private set; }
 
 		AppBarButton FavBtn;
 		AppBarButton BrowserBtn;
@@ -70,6 +70,7 @@ namespace wenku10.Pages
 		Storyboard CacheStateStory;
 
 		private volatile bool BookLoading = false;
+		private IImageService ImageSrv;
 
 		private BookInfoView()
 		{
@@ -80,13 +81,13 @@ namespace wenku10.Pages
 		private BookItem ThisBook;
 
 		public BookInfoView( HubScriptItem HSI )
-			:this()
+			: this()
 		{
 			OpenSpider( HSI );
 		}
 
 		public BookInfoView( BookItem Book )
-			:this()
+			: this()
 		{
 			OpenBook( Book );
 		}
@@ -177,6 +178,7 @@ namespace wenku10.Pages
 			OneDriveRing.IsActive = false;
 		}
 
+
 		private void BookLoadComplete( BookItem Book )
 		{
 			BookLoading = false;
@@ -185,8 +187,8 @@ namespace wenku10.Pages
 			{
 				if ( Book.IsSpider() )
 				{
-					IImageService ImgService = ImageService.GetProvider( Book );
-					bool ServiceExists = ImgService.Exists();
+					ImageSrv = ImageService.GetProvider( Book );
+					bool ServiceExists = ImageSrv.Exists();
 
 					ImageBrowserBtn.IsEnabled
 						= ImageCoverBtn.IsEnabled
@@ -228,7 +230,7 @@ namespace wenku10.Pages
 			ToggleFav();
 			ToggleAppBar();
 
-			if( ThisBook == null )
+			if ( ThisBook == null )
 			{
 				// Set Book Unavailable View
 				BrowserBtn.IsEnabled
@@ -394,7 +396,7 @@ namespace wenku10.Pages
 
 				MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
 			}
-			else if( ThisBook.IsSpider() )
+			else if ( ThisBook.IsSpider() )
 			{
 				HSBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.HomeGroup, stx.Text( "ScriptDetails", "AppResources" ) );
 				HSBtn.Click += OpenHSComments;
@@ -433,14 +435,14 @@ namespace wenku10.Pages
 		private void ToggleFav()
 		{
 			StringResources stx = StringResources.Load( "AppBar" );
-			if( ThisBook == null )
+			if ( ThisBook == null )
 			{
 				FavBtn.IsEnabled = false;
 				FavBtn.Label = stx.Str( "FavIn" );
 				return;
 			}
 
-			if( ThisBook.IsFav )
+			if ( ThisBook.IsFav )
 			{
 				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
 				FavBtn.Label = stx.Str( "FavOut" );
@@ -460,7 +462,7 @@ namespace wenku10.Pages
 			// AnchorSync is already handled on this page
 			AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( ThisBook, false );
 
-			if( TryAutoAnchor )
+			if ( TryAutoAnchor )
 			{
 				PageProcessor.NavigateToReader( ThisBook, TryAutoAnchor.Out );
 			}
@@ -476,16 +478,16 @@ namespace wenku10.Pages
 		private async void VoteButton_Click( object sender, RoutedEventArgs e )
 		{
 			bool Voted = await ThisBook.XCall<Task<bool>>( "Vote" );
-			if( Voted )
+			if ( Voted )
 			{
 				( PushGrid.Resources[ "DataUpdate" ] as Storyboard )?.Begin();
 			}
 		}
 
 		#region Image Service
-		private void OpenImageResult( object sender, RoutedEventArgs e )
+		private async void OpenImageResult( object sender, RoutedEventArgs e )
 		{
-			string Url = ImageService.GetProvider( ThisBook ).GetSearchQuery();
+			string Url = await ImageSrv.GetSearchQuery();
 			if ( !string.IsNullOrEmpty( Url ) )
 			{
 				var j = Windows.System.Launcher.LaunchUriAsync( new Uri( Url ) );
@@ -494,7 +496,6 @@ namespace wenku10.Pages
 
 		private async void ChangeKeyword( object sender, RoutedEventArgs e )
 		{
-			IImageService ImageSrv = ImageService.GetProvider( ThisBook );
 			string Keyword = ImageSrv.GetKeyword();
 
 			StringResources stx = StringResources.Load( "ContextMenu", "AppResources", "Settings", "Tips" );
@@ -528,8 +529,7 @@ namespace wenku10.Pages
 		private void ChangeCover( object sender, RoutedEventArgs e )
 		{
 			int Offset = int.Parse( ( ( FrameworkElement ) sender ).Tag.ToString() );
-			ImageService.GetProvider( ThisBook ).SetOffset( Offset );
-
+			ImageSrv.SetOffset( Offset );
 			ImageReloadCover();
 		}
 
@@ -549,7 +549,6 @@ namespace wenku10.Pages
 				, null, stx.Text( "HowToGetSubs", "Tips" )
 			);
 
-			NVInput.Value = Properties.MISC_COGNITIVE_API_KEY;
 			NVInput.AllowEmpty = true;
 
 			NVInput.HelpBtnClick = ( s, NOP ) =>
@@ -561,8 +560,7 @@ namespace wenku10.Pages
 
 			if ( NVInput.Canceled ) return;
 
-			Properties.MISC_COGNITIVE_API_KEY = NVInput.Value;
-			ImageService.GetProvider( ThisBook ).SetApiKey( NVInput.Value );
+			ImageSrv.SetApiKey( NVInput.Value );
 		}
 		#endregion
 
@@ -598,7 +596,7 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			if( SplashCover.Filling )
+			if ( SplashCover.Filling )
 			{
 				SimpleStory.DoubleAnimation( AnimaStory, SplashCover, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
 			}

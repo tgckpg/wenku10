@@ -124,10 +124,11 @@
                             HorizontalAlignment="Left"
                             Click="FlyoutBase_Click" IsEnabled="False"
                             Style="{StaticResource ThemeButton}"
+                            Foreground="{StaticResource SubtleBrush}"
                             FlyoutBase.AttachedFlyout="{StaticResource ImageCoverFlyout}"
                             e:TransitionDisplay.Mode="A01_Y_N30_0"
                             e:TransitionDisplay.State="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={StaticResource TransStateConverter}}">
-                        <i:IconImage />
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xECCB;" />
                     </Button>
 
                     <!-- Age Indicator -->
