@@ -563,7 +563,7 @@ namespace wenku10.Pages
 		public void RollOutLeftPane()
 		{
 			// Overlay frame is active, do not roll out the pane
-			if ( _Overlay.State == ControlState.Reovia )
+			if ( _Overlay.State == ControlState.Active )
 				return;
 
 			ContentView.UserStartReading = false;
@@ -773,13 +773,13 @@ namespace wenku10.Pages
 		private void GotoSettings()
 		{
 			_MainSplitView.ClosePane();
-			_Overlay.State = ControlState.Reovia;
+			_Overlay.State = ControlState.Active;
 			_OverlayFrame.Content = new Settings.Themes.ContentReader();
 		}
 
 		public void OverNavigate( Type Page, object Param )
 		{
-			_Overlay.State = ControlState.Reovia;
+			_Overlay.State = ControlState.Active;
 			_OverlayFrame.Navigate( Page, Param );
 		}
 
@@ -792,9 +792,9 @@ namespace wenku10.Pages
 		private void OnBackRequested( object sender, XBackRequestedEventArgs e )
 		{
 			// Close the settings first
-			if ( _Overlay.State == ControlState.Reovia )
+			if ( _Overlay.State == ControlState.Active )
 			{
-				_Overlay.State = ControlState.Foreatii;
+				_Overlay.State = ControlState.Closed;
 				_MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
 				_FocusHelper.DataContext = new AssistContext();
 
@@ -833,7 +833,7 @@ namespace wenku10.Pages
 
 		private void Overlay_OnStateChanged( object sender, ControlState args )
 		{
-			if ( args == ControlState.Foreatii )
+			if ( args == ControlState.Closed )
 			{
 				_OverlayFrame.Content = null;
 				( ( BgContext ) _ContentBg.DataContext )?.Reload();
@@ -858,12 +858,12 @@ namespace wenku10.Pages
 		{
 			StringResources stx = StringResources.Load( "LoadingMessage" );
 			_RenderMask.Text = stx.Str( "ProgressIndicator_Message" );
-			_RenderMask.State = ControlState.Reovia;
+			_RenderMask.State = ControlState.Active;
 		}
 
 		private void CloseMask()
 		{
-			_RenderMask.State = ControlState.Foreatii;
+			_RenderMask.State = ControlState.Closed;
 		}
 
 		#region Clock

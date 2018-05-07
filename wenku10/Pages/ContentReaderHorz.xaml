@@ -188,7 +188,7 @@
         <c:TipMask x:Name="RenderMask"
                    Foreground="{StaticResource RelativeShadesBrush}"
                    Background="{StaticResource Shades90}"
-                   State="Reovia" />
+                   State="Active" />
 
         <Grid.Resources>
             <Storyboard x:Name="ContentRestore">

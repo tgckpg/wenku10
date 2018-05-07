@@ -67,7 +67,7 @@ namespace wenku10.Pages.Settings
 		private void ClosePopup( object sender, XBackRequestedEventArgs e )
 		{
 			// Restart Required
-			if ( RestartMask.State == ControlState.Reovia ) return;
+			if ( RestartMask.State == ControlState.Active ) return;
 
 			// Go back
 			LoadingMask.HandleBack( Frame, e );
@@ -252,7 +252,7 @@ namespace wenku10.Pages.Settings
 				await ControlFrame.Instance.CloseSubView();
 				ControlFrame.Instance.CollapseAppBar();
 				NavigationHandler.InsertHandlerOnNavigatedBack( Exit );
-				RestartMask.State = ControlState.Reovia;
+				RestartMask.State = ControlState.Active;
 			}
 
 			return Restart;

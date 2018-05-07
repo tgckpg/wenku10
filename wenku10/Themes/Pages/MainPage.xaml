@@ -14,8 +14,8 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="ControlStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition x:Name="ForeatiiToReovia" 
-                                                          From="Foreatii" To="Reovia"
+                                    <VisualTransition x:Name="ClosedToActive"
+                                                          From="Closed" To="Active"
                                                           GeneratedDuration="0:0:0.5">
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SyncBubb">
@@ -24,8 +24,8 @@
                                             </DoubleAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualTransition>
-                                    <VisualTransition x:Name="ReoviaToForeatii" 
-                                                      From="Reovia" To="Foreatii"
+                                    <VisualTransition x:Name="ActiveToClosed"
+                                                      From="Active" To="Closed"
                                                       GeneratedDuration="0:0:0.5">
                                         <Storyboard>
                                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateX)" Storyboard.TargetName="SyncBubb">
@@ -36,12 +36,12 @@
                                     </VisualTransition>
                                 </VisualStateGroup.Transitions>
                                 <VisualStateGroup.States>
-                                    <VisualState x:Name="Reovia">
+                                    <VisualState x:Name="Active">
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="SyncBubb" Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateX)" Duration="0" To="-5" />
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="Foreatii">
+                                    <VisualState x:Name="Closed">
                                         <Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="SyncBubb" Storyboard.TargetProperty="(FrameworkElement.RenderTransform).(CompositeTransform.TranslateX)" Duration="0" To="-25" />
                                         </Storyboard>

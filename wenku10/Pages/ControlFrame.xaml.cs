@@ -228,7 +228,7 @@ namespace wenku10.Pages
 			// Let Page render silently
 			View.Opacity = 0;
 
-			LoadingScreen.State = ControlState.Reovia;
+			LoadingScreen.State = ControlState.Active;
 			await Task.Delay( 200 );
 
 			View.Tag = Name;
@@ -247,7 +247,7 @@ namespace wenku10.Pages
 
 			// Do not close the loading screen if redirecting
 			if ( !( P is MonoRedirector ) )
-				LoadingScreen.State = ControlState.Foreatii;
+				LoadingScreen.State = ControlState.Closed;
 
 			Navigating = false;
 			StartReacting();
