@@ -321,7 +321,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 			Rect ScreenBounds = IsHorz ? new Rect( 0, 0, ActualWidth * 0.8, ActualHeight ) : new Rect( 0, 0, ActualWidth, ActualHeight * 0.8 );
 
-			if ( VisibleParagraph != null && VisibleContext.DataContext.Equals( SelectedParagraph ) == true )
+			if ( VisibleParagraph != null && VisibleContext?.DataContext?.Equals( SelectedParagraph ) == true )
 			{
 				if ( VisualTreeHelper.FindElementsInHostCoordinates( ScreenBounds, ParaVisualizer ).Contains( VisibleParagraph ) )
 				{
