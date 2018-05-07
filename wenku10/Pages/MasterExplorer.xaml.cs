@@ -345,6 +345,9 @@ namespace wenku10.Pages
 
 		private void NavigateToViewSource( GRViewSource Payload, bool AddToQueue )
 		{
+			if ( Payload == null )
+				return;
+
 			NavTree.Open( Payload );
 			if ( NavTree.Contains( Payload ) )
 			{
