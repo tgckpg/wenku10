@@ -232,6 +232,24 @@ namespace wenku10.Pages.ContentReaderPane
 
 			if ( ACSTimer == null )
 			{
+				Action<float> HV_ChangeView;
+				if( IsHorz )
+				{
+					HV_ChangeView = _v =>
+					{
+						float d = ( float ) AccelerSV.HorizontalOffset;
+						AccelerSV.ChangeView( d - _v, null, null, true );
+					};
+				}
+				else
+				{
+					HV_ChangeView = _v =>
+					{
+						float d = ( float ) AccelerSV.VerticalOffset;
+						AccelerSV.ChangeView( null, d - _v, null, true );
+					};
+				}
+
 				ACSTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds( 20 ) };
 				ACSTimer.Tick += ( s, e ) =>
 				{
@@ -248,8 +266,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 					if ( 0.0001 < Math.Abs( v ) )
 					{
-						float d = ( float ) AccelerSV.HorizontalOffset;
-						AccelerSV.ChangeView( d - v, null, null, true );
+						HV_ChangeView( v );
 					}
 					else
 					{
@@ -302,7 +319,7 @@ namespace wenku10.Pages.ContentReaderPane
 					return;
 			}
 
-			Rect ScreenBounds = new Rect( 0, 0, ActualWidth * 0.8, ActualHeight );
+			Rect ScreenBounds = IsHorz ? new Rect( 0, 0, ActualWidth * 0.8, ActualHeight ) : new Rect( 0, 0, ActualWidth, ActualHeight * 0.8 );
 
 			if ( VisibleParagraph != null && VisibleContext.DataContext.Equals( SelectedParagraph ) == true )
 			{
