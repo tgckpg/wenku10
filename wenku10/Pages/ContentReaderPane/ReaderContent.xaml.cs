@@ -184,15 +184,16 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async void SetAccelerScroll()
 		{
-			var AccConf = GRConfig.ContentReader.AccelerScroll;
+			var ACSConf = GRConfig.ContentReader.AccelerScroll;
 			ACScroll = new AccelerScroll
 			{
 				ProgramBrake = true,
-				Brake = AccConf.Brake,
-				BrakeOffset = AccConf.BrakeOffset,
-				BrakingForce = AccConf.BrakingForce,
-				AccelerMultiplier = AccConf.AccelerMultiplier,
-				TerminalVelocity = AccConf.TerminalVelocity
+				TrackAutoAnchor = ACSConf.TrackAutoAnchor,
+				Brake = ACSConf.Brake,
+				BrakeOffset = ACSConf.BrakeOffset,
+				BrakingForce = ACSConf.BrakingForce,
+				AccelerMultiplier = ACSConf.AccelerMultiplier,
+				TerminalVelocity = ACSConf.TerminalVelocity
 			};
 
 			ACScroll.UpdateOrientation( App.ViewControl.DispOrientation );
@@ -207,7 +208,7 @@ namespace wenku10.Pages.ContentReaderPane
 			AccelerMenu.Items.Add( ToggleAcceler );
 			AccelerMenu.Items.Add( CallibrateAcceler );
 
-			if ( ACScroll.Available && !AccConf.Asked )
+			if ( ACScroll.Available && !ACSConf.Asked )
 			{
 				bool EnableAccel = false;
 
@@ -217,11 +218,11 @@ namespace wenku10.Pages.ContentReaderPane
 					, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
 				) );
 
-				AccConf.Asked = true;
-				AccConf.Enable = EnableAccel;
+				ACSConf.Asked = true;
+				ACSConf.Enable = EnableAccel;
 			}
 
-			ToggleAccelerScroll( AccConf.Enable );
+			ToggleAccelerScroll( ACSConf.Enable );
 			UpdateAccelerDelta();
 		}
 
@@ -270,6 +271,9 @@ namespace wenku10.Pages.ContentReaderPane
 					{
 						if ( !ACSTimer.IsEnabled )
 							ACSTimer.Start();
+
+						if( ACScroll.TrackAutoAnchor )
+							AutoSelectParagraph();
 					} );
 				}
 			}
@@ -283,6 +287,49 @@ namespace wenku10.Pages.ContentReaderPane
 					UpdateAcc( _a );
 				}
 			};
+		}
+
+		FrameworkElement VisibleParagraph;
+		FrameworkElement VisibleContext;
+		ItemsStackPanel ParaVisualizer;
+
+		private void AutoSelectParagraph()
+		{
+			if ( ParaVisualizer == null )
+			{
+				ParaVisualizer = ContentGrid.ChildAt<ItemsStackPanel>( 0, 0, 0, 0, 0, 0, 1 );
+				if ( ParaVisualizer == null )
+					return;
+			}
+
+			Rect ScreenBounds = new Rect( 0, 0, ActualWidth * 0.8, ActualHeight );
+
+			if ( VisibleParagraph != null && VisibleContext.DataContext.Equals( SelectedParagraph ) == true )
+			{
+				if ( VisualTreeHelper.FindElementsInHostCoordinates( ScreenBounds, ParaVisualizer ).Contains( VisibleParagraph ) )
+				{
+					return;
+				}
+			}
+
+			int l = ParaVisualizer.Children.Count();
+			for ( int i = 0; i < l; i++ )
+			{
+				FrameworkElement Item = ( FrameworkElement ) ParaVisualizer.Children[ i ];
+				if ( VisualTreeHelper.FindElementsInHostCoordinates( ScreenBounds, ParaVisualizer ).Contains( Item ) )
+				{
+					FrameworkElement _ContentPresenter = Item.ChildAt<FrameworkElement>( 0, 0, 1 );
+					if ( _ContentPresenter?.DataContext is Paragraph P )
+					{
+						VisibleParagraph = Item;
+						VisibleContext = _ContentPresenter;
+						SelectedParagraph = P;
+						ContentGrid.SelectedItem = P;
+						Reader.SelectAndAnchor( P );
+						break;
+					}
+				}
+			}
 		}
 
 		private void CallibrateAcceler_Click( object sender, RoutedEventArgs e )

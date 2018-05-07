@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using GR.Config;
+using GR.Config.Scopes;
 using GR.GSystem;
 
 namespace wenku10.Pages.Settings
@@ -28,6 +29,9 @@ namespace wenku10.Pages.Settings
 
 		private CanvasStage CvsStage;
 		private AccelerTest AccTest;
+		private Conf_ContentReader.Conf_AccelerScroll ACSConf;
+
+		private float _a = 0;
 
 		public CallibrateAcceler()
 		{
@@ -49,6 +53,7 @@ namespace wenku10.Pages.Settings
 				ACS.Delta = a => ODelta( AccTest.Accelerate( a ) );
 
 				ForceBrake.IsChecked = ACS.ForceBrake;
+				TrackAutoAnchor.IsChecked = ACS.TrackAutoAnchor;
 				Brake.Value = ACS.Brake;
 				BrakingForce.Value = ACS.BrakingForce;
 				TerminalVelocity.Value = ACS.TerminalVelocity;
@@ -73,26 +78,30 @@ namespace wenku10.Pages.Settings
 		{
 			ACS.Delta = ODelta;
 			ACS.EndCallibration();
+
 			if ( Stage != null )
 			{
 				AccTest.Dispose();
 
+				Stage.Draw -= Stage_Draw;
+				Stage.Paused = true;
 				Stage.RemoveFromVisualTree();
 				Stage = null;
 			}
+
+			ODelta?.Invoke( 0 );
 		}
 
 		private void Stage_Draw( ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args )
 		{
-			var j = Dispatcher.RunAsync( Windows.UI.Core.CoreDispatcherPriority.High, () =>
-				ACS.Delta( ( float ) AccelerReadings.Value )
-			);
+			ACS.Delta( _a );
 		}
 
 		private void SetTemplate()
 		{
 			CvsStage = new CanvasStage( Stage );
 
+			ACSConf = GRConfig.ContentReader.AccelerScroll;
 			AccTest = new AccelerTest();
 			CvsStage.Add( AccTest );
 		}
@@ -106,7 +115,7 @@ namespace wenku10.Pages.Settings
 		{
 			ACS.Brake = ( float ) Brake.Value;
 			AccTest.Brake( ACS.BrakeOffset, ACS.Brake );
-			GRConfig.ContentReader.AccelerScroll.Brake = ACS.Brake;
+			ACSConf.Brake = ACS.Brake;
 		}
 
 		private void AccelerMultiplier_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
@@ -117,7 +126,7 @@ namespace wenku10.Pages.Settings
 		private void AccelerMultiplier_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
 			ACS.AccelerMultiplier = ( float ) AccelerMultiplier.Value;
-			GRConfig.ContentReader.AccelerScroll.AccelerMultiplier = ACS.AccelerMultiplier;
+			ACSConf.AccelerMultiplier = ACS.AccelerMultiplier;
 		}
 
 		private void TerminalVelocity_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
@@ -128,13 +137,13 @@ namespace wenku10.Pages.Settings
 		private void TerminalVelocity_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
 			ACS.TerminalVelocity = ( float ) TerminalVelocity.Value;
-			GRConfig.ContentReader.AccelerScroll.TerminalVelocity = ACS.TerminalVelocity;
+			ACSConf.TerminalVelocity = ACS.TerminalVelocity;
 		}
 
 		private void BrakeOffset_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
 			ACS.BrakeOffset = ( float ) BrakeOffset.Value;
-			GRConfig.ContentReader.AccelerScroll.BrakeOffset = ACS.BrakeOffset;
+			ACSConf.BrakeOffset = ACS.BrakeOffset;
 		}
 
 		private void ForceBrake_Checked( object sender, RoutedEventArgs e ) => ACS.ForceBrake = true;
@@ -148,7 +157,25 @@ namespace wenku10.Pages.Settings
 		private void BrakingForce_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
 			ACS.BrakingForce = ( float ) BrakingForce.Value;
-			GRConfig.ContentReader.AccelerScroll.BrakingForce = ACS.BrakingForce;
+			ACSConf.BrakingForce = ACS.BrakingForce;
 		}
+
+		private void TrackAutoAnchor_Checked( object sender, RoutedEventArgs e )
+		{
+			ACS.TrackAutoAnchor = true;
+			ACSConf.TrackAutoAnchor = true;
+		}
+
+		private void TrackAutoAnchor_Unchecked( object sender, RoutedEventArgs e )
+		{
+			ACS.TrackAutoAnchor = false;
+			ACSConf.TrackAutoAnchor = false;
+		}
+
+		private void AccelerReadings_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
+		{
+			_a = ( float ) AccelerReadings.Value;
+		}
+
 	}
 }

@@ -615,4 +615,7 @@
   <data name="AccelerScroll_BrakingForce.Text" xml:space="preserve">
     <value>Brake force</value>
   </data>
+  <data name="AccelerScroll_TrackAutoAnchor.Text" xml:space="preserve">
+    <value>Track auto anchor</value>
+  </data>
 </root>

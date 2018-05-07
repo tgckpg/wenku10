@@ -611,4 +611,7 @@
   <data name="AccelerScroll_BrakingForce.Text" xml:space="preserve">
     <value>制动力</value>
   </data>
+  <data name="AccelerScroll_TrackAutoAnchor.Text" xml:space="preserve">
+    <value>自动锚点跟踪</value>
+  </data>
 </root>
