@@ -156,7 +156,8 @@ namespace wenku10.Pages.ContentReaderPane
 		internal void Grid_RightTapped( object sender, RightTappedRoutedEventArgs e )
 		{
 			Grid ParaGrid = sender as Grid;
-			if ( ParaGrid == null ) return;
+			if ( ParaGrid == null || ( ACScroll.ForceBrake && Container.OverlayActive ) )
+				return;
 
 			FlyoutBase.ShowAttachedFlyout( MainStage.Instance.IsPhone ? MasterGrid : ParaGrid );
 
@@ -221,6 +222,11 @@ namespace wenku10.Pages.ContentReaderPane
 
 			void SC( float a )
 			{
+				if( ACScroll.ForceBrake )
+				{
+					a = 0;
+				}
+
 				if ( a == 0 )
 				{
 					// Apply friction when stopped
@@ -611,6 +617,15 @@ namespace wenku10.Pages.ContentReaderPane
 			}
 
 			Container.CurrManiState = State;
+		}
+
+		private void ContentGrid_Holding( object sender, HoldingRoutedEventArgs e )
+		{
+			if ( AccelerScroll.StateActive )
+			{
+				ACScroll.ForceBrake = true;
+				Container.OverNavigate( typeof( Settings.CallibrateAcceler ), ACScroll );
+			}
 		}
 
 	}

@@ -48,6 +48,7 @@ namespace wenku10.Pages.Settings
 				ODelta = ACS.Delta;
 				ACS.Delta = a => ODelta( AccTest.Accelerate( a ) );
 
+				ForceBrake.IsChecked = ACS.ForceBrake;
 				Brake.Value = ACS.Brake;
 				TerminalVelocity.Value = ACS.TerminalVelocity;
 				BrakeOffset.Value = ACS.BrakeOffset;
@@ -71,7 +72,7 @@ namespace wenku10.Pages.Settings
 		{
 			ACS.Delta = ODelta;
 			ACS.EndCallibration();
-			if( Stage != null )
+			if ( Stage != null )
 			{
 				AccTest.Dispose();
 
@@ -134,6 +135,9 @@ namespace wenku10.Pages.Settings
 			ACS.BrakeOffset = ( float ) BrakeOffset.Value;
 			GRConfig.ContentReader.AccelerScroll.BrakeOffset = ACS.BrakeOffset;
 		}
+
+		private void ForceBrake_Checked( object sender, RoutedEventArgs e ) => ACS.ForceBrake = true;
+		private void ForceBrake_Unchecked( object sender, RoutedEventArgs e ) => ACS.ForceBrake = false;
 
 	}
 }

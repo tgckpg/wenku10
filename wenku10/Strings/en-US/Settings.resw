@@ -609,4 +609,7 @@
   <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
     <value>Brake offset</value>
   </data>
+  <data name="AccelerScroll_ForceBrake.Text" xml:space="preserve">
+    <value>Force brake</value>
+  </data>
 </root>

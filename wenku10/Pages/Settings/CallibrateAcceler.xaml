@@ -15,6 +15,11 @@
                     Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
                     MaxWidth="400"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <CheckBox x:Name="ForceBrake" Checked="ForceBrake_Checked" Unchecked="ForceBrake_Unchecked">
+                <TextBlock x:Uid="/Settings/AccelerScroll_ForceBrake"
+                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                           Text="Force brake is engaged" />
+            </CheckBox>
             <Slider x:Name="AccelerReadings" Visibility="Collapsed"
                     StepFrequency="0.01" Minimum="-1" Maximum="1"
                     Margin="5">

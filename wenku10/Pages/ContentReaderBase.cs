@@ -72,6 +72,8 @@ namespace wenku10.Pages
 			set => GRConfig.ContentReader.UseInertia = value;
 		}
 
+		public bool OverlayActive => _Overlay.State == ControlState.Active;
+
 		protected bool OrientationRedraw = false;
 
 		protected Action ReloadReader;

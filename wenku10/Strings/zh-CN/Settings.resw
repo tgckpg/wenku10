@@ -605,4 +605,7 @@
   <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
     <value>制动偏置</value>
   </data>
+  <data name="AccelerScroll_ForceBrake.Text" xml:space="preserve">
+    <value>强制制动</value>
+  </data>
 </root>

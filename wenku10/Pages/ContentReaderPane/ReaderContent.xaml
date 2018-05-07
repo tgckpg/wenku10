@@ -52,11 +52,12 @@
                   SelectionChanged="ContentGrid_SelectionChanged"
                   IsItemClickEnabled="True"
                   ItemClick="ContentGrid_ItemClick"
+                  Holding="ContentGrid_Holding"
+                  Loaded="SetBookAnchor"
                   ItemsSource="{Binding Data}"
                   SelectedIndex="{Binding SelectedIndex}"
                   ItemTemplateSelector="{Binding TemplateSelector}"
                   Margin="{Binding Margin}"
-                  Loaded="SetBookAnchor"
                   Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
                   FlowDirection="{Binding FlowDir}">
             <ListView.RenderTransform>
