@@ -183,6 +183,7 @@ namespace wenku10.Pages.ContentReaderPane
 		private async void SetAccelerScroll()
 		{
 			ACScroll = new AccelerScroll();
+			ACScroll.ProgramBrake = true;
 			ACScroll.Brake = GRConfig.ContentReader.AccelerScroll.Brake;
 			ACScroll.AccelerMultiplier = GRConfig.ContentReader.AccelerScroll.AccelerMultiplier;
 			ACScroll.TerminalVelocity = GRConfig.ContentReader.AccelerScroll.TerminalVelocity;
@@ -222,7 +223,7 @@ namespace wenku10.Pages.ContentReaderPane
 
 			void SC( float a )
 			{
-				if( ACScroll.ForceBrake )
+				if( ACScroll.ForceBrake || ACScroll.ProgramBrake )
 				{
 					a = 0;
 				}
@@ -392,6 +393,8 @@ namespace wenku10.Pages.ContentReaderPane
 					Shared.LoadMessage( "WaitingForUI" );
 
 					ShowUndoButton();
+
+					ACScroll.ProgramBrake = false;
 					var NOP = ContentGrid.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( Container.RenderComplete ) );
 					break;
 			}
@@ -430,7 +433,10 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			if ( P == null ) return;
 			Dialogs.EBDictSearch DictDialog = new Dialogs.EBDictSearch( P );
+
+			ACScroll.ProgramBrake = true;
 			await Popups.ShowDialog( DictDialog );
+			ACScroll.ProgramBrake = false;
 		}
 
 		public async void SetCustomAnchor( Paragraph P, string BookmarkName = null )
@@ -438,7 +444,10 @@ namespace wenku10.Pages.ContentReaderPane
 			Dialogs.NewBookmarkInput BookmarkIn = new Dialogs.NewBookmarkInput( P );
 			if ( BookmarkName != null ) BookmarkIn.SetName( BookmarkName );
 
+			ACScroll.ProgramBrake = true;
 			await Popups.ShowDialog( BookmarkIn );
+			ACScroll.ProgramBrake = false;
+
 			if ( BookmarkIn.Canceled ) return;
 
 			Reader.SetCustomAnchor( BookmarkIn.AnchorName, P );

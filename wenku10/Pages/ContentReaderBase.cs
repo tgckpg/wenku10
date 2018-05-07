@@ -231,7 +231,6 @@ namespace wenku10.Pages
 			Window.Current.SizeChanged += Current_SizeChanged;
 
 			if ( MainStage.Instance.IsPhone ) SizeChanged += ContentReader_SizeChanged;
-
 		}
 
 		private void InitAppBar()
@@ -516,10 +515,7 @@ namespace wenku10.Pages
 
 		}
 
-		private void ES_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
-		{
-			OpenBook( ES.Chapter );
-		}
+		private void ES_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e ) => OpenBook( ES.Chapter );
 
 		protected async void HistoryThumbs_ItemClick( object sender, ItemClickEventArgs e )
 		{
@@ -598,6 +594,7 @@ namespace wenku10.Pages
 
 			_PaneGrid.DataContext = ContentPane;
 			_MainSplitView.PanelBackground = ContentPane.BackgroundBrush;
+			_MainSplitView.RegisterPropertyChangedCallback( PassiveSplitView.StateProperty, OnPaneStateChanged );
 
 			_Overlay.OnStateChanged += Overlay_OnStateChanged;
 		}
@@ -833,13 +830,47 @@ namespace wenku10.Pages
 			}
 		}
 
-		private void Overlay_OnStateChanged( object sender, ControlState args )
+		private void Overlay_OnStateChanged( object sender, ControlState s )
 		{
-			if ( args == ControlState.Closed )
+			switch ( s )
 			{
-				_OverlayFrame.Content = null;
-				( ( BgContext ) _ContentBg.DataContext )?.Reload();
+				case ControlState.Active:
+					if ( !( _OverlayFrame.Content is Settings.CallibrateAcceler ) )
+					{
+						EngageACSBrake();
+					}
+					break;
+				case ControlState.Closed:
+					_OverlayFrame.Content = null;
+					ReleaseACSBrake();
+					( ( BgContext ) _ContentBg.DataContext )?.Reload();
+					break;
 			}
+		}
+
+		private void OnPaneStateChanged( DependencyObject sender, DependencyProperty dp )
+		{
+			switch( _MainSplitView.State )
+			{
+				case PaneStates.Opened:
+					EngageACSBrake();
+					break;
+				case PaneStates.Closed:
+					ReleaseACSBrake();
+					break;
+			}
+		}
+
+		private void EngageACSBrake()
+		{
+			if ( ContentView == null ) return;
+			ContentView.ACScroll.ProgramBrake = true;
+		}
+
+		private void ReleaseACSBrake()
+		{
+			if ( ContentView == null ) return;
+			ContentView.ACScroll.ProgramBrake = false;
 		}
 
 		private void Redraw()
@@ -1020,6 +1051,7 @@ namespace wenku10.Pages
 			_VESwipe.ManipulationDelta -= ManiZoomBackUp;
 			_VESwipe.ManipulationDelta -= ManiZoomBackDown;
 			_VESwipe.ManipulationCompleted -= ManiZoomEnd;
+			ReleaseACSBrake();
 		}
 
 		abstract protected void ManiZoomBackUp( object sender, ManipulationDeltaRoutedEventArgs e );
@@ -1028,6 +1060,8 @@ namespace wenku10.Pages
 
 		protected void StartZoom( bool Up )
 		{
+			EngageACSBrake();
+
 			ZoomTrigger = 0;
 			_VESwipe.IsHitTestVisible = true;
 
