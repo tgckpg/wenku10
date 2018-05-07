@@ -9,66 +9,83 @@
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource Shades60}">
-        <canvas:CanvasAnimatedControl x:Name="Stage" IsHitTestVisible="False" UseSharedDevice="True" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <canvas:CanvasAnimatedControl x:Name="Stage" Grid.Row="0" Height="60"
+                                      IsHitTestVisible="False" UseSharedDevice="True" />
 
-        <StackPanel Margin="5,5,5,45"
-                    Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                    MaxWidth="400"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <CheckBox x:Name="ForceBrake" Checked="ForceBrake_Checked" Unchecked="ForceBrake_Unchecked">
-                <TextBlock x:Uid="/Settings/AccelerScroll_ForceBrake"
-                           Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                           Text="Force brake is engaged" />
-            </CheckBox>
-            <Slider x:Name="AccelerReadings" Visibility="Collapsed"
-                    StepFrequency="0.01" Minimum="-1" Maximum="1"
-                    Margin="5">
-                <Slider.Header>
-                    <TextBlock x:Uid="/Settings/AccelerScroll_Tilt" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                               Text="Tilt" />
-                </Slider.Header>
-            </Slider>
+        <ScrollViewer Margin="5,5,5,45" Grid.Row="1"
+                      Width="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
+                      MaxWidth="400"
+                      HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <StackPanel>
+                <CheckBox x:Name="ForceBrake" Checked="ForceBrake_Checked" Unchecked="ForceBrake_Unchecked">
+                    <TextBlock x:Uid="/Settings/AccelerScroll_ForceBrake"
+                               Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                               Text="Force brake is engaged" />
+                </CheckBox>
+                <Slider x:Name="AccelerReadings" Visibility="Collapsed"
+                        StepFrequency="0.01" Minimum="-1" Maximum="1"
+                        Margin="5">
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/AccelerScroll_Tilt" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Text="Tilt" />
+                    </Slider.Header>
+                </Slider>
 
-            <Slider x:Name="AccelerMultiplier"
-                    ValueChanged="AccelerMultiplier_ValueChanged"
-                    PointerCaptureLost="AccelerMultiplier_PointerCaptureLost"
-                    StepFrequency="0.01" Minimum="0" Maximum="3"
-                    Margin="5">
-                <Slider.Header>
-                    <TextBlock x:Uid="/Settings/AccelerScroll_AMultiplier" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                               Text="Acceleration multiplier" />
-                </Slider.Header>
-            </Slider>
-            <Slider x:Name="TerminalVelocity"
-                    ValueChanged="TerminalVelocity_ValueChanged"
-                    PointerCaptureLost="TerminalVelocity_PointerCaptureLost"
-                    StepFrequency="0.01" Minimum="0" Maximum="100"
-                    Margin="5">
-                <Slider.Header>
-                    <TextBlock x:Uid="/Settings/AccelerScroll_TerminalVelocity" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                               Text="Terminal velocity" />
-                </Slider.Header>
-            </Slider>
-            <Slider x:Name="BrakeOffset"
-                    ValueChanged="Brake_ValueChanged"
-                    PointerCaptureLost="BrakeOffset_PointerCaptureLost"
-                    StepFrequency="0.01" Minimum="-1" Maximum="1"
-                    Margin="5">
-                <Slider.Header>
-                    <TextBlock x:Uid="/Settings/AccelerScroll_BrakeOffset" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                               Text="Stop range offset" />
-                </Slider.Header>
-            </Slider>
-            <Slider x:Name="Brake"
-                    ValueChanged="Brake_ValueChanged"
-                    PointerCaptureLost="Brake_PointerCaptureLost"
-                    StepFrequency="0.01" Minimum="0" Maximum="1"
-                    Margin="5">
-                <Slider.Header>
-                    <TextBlock x:Uid="/Settings/AccelerScroll_Brake" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                               Text="Stop Range" />
-                </Slider.Header>
-            </Slider>
-        </StackPanel>
+                <Slider x:Name="AccelerMultiplier"
+                        ValueChanged="AccelerMultiplier_ValueChanged"
+                        PointerCaptureLost="AccelerMultiplier_PointerCaptureLost"
+                        StepFrequency="0.01" Minimum="0" Maximum="10"
+                        Margin="5">
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/AccelerScroll_AMultiplier" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Text="Acceleration multiplier" />
+                    </Slider.Header>
+                </Slider>
+                <Slider x:Name="TerminalVelocity"
+                        ValueChanged="TerminalVelocity_ValueChanged"
+                        PointerCaptureLost="TerminalVelocity_PointerCaptureLost"
+                        StepFrequency="0.01" Minimum="0" Maximum="100"
+                        Margin="5">
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/AccelerScroll_TerminalVelocity" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Text="Terminal velocity" />
+                    </Slider.Header>
+                </Slider>
+                <Slider x:Name="BrakeOffset"
+                        ValueChanged="Brake_ValueChanged"
+                        PointerCaptureLost="BrakeOffset_PointerCaptureLost"
+                        StepFrequency="0.01" Minimum="-1" Maximum="1"
+                        Margin="5">
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/AccelerScroll_BrakeOffset" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Text="Stop range offset" />
+                    </Slider.Header>
+                </Slider>
+                <Slider x:Name="Brake"
+                        ValueChanged="Brake_ValueChanged"
+                        PointerCaptureLost="Brake_PointerCaptureLost"
+                        StepFrequency="0.01" Minimum="0" Maximum="1"
+                        Margin="5">
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/AccelerScroll_Brake" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Text="Stop Range" />
+                    </Slider.Header>
+                </Slider>
+                <Slider x:Name="BrakingForce"
+                        ValueChanged="BrakingForce_ValueChanged"
+                        PointerCaptureLost="BrakingForce_PointerCaptureLost"
+                        StepFrequency="0.01" Minimum="0" Maximum="1"
+                        Margin="5">
+                    <Slider.Header>
+                        <TextBlock x:Uid="/Settings/AccelerScroll_BrakingForce" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Text="Brake force" />
+                    </Slider.Header>
+                </Slider>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

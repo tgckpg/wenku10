@@ -184,13 +184,15 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async void SetAccelerScroll()
 		{
+			var AccConf = GRConfig.ContentReader.AccelerScroll;
 			ACScroll = new AccelerScroll
 			{
 				ProgramBrake = true,
-				Brake = GRConfig.ContentReader.AccelerScroll.Brake,
-				AccelerMultiplier = GRConfig.ContentReader.AccelerScroll.AccelerMultiplier,
-				TerminalVelocity = GRConfig.ContentReader.AccelerScroll.TerminalVelocity,
-				BrakeOffset = GRConfig.ContentReader.AccelerScroll.BrakeOffset
+				Brake = AccConf.Brake,
+				BrakeOffset = AccConf.BrakeOffset,
+				BrakingForce = AccConf.BrakingForce,
+				AccelerMultiplier = AccConf.AccelerMultiplier,
+				TerminalVelocity = AccConf.TerminalVelocity
 			};
 
 			ACScroll.UpdateOrientation( App.ViewControl.DispOrientation );
@@ -205,7 +207,7 @@ namespace wenku10.Pages.ContentReaderPane
 			AccelerMenu.Items.Add( ToggleAcceler );
 			AccelerMenu.Items.Add( CallibrateAcceler );
 
-			if ( ACScroll.Available && !GRConfig.ContentReader.AccelerScroll.Asked )
+			if ( ACScroll.Available && !AccConf.Asked )
 			{
 				bool EnableAccel = false;
 
@@ -215,44 +217,30 @@ namespace wenku10.Pages.ContentReaderPane
 					, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
 				) );
 
-				GRConfig.ContentReader.AccelerScroll.Asked = true;
-				GRConfig.ContentReader.AccelerScroll.Enable = EnableAccel;
+				AccConf.Asked = true;
+				AccConf.Enable = EnableAccel;
 			}
 
-			ToggleAccelerScroll( GRConfig.ContentReader.AccelerScroll.Enable );
+			ToggleAccelerScroll( AccConf.Enable );
 			UpdateAccelerDelta();
 		}
 
 		internal void UpdateAccelerDelta()
 		{
-			float v = 0;
-			float a = 0;
-
-			void SC( float _a )
-			{
-				if( ACScroll.ForceBrake || ACScroll.ProgramBrake )
-				{
-					_a = 0;
-				}
-
-				a = _a;
-			}
+			float a = 0, v = 0;
 
 			if ( ACSTimer == null )
 			{
-				ACSTimer = new DispatcherTimer();
-				ACSTimer.Interval = TimeSpan.FromMilliseconds( 20 );
+				ACSTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds( 20 ) };
 				ACSTimer.Tick += ( s, e ) =>
 				{
 					if ( a == 0 )
 					{
-						// Apply friction when stopped
-						Easings.ParamTween( ref v, 0, 0.90f, 0.10f );
+						// Apply the brake when stopped
+						Easings.ParamTween( ref v, 0, 1 - ACScroll.BrakingForce, ACScroll.BrakingForce );
 					}
 					else
 					{
-						// We want a low acceleration time to the terminal velocity
-						// so we'll need to scale it up and clamp it down
 						v += ( ACScroll.AccelerMultiplier * a );
 						v = v.Clamp( -ACScroll.TerminalVelocity, ACScroll.TerminalVelocity );
 					}
@@ -262,16 +250,37 @@ namespace wenku10.Pages.ContentReaderPane
 						float d = ( float ) AccelerSV.HorizontalOffset;
 						AccelerSV.ChangeView( d - v, null, null, true );
 					}
+					else
+					{
+						ACSTimer.Stop();
+					}
 				};
-
-				ACSTimer.Start();
 			}
 
-			ACScroll.Delta = iv =>
+			void UpdateAcc( float _a )
+			{
+				if ( ACScroll.ForceBrake || ACScroll.ProgramBrake )
+				{
+					a = 0;
+				}
+				else
+				{
+					a = _a;
+					var j = Dispatcher.RunAsync( CoreDispatcherPriority.High, () =>
+					{
+						if ( !ACSTimer.IsEnabled )
+							ACSTimer.Start();
+					} );
+				}
+			}
+
+			// Kickstarting machanism
+			ACScroll.Delta = _a =>
 			{
 				if ( AccelerSV != null )
 				{
-					ACScroll.Delta = SC;
+					ACScroll.Delta = UpdateAcc;
+					UpdateAcc( _a );
 				}
 			};
 		}

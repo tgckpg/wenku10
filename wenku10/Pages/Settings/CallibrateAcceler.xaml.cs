@@ -50,6 +50,7 @@ namespace wenku10.Pages.Settings
 
 				ForceBrake.IsChecked = ACS.ForceBrake;
 				Brake.Value = ACS.Brake;
+				BrakingForce.Value = ACS.BrakingForce;
 				TerminalVelocity.Value = ACS.TerminalVelocity;
 				BrakeOffset.Value = ACS.BrakeOffset;
 				AccelerMultiplier.Value = ACS.AccelerMultiplier;
@@ -139,5 +140,15 @@ namespace wenku10.Pages.Settings
 		private void ForceBrake_Checked( object sender, RoutedEventArgs e ) => ACS.ForceBrake = true;
 		private void ForceBrake_Unchecked( object sender, RoutedEventArgs e ) => ACS.ForceBrake = false;
 
+		private void BrakingForce_ValueChanged( object sender, RangeBaseValueChangedEventArgs e )
+		{
+			ACS.BrakingForce = ( float ) BrakingForce.Value;
+		}
+
+		private void BrakingForce_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
+		{
+			ACS.BrakingForce = ( float ) BrakingForce.Value;
+			GRConfig.ContentReader.AccelerScroll.BrakingForce = ACS.BrakingForce;
+		}
 	}
 }
