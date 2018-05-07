@@ -298,7 +298,7 @@ namespace wenku10.Pages
 				LocalRedraw = ( OrientationRedraw && UpdatePane );
 			}
 
-			ContentView.ACScroll.UpdateOrientation( DisplayInformation.GetForCurrentView().CurrentOrientation );
+			ContentView.ACScroll.UpdateOrientation( App.ViewControl.DispOrientation );
 
 			if ( UpdatePane && _MainSplitView.State != PaneStates.Closed )
 			{

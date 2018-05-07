@@ -50,6 +50,7 @@ namespace wenku10.Pages.ContentReaderPane
 		private Paragraph SelectedParagraph;
 
 		public AccelerScroll ACScroll { get; private set; }
+		DispatcherTimer ACSTimer;
 		ScrollViewer AccelerSV;
 
 		private volatile bool HoldOneMore = false;
@@ -79,6 +80,7 @@ namespace wenku10.Pages.ContentReaderPane
 			try
 			{
 				ACScroll.StopReading();
+				ACSTimer?.Stop();
 
 				Reader.PropertyChanged -= ScrollToParagraph;
 				Reader.Dispose();
@@ -182,12 +184,16 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private async void SetAccelerScroll()
 		{
-			ACScroll = new AccelerScroll();
-			ACScroll.ProgramBrake = true;
-			ACScroll.Brake = GRConfig.ContentReader.AccelerScroll.Brake;
-			ACScroll.AccelerMultiplier = GRConfig.ContentReader.AccelerScroll.AccelerMultiplier;
-			ACScroll.TerminalVelocity = GRConfig.ContentReader.AccelerScroll.TerminalVelocity;
-			ACScroll.BrakeOffset = GRConfig.ContentReader.AccelerScroll.BrakeOffset;
+			ACScroll = new AccelerScroll
+			{
+				ProgramBrake = true,
+				Brake = GRConfig.ContentReader.AccelerScroll.Brake,
+				AccelerMultiplier = GRConfig.ContentReader.AccelerScroll.AccelerMultiplier,
+				TerminalVelocity = GRConfig.ContentReader.AccelerScroll.TerminalVelocity,
+				BrakeOffset = GRConfig.ContentReader.AccelerScroll.BrakeOffset
+			};
+
+			ACScroll.UpdateOrientation( App.ViewControl.DispOrientation );
 
 			StringResources stx = StringResources.Load( "Settings", "Message" );
 			ToggleAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );
@@ -220,32 +226,45 @@ namespace wenku10.Pages.ContentReaderPane
 		internal void UpdateAccelerDelta()
 		{
 			float v = 0;
+			float a = 0;
 
-			void SC( float a )
+			void SC( float _a )
 			{
 				if( ACScroll.ForceBrake || ACScroll.ProgramBrake )
 				{
-					a = 0;
+					_a = 0;
 				}
 
-				if ( a == 0 )
-				{
-					// Apply friction when stopped
-					Easings.ParamTween( ref v, 0, 0.90f, 0.10f );
-				}
-				else
-				{
-					// We want a low acceleration time to the terminal velocity
-					// so we'll need to scale it up and clamp it down
-					v += ( ACScroll.AccelerMultiplier * a );
-					v = v.Clamp( -ACScroll.TerminalVelocity, ACScroll.TerminalVelocity );
-				}
+				a = _a;
+			}
 
-				if ( 0.0001 < Math.Abs( v ) )
+			if ( ACSTimer == null )
+			{
+				ACSTimer = new DispatcherTimer();
+				ACSTimer.Interval = TimeSpan.FromMilliseconds( 20 );
+				ACSTimer.Tick += ( s, e ) =>
 				{
-					float d = ( float ) AccelerSV.HorizontalOffset;
-					var j = Dispatcher.RunAsync( CoreDispatcherPriority.High, () => AccelerSV.ChangeView( d - v, null, null, true ) );
-				}
+					if ( a == 0 )
+					{
+						// Apply friction when stopped
+						Easings.ParamTween( ref v, 0, 0.90f, 0.10f );
+					}
+					else
+					{
+						// We want a low acceleration time to the terminal velocity
+						// so we'll need to scale it up and clamp it down
+						v += ( ACScroll.AccelerMultiplier * a );
+						v = v.Clamp( -ACScroll.TerminalVelocity, ACScroll.TerminalVelocity );
+					}
+
+					if ( 0.0001 < Math.Abs( v ) )
+					{
+						float d = ( float ) AccelerSV.HorizontalOffset;
+						AccelerSV.ChangeView( d - v, null, null, true );
+					}
+				};
+
+				ACSTimer.Start();
 			}
 
 			ACScroll.Delta = iv =>
