@@ -26,6 +26,7 @@ namespace GR.PageExtensions
 	using AdvDM;
 	using CompositeElement;
 	using Data;
+	using Database.Models;
 	using DataSources;
 	using GSystem;
 	using Model.ListItem;
@@ -77,6 +78,26 @@ namespace GR.PageExtensions
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
 				await ItemProcessor.ProcessLocal( ( LocalBook ) Row.Source );
+			}
+		}
+
+		public void ProcessOrOpenItem( IGRRow DataContext )
+		{
+			if ( DataContext is GRRow<IBookProcess> Row )
+			{
+				LocalBook BkProc = ( LocalBook ) Row.Source;
+				if ( BkProc.Processed && BkProc.ProcessSuccess )
+				{
+					Book Bk = Shared.BooksDb.QueryBook( BookType.L, BkProc.ZoneId, BkProc.ZItemId );
+					if ( Bk != null )
+					{
+						PageProcessor.NavigateToTOC( Page, ItemProcessor.GetBookItem( Bk ) );
+					}
+				}
+				else
+				{
+					ProcessItem( DataContext );
+				}
 			}
 		}
 

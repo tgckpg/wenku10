@@ -23,7 +23,7 @@ namespace GR.DataSources
 		private BookSpiderDisplayData BSData => ( BookSpiderDisplayData ) DataSource;
 		public BookSpiderPageExt BSExt => ( BookSpiderPageExt ) Extension;
 
-		public override Action<IGRRow> ItemAction => BSExt.ProcessItem;
+		public override Action<IGRRow> ItemAction => BSExt.ProcessOrOpenItem;
 
 		private ConcurrentQueue<Tuple<string, string>> PQueue = new ConcurrentQueue<Tuple<string, string>>();
 

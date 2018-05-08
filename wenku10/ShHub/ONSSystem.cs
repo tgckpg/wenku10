@@ -26,11 +26,11 @@ namespace wenku10.SHHub
 		public string ServiceUri
 		{
 #if DEBUG && !ARM
-			get => GetValue<string>( "AuthToken", "https://w10srv.botanical.astropenguin.net/" );
+			get => GetValue<string>( "ServiceUri", "https://w10srv.botanical.astropenguin.net/" );
 #else
-			get => GetValue<string>( "AuthToken", "https://w10srv.astropenguin.net/" );
+			get => GetValue<string>( "ServiceUri", "https://w10srv.astropenguin.net/" );
 #endif
-			set => SetValue( "AuthToken", value );
+			set => SetValue( "ServiceUri", value );
 		}
 	}
 }

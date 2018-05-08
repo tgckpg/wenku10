@@ -18,7 +18,7 @@ namespace GR.DataSources
 
 		public TextDocDisplayData BSData => ( TextDocDisplayData ) DataSource;
 
-		public override Action<IGRRow> ItemAction => ( ( TextDocPageExt ) Extension ).ProcessItem;
+		public override Action<IGRRow> ItemAction => ( ( TextDocPageExt ) Extension ).ProcessOrOpenItem;
 
 		public TextDocVS( string Name )
 			: base( Name )

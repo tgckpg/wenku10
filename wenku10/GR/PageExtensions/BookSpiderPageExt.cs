@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.Storage;
 
+using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 
@@ -18,7 +19,10 @@ namespace GR.PageExtensions
 {
 	using CompositeElement;
 	using Data;
+	using Database.Models;
 	using DataSources;
+	using GSystem;
+	using Model.Book;
 	using Model.Book.Spider;
 	using Model.ListItem;
 	using Model.Loaders;
@@ -127,11 +131,31 @@ namespace GR.PageExtensions
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
 				SpiderBook BkProc = ( SpiderBook ) Row.Source;
-				await ItemProcessor.ProcessLocal( BkProc );
-
-				if ( BkProc.GetBook().Packed == true )
+				if ( !BkProc.Processing )
 				{
-					new VolumeLoader( ( x ) => { } ).Load( BkProc.GetBook() );
+					await ItemProcessor.ProcessLocal( BkProc );
+
+					if ( BkProc.GetBook().Packed == true )
+					{
+						new VolumeLoader( ( x ) => { } ).Load( BkProc.GetBook() );
+					}
+				}
+			}
+		}
+
+		public void ProcessOrOpenItem( IGRRow DataContext )
+		{
+			if ( DataContext is GRRow<IBookProcess> Row )
+			{
+				SpiderBook BkProc = ( SpiderBook ) Row.Source;
+				if ( BkProc.Processed && BkProc.ProcessSuccess )
+				{
+					BookItem BkItem = BkProc.GetBook();
+					ControlFrame.Instance.NavigateTo( PageId.BOOK_INFO_VIEW, () => new wenku10.Pages.BookInfoView( BkItem ) );
+				}
+				else
+				{
+					ProcessItem( DataContext );
 				}
 			}
 		}
