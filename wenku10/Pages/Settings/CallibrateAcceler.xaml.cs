@@ -76,6 +76,8 @@ namespace wenku10.Pages.Settings
 
 		public void EndCallibration()
 		{
+			_a = 0;
+
 			ACS.Delta = ODelta;
 			ACS.EndCallibration();
 

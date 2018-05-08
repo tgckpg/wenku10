@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
 using GR.Config;
@@ -722,10 +723,11 @@ namespace wenku10.Pages.ContentReaderPane
 
 		private void ContentGrid_Holding( object sender, HoldingRoutedEventArgs e )
 		{
-			if ( AccelerScroll.StateActive )
+			if ( AccelerScroll.StateActive && !ACScroll.ForceBrake )
 			{
 				ACScroll.ForceBrake = true;
 				Container.OverNavigate( typeof( Settings.CallibrateAcceler ), ACScroll );
+				Logger.Log( ID, "Force brake engaged", LogType.DEBUG );
 			}
 		}
 
