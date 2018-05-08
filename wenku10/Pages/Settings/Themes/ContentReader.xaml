@@ -7,6 +7,7 @@
     xmlns:c="using:GR.CompositeElement"
     xmlns:v="using:GR.Converters"
     xmlns:e="using:GR.Effects"
+    xmlns:t="using:GR.Model.Text"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
@@ -222,7 +223,6 @@
                   MaxHeight="400">
                 <Grid.Resources>
                     <v:ContentStyleConverter x:Key="ContentStyleConverter" />
-                    <v:VDisplayConverter x:Key="VDisplayConverter" />
                 </Grid.Resources>
 
                 <Grid.ColumnDefinitions>
@@ -340,43 +340,43 @@
                           FlowDirection="{Binding FlowDir}">
 
                     <ListView.Resources>
-                        <DataTemplate x:Name="Horizontal">
+                        <DataTemplate x:Name="Horizontal" x:DataType="t:Paragraph">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="20"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="20"/>
                                 </Grid.RowDefinitions>
-                                <StackPanel Background="{Binding AnchorColor}" />
+                                <StackPanel Background="{x:Bind AnchorColor, Mode=OneWay}" />
                                 <p:VerticalStack
                                     Grid.Row="1"
-                                    Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
+                                    Text="{x:Bind Display}"
                                     HorizontalAlignment="Center"
-                                    Foreground="{Binding FontColor}"
-                                    FontSize="{Binding FontSize}"
+                                    Foreground="{x:Bind FontColor, Mode=OneWay}"
+                                    FontSize="{x:Bind FontSize, Mode=OneWay}"
                                     FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
-                                    FontWeight="{Binding FontWeight}"
-                                    LineHeight="{Binding LineHeight}"
-                                    Padding="{Binding ParagraphSpacing}"
+                                    FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                                    LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                                    Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                                 />
                             </Grid>
                         </DataTemplate>
-                        <DataTemplate x:Name="Vertical">
+                        <DataTemplate x:Name="Vertical" x:DataType="t:Paragraph">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
-                                <StackPanel Background="{Binding AnchorColor}" />
+                                <StackPanel Background="{x:Bind AnchorColor, Mode=OneWay}" />
                                 <TextBlock
                                     Grid.Column="1"
-                                    Text="{Binding Text}"
+                                    Text="{x:Bind Display}"
                                     TextWrapping="Wrap"
-                                    Foreground="{Binding FontColor}"
-                                    FontSize="{Binding FontSize}"
-                                    LineHeight="{Binding LineHeight}"
-                                    Padding="{Binding ParagraphSpacing}"
+                                    Foreground="{x:Bind FontColor, Mode=OneWay}"
+                                    FontSize="{x:Bind FontSize, Mode=OneWay}"
+                                    LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                                    Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                                 />
                             </Grid>
                         </DataTemplate>

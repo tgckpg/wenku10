@@ -64,6 +64,11 @@ namespace wenku10.Pages.Settings.Themes
 
 			RBgContext.ApplyBackgrounds();
 
+			if( Paragraph.Translator == null )
+			{
+				Paragraph.Translator = new libtranslate.Translator();
+			}
+
 			StringResources stx = StringResources.Load( "Settings" );
 
 			ExpContent = new Paragraph[]
