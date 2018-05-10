@@ -21,11 +21,26 @@ namespace GR.DataSources
 	using Resources;
 	using Settings;
 
-	sealed class BookSpiderDisplayData : GRDataSource
+	sealed class BookSpiderDisplayData : GRDataSource, IHelpContext
 	{
 		private readonly string ID = typeof( BookSpiderDisplayData ).Name;
 
 		public override string ConfigId => "NPSpider";
+
+		public bool Help_Show => !_Items.Any();
+		public string Help_Title { get; private set; }
+		public string Help_Desc { get; private set; }
+		public Uri Help_Uri { get; private set; }
+
+		public override bool IsLoading
+		{
+			get => base.IsLoading;
+			protected set
+			{
+				base.IsLoading = value;
+				NotifyChanged( "Help_Show" );
+			}
+		}
 
 		private GRTable<IBookProcess> PsTable;
 		public override IGRTable Table => PsTable;
@@ -38,6 +53,14 @@ namespace GR.DataSources
 			new ColumnConfig() { Name = "Zone", Width = 100 },
 			new ColumnConfig() { Name = "Desc", Width = 355 },
 		};
+
+		public BookSpiderDisplayData()
+		{
+			StringResources stx = StringResources.Load( "AppResources" );
+			Help_Title = stx.Text( "BookSpider" );
+			Help_Desc = stx.Text( "Desc_BookSpider" );
+			Help_Uri = new Uri( "https://github.com/tgckpg/wenku10-samples" );
+		}
 
 		public override string ColumnName( IGRCell CellProp ) => ColumnNameResolver.IBookProcess( CellProp.Property.Name );
 

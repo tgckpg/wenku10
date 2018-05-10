@@ -18,11 +18,26 @@ namespace GR.DataSources
 	using Model.ListItem;
 	using Resources;
 
-	sealed class TextDocDisplayData : GRDataSource
+	sealed class TextDocDisplayData : GRDataSource, IHelpContext
 	{
 		private readonly string ID = typeof( TextDocDisplayData ).Name;
 
 		public override string ConfigId => "TextDoc";
+
+		public bool Help_Show => !_Items.Any();
+		public string Help_Title { get; private set; }
+		public string Help_Desc { get; private set; }
+		public Uri Help_Uri { get; private set; }
+
+		public override bool IsLoading
+		{
+			get => base.IsLoading;
+			protected set
+			{
+				base.IsLoading = value;
+				NotifyChanged( "Help_Show" );
+			}
+		}
 
 		private GRTable<IBookProcess> PsTable;
 		public override IGRTable Table => PsTable;
@@ -38,6 +53,14 @@ namespace GR.DataSources
 
 		public override string ColumnName( IGRCell CellProp ) => GStrings.ColumnNameResolver.IBookProcess( CellProp.Property.Name );
 
+		public TextDocDisplayData()
+		{
+			StringResources stx = StringResources.Load( "AppResources", "AppBar" );
+			Help_Title = stx.Text( "LocalDocuments", "AppBar" );
+			Help_Desc = stx.Text( "Desc_LocalDocuments" );
+			Help_Uri = new Uri( "https://github.com/tgckpg/wenku10-samples" );
+		}
+
 		public override void Reload()
 		{
 			lock ( this )
@@ -47,7 +70,7 @@ namespace GR.DataSources
 			}
 
 			StringResources stx = StringResources.Load( "LoadingMessage" );
-			Message = stx.Str( "ProgressIndicator_Message" );
+			Message = stx.Str( "ProgressIndicator_Message", "LoadingMessage" );
 
 			PsTable.Items = _Items;
 			// _Items.Clear();
@@ -71,6 +94,7 @@ namespace GR.DataSources
 
 				Message = string.Format( "{0}/{1}", i, l );
 				ImportItem( new LocalBook( x ) );
+
 			} );
 
 			IsLoading = false;

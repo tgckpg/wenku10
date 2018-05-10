@@ -91,7 +91,11 @@ namespace GR.PageExtensions
 			AppBarButton OpenFile = UIAliases.CreateAppBarBtn( SegoeMDL2.OpenFile, stx.Text( "OpenZone" ) );
 			OpenFile.Click += OpenFile_Click;
 
+			SecondaryIconButton SpiderEditor = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.Edit, stx.Text( "SpiderEdit", "ContextMenu" ) );
+			SpiderEditor.Click += ( s, e ) => ControlFrame.Instance.NavigateTo( PageId.PROC_PANEL, () => new ProcPanelWrapper( null ) );
+
 			MajorControls = new ICommandBarElement[] { OpenFile };
+			Major2ndControls = new ICommandBarElement[] { SpiderEditor };
 		}
 
 		private void Edit_Click( object sender, RoutedEventArgs e )

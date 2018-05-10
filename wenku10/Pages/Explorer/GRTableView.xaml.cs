@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -91,7 +92,7 @@ namespace wenku10.Pages.Explorer
 		{
 			if ( this.ViewSource != ViewSource )
 			{
-				if( DataSource != null)
+				if ( DataSource != null )
 				{
 					DataSource.PropertyChanged -= SearchTerm_PropertyChanged;
 				}
@@ -128,6 +129,15 @@ namespace wenku10.Pages.Explorer
 				SearchTerm.Text = DataSource.Search;
 
 				DataSource.PropertyChanged += SearchTerm_PropertyChanged;
+
+				if ( DataSource is IHelpContext )
+				{
+					DSDesc.DataContext = DataSource;
+				}
+				else
+				{
+					DSDesc.DataContext = new NoHelp();
+				}
 			}
 
 			var j = Task.Run( () =>
@@ -197,10 +207,11 @@ namespace wenku10.Pages.Explorer
 
 		private void _ItemListAction( object Source )
 		{
-			IGRRow Row = ( ( FrameworkElement ) Source ).DataContext as IGRRow;
-			if ( Row == null ) return;
-			OpenedRow = Row;
-			GRTable_ItemAction( Row );
+			if ( ( ( FrameworkElement ) Source ).DataContext is IGRRow Row )
+			{
+				OpenedRow = Row;
+				GRTable_ItemAction( Row );
+			}
 		}
 
 		private void GRTable_ItemAction( IGRRow Row )
@@ -494,7 +505,7 @@ namespace wenku10.Pages.Explorer
 					HZCont.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
 				}
 			}
-			catch( Exception )
+			catch ( Exception )
 			{
 				// Logger.Log
 			}
@@ -550,18 +561,29 @@ namespace wenku10.Pages.Explorer
 			UpdateVSPosBindng();
 		}
 
-		private class NegateOffsetConv: IValueConverter
+		private class NegateOffsetConv : IValueConverter
 		{
 			public double Negate = 0;
 
 			public object Convert( object value, Type targetType, object parameter, string language )
 			{
-				if( value is double offset ) return Negate + offset;
+				if ( value is double offset ) return Negate + offset;
 				return value;
 			}
 
 			public object ConvertBack( object value, Type targetType, object parameter, string language ) => throw new NotSupportedException();
 		}
 		#endregion
+
+		private class NoHelp : IHelpContext
+		{
+#pragma warning disable 0067
+			public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore 0067
+			public bool Help_Show => false;
+			public string Help_Title => null;
+			public string Help_Desc => null;
+			public Uri Help_Uri => null;
+		}
 	}
 }

@@ -18,12 +18,18 @@ namespace GR.DataSources
 	using Database.Models;
 	using Model.Interfaces;
 	using Model.Section;
+	using Net.Astropenguin.Loaders;
 	using Resources;
 	using Settings;
 
-	sealed class ZSMDisplayData : GRDataSource
+	sealed class ZSMDisplayData : GRDataSource, IHelpContext
 	{
 		public readonly string ID = typeof( ZSMDisplayData ).Name;
+
+		public bool Help_Show => !MetaSpiders.Any();
+		public string Help_Title { get; private set; }
+		public string Help_Desc { get; private set; }
+		public Uri Help_Uri { get; private set; }
 
 		public GRTable<IMetaSpider> ZSTable { get; private set; }
 		public override IGRTable Table => ZSTable;
@@ -41,6 +47,13 @@ namespace GR.DataSources
 		public event ZSEvent ZoneRemoved;
 
 		private ObservableCollection<GRRow<IMetaSpider>> MetaSpiders = new ObservableCollection<GRRow<IMetaSpider>>();
+
+		public ZSMDisplayData()
+		{
+			StringResources stx = StringResources.Load( "AppResources" );
+			Help_Title = stx.Text( "ZoneSpider" );
+			Help_Desc = stx.Text( "Desc_ZoneSpider" );
+		}
 
 		public override string ColumnName( IGRCell CellProp ) => GStrings.ColumnNameResolver.IBookProcess( CellProp.Property.Name );
 

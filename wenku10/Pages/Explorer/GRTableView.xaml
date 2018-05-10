@@ -9,6 +9,7 @@
     xmlns:e="using:GR.Effects"
     xmlns:g="using:GR.Converters"
     xmlns:grt="using:GR.Data"
+    xmlns:gri="using:GR.Model.Interfaces"
     xmlns:ms="using:Microsoft.Phone.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
@@ -56,6 +57,27 @@
                       ItemsSource="{Binding Items}"
                       IsItemClickEnabled="True" />
         </ScrollViewer>
+
+        <!-- DataSource Desc -->
+        <ContentControl x:Name="DSDesc" Content="{Binding}" Grid.Row="1" Grid.ColumnSpan="2" >
+            <ContentControl.ContentTemplate>
+                <DataTemplate x:DataType="gri:IHelpContext">
+                    <StackPanel Margin="20,40,20,20"
+                                e:TransitionDisplay.Mode="A01_Y_30_30"
+                                e:TransitionDisplay.State="{Binding Help_Show, Converter={StaticResource TransStateConverter}}" >
+                        <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}" Text="{x:Bind Help_Title}" FontSize="30" />
+                        <TextBlock Foreground="{StaticResource SubtleBrush}" TextWrapping="Wrap" >
+                            <Run Text="{x:Bind Help_Desc}" />
+                            <Hyperlink NavigateUri="{x:Bind Help_Uri}">
+                                <Hyperlink.Inlines>
+                                    <Run Text="{x:Bind Help_Uri}" />
+                                </Hyperlink.Inlines>
+                            </Hyperlink>
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ContentControl.ContentTemplate>
+        </ContentControl>
 
         <!-- Loading Message -->
         <Grid x:Name="LoadingMessage"
