@@ -146,7 +146,7 @@ namespace GR.PageExtensions
 
 			Major2ndControls = new ICommandBarElement[] { LoginBtn, MAuthBtn, ChangeServer };
 #else
-			Major2ndControls = new ICommandBarElement[] { LoginBtn, UploadBtn, MAuthBtn };
+			Major2ndControls = new ICommandBarElement[] { LoginBtn, MAuthBtn };
 #endif
 		}
 
