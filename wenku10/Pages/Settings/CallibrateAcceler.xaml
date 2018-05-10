@@ -31,7 +31,7 @@
                             StepFrequency="0.01" Minimum="-1" Maximum="1"
                             Margin="5">
                         <Slider.Header>
-                            <TextBlock x:Uid="/Settings/AccelerScroll_Tilt" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                            <TextBlock x:Uid="/Settings/AccelerScroll_Tilt" Foreground="{StaticResource RelativeShadesBrush}"
                                        Text="Tilt" />
                         </Slider.Header>
                     </Slider>
@@ -41,7 +41,7 @@
                             StepFrequency="0.01" Minimum="0" Maximum="10"
                             Margin="5">
                         <Slider.Header>
-                            <TextBlock x:Uid="/Settings/AccelerScroll_AMultiplier" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                            <TextBlock x:Uid="/Settings/AccelerScroll_AMultiplier" Foreground="{StaticResource RelativeShadesBrush}"
                                        Text="Acceleration multiplier" />
                         </Slider.Header>
                     </Slider>
@@ -51,7 +51,7 @@
                             StepFrequency="0.01" Minimum="0" Maximum="100"
                             Margin="5">
                         <Slider.Header>
-                            <TextBlock x:Uid="/Settings/AccelerScroll_TerminalVelocity" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                            <TextBlock x:Uid="/Settings/AccelerScroll_TerminalVelocity" Foreground="{StaticResource RelativeShadesBrush}"
                                        Text="Terminal velocity" />
                         </Slider.Header>
                     </Slider>
@@ -61,7 +61,7 @@
                             StepFrequency="0.01" Minimum="-1" Maximum="1"
                             Margin="5">
                         <Slider.Header>
-                            <TextBlock x:Uid="/Settings/AccelerScroll_BrakeOffset" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                            <TextBlock x:Uid="/Settings/AccelerScroll_BrakeOffset" Foreground="{StaticResource RelativeShadesBrush}"
                                        Text="Stop range offset" />
                         </Slider.Header>
                     </Slider>
@@ -71,7 +71,7 @@
                             StepFrequency="0.01" Minimum="0" Maximum="1"
                             Margin="5">
                         <Slider.Header>
-                            <TextBlock x:Uid="/Settings/AccelerScroll_Brake" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                            <TextBlock x:Uid="/Settings/AccelerScroll_Brake" Foreground="{StaticResource RelativeShadesBrush}"
                                        Text="Stop Range" />
                         </Slider.Header>
                     </Slider>
@@ -81,7 +81,7 @@
                             StepFrequency="0.01" Minimum="0" Maximum="1"
                             Margin="5">
                         <Slider.Header>
-                            <TextBlock x:Uid="/Settings/AccelerScroll_BrakingForce" Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                            <TextBlock x:Uid="/Settings/AccelerScroll_BrakingForce" Foreground="{StaticResource RelativeShadesBrush}"
                                        Text="Brake force" />
                         </Slider.Header>
                     </Slider>
@@ -89,12 +89,12 @@
                 <StackPanel Grid.Column="1" Margin="5">
                     <CheckBox x:Name="ForceBrake" Checked="ForceBrake_Checked" Unchecked="ForceBrake_Unchecked">
                         <TextBlock x:Uid="/Settings/AccelerScroll_ForceBrake"
-                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Foreground="{StaticResource RelativeShadesBrush}"
                                    Text="Force brake is engaged" />
                     </CheckBox>
                     <CheckBox x:Name="TrackAutoAnchor" Checked="TrackAutoAnchor_Checked" Unchecked="TrackAutoAnchor_Unchecked">
                         <TextBlock x:Uid="/Settings/AccelerScroll_TrackAutoAnchor"
-                                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                                   Foreground="{StaticResource RelativeShadesBrush}"
                                    Text="Track auto anchor" />
                     </CheckBox>
                 </StackPanel>
