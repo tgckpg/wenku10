@@ -168,14 +168,17 @@ namespace GR.MigrationOps
 			CanBackup = CanMigrate = CanRestore = false;
 
 			await Shared.Storage.InitializeAsync();
+
+			bool MigrateRest = false;
 			foreach( Type M in Mops )
 			{
 				IMigrationOp Mop = ( IMigrationOp ) Activator.CreateInstance( M );
 				Mop.Mesg = MWriteLine;
 				Mop.MesgR = MWrite;
 
-				if( Mop.ShouldMigrate )
+				if( MigrateRest || Mop.ShouldMigrate )
 				{
+					MigrateRest = true;
 					MWriteLine( string.Format( stx.Text( "MPhase" ), M.Name ) );
 					await Mop.Up();
 				}
