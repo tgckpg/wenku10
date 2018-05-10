@@ -121,7 +121,7 @@
     <value>OneDrive：「クラウド」は再び同期させることができますクリックしてください</value>
   </data>
   <data name="10" xml:space="preserve">
-    <value>テキスト：イラスト組み込みモードは設定で調整することができます</value>
+    <value>テキスト：「挿絵はインラインモードに」設定で調整することができます</value>
   </data>
   <data name="11" xml:space="preserve">
     <value>テキスト：縦書きテキストの場合は、「↑→↓←↔↕」は自動的に90度回転されます</value>
@@ -133,7 +133,7 @@
     <value>情報ページ：ブックマークボタンは、セクションアンカーに直接ジャンプすることができます</value>
   </data>
   <data name="14" xml:space="preserve">
-    <value>資訊頁：[目次タイトル]キーを押し、ボリューム全体をダウンロードすることができます</value>
+    <value>情報ページ：[目次タイトル]キーを押し、ボリューム全体をダウンロードすることができます</value>
   </data>
   <data name="2" xml:space="preserve">
     <value>テキスト：上下の線は、補助線であります。設定ページへ「透明」に設定されて閉じることができます。</value>
@@ -157,7 +157,7 @@
     <value>システム：フルスクリーンモードを開くには Ctrl+ F / メインメニューのフルスクリーンボタン</value>
   </data>
   <data name="9" xml:space="preserve">
-    <value>システム：イラストはアルバムに保存することができます</value>
+    <value>システム：挿絵は写真集に保存することができます</value>
   </data>
   <data name="DidYouKnow.Text" xml:space="preserve">
     <value>ご存知でしたか？</value>

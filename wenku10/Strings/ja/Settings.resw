@@ -285,7 +285,7 @@
     <value>無線LANのみ</value>
   </data>
   <data name="Data_Illustration.Text" xml:space="preserve">
-    <value>イラスト</value>
+    <value>挿絵</value>
   </data>
   <data name="Data_Illustration_SaveLocation.Text" xml:space="preserve">
     <value>保存場所</value>
@@ -552,7 +552,7 @@
     <value>単一ボリュームを分割する</value>
   </data>
   <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
-    <value>イラストを埋め込む</value>
+    <value>挿絵を埋め込む</value>
   </data>
   <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
     <value>スクロール・バー</value>
