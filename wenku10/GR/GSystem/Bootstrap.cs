@@ -94,7 +94,10 @@ namespace GR.GSystem
 			if ( L2 ) return;
 			L2 = true;
 
-			X.Instance<object>( XProto.LibStart );
+			if ( X.Exists )
+			{
+				X.Instance<object>( XProto.LibStart );
+			}
 		}
 
 		private void AppSettingsInit()
