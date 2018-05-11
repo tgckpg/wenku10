@@ -1,0 +1,62 @@
+﻿<UserControl
+    x:Class="wenku10.Pages.Explorer.Widgets.TitleListHorz"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Explorer.Widgets"
+    xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:s="using:GR.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <s:VDisplayConverter x:Key="VDisplayConverter" />
+        <s:WIBConverter x:Name="WIBConverter" />
+    </UserControl.Resources>
+
+    <Grid x:Name="LayoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ListView x:Name="MainItems"
+                  Style="{StaticResource VerticalListView}"
+                  Grid.Row="0" Grid.ColumnSpan="2" Height="300"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  ScrollViewer.HorizontalScrollMode="Disabled"
+                  ItemContainerStyle="{StaticResource PlainListItem}"
+                  IsItemClickEnabled="True" ItemClick="MainItems_ItemClick"
+                  HorizontalAlignment="Left">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <p:VerticalStack
+                        DataContext="{Binding Source, Converter={StaticResource WIBConverter}}"
+                        Margin="0" FontSize="20"
+                        FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
+                        MaxLines="1" Trim="True"
+                        ToolTipService.ToolTip="{Binding Title}"
+                        Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
+                        HorizontalAlignment="Center"
+                        Foreground="{StaticResource SubtleBrush}"
+                    />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Grid.Row="1" Grid.Column="1"
+                Click="ShowMore_Click"
+                HorizontalAlignment="Right"
+                Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                Style="{StaticResource ThemeButton}">
+            <StackPanel Orientation="Horizontal" Margin="5">
+                <TextBlock x:Uid="/AppResources/ShowMore" VerticalAlignment="Center" Margin="5" />
+                <FontIcon Glyph="&#xEA37;" Margin="5" />
+            </StackPanel>
+        </Button>
+    </Grid>
+</UserControl>

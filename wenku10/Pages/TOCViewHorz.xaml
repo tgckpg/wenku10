@@ -3,15 +3,16 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages"
-    xmlns:c="using:wenku8.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:s="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:s="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
+        <v:DataBoolConverter x:Key="DataBoolConverter" />
         <s:VDisplayConverter x:Key="VDisplayConverter" />
         <s:PhoneVAlignConverter x:Key="PhoneVAlignConverter" />
         <s:TransStateConverter x:Key="TransStateConverter" />
@@ -23,17 +24,35 @@
 
     <Grid x:Name="LayoutRoot" Background="{StaticResource Shades90}">
 
-        <Grid Grid.Column="1" Background="{StaticResource Shades90}">
+        <Grid x:Name="BgWrapper" Grid.Column="1" Background="{StaticResource Shades90}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+
+            <StackPanel Grid.RowSpan="2"
+                        e:TransitionDisplay.Mode="A01"
+                        e:TransitionDisplay.State="{Binding ElementName=VolList, Path=ItemsSource, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressRing IsActive="{Binding ElementName=VolList, Path=ItemsSource, Converter={StaticResource DataBoolConverter}, ConverterParameter=1}"
+                              Foreground="{StaticResource RelativeShadesBrush}"
+                              Width="40" Height="40" Margin="5" />
+                <TextBlock x:Uid="/LoadingMessage/ProgressIndicator_PleaseWait"
+                           HorizontalAlignment="Center"
+                           Foreground="{StaticResource RelativeShadesBrush}" />
+            </StackPanel>
+
             <ListView x:Name="VolList"
                       Grid.Row="0"
                       ItemsSource="{Binding Volumes}"
                       Style="{StaticResource VerticalListView}"
                       ItemContainerStyle="{StaticResource TOCListItem}"
                       SelectionChanged="VolumeChanged">
+                <ListView.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="50" />
+                    </TransitionCollection>
+                </ListView.ItemContainerTransitions>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <p:VerticalStack
@@ -43,9 +62,10 @@
                             HorizontalAlignment="Center"
                             Foreground="{StaticResource RelativeShadesBrush}"
                             FontSize="20"
+                            FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                             RightTapped="TOCShowVolumeAction"
                             FlyoutBase.AttachedFlyout="{StaticResource VolumeAction}"
-                            Text="{Binding VolumeTitle, Converter={StaticResource VDisplayConverter}}"
+                            Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
                         />
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -54,15 +74,12 @@
             <Rectangle Grid.Row="1"
                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                        Fill="{StaticResource Shades90}" />
-            <ListView x:Name="ChapterList"
+            <ListView x:Name="ChapterList" Grid.Row="1"
                       ItemsSource="{Binding Chapters}"
-                      Grid.Row="1" 
                       Style="{StaticResource VerticalListView}"
                       HorizontalAlignment="Left"
                       ItemContainerStyle="{StaticResource PlainListItem}"
-                      MaxWidth="{Binding LayoutSettings.ScreenWidth, Source={StaticResource LayoutResources}}"
-                      IsItemClickEnabled="True"
-                      ItemClick="ChapterSelected" >
+                      IsItemClickEnabled="True" ItemClick="ChapterSelected" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -79,7 +96,8 @@
                                 </i:IconStar>
                             </Border>
                             <p:VerticalStack
-                                Text="{Binding ChapterTitle, Converter={StaticResource VDisplayConverter}}"
+                                Text="{Binding Title, Converter={StaticResource VDisplayConverter}}"
+                                FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
                                 HorizontalAlignment="Center"
                                 Foreground="{StaticResource RelativeShadesBrush}"
                                 FontSize="20"

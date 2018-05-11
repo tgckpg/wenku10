@@ -2,6 +2,7 @@
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=BB32EA9D-2E19-470F-862B-F9D5F1D815F3</Publisher>
   <PublisherDisplayName>Astropenguin</PublisherDisplayName>
+  <DeveloperAccountType>MSA</DeveloperAccountType>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="true" />
@@ -369,7 +370,7 @@
   <AccountPackageIdentityNames>
     <MainPackageIdentityName>60674Astropenguin.term-notify</MainPackageIdentityName>
     <MainPackageIdentityName>60674Astropenguin.wenku8appbeta</MainPackageIdentityName>
-    <MainPackageIdentityName>60674Astropenguin.wenku8testingchannel</MainPackageIdentityName>
+    <MainPackageIdentityName>60674ASTROPENGUIN.WENKU8TESTINGCHANNEL</MainPackageIdentityName>
   </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NTHKXSM0JXL" />
 </StoreAssociation>

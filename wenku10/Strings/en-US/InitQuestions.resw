@@ -117,8 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Backup.Text" xml:space="preserve">
+    <value>Backup</value>
+  </data>
+  <data name="BackupComplete.Text" xml:space="preserve">
+    <value>Backup complete.</value>
+  </data>
+  <data name="BooksType.Text" xml:space="preserve">
+    <value>Books - Type {0}</value>
+  </data>
   <data name="Complete.Text" xml:space="preserve">
     <value>Complete</value>
+  </data>
+  <data name="CompressCache.Text" xml:space="preserve">
+    <value>Compressing caches...</value>
+  </data>
+  <data name="CreatingDatabase.Text" xml:space="preserve">
+    <value>Creating database contexts...</value>
+  </data>
+  <data name="DataBackup.Text" xml:space="preserve">
+    <value>Backing up your files...</value>
   </data>
   <data name="EnableOneDrive.Text" xml:space="preserve">
     <value>OneDrive supports bookmark syncing, settings, etc.</value>
@@ -126,19 +144,79 @@
   <data name="EnableServerSelector.Text" xml:space="preserve">
     <value>ServerSelector is a load balancer that will perhaps enhance the loading speed</value>
   </data>
+  <data name="ExportBackup.Text" xml:space="preserve">
+    <value>Exporting the backup</value>
+  </data>
+  <data name="ExtractingFiles.Text" xml:space="preserve">
+    <value>Extracting files...</value>
+  </data>
+  <data name="FavRecords.Text" xml:space="preserve">
+    <value>Fav records</value>
+  </data>
   <data name="Intro.Text" xml:space="preserve">
     <value>Hi, looks like this is the first time running this app. You will need to answer a few question before setting up the environment</value>
+  </data>
+  <data name="MightTakeAWhile.Text" xml:space="preserve">
+    <value>This might take a while...</value>
+  </data>
+  <data name="Migrate.Text" xml:space="preserve">
+    <value>Migrate</value>
+  </data>
+  <data name="MigrateUserFile.Text" xml:space="preserve">
+    <value>Use backup to migrate</value>
+  </data>
+  <data name="Migration.Text" xml:space="preserve">
+    <value>Migration</value>
+  </data>
+  <data name="MigrationAborted.Text" xml:space="preserve">
+    <value>Migration aborted</value>
+  </data>
+  <data name="MigrationComplete.Text" xml:space="preserve">
+    <value>Migration complete</value>
+  </data>
+  <data name="MPhase.Text" xml:space="preserve">
+    <value>Phase - {0}</value>
   </data>
   <data name="Next.Text" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="NobackupWarning.Text" xml:space="preserve">
+    <value>Once migration failed, you will lost your data if you don't keep a backup. Ignore this warning and continue to migrate?</value>
+  </data>
+  <data name="PleaseMigrate.Text" xml:space="preserve">
+    <value>Migration is required before using the current version of this app</value>
+  </data>
   <data name="Prev.Text" xml:space="preserve">
-    <value>Prevous</value>
+    <value>Previous</value>
+  </data>
+  <data name="PurgingFiles.Text" xml:space="preserve">
+    <value>Purging files...</value>
+  </data>
+  <data name="RestoreBackup.Text" xml:space="preserve">
+    <value>Restore backup</value>
+  </data>
+  <data name="SavingRecords.Text" xml:space="preserve">
+    <value>Saving records...</value>
   </data>
   <data name="Thankyou.Text" xml:space="preserve">
     <value>Thankyou. Please restart the application.</value>
   </data>
   <data name="Theme.Text" xml:space="preserve">
     <value>Select a theme</value>
+  </data>
+  <data name="WarnMigrateWithBackup.Text" xml:space="preserve">
+    <value>Current data will be replaced by this backup. Continue?</value>
+  </data>
+  <data name="MigrateDatabase.Text" xml:space="preserve">
+    <value>Migrating database contexts...</value>
+  </data>
+  <data name="Failure_NTW.Text" xml:space="preserve">
+    <value>WARNING: Unable to download New-TongwenTang translation table, this will affect Hans -&gt; Hant translation process. To reload the table, please go to Settings &gt; Advanced &gt; Translation Table.</value>
+  </data>
+  <data name="Failure_Synpatch.Text" xml:space="preserve">
+    <value>WARNING: Unable to download syntax-patch translation table, this will affect text syntax patching. To reload the table, please go to Settings &gt; Advanced &gt; Translation Table.</value>
+  </data>
+  <data name="Failure_Vertical.Text" xml:space="preserve">
+    <value>WARNING: Unable to download vertical-text translation table, this will affect vertical text rendering. To reload the table, please go to Settings &gt; Advanced &gt; Translation Table.</value>
   </data>
 </root>

@@ -8,8 +8,8 @@ using Windows.UI.Notifications;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.Book;
-using wenku8.Resources;
+using GR.Model.Book;
+using GR.Resources;
 
 namespace Tasks
 {
@@ -21,7 +21,7 @@ namespace Tasks
 			Updater.EnableNotificationQueue( true );
 			Updater.Clear();
 
-			StringResBg stx = new StringResBg( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			XmlDocument Template150 = TileUpdateManager.GetTemplateContent( TileTemplateType.TileSquare150x150Text01 );
 			Template150.GetElementsByTagName( "text" ).First().AppendChild( Template150.CreateTextNode( stx.Str( "NewContent" ) ) );

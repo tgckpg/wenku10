@@ -234,4 +234,34 @@
   <data name="TranslateTC" xml:space="preserve">
     <value>この文書を中国語（繁体字）に翻訳しますか？</value>
   </data>
+  <data name="SourceNotAvailable" xml:space="preserve">
+    <value>アイテムソースが失われているか、削除されている</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>{0} を削除しますか？</value>
+  </data>
+  <data name="ConfirmBuildFTS" xml:space="preserve">
+    <value>全文検索の索引には、追加容量を使用する必要があります（推定値 {0} ）。 索引を作成しますか？</value>
+  </data>
+  <data name="FTSNeedsRebuild" xml:space="preserve">
+    <value>このアイテムの情報を見つかりません。 索引を再構築してください。</value>
+  </data>
+  <data name="RestartToRestore" xml:space="preserve">
+    <value>一部のファイルは現在使用中です。 復元モードに再起動しますか？</value>
+  </data>
+  <data name="ConfirmReset" xml:space="preserve">
+    <value>リセットしますか？</value>
+  </data>
+  <data name="ConfirmResetConvTable" xml:space="preserve">
+    <value>サーバーから変換テーブルをリロードしますか？</value>
+  </data>
+  <data name="NoAndNever" xml:space="preserve">
+    <value>いいえ、二度と質問しないで</value>
+  </data>
+  <data name="ConfirmReplace" xml:space="preserve">
+    <value>このアイテムはデータベースに存在します。 その内容を置き換えますか？</value>
+  </data>
+  <data name="EnableAccelerScroll" xml:space="preserve">
+    <value>このデバイスには加速度計が搭載されていたようです。 重力スクロールを有効にしますか？（段落メニューで無効にすることができます）</value>
+  </data>
 </root>

@@ -5,25 +5,29 @@
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:c="using:wenku8.CompositeElement"
-    xmlns:v="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:t="using:GR.Model.Text"
+    xmlns:v="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
-        <v:VDisplayConverter x:Key="VDisplayConverter" />
         <v:ContentStyleConverter x:Key="ContentStyleConverter" />
         <MenuFlyout x:Key="ParagraphFlyout" Placement="Bottom">
-            <MenuFlyoutItem x:Uid="/ContextMenu/Copy" Text="Copy" Click="ContextCopyClicked" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />
-            <MenuFlyoutItem x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
-            <MenuFlyoutItem x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
-            <MenuFlyoutSubItem x:Uid="/ContextMenu/Locate" Text="Position">
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/Copy" Text="Copy" Click="ContextCopyClicked" />
+            <MenuFlyoutSeparator />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/Search_Dict" Text="Search words" Click="SearchWords" />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/ViewHorz" Text="View Horizontally" Click="ViewHorizontal" />
+            <MenuFlyoutSeparator />
+            <MenuFlyoutSubItem FlowDirection="LeftToRight" x:Uid="/ContextMenu/Locate" Text="Position">
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoTop" Text="Goto Top" Click="GoTop" />
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoCurrent" Text="Goto Current" Click="GoCurrent" />
                 <MenuFlyoutItem x:Uid="/ContextMenu/GotoBottom" Text="Goto Bottom" Click="GoBottom" />
             </MenuFlyoutSubItem>
+            <MenuFlyoutSubItem x:Name="AccelerMenu" FlowDirection="LeftToRight" x:Uid="/ContextMenu/AccelerScroll" Text="AccelerScroll" />
+            <MenuFlyoutSeparator />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/Settings/Conv_Table_Local" Text="Translation table" Click="ShowConvPhases" />
+            <MenuFlyoutItem FlowDirection="LeftToRight" x:Uid="/AppBar/Bookmark" Text="Bookmark this paragraph" Click="MarkParagraph" />
         </MenuFlyout>
 
         <ItemsPanelTemplate x:Key="HPanel">
@@ -48,11 +52,12 @@
                   SelectionChanged="ContentGrid_SelectionChanged"
                   IsItemClickEnabled="True"
                   ItemClick="ContentGrid_ItemClick"
+                  Holding="ContentGrid_Holding"
+                  Loaded="SetBookAnchor"
                   ItemsSource="{Binding Data}"
                   SelectedIndex="{Binding SelectedIndex}"
                   ItemTemplateSelector="{Binding TemplateSelector}"
                   Margin="{Binding Margin}"
-                  Loaded="SetBookAnchor"
                   Style="{Binding AlignMode, Converter={StaticResource ContentStyleConverter}}"
                   FlowDirection="{Binding FlowDir}">
             <ListView.RenderTransform>
@@ -64,7 +69,7 @@
             </FlyoutBase.AttachedFlyout>
 
             <ListView.Resources>
-                <DataTemplate x:Name="Horizontal">
+                <DataTemplate x:Name="Horizontal" x:DataType="t:Paragraph">
                     <Grid FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}"
                           RightTapped="Grid_RightTapped">
                         <Grid.RowDefinitions>
@@ -72,64 +77,65 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="20"/>
                         </Grid.RowDefinitions>
-                        <StackPanel Background="{Binding AnchorColor}" />
+                        <Rectangle Fill="{x:Bind AnchorColor}" />
                         <p:VerticalStack
                             Grid.Row="1"
-                            Text="{Binding Text, Converter={StaticResource VDisplayConverter}}"
+                            Text="{x:Bind Display}"
                             HorizontalAlignment="Center"
-                            Foreground="{Binding FontColor}"
-                            FontSize="{Binding FontSize}"
-                            FontWeight="{Binding FontWeight}"
-                            LineHeight="{Binding LineHeight}"
-                            Padding="{Binding ParagraphSpacing}"
+                            Foreground="{x:Bind FontColor, Mode=OneWay}"
+                            FontFamily="/Assets/SegoeUIExt.ttf#Segoe UI Ext"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                            LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                            Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                         />
                     </Grid>
                 </DataTemplate>
-                <DataTemplate x:Name="Vertical">
+                <DataTemplate x:Name="Vertical" x:DataType="t:Paragraph">
                     <Grid RightTapped="Grid_RightTapped" FlyoutBase.AttachedFlyout="{StaticResource ParagraphFlyout}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Background="{Binding AnchorColor}" />
+                        <Rectangle Fill="{x:Bind AnchorColor, Mode=OneWay}" />
                         <TextBlock
                             Grid.Column="1"
-                            Text="{Binding Text}"
+                            Text="{x:Bind Display}"
                             TextWrapping="Wrap"
-                            Foreground="{Binding FontColor}"
-                            FontSize="{Binding FontSize}"
-                            FontWeight="{Binding FontWeight}"
-                            LineHeight="{Binding LineHeight}"
-                            Padding="{Binding ParagraphSpacing}"
+                            Foreground="{x:Bind FontColor, Mode=OneWay}"
+                            FontSize="{x:Bind FontSize, Mode=OneWay}"
+                            FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                            LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                            Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                         />
                     </Grid>
                 </DataTemplate>
                 <DataTemplate x:Name="IllusEmbed">
                     <Image Source="{Binding Illus}" />
                 </DataTemplate>
-                <DataTemplate x:Name="IllusIconH">
+                <DataTemplate x:Name="IllusIconH" x:DataType="t:Paragraph">
                     <TextBlock
                         Margin="0,10,0,20"
                         FontFamily="Segoe MDL2 Assets"
-                        Text="{Binding Text}"
-                        Foreground="{Binding FontColor}"
-                        FontSize="{Binding FontSize}"
-                        FontWeight="{Binding FontWeight}"
-                        LineHeight="{Binding LineHeight}"
-                        Padding="{Binding ParagraphSpacing}"
+                        Text="{x:Bind Display}"
+                        Foreground="{x:Bind FontColor, Mode=OneWay}"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                        LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                        Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                     />
                 </DataTemplate>
-                <DataTemplate x:Name="IllusIconV">
+                <DataTemplate x:Name="IllusIconV" x:DataType="t:Paragraph">
                     <TextBlock
                         Margin="10,0,20,0"
                         FontFamily="Segoe MDL2 Assets"
-                        Text="{Binding Text}"
-                        Foreground="{Binding FontColor}"
-                        FontSize="{Binding FontSize}"
-                        FontWeight="{Binding FontWeight}"
-                        LineHeight="{Binding LineHeight}"
-                        Padding="{Binding ParagraphSpacing}"
+                        Text="{x:Bind Display}"
+                        Foreground="{x:Bind FontColor, Mode=OneWay}"
+                        FontSize="{x:Bind FontSize, Mode=OneWay}"
+                        FontWeight="{x:Bind FontWeight, Mode=OneWay}"
+                        LineHeight="{x:Bind LineHeight, Mode=OneWay}"
+                        Padding="{x:Bind ParagraphSpacing, Mode=OneWay}"
                     />
                 </DataTemplate>
             </ListView.Resources>

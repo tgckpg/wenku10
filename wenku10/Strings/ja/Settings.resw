@@ -285,7 +285,7 @@
     <value>無線LANのみ</value>
   </data>
   <data name="Data_Illustration.Text" xml:space="preserve">
-    <value>イラスト</value>
+    <value>挿絵</value>
   </data>
   <data name="Data_Illustration_SaveLocation.Text" xml:space="preserve">
     <value>保存場所</value>
@@ -552,7 +552,7 @@
     <value>単一ボリュームを分割する</value>
   </data>
   <data name="Appearance_ContentReader_EmbedIllus.Text" xml:space="preserve">
-    <value>イラストを埋め込む</value>
+    <value>挿絵を埋め込む</value>
   </data>
   <data name="Appearance_ContentReader_ScrollBar.Text" xml:space="preserve">
     <value>スクロール・バー</value>
@@ -568,5 +568,56 @@
   </data>
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value> パスワードはこのデバイスに保存されます。 他のアカウントに同じパスワードを使用しないことをお勧めします。</value>
+  </data>
+  <data name="Conv_Custom.Text" xml:space="preserve">
+    <value>カスタム</value>
+  </data>
+  <data name="Conv_NTW_ps2t.Text" xml:space="preserve">
+    <value>簡体字 → 繁体字 フレーズ</value>
+  </data>
+  <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
+    <value>簡体字 → 繁体字 単語</value>
+  </data>
+  <data name="Conv_Table.Text" xml:space="preserve">
+    <value>翻訳テーブル</value>
+  </data>
+  <data name="Desc_Conv_Table.Text" xml:space="preserve">
+    <value>コンテンツ文字列の置換を定義する</value>
+  </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>縦書</value>
+  </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>フェーズ {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>翻訳テーブル（ローカル）</value>
+  </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>較正</value>
+  </data>
+  <data name="AccelerScroll_Brake.Text" xml:space="preserve">
+    <value>制動範囲</value>
+  </data>
+  <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
+    <value>傾斜率</value>
+  </data>
+  <data name="AccelerScroll_AMultiplier.Text" xml:space="preserve">
+    <value>加速倍率</value>
+  </data>
+  <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
+    <value>終端速度</value>
+  </data>
+  <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
+    <value>制動オフセット</value>
+  </data>
+  <data name="AccelerScroll_ForceBrake.Text" xml:space="preserve">
+    <value>強制制動</value>
+  </data>
+  <data name="AccelerScroll_BrakingForce.Text" xml:space="preserve">
+    <value>制動力</value>
+  </data>
+  <data name="AccelerScroll_TrackAutoAnchor.Text" xml:space="preserve">
+    <value>セクションアンカー追跡</value>
   </data>
 </root>

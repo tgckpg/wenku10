@@ -21,12 +21,13 @@ using Net.Astropenguin.DataModel;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Twitter;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Twitter;
 
 namespace wenku10.Pages
 {
@@ -73,7 +74,7 @@ namespace wenku10.Pages
 			if ( !await AuthData.Authenticate() ) goto TweetEnd;
 
 			string TweetText = "";
-			StringResources stx = new StringResources( "Error", "AppResources" );
+			StringResources stx = StringResources.Load( "Error", "AppResources" );
 
 			TweetStart:
 
@@ -137,9 +138,7 @@ namespace wenku10.Pages
 
 		private async void TestTwitter()
 		{
-			wenku8.Settings.Layout.BookInfoView InfoView = new wenku8.Settings.Layout.BookInfoView();
-
-			if( InfoView.TwitterConfirmed )
+			if( GRConfig.System.TwitterConfirmed )
 			{
 				TwitterBtn.IsEnabled = false;
 

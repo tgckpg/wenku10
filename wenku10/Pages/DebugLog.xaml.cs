@@ -19,8 +19,8 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging.Handler;
 
-using wenku8.Config;
-using wenku8.Model.Text;
+using GR.Config;
+using GR.Model.Text;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace wenku10.Pages
@@ -44,7 +44,7 @@ namespace wenku10.Pages
 			IsolatedStorageFile isf = new AppStorage().GetISOStorage();
 			if ( !isf.FileExists( "debug.log" ) ) return;
 
-			FileSystemLog FSL = global::wenku8.System.Bootstrap.LogInstance;
+			FileSystemLog FSL = global::GR.GSystem.Bootstrap.LogInstance;
 			FSL.Stop();
 
 			StreamReader Reader = new StreamReader( FSL.GetStream() );

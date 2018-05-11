@@ -18,14 +18,28 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock x:Name="CacheLimit"
-                           Foreground="{StaticResource MinorBrush}"
-                           VerticalAlignment="Center" />
+                <TextBlock x:Name="CacheLimit" Foreground="{StaticResource MinorBrush}" VerticalAlignment="Center" />
                 <Button Grid.Column="1" Padding="12.0" Click="Button_Click_1">
-                    <TextBlock x:Uid="/Settings/Data_Clear"
-                               Text="Data_Clear" />
+                    <TextBlock x:Uid="/Settings/Data_Clear" Text="Data_Clear" />
                 </Button>
             </Grid>
+
+            <TextBlock x:Uid="/NavigationTitles/FullTextSearch"
+                       Foreground="{StaticResource MajorBrush}"
+                       Text="Data_Preload_TextContent" FontSize="20"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="FTSSize"
+                           Foreground="{StaticResource MinorBrush}"
+                           Grid.Column="0" VerticalAlignment="Center"/>
+                <Button Grid.Column="1" Padding="12" Click="Button_Click_2">
+                    <TextBlock x:Uid="/Settings/Data_Clear" Text="Data_Clear" />
+                </Button>
+            </Grid>
+
         </StackPanel>
     </Grid>
 </Page>

@@ -481,7 +481,7 @@
     <value>增加豁免</value>
   </data>
   <data name="Advanced_Server_Reset.Text" xml:space="preserve">
-    <value>重置</value>
+    <value>重設</value>
   </data>
   <data name="Advanced_Misc_SyntaxPatch.Text" xml:space="preserve">
     <value>修正誤用了的符號</value>
@@ -569,5 +569,56 @@
   </data>
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value>密碼將存儲在此設備上。 建議您不要在其他帳戶使用相同的密碼。</value>
+  </data>
+  <data name="Conv_Custom.Text" xml:space="preserve">
+    <value>自定義</value>
+  </data>
+  <data name="Conv_NTW_ps2t.Text" xml:space="preserve">
+    <value>简 → 繁 短語</value>
+  </data>
+  <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
+    <value>简 → 繁 單詞</value>
+  </data>
+  <data name="Conv_Table.Text" xml:space="preserve">
+    <value>翻譯表</value>
+  </data>
+  <data name="Desc_Conv_Table.Text" xml:space="preserve">
+    <value>定義內文字串轉換</value>
+  </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>直書</value>
+  </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>階段 {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>翻譯表（本地）</value>
+  </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>較正</value>
+  </data>
+  <data name="AccelerScroll_Brake.Text" xml:space="preserve">
+    <value>制動範圍</value>
+  </data>
+  <data name="AccelerScroll_AMultiplier.Text" xml:space="preserve">
+    <value>加速倍數</value>
+  </data>
+  <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
+    <value>終端速度</value>
+  </data>
+  <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
+    <value>傾斜度</value>
+  </data>
+  <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
+    <value>制動偏移</value>
+  </data>
+  <data name="AccelerScroll_ForceBrake.Text" xml:space="preserve">
+    <value>強制制動</value>
+  </data>
+  <data name="AccelerScroll_BrakingForce.Text" xml:space="preserve">
+    <value>制動力</value>
+  </data>
+  <data name="AccelerScroll_TrackAutoAnchor.Text" xml:space="preserve">
+    <value>自動錨點追蹤</value>
   </data>
 </root>

@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.IO;
+using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
@@ -23,11 +25,11 @@ using libtaotu.Controls;
 using libtaotu.Models.Procedure;
 using libtaotu.Pages;
 
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Taotu;
+using GR.Database.Models;
+using GR.Model.Book.Spider;
+using GR.Model.ListItem;
+using GR.Settings;
+using GR.Taotu;
 
 using wenku10.Pages.ContentReaderPane;
 
@@ -39,24 +41,24 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 		WenkuMarker EditTarget;
 
+		private BookInstruction TempInst;
+
 		private EditProcMark()
 		{
 			this.InitializeComponent();
 			SetTemplate();
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
-
-		~EditProcMark() { Dispose(); }
 
 		public void Dispose()
 		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 		}
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 		}
 
@@ -87,7 +89,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 				&& Convoy != null
 				&& Convoy.Dispatcher == EditTarget )
 			{
-				BookInstruction TInst = Convoy.Payload as BookInstruction;
+				TempInst = Convoy.Payload as BookInstruction;
 
 				ProcConvoy ProcCon = ProcManager.TracePackage( Convoy, ( P, C ) => P is ProcParameter );
 				if ( ProcCon != null )
@@ -97,37 +99,67 @@ namespace wenku10.Pages.Dialogs.Taotu
 					ProcCon = new ProcConvoy( PPClone, null );
 				}
 
-				TInst.PackVolumes( ProcCon );
+				TempInst.PackVolumes( ProcCon );
 
 				Preview.Navigate(
 					typeof( TableOfContents )
-					, new Tuple<Volume[], SelectionChangedEventHandler>( TInst.GetVolumes(), PreviewContent )
+					, new Tuple<Volume[], SelectionChangedEventHandler>( TempInst.GetVolInsts().Remap( x => x.ToVolume( TempInst.Entry ) ), PreviewContent )
 				);
 				Preview.BackStack.Clear();
 				TestRunning.IsActive = false;
 			}
 		}
 
-		private void PreviewContent( object sender, SelectionChangedEventArgs e )
+		private async void PreviewContent( object sender, SelectionChangedEventArgs e )
 		{
-			if ( 0 == e.AddedItems.Count ) return;
-
+			if ( e.AddedItems.Count == 0 || TestRunning.IsActive ) return;
 			TestRunning.IsActive = true;
 
-			Chapter Ch = ( e.AddedItems[ 0 ] as TOCItem ).GetChapter();
+			TOCItem Item = ( TOCItem ) e.AddedItems[ 0 ];
+			Chapter Ch = Item.Ch;
 
-			if( Ch == null )
+			if ( Ch == null )
 			{
 				ProcManager.PanelMessage( ID, "Chapter is not available", LogType.INFO );
 				return;
 			}
 
-			new ChapterLoader(
-				C => {
-					ShowSource( ( C as SChapter ).TempFile );
-					TestRunning.IsActive = false;
+			string VId = Ch.Volume.Meta[ AppKeys.GLOBAL_VID ];
+			string CId = Ch.Meta[ AppKeys.GLOBAL_CID ];
+			EpInstruction EpInst = TempInst.GetVolInsts().First( x => x.VId == VId ).EpInsts.Cast<EpInstruction>().First( x => x.CId == CId );
+			IEnumerable<ProcConvoy> Convoys = await EpInst.Process();
+
+			StorageFile TempFile = await AppStorage.MkTemp();
+
+			StringResources stx = StringResources.Load( "LoadingMessage" );
+
+			foreach ( ProcConvoy Konvoi in Convoys )
+			{
+				ProcConvoy Convoy = ProcManager.TracePackage(
+					Konvoi
+					, ( d, c ) =>
+					c.Payload is IEnumerable<IStorageFile>
+					|| c.Payload is IStorageFile
+				);
+
+				if ( Convoy == null ) continue;
+
+				if ( Convoy.Payload is IStorageFile )
+				{
+					await TempFile.WriteFile( ( IStorageFile ) Convoy.Payload, true, new byte[] { ( byte ) '\n' } );
 				}
-			).Load( Ch );
+				else if ( Convoy.Payload is IEnumerable<IStorageFile> )
+				{
+					foreach ( IStorageFile ISF in ( ( IEnumerable<IStorageFile> ) Convoy.Payload ) )
+					{
+						ProcManager.PanelMessage( ID, string.Format( stx.Str( "MergingContents" ), ISF.Name ), LogType.INFO );
+						await TempFile.WriteFile( ISF, true, new byte[] { ( byte ) '\n' } );
+					}
+				}
+			}
+
+			ShowSource( TempFile );
+			TestRunning.IsActive = false;
 		}
 
 		private void ShowSource( StorageFile SF )

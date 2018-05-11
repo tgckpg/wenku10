@@ -15,11 +15,11 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.ListItem;
+using GR.Model.ListItem;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {
-	using StringAuthManager = global::wenku8.System.AuthManager<INameValue>;
+	using StringAuthManager = global::GR.GSystem.AuthManager<INameValue>;
 
 	sealed partial class AssignAuth : ContentDialog
 	{
@@ -36,7 +36,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 			Canceled = true;
 			AuthMgr = Mgr;
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );

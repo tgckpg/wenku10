@@ -16,25 +16,27 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Model.Section;
-using wenku8.Resources;
-using wenku8.Settings;
-using wenku8.Storage;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Database.Models;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
+using GR.Model.Interfaces;
+using GR.Model.ListItem.Sharers;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Model.Section;
+using GR.Resources;
+using GR.Settings;
+using GR.Storage;
 
-using TokenManager = wenku8.System.TokenManager;
+using TokenManager = GR.GSystem.TokenManager;
 using WComments = wenku10.Pages.BookInfoControls.Comments;
 
 namespace wenku10.Pages
@@ -46,18 +48,16 @@ namespace wenku10.Pages
 	{
 		private static readonly string ID = typeof( BookInfoView ).Name;
 
-		#pragma warning disable 0067
+#pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
-		#pragma warning restore 0067
+#pragma warning restore 0067
 
 		public bool NoCommands { get; }
 		public bool MajorNav { get; }
 
 		public IList<ICommandBarElement> MajorControls { get; private set; }
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
-		public IList<ICommandBarElement> MinorControls { get ; private set; }
-
-		private global::wenku8.Settings.Layout.BookInfoView LayoutSettings;
+		public IList<ICommandBarElement> MinorControls { get; private set; }
 
 		AppBarButton FavBtn;
 		AppBarButton BrowserBtn;
@@ -66,9 +66,11 @@ namespace wenku10.Pages
 		AppBarButton CommentBtn;
 		AppBarButton AuthorBtn;
 
+		BgContext InfoBgContext;
 		Storyboard CacheStateStory;
 
 		private volatile bool BookLoading = false;
+		private IImageService ImageSrv;
 
 		private BookInfoView()
 		{
@@ -79,33 +81,34 @@ namespace wenku10.Pages
 		private BookItem ThisBook;
 
 		public BookInfoView( HubScriptItem HSI )
-			:this()
+			: this()
 		{
 			OpenSpider( HSI );
 		}
 
 		public BookInfoView( BookItem Book )
-			:this()
+			: this()
 		{
 			OpenBook( Book );
 		}
 
-		public void SoftOpen()
+		public void SoftOpen( bool NavForward )
 		{
-			LayoutSettings.GetBgContext( "INFO_VIEW" ).ApplyBackgrounds();
+			InfoBgContext?.Reload();
 			SyncAnchors();
 		}
 
-		public void SoftClose() { }
+		public void SoftClose( bool NavForward ) { }
 
 		private void SetTemplate()
 		{
-			LayoutSettings = new global::wenku8.Settings.Layout.BookInfoView();
-
 			Indicators.RenderTransform = new TranslateTransform();
 			HeaderPanel.RenderTransform = new TranslateTransform();
 			StatusPanel.RenderTransform = new TranslateTransform();
 			IntroText.RenderTransform = new TranslateTransform();
+
+			InfoBgContext = new BgContext( GRConfig.BookInfoView.BgContext );
+			InfoBgContext.ApplyBackgrounds();
 
 			InitAppBar();
 
@@ -117,7 +120,7 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "ContextMenu", "AppResources" );
+			StringResources stx = StringResources.Load( "AppBar", "ContextMenu", "AppResources" );
 
 			// Major Controls
 			FavBtn = UIAliases.CreateAppBarBtn( Symbol.Favorite, "" );
@@ -153,11 +156,14 @@ namespace wenku10.Pages
 
 			BookLoading = true;
 
-			if ( Book.IsEx() ) Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+			if ( Book.IsEx() )
+				Book.XSetProp( "Mode", X.Const<string>( XProto.WProtocols, "ACTION_BOOK_META" ) );
+
 			BookLoader BL = new BookLoader( BookLoadComplete );
 
 			BL.Load( Book, true );
 			BL.LoadIntro( Book, true );
+			BL.LoadCover( Book, true );
 
 			SyncAnchors();
 			SetContext();
@@ -172,6 +178,7 @@ namespace wenku10.Pages
 			OneDriveRing.IsActive = false;
 		}
 
+
 		private void BookLoadComplete( BookItem Book )
 		{
 			BookLoading = false;
@@ -180,20 +187,17 @@ namespace wenku10.Pages
 			{
 				if ( Book.IsSpider() )
 				{
-					bool BingExists = new BingService( Book ).Exists();
+					ImageSrv = ImageService.GetProvider( Book );
+					bool ServiceExists = ImageSrv.Exists();
 
-					BingBrowserBtn.IsEnabled
-						= BingCoverBtn.IsEnabled
-						= BingExists;
+					ImageBrowserBtn.IsEnabled
+						= ImageCoverBtn.IsEnabled
+						= ServiceExists;
 
-					bool CanBing = BingExists || string.IsNullOrEmpty( Book.CoverSrcUrl );
+					bool ServiceAvail = ServiceExists || string.IsNullOrEmpty( Book.Info.CoverSrcUrl );
 
-					UsingBing.Foreground = new SolidColorBrush(
-						BingExists
-						? Properties.APPEARENCE_THEME_MINOR_COLOR
-						: Properties.APPEARENCE_THEME_SUBTLE_TEXT_COLOR );
-
-					UsingBing.IsEnabled = CanBing;
+					UseImageSearch.Foreground = new SolidColorBrush( ServiceExists ? GRConfig.Theme.ColorMinor : GRConfig.Theme.SubtleColor );
+					UseImageSearch.IsEnabled = ServiceAvail;
 				}
 
 				CacheStateStory.Stop();
@@ -223,13 +227,10 @@ namespace wenku10.Pages
 
 		private void SetContext()
 		{
-#if DEBUG
-			if ( ThisBook == null ) ThisBook = BookItem.DummyBook();
-#endif
 			ToggleFav();
 			ToggleAppBar();
 
-			if( ThisBook == null )
+			if ( ThisBook == null )
 			{
 				// Set Book Unavailable View
 				BrowserBtn.IsEnabled
@@ -240,9 +241,9 @@ namespace wenku10.Pages
 			else
 			{
 				CommentBtn.IsEnabled = !ThisBook.IsLocal();
-				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.OriginalUrl );
+				BrowserBtn.IsEnabled = !string.IsNullOrEmpty( ThisBook.Info.OriginalUrl );
 				LayoutRoot.DataContext = ThisBook;
-				InfoBgGrid.DataContext = LayoutSettings.GetBgContext( "INFO_VIEW" );
+				InfoBgGrid.DataContext = InfoBgContext;
 			}
 		}
 
@@ -255,7 +256,7 @@ namespace wenku10.Pages
 			{
 				bool No = true;
 
-				StringResources stx = new StringResources( "Message", "ContextMenu" );
+				StringResources stx = StringResources.Load( "Message", "ContextMenu" );
 
 				MessageDialog MsgBox = new MessageDialog( stx.Str( "BInfoView_PresetBg_Mesg" ), stx.Text( "PresetBackground", "ContextMenu" ) );
 				MsgBox.Commands.Add( new UICommand( stx.Str( "Yes" ), x => { No = false; } ) );
@@ -267,7 +268,7 @@ namespace wenku10.Pages
 
 			}
 
-			LayoutSettings.GetBgContext( Argv[ 1 ] ).SetBackground( Argv[ 0 ] );
+			InfoBgContext.SetBackground( Argv[ 0 ] );
 		}
 
 		private void FlyoutBase_Click( object sender, RoutedEventArgs e )
@@ -277,12 +278,12 @@ namespace wenku10.Pages
 
 		private void BrowserBtn_Click( object sender, RoutedEventArgs e )
 		{
-			var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.OriginalUrl ) );
+			var j = Windows.System.Launcher.LaunchUriAsync( new Uri( ThisBook.Info.OriginalUrl ) );
 		}
 
 		private void TOCBtn_Click( object sender, RoutedEventArgs e )
 		{
-			ControlFrame.Instance.SubNavigateTo( this, () => LayoutSettings.HorizontalTOC ? new TOCViewHorz( ThisBook ) : ( Page ) new TOCViewVert( ThisBook ) );
+			PageProcessor.NavigateToTOC( this, ThisBook );
 		}
 
 		private void ReloadBtn_Click( object sender, RoutedEventArgs e )
@@ -305,14 +306,14 @@ namespace wenku10.Pages
 		{
 			CommentBtn.IsEnabled = false;
 
-			if ( !LayoutSettings.TwitterConfirmed )
+			if ( !GRConfig.System.TwitterConfirmed )
 			{
-				LayoutSettings.TwitterConfirmed = true;
-				StringResources stx = new StringResources( "Message" );
+				GRConfig.System.TwitterConfirmed = true;
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "ConfirmTwitter" ), "Twitter" ) );
 			}
 
-			if ( !await wenku8.Model.Twitter.AuthData.Authenticate() ) return;
+			if ( !await GR.Model.Twitter.AuthData.Authenticate() ) return;
 
 			ControlFrame.Instance.SubNavigateTo( this, () => new TwitterCommentView( ThisBook ) );
 
@@ -323,8 +324,8 @@ namespace wenku10.Pages
 		{
 			HSBtn.IsEnabled = false;
 
-			string Token = ( string ) new TokenManager().GetAuthById( ThisBook.Id )?.Value;
-			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.Id, Token );
+			string Token = ( string ) new TokenManager().GetAuthById( ThisBook.ZItemId )?.Value;
+			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( ThisBook.ZItemId, Token );
 
 			if ( HSI == null )
 			{
@@ -352,7 +353,7 @@ namespace wenku10.Pages
 			await ControlFrame.Instance.CloseSubView();
 			HubScriptItem HSI = await PageProcessor.GetScriptFromHub( Id, AccessToken );
 
-			if ( ThisBook.Id != Id )
+			if ( ThisBook.ZItemId != Id )
 			{
 				ThisBook.Update( await ItemProcessor.GetBookFromId( Id ) );
 			}
@@ -362,31 +363,27 @@ namespace wenku10.Pages
 
 		private void SearchAuthor( object sender, RoutedEventArgs e )
 		{
-			ControlFrame.Instance.NavigateTo(
-				PageId.W_SEARCH, () => new WSearch()
-				, P => ( ( WSearch ) P ).SearchAuthor( ThisBook.AuthorRaw ) );
+			MessageBus.Send( GetType(), AppKeys.SEARCH_AUTHOR, ThisBook.Entry );
 		}
 
 		private void AddOrRemoveFav( object sender, RoutedEventArgs e )
 		{
-			BookStorage BS = new BookStorage();
 			if ( ThisBook.IsFav )
 			{
-				BS.RemoveBook( ThisBook.Id );
 				ThisBook.IsFav = false;
 			}
 			else
 			{
-				BS.SaveBook( ThisBook.Id, ThisBook.Title, ThisBook.RecentUpdateRaw, ThisBook.LatestSection );
 				ThisBook.IsFav = true;
 			}
 
+			ThisBook.SaveInfo();
 			ToggleFav();
 		}
 
 		private void ToggleAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources", "ContextMenu" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources", "ContextMenu" );
 
 			if ( ThisBook.IsEx() )
 			{
@@ -399,7 +396,7 @@ namespace wenku10.Pages
 
 				MajorControls = new ICommandBarElement[] { FavBtn, AuthorBtn, CommentBtn, TOCBtn };
 			}
-			else if( ThisBook.IsSpider() )
+			else if ( ThisBook.IsSpider() )
 			{
 				HSBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.HomeGroup, stx.Text( "ScriptDetails", "AppResources" ) );
 				HSBtn.Click += OpenHSComments;
@@ -430,29 +427,29 @@ namespace wenku10.Pages
 				PinManager PM = new PinManager();
 				PM.RegPin( ThisBook, TileId, true );
 
-				SpiderBook SpDef = await SpiderBook.CreateAsyncSpider( ThisBook.Id );
+				SpiderBook SpDef = await SpiderBook.CreateSAsync( ThisBook.ZItemId );
 				await PageProcessor.RegLiveSpider( SpDef, ( BookInstruction ) ThisBook, TileId );
 			}
 		}
 
 		private void ToggleFav()
 		{
-			StringResources stx = new StringResources( "AppBar" );
-			if( ThisBook == null )
+			StringResources stx = StringResources.Load( "AppBar" );
+			if ( ThisBook == null )
 			{
 				FavBtn.IsEnabled = false;
 				FavBtn.Label = stx.Str( "FavIn" );
 				return;
 			}
 
-			if( ThisBook.IsFav )
+			if ( ThisBook.IsFav )
 			{
-				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.UnFavorite;
+				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
 				FavBtn.Label = stx.Str( "FavOut" );
 			}
 			else
 			{
-				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.Favorite;
+				( ( SymbolIcon ) FavBtn.Icon ).Symbol = Symbol.OutlineStar;
 				FavBtn.Label = stx.Str( "FavIn" );
 			}
 		}
@@ -465,14 +462,13 @@ namespace wenku10.Pages
 			// AnchorSync is already handled on this page
 			AsyncTryOut<Chapter> TryAutoAnchor = await PageProcessor.TryGetAutoAnchor( ThisBook, false );
 
-			if( TryAutoAnchor )
+			if ( TryAutoAnchor )
 			{
-				ControlFrame.Instance.BackStack.Remove( PageId.CONTENT_READER );
-				ControlFrame.Instance.NavigateTo( PageId.CONTENT_READER, () => new ContentReader( ThisBook, TryAutoAnchor.Out ) );
+				PageProcessor.NavigateToReader( ThisBook, TryAutoAnchor.Out );
 			}
 			else
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "AnchorNotSetYet" ) ) );
 			}
 
@@ -481,20 +477,17 @@ namespace wenku10.Pages
 
 		private async void VoteButton_Click( object sender, RoutedEventArgs e )
 		{
-			bool LoggedIn = await ControlFrame.Instance.CommandMgr.WAuthenticate();
-			if ( !LoggedIn ) return;
-
 			bool Voted = await ThisBook.XCall<Task<bool>>( "Vote" );
-			if( Voted )
+			if ( Voted )
 			{
 				( PushGrid.Resources[ "DataUpdate" ] as Storyboard )?.Begin();
 			}
 		}
 
-		#region Bing Service
-		private void OpenBingResult( object sender, RoutedEventArgs e )
+		#region Image Service
+		private async void OpenImageResult( object sender, RoutedEventArgs e )
 		{
-			string Url = new BingService( ThisBook ).GetSearchQuery();
+			string Url = await ImageSrv.GetSearchQuery();
 			if ( !string.IsNullOrEmpty( Url ) )
 			{
 				var j = Windows.System.Launcher.LaunchUriAsync( new Uri( Url ) );
@@ -503,12 +496,11 @@ namespace wenku10.Pages
 
 		private async void ChangeKeyword( object sender, RoutedEventArgs e )
 		{
-			BingService BingSrv = new BingService( ThisBook );
-			string Keyword = BingSrv.GetKeyword();
+			string Keyword = ImageSrv.GetKeyword();
 
-			StringResources stx = new StringResources( "ContextMenu", "AppResources", "Settings", "Tips" );
+			StringResources stx = StringResources.Load( "ContextMenu", "AppResources", "Settings", "Tips" );
 			ValueHelpInput NVInput = new ValueHelpInput(
-				BingSrv.DefaultKeyword, stx.Text( "ChangeKeyword" )
+				ImageSrv.DefaultKeyword, stx.Text( "ChangeKeyword" )
 				, stx.Text( "Desc_InputKey", "AppResources" )
 				, stx.Text( "Help", "Settings" )
 			);
@@ -529,36 +521,34 @@ namespace wenku10.Pages
 			if ( NVInput.Canceled ) return;
 
 			Keyword = NVInput.Value;
-			BingSrv.SetKeyword( Keyword );
+			ImageSrv.SetKeyword( Keyword );
 
-			BingReloadCover();
+			ImageReloadCover();
 		}
 
 		private void ChangeCover( object sender, RoutedEventArgs e )
 		{
 			int Offset = int.Parse( ( ( FrameworkElement ) sender ).Tag.ToString() );
-			new BingService( ThisBook ).SetOffset( Offset );
-
-			BingReloadCover();
+			ImageSrv.SetOffset( Offset );
+			ImageReloadCover();
 		}
 
-		private void BingReloadCover()
+		private void ImageReloadCover()
 		{
-			BookLoader BL = new BookLoader( BookLoadComplete );
-			ThisBook.CoverSrcUrl = null;
+			BookLoader BL = new BookLoader();
+			ThisBook.Info.CoverSrcUrl = null;
 			BL.LoadCover( ThisBook, false );
 		}
 
 		private async void SetSubsKey( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "ContextMenu", "AppResources", "Tips" );
+			StringResources stx = StringResources.Load( "ContextMenu", "AppResources", "Tips" );
 			ValueHelpInput NVInput = new ValueHelpInput(
 				stx.Text( "UseDefault", "AppResources" )
 				, stx.Text( "SetSubsKey" )
 				, null, stx.Text( "HowToGetSubs", "Tips" )
 			);
 
-			NVInput.Value = Properties.MISC_COGNITIVE_API_KEY;
 			NVInput.AllowEmpty = true;
 
 			NVInput.HelpBtnClick = ( s, NOP ) =>
@@ -570,8 +560,7 @@ namespace wenku10.Pages
 
 			if ( NVInput.Canceled ) return;
 
-			Properties.MISC_COGNITIVE_API_KEY = NVInput.Value;
-			BingService.SetApiKey( NVInput.Value );
+			ImageSrv.SetApiKey( NVInput.Value );
 		}
 		#endregion
 
@@ -607,7 +596,7 @@ namespace wenku10.Pages
 			AnimaStory.Stop();
 			AnimaStory.Children.Clear();
 
-			if( SplashCover.Filling )
+			if ( SplashCover.Filling )
 			{
 				SimpleStory.DoubleAnimation( AnimaStory, SplashCover, "Opacity", 1, 0, 350, 0, Easings.EaseInCubic );
 			}

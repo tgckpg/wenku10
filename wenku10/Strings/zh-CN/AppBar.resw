@@ -162,7 +162,7 @@
   <data name="Reply.Text" xml:space="preserve">
     <value>回复</value>
   </data>
-  <data name="Save" xml:space="preserve">
+  <data name="Save.Text" xml:space="preserve">
     <value>保存</value>
   </data>
   <data name="Search.Text" xml:space="preserve">
@@ -254,5 +254,21 @@
   </data>
   <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
     <value>移除记录</value>
+  </data>
+  <data name="RebuildIndex.Text" xml:space="preserve">
+    <value>重建索引</value>
+    <comment>Rebuild Index</comment>
+  </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>添加小部件</value>
+  </data>
+  <data name="Import.Text" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>备份与还原</value>
+  </data>
+  <data name="TogglePane.Text" xml:space="preserve">
+    <value>切换窗格</value>
   </data>
 </root>

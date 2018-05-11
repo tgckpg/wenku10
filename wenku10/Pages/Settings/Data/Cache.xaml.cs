@@ -15,13 +15,12 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Resources;
+using GR.GSystem;
+using GR.Resources;
+using GR.Settings;
 
 namespace wenku10.Pages.Settings.Data
 {
-	/// <summary>
-	/// An empty page that can be used on its own or navigated to within a Frame.
-	/// </summary>
 	public sealed partial class Cache : Page
 	{
 		public Cache()
@@ -32,17 +31,42 @@ namespace wenku10.Pages.Settings.Data
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Settings" );
-			CacheLimit.Text = stx.Text( "Data_CacheUsed" )
-				+ " " + global::wenku8.System.Utils.AutoByteUnit( Shared.Storage.CacheSize() );
+			UpdateZCache();
+			UpdateFTSData();
+		}
+
+		private async void UpdateZCache()
+		{
+			StringResources stx = StringResources.Load( "Settings" );
+			CacheLimit.Text = stx.Text( "Data_CacheUsed" ) + " " + Utils.AutoByteUnit( await Shared.Storage.FileSize( FileLinks.DB_ZCACHE ) );
+		}
+
+		private async void UpdateFTSData()
+		{
+			StringResources stx = StringResources.Load( "Settings" );
+			if ( Shared.Storage.FileExists( FileLinks.DB_FTS_DATA ) )
+			{
+				FTSSize.Text = stx.Text( "Data_CacheUsed" ) + " " + Utils.AutoByteUnit( await Shared.Storage.FileSize( FileLinks.DB_FTS_DATA ) );
+			}
+			else
+			{
+				FTSSize.Text = stx.Text( "Data_CacheUsed" ) + " " + Utils.AutoByteUnit( 0 );
+			}
 		}
 
 		private void Button_Click_1( object sender, RoutedEventArgs e )
 		{
-			Shared.Storage.CLEAR_CACHE();
-			SetTemplate();
+			Shared.ZCacheDb.Reset();
+			UpdateZCache();
+		}
+
+		private void Button_Click_2( object sender, RoutedEventArgs e )
+		{
+			GR.Database.ContextManager.RemoveFTSContext();
+			// This removes the internal CFCache
+			Shared.Storage.DeleteFile( FileLinks.DB_FTS_DATA );
+			UpdateFTSData();
 		}
 
 	}
-
 }

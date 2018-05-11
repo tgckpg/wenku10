@@ -15,14 +15,13 @@ using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Geometry;
 
-using wenku8.Effects;
-using wenku8.Effects.Stage;
-using wenku8.Resources;
+using GR.Effects;
+using GR.Effects.Stage;
+using GR.Resources;
+using GR.Model.Section;
 
 namespace wenku10.Scenes
 {
-	using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
-
 	sealed partial class HyperBanner
 	{
 		private Rect StageRect;
@@ -94,10 +93,10 @@ namespace wenku10.Scenes
 
 		private void DrawIdleBg( CanvasDrawingSession ds )
 		{
-			CubicTween( ref BgY_c, BgY_t, 0.85f, 0.15f );
+			Easings.ParamTween( ref BgY_c, BgY_t, 0.85f, 0.15f );
 			BgFillRect.Y = BgY_c;
 
-			CubicTween( ref BgR_c, BgR_t, 0.75f, 0.25f );
+			Easings.ParamTween( ref BgR_c, BgR_t, 0.75f, 0.25f );
 			if ( BgR_c < 0 )
 			{
 				ds.DrawImage( BgBmp, StageRect, BgFillRect );
@@ -117,9 +116,9 @@ namespace wenku10.Scenes
 
 		private async void ReloadBackground()
 		{
-			if ( ResCreator == null || BackgroundUri == null || StageSize.IsZero() ) return;
+			if ( ResCreator == null || StageSize.IsZero() ) return;
 
-			if ( BackgroundUri.Scheme == "ms-appx" )
+			if ( BackgroundUri == null || BackgroundUri.Scheme == "ms-appx" )
 			{
 				BgBmp = new RandomStripe( Seed ).DrawBitmap( ResCreator, ( int ) LayoutSettings.DisplayWidth, ( int ) LayoutSettings.DisplayHeight );
 			}

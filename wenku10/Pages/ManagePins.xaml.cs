@@ -18,16 +18,16 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Pages;
-using wenku8.Resources;
-using wenku8.Storage;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Pages;
+using GR.Resources;
+using GR.Storage;
 
 namespace wenku10.Pages
 {
@@ -98,14 +98,14 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			// Do nothing ( default ) / Ask / Pin Missing / Remove Missing
 			PinPolicyBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Pin, "Pin Policy" );
 			PinPolicyBtn.Click += RotatePolicy;
 			UpdatePinPolicy( stx );
 
-			if ( Properties.ENABLE_ONEDRIVE )
+			if ( GRConfig.System.EnableOneDrive )
 			{
 				AppBarButtonEx OneDriveButton = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "Sync" ) );
 				ButtonOperation SyncOp = new ButtonOperation( OneDriveButton );
@@ -160,7 +160,7 @@ namespace wenku10.Pages
 					break;
 			}
 
-			UpdatePinPolicy( new StringResources( "AppBar" ) );
+			UpdatePinPolicy( StringResources.Load( "AppBar" ) );
 		}
 
 		private async Task OneDriveRsync()
@@ -199,7 +199,7 @@ namespace wenku10.Pages
 			if ( 5 < Records.Length )
 			{
 				bool Canceled = true;
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					string.Format( stx.Str( "ConfirmMassPin" ), Records.Length )
 					, () => Canceled = false
@@ -235,7 +235,7 @@ namespace wenku10.Pages
 
 			bool Canceled = true;
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			await Popups.ShowDialog( UIAliases.CreateDialog(
 				stx.Str( "ConfirmTakeOver" )
 				, () => Canceled = false
@@ -257,7 +257,7 @@ namespace wenku10.Pages
 			}
 			else
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					stx.Str( "PinMgr_NoRemoteAction" )
 				) );

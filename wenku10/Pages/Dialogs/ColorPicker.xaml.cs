@@ -20,7 +20,7 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Settings.Theme;
+using GR.Settings.Theme;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -41,12 +41,12 @@ namespace wenku10.Pages.Dialogs
 
 		private void SetTemplate( ColorItem BindColor )
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );
 			// PresetColors
-			PresetColors.ItemsSource = global::wenku8.System.ThemeManager.PresetColors();
+			PresetColors.ItemsSource = global::GR.GSystem.ThemeManager.PresetColors();
 
 			UpdateColor( BindColor );
 		}
@@ -119,7 +119,7 @@ namespace wenku10.Pages.Dialogs
 			{
 				if( Hex != SectionData.CColor.Hex )
 				{
-					UpdateColor( new ColorItem( "Hex", global::wenku8.System.ThemeManager.StringColor( Hex ) ) );
+					UpdateColor( new ColorItem( "Hex", global::GR.GSystem.ThemeManager.StringColor( Hex ) ) );
 				}
 			}
 			else
@@ -148,7 +148,7 @@ namespace wenku10.Pages.Dialogs
 			}
 
 			// Not a number
-			if ( Pass && !global::wenku8.System.Utils.Numberstring( Input ) )
+			if ( Pass && !global::GR.GSystem.Utils.Numberstring( Input ) )
 			{
 				Pass = false;
 				await InvalidFormat();

@@ -17,8 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.Book;
-using wenku8.Model.Comments;
+using GR.Model.Book;
+using GR.Model.Comments;
 
 namespace wenku10.Pages
 {
@@ -37,14 +37,14 @@ namespace wenku10.Pages
 			this.InitializeComponent();
 			STopicType.SelectedIndex = 0;
 
-			if( global::wenku8.Config.Properties.REVIEWS_SIGN == null )
+			if( global::GR.Config.Properties.REVIEWS_SIGN == null )
 			{
-				StringResources stx = new StringResources( "Settings" );
-				global::wenku8.Config.Properties.REVIEWS_SIGN
+				StringResources stx = StringResources.Load( "Settings" );
+				global::GR.Config.Properties.REVIEWS_SIGN
 					= stx.Text( "Account_Reviews_Post_Sign_Default" );
 			}
 
-			Sign.Text = global::wenku8.Config.Properties.REVIEWS_SIGN;
+			Sign.Text = global::GR.Config.Properties.REVIEWS_SIGN;
 		}
 
 		public ReviewsInput( BookItem B )
@@ -52,7 +52,7 @@ namespace wenku10.Pages
 		{
 			IsReview = false;
 
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			Title.Text = stx.Str( "AddComment" );
 		}
 
@@ -61,14 +61,14 @@ namespace wenku10.Pages
 		{
 			IsReview = true;
 
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 			Title.Text = stx.Text( "Reply" );
 			TitleSection.Visibility = Visibility.Collapsed;
 		}
 
 		public async Task<bool> Validate()
 		{
-			global::wenku8.SelfCencorship SS = new global::wenku8.SelfCencorship();
+			global::GR.SelfCencorship SS = new global::GR.SelfCencorship();
 
 			string Cont = "";
 
@@ -81,7 +81,7 @@ namespace wenku10.Pages
 			if ( !await SS.Passed( Title ) ) return false;
 
 			string Msg;
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 
 			if( !IsReview && Title.Length < MinTitleLimit )
 			{
@@ -127,7 +127,7 @@ namespace wenku10.Pages
 		{
 			if ( BTitle == null ) return;
 
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			switch ( STopicType.SelectedIndex )
 			{
 				case 0:
@@ -161,7 +161,7 @@ namespace wenku10.Pages
 
 		private string GetPrefix()
 		{
-			StringResources stx = new StringResources();
+			StringResources stx = StringResources.Load();
 			switch ( STopicType.SelectedIndex )
 			{
 				case 1:

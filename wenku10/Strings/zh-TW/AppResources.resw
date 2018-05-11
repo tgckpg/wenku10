@@ -201,20 +201,14 @@
   <data name="NoComments.Text" xml:space="preserve">
     <value>這裏還沒有人發表過評論，來發表一下吧！</value>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>共找到</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>個結果</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>共找到 {0} 個結果</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>不支援內文搜索</value>
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>文庫暫沒有收錄此作品</value>
-  </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>文庫精選</value>
   </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>統計</value>
@@ -252,8 +246,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>請再按一次退出</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>點擊閱題</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>閲讀</value>
   </data>
   <data name="EBWin_HighlightToSearch.Text" xml:space="preserve">
     <value>反白以搜尋</value>
@@ -375,9 +369,6 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>書</value>
   </data>
-  <data name="PleaseClick.Text" xml:space="preserve">
-    <value>請按一下</value>
-  </data>
   <data name="ZoneSpider.Text" xml:space="preserve">
     <value>區域蜘蛛</value>
   </data>
@@ -409,9 +400,36 @@
     <value>沒有字典。</value>
   </data>
   <data name="TweetNeedsPropagate.Text" xml:space="preserve">
-    <value>您的推文將需要1〜2分鐘在搜索隊列中傳播。 如果您沒有看到您的推文，請稍後再試！</value>
+    <value>您的推文將需要1〜2分鐘在搜尋隊列中傳播。 如果您沒有看到您的推文，請稍後再試！</value>
   </data>
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 字 ( #wenku10 )</value>
+  </data>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>未處理的項目</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>記錄存在</value>
+  </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>準備就緒</value>
+  </data>
+  <data name="Search_By_Id.Text" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="IssueDate.Text" xml:space="preserve">
+    <value>發行日期</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>搜尋結果</value>
+  </data>
+  <data name="ShowMore.Text" xml:space="preserve">
+    <value>顯示更多</value>
+  </data>
+  <data name="KV_Key.Text" xml:space="preserve">
+    <value>索引鍵</value>
+  </data>
+  <data name="KV_Value.Text" xml:space="preserve">
+    <value>值</value>
   </data>
 </root>

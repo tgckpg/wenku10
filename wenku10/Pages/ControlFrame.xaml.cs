@@ -1,5 +1,4 @@
-﻿using Microsoft.Services.Store.Engagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,12 +14,12 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 using Net.Astropenguin.UI;
 
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Pages;
-using wenku8.Settings;
+using GR.Effects;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Pages;
+using GR.Settings;
 
 namespace wenku10.Pages
 {
@@ -30,15 +29,17 @@ namespace wenku10.Pages
 
 		public CommandBar MajorCmdBar { get; private set; }
 		public CommandBar MinorCmdBar { get; private set; }
-		public global::wenku8.System.MasterCommandManager CommandMgr { get; private set; }
-		public global::wenku8.System.BackStackManager BackStack { get; private set; }
+		public global::GR.GSystem.MasterCommandManager CommandMgr { get; private set; }
+		public global::GR.GSystem.BackStackManager BackStack { get; private set; }
 
 		private bool InSubView { get { return TransitionDisplay.GetState( SubView ) == TransitionState.Active; } }
 
 		public static ControlFrame Instance { get; private set; }
-		public static volatile string LaunchArgs;
+		public static volatile object LaunchArgs;
 
 		private volatile bool Navigating = false;
+
+		private BgTaskContext _BgTaskContext;
 
 		public ControlFrame()
 		{
@@ -50,10 +51,12 @@ namespace wenku10.Pages
 
 		private void SetTemplate()
 		{
-			BackStack = new global::wenku8.System.BackStackManager();
+			BackStack = new global::GR.GSystem.BackStackManager();
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 			NavigationHandler.OnNavigatedBack += NavigationHandler_OnNavigatedBack;
+
+			BgTaskBadge.DataContext = ( _BgTaskContext = new BgTaskContext() );
 
 			ApplyControlSet();
 		}
@@ -61,20 +64,32 @@ namespace wenku10.Pages
 		private async void MessageBus_OnDelivery( Message Mesg )
 		{
 			// Handles secondary tile launch on App opened
-			if ( Mesg.Content == AppKeys.SYS_2ND_TILE_LAUNCH )
+			switch ( Mesg.Content )
 			{
-				if ( Navigating )
-				{
-					ActionBlocked();
-					return;
-				}
+				case AppKeys.SYS_2ND_TILE_LAUNCH:
+				case AppKeys.SYS_FILE_LAUNCH:
+					if ( Navigating )
+					{
+						ActionBlocked();
+						return;
+					}
 
-				BookItem Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
-				if ( Book != null )
-				{
-					NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
-				}
+					BookItem Book = null;
 
+					if ( Mesg.Payload is string )
+					{
+						Book = await ItemProcessor.GetBookFromTileCmd( ( string ) Mesg.Payload );
+					}
+					else if ( ItemProcessor.RequestOpenXRBK( Mesg.Payload, out var ISF ) )
+					{
+						Book = await _BgTaskContext.RunAsync( ItemProcessor.OpenXRBK, ISF );
+					}
+
+					if ( Book != null )
+					{
+						NavigateTo( PageId.MONO_REDIRECTOR, () => new MonoRedirector(), P => ( ( MonoRedirector ) P ).InfoView( Book ) );
+					}
+					break;
 			}
 		}
 
@@ -101,13 +116,30 @@ namespace wenku10.Pages
 		public async void SetHomePage( string Id, Func<Page> FPage, Action<Page> PageAct = null )
 		{
 			// Handles secondary tile launch when App closed
-			if ( !string.IsNullOrEmpty( LaunchArgs ) )
+			if ( LaunchArgs is string TileQStr && !string.IsNullOrEmpty( TileQStr ) )
 			{
 				Id = PageId.BOOK_INFO_VIEW;
-				BookItem Book = await ItemProcessor.GetBookFromTileCmd( LaunchArgs );
+				BookItem Book = await ItemProcessor.GetBookFromTileCmd( TileQStr );
 				FPage = () => new BookInfoView( Book );
 
 				LaunchArgs = null;
+			}
+			else if ( ItemProcessor.RequestOpenXRBK( LaunchArgs, out var ISF ) )
+			{
+				try
+				{
+					BookItem Book = await _BgTaskContext.RunAsync( ItemProcessor.OpenXRBK, ISF );
+
+					if ( Book != null )
+					{
+						LaunchArgs = null;
+						FPage = () => new BookInfoView( Book );
+					}
+				}
+				catch ( InvalidOperationException )
+				{
+					ActionBlocked();
+				}
 			}
 
 			MajorCmdBar.IsOpen = false;
@@ -173,8 +205,11 @@ namespace wenku10.Pages
 				if ( View.Content is IAnimaPage )
 					await ( ( IAnimaPage ) View.Content ).ExitAnima();
 
+				if ( View.Content is IBackStackInterceptor )
+					( ( IBackStackInterceptor ) View.Content ).Update_CanGoBack = null;
+
 				UnsubEvents( ( Page ) View.Content );
-				( View.Content as INavPage )?.SoftClose();
+				( View.Content as INavPage )?.SoftClose( true );
 
 				if ( !PageId.NonStackables.Contains( View.Tag ) )
 					BackStack.Add( ( string ) View.Tag, ( Page ) View.Content );
@@ -193,7 +228,7 @@ namespace wenku10.Pages
 			// Let Page render silently
 			View.Opacity = 0;
 
-			LoadingScreen.State = ControlState.Reovia;
+			LoadingScreen.State = ControlState.Active;
 			await Task.Delay( 200 );
 
 			View.Tag = Name;
@@ -201,7 +236,7 @@ namespace wenku10.Pages
 
 			View.Content = P;
 
-			( P as INavPage )?.SoftOpen();
+			( P as INavPage )?.SoftOpen( true );
 			await View.Dispatcher.RunIdleAsync( x =>
 			{
 				View.Opacity = 1;
@@ -212,7 +247,7 @@ namespace wenku10.Pages
 
 			// Do not close the loading screen if redirecting
 			if ( !( P is MonoRedirector ) )
-				LoadingScreen.State = ControlState.Foreatii;
+				LoadingScreen.State = ControlState.Closed;
 
 			Navigating = false;
 			StartReacting();
@@ -230,7 +265,7 @@ namespace wenku10.Pages
 
 		public async void SubNavigateTo( object sender, Func<Page> Target )
 		{
-			if ( View.Content != sender )
+			if ( !( View.Content == sender || SubView.Content == sender ) )
 			{
 				Logger.Log( ID, "Main view has been differed, not showing sub view", LogType.INFO );
 				return;
@@ -242,13 +277,20 @@ namespace wenku10.Pages
 			StopReacting();
 			SetBackButton( true );
 
+			if ( SubView.Content != null )
+			{
+				TransitionDisplay.SetState( SubView, TransitionState.Inactive );
+				await Task.Delay( 350 );
+
+				( SubView.Content as INavPage )?.SoftClose( true );
+			}
+
 			SubView.Content = Target();
 
-			( SubView.Content as INavPage )?.SoftOpen();
+			( SubView.Content as INavPage )?.SoftOpen( true );
 			SetControls( SubView.Content, true );
 
 			TransitionDisplay.SetState( SubView, TransitionState.Active );
-
 			await Task.Delay( 350 );
 
 			Navigating = false;
@@ -287,20 +329,23 @@ namespace wenku10.Pages
 				await ( ( IAnimaPage ) View.Content ).ExitAnima();
 
 			UnsubEvents( ( Page ) View.Content );
-			( View.Content as INavPage )?.SoftClose();
+			( View.Content as INavPage )?.SoftClose( false );
 
 			NameValue<Page> P = BackStack.Back();
 
 			// Keep going back if previous page == current page
 			// This happens when pages in backstack got removed
-			while ( P.Value == View.Content )
+			while ( P.Value == View.Content && BackStack.CanGoBack )
 				P = BackStack.Back();
 
 			View.Tag = P.Name;
 			View.Content = P.Value;
 
-			( P.Value as INavPage )?.SoftOpen();
-			( P.Value as IAnimaPage )?.EnterAnima();
+			( P.Value as INavPage )?.SoftOpen( false );
+			if ( P.Value is IAnimaPage AnimaPage )
+			{
+				await AnimaPage.EnterAnima();
+			}
 			SetControls( View.Content, true );
 
 			Navigating = false;
@@ -314,7 +359,7 @@ namespace wenku10.Pages
 
 			if ( !Override && SubView.Content is IAnimaPage )
 			{
-				await ( ( IAnimaPage ) View.Content ).ExitAnima();
+				await ( ( IAnimaPage ) SubView.Content ).ExitAnima();
 				TransitionDisplay.SetState( SubView, TransitionState.Hidden );
 			}
 			else
@@ -323,8 +368,8 @@ namespace wenku10.Pages
 				await Task.Delay( 350 );
 			}
 
-			UnsubEvents( ( Page ) View.Content );
-			( SubView.Content as INavPage )?.SoftClose();
+			UnsubEvents( ( Page ) SubView.Content );
+			( SubView.Content as INavPage )?.SoftClose( false );
 		}
 
 		private void SetControls( object CPage, bool RegEvent )
@@ -386,8 +431,7 @@ namespace wenku10.Pages
 			{
 				MajorCmdBar = BottomCmdBar;
 				MinorCmdBar = TopCmdBar;
-				// Disable Update delay in phone
-				VerticalStack.UpdateDelay = 0;
+				VerticalStack.UpdateDelay = 100;
 			}
 			else
 			{
@@ -403,7 +447,7 @@ namespace wenku10.Pages
 			// Be aware of possible infinite event loop
 			MinorCmdBar.Closing += ( sender, e ) => MajorCmdBar.IsOpen = false;
 
-			CommandMgr = new global::wenku8.System.MasterCommandManager( MajorCmdBar.PrimaryCommands, MajorCmdBar.SecondaryCommands );
+			CommandMgr = new global::GR.GSystem.MasterCommandManager( MajorCmdBar.PrimaryCommands, MajorCmdBar.SecondaryCommands );
 		}
 
 		public void ReloadCommands()
@@ -434,8 +478,56 @@ namespace wenku10.Pages
 		private void SetBackButton( bool Visible )
 		{
 			// Each time a navigation event occurs, update the Back button's visibility
-			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = ( Visible || BackStack.CanGoBack )
+			NavigationHandler.OnNavigatedBack -= BSInterceptorBack;
+
+			if ( TryGetInterceptor( out IBackStackInterceptor Interceptor ) )
+			{
+				NavigationHandler.InsertHandlerOnNavigatedBack( BSInterceptorBack );
+				Interceptor.Update_CanGoBack = Update_ViewBackButton;
+			}
+
+			Update_ViewBackButton( InSubView ? SubView : View );
+		}
+
+		private bool TryGetInterceptor( out IBackStackInterceptor Interceptor )
+		{
+			Interceptor = null;
+
+			if ( InSubView )
+			{
+				if ( SubView.Content is IBackStackInterceptor )
+				{
+					Interceptor = ( IBackStackInterceptor ) SubView.Content;
+				}
+			}
+			else if ( View.Content is IBackStackInterceptor )
+			{
+				Interceptor = ( IBackStackInterceptor ) View.Content;
+			}
+
+			return Interceptor != null;
+		}
+
+		private void Update_ViewBackButton( object sender )
+		{
+			bool CanGoBack = InSubView || BackStack.CanGoBack;
+
+			if ( !CanGoBack && TryGetInterceptor( out IBackStackInterceptor Interceptor ) )
+			{
+				CanGoBack = Interceptor.CanGoBack;
+			}
+
+			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = CanGoBack
 				? AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+		}
+
+		private async void BSInterceptorBack( object sender, XBackRequestedEventArgs e )
+		{
+			if ( TryGetInterceptor( out IBackStackInterceptor Interceptor ) )
+			{
+				e.Handled = await Interceptor.GoBack();
+				Update_ViewBackButton( Interceptor );
+			}
 		}
 
 		private void PreventBack( object sender, XBackRequestedEventArgs e )

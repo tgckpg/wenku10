@@ -6,8 +6,8 @@
     xmlns:c="using:Net.Astropenguin.UI"
     xmlns:p="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:v="using:wenku8.Converters"
-    xmlns:e="using:wenku8.Effects"
+    xmlns:v="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">

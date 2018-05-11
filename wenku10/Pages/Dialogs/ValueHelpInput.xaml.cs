@@ -48,7 +48,7 @@ namespace wenku10.Pages.Dialogs
 			if ( !string.IsNullOrEmpty( DefaultValue ) )
 				ValueInput.PlaceholderText = DefaultValue;
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( BtnLeft );
 			SecondaryButtonText = stx.Str( BtnRight );
 

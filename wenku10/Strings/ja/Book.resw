@@ -120,23 +120,26 @@
   <data name="Author.Text" xml:space="preserve">
     <value>著者</value>
   </data>
+  <data name="Chapter.Text" xml:space="preserve">
+    <value>章</value>
+  </data>
   <data name="ChapterMapping.Text" xml:space="preserve">
     <value>チャプターマッピング</value>
   </data>
   <data name="Cover.Text" xml:space="preserve">
     <value>表紙</value>
   </data>
-  <data name="DailyHitsCount.Text" xml:space="preserve">
+  <data name="DailyHitCount.Text" xml:space="preserve">
     <value>本日のヒット</value>
-  </data>
-  <data name="Date.Text" xml:space="preserve">
-    <value>掲載日</value>
   </data>
   <data name="FavCount.Text" xml:space="preserve">
     <value>収集した数</value>
   </data>
   <data name="Intro.Text" xml:space="preserve">
     <value>あらすじ</value>
+  </data>
+  <data name="LastUpdateDate.Text" xml:space="preserve">
+    <value>最終更新日</value>
   </data>
   <data name="LatestSection.Text" xml:space="preserve">
     <value>最後の更新</value>
@@ -146,6 +149,9 @@
   </data>
   <data name="Others.Text" xml:space="preserve">
     <value>その他</value>
+  </data>
+  <data name="PostingDate.Text" xml:space="preserve">
+    <value>掲載日</value>
   </data>
   <data name="Press.Text" xml:space="preserve">
     <value>文庫</value>
@@ -165,8 +171,11 @@
   <data name="Title.Text" xml:space="preserve">
     <value>書名</value>
   </data>
-  <data name="TotalHitsCount.Text" xml:space="preserve">
+  <data name="TotalHitCount.Text" xml:space="preserve">
     <value>合計ヒット数</value>
+  </data>
+  <data name="Volume.Text" xml:space="preserve">
+    <value>巻</value>
   </data>
   <data name="VolumeMapping.Text" xml:space="preserve">
     <value>ボリュームマッピング</value>

@@ -159,7 +159,7 @@
   <data name="Reply.Text" xml:space="preserve">
     <value>返事</value>
   </data>
-  <data name="Save" xml:space="preserve">
+  <data name="Save.Text" xml:space="preserve">
     <value>セーブ</value>
   </data>
   <data name="Search.Text" xml:space="preserve">
@@ -254,5 +254,21 @@
   </data>
   <data name="PinPolicy_RemoveMissing.Text" xml:space="preserve">
     <value>記録を削除する</value>
+  </data>
+  <data name="RebuildIndex.Text" xml:space="preserve">
+    <value>索引を再構築する</value>
+    <comment>Rebuild Index</comment>
+  </data>
+  <data name="BackupAndRestore.Text" xml:space="preserve">
+    <value>バックアップと復元</value>
+  </data>
+  <data name="AddWidget.Text" xml:space="preserve">
+    <value>ウィジェットを追加する</value>
+  </data>
+  <data name="Import.Text" xml:space="preserve">
+    <value>インポート</value>
+  </data>
+  <data name="TogglePane.Text" xml:space="preserve">
+    <value>パネルを切り替える</value>
   </data>
 </root>

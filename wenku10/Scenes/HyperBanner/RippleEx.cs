@@ -16,8 +16,8 @@ using Microsoft.Graphics.Canvas.Text;
 
 using Net.Astropenguin.Linq;
 
-using wenku8.Effects;
-using wenku8.Model.ListItem;
+using GR.Effects;
+using GR.Model.ListItem;
 
 namespace wenku10.Scenes
 {
@@ -25,14 +25,7 @@ namespace wenku10.Scenes
 	{
 		public Uri CoverUri { get; private set; }
 
-		public HorizontalAlignment Align
-		{
-			get { return _Align; }
-			set
-			{
-				_Align = value;
-			}
-		}
+		public HorizontalAlignment Align { get; set; } = HorizontalAlignment.Left;
 
 		public ICanvasBrush RingBrush;
 		public string RingText;
@@ -42,15 +35,12 @@ namespace wenku10.Scenes
 		public float IrisFactor = 0.65f;
 		public float TextRotation = 0;
 		public float TextSpeed = 0.002f * ( float ) Math.PI;
-
-		private HorizontalAlignment _Align = HorizontalAlignment.Left;
-
 		private Size StageSize;
 		private Size EyeBox;
 
 		private Rect FillRect;
 
-		private BookInfoItem BindItem;
+		private BookBannerItem BindItem;
 
 		private CanvasBitmap CoverBmp;
 		private ICanvasBrush CoverBrush;
@@ -64,9 +54,15 @@ namespace wenku10.Scenes
 			RingText = Context.Name;
 			// RingText = "The quick Brown Fox Jumps Over the Lazy dog";
 
-			if ( Context is BookInfoItem )
+			if ( Context is BookBannerItem )
 			{
-				BindItem = ( BookInfoItem ) Context;
+				BindItem = ( BookBannerItem ) Context;
+
+				if( BindItem.BannerExist )
+				{
+					CoverUri = BindItem.UriSource;
+				}
+
 				BindItem.PropertyChanged += BindItem_PropertyChanged;
 			}
 		}
@@ -90,9 +86,9 @@ namespace wenku10.Scenes
 
 		private void BindItem_PropertyChanged( object sender, System.ComponentModel.PropertyChangedEventArgs e )
 		{
-			if ( e.PropertyName == "Banner" )
+			if ( e.PropertyName == "BannerExist" )
 			{
-				CoverUri = ( ( BitmapImage ) BindItem.Banner ).UriSource;
+				CoverUri = BindItem.UriSource;
 				var j = ReloadCover();
 			}
 		}
@@ -123,12 +119,12 @@ namespace wenku10.Scenes
 
 		private void DrawIdleRipple( CanvasDrawingSession ds )
 		{
-			CubicTween( ref ImgR_c, ImgR_t, 0.80f, 0.20f );
-			CubicTween( ref RingR_c, RingR_t, 0.75f, 0.25f );
-			CubicTween( ref TextR_c, TextR_t, 0.80f, 0.20f );
+			Easings.ParamTween( ref ImgR_c, ImgR_t, 0.80f, 0.20f );
+			Easings.ParamTween( ref RingR_c, RingR_t, 0.75f, 0.25f );
+			Easings.ParamTween( ref TextR_c, TextR_t, 0.80f, 0.20f );
 
 			// TextBrush Color
-			TextBrush.Color = CubicTween( TextBrush.Color, TextBrush_t, 0.80f, 0.20f );
+			TextBrush.Color = Easings.ParamTween( TextBrush.Color, TextBrush_t, 0.80f, 0.20f );
 
 			float RingW = ( RingR_c - ImgR_c );
 			float RingR = ImgR_c + 0.5f * RingW;
@@ -144,10 +140,10 @@ namespace wenku10.Scenes
 
 		private void DrawClickedRipple( CanvasDrawingSession ds )
 		{
-			CubicTween( ref ImgR_c, ImgR_t, 0.75f, 0.25f );
-			CubicTween( ref ImgRi_c, ImgRi_t, 0.75f, 0.25f );
-			CubicTween( ref RingR_c, RingR_t, 0.875f, 0.125f );
-			CubicTween( ref RingRi_c, RingRi_t, 0.875f, 0.125f );
+			Easings.ParamTween( ref ImgR_c, ImgR_t, 0.75f, 0.25f );
+			Easings.ParamTween( ref ImgRi_c, ImgRi_t, 0.75f, 0.25f );
+			Easings.ParamTween( ref RingR_c, RingR_t, 0.875f, 0.125f );
+			Easings.ParamTween( ref RingRi_c, RingRi_t, 0.875f, 0.125f );
 			float RingW = ( RingR_c - RingRi_c );
 			float RingR = RingRi_c + 0.5f * RingW;
 

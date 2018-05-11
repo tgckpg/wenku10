@@ -16,9 +16,9 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.Resources;
-using wenku8.Model.REST;
+using GR.AdvDM;
+using GR.Resources;
+using GR.Model.REST;
 
 namespace wenku10.Pages.Dialogs.Sharers
 {
@@ -30,7 +30,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 		{
 			this.InitializeComponent();
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 			SecondaryButtonText = stx.Str( "Cancel" );
 		}
@@ -74,7 +74,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 			}
 			else if( NewPasswd != PasswdV )
 			{
-				StringResources stx = new StringResources( "Error" );
+				StringResources stx = StringResources.Load( "Error" );
 				ServerMessage.Text = stx.Str( "PasswordMismatch" );
 				Password.Focus( FocusState.Keyboard );
 			}
@@ -139,7 +139,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 
 		private void IndicateLoad()
 		{
-			StringResources stx = new StringResources( "LoadingMessage" );
+			StringResources stx = StringResources.Load( "LoadingMessage" );
 			LoadingRing.IsActive = true;
 			LoadingRing.Visibility = Visibility.Visible;
 			ServerMessage.Text = stx.Text( "ProgressIndicator_PleaseWait" );

@@ -21,17 +21,17 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
-using wenku8.AdvDM;
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Ext;
-using wenku8.Model.Comments;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem.Sharers;
-using wenku8.Model.REST;
-using wenku8.Resources;
+using GR.AdvDM;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Ext;
+using GR.Model.Comments;
+using GR.Model.Interfaces;
+using GR.Model.ListItem.Sharers;
+using GR.Model.REST;
+using GR.Resources;
 
-using CryptAES = wenku8.System.CryptAES;
+using CryptAES = GR.GSystem.CryptAES;
 
 namespace wenku10.Pages.Sharers
 {
@@ -122,7 +122,7 @@ namespace wenku10.Pages.Sharers
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources" );
 
 			AddBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Str( "AddComment" ) );
 			AddBtn.Click += ( sender, e ) =>
@@ -285,7 +285,7 @@ namespace wenku10.Pages.Sharers
 		private void NewReply( object sender, RoutedEventArgs e )
 		{
 			HSComment HSC = ( HSComment ) ( ( FrameworkElement ) sender ).DataContext;
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			CCTarget = SHTarget.COMMENT;
 			CCId = HSC.Id;
@@ -294,20 +294,18 @@ namespace wenku10.Pages.Sharers
 
 		private void NewComment( string Label )
 		{
-			TransitionDisplay.SetState( CommentEditor, TransitionState.Active );
+			IsEditorOpened = true;
 			CommentModeLabel.Text = Label;
 
 			if( BindItem.ForceEncryption && Crypt == null )
 			{
-				IsEditorOpened = false;
 				DisplayControls( DiscardBtn );
 
-				StringResources stx = new StringResources();
+				StringResources stx = StringResources.Load();
 				CommentError.Text = stx.Text( "CommentsEncrypted" );
 			}
 			else
 			{
-				IsEditorOpened = true;
 				DisplayControls( DiscardBtn, SubmitBtn );
 				CommentError.Text = "";
 			}
@@ -377,7 +375,7 @@ namespace wenku10.Pages.Sharers
 
 			if ( !string.IsNullOrEmpty( Data ) )
 			{
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				MessageDialog ConfirmDialog = new MessageDialog( "Are you sure you want to discard your message?" );
 
 				bool No = true;

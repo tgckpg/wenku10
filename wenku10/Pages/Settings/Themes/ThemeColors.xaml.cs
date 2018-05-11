@@ -23,11 +23,11 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Model.Interfaces;
-using wenku8.Resources;
-using wenku8.Settings.Theme;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Model.Interfaces;
+using GR.Resources;
+using GR.Settings.Theme;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -35,9 +35,9 @@ namespace wenku10.Pages.Settings.Themes
 	{
 		public static readonly string ID = typeof( ThemeColors ).Name;
 
-		#pragma warning disable 0067
+#pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
-		#pragma warning restore 0067
+#pragma warning restore 0067
 
 		public bool NoCommands { get; }
 		public bool MajorNav { get; }
@@ -48,7 +48,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private ObservableCollection<ThemeSet> PresetThemeColors;
 		private ThemeSet SelectedTheme;
-		private global::wenku8.System.ThemeManager Manager;
+		private global::GR.GSystem.ThemeManager Manager;
 
 		public Visibility IsSystemSet
 		{
@@ -60,12 +60,12 @@ namespace wenku10.Pages.Settings.Themes
 			}
 		}
 
-		public void SoftOpen() { NavigationHandler.InsertHandlerOnNavigatedBack( CloseThemesetFrame ); }
-		public void SoftClose() { NavigationHandler.OnNavigatedBack -= CloseThemesetFrame; }
+		public void SoftOpen( bool NavForward ) { NavigationHandler.InsertHandlerOnNavigatedBack( CloseThemesetFrame ); }
+		public void SoftClose( bool NavForward ) { NavigationHandler.OnNavigatedBack -= CloseThemesetFrame; }
 
 		private void CloseThemesetFrame( object sender, XBackRequestedEventArgs e )
 		{
-			if( ThemeSetFrame.Content != null )
+			if ( ThemeSetFrame.Content != null )
 			{
 				e.Handled = true;
 				ThemeSetFrame.Content = null;
@@ -100,18 +100,18 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void SetTemplates()
 		{
-			Manager = new global::wenku8.System.ThemeManager();
+			Manager = new global::GR.GSystem.ThemeManager();
 			ThemePresets();
 			InitAppBar();
 		}
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			List<ICommandBarElement> Btns = new List<ICommandBarElement>();
 
-			if ( Properties.ENABLE_ONEDRIVE )
+			if ( GRConfig.System.EnableOneDrive )
 			{
 				AppBarButtonEx OneDriveBtn = UIAliases.CreateAppBarBtnEx( SegoeMDL2.Cloud, stx.Text( "Sync" ) );
 
@@ -139,47 +139,24 @@ namespace wenku10.Pages.Settings.Themes
 			// Major Color Schemes
 			PutThemeBlocks(
 				ThemeBlocks
-				, new string[] {
-					"APPEARENCE_THEME_MAJOR_COLOR"
-					, "APPEARENCE_THEME_MINOR_COLOR"
-					, "APPEARENCE_THEME_TEXT_COLOR_RELATIVE_TO_BACKGROUND"
-					, "APPEARENCE_THEME_SUBTLE_TEXT_COLOR"
-				}
-				, new string[]
-				{
-					"APPEARENCE_THEME_MAJOR_BACKGROUND_COLOR"
-					, "APPEARENCE_THEME_MINOR_BACKGROUND_COLOR"
-				}
+				, new string[] { "ColorMajor", "ColorMinor", "RelColorMajorBackground", "SubtleColor" }
+				, new string[] { "BgColorMajor", "BgColorMinor" }
 				, ColorSet
 			);
 
 			// Major Text Schemes
 			PutThemeBlocks(
 				ThemeBlocks
-				, new string[] {
-					"APPEARENCE_THEME_TEXT_COLOR_RELATIVE_TO_MAJOR"
-				}
-				, new string[]
-				{
-					"APPEARENCE_THEME_MAJOR_COLOR"
-					, "APPEARENCE_THEME_MINOR_COLOR"
-				}
+				, new string[] { "RelColorMajor" }
+				, new string[] { "ColorMajor", "ColorMinor" }
 				, ColorSet
 			);
 
 			// Shades Major Schemes
 			PutThemeBlocks(
 				ThemeBlocks
-				, new string[] {
-					"APPEARENCE_THEME_TEXT_COLOR_RELATIVE_TO_MAJOR"
-				}
-				, new string[]
-				{
-					"APPEARENCE_THEME_MAJOR_COLOR"
-					, "APPEARENCE_THEME_MINOR_COLOR"
-					, "APPEARENCE_THEME_HORIZONTAL_RIBBON_COLOR"
-					, "APPEARENCE_THEME_VERTICAL_RIBBON_COLOR"
-				}
+				, new string[] { "RelColorMajorBackground" }
+				, new string[] { "ColorMajor", "ColorMinor", "RibbonColorHorz", "RibbonColorVert" }
 				, ColorSet
 			);
 
@@ -190,7 +167,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void ThemePresets()
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			PresetThemeColors = new ObservableCollection<ThemeSet>(
 				Manager.GetThemes()
 			);
@@ -200,11 +177,11 @@ namespace wenku10.Pages.Settings.Themes
 			// Current Color Set
 			List<Color> CurrentColors = new List<Color>();
 
-			Type P = typeof( Properties );
-			foreach( KeyValuePair<string, string> Map in ThemeSet.ParamMap )
+			Type P = typeof( GR.Config.Scopes.Conf_Theme );
+			foreach ( KeyValuePair<string, string> Map in ThemeSet.ParamMap )
 			{
 				PropertyInfo PInfo = P.GetProperty( Map.Value );
-				CurrentColors.Add( ( Color ) PInfo.GetValue( null ) );
+				CurrentColors.Add( ( Color ) PInfo.GetValue( GRConfig.Theme ) );
 			}
 
 			SetThemeBlocks(
@@ -227,19 +204,15 @@ namespace wenku10.Pages.Settings.Themes
 		{
 			List<ThemeTextBlock> ShadeBlocks = new List<ThemeTextBlock>();
 
-			for( int j = 1; j < 10; j ++ )
+			for ( int j = 1; j < 10; j++ )
 			{
-				ThemeTextBlock Block = new ThemeTextBlock(
-					ThemeBlock.FGName, ThemeBlock.BGName, ThemeBlock.ColorSet
-				);
+				ThemeTextBlock Block = new ThemeTextBlock( ThemeBlock.FGName, ThemeBlock.BGName, ThemeBlock.ColorSet );
 				Block.Shades( j * 10 );
 				ShadeBlocks.Add( Block );
 
 				if ( 4 < j )
 				{
-					ThemeTextBlock BlockR = new ThemeTextBlock(
-						"APPEARENCE_THEME_RELATIVE_SHADES_COLOR", ThemeBlock.BGName, ThemeBlock.ColorSet
-					);
+					ThemeTextBlock BlockR = new ThemeTextBlock( "RelColorShades", ThemeBlock.BGName, ThemeBlock.ColorSet );
 					BlockR.Shades( j * 10 );
 					ShadeBlocks.Add( BlockR );
 				}
@@ -252,7 +225,7 @@ namespace wenku10.Pages.Settings.Themes
 		{
 			if ( e.AddedItems.Count() < 1 ) return;
 
-			ViewShades( e.AddedItems[0] as ThemeTextBlock );
+			ViewShades( e.AddedItems[ 0 ] as ThemeTextBlock );
 		}
 
 		private async void SaveBtn_Click( object sender, RoutedEventArgs e )
@@ -290,7 +263,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void ThemeCopy( object sender, RoutedEventArgs e )
 		{
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			PresetThemeColors.Add(
 				Manager.CopyTheme(
 					SelectedTheme

@@ -5,8 +5,8 @@
 	path = libs/libpenguin
 	url = https://github.com/tgckpg/libpenguin.git
 [submodule "libs/libwenku8"]
-	path = libs/libwenku8
-	url = https://github.com/tgckpg/libwenku8.git
+	path = libs/GR
+	url = git@github.com:tgckpg/libwenku8.git
 [submodule "libs/libtaotu"]
 	path = libs/libtaotu
 	url = https://github.com/tgckpg/libtaotu.git

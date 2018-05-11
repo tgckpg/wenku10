@@ -25,15 +25,15 @@ using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 
-using wenku8.CompositeElement;
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Model.Loaders;
-using wenku8.Model.Text;
-using wenku8.Model.Twitter;
-using wenku8.Resources;
+using GR.CompositeElement;
+using GR.Effects;
+using GR.Model.Book;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Model.Loaders;
+using GR.Model.Text;
+using GR.Model.Twitter;
+using GR.Resources;
 
 namespace wenku10.Pages
 {
@@ -80,13 +80,13 @@ namespace wenku10.Pages
 			SetContext();
 		}
 
-		public void SoftOpen()
+		public void SoftOpen( bool NavForward )
 		{
 			NavigationHandler.InsertHandlerOnNavigatedBack( ShouldCloseInputBox );
 			RmCtrlEnterListener = App.KeyboardControl.RegisterCombination( e => CtrlSubmit(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Enter );
 		}
 
-		public void SoftClose()
+		public void SoftClose( bool NavForward )
 		{
 			NavigationHandler.OnNavigatedBack -= ShouldCloseInputBox;
 			RmCtrlEnterListener?.Invoke();
@@ -94,7 +94,7 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar", "AppResources", "Settings" );
+			StringResources stx = StringResources.Load( "AppBar", "AppResources", "Settings" );
 
 			AddBtn = UIAliases.CreateAppBarBtn( Symbol.Add, stx.Str( "AddComment" ) );
 			AddBtn.Click += OpenInputBox;
@@ -162,7 +162,7 @@ namespace wenku10.Pages
 			{
 				bool Discard = false;
 
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					stx.Str( "ConfirmDiscard" )
 					, () => Discard = true
@@ -203,11 +203,11 @@ namespace wenku10.Pages
 			if ( !string.IsNullOrEmpty( ThisBook.Title ) )
 				TagsAvailable.AddRange( ThisBook.Title.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
-			if ( !string.IsNullOrEmpty( ThisBook.PressRaw ) )
-				TagsAvailable.AddRange( ThisBook.PressRaw.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
+			if ( !string.IsNullOrEmpty( ThisBook.Info.Press ) )
+				TagsAvailable.AddRange( ThisBook.Info.Press.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
-			if ( !string.IsNullOrEmpty( ThisBook.AuthorRaw ) )
-				TagsAvailable.AddRange( ThisBook.AuthorRaw.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
+			if ( !string.IsNullOrEmpty( ThisBook.Info.Author ) )
+				TagsAvailable.AddRange( ThisBook.Info.Author.ToHashTags().Remap( x => new NameValue<bool>( x, false ) ) );
 
 			Keywords.Text = ThisBook.Title.TrimForSearch();
 			HashTags.ItemsSource = TagsAvailable;
@@ -220,7 +220,7 @@ namespace wenku10.Pages
 			if ( TweetInput.FocusState == FocusState.Keyboard )
 			{
 				bool Continue = false;
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					stx.Str( "ConfirmSubmit" )
 					, () => Continue = true
@@ -244,7 +244,7 @@ namespace wenku10.Pages
 			if ( !( TweetContent.Contains( "#wenku10" ) && TweetContent.Contains( Keywords.Text ) ) )
 			{
 				bool Continue = false;
-				StringResources stx = new StringResources( "Message" );
+				StringResources stx = StringResources.Load( "Message" );
 				await Popups.ShowDialog( UIAliases.CreateDialog(
 					string.Format( stx.Str( "Desc_OSTweet" ), Keywords.Text, "#wenku10" )
 					, stx.Str( "OSTweet" )

@@ -12,14 +12,13 @@ using Microsoft.Graphics.Canvas.Brushes;
 using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
-using wenku8.Effects;
-using wenku8.Resources;
-using wenku8.Model.ListItem;
+using GR.Effects;
+using GR.Resources;
+using GR.Model.ListItem;
+using GR.Model.Section;
 
 namespace wenku10.Scenes
 {
-	using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
-
 	sealed partial class HyperBanner : ITextureScene, ISceneExitable
 	{
 		private ICanvasResourceCreatorWithDpi ResCreator;
@@ -27,7 +26,7 @@ namespace wenku10.Scenes
 
 		public HyperBanner( ActiveItem Item, BgContext ItemContext )
 		{
-			Seed = wenku8.System.Utils.Md5Int( Item.Name );
+			Seed = GR.GSystem.Utils.Md5Int( Item.Name );
 			InitRipple( Item );
 			InitBackground( ItemContext );
 		}
@@ -148,20 +147,5 @@ namespace wenku10.Scenes
 
 		private void DrawNothing( CanvasDrawingSession ds ) { }
 
-		private void CubicTween( ref float a, float b, float dx = 0.5f, float dy = 0.5f )
-		{
-			a = dx * a + dy * b;
-		}
-
-		private Color CubicTween( Color a, Color b, float dx = 0.5f, float dy = 0.5f )
-		{
-			return new Color()
-			{
-				A = ( byte ) ( dx * a.A + dy * b.A )
-				, R = ( byte ) ( dx * a.R + dy * b.R )
-				, G = ( byte ) ( dx * a.G + dy * b.G )
-				, B = ( byte ) ( dx * a.B + dy * b.B )
-			};
-		}
 	}
 }

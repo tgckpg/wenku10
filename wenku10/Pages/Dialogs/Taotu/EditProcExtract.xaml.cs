@@ -27,9 +27,9 @@ using libtaotu.Controls;
 using libtaotu.Models.Procedure;
 using libtaotu.Pages;
 
-using wenku8.Taotu;
-using wenku8.Model.Book;
-using wenku8.Model.Book.Spider;
+using GR.Taotu;
+using GR.Model.Book;
+using GR.Model.Book.Spider;
 
 namespace wenku10.Pages.Dialogs.Taotu
 {
@@ -39,24 +39,26 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 		private IStorageFile PreviewFile;
 		private WenkuExtractor EditTarget;
+		private ProceduralSpider MCrawler;
 
 		private EditProcExtract()
 		{
 			this.InitializeComponent();
+			MCrawler = new ProceduralSpider( new Procedure[ 0 ] );
 			SetTemplate();
 		}
 
 		private void SetTemplate()
 		{
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( "OK" );
 
-			MessageBus.OnDelivery += MessageBus_OnDelivery;
+			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
 
 		public void Dispose()
 		{
-			MessageBus.OnDelivery -= MessageBus_OnDelivery;
+			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
 			if ( PreviewFile != null )
 			{
 				try
@@ -77,7 +79,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 
 			if( EditTarget.PropDefs.Count == 0 )
 			{
-				EditTarget.PropDefs.Add( new WenkuExtractor.PropExt( BookInfo.Title ) );
+				EditTarget.PropDefs.Add( new WenkuExtractor.PropExt( PropType.Title ) );
 			}
 
 			IncomingCheck.IsChecked = EditTarget.Incoming;
@@ -106,7 +108,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 			try
 			{
 				if ( PreviewFile == null )
-					PreviewFile = await ProceduralSpider.DownloadSource( Url );
+					PreviewFile = await MCrawler.DownloadSource( Url );
 
 				// The resulting convoy may not be the book instruction originally created
 				ProcConvoy Convoy = await new ProceduralSpider( new Procedure[] { EditTarget } )
@@ -182,7 +184,7 @@ namespace wenku10.Pages.Dialogs.Taotu
 			if ( e.AddedItems.Count == 0 ) return;
 
 			ComboBox Cb = sender as ComboBox;
-			GenericData<BookInfo> NType = e.AddedItems[ 0 ] as GenericData<BookInfo>;
+			GenericData<PropType> NType = e.AddedItems[ 0 ] as GenericData<PropType>;
 
 			GrimoireExtractor.PropExt Ext = ( GrimoireExtractor.PropExt ) Cb.DataContext;
 			Ext.PType = NType.Data;

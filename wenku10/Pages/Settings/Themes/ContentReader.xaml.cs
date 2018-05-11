@@ -22,13 +22,11 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 
-using wenku8.Config;
-using wenku8.Model.Section;
-using wenku8.Model.Text;
-using wenku8.Model.Pages.ContentReader;
-using wenku8.Settings.Theme;
-
-using BgContext = wenku8.Settings.Layout.BookInfoView.BgContext;
+using GR.Config;
+using GR.Model.Section;
+using GR.Model.Text;
+using GR.Model.Pages.ContentReader;
+using GR.Settings.Theme;
 
 namespace wenku10.Pages.Settings.Themes
 {
@@ -61,12 +59,17 @@ namespace wenku10.Pages.Settings.Themes
 			ContentGrid.DataContext = ReaderContext;
 			ContextGrid.DataContext = new ESContext();
 
-			RBgContext = ReaderContext.Settings.GetBgContext();
+			RBgContext = new BgContext( GRConfig.ContentReader.BgContext );
 			ContentBg.DataContext = RBgContext;
 
 			RBgContext.ApplyBackgrounds();
 
-			StringResources stx = new StringResources( "Settings" );
+			if( Paragraph.Translator == null )
+			{
+				Paragraph.Translator = new libtranslate.Translator();
+			}
+
+			StringResources stx = StringResources.Load( "Settings" );
 
 			ExpContent = new Paragraph[]
 			{
@@ -82,83 +85,83 @@ namespace wenku10.Pages.Settings.Themes
 			{
 				new ColorItem(
 					stx.Text( "Appearance_ContentReader_Background" )
-					, Properties.APPEARANCE_CONTENTREADER_BACKGROUND
+					, GRConfig.ContentReader.BackgroundColor
 				)
 				{
 					BindAction = ( c ) => {
-						Properties.APPEARANCE_CONTENTREADER_BACKGROUND = c;
+						GRConfig.ContentReader.BackgroundColor = c;
 						UpdateExampleFc();
 					}
 				}
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_ScrollBar" )
-					, Properties.APPEARANCE_CONTENTREADER_SCROLLBAR
+					, GRConfig.ContentReader.ScrollBarColor
 				)
 				{
 					BindAction = ( c ) => {
-						Properties.APPEARANCE_CONTENTREADER_SCROLLBAR = c;
+						GRConfig.ContentReader.ScrollBarColor = c;
 						UpdateScrollBar();
 					}
 				}
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_FontColor" )
-					, Properties.APPEARANCE_CONTENTREADER_FONTCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_FONTCOLOR = c; } }
+					, GRConfig.ContentReader.FontColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.FontColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_TapBrushColor" )
-					, Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_TAPBRUSHCOLOR = c; } }
+					, GRConfig.ContentReader.TapBrushColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.TapBrushColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_NavBg" )
-					, Properties.APPEARANCE_CONTENTREADER_NAVBG
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_NAVBG = c; } }
+					, GRConfig.ContentReader.BgColorNav
+				) { BindAction = ( c ) => { GRConfig.ContentReader.BgColorNav = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_AssistHelper" )
-					, Properties.APPEARANCE_CONTENTREADER_ASSISTBG
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ASSISTBG = c; } }
+					, GRConfig.ContentReader.BgColorAssist
+				) { BindAction = ( c ) => { GRConfig.ContentReader.BgColorAssist = c; } }
 			};
 
 			ClockColorList.ItemsSource = new ColorItem[]
 			{
 				new ColorItem(
 					stx.Text( "Appearance_ContentReader_Clock_ARColor" )
-					, Properties.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_ARCOLOR = c; } }
+					, GRConfig.ContentReader.Clock.ARColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.Clock.ARColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_Clock_HHColor" )
-					, Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_HHCOLOR = c; } }
+					, GRConfig.ContentReader.Clock.HHColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.Clock.HHColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_Clock_MHColor" )
-					, Properties.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_MHCOLOR = c; } }
+					, GRConfig.ContentReader.Clock.MHColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.Clock.MHColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_Clock_SColor" )
-					, Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_CLOCK_SCOLOR = c; } }
+					, GRConfig.ContentReader.Clock.SColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.Clock.SColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_EStepper_DColor" )
-					, Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_DCOLOR = c; } }
+					, GRConfig.ContentReader.EpStepper.DColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.EpStepper.DColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_EStepper_SColor" )
-					, Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_SCOLOR = c; } }
+					, GRConfig.ContentReader.EpStepper.SColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.EpStepper.SColor = c; } }
 
 				, new ColorItem(
 					stx.Text( "Appearance_ContentReader_Background" )
-					, Properties.APPEARANCE_CONTENTREADER_ES_BG
-				) { BindAction = ( c ) => { Properties.APPEARANCE_CONTENTREADER_ES_BG = c; } }
+					, GRConfig.ContentReader.EpStepper.BackgroundColor
+				) { BindAction = ( c ) => { GRConfig.ContentReader.EpStepper.BackgroundColor = c; } }
 			};
 
 			BatteryReport Report = Battery.AggregateBattery.GetReport();
@@ -174,20 +177,21 @@ namespace wenku10.Pages.Settings.Themes
 			SSliders[ LineSpacingInput.Name ] = LineSpacingSlider;
 			SSliders[ ParaSpacingInput.Name ] = ParaSpacingSlider;
 
-			FontSizeSlider.Value = Properties.APPEARANCE_CONTENTREADER_FONTSIZE;
-			LineSpacingSlider.Value = Properties.APPEARANCE_CONTENTREADER_LINEHEIGHT;
-			ParaSpacingSlider.Value = 2 * Properties.APPEARANCE_CONTENTREADER_PARAGRAPHSPACING;
+			FontSizeSlider.Value = GRConfig.ContentReader.FontSize;
+			LineSpacingSlider.Value = GRConfig.ContentReader.LineHeight;
+			ParaSpacingSlider.Value = 2 * GRConfig.ContentReader.ParagraphSpacing;
 
 			FontSizeInput.Text = FontSizeSlider.Value.ToString();
 			LineSpacingInput.Text = LineSpacingSlider.Value.ToString();
 			ParaSpacingInput.Text = ParaSpacingSlider.Value.ToString();
 
-			if ( 0 < Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+			double BlockHeight = GRConfig.ContentReader.BlockHeight;
+			if ( 0 < BlockHeight )
 			{
-				BlockHeightSlider.Value = Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT;
+				BlockHeightSlider.Value = BlockHeight;
 			}
 
-			FontWeight FWeight = Properties.APPEARANCE_CONTENTREADER_FONTWEIGHT;
+			FontWeight FWeight = GRConfig.ContentReader.FontWeight;
 			// Set font weights
 			Dictionary<string, FontWeight> ForReflection = new Dictionary<string, FontWeight>()
 			{
@@ -240,7 +244,7 @@ namespace wenku10.Pages.Settings.Themes
 
 		private void SetLayoutAware()
 		{
-			if ( ReaderContext.Settings.IsHorizontal )
+			if ( GRConfig.ContentReader.IsHorizontal )
 			{
 				Grid.SetRowSpan( ContentGrid, 1 );
 				Grid.SetColumnSpan( ContentGrid, 2 );
@@ -267,8 +271,8 @@ namespace wenku10.Pages.Settings.Themes
 			UpdateExampleFs();
 			UpdateExampleBh();
 
-			Properties.APPEARANCE_CONTENTREADER_FONTSIZE = FontSizeSlider.Value;
-			Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT = 0;
+			GRConfig.ContentReader.FontSize = FontSizeSlider.Value;
+			GRConfig.ContentReader.BlockHeight = 0;
 			FontSizeInput.Text = FontSizeSlider.Value.ToString();
 		}
 
@@ -279,11 +283,12 @@ namespace wenku10.Pages.Settings.Themes
 			VerticalLogaTable LogaTable = VerticalLogaManager.GetLoga( FontSizeSlider.Value );
 			LogaTable.Override( BlockHeightSlider.Value );
 
-			if ( BlockHeightSlider.Value != Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT )
+			double BlockHeight = GRConfig.ContentReader.BlockHeight;
+			if ( BlockHeightSlider.Value != BlockHeight )
 			{
-				VerticalLogaManager.Destroy( Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT );
+				VerticalLogaManager.Destroy( BlockHeight );
 
-				Properties.APPEARANCE_CONTENTREADER_BLOCKHEIGHT = BlockHeightSlider.Value;
+				GRConfig.ContentReader.BlockHeight = BlockHeightSlider.Value;
 				BlockHeightInput.Text = BlockHeightSlider.Value.ToString();
 
 				UpdateExampleFs();
@@ -293,14 +298,14 @@ namespace wenku10.Pages.Settings.Themes
 		private void LineSpacingSlider_ValueChanged( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExampleLs(); }
 		private void LineSpacingSlider_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
-			Properties.APPEARANCE_CONTENTREADER_LINEHEIGHT = LineSpacingSlider.Value;
+			GRConfig.ContentReader.LineHeight = LineSpacingSlider.Value;
 			LineSpacingInput.Text = LineSpacingSlider.Value.ToString();
 		}
 		private void ParaSpacingSlider_ValueChanged( object sender, RangeBaseValueChangedEventArgs e ) { UpdateExamplePs(); }
 		private void ParaSpacingSlider_PointerCaptureLost( object sender, PointerRoutedEventArgs e )
 		{
 			// Setting it will auto scale down half
-			Properties.APPEARANCE_CONTENTREADER_PARAGRAPHSPACING = ParaSpacingSlider.Value;
+			GRConfig.ContentReader.ParagraphSpacing = ParaSpacingSlider.Value;
 			ParaSpacingInput.Text = ParaSpacingSlider.Value.ToString();
 		}
 
@@ -350,7 +355,7 @@ namespace wenku10.Pages.Settings.Themes
 			if ( HScrollBar == null ) return;
 			HScrollBar.Foreground
 				= VScrollBar.Foreground
-				= new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_SCROLLBAR );
+				= new SolidColorBrush( GRConfig.ContentReader.ScrollBarColor );
 		}
 		private void UpdateExampleLs()
 		{
@@ -369,10 +374,10 @@ namespace wenku10.Pages.Settings.Themes
 		{
 			if ( ExpContent == null ) return;
 
-			SolidColorBrush C = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_FONTCOLOR );
+			SolidColorBrush C = new SolidColorBrush( GRConfig.ContentReader.FontColor );
 			ExpContent.All( ( x ) => { x.FontColor = C; return true; } );
 
-			ContentGrid.Background = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_BACKGROUND );
+			ContentGrid.Background = new SolidColorBrush( GRConfig.ContentReader.BackgroundColor );
 		}
 
 		private async void ColorList_ItemClick( object sender, ItemClickEventArgs e )
@@ -392,7 +397,7 @@ namespace wenku10.Pages.Settings.Themes
 			FontWeight Weight = ( e.AddedItems[ 0 ] as PInfoWrapper ).Weight;
 			ExpContent.All( ( x ) => { x.FontWeight = Weight; return true; } );
 
-			Properties.APPEARANCE_CONTENTREADER_FONTWEIGHT = Weight;
+			GRConfig.ContentReader.FontWeight = Weight;
 		}
 
 		private class PInfoWrapper
@@ -419,7 +424,8 @@ namespace wenku10.Pages.Settings.Themes
 			if ( ReaderContext == null ) return;
 
 			BgChoice.SelectedIndex = Array.IndexOf(
-				new string[] { "None", "Custom", "Preset", "System" }, RBgContext.BgType
+				new string[] { "None", "Custom", "Preset", "System" }
+				, GRConfig.ContentReader.BgContext.BgType
 			);
 		}
 

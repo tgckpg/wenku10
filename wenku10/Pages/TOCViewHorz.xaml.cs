@@ -14,7 +14,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using wenku8.Model.Book;
+using GR.Model.Book;
+using GR.Model.Pages;
+using GR.Database.Models;
 
 namespace wenku10.Pages
 {
@@ -26,15 +28,11 @@ namespace wenku10.Pages
 			SetTemplate();
 		}
 
-		public TOCViewHorz( BookItem Book ) : this() { Init( Book ); }
-
-		protected override void SetTemplate()
+		public TOCViewHorz( BookItem Book )
+			: this()
 		{
-			base.SetTemplate();
-			LayoutRoot.FlowDirection = LayoutSettings.IsRightToLeft
-				? FlowDirection.RightToLeft
-				: FlowDirection.LeftToRight
-				;
+			Init( Book );
+			ToggleDir();
 		}
 
 		protected override void SetTOC( BookItem b )
@@ -45,6 +43,21 @@ namespace wenku10.Pages
 			if ( VolList != null && 0 < VolList.Items.Count() )
 			{
 				VolList.SelectedIndex = 0;
+			}
+		}
+
+		protected override void ToggleDir()
+		{
+			if ( ThisBook.Entry.TextLayout.HasFlag( LayoutMethod.VerticalWriting ) )
+			{
+				LayoutRoot.FlowDirection = ThisBook.Entry.TextLayout.HasFlag( LayoutMethod.RightToLeft )
+					? FlowDirection.RightToLeft
+					: FlowDirection.LeftToRight
+				;
+			}
+			else
+			{
+				PageProcessor.NavigateToTOC( this, ThisBook );
 			}
 		}
 

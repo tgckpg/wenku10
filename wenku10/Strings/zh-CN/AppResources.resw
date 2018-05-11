@@ -202,11 +202,8 @@
     <value>这里还没有人发表过评论，来发表一下吧！</value>
     <comment>NaN</comment>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>共找到</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>个結果</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>共找到 {0} 个結果</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>不支持查找內文</value>
@@ -214,9 +211,6 @@
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>文库暂没有收录此作品</value>
-  </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>文库精选</value>
   </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>统计</value>
@@ -254,8 +248,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>请再按一次退出</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>点击阅题</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>阅读</value>
   </data>
   <data name="Size.Text" xml:space="preserve">
     <value>大小</value>
@@ -380,9 +374,6 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>书</value>
   </data>
-  <data name="PleaseClick.Text" xml:space="preserve">
-    <value>请点击</value>
-  </data>
   <data name="ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛</value>
   </data>
@@ -396,7 +387,7 @@
     <value>文章蜘蛛是用“蜘蛛编辑器”制作的脚本，这些脚本可以从“共享脚本目录”上下载，制作这些文件通常需要基本的 Html / RegEx 的知识（不需要懂得编程）。说明请到 设定 - &gt; 说明 - &gt; wiki 上取得</value>
   </data>
   <data name="Desc_LocalDocuments.Text" xml:space="preserve">
-    <value>本地文件是拥有特定格式的纯文字文件，您可以点更多 - &gt;打开网址/打开目录中汇入这些文件。文件格式定义请到</value>
+    <value>本地文件是拥有特定格式的纯文字文件，您可以点更多 - &gt;打开网址/打开目录中导入这些文件。文件格式定义请到</value>
   </data>
   <data name="Desc_ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛可以自动制作网站的「文章蜘蛛」，同样也是从「蜘蛛编辑器」中制作。这些脚本也可以在「共享脚本目录」中取得。制作这些文件需要更全面的 Html / RegEx 以及 基本的编辑知识。</value>
@@ -418,5 +409,32 @@
   </data>
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 字 ( #wenku10 )</value>
+  </data>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>未处理的项目</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>记录存在</value>
+  </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>准备就绪</value>
+  </data>
+  <data name="Search_By_Id.Text" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="IssueDate.Text" xml:space="preserve">
+    <value>发行日期</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>搜索結果</value>
+  </data>
+  <data name="ShowMore.Text" xml:space="preserve">
+    <value>展示更多</value>
+  </data>
+  <data name="KV_Key.Text" xml:space="preserve">
+    <value>键</value>
+  </data>
+  <data name="KV_Value.Text" xml:space="preserve">
+    <value>值</value>
   </data>
 </root>

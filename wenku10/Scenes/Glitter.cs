@@ -12,12 +12,12 @@ using Windows.UI.Xaml.Controls;
 using Microsoft.Graphics.Canvas;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Effects.P2DFlow;
-using wenku8.Effects.P2DFlow.ForceFields;
-using wenku8.Effects.P2DFlow.Reapers;
-using wenku8.Effects.P2DFlow.Spawners;
+using GR.Config;
+using GR.Effects;
+using GR.Effects.P2DFlow;
+using GR.Effects.P2DFlow.ForceFields;
+using GR.Effects.P2DFlow.Reapers;
+using GR.Effects.P2DFlow.Spawners;
 
 namespace wenku10.Scenes
 {
@@ -30,7 +30,7 @@ namespace wenku10.Scenes
 
 		public Glitter()
 		{
-			Color C = Properties.APPEARENCE_THEME_HORIZONTAL_RIBBON_COLOR;
+			Color C = GRConfig.Theme.RibbonColorHorz;
 			ThemeTint = new Vector4( C.R * 0.0039f, C.G * 0.0039f, C.B * 0.0039f, C.A * 0.0039f );
 
 			PFSim.Create( MainStage.Instance.IsPhone ? 25 : 50 );

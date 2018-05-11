@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
-    xmlns:c="using:wenku8.CompositeElement"
+    xmlns:c="using:GR.CompositeElement"
     xmlns:p="using:Net.Astropenguin.UI"
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
@@ -63,7 +63,7 @@
                         </p:StateControl>
                         <TextBlock Grid.Row="1" Foreground="White"
                                    FontSize="20" Margin="0"
-                                   Text="{Binding ChapterTitle}"
+                                   Text="{Binding Title}"
                                    HorizontalAlignment="Center" />
                     </Grid>
                 </DataTemplate>

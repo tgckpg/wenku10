@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Loaders;
 
-using wenku8.Model.ListItem;
+using GR.Model.ListItem;
 
 namespace wenku10.Pages.Dialogs
 {
@@ -34,13 +34,16 @@ namespace wenku10.Pages.Dialogs
 			Canceled = true;
 			Target = Item;
 
-			StringResources stx = new StringResources( "Message" );
+			StringResources stx = StringResources.Load( "Message" );
 			PrimaryButtonText = stx.Str( BtnLeft );
 			SecondaryButtonText = stx.Str( BtnRight );
 
 			TitleText.Text = Title;
 			NameLbl.Text = NameLabel;
 			ValueLbl.Text = ValueLabel;
+
+			NameInput.Text = Target.Name;
+			ValueInput.Text = Target.Value;
 		}
 
 		private void ContentDialog_PrimaryButtonClick( ContentDialog sender, ContentDialogButtonClickEventArgs args )

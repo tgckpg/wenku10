@@ -1,0 +1,52 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:v="using:Net.Astropenguin.UI.Converters"
+    xmlns:ms="using:Microsoft.Phone.Controls"
+    xmlns:c="using:GR.CompositeElement">
+
+    <Style TargetType="c:ActivityList">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:ActivityList">
+                    <Grid x:Name="LayoutRoot"
+                          HorizontalAlignment="Right" VerticalAlignment="Top"
+                          MaxWidth="400">
+                        <Grid.Resources>
+                            <v:DataVisConverter x:Key="DataVisConverter" />
+                            <ms:RelativeTimeConverter x:Key="RelativeTimeConverter" />
+                        </Grid.Resources>
+                        <Polygon x:Name="Pointergon"
+                                 Points="15,0 30,15 0,15"
+                                 HorizontalAlignment="Right"
+                                 Fill="{StaticResource MinorBrush}" />
+                        <ListView x:Name="ItemList"
+                                  Margin="0,15,0,0" Padding="10"
+                                  IsItemClickEnabled="True"
+                                  ItemContainerStyle="{StaticResource BareListItem}"
+                                  ItemsSource="{TemplateBinding ItemsSource}"
+                                  Background="{StaticResource MinorBrush}">
+                            <ListView.RenderTransform>
+                                <TranslateTransform Y="-1" />
+                            </ListView.RenderTransform>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="10,5">
+                                        <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   Text="{Binding Name}" />
+                                        <TextBlock Foreground="{StaticResource RelativeMajorBrush}"
+                                                   TextAlignment="Right" Opacity="0.8"
+                                                   Visibility="{Binding TimeStamp, Converter={StaticResource DataVisConverter}}"
+                                                   Text="{Binding TimeStamp, Converter={StaticResource RelativeTimeConverter}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -234,4 +234,34 @@
   <data name="TranslateTC" xml:space="preserve">
     <value>要将此文件转换为繁体中文吗？</value>
   </data>
+  <data name="SourceNotAvailable" xml:space="preserve">
+    <value>来源已经丢失或已被删除</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>您确定想要删除 {0} 吗？</value>
+  </data>
+  <data name="ConfirmBuildFTS" xml:space="preserve">
+    <value>全文搜索需要使用额外的容量建立索引（估计为 {0} ），要建立索引吗？</value>
+  </data>
+  <data name="FTSNeedsRebuild" xml:space="preserve">
+    <value>无法找到项目信息。 请重建索引。</value>
+  </data>
+  <data name="RestartToRestore" xml:space="preserve">
+    <value>一些文件当前正在使用中。 重新启动到恢复模式？</value>
+  </data>
+  <data name="ConfirmReset" xml:space="preserve">
+    <value>确认重置</value>
+  </data>
+  <data name="ConfirmResetConvTable" xml:space="preserve">
+    <value>要从服务器重新加载翻译表吗？</value>
+  </data>
+  <data name="NoAndNever" xml:space="preserve">
+    <value>否，不要再问</value>
+  </data>
+  <data name="ConfirmReplace" xml:space="preserve">
+    <value>该项目存在于数据库中。要取代其内容吗？</value>
+  </data>
+  <data name="EnableAccelerScroll" xml:space="preserve">
+    <value>这个设备似乎有一个加速计。 要启用重力滚动吗？（您可以通过段落菜单禁用它）</value>
+  </data>
 </root>

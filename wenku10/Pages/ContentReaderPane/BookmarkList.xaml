@@ -5,7 +5,7 @@
     xmlns:local="using:wenku10.Pages.ContentReaderPane"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
-    xmlns:v="using:wenku8.Converters"
+    xmlns:v="using:GR.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 

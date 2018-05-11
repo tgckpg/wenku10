@@ -201,11 +201,8 @@
   <data name="NoComments.Text" xml:space="preserve">
     <value>誰もここにコメントしていません。コメントをしてみませんか？</value>
   </data>
-  <data name="Search_ResultStamp_A.Text" xml:space="preserve">
-    <value>検索結果</value>
-  </data>
-  <data name="Search_ResultStamp_B.Text" xml:space="preserve">
-    <value>件</value>
+  <data name="Search_N_Result.Text" xml:space="preserve">
+    <value>検索結果 {0} 件</value>
   </data>
   <data name="Search_Tooltip.Text" xml:space="preserve">
     <value>フルテキスト検索をサポートしていません</value>
@@ -213,9 +210,6 @@
   </data>
   <data name="SpecialList_Not_In_Collection.Text" xml:space="preserve">
     <value>本が含まれていません</value>
-  </data>
-  <data name="StaffPicks.Header" xml:space="preserve">
-    <value>文庫精選</value>
   </data>
   <data name="Statistic.Text" xml:space="preserve">
     <value>統計</value>
@@ -250,8 +244,8 @@
   <data name="PressAgainExit.Text" xml:space="preserve">
     <value>もう一度押すと終了します</value>
   </data>
-  <data name="ClickToRead.Text" xml:space="preserve">
-    <value>クリックしてください</value>
+  <data name="Read.Text" xml:space="preserve">
+    <value>読む</value>
   </data>
   <data name="Size.Text" xml:space="preserve">
     <value>サイズ</value>
@@ -379,9 +373,6 @@
   <data name="HS_Book.Text" xml:space="preserve">
     <value>本</value>
   </data>
-  <data name="PleaseClick.Text" xml:space="preserve">
-    <value>クリックしてください</value>
-  </data>
   <data name="ZoneSpider.Text" xml:space="preserve">
     <value>区域蜘蛛</value>
   </data>
@@ -417,5 +408,32 @@
   </data>
   <data name="Tweetwenku10.Text" xml:space="preserve">
     <value>131 文字 ( #wenku10 )</value>
+  </data>
+  <data name="UnprocessedItem.Text" xml:space="preserve">
+    <value>未処理アイテム</value>
+  </data>
+  <data name="RecordExist.Text" xml:space="preserve">
+    <value>記録がある</value>
+  </data>
+  <data name="Ready.Text" xml:space="preserve">
+    <value>準備完了</value>
+  </data>
+  <data name="Search_By_Id.Text" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="IssueDate.Text" xml:space="preserve">
+    <value>発行日</value>
+  </data>
+  <data name="Search_Result.Text" xml:space="preserve">
+    <value>検索結果</value>
+  </data>
+  <data name="ShowMore.Text" xml:space="preserve">
+    <value>もっと見る</value>
+  </data>
+  <data name="KV_Key.Text" xml:space="preserve">
+    <value>キー</value>
+  </data>
+  <data name="KV_Value.Text" xml:space="preserve">
+    <value>値</value>
   </data>
 </root>

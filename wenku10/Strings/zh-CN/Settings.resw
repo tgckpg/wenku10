@@ -563,4 +563,55 @@
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value>密码将存储在此设备上。建议您不要在其他帐户使用相同的密码。</value>
   </data>
+  <data name="Conv_Custom.Text" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="Conv_NTW_ps2t.Text" xml:space="preserve">
+    <value>简 → 繁 短语</value>
+  </data>
+  <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
+    <value>简 → 繁 单词</value>
+  </data>
+  <data name="Conv_Table.Text" xml:space="preserve">
+    <value>翻译表</value>
+  </data>
+  <data name="Desc_Conv_Table.Text" xml:space="preserve">
+    <value>定义内容字符串替换</value>
+  </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>直书</value>
+  </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>阶段 {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>翻译表（本地）</value>
+  </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>校准</value>
+  </data>
+  <data name="AccelerScroll_Brake.Text" xml:space="preserve">
+    <value>制动范围</value>
+  </data>
+  <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
+    <value>倾斜率</value>
+  </data>
+  <data name="AccelerScroll_AMultiplier.Text" xml:space="preserve">
+    <value>加速乘数</value>
+  </data>
+  <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
+    <value>终端速度</value>
+  </data>
+  <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
+    <value>制动偏置</value>
+  </data>
+  <data name="AccelerScroll_ForceBrake.Text" xml:space="preserve">
+    <value>强制制动</value>
+  </data>
+  <data name="AccelerScroll_BrakingForce.Text" xml:space="preserve">
+    <value>制动力</value>
+  </data>
+  <data name="AccelerScroll_TrackAutoAnchor.Text" xml:space="preserve">
+    <value>自动锚点跟踪</value>
+  </data>
 </root>

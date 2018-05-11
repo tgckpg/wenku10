@@ -10,7 +10,7 @@ using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml;
 
-using wenku8.Effects;
+using GR.Effects;
 
 namespace wenku10.Scenes
 {
@@ -181,7 +181,7 @@ namespace wenku10.Scenes
 			{
 				lock ( Scenes )
 				{
-					foreach ( IScene S in TxScenes )
+					foreach ( IScene S in Scenes )
 					{
 						S.UpdateAssets( StageSize );
 					}

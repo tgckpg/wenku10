@@ -23,9 +23,9 @@ using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.Config;
-using wenku8.Ext;
-using wenku8.Settings;
+using GR.Config;
+using GR.Ext;
+using GR.Settings;
 
 namespace wenku10.Pages.Settings.Advanced
 {
@@ -66,10 +66,10 @@ namespace wenku10.Pages.Settings.Advanced
 		{
 			try
 			{
-				IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0, false );
+				IRuntimeCache wc = X.Instance<IRuntimeCache>( XProto.WRuntimeCache, 0 );
 				wc.GET(
 					new Uri( X.Const<string>( XProto.WProtocols, "APP_PROTOCOL" ) + "server.list" )
-					, GotServerList, global::wenku8.System.Utils.DoNothing, true );
+					, GotServerList, global::GR.GSystem.Utils.DoNothing, true );
 			}
 			catch ( DllNotFoundException ex )
 			{
@@ -124,7 +124,7 @@ namespace wenku10.Pages.Settings.Advanced
 				Logger.Log( ID, ex.Message, LogType.ERROR );
 			}
 
-			AvailableServers.ItemsSource = SC;
+			Worker.UIInvoke( () => AvailableServers.ItemsSource = SC );
 		}
 
 		private void ToggleSettings( bool b )
@@ -194,7 +194,7 @@ namespace wenku10.Pages.Settings.Advanced
 			RefreshServers();
 		}
 
-		private class ServerChoice : global::wenku8.Model.ListItem.ActiveItem
+		private class ServerChoice : global::GR.Model.ListItem.ActiveItem
 		{
 			private bool _preferred = false;
 			public bool Preferred
@@ -235,7 +235,7 @@ namespace wenku10.Pages.Settings.Advanced
 		private async void ShowCommand( Hyperlink sender, HyperlinkClickEventArgs args )
 		{
 			Logger.Log( ID, AppSettings.FamilyName, LogType.DEBUG );
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 			await Popups.ShowDialog(
 				new Dialogs.Rename(
 					new CommandCopy() { Name = "CheckNetIsolation LoopbackExempt -a -n=" + AppSettings.FamilyName }

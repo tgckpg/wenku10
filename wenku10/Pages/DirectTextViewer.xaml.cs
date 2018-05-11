@@ -20,9 +20,9 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using wenku8.Model.Interfaces;
-using wenku8.CompositeElement;
-using wenku8.Resources;
+using GR.Model.Interfaces;
+using GR.CompositeElement;
+using GR.Resources;
 
 namespace wenku10.Pages
 {
@@ -59,7 +59,7 @@ namespace wenku10.Pages
 
 		private void InitAppBar()
 		{
-			StringResources stx = new StringResources( "AppBar" );
+			StringResources stx = StringResources.Load( "AppBar" );
 
 			AppBarButton ExportBtn = UIAliases.CreateAppBarBtn( SegoeMDL2.Export, stx.Text( "Export" ) );
 			ExportBtn.Click += ExportBtn_Click;

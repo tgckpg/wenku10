@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="60674Astropenguin.GrimoireReaper" Publisher="CN=BB32EA9D-2E19-470F-862B-F9D5F1D815F3" Version="1.0.7.0" />
-  <mp:PhoneIdentity PhoneProductId="65e0b19c-e4b4-4abe-ab56-b964a48a7ef3" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2" xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3" IgnorableNamespaces="uap uap3 mp desktop2">
+  <Identity Name="60674Astropenguin.GrimoireReaper" Publisher="CN=BB32EA9D-2E19-470F-862B-F9D5F1D815F3" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="521a38a4-c313-4c0b-af15-5ea3d84ce507" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Grimoire Reaper</DisplayName>
     <PublisherDisplayName>Astropenguin</PublisherDisplayName>

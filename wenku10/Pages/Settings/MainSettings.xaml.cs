@@ -23,12 +23,12 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.UI;
 
-using wenku8.CompositeElement;
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Interfaces;
-using wenku8.Model.ListItem;
-using wenku8.Settings;
+using GR.CompositeElement;
+using GR.Config;
+using GR.Effects;
+using GR.Model.Interfaces;
+using GR.Model.ListItem;
+using GR.Settings;
 
 namespace wenku10.Pages.Settings
 {
@@ -67,7 +67,7 @@ namespace wenku10.Pages.Settings
 		private void ClosePopup( object sender, XBackRequestedEventArgs e )
 		{
 			// Restart Required
-			if ( RestartMask.State == ControlState.Reovia ) return;
+			if ( RestartMask.State == ControlState.Active ) return;
 
 			// Go back
 			LoadingMask.HandleBack( Frame, e );
@@ -108,7 +108,7 @@ namespace wenku10.Pages.Settings
 		{
 			LayoutRoot.RenderTransform = new TranslateTransform();
 
-			StringResources stx = new StringResources( "Settings" );
+			StringResources stx = StringResources.Load( "Settings" );
 
 			string CurrentLang = Properties.LANGUAGE;
 			SettingsSection LangSection = new SettingsSection()
@@ -168,7 +168,7 @@ namespace wenku10.Pages.Settings
 						, new ActionItem( stx.Text( "Data_Illustration"), stx.Text( "Desc_Data_Illustration" ), typeof( Data.Illustration ) )
 						, new ActionItem( stx.Text( "Data_Preload"), stx.Text( "Desc_Data_Preload" ), typeof( Data.Preload ) )
 						, new ActionItem( stx.Text( "EBWin"), stx.Text( "Desc_EBWin_Short" ), typeof( Data.EBWin ) )
-						, OneDriveButton = new ActionItem( "OneDrive", Properties.ENABLE_ONEDRIVE ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
+						, OneDriveButton = new ActionItem( "OneDrive", GRConfig.System.EnableOneDrive ? stx.Text( "Enabled" ) : stx.Text( "Disabled" ), false )
 						// , new ActionItem( stx.Text( "Data_Connection"), stx.Text( "Desc_Data_Connection" ), typeof( Data.Cache ) )
 					}
 					, ItemAction = PopupSettings
@@ -194,6 +194,7 @@ namespace wenku10.Pages.Settings
 					{
 						new ActionItem( stx.Text( "Advanced_Server"), stx.Text( "Desc_Advanced_Server" ), typeof( Advanced.ServerSelector ) )
 						, new ActionItem( stx.Text( "Advanced_Misc"), stx.Text( "Desc_Advanced_Misc" ), typeof( Advanced.Misc ) )
+						, new ActionItem( stx.Text( "Conv_Table"), stx.Text( "Desc_Conv_Table" ), typeof( Advanced.TRTableEditor ) )
 #if DEBUG || TESTING 
 						, new ActionItem( stx.Text( "Advanced_Debug"), stx.Text( "Desc_Advanced_Debug" ), typeof( Advanced.Debug ) )
 #endif
@@ -235,7 +236,7 @@ namespace wenku10.Pages.Settings
 
 		public async Task<bool> ConfirmRestart( string CaptionRes )
 		{
-			StringResources stx = new StringResources( "Message", "Settings" );
+			StringResources stx = StringResources.Load( "Message", "Settings" );
 
 			bool Restart = false;
 
@@ -251,7 +252,7 @@ namespace wenku10.Pages.Settings
 				await ControlFrame.Instance.CloseSubView();
 				ControlFrame.Instance.CollapseAppBar();
 				NavigationHandler.InsertHandlerOnNavigatedBack( Exit );
-				RestartMask.State = ControlState.Reovia;
+				RestartMask.State = ControlState.Active;
 			}
 
 			return Restart;
@@ -269,32 +270,32 @@ namespace wenku10.Pages.Settings
 		{
 			if( P.GetType() == typeof( bool ) )
 			{
-				StringResources sts = new StringResources( "Settings" );
-				if ( !Properties.ENABLE_ONEDRIVE )
+				StringResources sts = StringResources.Load( "Settings" );
+				if ( !GRConfig.System.EnableOneDrive )
 				{
-					StringResources stx = new StringResources( "InitQuestions" );
-					StringResources stm = new StringResources( "Message" );
+					StringResources stx = StringResources.Load( "InitQuestions" );
+					StringResources stm = StringResources.Load( "Message" );
 					MessageDialog Msg = new MessageDialog( stx.Text( "EnableOneDrive" ), "OneDrive" );
 					Msg.Commands.Add(
-						new UICommand( stm.Str( "Yes" ), ( x ) => Properties.ENABLE_ONEDRIVE = true )
+						new UICommand( stm.Str( "Yes" ), ( x ) => GRConfig.System.EnableOneDrive = true )
 					);
 					Msg.Commands.Add(
-						new UICommand( stm.Str( "No" ), ( x ) => Properties.ENABLE_ONEDRIVE = false )
+						new UICommand( stm.Str( "No" ), ( x ) => GRConfig.System.EnableOneDrive = false )
 					);
 
 					await Popups.ShowDialog( Msg );
 
-					if ( Properties.ENABLE_ONEDRIVE )
+					if ( GRConfig.System.EnableOneDrive )
 					{
-						await global::wenku8.Storage.OneDriveSync.Instance.Authenticate();
+						await global::GR.Storage.OneDriveSync.Instance.Authenticate();
 					}
 
 					OneDriveButton.Desc = sts.Text( "Enabled" );
 				}
 				else
 				{
-					Properties.ENABLE_ONEDRIVE = false;
-					await global::wenku8.Storage.OneDriveSync.Instance.UnAuthenticate();
+					GRConfig.System.EnableOneDrive = false;
+					await global::GR.Storage.OneDriveSync.Instance.UnAuthenticate();
 					OneDriveButton.Desc = sts.Text( "Disabled" );
 				}
 

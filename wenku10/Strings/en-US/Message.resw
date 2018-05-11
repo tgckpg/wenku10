@@ -234,4 +234,34 @@
   <data name="TranslateTC" xml:space="preserve">
     <value>Do you want to translate this document to Chinese ( traditional )?</value>
   </data>
+  <data name="SourceNotAvailable" xml:space="preserve">
+    <value>Item source has either been lost or deleted</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value> Are you sure you want to delete {0}?</value>
+  </data>
+  <data name="ConfirmBuildFTS" xml:space="preserve">
+    <value>Additional space must be used for FTS index ( estimated {0} ). Build this index?</value>
+  </data>
+  <data name="FTSNeedsRebuild" xml:space="preserve">
+    <value>Unable to find info for this item. Please rebuild your index.</value>
+  </data>
+  <data name="RestartToRestore" xml:space="preserve">
+    <value>Some files are currently in use. Restart into restore mode?</value>
+  </data>
+  <data name="ConfirmReset" xml:space="preserve">
+    <value>Confirm reset</value>
+  </data>
+  <data name="ConfirmResetConvTable" xml:space="preserve">
+    <value>Reload the translation table from server?</value>
+  </data>
+  <data name="NoAndNever" xml:space="preserve">
+    <value>No, do not ask again</value>
+  </data>
+  <data name="ConfirmReplace" xml:space="preserve">
+    <value>This item exists in database. Replace its contents?</value>
+  </data>
+  <data name="EnableAccelerScroll" xml:space="preserve">
+    <value>This device seemed to have an accelerometer. Enable Gravity scrolling? ( You can disable it via paragraph menu )</value>
+  </data>
 </root>

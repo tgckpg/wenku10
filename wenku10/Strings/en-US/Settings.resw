@@ -404,9 +404,6 @@
   <data name="Account_Reviews_Post_Sign_Default.Text" xml:space="preserve">
     <value>- Sent from Grimoire Reaper ( wenku10 )</value>
   </data>
-  <data name=" Appearance_ContentReader_FontWeight.Text" xml:space="preserve">
-    <value>Font weight</value>
-  </data>
   <data name="Others.Text" xml:space="preserve">
     <value>Others</value>
   </data>
@@ -569,5 +566,56 @@
   </data>
   <data name="Account_Remember_Warn.Text" xml:space="preserve">
     <value>The password will be stored in this device. It is recommended you does not use the same password for other accounts.</value>
+  </data>
+  <data name="Desc_Conv_Table.Text" xml:space="preserve">
+    <value>Defines content string replacements</value>
+  </data>
+  <data name="Conv_Table.Text" xml:space="preserve">
+    <value>Translation table</value>
+  </data>
+  <data name="Conv_Custom.Text" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Conv_NTW_ps2t.Text" xml:space="preserve">
+    <value>Hans → Hant Phrases</value>
+  </data>
+  <data name="Conv_NTW_ws2t.Text" xml:space="preserve">
+    <value>Hans → Hant Words</value>
+  </data>
+  <data name="Conv_Vertical.Text" xml:space="preserve">
+    <value>Vertial Text</value>
+  </data>
+  <data name="Conv_Phase.Text" xml:space="preserve">
+    <value>Phase {0}</value>
+  </data>
+  <data name="Conv_Table_Local.Text" xml:space="preserve">
+    <value>Translation table ( Local )</value>
+  </data>
+  <data name="Callibrate.Text" xml:space="preserve">
+    <value>Callibrate</value>
+  </data>
+  <data name="AccelerScroll_Brake.Text" xml:space="preserve">
+    <value>Brake</value>
+  </data>
+  <data name="AccelerScroll_Tilt.Text" xml:space="preserve">
+    <value>Tilt</value>
+  </data>
+  <data name="AccelerScroll_AMultiplier.Text" xml:space="preserve">
+    <value>Acceleration multiplier</value>
+  </data>
+  <data name="AccelerScroll_TerminalVelocity.Text" xml:space="preserve">
+    <value>Terminal velocity</value>
+  </data>
+  <data name="AccelerScroll_BrakeOffset.Text" xml:space="preserve">
+    <value>Brake offset</value>
+  </data>
+  <data name="AccelerScroll_ForceBrake.Text" xml:space="preserve">
+    <value>Force brake</value>
+  </data>
+  <data name="AccelerScroll_BrakingForce.Text" xml:space="preserve">
+    <value>Brake force</value>
+  </data>
+  <data name="AccelerScroll_TrackAutoAnchor.Text" xml:space="preserve">
+    <value>Track auto anchor</value>
   </data>
 </root>

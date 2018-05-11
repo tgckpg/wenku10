@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using wenku8.Model.ListItem;
+using GR.Model.ListItem;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -18,7 +18,7 @@ namespace wenku10.Pages.ContentReaderPane
 {
 	sealed partial class BookmarkList : Page
 	{
-		private ContentReader Reader;
+		private ContentReaderBase Reader;
 		private BookmarkListItem FlyoutTargetItem;
 
 		public BookmarkList()
@@ -26,7 +26,7 @@ namespace wenku10.Pages.ContentReaderPane
 			this.InitializeComponent();
 		}
 
-		public BookmarkList( ContentReader MainReader )
+		public BookmarkList( ContentReaderBase MainReader )
 			:this()
 		{
 			Reader = MainReader;

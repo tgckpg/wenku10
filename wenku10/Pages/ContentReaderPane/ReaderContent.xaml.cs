@@ -20,13 +20,21 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
+using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Logging;
+using Net.Astropenguin.Messaging;
 
-using wenku8.Config;
-using wenku8.Effects;
-using wenku8.Model.Book;
-using wenku8.Model.Section;
-using wenku8.Model.Text;
-using wenku8.Resources;
+using GR.Config;
+using GR.CompositeElement;
+using GR.Database.Models;
+using GR.Effects;
+using GR.GSystem;
+using GR.Model.Loaders;
+using GR.Model.Section;
+using GR.Model.Text;
+using GR.Resources;
+
+using BookItem = GR.Model.Book.BookItem;
 
 namespace wenku10.Pages.ContentReaderPane
 {
@@ -37,23 +45,34 @@ namespace wenku10.Pages.ContentReaderPane
 		public ReaderView Reader { get; private set; }
 		public bool UserStartReading = false;
 
-		private ContentReader Container;
+		private ContentReaderBase Container;
 		private BookItem CurrentBook { get { return Container.CurrentBook; } }
 		private Chapter CurrentChapter { get { return Container.CurrentChapter; } }
 		private Paragraph SelectedParagraph;
 
+		public AccelerScroll ACScroll { get; private set; }
+		DispatcherTimer ACSTimer;
+		ScrollViewer AccelerSV;
+
 		private volatile bool HoldOneMore = false;
 		private volatile int UndoingJump = 0;
+
+		private bool IsHorz = false;
 
 		private AHQueue AnchorHistory;
 
 		ScrollBar VScrollBar;
 		ScrollBar HScrollBar;
 
-		public ReaderContent( ContentReader Container, int Anchor )
+		CompatMenuFlyoutItem ToggleAcceler;
+		MenuFlyoutItem CallibrateAcceler;
+
+		public ReaderContent( ContentReaderBase Container, int Anchor )
 		{
 			this.InitializeComponent();
 			this.Container = Container;
+
+			IsHorz = ( Container is ContentReaderHorz );
 			SetTemplate( Anchor );
 		}
 
@@ -61,7 +80,9 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			try
 			{
-				AppSettings.PropertyChanged -= AppSettings_PropertyChanged;
+				ACScroll.StopReading();
+				ACSTimer?.Stop();
+
 				Reader.PropertyChanged -= ScrollToParagraph;
 				Reader.Dispose();
 				Reader = null;
@@ -70,15 +91,17 @@ namespace wenku10.Pages.ContentReaderPane
 				{
 					MasterGrid.DataContext = null;
 				} );
-
 			}
 			catch ( Exception ) { }
 		}
 
-		internal void SetTemplate( int Anchor )
+		private void SetTemplate( int Anchor )
 		{
 			if ( Reader != null )
 				Reader.PropertyChanged -= ScrollToParagraph;
+
+			Paragraph.Translator = new libtranslate.Translator();
+			InitPhaseConverter();
 
 			Reader = new ReaderView( CurrentBook, CurrentChapter );
 			Reader.ApplyCustomAnchor( Anchor );
@@ -86,21 +109,38 @@ namespace wenku10.Pages.ContentReaderPane
 			AnchorHistory = new AHQueue( 20 );
 			HCount.DataContext = AnchorHistory;
 
-			ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ Reader.Settings.IsHorizontal ? "HPanel" : "VPanel" ];
+			ContentGrid.ItemsPanel = ( ItemsPanelTemplate ) Resources[ IsHorz ? "HPanel" : "VPanel" ];
 
 			MasterGrid.DataContext = Reader;
 			Reader.PropertyChanged += ScrollToParagraph;
-			AppSettings.PropertyChanged += AppSettings_PropertyChanged;
+			GRConfig.ConfigChanged.AddHandler( this, CRConfigChanged );
+
+			SetAccelerScroll();
 		}
 
-		private void AppSettings_PropertyChanged( object sender, PropertyChangedEventArgs e )
+		private async void InitPhaseConverter()
 		{
-			if( e.PropertyName == Parameters.APPEARANCE_CONTENTREADER_SCROLLBAR ) UpdateScrollBar();
+			List<CustomConv> Phases = await Shared.BooksDb.LoadCollectionAsync( CurrentBook.Entry, x => x.ConvPhases, x => x.Phase );
+			Phases.ForEach( x => Paragraph.Translator.AddTable( x.Table ) );
+
+			if ( IsHorz )
+			{
+				TRTable Table = new TRTable();
+				Paragraph.Translator.AddTable( await Table.Get( "vertical" ) );
+			}
+		}
+
+		private void CRConfigChanged( Message Mesg )
+		{
+			if ( Mesg.TargetType == typeof( GR.Config.Scopes.Conf_ContentReader ) && Mesg.Content == "ScrollBarColor" )
+			{
+				UpdateScrollBar();
+			}
 		}
 
 		internal void Load( bool Reload = false )
 		{
-			Reader.Load( !Reload || CurrentBook.IsLocal() );
+			Reader.Load( !Reload || CurrentBook.Type == BookType.L );
 		}
 
 		internal void ContentGrid_SelectionChanged( object sender, SelectionChangedEventArgs e )
@@ -119,7 +159,8 @@ namespace wenku10.Pages.ContentReaderPane
 		internal void Grid_RightTapped( object sender, RightTappedRoutedEventArgs e )
 		{
 			Grid ParaGrid = sender as Grid;
-			if ( ParaGrid == null ) return;
+			if ( ParaGrid == null || ( ACScroll.ForceBrake && Container.OverlayActive ) )
+				return;
 
 			FlyoutBase.ShowAttachedFlyout( MainStage.Instance.IsPhone ? MasterGrid : ParaGrid );
 
@@ -128,32 +169,232 @@ namespace wenku10.Pages.ContentReaderPane
 
 		internal void ScrollMore( bool IsPage = false )
 		{
-			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = ContentGrid.Child_0<ScrollViewer>( 1 );
 			double d = 50;
-			if ( Reader.Settings.IsHorizontal )
+			if ( IsHorz )
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
+				if ( IsPage ) d = LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset + d, null, null );
 			}
 			else
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenHeight;
+				if ( IsPage ) d = LayoutSettings.ScreenHeight;
 				SV.ChangeView( null, SV.VerticalOffset + d, null );
+			}
+		}
+
+		private async void SetAccelerScroll()
+		{
+			var ACSConf = GRConfig.ContentReader.AccelerScroll;
+			ACScroll = new AccelerScroll
+			{
+				ProgramBrake = true,
+				TrackAutoAnchor = ACSConf.TrackAutoAnchor,
+				Brake = ACSConf.Brake,
+				BrakeOffset = ACSConf.BrakeOffset,
+				BrakingForce = ACSConf.BrakingForce,
+				AccelerMultiplier = ACSConf.AccelerMultiplier,
+				TerminalVelocity = ACSConf.TerminalVelocity
+			};
+
+			ACScroll.UpdateOrientation( App.ViewControl.DispOrientation );
+
+			StringResources stx = StringResources.Load( "Settings", "Message" );
+			ToggleAcceler = UIAliases.CreateMenuFlyoutItem( stx.Text( "Enabled" ), new SymbolIcon( Symbol.Accept ) );
+			ToggleAcceler.Click += ( s, e ) => ToggleAccelerScroll();
+
+			CallibrateAcceler = new MenuFlyoutItem() { Text = stx.Text( "Callibrate" ) };
+			CallibrateAcceler.Click += CallibrateAcceler_Click;
+
+			AccelerMenu.Items.Add( ToggleAcceler );
+			AccelerMenu.Items.Add( CallibrateAcceler );
+
+			if ( ACScroll.Available && !ACSConf.Asked )
+			{
+				bool EnableAccel = false;
+
+				await Popups.ShowDialog( UIAliases.CreateDialog(
+					stx.Str( "EnableAccelerScroll", "Message" )
+					, () => EnableAccel = true
+					, stx.Str( "Yes", "Message" ), stx.Str( "No", "Message" )
+				) );
+
+				ACSConf.Asked = true;
+				ACSConf.Enable = EnableAccel;
+			}
+
+			ToggleAccelerScroll( ACSConf.Enable );
+			UpdateAccelerDelta();
+		}
+
+		internal void UpdateAccelerDelta()
+		{
+			float a = 0, v = 0;
+
+			if ( ACSTimer == null )
+			{
+				Action<float> HV_ChangeView;
+				if( IsHorz )
+				{
+					HV_ChangeView = _v =>
+					{
+						float d = ( float ) AccelerSV.HorizontalOffset;
+						AccelerSV.ChangeView( d - _v, null, null, true );
+					};
+				}
+				else
+				{
+					HV_ChangeView = _v =>
+					{
+						float d = ( float ) AccelerSV.VerticalOffset;
+						AccelerSV.ChangeView( null, d - _v, null, true );
+					};
+				}
+
+				ACSTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds( 20 ) };
+				ACSTimer.Tick += ( s, e ) =>
+				{
+					if ( a == 0 )
+					{
+						// Apply the brake when stopped
+						Easings.ParamTween( ref v, 0, 1 - ACScroll.BrakingForce, ACScroll.BrakingForce );
+					}
+					else
+					{
+						v += ( ACScroll.AccelerMultiplier * a );
+						v = v.Clamp( -ACScroll.TerminalVelocity, ACScroll.TerminalVelocity );
+					}
+
+					if ( 0.0001 < Math.Abs( v ) )
+					{
+						HV_ChangeView( v );
+					}
+					else
+					{
+						ACSTimer.Stop();
+					}
+				};
+			}
+
+			void UpdateAcc( float _a )
+			{
+				if ( ACScroll.ForceBrake || ACScroll.ProgramBrake )
+				{
+					a = 0;
+				}
+				else
+				{
+					a = _a;
+					var j = Dispatcher.RunAsync( CoreDispatcherPriority.High, () =>
+					{
+						if ( !ACSTimer.IsEnabled )
+							ACSTimer.Start();
+
+						if( ACScroll.TrackAutoAnchor )
+							AutoSelectParagraph();
+					} );
+				}
+			}
+
+			// Kickstarting machanism
+			ACScroll.Delta = _a =>
+			{
+				if ( AccelerSV != null )
+				{
+					ACScroll.Delta = UpdateAcc;
+					UpdateAcc( _a );
+				}
+			};
+		}
+
+		FrameworkElement VisibleParagraph;
+		FrameworkElement VisibleContext;
+		ItemsStackPanel ParaVisualizer;
+
+		private void AutoSelectParagraph()
+		{
+			if ( ParaVisualizer == null )
+			{
+				ParaVisualizer = ContentGrid.ChildAt<ItemsStackPanel>( 0, 0, 0, 0, 0, 0, 1 );
+				if ( ParaVisualizer == null )
+					return;
+			}
+
+			Rect ScreenBounds = IsHorz ? new Rect( 0, 0, ActualWidth * 0.8, ActualHeight ) : new Rect( 0, 0, ActualWidth, ActualHeight * 0.8 );
+
+			if ( VisibleParagraph != null && VisibleContext?.DataContext?.Equals( SelectedParagraph ) == true )
+			{
+				if ( VisualTreeHelper.FindElementsInHostCoordinates( ScreenBounds, ParaVisualizer ).Contains( VisibleParagraph ) )
+				{
+					return;
+				}
+			}
+
+			int l = ParaVisualizer.Children.Count();
+			for ( int i = 0; i < l; i++ )
+			{
+				FrameworkElement Item = ( FrameworkElement ) ParaVisualizer.Children[ i ];
+				if ( VisualTreeHelper.FindElementsInHostCoordinates( ScreenBounds, ParaVisualizer ).Contains( Item ) )
+				{
+					FrameworkElement _ContentPresenter = Item.ChildAt<FrameworkElement>( 0, 0, 1 );
+					if ( _ContentPresenter?.DataContext is Paragraph P )
+					{
+						VisibleParagraph = Item;
+						VisibleContext = _ContentPresenter;
+						SelectedParagraph = P;
+						ContentGrid.SelectedItem = P;
+						Reader.SelectAndAnchor( P );
+						break;
+					}
+				}
+			}
+		}
+
+		private void CallibrateAcceler_Click( object sender, RoutedEventArgs e )
+		{
+			Container.OverNavigate( typeof( Settings.CallibrateAcceler ), ACScroll );
+		}
+
+		private void ToggleAccelerScroll( bool? State = null )
+		{
+			bool RState = false;
+			if ( State == null )
+			{
+				// Start toggling
+				RState = ToggleAcceler.Icon2.Opacity == 0;
+				GRConfig.ContentReader.AccelerScroll.Enable = RState;
+			}
+			else
+			{
+				RState = ( bool ) State;
+			}
+
+			if ( RState )
+			{
+				ToggleAcceler.Icon2.Opacity = 1;
+				CallibrateAcceler.IsEnabled = true;
+				ACScroll.StartReading();
+			}
+			else
+			{
+				ToggleAcceler.Icon2.Opacity = 0;
+				CallibrateAcceler.IsEnabled = false;
+				ACScroll.StopReading();
 			}
 		}
 
 		internal void ScrollLess( bool IsPage = false )
 		{
-			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = ContentGrid.Child_0<ScrollViewer>( 1 );
 			double d = 50;
-			if ( Reader.Settings.IsHorizontal )
+			if ( IsHorz )
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenWidth;
+				if ( IsPage ) d = LayoutSettings.ScreenWidth;
 				SV.ChangeView( SV.HorizontalOffset - d, null, null );
 			}
 			else
 			{
-				if ( IsPage ) d = global::wenku8.Resources.LayoutSettings.ScreenHeight;
+				if ( IsPage ) d = LayoutSettings.ScreenHeight;
 				SV.ChangeView( null, SV.VerticalOffset - d, null );
 			}
 		}
@@ -196,6 +437,8 @@ namespace wenku10.Pages.ContentReaderPane
 
 			ContentGrid.IsSynchronizedWithCurrentItem = false;
 
+			AccelerSV = ContentGrid.Child_0<ScrollViewer>( 1 );
+
 			// Reader may not be available as ContentGrid.OnLoad is faster then SetTemplate
 			if ( !( Reader == null || Reader.SelectedData == null ) )
 				ContentGrid.ScrollIntoView( Reader.SelectedData, ScrollIntoViewAlignment.Leading );
@@ -213,12 +456,12 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			VScrollBar.Foreground
 			   = HScrollBar.Foreground
-			   = new SolidColorBrush( Properties.APPEARANCE_CONTENTREADER_SCROLLBAR );
+			   = new SolidColorBrush( GRConfig.ContentReader.ScrollBarColor );
 		}
 
 		internal void ToggleInertia()
 		{
-			ScrollViewer SV = ContentGrid.ChildAt<ScrollViewer>( 1 );
+			ScrollViewer SV = ContentGrid.Child_0<ScrollViewer>( 1 );
 			if ( SV != null )
 			{
 				SV.HorizontalSnapPointsType = SnapPointsType.None;
@@ -243,6 +486,8 @@ namespace wenku10.Pages.ContentReaderPane
 					Shared.LoadMessage( "WaitingForUI" );
 
 					ShowUndoButton();
+
+					ACScroll.ProgramBrake = false;
 					var NOP = ContentGrid.Dispatcher.RunIdleAsync( new IdleDispatchedHandler( Container.RenderComplete ) );
 					break;
 			}
@@ -253,10 +498,11 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( SelectedParagraph == null ) return;
 			FlyoutBase.ShowAttachedFlyout( ContentGrid );
 
-			TextBlock tb = new TextBlock();
-			tb.TextWrapping = TextWrapping.Wrap;
-			tb.Text = SelectedParagraph.Text;
-			ContentFlyout.Content = tb;
+			ContentFlyout.Content = new TextBlock()
+			{
+				TextWrapping = TextWrapping.Wrap,
+				Text = SelectedParagraph.Text
+			};
 		}
 
 		internal void ContextCopyClicked( object sender, RoutedEventArgs e )
@@ -280,7 +526,10 @@ namespace wenku10.Pages.ContentReaderPane
 		{
 			if ( P == null ) return;
 			Dialogs.EBDictSearch DictDialog = new Dialogs.EBDictSearch( P );
+
+			ACScroll.ProgramBrake = true;
 			await Popups.ShowDialog( DictDialog );
+			ACScroll.ProgramBrake = false;
 		}
 
 		public async void SetCustomAnchor( Paragraph P, string BookmarkName = null )
@@ -288,10 +537,18 @@ namespace wenku10.Pages.ContentReaderPane
 			Dialogs.NewBookmarkInput BookmarkIn = new Dialogs.NewBookmarkInput( P );
 			if ( BookmarkName != null ) BookmarkIn.SetName( BookmarkName );
 
+			ACScroll.ProgramBrake = true;
 			await Popups.ShowDialog( BookmarkIn );
+			ACScroll.ProgramBrake = false;
+
 			if ( BookmarkIn.Canceled ) return;
 
 			Reader.SetCustomAnchor( BookmarkIn.AnchorName, P );
+		}
+
+		private void ShowConvPhases( object sender, RoutedEventArgs e )
+		{
+			Container.OverNavigate( typeof( Settings.Advanced.LocalTableEditor ), CurrentBook );
 		}
 
 		private void MasterGrid_Tapped( object sender, TappedRoutedEventArgs e )
@@ -301,17 +558,17 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( Reader.UsePageClick )
 			{
 				Point P = e.GetPosition( MasterGrid );
-				if ( Reader.Settings.IsHorizontal )
+				if ( IsHorz )
 				{
-					double HW = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenWidth;
-					if ( Reader.Settings.IsRightToLeft )
+					double HW = 0.5 * LayoutSettings.ScreenWidth;
+					if ( GRConfig.ContentReader.IsRightToLeft )
 						if ( P.X < HW ) ScrollMore( true ); else ScrollLess( true );
 					else
 						if ( HW < P.X ) ScrollMore( true ); else ScrollLess( true );
 				}
 				else
 				{
-					double HS = 0.5 * global::wenku8.Resources.LayoutSettings.ScreenHeight;
+					double HS = 0.5 * LayoutSettings.ScreenHeight;
 					if ( P.Y < HS ) ScrollLess( true ); else ScrollMore( true );
 				}
 			}
@@ -325,14 +582,9 @@ namespace wenku10.Pages.ContentReaderPane
 			RecordUndo( ContentGrid.SelectedIndex );
 			Reader.SelectAndAnchor( SelectedParagraph = P );
 
-			if( P is IllusPara )
+			if ( P is IllusPara S && !S.EmbedIllus )
 			{
-				IllusPara S = ( IllusPara ) P;
-
-				if ( !S.EmbedIllus )
-				{
-					Container.OverNavigate( typeof( ImageView ), S );
-				}
+				Container.OverNavigate( typeof( ImageView ), S );
 			}
 		}
 
@@ -430,43 +682,53 @@ namespace wenku10.Pages.ContentReaderPane
 			if ( 100 < ZoomTrigger )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReader.ManiState.DOWN );
+				CRSlide( ContentReaderBase.ManiState.DOWN );
 			}
 			else if ( ZoomTrigger < -100 )
 			{
 				ZoomTrigger = 0;
-				CRSlide( ContentReader.ManiState.UP );
+				CRSlide( ContentReaderBase.ManiState.UP );
 			}
 			else if ( ZoomTrigger == 0 )
 			{
-				CRSlide( ContentReader.ManiState.NORMAL );
+				CRSlide( ContentReaderBase.ManiState.NORMAL );
 			}
 		}
 
-		private void CRSlide( ContentReader.ManiState State )
+		private void CRSlide( ContentReaderBase.ManiState State )
 		{
 			if ( State == Container.CurrManiState ) return;
 
 			switch ( State )
 			{
-				case ContentReader.ManiState.NORMAL:
+				case ContentReaderBase.ManiState.NORMAL:
 					Container.ReaderSlideBack();
 					break;
-				case ContentReader.ManiState.UP:
-					if ( Container.CurrManiState == ContentReader.ManiState.DOWN )
-						goto case ContentReader.ManiState.NORMAL;
+				case ContentReaderBase.ManiState.UP:
+					if ( Container.CurrManiState == ContentReaderBase.ManiState.DOWN )
+						goto case ContentReaderBase.ManiState.NORMAL;
 
 					Container.ReaderSlideUp();
 					break;
-				case ContentReader.ManiState.DOWN:
-					if ( Container.CurrManiState == ContentReader.ManiState.UP )
-						goto case ContentReader.ManiState.NORMAL;
+				case ContentReaderBase.ManiState.DOWN:
+					if ( Container.CurrManiState == ContentReaderBase.ManiState.UP )
+						goto case ContentReaderBase.ManiState.NORMAL;
 
 					Container.ReaderSlideDown();
 					break;
 			}
 
 			Container.CurrManiState = State;
+		}
+
+		private void ContentGrid_Holding( object sender, HoldingRoutedEventArgs e )
+		{
+			if ( AccelerScroll.StateActive && !ACScroll.ForceBrake )
+			{
+				ACScroll.ForceBrake = true;
+				Container.OverNavigate( typeof( Settings.CallibrateAcceler ), ACScroll );
+				Logger.Log( ID, "Force brake engaged", LogType.DEBUG );
+			}
 		}
 
 	}
