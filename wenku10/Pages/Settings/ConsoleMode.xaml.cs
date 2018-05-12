@@ -63,7 +63,7 @@ namespace wenku10.Pages.Settings
 
 		private bool UserUnderstandTheRisk( string cmd )
 		{
-			if( cmd == "continue" )
+			if( cmd.ToLower() == "continue" )
 			{
 				UserConfirmed = true;
 				return true;
@@ -251,9 +251,9 @@ namespace wenku10.Pages.Settings
 			await GR.GSystem.Utils.RestartOrExit();
 		}
 
-		private async void QuitApp( IdleDispatchedHandlerArgs e )
+		private void QuitApp( IdleDispatchedHandlerArgs e )
 		{
-			await GR.GSystem.Utils.RestartOrExit();
+			Application.Current.Exit();
 		}
 
 		private void DisplayCommand( string Command ) => AddElement( CommandTextBlock( PS1.Text + CMode.Text + Command ) );
@@ -279,6 +279,7 @@ namespace wenku10.Pages.Settings
 			FontFamily = CommandInput.FontFamily,
 			Foreground = CommandInput.Foreground,
 			FontSize = CommandInput.FontSize,
+			TextWrapping = CommandInput.TextWrapping,
 			IsTextSelectionEnabled = true,
 			Text = Text
 		};
