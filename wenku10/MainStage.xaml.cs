@@ -45,7 +45,6 @@ namespace wenku10
 
 			if ( Properties.CONSOLE_MODE )
 			{
-				Properties.CONSOLE_MODE = false;
 				RootFrame.Navigate( typeof( Pages.Settings.ConsoleMode ) );
 				return;
 			}

@@ -1,3 +1,4 @@
 ﻿Avaible commands:
 	Database
 	File
+	Reset

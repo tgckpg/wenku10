@@ -109,8 +109,10 @@
     <Content Include="Strings\man\help.txt" />
     <Content Include="Strings\man\help\database.txt" />
     <Content Include="Strings\man\help\file.txt" />
+    <Content Include="Strings\man\help\reset.txt" />
     <Content Include="Strings\man\usage-warning.txt" />
     <Content Include="Strings\man\show.txt" />
+    <Content Include="Strings\man\welcome-message.txt" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Assets\circle.dds" />
     <Content Include="Assets\NewContent155x155-200.png" />
@@ -251,6 +253,12 @@
       <DependentUpon>CallibrateAcceler.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\ConsoleMode.xaml.cs">
+      <DependentUpon>ConsoleMode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\CModeFileCommand.cs">
+      <DependentUpon>ConsoleMode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Settings\CModeDatabaseCommand.cs">
       <DependentUpon>ConsoleMode.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TOCPageBase.cs" />

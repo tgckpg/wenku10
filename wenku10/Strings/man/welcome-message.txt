@@ -1,0 +1,1 @@
+﻿Welcome to the Console. Type "help" to see general help, "show" to list available commands.

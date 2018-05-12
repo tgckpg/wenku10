@@ -1,0 +1,4 @@
+﻿Reset, Clear
+
+DESCRIPTION
+	Clear the console

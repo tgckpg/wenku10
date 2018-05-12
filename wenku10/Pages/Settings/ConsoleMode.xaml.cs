@@ -15,15 +15,14 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using GR.Database.Contexts;
-using GR.Database.DirectSQL;
-
 namespace wenku10.Pages.Settings
 {
 	public sealed partial class ConsoleMode : Page
 	{
-		private string OpenedDb;
 		private bool UserConfirmed;
+		private UIElement CurrentElem;
+
+		private Action<bool> PendingConfirm;
 
 		public ConsoleMode()
 		{
@@ -50,12 +49,13 @@ namespace wenku10.Pages.Settings
 					{
 						if ( UserUnderstandTheRisk( Cmd ) )
 						{
-							ResponseCommand( "User confirmed. Enter \"help\" to see help, \"show\" to list available commands." );
+							ResponseHelp( "welcome-message" );
 						}
 						return;
 					}
 
 					DisplayCommand( Cmd );
+					if ( ConfirmCommand( Cmd ) || Cmd[ 0 ] == '#' ) return;
 					ProcessCommand( Cmd );
 				}
 			}
@@ -69,10 +69,22 @@ namespace wenku10.Pages.Settings
 				return true;
 			}
 
+			GR.Config.Properties.CONSOLE_MODE = false;
+
 			ResponseCommand( "User did not confirmed the risks. Quitting ..." );
 			CommandInput.IsEnabled = false;
 			DelayedQuit();
 			return false;
+		}
+
+		private bool ConfirmCommand( string Cmd )
+		{
+			if ( PendingConfirm == null )
+				return false;
+
+			PendingConfirm( Cmd.Trim().ToLower() == "y" );
+			PendingConfirm = null;
+			return true;
 		}
 
 		private void ProcessCommand( string Line )
@@ -85,20 +97,28 @@ namespace wenku10.Pages.Settings
 
 			string iCommand = Line.ToLower();
 
-			string[] pCommand = iCommand.Split( new char[] { ' ' }, 2 );
+			NextSeg( ref iCommand, out string Cmd );
 
-			switch ( pCommand[ 0 ] )
+			switch ( Cmd )
 			{
-				case "help":
-					if ( pCommand.Length == 2 ) HelpCommand( pCommand[ 1 ] );
-					else ResponseHelp( "help" );
-					break;
-				case "show":
-					ResponseHelp( "show" );
+				case "help": HelpCommand( Line ); break;
+				case "show": ResponseHelp( "show" ); break;
+				case "database": DatabaseCommand( Line ); break;
+
+				case "ls": case "cd": case "pwd":
+				case "cat": case "wc":
+				case "rm": case "touch":
+					FileCommand( Line );
 					break;
 
-				case "database":
-					DatabaseCommand( Line );
+				case "file":
+					ResponseCommand( "File is a group of commands. Enter \"help file\" to see the available commands" );
+					break;
+
+				case "clear":
+				case "reset":
+					CurrentElem = null;
+					OutputPanel.Children.Clear();
 					break;
 
 				case "exit":
@@ -113,134 +133,24 @@ namespace wenku10.Pages.Settings
 			}
 		}
 
-		private void DatabaseCommand( string Command )
-		{
-			string[] Commands = Command.Split( ' ' );
-			int len = Commands.Length;
-			if ( len < 2 )
-			{
-				ResponseCommand( "Database: No action" );
-				return;
-			}
-
-			string Action = Commands[ 1 ].Trim().ToLower();
-
-			switch ( Action )
-			{
-				case "open":
-					if ( len < 3 )
-					{
-						ResponseCommand( "Database: Please specify a database" );
-						break;
-					}
-
-					string Db = Commands[ 2 ].Trim().ToLower();
-
-					switch ( Db )
-					{
-						case "books": OpenedDb = "Books"; goto OpenDb;
-						case "caches": OpenedDb = "Caches"; goto OpenDb;
-						case "ftsdata": OpenedDb = "FTSData"; goto OpenDb;
-						case "settings": OpenedDb = "Settings"; goto OpenDb;
-						default:
-							ResponseCommand( $"Database: \"{Db}\" does not exists" );
-							break;
-					}
-
-					break;
-				case "show":
-					ResponseCommand( "Aviable databases: Books, Caches, FTSData, Settings" );
-					break;
-				default:
-					ResponseCommand( $"No such action: {Action}" );
-					break;
-			}
-
-			return;
-
-			OpenDb:
-			ResponseCommand( $"Entering database command console: {OpenedDb}" );
-			PS1.Text = $"Db[{OpenedDb}]";
-		}
-
-		private void ExecQuery( string Command )
-		{
-			ResultDisplayData ResultDD = null;
-			string Mesg = null;
-
-			switch ( Command.Trim() )
-			{
-				case "quit":
-				case "q":
-					ResponseCommand( "Quit." );
-					OpenedDb = null;
-					PS1.Text = "";
-					return;
-			}
-
-			switch ( OpenedDb )
-			{
-				case "Books":
-					using ( var Context = new BooksContext() )
-						(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
-					break;
-
-				case "Caches":
-					using ( var Context = new ZCacheContext() )
-						(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
-					break;
-
-				case "Settings":
-					using ( var Context = new SettingsContext() )
-						(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
-					break;
-
-				default:
-					ResponseCommand( $"\"{OpenedDb}\" is currently unavailable" );
-					break;
-			}
-
-			if ( ResultDD != null )
-			{
-				if ( ResultDD.HasData )
-				{
-					Border B = new Border
-					{
-						Margin = new Thickness( 5 ),
-						Background = new SolidColorBrush( GR.Resources.LayoutSettings.MajorBackgroundColor ),
-						MinHeight = 400,
-						Height = GR.Resources.LayoutSettings.ScreenHeight * 0.7
-					};
-
-					Explorer.GRTableView TableView = new Explorer.GRTableView();
-					TableView.ViewMode = Explorer.ViewMode.Table;
-					var j = TableView.View( new ResultViewSource( ResultDD ) );
-
-					B.Child = TableView;
-					AddElement( B );
-				}
-				else
-				{
-					ResponseCommand( "(Empty set)" );
-				}
-			}
-
-			if( !string.IsNullOrEmpty( Mesg ) )
-			{
-				ResponseCommand( Mesg );
-			}
-		}
-
 		private void HelpCommand( string Command )
 		{
-			switch ( Command )
+			Command = Command.ToLower();
+			NextSeg( ref Command, out string Section );
+			NextSeg( ref Command, out Section );
+
+			switch ( Section )
 			{
+				case "":
+					ResponseHelp( "help" );
+					break;
 				case "file":
+				case "reset":
 				case "database":
-					ResponseHelp( "help/" + Command );
+					ResponseHelp( "help/" + Section );
 					break;
 				default:
-					ResponseCommand( "No help for such command: " + Command );
+					ResponseCommand( "help: Section not found: " + Section );
 					break;
 			}
 		}
@@ -256,12 +166,23 @@ namespace wenku10.Pages.Settings
 			Application.Current.Exit();
 		}
 
-		private void DisplayCommand( string Command ) => AddElement( CommandTextBlock( PS1.Text + CMode.Text + Command ) );
-		private void ResponseCommand( string Command, string End = "\n" ) => AddElement( CommandTextBlock( Command + End ) );
+		private void DisplayCommand( string Command ) => ResponseCommand( PS1.Text + CMode.Text + Command, "" );
+		private void ResponseCommand( string Command, string End = "\n" )
+		{
+			if ( CurrentElem is TextBlock tb )
+			{
+				tb.Text += "\n" + Command + End;
+			}
+			else
+			{
+				AddElement( CommandTextBlock( Command + End ) );
+			}
+		}
 
 		private void AddElement( UIElement Elem )
 		{
 			OutputPanel.Children.Add( Elem );
+			CurrentElem = Elem;
 		}
 
 		private void OutputPanel_SizeChanged( object sender, SizeChangedEventArgs e )
@@ -272,6 +193,21 @@ namespace wenku10.Pages.Settings
 		private void ResponseHelp( string ManFile )
 		{
 			ResponseCommand( File.ReadAllText( $"Strings/man/{ManFile}.txt" ) );
+		}
+
+		private bool NextSeg( ref string s, out string seg )
+		{
+			int n = s.IndexOf( ' ' );
+			if( n == -1 )
+			{
+				seg = s;
+				s = "";
+				return false;
+			}
+
+			seg = s.Substring( 0, n );
+			s = s.Substring( n + 1 );
+			return true;
 		}
 
 		private TextBlock CommandTextBlock( string Text ) => new TextBlock()

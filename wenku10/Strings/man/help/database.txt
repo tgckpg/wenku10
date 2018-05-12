@@ -4,6 +4,6 @@ DESCRIPTION
 	Manipulate application database
 
 OPTIONS
-	Available Actions
-		Open           Open a database, this will enter SQL command console
-		Show           List available databases
+	Open/Use       Open a database, this will enter the SQL command console
+	Show           List available databases
+	Migrate        Create and migrate all application databases
