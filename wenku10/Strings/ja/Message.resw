@@ -247,7 +247,7 @@
     <value>このアイテムの情報を見つかりません。 索引を再構築してください。</value>
   </data>
   <data name="RestartToRestore" xml:space="preserve">
-    <value>一部のファイルは現在使用中です。 復元モードに再起動しますか？</value>
+    <value>一部のファイルは現在使用中です。復元モードに再起動しますか？</value>
   </data>
   <data name="ConfirmReset" xml:space="preserve">
     <value>リセットしますか？</value>
@@ -263,5 +263,8 @@
   </data>
   <data name="EnableAccelerScroll" xml:space="preserve">
     <value>このデバイスには加速度計が搭載されていたようです。 重力スクロールを有効にしますか？（段落メニューで無効にすることができます）</value>
+  </data>
+  <data name="RestartToConsole" xml:space="preserve">
+    <value>一部のファイルは現在使用中です。コンソールモードに再起動しますか？</value>
   </data>
 </root>

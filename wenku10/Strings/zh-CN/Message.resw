@@ -247,7 +247,7 @@
     <value>无法找到项目信息。 请重建索引。</value>
   </data>
   <data name="RestartToRestore" xml:space="preserve">
-    <value>一些文件当前正在使用中。 重新启动到恢复模式？</value>
+    <value>一些文件当前正在使用中。重新启动到恢复模式？</value>
   </data>
   <data name="ConfirmReset" xml:space="preserve">
     <value>确认重置</value>
@@ -263,5 +263,8 @@
   </data>
   <data name="EnableAccelerScroll" xml:space="preserve">
     <value>这个设备似乎有一个加速计。 要启用重力滚动吗？（您可以通过段落菜单禁用它）</value>
+  </data>
+  <data name="RestartToConsole" xml:space="preserve">
+    <value>一些文件当前正在使用中。重新启动到主控台模式？</value>
   </data>
 </root>

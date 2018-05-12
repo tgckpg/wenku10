@@ -1,0 +1,12 @@
+﻿File [ACTION] [TARGET]
+
+DESCRIPTION
+	This command operates under the Isolated Storage of this app.
+
+Available Actions
+	Print           Open and print the contents of a file
+	Edit            Edit a file
+	Find            Find a file
+	Delete          Delete a file
+	Export          Export TARGET to somewhere
+	Import          Import data to TARGET

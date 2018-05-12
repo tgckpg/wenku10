@@ -247,7 +247,7 @@
     <value>無法找到項目信息。 請重建索引。</value>
   </data>
   <data name="RestartToRestore" xml:space="preserve">
-    <value>某些文件正在使用中。 重新啟動到還原模式？</value>
+    <value>某些文件正在使用中。重新啟動到還原模式？</value>
   </data>
   <data name="ConfirmReset" xml:space="preserve">
     <value>確認重設</value>
@@ -263,5 +263,8 @@
   </data>
   <data name="EnableAccelerScroll" xml:space="preserve">
     <value>這個裝置似乎有一個加速計。 要啟用引力捲動嗎？（您可以透過段落選單停用它）</value>
+  </data>
+  <data name="RestartToConsole" xml:space="preserve">
+    <value>某些文件正在使用中。重新啟動到控制台模式？</value>
   </data>
 </root>

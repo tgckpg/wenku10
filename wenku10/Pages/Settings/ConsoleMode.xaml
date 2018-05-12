@@ -1,0 +1,68 @@
+﻿<Page
+    x:Class="wenku10.Pages.Settings.ConsoleMode"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:wenku10.Pages.Settings"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Black">
+    <Page.Resources>
+        <Style x:Key="CmdInputStyle" TargetType="TextBox">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates" />
+                                <VisualStateGroup x:Name="ButtonStates" />
+                            </VisualStateManager.VisualStateGroups>
+                            <ScrollViewer x:Name="ContentElement" AutomationProperties.AccessibilityView="Raw" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsTabStop="False" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" Margin="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}" Grid.Row="1" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" ZoomMode="Disabled"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer x:Name="OutputSV" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom">
+            <StackPanel x:Name="OutputPanel" SizeChanged="OutputPanel_SizeChanged" />
+        </ScrollViewer>
+
+        <TextBlock Grid.Column="0" Grid.Row="2"
+                   Margin="0,5,0,0"
+                   Foreground="White"
+                   FontFamily="Consolas">
+            <Run x:Name="PS1" /><Run x:Name="CMode" Text=">&#160;" />
+        </TextBlock>
+
+        <TextBox Style="{StaticResource CmdInputStyle}"
+                 Grid.Row="2" Grid.Column="1"
+                 Padding="0,6,0,0" HorizontalAlignment="Stretch"
+                 Background="Transparent"
+                 BorderThickness="0"
+                 Foreground="White"
+                 FontFamily="Consolas"
+                 KeyDown="CommandInput_KeyDown"
+                 x:Name="CommandInput" />
+    </Grid>
+</Page>

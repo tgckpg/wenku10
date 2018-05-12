@@ -1,0 +1,9 @@
+﻿Database [ACTION] [TARGET]
+
+DESCRIPTION
+	Manipulate application database
+
+OPTIONS
+	Available Actions
+		Open           Open a database, this will enter SQL command console
+		Show           List available databases

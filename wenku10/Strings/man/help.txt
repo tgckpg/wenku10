@@ -1,0 +1,4 @@
+﻿help             Show this message
+help [command]   Show the usage of a command
+show             Show all commands
+exit             Close this application

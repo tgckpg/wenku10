@@ -1,0 +1,3 @@
+﻿WARNING! You have entered the console mode. Changes made from here could make this application crashes, unable to start or some features unusable.
+
+Enter "continue" to continue to the console.

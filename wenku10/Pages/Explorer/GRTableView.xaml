@@ -372,7 +372,7 @@
                         Click="SortByColumn_Click" Tag="0" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S00 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C00, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F00, Mode=OneWay}" Text="{x:Bind C00, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="1" Visibility="{x:Bind H01, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -381,7 +381,7 @@
                         Click="SortByColumn_Click" Tag="1" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S01 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C01, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F01, Mode=OneWay}" Text="{x:Bind C01, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="2" Visibility="{x:Bind H02, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -390,7 +390,7 @@
                         Click="SortByColumn_Click" Tag="2" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S02 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C02, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F02, Mode=OneWay}" Text="{x:Bind C02, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="3" Visibility="{x:Bind H03, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -399,7 +399,7 @@
                         Click="SortByColumn_Click" Tag="3" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S03 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C03, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F03, Mode=OneWay}" Text="{x:Bind C03, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="4" Visibility="{x:Bind H04, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -408,7 +408,7 @@
                         Click="SortByColumn_Click" Tag="4" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S04 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C04, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F04, Mode=OneWay}" Text="{x:Bind C04, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="5" Visibility="{x:Bind H05, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -417,7 +417,7 @@
                         Click="SortByColumn_Click" Tag="5" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S05 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C05, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F05, Mode=OneWay}" Text="{x:Bind C05, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="6" Visibility="{x:Bind H06, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -426,7 +426,7 @@
                         Click="SortByColumn_Click" Tag="6" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S06 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C06, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F06, Mode=OneWay}" Text="{x:Bind C06, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="7" Visibility="{x:Bind H07, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -435,7 +435,7 @@
                         Click="SortByColumn_Click" Tag="7" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S07 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C07, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F07, Mode=OneWay}" Text="{x:Bind C07, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="8" Visibility="{x:Bind H08, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -444,7 +444,7 @@
                         Click="SortByColumn_Click" Tag="8" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S08 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C08, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F08, Mode=OneWay}" Text="{x:Bind C08, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Button Grid.Row="0" Grid.Column="9" Visibility="{x:Bind H09, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"
@@ -453,7 +453,7 @@
                         Click="SortByColumn_Click" Tag="9" Style="{StaticResource ColumnButton}">
                     <Grid>
                         <FontIcon FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Center" Glyph="{x:Bind grt:GRColumn.OrderGlyph( S09 ), Mode=OneWay}"/>
-                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" Text="{x:Bind C09, Mode=OneWay}" />
+                        <TextBlock Margin="10,5" TextTrimming="CharacterEllipsis" FontFamily="{x:Bind F09, Mode=OneWay}" Text="{x:Bind C09, Mode=OneWay}" />
                     </Grid>
                 </Button>
                 <Rectangle Grid.Row="0" Grid.Column="0" Visibility="{x:Bind H00, Mode=OneWay, Converter={StaticResource ColumnVisConverter}}"

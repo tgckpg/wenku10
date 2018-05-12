@@ -43,6 +43,13 @@ namespace wenku10
 				return;
 			}
 
+			if ( Properties.CONSOLE_MODE )
+			{
+				Properties.CONSOLE_MODE = false;
+				RootFrame.Navigate( typeof( Pages.Settings.ConsoleMode ) );
+				return;
+			}
+
 			if ( new GR.MigrationOps.MigrationManager().ShouldMigrate )
 			{
 				RootFrame.Navigate( typeof( Pages.Settings.BackupAndRestore ) );

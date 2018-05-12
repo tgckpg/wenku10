@@ -90,6 +90,9 @@ namespace GR.GSystem
 			SecondaryIconButton BackupBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.UpdateRestore, stx.Text( "BackupAndRestore", "AppBar" ) );
 			BackupBtn.Click += BackupBtn_Click;
 
+			SecondaryIconButton ConsoleBtn = UIAliases.CreateSecondaryIconBtn( SegoeMDL2.CommandPrompt, stx.Text( "ConsoleMode", "AppBar" ) );
+			ConsoleBtn.Click += ConsoleBtn_Click;
+
 			AboutBtn = new SecretSwipeButton( SegoeMDL2.Info )
 			{
 				Label = stx.Text( "About", "AppBar" ),
@@ -101,6 +104,7 @@ namespace GR.GSystem
 			AboutBtn.CanSwipe = true;
 			AboutBtn.OnIndexUpdate += ( s, i ) => Logger.Log( AboutBtn.Label2, i.ToString(), LogType.DEBUG );
 
+			Btns.Add( ConsoleBtn );
 			Btns.Add( BackupBtn );
 			Btns.Add( new AppBarSeparator() );
 			Btns.Add( SettingsBtn );
@@ -201,18 +205,37 @@ namespace GR.GSystem
 		{
 			StringResources stx = StringResources.Load( "Message" );
 
-			bool ConfirmRestore = false;
+			bool ConfirmRestart = false;
 
 			await Popups.ShowDialog( UIAliases.CreateDialog(
 				stx.Str( "RestartToRestore" )
-				, () => ConfirmRestore = true
+				, () => ConfirmRestart = true
 				, stx.Str( "Yes" ), stx.Str( "No" ) )
 			);
 
-			if( ConfirmRestore )
+			if( ConfirmRestart )
 			{
 				Config.Properties.RESTORE_MODE = true;
-				Windows.ApplicationModel.Core.CoreApplication.Exit();
+				await Utils.RestartOrExit();
+			}
+		}
+
+		private async void ConsoleBtn_Click( object sender, RoutedEventArgs e )
+		{
+			StringResources stx = StringResources.Load( "Message" );
+
+			bool ConfirmRestart = false;
+
+			await Popups.ShowDialog( UIAliases.CreateDialog(
+				stx.Str( "RestartToConsole" )
+				, () => ConfirmRestart = true
+				, stx.Str( "Yes" ), stx.Str( "No" ) )
+			);
+
+			if ( ConfirmRestart )
+			{
+				Config.Properties.CONSOLE_MODE = true;
+				await Utils.RestartOrExit();
 			}
 		}
 

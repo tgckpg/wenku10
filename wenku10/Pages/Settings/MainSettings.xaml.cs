@@ -314,14 +314,14 @@ namespace wenku10.Pages.Settings
 			public Action<object> ItemAction { get; set; }
 		}
 
-		private void Button_Tapped( object sender, TappedRoutedEventArgs e )
+		private async void Button_Tapped( object sender, TappedRoutedEventArgs e )
 		{
-			Windows.ApplicationModel.Core.CoreApplication.Exit();
+			await GR.GSystem.Utils.RestartOrExit();
 		}
 
-		private void Exit( object sender, XBackRequestedEventArgs e )
+		private async void Exit( object sender, XBackRequestedEventArgs e )
 		{
-			Windows.ApplicationModel.Core.CoreApplication.Exit();
+			await GR.GSystem.Utils.RestartOrExit();
 		}
 	}
 

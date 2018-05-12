@@ -270,4 +270,7 @@
   <data name="TogglePane.Text" xml:space="preserve">
     <value>Toggle Pane</value>
   </data>
+  <data name="ConsoleMode.Text" xml:space="preserve">
+    <value>Console mode</value>
+  </data>
 </root>

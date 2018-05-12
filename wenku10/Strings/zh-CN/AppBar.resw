@@ -271,4 +271,7 @@
   <data name="TogglePane.Text" xml:space="preserve">
     <value>切换窗格</value>
   </data>
+  <data name="ConsoleMode.Text" xml:space="preserve">
+    <value>主控台模式</value>
+  </data>
 </root>

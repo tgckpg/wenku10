@@ -264,4 +264,7 @@
   <data name="EnableAccelerScroll" xml:space="preserve">
     <value>This device seemed to have an accelerometer. Enable Gravity scrolling? ( You can disable it via paragraph menu )</value>
   </data>
+  <data name="RestartToConsole" xml:space="preserve">
+    <value>Some files are currently in use. Restart into console mode?</value>
+  </data>
 </root>

@@ -271,4 +271,7 @@
   <data name="TogglePane.Text" xml:space="preserve">
     <value>パネルを切り替える</value>
   </data>
+  <data name="ConsoleMode.Text" xml:space="preserve">
+    <value>コンソールモード</value>
+  </data>
 </root>
