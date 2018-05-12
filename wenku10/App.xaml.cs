@@ -134,9 +134,7 @@ namespace wenku10
 
 		private Frame ActivateRootFrame()
 		{
-			Frame RootFrame = Window.Current.Content as Frame;
-
-			if ( RootFrame == null )
+			if ( !( Window.Current.Content is Frame RootFrame ) )
 			{
 				RootFrame = new Frame();
 

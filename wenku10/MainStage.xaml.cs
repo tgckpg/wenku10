@@ -57,7 +57,7 @@ namespace wenku10
 			}
 
 #if DEBUG
-			GR.Database.ContextManager.Migrate();
+			// GR.Database.ContextManager.Migrate();
 #endif
 
 			Background = new SolidColorBrush( GRConfig.Theme.BgColorMajor );
