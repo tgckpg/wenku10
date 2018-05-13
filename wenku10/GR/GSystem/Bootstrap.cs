@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Reflection;
 
 using libtaotu.Models.Procedure;
@@ -28,7 +29,7 @@ namespace GR.GSystem
 		public static string Version = AppSettings.SimpVersion
 #if DEBUG
 			+ "d";
-#elif TESTING 
+#elif TESTING
 			+ "t";
 #elif BETA
 			+ "b";
@@ -103,7 +104,7 @@ namespace GR.GSystem
 		private void AppSettingsInit()
 		{
 			AppSettings.Initialize();
-			if( Properties.ENABLE_SYSTEM_LOG )
+			if ( Properties.ENABLE_SYSTEM_LOG )
 			{
 				LogInstance = new FileSystemLog( FileLinks.ROOT_LOG + FileLinks.LOG_GENERAL );
 			}
@@ -118,7 +119,11 @@ namespace GR.GSystem
 
 			string Lang = Properties.LANGUAGE;
 			// Language Override
-			Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = Lang;
+			try
+			{
+				Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = Lang;
+			}
+			catch ( Exception ) { }
 
 #if DEBUG
 			Logger.Log( ID, typeof( global::wenku10.App ).GetTypeInfo().Assembly.FullName, LogType.INFO );

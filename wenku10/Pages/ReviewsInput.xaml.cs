@@ -16,9 +16,12 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Loaders;
+using Net.Astropenguin.Messaging;
 
+using GR.Ext;
 using GR.Model.Book;
 using GR.Model.Comments;
+using GR.Settings;
 
 namespace wenku10.Pages
 {
@@ -37,14 +40,7 @@ namespace wenku10.Pages
 			this.InitializeComponent();
 			STopicType.SelectedIndex = 0;
 
-			if( global::GR.Config.Properties.REVIEWS_SIGN == null )
-			{
-				StringResources stx = StringResources.Load( "Settings" );
-				global::GR.Config.Properties.REVIEWS_SIGN
-					= stx.Text( "Account_Reviews_Post_Sign_Default" );
-			}
-
-			Sign.Text = global::GR.Config.Properties.REVIEWS_SIGN;
+			MessageBus.SendUI( GetType(), AppKeys.ACQUIRE_SIG, new Tuple<Action<string>>( x => Sign.Text = x ) );
 		}
 
 		public ReviewsInput( BookItem B )

@@ -1,4 +1,6 @@
 ﻿Avaible commands:
+	coreutils       General utilities that includes mv, cat, touch, ls, etc.
+
 	Database        Database operations
-	coreutils       General utilities includes mv, cat, touch, ls, etc.
+	Sysctl          View / change system variables
 	Reset           Clear screen

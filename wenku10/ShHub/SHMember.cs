@@ -45,6 +45,12 @@ namespace wenku10.SHHub
 			}
 		}
 
+		public Task<T> GetUserProp<T>( string Key )
+			=> throw new NotSupportedException();
+
+		public Task SetUserProp<T>( string Key, T Value )
+			=> throw new NotSupportedException();
+
 		public Activities Activities { get; private set; }
 
 		public string ServerMessage { get; private set; }
@@ -95,7 +101,7 @@ namespace wenku10.SHHub
 
 					LoginRequest.TrySetResult( true );
 				}
-				, Utils.DoNothing 
+				, Utils.DoNothing
 				, false
 			);
 
@@ -207,6 +213,5 @@ namespace wenku10.SHHub
 			WHttpRequest.Cookies = new CookieContainer();
 			ONSSystem.Config.AuthToken = null;
 		}
-
 	}
 }

@@ -104,6 +104,7 @@ namespace wenku10.Pages.Settings
 				case "help": HelpCommand( Line ); break;
 				case "show": ResponseHelp( "show" ); break;
 				case "database": DatabaseCommand( Line ); break;
+				case "sysctl": SysctlCommand( Line ); break;
 
 				case "ls": case "cd": case "pwd":
 				case "cat": case "wc": case "mkdir":
@@ -148,6 +149,7 @@ namespace wenku10.Pages.Settings
 					break;
 				case "coreutils":
 				case "reset":
+				case "sysctl":
 				case "database":
 					ResponseHelp( "help/" + Section );
 					break;
@@ -181,6 +183,8 @@ namespace wenku10.Pages.Settings
 			}
 		}
 
+		private void ResponseError( string Command, string End = "\n" ) => ResponseCommand( Command, End );
+
 		private void AddElement( UIElement Elem )
 		{
 			OutputPanel.Children.Add( Elem );
@@ -197,13 +201,15 @@ namespace wenku10.Pages.Settings
 			ResponseCommand( File.ReadAllText( $"Strings/man/{ManFile}.txt" ) );
 		}
 
-		private bool NextSeg( ref string s, out string seg )
+		private bool NextSeg( ref string s, out string seg, char[] IFS = null )
 		{
-			if( string.IsNullOrEmpty( s ) )
+			if ( string.IsNullOrEmpty( s ) )
 			{
 				seg = s;
 				return false;
 			}
+
+			if ( IFS == null ) IFS = new char[] { ' ' };
 
 			bool escDouble = false, escSingle = false, escNext = false;
 
@@ -240,9 +246,23 @@ namespace wenku10.Pages.Settings
 				}
 				else
 				{
-					if ( k == ' ' )
+					if ( IFS.Contains( k ) )
 					{
-						s = s.Substring( i + 1 );
+						i++;
+						while ( i < l )
+						{
+							k = s[ i ];
+							if( IFS.Contains( k ) )
+							{
+								i++;
+							}
+							else
+							{
+								break;
+							}
+						}
+
+						s = s.Substring( i );
 						return true;
 					}
 					else

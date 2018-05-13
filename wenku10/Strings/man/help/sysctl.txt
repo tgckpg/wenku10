@@ -1,0 +1,14 @@
+﻿sysctl [options] [variable[=value]]
+
+DESCRIPTION
+	get / set application flags
+
+OPTIONS
+	variable
+		The name of a key to read from. An example is a.b.
+
+	variable=value
+		To set a key, use the form variable=value where variable is the key and value is the value to set it to.
+
+	-a
+		Display all values currently available.

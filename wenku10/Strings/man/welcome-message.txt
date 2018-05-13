@@ -1,1 +1,3 @@
 ﻿Welcome to the Console. Type "help" to see general help, "show" to list available commands.
+
+To turn off the Console. Type "sysctl CONSOLE_MODE = False" then restart this application.
