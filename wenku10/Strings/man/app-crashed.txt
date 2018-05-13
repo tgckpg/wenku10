@@ -1,0 +1,5 @@
+﻿INFO: Application detected a crash within 30s from the start!
+
+You have now been bring into the Console.
+
+Last error message:

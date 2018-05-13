@@ -1,0 +1,8 @@
+﻿If this happens repeatedly. Try reinstalling the app.
+
+To restore a previous backup, use the following commands to activate restore mode:
+
+	sysctl CONSOLE_MODE = false
+	sysctl RESTORE_MODE = true
+
+Application will resume in normal operation for the next session. Type "exit" to exit the Console, "help" to see help, "show" to see available commands.

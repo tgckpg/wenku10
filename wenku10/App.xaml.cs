@@ -37,6 +37,9 @@ namespace wenku10
 
 		internal static global::GR.GSystem.ViewControl ViewControl;
 		internal static KeyboardControl KeyboardControl;
+
+		private DateTime AppStartTime = DateTime.Now;
+
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
@@ -57,9 +60,18 @@ namespace wenku10
 		{
 			try
 			{
+				Exception ex = e.Exception;
+
+				// If app crashed within 30 seconds, this might be a start up crash.
+				// Bring user into console mode
+				if ( DateTime.Now.Subtract( AppStartTime ).TotalSeconds < 30 )
+				{
+					GR.Config.Properties.CONSOLE_MODE = true;
+					GR.Config.Properties.LAST_ERROR = ex.Message + "\n" + ex.StackTrace;
+				}
+
 				if ( NetLog.Enabled && !NetLog.Ended )
 				{
-					Exception ex = e.Exception;
 					Logger.Log( ID, ex.Message, LogType.ERROR );
 					Logger.Log( ID, ex.StackTrace, LogType.ERROR );
 					NetLog.FireEndSignal( ex );

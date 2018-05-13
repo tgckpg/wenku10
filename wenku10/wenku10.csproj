@@ -106,7 +106,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\SegoeUIExt.ttf" />
+    <Content Include="Strings\man\app-crashed.txt" />
     <Content Include="Strings\man\help.txt" />
+    <Content Include="Strings\man\crash-usage.txt" />
     <Content Include="Strings\man\help\database.txt" />
     <Content Include="Strings\man\help\coreutils.txt" />
     <Content Include="Strings\man\help\reset.txt" />

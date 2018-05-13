@@ -36,7 +36,22 @@ namespace wenku10.Pages.Settings
 		{
 			PS1.Text = "";
 			CommandHistory = new List<string>();
-			ResponseHelp( "usage-warning" );
+
+			string LastError = GR.Config.Properties.LAST_ERROR;
+			if ( !string.IsNullOrEmpty( LastError ) )
+			{
+				GR.Config.Properties.LAST_ERROR = null;
+				GR.Config.Properties.CONSOLE_MODE = false;
+
+				ResponseHelp( "app-crashed" );
+				ResponseCommand( LastError );
+				ResponseHelp( "crash-usage" );
+				UserConfirmed = true;
+			}
+			else
+			{
+				ResponseHelp( "usage-warning" );
+			}
 		}
 
 		private void CommandInput_KeyDown( object sender, KeyRoutedEventArgs e )
