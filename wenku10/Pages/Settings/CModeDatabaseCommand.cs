@@ -53,7 +53,25 @@ namespace wenku10.Pages.Settings
 				case "migrate":
 					ResponseCommand( "Migrating Databases ...", "" );
 					CommandInput.IsEnabled = false;
-					await Task.Run( () => ContextManager.Migrate() );
+
+					string ErrorMesg = null;
+					await Task.Run( () => {
+						try
+						{
+							ContextManager.Migrate();
+						}
+						catch( Exception ex )
+						{
+							ErrorMesg = ex.Message;
+						}
+					} );
+
+					if ( ErrorMesg != null )
+					{
+						ResponseCommand( ErrorMesg, "" );
+						ResponseCommand( "Migration failed: Existing database might be corrupted. Please remove those databases and re-run this command" );
+					}
+
 					CommandInput.IsEnabled = true;
 					ResponseCommand( "Done." );
 					break;
@@ -72,7 +90,7 @@ namespace wenku10.Pages.Settings
 			PS1.Text = $"Db[{OpenedDb}]";
 		}
 
-		private void ExecQuery( string Command )
+		private async void ExecQuery( string Command )
 		{
 			ResultDisplayData ResultDD = null;
 			string Mesg = null;
@@ -87,27 +105,37 @@ namespace wenku10.Pages.Settings
 					return;
 			}
 
-			switch ( OpenedDb )
+			CommandInput.IsEnabled = false;
+			await Task.Run( () =>
 			{
-				case "Books":
-					using ( var Context = new BooksContext() )
-						(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
-					break;
+				switch ( OpenedDb )
+				{
+					case "Books":
+						using ( var Context = new BooksContext() )
+							(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
+						break;
 
-				case "Caches":
-					using ( var Context = new ZCacheContext() )
-						(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
-					break;
+					case "Caches":
+						using ( var Context = new ZCacheContext() )
+							(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
+						break;
 
-				case "Settings":
-					using ( var Context = new SettingsContext() )
-						(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
-					break;
+					case "Settings":
+						using ( var Context = new SettingsContext() )
+							(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
+						break;
 
-				default:
-					ResponseCommand( $"\"{OpenedDb}\" is currently unavailable" );
-					break;
-			}
+					case "FTSData":
+						using ( var Context = new FTSDataContext() )
+							(ResultDD, Mesg) = GR.Database.DirectSQL.Command.Exec( Context, Command );
+						break;
+
+					default:
+						Mesg = $"\"{OpenedDb}\" is currently unavailable";
+						break;
+				}
+			} );
+			CommandInput.IsEnabled = true;
 
 			if ( ResultDD != null )
 			{

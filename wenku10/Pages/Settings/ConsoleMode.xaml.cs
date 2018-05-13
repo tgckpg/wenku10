@@ -106,13 +106,15 @@ namespace wenku10.Pages.Settings
 				case "database": DatabaseCommand( Line ); break;
 
 				case "ls": case "cd": case "pwd":
-				case "cat": case "wc":
-				case "rm": case "touch":
-					FileCommand( Line );
+				case "cat": case "wc": case "mkdir":
+				case "mv": case "rm": case "touch":
+				case "uuidgen": case "date":
+				case "export": case "import":
+					CoreCommand( Line );
 					break;
 
-				case "file":
-					ResponseCommand( "File is a group of commands. Enter \"help file\" to see the available commands" );
+				case "coreutils":
+					ResponseCommand( "coreutils is a group of commands. Enter \"help coreutils\" to see the available commands" );
 					break;
 
 				case "clear":
@@ -144,7 +146,7 @@ namespace wenku10.Pages.Settings
 				case "":
 					ResponseHelp( "help" );
 					break;
-				case "file":
+				case "coreutils":
 				case "reset":
 				case "database":
 					ResponseHelp( "help/" + Section );
@@ -197,17 +199,73 @@ namespace wenku10.Pages.Settings
 
 		private bool NextSeg( ref string s, out string seg )
 		{
-			int n = s.IndexOf( ' ' );
-			if( n == -1 )
+			if( string.IsNullOrEmpty( s ) )
 			{
 				seg = s;
-				s = "";
 				return false;
 			}
 
-			seg = s.Substring( 0, n );
-			s = s.Substring( n + 1 );
-			return true;
+			bool escDouble = false, escSingle = false, escNext = false;
+
+			seg = "";
+			int i = 0, l = s.Length;
+			for ( ; i < l; i++ )
+			{
+				char k = s[ i ];
+				if ( escNext )
+				{
+					seg += k;
+					escNext = false;
+					continue;
+				}
+				else if ( k == '\\' )
+				{
+					escNext = true;
+					continue;
+				}
+				else if ( k == '"' && !escSingle )
+				{
+					escDouble = !escDouble;
+					continue;
+				}
+				else if ( k == '\'' && !escDouble )
+				{
+					escSingle = !escSingle;
+					continue;
+				}
+
+				if ( escSingle || escDouble )
+				{
+					seg += k;
+				}
+				else
+				{
+					if ( k == ' ' )
+					{
+						s = s.Substring( i + 1 );
+						return true;
+					}
+					else
+					{
+						seg += k;
+					}
+				}
+			}
+
+			if ( 0 < i )
+			{
+				if ( i == l )
+				{
+					s = "";
+				}
+				else
+				{
+					s = s.Substring( i );
+				}
+				return true;
+			}
+
+			return false;
 		}
 
 		private TextBlock CommandTextBlock( string Text ) => new TextBlock()

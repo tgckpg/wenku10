@@ -1,4 +1,6 @@
-﻿help             Show this message
+﻿This is the Console. It is not a full-fledged shell but it has limited utilities that is considered *good enough* for simple inspections for this application.
+
+help             Show this message
 help [command]   Show the usage of a command
 show             Show all commands
 exit             Close this application

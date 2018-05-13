@@ -1,4 +1,4 @@
 ﻿Avaible commands:
-	Database
-	File
-	Reset
+	Database        Database operations
+	coreutils       General utilities includes mv, cat, touch, ls, etc.
+	Reset           Clear screen

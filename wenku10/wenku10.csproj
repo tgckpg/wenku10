@@ -108,7 +108,7 @@
     <Content Include="Assets\SegoeUIExt.ttf" />
     <Content Include="Strings\man\help.txt" />
     <Content Include="Strings\man\help\database.txt" />
-    <Content Include="Strings\man\help\file.txt" />
+    <Content Include="Strings\man\help\coreutils.txt" />
     <Content Include="Strings\man\help\reset.txt" />
     <Content Include="Strings\man\usage-warning.txt" />
     <Content Include="Strings\man\show.txt" />
@@ -255,7 +255,7 @@
     <Compile Include="Pages\Settings\ConsoleMode.xaml.cs">
       <DependentUpon>ConsoleMode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Settings\CModeFileCommand.cs">
+    <Compile Include="Pages\Settings\CModeCoreCommand.cs">
       <DependentUpon>ConsoleMode.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Settings\CModeDatabaseCommand.cs">
