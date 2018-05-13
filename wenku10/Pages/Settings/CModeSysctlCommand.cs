@@ -85,7 +85,11 @@ namespace wenku10.Pages.Settings
 			{
 				if ( FlagKeys.Contains( Key ) )
 				{
-					if ( NextSeg( ref Args, out string Value ) )
+					if( Key == "LAST_ERROR" )
+					{
+						ResponseError( $"sysctl: {Key}: Is read-only" );
+					}
+					else if ( NextSeg( ref Args, out string Value ) )
 					{
 						PropertyInfo Prop = AppProps.GetProperty( Key );
 						Type PropType = Prop.PropertyType;
