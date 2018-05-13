@@ -30,9 +30,9 @@ namespace wenku10.Pages.Settings
 		private async void CoreCommand( string Line )
 		{
 			NextSeg( ref Line, out string Cmd );
-			List<string> Options = new List<string>();
+			Cmd = Cmd.ToLower();
 
-			// Extract options
+			List<string> Options = new List<string>();
 			NextSeg( ref Line, out string Target );
 			while ( !string.IsNullOrEmpty( Target ) && Target[ 0 ] == '-' )
 			{

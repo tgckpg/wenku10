@@ -23,6 +23,8 @@ namespace wenku10.Pages.Settings
 		private UIElement CurrentElem;
 
 		private Action<bool> PendingConfirm;
+		private int CmdIndex = 0;
+		private List<string> CommandHistory;
 
 		public ConsoleMode()
 		{
@@ -33,6 +35,7 @@ namespace wenku10.Pages.Settings
 		private void SetTemplate()
 		{
 			PS1.Text = "";
+			CommandHistory = new List<string>();
 			ResponseHelp( "usage-warning" );
 		}
 
@@ -57,6 +60,42 @@ namespace wenku10.Pages.Settings
 					DisplayCommand( Cmd );
 					if ( ConfirmCommand( Cmd ) || Cmd[ 0 ] == '#' ) return;
 					ProcessCommand( Cmd );
+				}
+			}
+			else if ( e.Key == Windows.System.VirtualKey.Up )
+			{
+				if ( 0 <= --CmdIndex )
+				{
+					string rCmd = CommandHistory.ElementAt( CmdIndex );
+					CommandInput.Text = rCmd;
+					if ( !string.IsNullOrEmpty( rCmd ) )
+					{
+						CommandInput.SelectionStart = rCmd.Length;
+						CommandInput.SelectionLength = 0;
+					}
+				}
+				else
+				{
+					CommandInput.Text = "";
+					CmdIndex = 0;
+				}
+			}
+			else if ( e.Key == Windows.System.VirtualKey.Down )
+			{
+				if ( ++CmdIndex < CommandHistory.Count )
+				{
+					string rCmd = CommandHistory.ElementAt( CmdIndex );
+					CommandInput.Text = rCmd;
+					if ( !string.IsNullOrEmpty( rCmd ) )
+					{
+						CommandInput.SelectionStart = rCmd.Length;
+						CommandInput.SelectionLength = 0;
+					}
+				}
+				else
+				{
+					CommandInput.Text = "";
+					CmdIndex = CommandHistory.Count;
 				}
 			}
 		}
@@ -170,7 +209,16 @@ namespace wenku10.Pages.Settings
 			Application.Current.Exit();
 		}
 
-		private void DisplayCommand( string Command ) => ResponseCommand( PS1.Text + CMode.Text + Command, "" );
+		private void DisplayCommand( string Command )
+		{
+			if ( CommandHistory.LastOrDefault() != Command )
+			{
+				CommandHistory.Add( Command );
+				CmdIndex = CommandHistory.Count;
+			}
+
+			ResponseCommand( PS1.Text + CMode.Text + Command, "" );
+		}
 		private void ResponseCommand( string Command, string End = "\n" )
 		{
 			if ( CurrentElem is TextBlock tb )
@@ -286,6 +334,14 @@ namespace wenku10.Pages.Settings
 			}
 
 			return false;
+		}
+
+		private async Task IntensiveCommand( Action p )
+		{
+			CommandInput.IsEnabled = false;
+			await Task.Run( p );
+			CommandInput.IsEnabled = true;
+			CommandInput.Focus( FocusState.Keyboard );
 		}
 
 		private TextBlock CommandTextBlock( string Text ) => new TextBlock()

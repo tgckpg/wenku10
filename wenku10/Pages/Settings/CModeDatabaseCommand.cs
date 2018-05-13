@@ -55,12 +55,13 @@ namespace wenku10.Pages.Settings
 					CommandInput.IsEnabled = false;
 
 					string ErrorMesg = null;
-					await Task.Run( () => {
+					await Task.Run( () =>
+					{
 						try
 						{
 							ContextManager.Migrate();
 						}
-						catch( Exception ex )
+						catch ( Exception ex )
 						{
 							ErrorMesg = ex.Message;
 						}
@@ -95,7 +96,7 @@ namespace wenku10.Pages.Settings
 			ResultDisplayData ResultDD = null;
 			string Mesg = null;
 
-			switch ( Command.Trim() )
+			switch ( Command.ToLower().Trim() )
 			{
 				case "quit":
 				case "q":
@@ -105,8 +106,7 @@ namespace wenku10.Pages.Settings
 					return;
 			}
 
-			CommandInput.IsEnabled = false;
-			await Task.Run( () =>
+			await IntensiveCommand( () =>
 			{
 				switch ( OpenedDb )
 				{
@@ -135,7 +135,6 @@ namespace wenku10.Pages.Settings
 						break;
 				}
 			} );
-			CommandInput.IsEnabled = true;
 
 			if ( ResultDD != null )
 			{
@@ -167,5 +166,6 @@ namespace wenku10.Pages.Settings
 				ResponseCommand( Mesg );
 			}
 		}
+
 	}
 }
