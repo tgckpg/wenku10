@@ -15,6 +15,8 @@ namespace wenku10.Pages.Settings
 {
 	public sealed partial class ConsoleMode : Page
 	{
+		private readonly Type StringType = typeof( string );
+
 		private string[] _FlagKeys;
 		private string[] FlagKeys
 		{
@@ -22,7 +24,6 @@ namespace wenku10.Pages.Settings
 			{
 				if ( _FlagKeys == null )
 				{
-					Type StringType = typeof( string );
 					_FlagKeys = typeof( Parameters ).GetFields().Where( x => x.FieldType == StringType ).Remap( x => x.Name );
 				}
 				return _FlagKeys;
@@ -50,6 +51,35 @@ namespace wenku10.Pages.Settings
 				return;
 			}
 
+			if( Options.Contains( "-l" ) )
+			{
+				FieldInfo[] ParamFields = typeof( Parameters ).GetFields();
+				string[] ParamValues = ParamFields.Where( x => x.FieldType == StringType ).Remap( x => ( string ) x.GetValue( null ) );
+
+				if ( Options.Contains( "--clean" ) )
+				{
+					ApplicationData.Current.LocalSettings.Values
+						.Where( x => Array.IndexOf( ParamValues, x.Key ) == -1 )
+						.ExecEach( x => ApplicationData.Current.LocalSettings.Values.Remove( x.Key ) );
+					ResponseCommand( "ok" );
+				}
+				else
+				{
+					ResponseCommand( string.Join(
+						"\n", ApplicationData.Current.LocalSettings.Values
+							.Where( x => Array.IndexOf( ParamValues, x.Key ) == -1 )
+							.Remap( x => $"{x.Key} = {x.Value}" )
+					) );
+				}
+				return;
+			}
+
+			if( Options.Contains( "--clean" ) )
+			{
+				ResponseError( "Operation not permitted. Did you mean '-l --clean'?" );
+				return;
+			}
+
 			Args = Args + Line;
 			if ( NextSeg( ref Args, out string Key, new char[] { '=', ' ' } ) )
 			{
@@ -60,7 +90,7 @@ namespace wenku10.Pages.Settings
 						PropertyInfo Prop = AppProps.GetProperty( Key );
 						Type PropType = Prop.PropertyType;
 
-						if ( PropType == typeof( string ) )
+						if ( PropType == StringType )
 						{
 							Prop.SetValue( null, Value );
 							ResponseCommand( $"{Key} = {Value}" );

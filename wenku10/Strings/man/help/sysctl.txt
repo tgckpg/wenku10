@@ -12,3 +12,9 @@ OPTIONS
 
 	-a
 		Display all values currently available.
+
+	-l
+		Display all values that is legacy / not known to this application
+
+	--clean ( must be with -l )
+		Remove all legacy / unknown values

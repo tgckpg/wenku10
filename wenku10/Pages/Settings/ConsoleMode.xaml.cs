@@ -71,7 +71,7 @@ namespace wenku10.Pages.Settings
 
 			GR.Config.Properties.CONSOLE_MODE = false;
 
-			ResponseCommand( "User did not confirmed the risks. Quitting ..." );
+			ResponseError( "User did not confirmed the risks. Quitting ..." );
 			CommandInput.IsEnabled = false;
 			DelayedQuit();
 			return false;
@@ -115,7 +115,7 @@ namespace wenku10.Pages.Settings
 					break;
 
 				case "coreutils":
-					ResponseCommand( "coreutils is a group of commands. Enter \"help coreutils\" to see the available commands" );
+					ResponseError( "coreutils is a group of commands. Enter \"help coreutils\" to see the available commands" );
 					break;
 
 				case "clear":
@@ -131,7 +131,7 @@ namespace wenku10.Pages.Settings
 					break;
 
 				default:
-					ResponseCommand( $"No such command: {Line}" );
+					ResponseError( $"No such command: {Line}" );
 					break;
 			}
 		}
@@ -154,7 +154,7 @@ namespace wenku10.Pages.Settings
 					ResponseHelp( "help/" + Section );
 					break;
 				default:
-					ResponseCommand( "help: Section not found: " + Section );
+					ResponseError( "help: Section not found: " + Section );
 					break;
 			}
 		}

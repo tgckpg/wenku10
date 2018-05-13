@@ -47,7 +47,7 @@ namespace wenku10.Pages.Settings
 			}
 			catch ( Exception ex )
 			{
-				ResponseCommand( ex.Message );
+				ResponseError( ex.Message );
 				return;
 			}
 
@@ -82,11 +82,11 @@ namespace wenku10.Pages.Settings
 					{
 						if ( Target == "" )
 						{
-							ResponseCommand( "ls: cannot open directory '.': No such file or directory" );
+							ResponseError( "ls: cannot open directory '.': No such file or directory" );
 						}
 						else
 						{
-							ResponseCommand( "ls: cannot access '" + Target + "': No such file or directory" );
+							ResponseError( "ls: cannot access '" + Target + "': No such file or directory" );
 						}
 					}
 					return;
@@ -100,17 +100,17 @@ namespace wenku10.Pages.Settings
 
 							if ( pt == p )
 							{
-								ResponseCommand( $"mv: '{Target}' and '{Target}' are the same file" );
+								ResponseError( $"mv: '{Target}' and '{Target}' are the same file" );
 							}
 							else if ( pt.IndexOf( p ) == 0 )
 							{
-								ResponseCommand( $"mv: cannot move '{Target}' to a subdirectory of itself, '{ToTarget}'" );
+								ResponseError( $"mv: cannot move '{Target}' to a subdirectory of itself, '{ToTarget}'" );
 							}
 							else if ( Shared.Storage.DirExist( p ) )
 							{
 								if ( Shared.Storage.FileExists( pt ) )
 								{
-									ResponseCommand( $"mv: cannot overwrite non-directory '{ToTarget}' with directory '{Target}'" );
+									ResponseError( $"mv: cannot overwrite non-directory '{ToTarget}' with directory '{Target}'" );
 								}
 								else if ( Shared.Storage.DirExist( pt ) )
 								{
@@ -129,7 +129,7 @@ namespace wenku10.Pages.Settings
 								}
 								else if ( ToTarget.EndsWith( "/" ) )
 								{
-									ResponseCommand( $"mv: cannot move '{Target}' to '{ToTarget}': No such file or directory" );
+									ResponseError( $"mv: cannot move '{Target}' to '{ToTarget}': No such file or directory" );
 								}
 								else
 								{
@@ -138,24 +138,24 @@ namespace wenku10.Pages.Settings
 							}
 							else
 							{
-								ResponseCommand( $"mv: cannot stat '{Target}': No such file or directory" );
+								ResponseError( $"mv: cannot stat '{Target}': No such file or directory" );
 							}
 						}
 						catch ( Exception ex )
 						{
-							ResponseCommand( ex.Message );
+							ResponseError( ex.Message );
 						}
 					}
 					else
 					{
-						ResponseCommand( $"mv: missing destination file operand after '{Target}'" );
+						ResponseError( $"mv: missing destination file operand after '{Target}'" );
 					}
 					return;
 
 				case "wc":
 					if ( p == "." )
 					{
-						ResponseCommand( "wc: ./: Is a directory" );
+						ResponseError( "wc: ./: Is a directory" );
 						return;
 					}
 
@@ -172,20 +172,20 @@ namespace wenku10.Pages.Settings
 						}
 						else
 						{
-							ResponseCommand( "wc: No options provided or unknown/unsupported option." );
+							ResponseError( "wc: No options provided or unknown/unsupported option." );
 						}
 						CommandInput.IsEnabled = true;
 					}
 					else
 					{
-						ResponseCommand( "cat: " + Target + ": No such file" );
+						ResponseError( "cat: " + Target + ": No such file" );
 					}
 					return;
 
 				case "cat":
 					if ( p == "." )
 					{
-						ResponseCommand( "cat: ./: Is a directory" );
+						ResponseError( "cat: ./: Is a directory" );
 						return;
 					}
 
@@ -195,14 +195,14 @@ namespace wenku10.Pages.Settings
 					}
 					else
 					{
-						ResponseCommand( "cat: " + Target + ": No such file" );
+						ResponseError( "cat: " + Target + ": No such file" );
 					}
 					return;
 
 				case "mkdir":
 					if ( Shared.Storage.DirExist( p ) || Shared.Storage.FileExists( p ) )
 					{
-						ResponseCommand( $"mkdir: cannot create directory ‘{Target}’: File exists" );
+						ResponseError( $"mkdir: cannot create directory ‘{Target}’: File exists" );
 					}
 					else
 					{
@@ -218,7 +218,7 @@ namespace wenku10.Pages.Settings
 					{
 						if ( !Shared.Storage.WriteBytes( p, new byte[ 0 ] ) )
 						{
-							ResponseCommand( "Access is denined" );
+							ResponseError( "Access is denined" );
 						}
 					}
 					return;
@@ -257,7 +257,7 @@ namespace wenku10.Pages.Settings
 							}
 							else
 							{
-								ResponseCommand( "Operation canceled." );
+								ResponseError( "Operation canceled." );
 							}
 						};
 						return;
@@ -281,12 +281,12 @@ namespace wenku10.Pages.Settings
 						}
 						else
 						{
-							ResponseCommand( "rm: cannot remove '" + Target + "': Is a directory" );
+							ResponseError( "rm: cannot remove '" + Target + "': Is a directory" );
 						}
 					}
 					else
 					{
-						ResponseCommand( "rm: " + Target + ": No such file or directory" );
+						ResponseError( "rm: " + Target + ": No such file or directory" );
 					}
 					return;
 
@@ -304,24 +304,19 @@ namespace wenku10.Pages.Settings
 					}
 					else
 					{
-						ResponseCommand( "cd: " + Target + ": No such file or directory" );
+						ResponseError( "cd: " + Target + ": No such file or directory" );
 					}
 					return;
 
-				case "pwd":
-					ResponseCommand( cwd );
-					return;
-				case "date":
-					ResponseCommand( DateTime.Now.ToString() );
-					return;
-				case "uuidgen":
-					ResponseCommand( Guid.NewGuid().ToString() );
-					return;
+				case "pwd": ResponseCommand( cwd ); return;
+				case "date": ResponseCommand( DateTime.Now.ToString() ); return;
+				case "uuidgen": ResponseCommand( Guid.NewGuid().ToString() ); return;
+
 				case "import":
 					if ( Shared.Storage.DirExist( p ) )
 					{
 						if ( Target == "" ) Target = "./";
-						ResponseCommand( "import: " + Target + ": Is a directory" );
+						ResponseError( "import: " + Target + ": Is a directory" );
 						return;
 					}
 
@@ -331,7 +326,7 @@ namespace wenku10.Pages.Settings
 						IStorageFile ISF = await AppStorage.OpenFileAsync( "*" );
 						if ( ISF == null )
 						{
-							ResponseCommand( $"import: {Target}: terminated", "" );
+							ResponseError( $"import: {Target}: terminated", "" );
 						}
 						else
 						{
@@ -347,7 +342,7 @@ namespace wenku10.Pages.Settings
 					}
 					catch ( Exception ex )
 					{
-						ResponseCommand( ex.Message );
+						ResponseError( ex.Message );
 					}
 
 					CommandInput.IsEnabled = true;
@@ -363,7 +358,7 @@ namespace wenku10.Pages.Settings
 							IStorageFile ISF = await AppStorage.SaveFileAsync( "Export", new string[] { Path.GetExtension( p ) }, Path.GetFileName( p ) );
 							if ( ISF == null )
 							{
-								ResponseCommand( $"export: {Target}: terminated", "" );
+								ResponseError( $"export: {Target}: terminated", "" );
 							}
 							else
 							{
@@ -378,16 +373,16 @@ namespace wenku10.Pages.Settings
 						else if ( Shared.Storage.DirExist( p ) )
 						{
 							if ( Target == "" ) Target = "./";
-							ResponseCommand( "export: " + Target + ": Is a directory" );
+							ResponseError( "export: " + Target + ": Is a directory" );
 						}
 						else
 						{
-							ResponseCommand( "export: " + Target + ": No such file or directory" );
+							ResponseError( "export: " + Target + ": No such file or directory" );
 						}
 					}
 					catch ( Exception ex )
 					{
-						ResponseCommand( ex.Message );
+						ResponseError( ex.Message );
 					}
 
 					CommandInput.IsEnabled = true;

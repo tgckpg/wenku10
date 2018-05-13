@@ -20,7 +20,7 @@ namespace wenku10.Pages.Settings
 			int len = Commands.Length;
 			if ( len < 2 )
 			{
-				ResponseCommand( "Database: No action" );
+				ResponseError( "Database: No action" );
 				return;
 			}
 
@@ -32,7 +32,7 @@ namespace wenku10.Pages.Settings
 				case "use":
 					if ( len < 3 )
 					{
-						ResponseCommand( "Database: Please specify a database" );
+						ResponseError( "Database: Please specify a database" );
 						break;
 					}
 
@@ -45,7 +45,7 @@ namespace wenku10.Pages.Settings
 						case "ftsdata": OpenedDb = "FTSData"; goto OpenDb;
 						case "settings": OpenedDb = "Settings"; goto OpenDb;
 						default:
-							ResponseCommand( $"Database: \"{Db}\" does not exists" );
+							ResponseError( $"Database: \"{Db}\" does not exists" );
 							break;
 					}
 
@@ -68,8 +68,8 @@ namespace wenku10.Pages.Settings
 
 					if ( ErrorMesg != null )
 					{
-						ResponseCommand( ErrorMesg, "" );
-						ResponseCommand( "Migration failed: Existing database might be corrupted. Please remove those databases and re-run this command" );
+						ResponseError( ErrorMesg, "" );
+						ResponseError( "Migration failed: Existing database might be corrupted. Please remove those databases and re-run this command" );
 					}
 
 					CommandInput.IsEnabled = true;
@@ -79,7 +79,7 @@ namespace wenku10.Pages.Settings
 					ResponseCommand( "Aviable databases: Books, Caches, FTSData, Settings" );
 					break;
 				default:
-					ResponseCommand( $"No such action: {_action}" );
+					ResponseError( $"No such action: {_action}" );
 					break;
 			}
 
