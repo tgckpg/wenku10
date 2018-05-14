@@ -53,6 +53,7 @@ namespace wenku10.Pages.Explorer
 		private IGRRow OpenedRow;
 
 		private int ColResizeIndex = -1;
+		private double ColResizeOverflow = 0;
 
 		private Button ColReorder = null;
 		private TranslateTransform DragColTrans = null;
@@ -264,19 +265,42 @@ namespace wenku10.Pages.Explorer
 		private void Rezise_DragStart( object sender, ManipulationStartedRoutedEventArgs e )
 		{
 			ColResizeIndex = int.Parse( ( string ) ( ( FrameworkElement ) sender ).Tag );
+			ColResizeOverflow = 0;
 			CursorResize();
 		}
 
 		private void Resize_DragEnd( object sender, ManipulationCompletedRoutedEventArgs e )
 		{
 			ColResizeIndex = -1;
+			ColResizeOverflow = 0;
 			CursorArrow();
 			DataSource?.SaveConfig();
 		}
 
 		private void Resize_Drag( object sender, ManipulationDeltaRoutedEventArgs e )
 		{
-			Table?.ResizeCol( ColResizeIndex, e.Delta.Translation.X );
+			if ( Table == null ) return;
+
+			double d = e.Delta.Translation.X;
+
+			if ( ColResizeOverflow != 0 )
+			{
+				double n = ColResizeOverflow + d;
+				if ( Math.Sign( ColResizeOverflow ) != Math.Sign( n ) )
+				{
+					ColResizeOverflow = 0;
+				}
+				else
+				{
+					ColResizeOverflow = n;
+					return;
+				}
+			}
+
+			if ( !Table.ResizeCol( ColResizeIndex, d ) )
+			{
+				ColResizeOverflow = d;
+			}
 		}
 
 		private void Column_DragStart( object sender, ManipulationStartedRoutedEventArgs e )
