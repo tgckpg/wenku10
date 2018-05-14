@@ -267,4 +267,7 @@
   <data name="RestartToConsole" xml:space="preserve">
     <value>一些文件当前正在使用中。重新启动到主控台模式？</value>
   </data>
+  <data name="TooManyColumns" xml:space="preserve">
+    <value>启用的列过多！请先禁用某个列。</value>
+  </data>
 </root>

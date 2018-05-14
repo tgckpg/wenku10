@@ -267,4 +267,7 @@
   <data name="RestartToConsole" xml:space="preserve">
     <value>Some files are currently in use. Restart into console mode?</value>
   </data>
+  <data name="TooManyColumns" xml:space="preserve">
+    <value>Too many enabled columns! Please disable some columns first.</value>
+  </data>
 </root>

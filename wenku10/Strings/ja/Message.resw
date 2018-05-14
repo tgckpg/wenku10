@@ -267,4 +267,7 @@
   <data name="RestartToConsole" xml:space="preserve">
     <value>一部のファイルは現在使用中です。コンソールモードに再起動しますか？</value>
   </data>
+  <data name="TooManyColumns" xml:space="preserve">
+    <value>有効な列が多すぎます！まず列を無効にしてください。</value>
+  </data>
 </root>

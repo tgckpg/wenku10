@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 
 using GR.Data;
 using GR.DataSources;
@@ -164,8 +165,16 @@ namespace wenku10.Pages.Explorer
 		private void ToggleCol_Click( object sender, RoutedEventArgs e )
 		{
 			CompatMenuFlyoutItem Item = ( CompatMenuFlyoutItem ) sender;
-			Item.Icon2.Opacity = Table.ToggleCol( ( IGRCell ) Item.Tag ) ? 1 : 0;
-			var j = DataSource.SaveConfig();
+			try
+			{
+				Item.Icon2.Opacity = Table.ToggleCol( ( IGRCell ) Item.Tag ) ? 1 : 0;
+				var j = DataSource.SaveConfig();
+			}
+			catch( ToManyColumnsException )
+			{
+				StringResources stx = StringResources.Load( "Message" );
+				var j = Popups.ShowDialog( UIAliases.CreateDialog( stx.Str( "TooManyColumns" ) ) );
+			}
 		}
 
 		private void SortByColumn_Click( object sender, RoutedEventArgs e )
