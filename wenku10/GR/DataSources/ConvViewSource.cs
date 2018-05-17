@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace GR.DataSources
 {
-	using Data;
 	using Model.Interfaces;
-	using Model.ListItem;
 	using PageExtensions;
 
 	sealed class ConvViewSource : GRViewSource, IExtViewSource

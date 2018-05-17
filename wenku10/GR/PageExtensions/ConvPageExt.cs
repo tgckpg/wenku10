@@ -71,6 +71,7 @@ namespace GR.PageExtensions
 				, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 0 ] )
 				, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 1 ] )
 			);
+			NVInput.Trim = false;
 
 			await Popups.ShowDialog( NVInput );
 
@@ -152,6 +153,7 @@ namespace GR.PageExtensions
 					, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 0 ] )
 					, ViewSource.DataSource.ColumnName( ViewSource.DataSource.Table.CellProps[ 1 ] )
 				);
+				NVInput.Trim = false;
 
 				await Popups.ShowDialog( NVInput );
 				if ( !NVInput.Canceled )

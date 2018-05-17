@@ -22,6 +22,8 @@ namespace wenku10.Pages.Dialogs
 	sealed partial class NameValueInput : ContentDialog
 	{
 		public bool Canceled { get; private set; }
+		public bool Trim { get; set; } = true;
+
 		private NameValue<string> Target;
 
 		public NameValueInput( NameValue<string> Item
@@ -62,8 +64,14 @@ namespace wenku10.Pages.Dialogs
 
 		private void DetectInput()
 		{
-			string Name = NameInput.Text.Trim();
+			string Name = NameInput.Text;
 			string Value = ValueInput.Text;
+
+			if( Trim )
+			{
+				Name = Name.Trim();
+				Value = Value.Trim();
+			}
 
 			if ( string.IsNullOrEmpty( Name ) || string.IsNullOrEmpty( Value ) )
 			{
