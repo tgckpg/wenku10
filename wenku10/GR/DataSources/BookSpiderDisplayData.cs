@@ -128,6 +128,7 @@ namespace GR.DataSources
 
 		public void ImportItem( SpiderBook Item )
 		{
+			IsLoading = true;
 			if ( FindRow( _Items, Item.ZoneId, Item.ZItemId, out GRRow<IBookProcess> Existing ) )
 			{
 				// TODO: Ask to replace
@@ -136,6 +137,7 @@ namespace GR.DataSources
 			{
 				AddRowBg( new GRRow<IBookProcess>( PsTable ) { Source = Item } );
 			}
+			IsLoading = false;
 		}
 
 		public void Delete( GRRow<IBookProcess> Row )

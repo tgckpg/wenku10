@@ -120,7 +120,10 @@ namespace wenku10.Pages
 			{
 				Id = PageId.BOOK_INFO_VIEW;
 				BookItem Book = await ItemProcessor.GetBookFromTileCmd( TileQStr );
-				FPage = () => new BookInfoView( Book );
+				if ( Book != null )
+				{
+					FPage = () => new BookInfoView( Book );
+				}
 
 				LaunchArgs = null;
 			}
