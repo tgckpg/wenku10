@@ -271,6 +271,7 @@ namespace wenku10.Pages.ContentReaderPane
 					}
 					else
 					{
+						v = 0;
 						ACSTimer.Stop();
 					}
 				};
@@ -290,7 +291,7 @@ namespace wenku10.Pages.ContentReaderPane
 						if ( !ACSTimer.IsEnabled )
 							ACSTimer.Start();
 
-						if( ACScroll.TrackAutoAnchor )
+						if ( ACScroll.TrackAutoAnchor && v != 0 )
 							AutoSelectParagraph();
 					} );
 				}
