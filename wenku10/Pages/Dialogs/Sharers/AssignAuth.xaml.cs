@@ -32,7 +32,7 @@ namespace wenku10.Pages.Dialogs.Sharers
 		{
 			this.InitializeComponent();
 
-			this.Title = Title;
+			TitleText.Text = Title;
 			Canceled = true;
 			AuthMgr = Mgr;
 

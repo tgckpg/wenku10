@@ -192,7 +192,8 @@ namespace wenku10.Pages.Sharers
 
 		private async void AssignKey( object sender, RoutedEventArgs e )
 		{
-			AssignAuth RequestBox = new AssignAuth( new AESManager(), "Assign Key" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
+			AssignAuth RequestBox = new AssignAuth( new AESManager(), stx.Text( "AssignKey" ) );
 			await Popups.ShowDialog( RequestBox );
 
 			if ( RequestBox.Canceled || RequestBox.SelectedAuth == null ) return;
@@ -202,12 +203,16 @@ namespace wenku10.Pages.Sharers
 
 		private async void AssignToken( object sender, RoutedEventArgs e )
 		{
-			AssignAuth RequestBox = new AssignAuth( new TokenManager(), "Assign Token" );
+			StringResources stx = StringResources.Load( "ContextMenu" );
+			TokenManager Mgr = new TokenManager();
+			AssignAuth RequestBox = new AssignAuth( Mgr, stx.Text( "AssignToken" ) );
 			await Popups.ShowDialog( RequestBox );
 
 			if ( RequestBox.Canceled || RequestBox.SelectedAuth == null ) return;
 
 			AccessToken = ( string ) RequestBox.SelectedAuth.Value;
+			Mgr.AssignId( RequestBox.SelectedAuth.Name, BindItem.Id );
+
 			TransitionDisplay.SetState( AccessControls, TransitionState.Active );
 		}
 

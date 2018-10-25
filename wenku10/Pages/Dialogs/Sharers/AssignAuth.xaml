@@ -7,10 +7,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    Style="{StaticResource ScrollContentDialog}"
     Background="{StaticResource MajorBackgroundBrush}"
     PrimaryButtonText="Send"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
+
+    <ContentDialog.Title>
+        <TextBlock x:Name="TitleText"
+                   FontSize="20"
+                   Foreground="{StaticResource RelativeMajorBackgroundBrush}"
+                   Text="Change Password" />
+    </ContentDialog.Title>
 
     <StackPanel Margin="10, 0">
         <Grid>

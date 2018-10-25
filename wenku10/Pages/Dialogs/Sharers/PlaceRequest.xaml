@@ -8,6 +8,7 @@
     xmlns:v="using:Net.Astropenguin.UI.Converters"
     mc:Ignorable="d"
     xmlns:i="using:Net.Astropenguin.UI.Icons"
+    Style="{StaticResource ScrollContentDialog}"
     Background="{StaticResource MajorBackgroundBrush}"
     PrimaryButtonText="Send"
     SecondaryButtonText="Cancel"
