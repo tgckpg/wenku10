@@ -265,7 +265,7 @@ namespace GR.PageExtensions
 
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
-				ControlFrame.Instance.SubNavigateTo( Page, () => new DirectTextViewer( ( ( LocalBook ) Row.Source ).File ) );
+				ControlFrame.Instance.SubNavigateTo( Page, () => new ObjectViewer( ( ( LocalBook ) Row.Source ).File ) );
 			}
 		}
 

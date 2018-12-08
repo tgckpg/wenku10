@@ -15,22 +15,25 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using Net.Astropenguin.DataModel;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-using GR.Model.Interfaces;
+using GFlow.Models.Procedure;
+
 using GR.CompositeElement;
+using GR.GFlow;
+using GR.Model.Book.Spider;
+using GR.Model.Interfaces;
 using GR.Resources;
 
 namespace wenku10.Pages
 {
-	public sealed partial class DirectTextViewer : Page, ICmdControls 
+	public sealed partial class ObjectViewer : Page, ICmdControls
 	{
-		#pragma warning disable 0067
+#pragma warning disable 0067
 		public event ControlChangedEvent ControlChanged;
-		#pragma warning restore 0067
+#pragma warning restore 0067
 
 		public bool NoCommands { get; }
 		public bool MajorNav { get; }
@@ -39,25 +42,24 @@ namespace wenku10.Pages
 		public IList<ICommandBarElement> Major2ndControls { get; private set; }
 		public IList<ICommandBarElement> MinorControls { get; private set; }
 
-		public static readonly string ID = typeof( DirectTextViewer ).Name;
+		public static readonly string ID = typeof( ObjectViewer ).Name;
 
-		private IStorageFile CurrentFile;
+		private object Target;
 
-		public DirectTextViewer()
+		public ObjectViewer()
 		{
 			this.InitializeComponent();
+			SetTemplate();
 		}
 
-		public DirectTextViewer( StorageFile ISF )
-			:this()
+		public ObjectViewer( object Target )
+			: this()
 		{
-			CurrentFile = ISF;
-
-			InitAppBar();
-			ViewFile( ISF );
+			this.Target = Target;
+			InspectObject();
 		}
 
-		private void InitAppBar()
+		private void SetTemplate()
 		{
 			StringResources stx = StringResources.Load( "AppBar" );
 
@@ -71,7 +73,7 @@ namespace wenku10.Pages
 		{
 			IStorageFile ExFile = await AppStorage.SaveFileAsync( "Text File", new string[] { ".log" } );
 			if ( ExFile == null ) return;
-			await CurrentFile.CopyAndReplaceAsync( ExFile );
+			// await CurrentFile.CopyAndReplaceAsync( ExFile );
 		}
 
 		protected override void OnNavigatedTo( NavigationEventArgs e )
@@ -79,18 +81,46 @@ namespace wenku10.Pages
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			ViewFile( e.Parameter as StorageFile );
+			Target = e.Parameter;
+			InspectObject();
 		}
 
-		private async void ViewFile( StorageFile file )
+		private void InspectObject()
 		{
-			StorageFileStreamer SFS = new StorageFileStreamer( file );
-			IList<string> FirstRead = await SFS.NextPage( 50 );
+			if ( Target is Tuple<IStorageFile, string>
+				|| Target is string
+				|| Target is IEnumerable<string>
+				|| Target is IEnumerable<IStorageFile>
+				|| Target is IStorageFile ISF )
+			{
+				ObjectViewFrame.Navigate( typeof( CCSourceView ), Target );
+				return;
+			}
 
-			Observables<string, string> OSF = new Observables<string, string>( FirstRead );
-			OSF.ConnectLoader( SFS );
+			if ( !( Target is ProcConvoy Convoy ) )
+				return;
 
-			TextContent.ItemsSource = OSF;
+			switch ( Convoy.Payload )
+			{
+				case BookInstruction Bk:
+					if ( Convoy.Dispatcher is GrimoireMarker )
+					{
+					}
+					else
+					{
+						Target = Bk.PlainTextInfo;
+						InspectObject();
+					}
+					break;
+				case IEnumerable<BookInstruction> Bks:
+					Target = Bks.Select( x => x.PlainTextInfo );
+					InspectObject();
+					break;
+				default:
+					Target = Convoy.Payload;
+					InspectObject();
+					break;
+			}
 		}
 
 	}

@@ -78,7 +78,7 @@ namespace GR.GSystem
 			//// End fixed orders
 
 			// Shared Resources
-			ResGFlow.SourceView = typeof( global::wenku10.Pages.DirectTextViewer );
+			ResGFlow.SourceView = typeof( global::wenku10.Pages.ObjectViewer );
 			ResGFlow.CreateRequest = x => new SHttpRequest( x ) { EN_UITHREAD = false };
 			ProcList.Register( "EXTRACT", "/Resources:ProcEXTRACT", typeof( GrimoireExtractor ) );
 			ProcList.Register( "MARK", "/Resources:ProcMARK", typeof( GrimoireMarker ) );

@@ -209,13 +209,13 @@
     <value>Library</value>
   </data>
   <data name="AllRecords.Text" xml:space="preserve">
-    <value>All records</value>
+    <value>All Records</value>
   </data>
   <data name="Zones.Text" xml:space="preserve">
     <value>Zones</value>
   </data>
   <data name="FullTextSearch.Text" xml:space="preserve">
-    <value>Full text search</value>
+    <value>Full Text Search</value>
   </data>
   <data name="StaffPicks.Text" xml:space="preserve">
     <value>Highlights</value>

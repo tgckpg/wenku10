@@ -16,18 +16,12 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.Helpers;
-using Net.Astropenguin.IO;
-using Net.Astropenguin.Loaders;
-using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
-using GFlow.Crawler;
 using GFlow.Models.Procedure;
 
 using GR.GFlow;
 using GR.Model.Book;
-using GR.Model.Book.Spider;
 
 namespace wenku10.Pages.Dialogs.GFlow
 {
@@ -37,7 +31,6 @@ namespace wenku10.Pages.Dialogs.GFlow
 
 		private IStorageFile PreviewFile;
 		private GrimoireExtractor EditTarget;
-		private ProceduralSpider MCrawler = new ProceduralSpider( new Procedure[ 0 ] );
 
 		public EditProcExtract()
 		{
@@ -116,18 +109,6 @@ namespace wenku10.Pages.Dialogs.GFlow
 			Ext.PType = NType.Data;
 
 			MessageBus.Send( typeof( global::GFlow.Pages.GFEditor ), "REDRAW" );
-		}
-
-		private async Task ViewTestResult( BookInstruction Payload )
-		{
-			if ( PreviewFile == null )
-				PreviewFile = await AppStorage.MkTemp();
-
-			await PreviewFile.WriteString( Payload.PlainTextInfo );
-
-			var j = Dispatcher.RunIdleAsync(
-				x => Frame.Navigate( typeof( DirectTextViewer ), PreviewFile )
-			);
 		}
 
 	}

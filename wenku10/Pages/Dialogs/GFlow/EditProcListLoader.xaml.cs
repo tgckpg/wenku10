@@ -36,6 +36,7 @@ namespace wenku10.Pages.Dialogs.GFlow
 			if ( e.Parameter is GrimoireListLoader EditTarget )
 			{
 				this.EditTarget = EditTarget;
+				LayoutRoot.DataContext = EditTarget;
 			}
 		}
 

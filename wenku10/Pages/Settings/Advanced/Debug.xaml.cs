@@ -95,7 +95,7 @@ namespace wenku10.Pages.Settings.Advanced
 			await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
 
 			await ControlFrame.Instance.CloseSubView();
-			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
+			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new ObjectViewer( ISF ) );
 		}
 
 		private async void ViewDebugLog( object sender, RoutedEventArgs e )
@@ -122,7 +122,7 @@ namespace wenku10.Pages.Settings.Advanced
 			}
 
 			await ControlFrame.Instance.CloseSubView();
-			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new DirectTextViewer( ISF ) );
+			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new ObjectViewer( ISF ) );
 		}
 
 		private async void ClearDebugLog( object sender, RoutedEventArgs e )
