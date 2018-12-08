@@ -230,7 +230,7 @@
     <Compile Include="Pages\Dialogs\Sharers\PlaceRequest.xaml.cs">
       <DependentUpon>PlaceRequest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Dialogs\Taotu\EditProcListLoader.xaml.cs">
+    <Compile Include="Pages\Dialogs\GFlow\EditProcListLoader.xaml.cs">
       <DependentUpon>EditProcListLoader.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Dialogs\ValueHelpInput.xaml.cs">
@@ -342,7 +342,6 @@
     <Compile Include="GR\Model\Section\SharersHub.cs" />
     <Compile Include="GR\Model\Section\ZoneSpider.cs" />
     <Compile Include="GR\GSystem\ActionEvent.cs" />
-    <Compile Include="GR\Taotu\WenkuListLoader.cs" />
     <Compile Include="GR\ThemeIcons.cs" />
     <Compile Include="MainStage.xaml.cs">
       <DependentUpon>MainStage.xaml</DependentUpon>
@@ -353,10 +352,10 @@
     <Compile Include="Pages\Dialogs\EBDictSearch.xaml.cs">
       <DependentUpon>EBDictSearch.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Dialogs\Taotu\EditProcExtract.xaml.cs">
+    <Compile Include="Pages\Dialogs\GFlow\EditProcExtract.xaml.cs">
       <DependentUpon>EditProcExtract.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Dialogs\Taotu\EditProcMark.xaml.cs">
+    <Compile Include="Pages\Dialogs\GFlow\EditProcMark.xaml.cs">
       <DependentUpon>EditProcMark.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DirectTextViewer.xaml.cs">
@@ -466,8 +465,6 @@
     <Compile Include="GR\Model\Section\BgContext.cs" />
     <Compile Include="GR\GSystem\Bootstrap.cs" />
     <Compile Include="GR\GSystem\UnitTest.cs" />
-    <Compile Include="GR\Taotu\WenkuMarker.cs" />
-    <Compile Include="GR\Taotu\WenkuExtractor.cs" />
     <Compile Include="Microsoft.Phone.Controls\WrapPanel.cs" />
     <Page Include="MainStage.xaml">
       <SubType>Designer</SubType>
@@ -633,15 +630,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Dialogs\Taotu\EditProcListLoader.xaml">
+    <Page Include="Pages\Dialogs\GFlow\EditProcListLoader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Pages\Dialogs\Taotu\EditProcExtract.xaml">
+    <Page Include="Pages\Dialogs\GFlow\EditProcExtract.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Dialogs\Taotu\EditProcMark.xaml">
+    <Page Include="Pages\Dialogs\GFlow\EditProcMark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -936,9 +933,9 @@
       <Project>{5a6b4589-8c63-40d5-946f-759a9282a176}</Project>
       <Name>Net.Astropenguin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libs\libtaotu\libtaotu.csproj">
+    <ProjectReference Include="..\libs\GFlow\GFlow.csproj">
       <Project>{119b84b1-d42b-460c-8f72-4fae1e2614f1}</Project>
-      <Name>libtaotu</Name>
+      <Name>GFlow</Name>
     </ProjectReference>
     <ProjectReference Include="..\libs\GR\GR.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>

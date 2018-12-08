@@ -80,7 +80,7 @@ namespace GR.GSystem
 
 		public void AddCombo( string Desc, Action<KeyCombinationEventArgs> P, params VirtualKey[] Combinations )
 		{
-			RegKeys.Add( App.KeyboardControl.RegisterCombination( P, Combinations ) );
+			RegKeys.Add( App.AppKeyboard.RegisterCombination( P, Combinations ) );
 
 			if ( !KeyDesc.ContainsKey( Desc ) ) KeyDesc[ Desc ] = new List<string>();
 			KeyDesc[ Desc ].Add( HumanReadable( string.Join( " + ", Combinations ) ) );
@@ -89,7 +89,7 @@ namespace GR.GSystem
 		public void AddSeq( string Desc, Action<KeyCombinationEventArgs> P, params VirtualKey[] Seq )
 		{
 
-			RegKeys.Add( App.KeyboardControl.RegisterSequence( P, Seq ) );
+			RegKeys.Add( App.AppKeyboard.RegisterSequence( P, Seq ) );
 
 			if ( !KeyDesc.ContainsKey( Desc ) ) KeyDesc[ Desc ] = new List<string>();
 			KeyDesc[ Desc ].Add( HumanReadable( string.Join( "", Seq ) ) );

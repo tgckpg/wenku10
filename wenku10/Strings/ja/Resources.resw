@@ -180,4 +180,16 @@
   <data name="KeyboardControls" xml:space="preserve">
     <value>キーボードコントロール</value>
   </data>
+  <data name="ProcLIST" xml:space="preserve">
+    <value>リストビルダ</value>
+  </data>
+  <data name="ProcMARK" xml:space="preserve">
+    <value>標識</value>
+  </data>
+  <data name="ProcEXTRACT" xml:space="preserve">
+    <value>導出</value>
+  </data>
+  <data name="ProcTRANSLATE" xml:space="preserve">
+    <value>中国語の変換 簡 → 繁</value>
+  </data>
 </root>

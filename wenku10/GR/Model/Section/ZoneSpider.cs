@@ -10,15 +10,15 @@ using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
-using libtaotu.Controls;
-using libtaotu.Models.Procedure;
+using GFlow.Controls;
+using GFlow.Models.Procedure;
 
 namespace GR.Model.Section
 {
 	using Book;
 	using Interfaces;
 	using Loaders;
-	using Taotu;
+	using GFlow;
 	using Settings;
 
 	sealed class ZoneSpider : ActiveData, IMetaSpider
@@ -52,7 +52,7 @@ namespace GR.Model.Section
 
 		private void SetBanner()
 		{
-			WenkuListLoader PLL = ( WenkuListLoader ) ProcList.FirstOrDefault( x => x is WenkuListLoader );
+			GrimoireListLoader PLL = ( GrimoireListLoader ) ProcList.FirstOrDefault( x => x is GrimoireListLoader );
 
 			if ( PLL == null )
 			{

@@ -112,16 +112,16 @@
     <Compile Include="BackgroundProcessor.cs" />
     <Compile Include="LiveTileService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaotuRes.cs" />
+    <Compile Include="GFlowRes.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libs\libpenguin\Net.Astropenguin\Net.Astropenguin.csproj">
       <Project>{5a6b4589-8c63-40d5-946f-759a9282a176}</Project>
       <Name>Net.Astropenguin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\libs\libtaotu\libtaotu.csproj">
+    <ProjectReference Include="..\libs\GFlow\GFlow.csproj">
       <Project>{119B84B1-D42B-460C-8F72-4FAE1E2614F1}</Project>
-      <Name>libtaotu</Name>
+      <Name>GFlow</Name>
     </ProjectReference>
     <ProjectReference Include="..\libs\GR\GR.csproj">
       <Project>{02ac68c5-6868-4efd-8622-0fb49a5de0c1}</Project>

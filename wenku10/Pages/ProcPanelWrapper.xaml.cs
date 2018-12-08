@@ -13,9 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-using libtaotu.Pages;
+using GFlow.Pages;
 using GR.Model.Interfaces;
-
 
 namespace wenku10.Pages
 {
@@ -29,14 +28,14 @@ namespace wenku10.Pages
 		public ProcPanelWrapper( object Param )
 			: this()
 		{
-			LayoutRoot.Navigate( typeof( ProceduresPanel ), Param );
+			LayoutRoot.Navigate( typeof( GFEditor ), Param );
 		}
 
 		public void SoftOpen( bool NavForward ) { }
 
 		public void SoftClose( bool NavForward )
 		{
-			( ( ProceduresPanel ) LayoutRoot.Content ).Dispose();
+			( ( GFEditor ) LayoutRoot.Content ).Dispose();
 		}
 
 	}

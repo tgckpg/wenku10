@@ -180,4 +180,16 @@
   <data name="KeyboardControls" xml:space="preserve">
     <value>Keyboard Controls</value>
   </data>
+  <data name="ProcLIST" xml:space="preserve">
+    <value>List Builder</value>
+  </data>
+  <data name="ProcMARK" xml:space="preserve">
+    <value>Marker</value>
+  </data>
+  <data name="ProcTRANSLATE" xml:space="preserve">
+    <value>zh-hans → zh-hant</value>
+  </data>
+  <data name="ProcEXTRACT" xml:space="preserve">
+    <value>Extractor</value>
+  </data>
 </root>

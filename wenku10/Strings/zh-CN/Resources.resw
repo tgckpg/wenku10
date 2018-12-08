@@ -180,4 +180,16 @@
   <data name="KeyboardControls" xml:space="preserve">
     <value>键盘控制</value>
   </data>
+  <data name="ProcEXTRACT" xml:space="preserve">
+    <value>提取</value>
+  </data>
+  <data name="ProcLIST" xml:space="preserve">
+    <value>列表生成</value>
+  </data>
+  <data name="ProcMARK" xml:space="preserve">
+    <value>标记</value>
+  </data>
+  <data name="ProcTRANSLATE" xml:space="preserve">
+    <value>简 → 繁 转换</value>
+  </data>
 </root>

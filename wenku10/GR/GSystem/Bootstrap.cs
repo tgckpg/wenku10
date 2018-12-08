@@ -2,23 +2,24 @@
 using System.Threading.Tasks;
 using System.Reflection;
 
-using libtaotu.Models.Procedure;
-
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Logging.Handler;
 
 using wenku10.SHHub;
+using wenku10.Pages.Dialogs.GFlow;
 
 namespace GR.GSystem
 {
 	using AdvDM;
 	using Config;
 	using Ext;
+	using GFlow;
 	using Model.REST;
 	using Settings;
 	using Storage;
 
-	using ResTaotu = libtaotu.Resources.Shared;
+	using ProcList = global::GFlow.Controls.GFProcedureList;
+	using ResGFlow = global::GFlow.Resources.Shared;
 
 	internal sealed class Bootstrap
 	{
@@ -77,13 +78,15 @@ namespace GR.GSystem
 			//// End fixed orders
 
 			// Shared Resources
-			ResTaotu.SourceView = typeof( global::wenku10.Pages.DirectTextViewer );
-			ResTaotu.RenameDialog = typeof( global::wenku10.Pages.Dialogs.Rename );
-			ResTaotu.AddProcType( ProcType.EXTRACT, typeof( Taotu.WenkuExtractor ) );
-			ResTaotu.AddProcType( ProcType.MARK, typeof( Taotu.WenkuMarker ) );
-			ResTaotu.AddProcType( ProcType.LIST, typeof( Taotu.WenkuListLoader ) );
-			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( Taotu.TongWenTang ) );
-			ResTaotu.CreateRequest = x => new SHttpRequest( x ) { EN_UITHREAD = false };
+			ResGFlow.SourceView = typeof( global::wenku10.Pages.DirectTextViewer );
+			ResGFlow.CreateRequest = x => new SHttpRequest( x ) { EN_UITHREAD = false };
+			ProcList.Register( "EXTRACT", "/Resources:ProcEXTRACT", typeof( GrimoireExtractor ) );
+			ProcList.Register( "MARK", "/Resources:ProcMARK", typeof( GrimoireMarker ) );
+			ProcList.Register( "LIST", "/Resources:ProcLIST", typeof( GrimoireListLoader ) );
+			ProcList.Register( "TRANSLATE", "/Resources:ProcTRANSLATE", typeof( TongWenTang ) );
+			GrimoireExtractor.GRPropertyPage = typeof( EditProcExtract );
+			GrimoireMarker.GRPropertyPage = typeof( EditProcMark );
+			GrimoireListLoader.GRPropertyPage = typeof( EditProcListLoader );
 
 			// Set Logger for libeburc
 			EBDictManager.SetLogger();

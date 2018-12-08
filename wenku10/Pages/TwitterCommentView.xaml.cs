@@ -83,7 +83,7 @@ namespace wenku10.Pages
 		public void SoftOpen( bool NavForward )
 		{
 			NavigationHandler.InsertHandlerOnNavigatedBack( ShouldCloseInputBox );
-			RmCtrlEnterListener = App.KeyboardControl.RegisterCombination( e => CtrlSubmit(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Enter );
+			RmCtrlEnterListener = App.AppKeyboard.RegisterCombination( e => CtrlSubmit(), Windows.System.VirtualKey.Control, Windows.System.VirtualKey.Enter );
 		}
 
 		public void SoftClose( bool NavForward )

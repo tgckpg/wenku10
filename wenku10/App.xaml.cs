@@ -20,8 +20,8 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Controls;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
-using Net.Astropenguin.Helpers;
 
+using GR.GSystem;
 using GR.Resources;
 using GR.Storage;
 using GR.Settings;
@@ -31,12 +31,14 @@ namespace wenku10
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
-	sealed partial class App : Application
+	sealed partial class App : Application, IKeyboardControl
 	{
 		public static readonly string ID = typeof( App ).Name;
 
-		internal static global::GR.GSystem.ViewControl ViewControl;
-		internal static KeyboardControl KeyboardControl;
+		internal static ViewControl ViewControl;
+		internal static KeyboardControl AppKeyboard;
+
+		public KeyboardControl KeyboardControl => AppKeyboard;
 
 		private DateTime AppStartTime = DateTime.Now;
 

@@ -7,8 +7,8 @@
 [submodule "libs/libwenku8"]
 	path = libs/GR
 	url = git@github.com:tgckpg/libwenku8.git
-[submodule "libs/libtaotu"]
-	path = libs/libtaotu
+[submodule "libs/GFlow"]
+	path = libs/GFlow
 	url = git@github.com:tgckpg/libtaotu.git
 [submodule "libs/libeburc"]
 	path = libs/libeburc

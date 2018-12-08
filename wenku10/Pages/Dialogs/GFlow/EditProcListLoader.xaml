@@ -1,0 +1,40 @@
+﻿<Page
+    x:Class="wenku10.Pages.Dialogs.GFlow.EditProcListLoader"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:n="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <n:TransStateConverter x:Key="TransStateConverter" />
+    </Page.Resources>
+
+    <StackPanel x:Name="LayoutRoot">
+        <TextBox x:Uid="/AppResources/Name"
+                 LostFocus="SetZoneName"
+                 Text="{Binding ZoneName}"/>
+        <!-- Logo -->
+        <Image Margin="0,10,0,0" Stretch="Uniform"
+               Source="{Binding BannerSrc}" Height="50"
+               e:TransitionDisplay.State="{Binding BannerSrc, Converter={StaticResource TransStateConverter}}"/>
+        <TextBox x:Uid="/AppResources/Banner"
+                 Margin="0,5,0,0"
+                 LostFocus="SetBanner"
+                 Text="{Binding BannerPath}"/>
+        <TextBlock Margin="0,10,0,0" x:Uid="/AppResources/BookSpider" Text="Book Spider" />
+        <TextBox x:Uid="/GFlow/Resources/Pattern"
+                 Margin="0,5,0,0"
+                 PlaceholderText="Pattern"
+                 Text="{Binding ItemPattern}"
+                 FontFamily="Lucida Console"
+                 LostFocus="SetPattern"/>
+        <TextBox x:Uid="/GFlow/Resources/Param"
+                 Margin="0,5,0,0"
+                 PlaceholderText="Param ->"
+                 Text="{Binding ItemParam}"
+                 FontFamily="Lucida Console"
+                 LostFocus="SetFormat"/>
+    </StackPanel>
+</Page>

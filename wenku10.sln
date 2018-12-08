@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GR", "libs\GR\GR.csproj", "
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtranslate", "libs\libtranslate\libtranslate.vcxproj", "{6C187966-FFB6-4022-B80A-C966D099F14C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libtaotu", "libs\libtaotu\libtaotu.csproj", "{119B84B1-D42B-460C-8F72-4FAE1E2614F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GFlow", "libs\GFlow\GFlow.csproj", "{119B84B1-D42B-460C-8F72-4FAE1E2614F1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libeburc", "libs\libeburc\libeburc.vcxproj", "{CC217642-F7F5-4BDB-B4A2-ED6628466212}"
 EndProject

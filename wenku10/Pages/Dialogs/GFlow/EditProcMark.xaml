@@ -1,0 +1,84 @@
+﻿<Page
+    x:Class="wenku10.Pages.Dialogs.GFlow.EditProcMark"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:i="using:Net.Astropenguin.UI.Icons"
+    xmlns:n="using:GR.Converters"
+    xmlns:e="using:GR.Effects"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <n:TransStateConverter x:Key="TransStateConverter" />
+    </Page.Resources>
+
+    <StackPanel x:Name="LayoutRoot">
+        <!-- Volume Mappings -->
+        <TextBlock x:Uid="/Book/VolumeMapping" Text="Volume Mappings" />
+        <TextBox x:Uid="/GFlow/Resources/Pattern"
+                 PlaceholderText="Pattern"
+                 Text="{Binding VolPattern}"
+                 FontFamily="Consolas"
+                 Tag="VolPattern" Margin="0,5,0,0"
+                 LostFocus="SetProp"/>
+        <TextBox PlaceholderText="Title"
+                 Text="{Binding VolTitle}"
+                 FontFamily="Consolas"
+                 Tag="VolTitle" Margin="0,5,0,0"
+                 LostFocus="SetProp"/>
+        <TextBox x:Uid="/GFlow/Resources/Param"
+                 PlaceholderText="Param ->"
+                 Tag="VolParam" Margin="0,5,0,0"
+                 Text="{Binding VolParam}"
+                 FontFamily="Consolas"
+                 LostFocus="SetProp"/>
+        <Button Click="ToggleVAsync" HorizontalAlignment="Right"
+                Margin="0,5,0,0" Style="{ThemeResource TextBlockButtonStyle}">
+            <Grid>
+                <SymbolIcon x:Uid="/GFlow/Resources/Sync"
+                            ToolTipService.ToolTip="Synchronous"
+                            e:TransitionDisplay.State="{Binding VolAsync, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                            Foreground="#AAA" Symbol="Switch" />
+                <SymbolIcon x:Uid="/GFlow/Resources/ASync"
+                            ToolTipService.ToolTip="Asynchronous"
+                            e:TransitionDisplay.State="{Binding VolAsync, Converter={StaticResource TransStateConverter}}"
+                            Foreground="#AAA" Symbol="Shuffle"/>
+            </Grid>
+        </Button>
+
+        <!-- Chapter Mappings -->
+        <TextBlock x:Uid="/Book/ChapterMapping" Margin="0,10,0,0"
+                   Text="Chapter Mappings" />
+        <TextBox x:Uid="/GFlow/Resources/Pattern"
+                 PlaceholderText="Pattern"
+                 Text="{Binding EpPattern}"
+                 FontFamily="Consolas"
+                 Tag="EpPattern" Margin="0,5,0,0"
+                 LostFocus="SetProp"/>
+        <TextBox PlaceholderText="Title"
+                 Text="{Binding EpTitle}"
+                 FontFamily="Consolas"
+                 Tag="EpTitle" Margin="0,5,0,0"
+                 LostFocus="SetProp"/>
+        <TextBox x:Uid="/GFlow/Resources/Param"
+                 PlaceholderText="Param ->"
+                 Tag="EpParam" Margin="0,5,0,0"
+                 Text="{Binding EpParam}"
+                 FontFamily="Consolas"
+                 LostFocus="SetProp"/>
+        <Button Click="ToggleEAsync" HorizontalAlignment="Right"
+                Margin="0,5,0,0" Style="{ThemeResource TextBlockButtonStyle}">
+            <Grid>
+                <SymbolIcon x:Uid="/GFlow/Resources/Sync"
+                            ToolTipService.ToolTip="Synchronous"
+                            e:TransitionDisplay.State="{Binding EpAsync, Converter={StaticResource TransStateConverter}, ConverterParameter=1}"
+                            Foreground="#AAA" Symbol="Switch" />
+                <SymbolIcon x:Uid="/GFlow/Resources/ASync"
+                            ToolTipService.ToolTip="Asynchronous"
+                            e:TransitionDisplay.State="{Binding EpAsync, Converter={StaticResource TransStateConverter}}"
+                            Foreground="#AAA" Symbol="Shuffle"/>
+            </Grid>
+        </Button>
+
+    </StackPanel>
+</Page>

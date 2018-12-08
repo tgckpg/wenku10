@@ -98,18 +98,18 @@ namespace wenku10
 
 			// Initialize the Controls
 			App.ViewControl = new global::GR.GSystem.ViewControl();
-			App.KeyboardControl = new KeyboardControl( Window.Current.CoreWindow );
+			App.AppKeyboard = new KeyboardControl( Window.Current.CoreWindow );
 
 			// Full Screen Ctrl + F
-			App.KeyboardControl.RegisterCombination(
+			App.AppKeyboard.RegisterCombination(
 				( x ) => App.ViewControl.ToggleFullScreen()
 				, Windows.System.VirtualKey.Control
 				, Windows.System.VirtualKey.F
 			);
 
 			// Escape / Backspace = Back
-			App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Escape );
-			App.KeyboardControl.RegisterCombination( Escape, Windows.System.VirtualKey.Back );
+			App.AppKeyboard.RegisterCombination( Escape, Windows.System.VirtualKey.Escape );
+			App.AppKeyboard.RegisterCombination( Escape, Windows.System.VirtualKey.Back );
 		}
 
 		private void Escape( KeyCombinationEventArgs e )

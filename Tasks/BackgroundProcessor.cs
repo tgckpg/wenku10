@@ -9,8 +9,6 @@ using Windows.System.Diagnostics;
 using Windows.UI.Notifications;
 using Windows.UI.StartScreen;
 
-using libtaotu.Models.Procedure;
-
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Logging;
@@ -18,6 +16,7 @@ using Net.Astropenguin.Logging.Handler;
 
 using GR.CompositeElement;
 using GR.Config;
+using GR.GFlow;
 using GR.Model.Book.Spider;
 using GR.Model.ListItem;
 using GR.Model.Pages;
@@ -27,7 +26,8 @@ using GR.Storage;
 
 namespace Tasks
 {
-	using ResTaotu = libtaotu.Resources.Shared;
+	using ProcList = global::GFlow.Controls.GFProcedureList;
+	using ResGFlow = GFlow.Resources.Shared;
 
 	public sealed class BackgroundProcessor : IBackgroundTask
 	{
@@ -76,11 +76,11 @@ namespace Tasks
 			}
 
 			THttpRequest.UA = string.Format( AppKeys.UA, AppSettings.SimpVersion );
-			ResTaotu.AddProcType( ProcType.EXTRACT, typeof( TasksExtractor ) );
-			ResTaotu.AddProcType( ProcType.MARK, typeof( TasksMarker ) );
-			ResTaotu.AddProcType( ProcType.LIST, typeof( TasksListLoader ) );
-			ResTaotu.AddProcType( ProcType.TRANSLATE, typeof( GR.Taotu.TongWenTang ) );
-			ResTaotu.CreateRequest = ( x ) => new THttpRequest( x );
+			ResGFlow.CreateRequest = ( x ) => new THttpRequest( x );
+			ProcList.Register( "EXTRACT", "/Resources:ProcEXTRACT", typeof( GrimoireExtractor ) );
+			ProcList.Register( "MARK", "/Resources:ProcMARK", typeof( GrimoireMarker ) );
+			ProcList.Register( "LIST", "/Resources:ProcLIST", typeof( GrimoireListLoader ) );
+			ProcList.Register( "TRANSLATE", "/Resources:ProcTRANSLATE", typeof( TongWenTang ) );
 
 			Shared.Conv = new GR.Model.Text.TranslationAPI();
 			await Shared.Conv.InitContextTranslator();

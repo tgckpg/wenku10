@@ -32,7 +32,6 @@
 
                 <ResourceDictionary Source="/GR/Themes/PassiveSplitView.xaml" />
                 <ResourceDictionary Source="/GR/Themes/TitleStepper.xaml" />
-                <ResourceDictionary Source="/libtaotu/Themes/Button.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

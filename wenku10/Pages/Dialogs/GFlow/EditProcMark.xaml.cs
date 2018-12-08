@@ -21,53 +21,41 @@ using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
-using libtaotu.Controls;
-using libtaotu.Models.Procedure;
-using libtaotu.Pages;
+using GFlow.Controls;
+using GFlow.Models.Procedure;
+using GFlow.Pages;
 
 using GR.Database.Models;
 using GR.Model.Book.Spider;
 using GR.Model.ListItem;
 using GR.Settings;
-using GR.Taotu;
+using GR.GFlow;
 
 using wenku10.Pages.ContentReaderPane;
 
-namespace wenku10.Pages.Dialogs.Taotu
+namespace wenku10.Pages.Dialogs.GFlow
 {
-	sealed partial class EditProcMark : ContentDialog, IDisposable
+	sealed partial class EditProcMark : Page
 	{
-		public static readonly string ID = typeof( EditProcExtract ).Name;
+		public static readonly string ID = typeof( EditProcMark ).Name;
 
-		WenkuMarker EditTarget;
+		GrimoireMarker EditTarget;
 
 		private BookInstruction TempInst;
 
-		private EditProcMark()
+		public EditProcMark()
 		{
 			this.InitializeComponent();
-			SetTemplate();
-
-			MessageBus.Subscribe( this, MessageBus_OnDelivery );
 		}
 
-		public void Dispose()
+		protected override void OnNavigatedTo( NavigationEventArgs e )
 		{
-			MessageBus.Unsubscribe( this, MessageBus_OnDelivery );
-		}
-
-		private void SetTemplate()
-		{
-			StringResources stx = StringResources.Load( "Message" );
-			PrimaryButtonText = stx.Str( "OK" );
-		}
-
-		public EditProcMark( WenkuMarker P )
-			: this()
-		{
-			EditTarget = P;
-			EditTarget.SubEditComplete();
-			LayoutRoot.DataContext = P;
+			base.OnNavigatedTo( e );
+			if ( e.Parameter is GrimoireMarker EditTarget )
+			{
+				this.EditTarget = EditTarget;
+				LayoutRoot.DataContext = EditTarget;
+			}
 		}
 
 		private void SetProp( object sender, RoutedEventArgs e )
@@ -76,14 +64,9 @@ namespace wenku10.Pages.Dialogs.Taotu
 			EditTarget.SetProp( Input.Tag as string, Input.Text.Trim() );
 		}
 
-		private void RunTilHere( object sender, RoutedEventArgs e )
-		{
-			TestRunning.IsActive = true;
-			MessageBus.SendUI( typeof( ProceduresPanel ), "RUN", EditTarget );
-		}
-
 		private void MessageBus_OnDelivery( Message Mesg )
 		{
+			/*
 			ProcConvoy Convoy = Mesg.Payload as ProcConvoy;
 			if ( Mesg.Content == "RUN_RESULT"
 				&& Convoy != null
@@ -108,13 +91,11 @@ namespace wenku10.Pages.Dialogs.Taotu
 				Preview.BackStack.Clear();
 				TestRunning.IsActive = false;
 			}
+			*/
 		}
 
 		private async void PreviewContent( object sender, SelectionChangedEventArgs e )
 		{
-			if ( e.AddedItems.Count == 0 || TestRunning.IsActive ) return;
-			TestRunning.IsActive = true;
-
 			TOCItem Item = ( TOCItem ) e.AddedItems[ 0 ];
 			Chapter Ch = Item.Ch;
 
@@ -159,32 +140,14 @@ namespace wenku10.Pages.Dialogs.Taotu
 			}
 
 			ShowSource( TempFile );
-			TestRunning.IsActive = false;
 		}
 
 		private void ShowSource( StorageFile SF )
 		{
-			Preview.Navigate( typeof( DirectTextViewer ), SF );
-		}
-
-		private void SubVolume( object sender, RoutedEventArgs e )
-		{
-			EditTarget.SubEdit = WMarkerSub.Volume;
-			Popups.CloseDialog();
-		}
-
-		private void SubChapter( object sender, RoutedEventArgs e )
-		{
-			EditTarget.SubEdit = WMarkerSub.Chapter;
-			Popups.CloseDialog();
 		}
 
 		private void ToggleVAsync( object sender, RoutedEventArgs e ) { EditTarget.VolAsync = !EditTarget.VolAsync; }
 		private void ToggleEAsync( object sender, RoutedEventArgs e ) { EditTarget.EpAsync = !EditTarget.EpAsync; }
 
-		private void FrameGoBack( object sender, RoutedEventArgs e )
-		{
-			if( Preview.CanGoBack ) Preview.GoBack();
-		}
 	}
 }
