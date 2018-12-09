@@ -21,9 +21,6 @@ using GR.Model.Section;
 
 namespace wenku10.Pages.ContentReaderPane
 {
-	/// <summary>
-	/// Table of content view
-	/// </summary>
 	sealed partial class TableOfContents : Page
 	{
 		public static readonly string ID = typeof( TableOfContents ).Name;
@@ -31,6 +28,7 @@ namespace wenku10.Pages.ContentReaderPane
 		private ContentReaderBase Reader;
 
 		private TOCPane TOC;
+		private Action<Chapter> OpenChapter;
 
 		public TableOfContents()
 		{
@@ -38,21 +36,18 @@ namespace wenku10.Pages.ContentReaderPane
 		}
 
 		public TableOfContents( ContentReaderBase MainReader )
-			:this()
+			: this()
 		{
 			Reader = MainReader;
 
-			if( Reader.CurrentBook == null )
+			if ( Reader.CurrentBook == null )
 			{
 				Logger.Log( ID, "Cannot init TOC: CurrentBook is null... is pages unloaded ?", LogType.WARNING );
 				return;
 			}
 
-			TOC = new TOCPane( Reader.CurrentBook.GetVolumes() );
-
-			TOCContext.DataContext = TOC;
-
-			TOCList.SelectedItem = TOC.OpenChapter( Reader.CurrentChapter );
+			SetTOC( Reader.CurrentBook.GetVolumes(), x => Reader.OpenBook( x ) );
+			UpdateDisplay();
 		}
 
 		public void UpdateDisplay()
@@ -65,28 +60,17 @@ namespace wenku10.Pages.ContentReaderPane
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
 
-			if( e.Parameter is Tuple<Volume[], SelectionChangedEventHandler>)
+			if ( e.Parameter is Tuple<Volume[], Action<Chapter>> Args )
 			{
-				Tuple<Volume[], SelectionChangedEventHandler> Args = e.Parameter as Tuple<Volume[], SelectionChangedEventHandler>;
-				Load( Args.Item1, Args.Item2 );
+				SetTOC( Args.Item1, Args.Item2 );
 			}
 		}
 
-		/// <summary>
-		/// Standalone mode, use it for preview or something
-		/// </summary>
-		/// <param name="Vols"> The Volumes needed to be shown </param>
-		/// <param name="SelectEvent"> EventHandler when an item is selected </param>
-		private void Load( Volume[] Vols, SelectionChangedEventHandler SelectEvent = null )
+		private void SetTOC( Volume[] Vols, Action<Chapter> OpenCh )
 		{
 			TOC = new TOCPane( Vols );
-
 			TOCContext.DataContext = TOC;
-
-			if ( SelectEvent != null )
-			{
-				TOCList.SelectionChanged += SelectEvent;
-			}
+			OpenChapter = OpenCh;
 		}
 
 		private void TOCListLoaded( object sender, RoutedEventArgs e )
@@ -104,7 +88,7 @@ namespace wenku10.Pages.ContentReaderPane
 				}
 				else
 				{
-					Reader.OpenBook( Item.Ch );
+					OpenChapter?.Invoke( Item.Ch );
 				}
 			}
 		}

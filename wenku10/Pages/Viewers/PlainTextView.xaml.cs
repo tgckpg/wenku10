@@ -22,27 +22,37 @@ using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
-namespace wenku10.Pages
+namespace wenku10.Pages.Viewers
 {
-	public sealed partial class CCSourceView : Page
+	public sealed partial class PlainTextView : Page
 	{
-		private static readonly string ID = typeof( CCSourceView ).Name;
+		private static readonly string ID = typeof( PlainTextView ).Name;
 
 		private Observables<string, Paragraph> CodeOSF;
 
 		ConcurrentQueue<Paragraph> StagedTexts = new ConcurrentQueue<Paragraph>();
 
-		public CCSourceView()
+		public PlainTextView()
 		{
 			this.InitializeComponent();
+		}
+
+		public PlainTextView( object Target )
+			: base()
+		{
+			ViewTarget( Target );
 		}
 
 		protected override void OnNavigatedTo( NavigationEventArgs e )
 		{
 			base.OnNavigatedTo( e );
 			Logger.Log( ID, string.Format( "OnNavigatedTo: {0}", e.SourcePageType.Name ), LogType.INFO );
+			ViewTarget( e.Parameter );
+		}
 
-			switch ( e.Parameter )
+		private void ViewTarget( object Target )
+		{
+			switch ( Target )
 			{
 				case Tuple<IStorageFile, string> TypedFile:
 					ViewFile( TypedFile.Item1 );
@@ -60,6 +70,7 @@ namespace wenku10.Pages
 					ViewFile( ISF );
 					break;
 			}
+
 		}
 
 		private IList<Paragraph> S2P( IEnumerable<string> s )

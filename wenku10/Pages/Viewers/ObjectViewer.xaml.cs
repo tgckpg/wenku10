@@ -27,7 +27,7 @@ using GR.Model.Book.Spider;
 using GR.Model.Interfaces;
 using GR.Resources;
 
-namespace wenku10.Pages
+namespace wenku10.Pages.Viewers
 {
 	public sealed partial class ObjectViewer : Page, ICmdControls
 	{
@@ -93,7 +93,7 @@ namespace wenku10.Pages
 				|| Target is IEnumerable<IStorageFile>
 				|| Target is IStorageFile ISF )
 			{
-				ObjectViewFrame.Navigate( typeof( CCSourceView ), Target );
+				ObjectViewFrame.Navigate( typeof( PlainTextView ), Target );
 				return;
 			}
 
@@ -105,6 +105,7 @@ namespace wenku10.Pages
 				case BookInstruction Bk:
 					if ( Convoy.Dispatcher is GrimoireMarker )
 					{
+						ObjectViewFrame.Navigate( typeof( GRMarkerView ), Convoy );
 					}
 					else
 					{

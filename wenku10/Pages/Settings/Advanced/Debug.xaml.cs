@@ -21,12 +21,14 @@ using Net.Astropenguin.IO;
 
 using GR.CompositeElement;
 using GR.Config;
+using GR.GSystem;
 using GR.Resources;
 using GR.Settings;
-using GR.GSystem;
 
 namespace wenku10.Pages.Settings.Advanced
 {
+	using Viewers;
+
 	public sealed partial class Debug : Page
 	{
 		bool ActionBlocked = false;
@@ -95,7 +97,7 @@ namespace wenku10.Pages.Settings.Advanced
 			await ISF.WriteString( new XRegistry( "<tasks />", FileLinks.ROOT_SETTING + FileLinks.TASKS ).ToString() );
 
 			await ControlFrame.Instance.CloseSubView();
-			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new ObjectViewer( ISF ) );
+			ControlFrame.Instance.SubNavigateTo( MainSettings.Instance, () => new PlainTextView( ISF ) );
 		}
 
 		private async void ViewDebugLog( object sender, RoutedEventArgs e )

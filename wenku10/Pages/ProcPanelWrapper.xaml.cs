@@ -18,8 +18,19 @@ using GR.Model.Interfaces;
 
 namespace wenku10.Pages
 {
-	public sealed partial class ProcPanelWrapper : Page, INavPage
+	public sealed partial class ProcPanelWrapper : Page, INavPage, ICmdControls
 	{
+#pragma warning disable 0067
+		public event ControlChangedEvent ControlChanged;
+#pragma warning restore 0067
+
+		public bool NoCommands => true;
+		public bool MajorNav { get; }
+
+		public IList<ICommandBarElement> MajorControls { get; private set; }
+		public IList<ICommandBarElement> Major2ndControls { get; private set; }
+		public IList<ICommandBarElement> MinorControls { get; private set; }
+
 		private ProcPanelWrapper()
 		{
 			this.InitializeComponent();
@@ -32,11 +43,6 @@ namespace wenku10.Pages
 		}
 
 		public void SoftOpen( bool NavForward ) { }
-
-		public void SoftClose( bool NavForward )
-		{
-			( ( GFEditor ) LayoutRoot.Content ).Dispose();
-		}
-
+		public void SoftClose( bool NavForward ) => ( ( GFEditor ) LayoutRoot.Content ).Dispose();
 	}
 }

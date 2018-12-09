@@ -182,8 +182,11 @@
     <Compile Include="Pages\BookInfoControls\Comments.xaml.cs">
       <DependentUpon>Comments.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\CCSourceView.xaml.cs">
-      <DependentUpon>CCSourceView.xaml</DependentUpon>
+    <Compile Include="Pages\Viewers\GRMarkerView.xaml.cs">
+      <DependentUpon>GRMarkerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Viewers\PlainTextView.xaml.cs">
+      <DependentUpon>PlainTextView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Dialogs\AddWidget.xaml.cs">
       <DependentUpon>AddWidget.xaml</DependentUpon>
@@ -361,7 +364,7 @@
     <Compile Include="Pages\Dialogs\GFlow\EditProcMark.xaml.cs">
       <DependentUpon>EditProcMark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ObjectViewer.xaml.cs">
+    <Compile Include="Pages\Viewers\ObjectViewer.xaml.cs">
       <DependentUpon>ObjectViewer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ControlFrame.xaml.cs">
@@ -477,7 +480,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\CCSourceView.xaml">
+    <Page Include="Pages\Viewers\GRMarkerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Viewers\PlainTextView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -649,7 +656,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ObjectViewer.xaml">
+    <Page Include="Pages\Viewers\ObjectViewer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

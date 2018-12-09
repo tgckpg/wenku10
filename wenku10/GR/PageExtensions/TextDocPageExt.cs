@@ -20,6 +20,7 @@ using Net.Astropenguin.Logging;
 using Net.Astropenguin.Messaging;
 
 using wenku10.Pages;
+using wenku10.Pages.Viewers;
 
 namespace GR.PageExtensions
 {
@@ -265,7 +266,7 @@ namespace GR.PageExtensions
 
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
-				ControlFrame.Instance.SubNavigateTo( Page, () => new ObjectViewer( ( ( LocalBook ) Row.Source ).File ) );
+				ControlFrame.Instance.SubNavigateTo( Page, () => new PlainTextView( ( ( LocalBook ) Row.Source ).File ) );
 			}
 		}
 
