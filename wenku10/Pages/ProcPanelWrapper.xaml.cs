@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -39,10 +40,25 @@ namespace wenku10.Pages
 		public ProcPanelWrapper( object Param )
 			: this()
 		{
-			LayoutRoot.Navigate( typeof( GFEditor ), Param );
+			if ( Param is string Location )
+			{
+				if ( !Location.Contains( ':' ) )
+					Location = "ms-appdata:///local/" + Location;
+
+				OpenFile( Location );
+			}
+			else
+			{
+				LayoutRoot.Navigate( typeof( GFEditor ), Param );
+			}
 		}
 
 		public void SoftOpen( bool NavForward ) { }
 		public void SoftClose( bool NavForward ) => ( ( GFEditor ) LayoutRoot.Content ).Dispose();
+
+		private async void OpenFile( string Location )
+		{
+			LayoutRoot.Navigate( typeof( GFEditor ), await StorageFile.GetFileFromApplicationUriAsync( new Uri( Location ) ) );
+		}
 	}
 }

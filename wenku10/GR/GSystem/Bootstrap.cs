@@ -63,7 +63,7 @@ namespace GR.GSystem
 			Resources.Shared.ShRequest = new SharersRequest(
 				ONSSystem.Config.ServiceUri
 				, Version
-				, new string[] { "2.2.0t", "1.5.0b", "1.1.0p" } );
+				, new string[] { "2.4.0t", "1.6.0b", "1.2.0p" } );
 
 			// Connection Mode
 			WHttpRequest.UA = string.Format( AppKeys.UA, Version );

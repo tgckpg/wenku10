@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
+using Net.Astropenguin.Controls;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
@@ -67,6 +69,8 @@ namespace wenku10.Pages.Explorer
 		private Dictionary<int, ReorderStory> ReorderStories;
 		private Dictionary<int, TranslateTransform> ColTransforms;
 
+		private Action UnRegKbMenu;
+
 		private struct ReorderStory
 		{
 			public Storyboard Move, Restore;
@@ -82,6 +86,7 @@ namespace wenku10.Pages.Explorer
 		public GRTableView()
 		{
 			this.InitializeComponent();
+			UnRegKbMenu = App.AppKeyboard.RegisterCombination( Kb_ShowContextMenu, VirtualKey.Application );
 		}
 
 		public void Refresh()
@@ -478,24 +483,52 @@ namespace wenku10.Pages.Explorer
 
 		private void ShowContextMenu( object sender, RightTappedRoutedEventArgs e )
 		{
-			if ( sender is FrameworkElement Elem && ViewSource is IExtViewSource ExtViewSource )
+			if ( !( ViewSource is IExtViewSource ExtViewSource ) )
+				return;
+
+			if ( sender is FrameworkElement Elem && Elem.DataContext is IGRRow Row )
 			{
-				if ( Elem.DataContext is IGRRow Row )
+				ItemList.SelectedItem = Row;
+
+				FlyoutBase ItemMenu = ExtViewSource.Extension.GetContextMenu( Elem );
+				FlyoutBase.SetAttachedFlyout( Elem, ItemMenu );
+
+				if ( ItemMenu is MenuFlyout CMenu )
 				{
-					ItemList.SelectedItem = Row;
-
-					FlyoutBase ItemMenu = ExtViewSource.Extension.GetContextMenu( Elem );
-					FlyoutBase.SetAttachedFlyout( Elem, ItemMenu );
-
-					if ( ItemMenu is MenuFlyout CMenu )
-					{
-						CMenu.ShowAt( Elem, e.GetPosition( Elem ) );
-					}
-					else if ( ItemMenu != null )
-					{
-						FlyoutBase.ShowAttachedFlyout( Elem );
-					}
+					CMenu.ShowAt( Elem, e.GetPosition( Elem ) );
 				}
+				else if ( ItemMenu != null )
+				{
+					FlyoutBase.ShowAttachedFlyout( Elem );
+				}
+			}
+		}
+
+		private void Kb_ShowContextMenu( KeyCombinationEventArgs e )
+		{
+			if ( !( ViewSource is IExtViewSource ExtViewSource ) )
+				return;
+
+			if ( !( e.Target is FrameworkElement Elem ) )
+				return;
+
+			// We need to get a FrameworkElement that has DataContext
+			// otherwise the DataContext will not get inherited to the attached menu
+			if ( e.Target is ListViewItem Item )
+			{
+				Elem = VisualTree.At_0<FrameworkElement>( Item, 0 );
+			}
+
+			if ( Elem.DataContext is IGRRow Row )
+			{
+				ItemList.SelectedItem = Row;
+
+				if ( Elem.DataContext == null )
+					Elem.DataContext = Row;
+
+				FlyoutBase ItemMenu = ExtViewSource.Extension.GetContextMenu( Elem );
+				FlyoutBase.SetAttachedFlyout( Elem, ItemMenu );
+				FlyoutBase.ShowAttachedFlyout( Elem );
 			}
 		}
 
@@ -618,5 +651,6 @@ namespace wenku10.Pages.Explorer
 			public string Help_Desc => null;
 			public Uri Help_Uri => null;
 		}
+
 	}
 }
