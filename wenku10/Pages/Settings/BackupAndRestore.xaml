@@ -8,8 +8,8 @@
     mc:Ignorable="d">
     <Page.Resources>
         <v:DataVisConverter x:Name="DataVisConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </Page.Resources>
-
     <Grid x:Name="LayoutRoot" Background="Black">
         <StackPanel Margin="10" VerticalAlignment="Top">
             <StackPanel x:Name="MMigrate" Visibility="{Binding ShouldMigrate, Converter={StaticResource DataVisConverter}}">

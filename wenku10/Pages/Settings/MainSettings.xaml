@@ -10,7 +10,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     NavigationCacheMode="Enabled">
-
+    <Page.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
+    </Page.Resources>
     <Grid x:Name="LayoutRoot" Background="{StaticResource MajorBackgroundBrush}">
         <Pivot x:Name="MainView" Background="{StaticResource MajorBackgroundBrush}">
             <Pivot.HeaderTemplate>

@@ -20,6 +20,7 @@
     <ContentDialog.Resources>
         <v:DataStateConverter x:Key="DataStateConverter" />
         <v:DataVisConverter x:Key="DataVisConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
         <Style x:Key="TextBoxStyle1" TargetType="TextBox">
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
             <Setter Property="Background" Value="Transparent" />

@@ -9,6 +9,9 @@
     Background="{StaticResource MajorBackgroundBrush}"
     Style="{StaticResource ScrollContentDialog}"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
+    <ContentDialog.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
+    </ContentDialog.Resources>
     <ContentDialog.Title>
         <TextBlock Foreground="{StaticResource RelativeMajorBackgroundBrush}"
                    x:Name="TitleBlock"

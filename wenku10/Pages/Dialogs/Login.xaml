@@ -18,6 +18,7 @@
     </ContentDialog.Title>
     <ContentDialog.Resources>
         <v:DataVisConverter x:Name="DataVisConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </ContentDialog.Resources>
 
     <StackPanel>

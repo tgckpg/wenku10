@@ -7,7 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ex="using:wenku10.Pages.Explorer"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
+    </Page.Resources>
     <Grid Background="{StaticResource MajorBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

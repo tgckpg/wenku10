@@ -10,8 +10,8 @@
     mc:Ignorable="d">
     <Page.Resources>
         <v:TransStateConverter x:Key="TransStateConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </Page.Resources>
-
     <Grid Background="{StaticResource MajorBackgroundBrush}">
         <StackPanel Margin="15">
 

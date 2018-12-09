@@ -15,6 +15,7 @@
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick" >
     <ContentDialog.Resources>
         <v:DataVisConverter x:Key="DataVisConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </ContentDialog.Resources>
 
     <ContentDialog.Title>

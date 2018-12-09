@@ -13,7 +13,9 @@
     Style="{StaticResource ScrollContentDialog}"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-
+    <ContentDialog.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
+    </ContentDialog.Resources>
     <StackPanel>
         <ComboBox x:Name="WidgetList" Margin="5"
                   SelectionChanged="WidgetList_SelectionChanged"

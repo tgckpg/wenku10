@@ -9,11 +9,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
     <Page.Resources>
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </Page.Resources>
-
     <Grid Background="{StaticResource MajorBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -88,53 +87,50 @@
                          KeyDown="AddServer"
                          PlaceholderText="Service Uri" />
                 <Button x:Name="AddUri" Grid.Column="1"
-                        Style="{StaticResource IconButton}"
-                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Width="25" Height="25" Margin="5"
+                        VerticalAlignment="Center" Margin="5"
+                        Foreground="{StaticResource SubtleBrush}"
+                        Style="{StaticResource ThemeButton}"
                         Click="AddServer">
-                    <i:IconPlusSign AutoScale="True" />
+                    <SymbolIcon Symbol="Add" />
                 </Button>
             </Grid>
 
             <ListView x:Name="AvailableServers"
+                      ItemContainerStyle="{StaticResource BareListItem}"
                       Grid.Row="2" Margin="3" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="30" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="auto" />
                             </Grid.ColumnDefinitions>
-
                             <Rectangle Grid.Column="0" Fill="{StaticResource MajorBrush}" Opacity="0.2" />
                             <p:StateControl State="{Binding Preferred, Converter={StaticResource DataStateConverter}}"
                                             Grid.Column="0">
                                 <Rectangle Fill="{StaticResource MajorBrush}" />
                             </p:StateControl>
-
-                            <Button Click="RemoveServer"
-                                    Grid.Column="1"
-                                    Style="{StaticResource IconButton}"
-                                    VerticalAlignment="Center" HorizontalAlignment="Center" 
-                                    Width="25" Height="25">
-                                <i:IconCross AutoScale="True" />
-                            </Button>
-                            <TextBlock Grid.Column="2"
+                            <TextBlock Grid.Column="1" Margin="10"
                                        Foreground="{StaticResource RelativeMajorBackgroundBrush}"
-                                       Margin="10"
                                        TextTrimming="CharacterEllipsis"
                                        Text="{Binding Name}" />
-                            <ProgressRing Grid.Column="3"
+                            <ProgressRing Grid.Column="2"
                                           Width="25" Height="25"
                                           Foreground="{StaticResource MajorBrush}"
                                           IsActive="{Binding IsLoading}" />
-                            <TextBlock Grid.Column="3"
-                                       VerticalAlignment="Center" HorizontalAlignment="Center" 
+                            <TextBlock Grid.Column="2"
+                                       VerticalAlignment="Center"
                                        Foreground="{StaticResource SubtleBrush}"
                                        TextTrimming="CharacterEllipsis"
                                        Text="{Binding Desc}" />
+                            <Button Click="RemoveServer" Grid.Column="3"
+                                    Foreground="{StaticResource SubtleBrush}"
+                                    Style="{StaticResource ThemeButton}"
+                                    VerticalAlignment="Center">
+                                <SymbolIcon Symbol="Delete" />
+                            </Button>
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -11,6 +11,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <v:DataStateConverter x:Key="DataStateConverter" />
+        <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </Page.Resources>
 
     <Grid Background="{StaticResource MajorBackgroundBrush}"
@@ -28,9 +29,7 @@
                     <Run x:Uid="/Settings/Desc_EBWin_Help" />
                 </Hyperlink>
             </TextBlock>
-            <Button Margin="5"
-                    Click="OpenNewDict"
-                    HorizontalAlignment="Right">
+            <Button Margin="5" Click="OpenNewDict" HorizontalAlignment="Right">
                 <TextBlock Text="Install new dict"
                            x:Uid="/Settings/Desc_EBWin_Install"/>
             </Button>
@@ -72,13 +71,8 @@
                             <Button Grid.Column="0"
                                     Click="RemoveDict"
                                     Background="{StaticResource Shades90}"
-                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                    Width="30"
-                                    Style="{StaticResource IconButton}">
-                                <i:IconCross Width="20" Height="20"
-                                             AutoScale="True"
-                                             HorizontalAlignment="Center" VerticalAlignment="Center"
-                                             Foreground="{StaticResource RelativeShadesBrush}"/>
+                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <SymbolIcon Symbol="Delete" />
                             </Button>
                             <StackPanel Grid.Column="1" Margin="5">
                                 <TextBlock FontSize="23"
