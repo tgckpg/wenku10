@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Navigation;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.Linq;
 
+using GR.Config;
 using GR.Database.Contexts;
 using GR.Database.Models;
 using GR.DataSources;
@@ -69,14 +70,17 @@ namespace wenku10.Pages.Explorer
 					}
 				}
 			}
-			else
+			else if( GRConfig.MasterExplorer.DefaultWidgets )
 			{
+				GRConfig.MasterExplorer.DefaultWidgets = false;
 				foreach ( GRViewSource GVS in AvailableWidgets )
 				{
 					WidgetView WView = new WidgetView( GVS );
 					await WView.ConfigureAsync();
 					_AddWidget( WView );
 				}
+
+				SaveConfigs();
 			}
 		}
 

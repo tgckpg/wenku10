@@ -11,10 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.Storage;
 
-using Net.Astropenguin.DataModel;
-using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
-using Net.Astropenguin.Linq;
 using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Messaging;
 

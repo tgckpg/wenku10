@@ -92,7 +92,7 @@ namespace GR.Model.Loaders
 		private async void LoadChapterInst( Chapter C )
 		{
 			BookInstruction BkInst = ( BookInstruction ) CurrentBook ?? new BookInstruction( C.Book );
-			XRegistry Settings = SpiderBook.GetSettings( BkInst.ZoneId, BkInst.ZItemId );
+			XRegistry Settings = SpiderBook.GetSettings( BkInst.Entry );
 
 			EpInstruction Inst = new EpInstruction( C, Settings );
 			IEnumerable<ProcConvoy> Convoys = await Inst.Process();

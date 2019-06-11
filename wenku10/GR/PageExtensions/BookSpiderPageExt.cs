@@ -19,9 +19,7 @@ namespace GR.PageExtensions
 {
 	using CompositeElement;
 	using Data;
-	using Database.Models;
 	using DataSources;
-	using GSystem;
 	using Model.Book;
 	using Model.Book.Spider;
 	using Model.ListItem;
@@ -123,16 +121,19 @@ namespace GR.PageExtensions
 
 		private void Reanalyze_Click( object sender, RoutedEventArgs e )
 		{
-			ProcessItem( ( IGRRow ) ( ( FrameworkElement ) sender ).DataContext );
+			ProcessItem( ( IGRRow ) ( ( FrameworkElement ) sender ).DataContext, true );
 		}
 
-		public async void ProcessItem( IGRRow DataContext )
+		public async void ProcessItem( IGRRow DataContext, bool Reprocess = false )
 		{
 			if ( DataContext is GRRow<IBookProcess> Row )
 			{
 				SpiderBook BkProc = ( SpiderBook ) Row.Source;
 				if ( !BkProc.Processing )
 				{
+					if ( Reprocess )
+						await BkProc.Reload();
+
 					await ItemProcessor.ProcessLocal( BkProc );
 
 					if ( BkProc.GetBook().Packed == true )

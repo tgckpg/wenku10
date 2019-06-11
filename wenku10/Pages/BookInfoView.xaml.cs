@@ -209,7 +209,7 @@ namespace wenku10.Pages
 			BookItem Book = null;
 			try
 			{
-				SpiderBook SBook = await SpiderBook.ImportFile( await HSI.ScriptFile.ReadString(), true );
+				SpiderBook SBook = await SpiderBook.ImportFile( HSI.ScriptFile, true );
 				if ( SBook.CanProcess && !SBook.Processed )
 				{
 					await ItemProcessor.ProcessLocal( SBook );

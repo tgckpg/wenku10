@@ -69,7 +69,7 @@ namespace wenku10.Pages.Explorer
 		private Dictionary<int, ReorderStory> ReorderStories;
 		private Dictionary<int, TranslateTransform> ColTransforms;
 
-		private Action UnRegKbMenu;
+		private List<Action> KbRegisters;
 
 		private struct ReorderStory
 		{
@@ -86,7 +86,9 @@ namespace wenku10.Pages.Explorer
 		public GRTableView()
 		{
 			this.InitializeComponent();
-			UnRegKbMenu = App.AppKeyboard.RegisterCombination( Kb_ShowContextMenu, VirtualKey.Application );
+			KbRegisters = new List<Action>();
+			KbRegisters.Add( App.AppKeyboard.RegisterCombination( Kb_ShowContextMenu, VirtualKey.Application ) );
+			KbRegisters.Add( App.AppKeyboard.RegisterCombination( Kb_DefaultAction, VirtualKey.Enter ) );
 		}
 
 		public void Refresh()
@@ -515,9 +517,7 @@ namespace wenku10.Pages.Explorer
 			// We need to get a FrameworkElement that has DataContext
 			// otherwise the DataContext will not get inherited to the attached menu
 			if ( e.Target is ListViewItem Item )
-			{
 				Elem = VisualTree.At_0<FrameworkElement>( Item, 0 );
-			}
 
 			if ( Elem.DataContext is IGRRow Row )
 			{
@@ -527,9 +527,23 @@ namespace wenku10.Pages.Explorer
 					Elem.DataContext = Row;
 
 				FlyoutBase ItemMenu = ExtViewSource.Extension.GetContextMenu( Elem );
+				if ( ItemMenu == null )
+					return;
+
 				FlyoutBase.SetAttachedFlyout( Elem, ItemMenu );
 				FlyoutBase.ShowAttachedFlyout( Elem );
 			}
+		}
+
+		private void Kb_DefaultAction( KeyCombinationEventArgs e )
+		{
+			if ( !( e.Target is FrameworkElement Elem ) )
+				return;
+
+			if ( e.Target is ListViewItem Item )
+				Elem = VisualTree.At_0<FrameworkElement>( Item, 0 );
+
+			_ItemListAction( Elem );
 		}
 
 		private void HZCont_SizeChanged( object sender, SizeChangedEventArgs e )

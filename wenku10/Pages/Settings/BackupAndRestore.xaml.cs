@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System.Display;
 using Windows.UI;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -25,6 +26,24 @@ namespace wenku10.Pages.Settings
 	public sealed partial class BackupAndRestore : Page
 	{
 		MigrationManager MigrationMgr;
+		DisplayRequest DispRequest = new DisplayRequest();
+
+		bool _Working = false;
+		bool Working
+		{
+			get => _Working;
+			set
+			{
+				if ( ( _Working = value ) )
+				{
+					DispRequest.RequestActive();
+				}
+				else
+				{
+					DispRequest.RequestRelease();
+				}
+			}
+		}
 
 		public BackupAndRestore()
 		{
@@ -38,8 +57,6 @@ namespace wenku10.Pages.Settings
 			MigrationMgr = new MigrationManager();
 			LayoutRoot.DataContext = MigrationMgr;
 		}
-
-		bool Working = false;
 
 		private async void Backup_Click( object sender, RoutedEventArgs e )
 		{

@@ -81,44 +81,23 @@ namespace GR.DataSources
 			GRRow<IBookProcess>[] Items = _Items.ToArray();
 			Worker.UIInvoke( () => _Items.Clear() );
 
-			IEnumerable<string> ZoneIds = Shared.Storage.ListDirs( FileLinks.ROOT_SPIDER_VOL );
-
-			foreach ( string ZoneId in ZoneIds )
+			foreach ( var Bk in Shared.BooksDb.Books.Where( x => x.Script != null ).Select( x => new { x.ZoneId, x.ZItemId } ) )
 			{
+				string ZoneId = Bk.ZoneId;
+				string ZItemId = Bk.ZItemId;
+
 				Message = LoadText + ": " + ZoneId;
-
-				IEnumerable<string> ZItemIds = Shared.Storage.ListFiles( FileLinks.ROOT_SPIDER_VOL + ZoneId + "/" ).Remap( x => x.Replace( ".xml", "" ) );
-
-				foreach ( string ZItemId in ZItemIds )
+				if ( FindRow( Items, ZoneId, ZItemId, out GRRow<IBookProcess> Row ) )
 				{
-					if ( ZItemId == "METADATA" )
-						continue;
-
-					if ( FindRow( Items, ZoneId, ZItemId, out GRRow<IBookProcess> Row ) )
+					await AddRowAsync( Row );
+				}
+				else
+				{
+					SpiderBook LB = await SpiderBook.CreateSAsync( ZoneId, ZItemId, null );
+					if ( LB.ProcessSuccess || LB.CanProcess )
 					{
-						await AddRowAsync( Row );
-					}
-					else
-					{
-						SpiderBook LB = await SpiderBook.CreateSAsync( ZoneId, ZItemId, null );
-
-						if ( LB.ProcessSuccess || LB.CanProcess )
-						{
-							ZoneNameResolver.Instance.Resolve( LB.ZoneId, x => LB.Zone = x );
-							await AddRowAsync( new GRRow<IBookProcess>( PsTable ) { Source = LB } );
-						}
-						else
-						{
-							try
-							{
-								Logger.Log( ID, "Removing invalid script: " + ZItemId, LogType.INFO );
-								Shared.Storage.DeleteFile( LB.MetaLocation );
-							}
-							catch ( Exception ex )
-							{
-								Logger.Log( ID, "Cannot remove invalid script: " + ex.Message, LogType.WARNING );
-							}
-						}
+						ZoneNameResolver.Instance.Resolve( LB.ZoneId, x => LB.Zone = x );
+						await AddRowAsync( new GRRow<IBookProcess>( PsTable ) { Source = LB } );
 					}
 				}
 			}

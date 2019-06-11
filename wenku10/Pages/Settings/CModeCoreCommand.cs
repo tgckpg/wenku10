@@ -266,10 +266,10 @@ namespace wenku10.Pages.Settings
 					if ( Shared.Storage.FileExists( p ) )
 					{
 						Shared.Storage.DeleteFile( p );
-						if ( p.EndsWith( ".db" ) )
+						if ( p.ToLower().EndsWith( ".db" ) )
 						{
 							ResponseCommand(
-								"You just removed a database file! Application might crash if some database are missing."
+								"You just removed a database file! Application might crash if some databases are missing."
 								+ " Remember to run \"Database Migrate\" to create required databases." );
 						}
 					}

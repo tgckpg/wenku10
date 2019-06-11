@@ -11,7 +11,7 @@
     <AssemblyName>wenku10</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.17134.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.17763.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
@@ -163,6 +163,7 @@
     <Compile Include="GR\DataSources\ZSViewSource.cs" />
     <Compile Include="GR\GStrings\ZoneNameResolver.cs" />
     <Compile Include="GR\MigrationOps\M0000.cs" />
+    <Compile Include="GR\MigrationOps\M0003.cs" />
     <Compile Include="GR\MigrationOps\M0002.cs" />
     <Compile Include="GR\MigrationOps\M0001.cs" />
     <Compile Include="GR\MigrationOps\MigrationManager.cs" />
@@ -910,7 +911,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights">
-      <Version>2.8.1</Version>
+      <Version>2.9.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights.PersistenceChannel">
       <Version>1.2.3</Version>
@@ -938,7 +939,7 @@
     <SDKReference Include="Microsoft.VCLibs, Version=14.0">
       <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
-    <SDKReference Include="WindowsMobile, Version=10.0.17134.0">
+    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>

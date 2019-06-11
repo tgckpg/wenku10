@@ -11,6 +11,10 @@
         <Style TargetType="Button" BasedOn="{StaticResource GRButton}" />
     </Page.Resources>
     <Grid x:Name="LayoutRoot" Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <StackPanel Margin="10" VerticalAlignment="Top">
             <StackPanel x:Name="MMigrate" Visibility="{Binding ShouldMigrate, Converter={StaticResource DataVisConverter}}">
                 <TextBlock FontSize="29" x:Uid="/InitQuestions/Migration" Foreground="White"/>
@@ -33,9 +37,12 @@
                     </Grid>
                 </Button>
             </StackPanel>
-
-            <TextBlock Margin="10,10,10,0" x:Name="ProgressText" Text="{Binding Mesg}" Foreground="White" TextWrapping="Wrap"/>
-            <TextBlock Margin="20,0,10,10" x:Name="RProgressText" Text="{Binding MesgR}" Foreground="White" TextWrapping="Wrap"/>
         </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <TextBlock Margin="10,10,10,0" x:Name="ProgressText" Text="{Binding Mesg}" Foreground="White" TextWrapping="Wrap"/>
+                <TextBlock Margin="20,0,10,10" x:Name="RProgressText" Text="{Binding MesgR}" Foreground="White" TextWrapping="Wrap"/>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 using Net.Astropenguin.DataModel;
-using Net.Astropenguin.IO;
-using Net.Astropenguin.Logging;
-using Net.Astropenguin.Messaging;
 
 using GFlow.Controls;
 using GFlow.Models.Procedure;
@@ -62,7 +61,7 @@ namespace GR.Model.Section
 			Banner = PLL.BannerSrc;
 			Name = PLL.ZoneName;
 
-			if( string.IsNullOrEmpty( Name ) )
+			if ( string.IsNullOrEmpty( Name ) )
 			{
 				Name = "[ Untitled ]";
 				GStrings.ZoneNameResolver.Instance.Resolve( ZoneId, x =>
@@ -79,7 +78,7 @@ namespace GR.Model.Section
 		{
 			try
 			{
-				Open( new XRegistry( "<zs />", MetaLocation ) );
+				Open( Resources.Shared.Storage.GetStream( MetaLocation ) );
 			}
 			catch ( Exception ) { }
 		}
@@ -89,34 +88,24 @@ namespace GR.Model.Section
 			return new ZSFeedbackLoader<BookItem>( PM.CreateSpider() );
 		}
 
-		public bool Open( XRegistry ZDef )
+		public bool Open( Stream s )
 		{
 			IsLoading = true;
 
-			try
+			bool LoadSuccess = false;
+			using ( s )
 			{
-				XParameter Param = ZDef.Parameter( "Procedures" );
-				PM = new ProcManager( Param );
-				NotifyChanged( "ProcList" );
-
-				SetBanner();
-
-				return true;
-			}
-			catch( InvalidFIleException )
-			{
-				ProcManager.PanelMessage( ID, Res.RSTR( "InvalidXML" ), LogType.ERROR );
-			}
-			catch( Exception ex )
-			{
-				Logger.Log( ID, ex.Message, LogType.ERROR );
-			}
-			finally
-			{
-				IsLoading = false;
+				PM = ProcManager.Load( s );
+				if ( PM != null )
+				{
+					LoadSuccess = true;
+					NotifyChanged( "ProcList" );
+					SetBanner();
+				}
 			}
 
-			return false;
+			IsLoading = false;
+			return LoadSuccess;
 		}
 
 		private class InvalidFIleException : Exception { }

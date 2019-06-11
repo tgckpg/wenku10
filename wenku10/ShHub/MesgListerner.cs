@@ -75,7 +75,7 @@ namespace wenku10.SHHub
 					}
 
 					// This will save the book
-					SpiderBook SBook = await SpiderBook.ImportFile( await HSI.ScriptFile.ReadString(), true );
+					SpiderBook SBook = await SpiderBook.ImportFile( HSI.ScriptFile, true );
 
 					if ( SBook.CanProcess )
 					{

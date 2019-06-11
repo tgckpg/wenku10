@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,6 +11,7 @@ using Windows.Storage;
 using Net.Astropenguin.Helpers;
 using Net.Astropenguin.IO;
 using Net.Astropenguin.Linq;
+using Net.Astropenguin.Loaders;
 using Net.Astropenguin.Logging;
 
 namespace GR.DataSources
@@ -18,7 +20,6 @@ namespace GR.DataSources
 	using Database.Models;
 	using Model.Interfaces;
 	using Model.Section;
-	using Net.Astropenguin.Loaders;
 	using Resources;
 	using Settings;
 
@@ -64,19 +65,12 @@ namespace GR.DataSources
 				ZSTable.Items = MetaSpiders;
 			}
 
-			string[] StoredZones = Shared.Storage.ListFiles( FileLinks.ROOT_ZSPIDER );
-			foreach ( string Zone in StoredZones )
-			{
-				try
-				{
-					var j = AddZone( Shared.Storage.GetString( FileLinks.ROOT_ZSPIDER + Zone ) );
-				}
-				catch ( Exception ex )
-				{
-					Logger.Log( ID, "Removing faulty zone: " + Zone, LogType.WARNING );
-					Logger.Log( ID, ex.Message, LogType.DEBUG );
-				}
-			}
+			Shared.BooksDb.SafeRun(
+				Db => Db.SScripts
+					.Where( x => x.Type == AppKeys.SS_ZS )
+					.Select( z => new DbSpiderMeta() { ZoneId = z.Id.ToString(), Name = z.Title } )
+			).ExecEach
+				// _AddItem( Zone );
 		}
 
 		public override void StructTable()
@@ -106,7 +100,7 @@ namespace GR.DataSources
 		{
 			try
 			{
-				IMetaSpider ZS = await AddZone( await ISF.ReadString() );
+				IMetaSpider ZS = await AddZone( await ISF.OpenStreamForReadAsync() );
 
 				if ( ZS != null )
 				{
@@ -133,12 +127,11 @@ namespace GR.DataSources
 			catch ( Exception ) { }
 		}
 
-		private async Task<IMetaSpider> AddZone( string ZData )
+		private async Task<IMetaSpider> AddZone( Stream s )
 		{
 			ZoneSpider ZS = new ZoneSpider();
-			XRegistry ZDef = new XRegistry( ZData, null, false );
 
-			if ( await Task.Run( () => ZS.Open( ZDef ) ) )
+			if ( await Task.Run( () => ZS.Open( s ) ) )
 			{
 				GRRow<IMetaSpider> Existing = MetaSpiders.FirstOrDefault( x => x.Source.MetaLocation == ZS.MetaLocation );
 				if ( Existing != null )
@@ -154,10 +147,14 @@ namespace GR.DataSources
 			return null;
 		}
 
-		private Task AddZone( ZoneSpider ZS )
-		{
-			return Worker.RunUIAsync( () => MetaSpiders.Add( new GRRow<IMetaSpider>( ZSTable ) { Source = ZS } ) );
-		}
-
+		private Task AddZone( ZoneSpider ZS ) => Worker.RunUIAsync( () => _AddItem( ZS ) );
+		private void _AddItem( IMetaSpider Source ) => MetaSpiders.Add( new GRRow<IMetaSpider>( ZSTable ) { Source = Source } );
 	}
+
+	sealed class DbSpiderMeta : IMetaSpider
+	{
+		public string Name { get; set; }
+		public string ZoneId { get; set; }
+	}
+
 }

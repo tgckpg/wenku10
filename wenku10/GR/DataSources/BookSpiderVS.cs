@@ -37,7 +37,7 @@ namespace GR.DataSources
 		{
 			try
 			{
-				SpiderBook SBook = await SpiderBook.ImportFile( await ISF.ReadString(), true );
+				SpiderBook SBook = await SpiderBook.ImportFile( ISF, true );
 				BSData.ImportItem( SBook );
 
 				return SBook.CanProcess || SBook.ProcessSuccess;

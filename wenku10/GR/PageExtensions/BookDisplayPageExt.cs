@@ -162,7 +162,7 @@ namespace GR.PageExtensions
 			return null;
 		}
 
-		public void OpenItem( IGRRow obj )
+		public void OpenItem( object obj )
 		{
 			switch ( DefaultAction.Value )
 			{

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 
 using Net.Astropenguin.Helpers;
@@ -26,8 +27,6 @@ namespace GR.PageExtensions
 	using Model.ListItem.Sharers;
 	using Model.Section.SharersHub;
 	using Resources;
-	using System.ComponentModel;
-	using Windows.UI.Xaml.Data;
 
 	sealed class ONSPageExt : PageExtension, ICmdControls
 	{

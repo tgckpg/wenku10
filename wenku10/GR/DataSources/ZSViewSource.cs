@@ -78,7 +78,7 @@ namespace GR.DataSources
 
 			Item.PropertyChanged -= Item_PropertyChanged;
 
-			( ( BookDisplayPageExt ) Extension ).OpenItem( _Row );
+			( ( BookDisplayPageExt ) Extension ).OpenItem( Item.GetBook() );
 
 			return true;
 		}

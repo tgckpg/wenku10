@@ -319,7 +319,7 @@ namespace wenku10.Pages.Sharers
 
 			try
 			{
-				SelectedBook = await SpiderBook.ImportFile( await ISF.ReadString(), false );
+				SelectedBook = await SpiderBook.ImportFile( ISF, false );
 				if ( !SelectedBook.CanProcess )
 				{
 					StringResources stx = StringResources.Load( "ERROR" );
